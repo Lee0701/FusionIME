@@ -1,0 +1,108 @@
+/*
+ * Copyright (C) 2014 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.android.inputmethod.latin.settings
+
+import android.content.Context
+import android.content.SharedPreferences
+import android.os.Build
+import android.os.Build.VERSION_CODES
+import android.os.Bundle
+import com.android.inputmethod.latin.AudioAndHapticFeedbackManager
+import com.android.inputmethod.latin.R
+import com.android.inputmethod.latin.RichInputMethodManager
+
+/**
+ * "Preferences" settings sub screen.
+ *
+ * This settings sub screen handles the following input preferences.
+ * - Auto-capitalization
+ * - Double-space period
+ * - Vibrate on keypress
+ * - Sound on keypress
+ * - Popup on keypress
+ * - Voice input key
+ */
+class PreferencesSettingsFragment : SubScreenFragment() {
+    override fun onCreate(icicle: Bundle?) {
+        super.onCreate(icicle)
+        addPreferencesFromResource(R.xml.prefs_screen_preferences)
+
+        val res = resources
+        val context: Context = activity
+
+        // When we are called from the Settings application but we are not already running, some
+        // singleton and utility classes may not have been initialized.  We have to call
+        // initialization method of these classes here. See {@link LatinIME#onCreate()}.
+        RichInputMethodManager.Companion.init(context)
+
+        val showVoiceKeyOption = res.getBoolean(
+            R.bool.config_enable_show_voice_key_option
+        )
+        if (!showVoiceKeyOption) {
+            removePreference(Settings.Companion.PREF_VOICE_INPUT_KEY)
+        }
+        if (!AudioAndHapticFeedbackManager.Companion.getInstance().hasVibrator()) {
+            removePreference(Settings.Companion.PREF_VIBRATE_ON)
+        }
+        if (!Settings.Companion.readFromBuildConfigIfToShowKeyPreviewPopupOption(res)) {
+            removePreference(Settings.Companion.PREF_POPUP_ON)
+        }
+
+        refreshEnablingsOfKeypressSoundAndVibrationSettings()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val voiceInputKeyOption = findPreference(Settings.Companion.PREF_VOICE_INPUT_KEY)
+        if (voiceInputKeyOption != null) {
+            RichInputMethodManager.Companion.getInstance().refreshSubtypeCaches()
+            voiceInputKeyOption.isEnabled = VOICE_IME_ENABLED
+            voiceInputKeyOption.summary =
+                if (VOICE_IME_ENABLED)
+                    null
+                else
+                    getText(R.string.voice_input_disabled_summary)
+        }
+    }
+
+    override fun onSharedPreferenceChanged(prefs: SharedPreferences, key: String) {
+        val res = resources
+        if (key == Settings.Companion.PREF_POPUP_ON) {
+            setPreferenceEnabled(
+                Settings.Companion.PREF_KEY_PREVIEW_POPUP_DISMISS_DELAY,
+                Settings.Companion.readKeyPreviewPopupEnabled(prefs, res)
+            )
+        }
+        refreshEnablingsOfKeypressSoundAndVibrationSettings()
+    }
+
+    private fun refreshEnablingsOfKeypressSoundAndVibrationSettings() {
+        val prefs = sharedPreferences
+        val res = resources
+        setPreferenceEnabled(
+            Settings.Companion.PREF_VIBRATION_DURATION_SETTINGS,
+            Settings.Companion.readVibrationEnabled(prefs!!, res)
+        )
+        setPreferenceEnabled(
+            Settings.Companion.PREF_KEYPRESS_SOUND_VOLUME,
+            Settings.Companion.readKeypressSoundEnabled(prefs, res)
+        )
+    }
+
+    companion object {
+        private val VOICE_IME_ENABLED = Build.VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN
+    }
+}
