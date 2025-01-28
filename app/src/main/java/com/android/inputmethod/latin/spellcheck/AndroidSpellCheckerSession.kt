@@ -47,7 +47,7 @@ class AndroidSpellCheckerSession(service: AndroidSpellCheckerService) :
         ssi: SentenceSuggestionsInfo
     ): SentenceSuggestionsInfo? {
         val typedText: CharSequence? = TextInfoCompatUtils.getCharSequenceOrString(ti)
-        if (!typedText.toString().contains(AndroidSpellCheckerService.Companion.SINGLE_QUOTE)) {
+        if (!typedText.toString().contains(AndroidSpellCheckerService.SINGLE_QUOTE)) {
             return null
         }
         val N: Int = ssi.getSuggestionsCount()
@@ -67,13 +67,13 @@ class AndroidSpellCheckerSession(service: AndroidSpellCheckerService) :
             val ngramContext: NgramContext =
                 NgramContext(WordInfo(currentWord))
             currentWord = subText
-            if (!subText.toString().contains(AndroidSpellCheckerService.Companion.SINGLE_QUOTE)) {
+            if (!subText.toString().contains(AndroidSpellCheckerService.SINGLE_QUOTE)) {
                 continue
             }
             // Split preserving spans.
-            val splitTexts: Array<CharSequence?>? = SpannableStringUtils.split(
+            val splitTexts: Array<CharSequence> = SpannableStringUtils.split(
                 subText,
-                AndroidSpellCheckerService.Companion.SINGLE_QUOTE,
+                AndroidSpellCheckerService.SINGLE_QUOTE,
                 true /* preserveTrailingEmptySegments */
             )
             if (splitTexts == null || splitTexts.size <= 1) {
@@ -93,7 +93,7 @@ class AndroidSpellCheckerSession(service: AndroidSpellCheckerService) :
                 val newFlags: Int = 0
                 val newSi: SuggestionsInfo = SuggestionsInfo(
                     newFlags,
-                    AndroidWordLevelSpellCheckerSession.Companion.EMPTY_STRING_ARRAY
+                    AndroidWordLevelSpellCheckerSession.EMPTY_STRING_ARRAY
                 )
                 newSi.setCookieAndSequence(si.getCookie(), si.getSequence())
                 if (DBG) {
@@ -115,18 +115,17 @@ class AndroidSpellCheckerSession(service: AndroidSpellCheckerService) :
         val newOffsets: IntArray = IntArray(suggestionsSize)
         val newLengths: IntArray = IntArray(suggestionsSize)
         val newSuggestionsInfos: Array<SuggestionsInfo?> = arrayOfNulls(suggestionsSize)
-        var i: Int
-        i = 0
+        var i = 0
         while (i < N) {
-            newOffsets.get(i) = ssi.getOffsetAt(i)
-            newLengths.get(i) = ssi.getLengthAt(i)
-            newSuggestionsInfos.get(i) = ssi.getSuggestionsInfoAt(i)
+            newOffsets[i] = ssi.getOffsetAt(i)
+            newLengths[i] = ssi.getLengthAt(i)
+            newSuggestionsInfos[i] = ssi.getSuggestionsInfoAt(i)
             ++i
         }
         while (i < suggestionsSize) {
-            newOffsets.get(i) = additionalOffsets.get(i - N)
-            newLengths.get(i) = additionalLengths.get(i - N)
-            newSuggestionsInfos.get(i) = additionalSuggestionsInfos.get(i - N)
+            newOffsets[i] = additionalOffsets[i - N]
+            newLengths[i] = additionalLengths[i - N]
+            newSuggestionsInfos[i] = additionalSuggestionsInfos[i - N]
             ++i
         }
         return SentenceSuggestionsInfo(newSuggestionsInfos, newOffsets, newLengths)
@@ -135,8 +134,8 @@ class AndroidSpellCheckerSession(service: AndroidSpellCheckerService) :
     override fun onGetSentenceSuggestionsMultiple(
         textInfos: Array<TextInfo>,
         suggestionsLimit: Int
-    ): Array<SentenceSuggestionsInfo>? {
-        val retval: Array<SentenceSuggestionsInfo>? = splitAndSuggest(textInfos, suggestionsLimit)
+    ): Array<SentenceSuggestionsInfo> {
+        val retval: Array<SentenceSuggestionsInfo> = splitAndSuggest(textInfos, suggestionsLimit)
         if (retval == null || retval.size != textInfos.size) {
             return retval
         }
@@ -144,7 +143,7 @@ class AndroidSpellCheckerSession(service: AndroidSpellCheckerService) :
             val tempSsi: SentenceSuggestionsInfo? =
                 fixWronglyInvalidatedWordWithSingleQuote(textInfos.get(i), retval.get(i))
             if (tempSsi != null) {
-                retval.get(i) = tempSsi
+                retval[i] = tempSsi
             }
         }
         return retval
@@ -167,9 +166,9 @@ class AndroidSpellCheckerSession(service: AndroidSpellCheckerService) :
     private fun splitAndSuggest(
         textInfos: Array<TextInfo>?,
         suggestionsLimit: Int
-    ): Array<SentenceSuggestionsInfo?> {
+    ): Array<SentenceSuggestionsInfo> {
         if (textInfos == null || textInfos.size == 0) {
-            return SentenceLevelAdapter.Companion.getEmptySentenceSuggestionsInfo()
+            return SentenceLevelAdapter.EmptySentenceSuggestionsInfosInitializationHolder.emptySentenceSuggestionsInfo
         }
         var sentenceLevelAdapter: SentenceLevelAdapter?
         synchronized(this) {
@@ -186,27 +185,17 @@ class AndroidSpellCheckerSession(service: AndroidSpellCheckerService) :
             }
         }
         if (sentenceLevelAdapter == null) {
-            return SentenceLevelAdapter.Companion.getEmptySentenceSuggestionsInfo()
+            return SentenceLevelAdapter.EmptySentenceSuggestionsInfosInitializationHolder.emptySentenceSuggestionsInfo
         }
-        val infosSize: Int = textInfos.size
-        val retval: Array<SentenceSuggestionsInfo?> = arrayOfNulls(infosSize)
-        for (i in 0 until infosSize) {
-            val textInfoParams: SentenceTextInfoParams =
-                sentenceLevelAdapter!!.getSplitWords(textInfos.get(i))
-            val mItems: ArrayList<SentenceWordItem?>? =
-                textInfoParams.mItems
-            val itemsSize: Int = mItems!!.size
-            val splitTextInfos: Array<TextInfo?> = arrayOfNulls(itemsSize)
-            for (j in 0 until itemsSize) {
-                splitTextInfos.get(j) = mItems.get(j)!!.mTextInfo
-            }
-            retval.get(i) = SentenceLevelAdapter.Companion.reconstructSuggestions(
-                textInfoParams, onGetSuggestionsMultiple(
-                    splitTextInfos, suggestionsLimit, true
-                )
+        return textInfos.mapNotNull {
+            val textInfoParams = sentenceLevelAdapter?.getSplitWords(it)
+            val items = textInfoParams!!.mItems
+            val splitTextInfos = items.mapNotNull { it.mTextInfo }.toTypedArray()
+            SentenceLevelAdapter.reconstructSuggestions(
+                textInfoParams,
+                onGetSuggestionsMultiple(splitTextInfos, suggestionsLimit, true)
             )
-        }
-        return retval
+        }.toTypedArray()
     }
 
     override fun onGetSuggestionsMultiple(
@@ -229,13 +218,12 @@ class AndroidSpellCheckerSession(service: AndroidSpellCheckerService) :
                 } else {
                     prevWord = null
                 }
-                val ngramContext: NgramContext =
-                    NgramContext(WordInfo(prevWord))
-                val textInfo: TextInfo = textInfos.get(i)
-                retval.get(i) = onGetSuggestionsInternal(textInfo, ngramContext, suggestionsLimit)
-                retval.get(i)!!.setCookieAndSequence(textInfo.getCookie(), textInfo.getSequence())
+                val ngramContext = NgramContext(WordInfo(prevWord))
+                val textInfo: TextInfo = textInfos[i]
+                retval[i] = onGetSuggestionsInternal(textInfo, ngramContext, suggestionsLimit)
+                retval[i]!!.setCookieAndSequence(textInfo.cookie, textInfo.sequence)
             }
-            return retval
+            return retval.filterNotNull().toTypedArray()
         } finally {
             Binder.restoreCallingIdentity(ident)
         }

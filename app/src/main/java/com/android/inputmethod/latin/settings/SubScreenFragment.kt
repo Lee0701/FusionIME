@@ -103,18 +103,16 @@ abstract class SubScreenFragment : PreferenceFragment(), OnSharedPreferenceChang
             }
         }
 
-        @JvmOverloads
-        fun removePreference(prefKey: String?, screen: PreferenceScreen = getPreferenceScreen()) {
+        fun removePreference(prefKey: String?, screen: PreferenceScreen) {
             val preference = screen.findPreference(prefKey)
             if (preference != null) {
                 screen.removePreference(preference)
             }
         }
 
-        @JvmOverloads
         fun updateListPreferenceSummaryToCurrentValue(
             prefKey: String?,
-            screen: PreferenceScreen = getPreferenceScreen()
+            screen: PreferenceScreen
         ) {
             // Because the "%s" summary trick of {@link ListPreference} doesn't work properly before
             // KitKat, we need to update the summary programmatically.

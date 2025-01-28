@@ -54,7 +54,7 @@ class AsyncResultHolder<E>(tag: String) {
      * @param timeOut the maximum time to wait.
      * @return if the result is set before the time limit then the result, otherwise defaultValue.
      */
-    fun get(defaultValue: E, timeOut: Long): E? {
+    operator fun get(defaultValue: E?, timeOut: Long): E? {
         try {
             return if (mLatch.await(timeOut, TimeUnit.MILLISECONDS)) mResult else defaultValue
         } catch (e: InterruptedException) {

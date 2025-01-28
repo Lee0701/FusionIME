@@ -100,7 +100,7 @@ class KeyboardId(elementId: Int, params: KeyboardLayoutSet.Params) {
     }
 
     fun getLocale(): Locale {
-        return mSubtype.getLocale()
+        return mSubtype!!.locale
     }
 
     override fun equals(other: Any?): Boolean {
@@ -115,8 +115,8 @@ class KeyboardId(elementId: Int, params: KeyboardLayoutSet.Params) {
         return String.format(
             Locale.ROOT, "[%s %s:%s %dx%d %s %s%s%s%s%s%s%s%s%s]",
             elementIdToName(mElementId),
-            mSubtype.getLocale(),
-            mSubtype!!.getExtraValueOf(ExtraValue.KEYBOARD_LAYOUT_SET),
+            mSubtype!!.locale,
+            mSubtype.getExtraValueOf(ExtraValue.KEYBOARD_LAYOUT_SET),
             mWidth, mHeight,
             modeName(mMode),
             actionName(imeAction()),

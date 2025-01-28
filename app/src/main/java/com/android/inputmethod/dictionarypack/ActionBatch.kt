@@ -116,24 +116,24 @@ class ActionBatch {
                 return
             }
             DebugLogUtils.l("Downloading word list")
-            val db: SQLiteDatabase = MetadataDbHelper.Companion.getDb(context, mClientId)
-            val values: ContentValues? = MetadataDbHelper.Companion.getContentValuesByWordListId(
+            val db: SQLiteDatabase = MetadataDbHelper.getDb(context, mClientId)
+            val values: ContentValues? = MetadataDbHelper.getContentValuesByWordListId(
                 db,
                 mWordList.mId, mWordList.mVersion
             )
-            val status: Int = values!!.getAsInteger(MetadataDbHelper.Companion.STATUS_COLUMN)
+            val status: Int = values!!.getAsInteger(MetadataDbHelper.STATUS_COLUMN)
             val manager: DownloadManagerWrapper = DownloadManagerWrapper(context)
-            if (MetadataDbHelper.Companion.STATUS_DOWNLOADING == status) {
+            if (MetadataDbHelper.STATUS_DOWNLOADING == status) {
                 // The word list is still downloading. Cancel the download and revert the
                 // word list status to "available".
-                manager.remove(values.getAsLong(MetadataDbHelper.Companion.PENDINGID_COLUMN))
-                MetadataDbHelper.Companion.markEntryAsAvailable(
+                manager.remove(values.getAsLong(MetadataDbHelper.PENDINGID_COLUMN))
+                MetadataDbHelper.markEntryAsAvailable(
                     db,
                     mWordList.mId,
                     mWordList.mVersion
                 )
-            } else if (MetadataDbHelper.Companion.STATUS_AVAILABLE != status
-                && MetadataDbHelper.Companion.STATUS_RETRYING != status
+            } else if (MetadataDbHelper.STATUS_AVAILABLE != status
+                && MetadataDbHelper.STATUS_RETRYING != status
             ) {
                 // Should never happen
                 Log.e(
@@ -207,10 +207,10 @@ class ActionBatch {
                 Log.e(TAG, "InstallAfterDownloadAction with a null parameter!")
                 return
             }
-            val status: Int = mWordListValues.getAsInteger(MetadataDbHelper.Companion.STATUS_COLUMN)
-            if (MetadataDbHelper.Companion.STATUS_DOWNLOADING != status) {
+            val status: Int = mWordListValues.getAsInteger(MetadataDbHelper.STATUS_COLUMN)
+            if (MetadataDbHelper.STATUS_DOWNLOADING != status) {
                 val id: String =
-                    mWordListValues.getAsString(MetadataDbHelper.Companion.WORDLISTID_COLUMN)
+                    mWordListValues.getAsString(MetadataDbHelper.WORDLISTID_COLUMN)
                 Log.e(
                     TAG, ("Unexpected state of the word list '" + id + "' : " + status
                             + " for an InstallAfterDownload action. Bailing out.")
@@ -219,8 +219,8 @@ class ActionBatch {
             }
 
             DebugLogUtils.l("Setting word list as installed")
-            val db: SQLiteDatabase = MetadataDbHelper.Companion.getDb(context, mClientId)
-            MetadataDbHelper.Companion.markEntryAsFinishedDownloadingAndInstalled(
+            val db: SQLiteDatabase = MetadataDbHelper.getDb(context, mClientId)
+            MetadataDbHelper.markEntryAsFinishedDownloadingAndInstalled(
                 db,
                 mWordListValues
             )
@@ -229,7 +229,7 @@ class ActionBatch {
             // directory. Ideally, we should do this before updating the DB, but the
             // installDictToStagingFromContentProvider() relies on the db being updated.
             val localeString: String =
-                mWordListValues.getAsString(MetadataDbHelper.Companion.LOCALE_COLUMN)
+                mWordListValues.getAsString(MetadataDbHelper.LOCALE_COLUMN)
             BinaryDictionaryFileDumper.installDictToStagingFromContentProvider(
                 LocaleUtils.constructLocaleFromString(localeString)!!, context, false
             )
@@ -262,14 +262,14 @@ class ActionBatch {
                 return
             }
             DebugLogUtils.l("Enabling word list")
-            val db: SQLiteDatabase = MetadataDbHelper.Companion.getDb(context, mClientId)
-            val values: ContentValues? = MetadataDbHelper.Companion.getContentValuesByWordListId(
+            val db: SQLiteDatabase = MetadataDbHelper.getDb(context, mClientId)
+            val values: ContentValues? = MetadataDbHelper.getContentValuesByWordListId(
                 db,
                 mWordList.mId, mWordList.mVersion
             )
-            val status: Int = values!!.getAsInteger(MetadataDbHelper.Companion.STATUS_COLUMN)
-            if (MetadataDbHelper.Companion.STATUS_DISABLED != status
-                && MetadataDbHelper.Companion.STATUS_DELETING != status
+            val status: Int = values!!.getAsInteger(MetadataDbHelper.STATUS_COLUMN)
+            if (MetadataDbHelper.STATUS_DISABLED != status
+                && MetadataDbHelper.STATUS_DELETING != status
             ) {
                 Log.e(
                     TAG, ("Unexpected state of the word list '" + mWordList.mId + " : " + status
@@ -277,7 +277,7 @@ class ActionBatch {
                 )
                 return
             }
-            MetadataDbHelper.Companion.markEntryAsEnabled(db, mWordList.mId, mWordList.mVersion)
+            MetadataDbHelper.markEntryAsEnabled(db, mWordList.mId, mWordList.mVersion)
         }
 
         companion object {
@@ -306,21 +306,21 @@ class ActionBatch {
                 return
             }
             DebugLogUtils.l("Disabling word list : " + mWordList)
-            val db: SQLiteDatabase = MetadataDbHelper.Companion.getDb(context, mClientId)
-            val values: ContentValues? = MetadataDbHelper.Companion.getContentValuesByWordListId(
+            val db: SQLiteDatabase = MetadataDbHelper.getDb(context, mClientId)
+            val values: ContentValues? = MetadataDbHelper.getContentValuesByWordListId(
                 db,
                 mWordList.mId, mWordList.mVersion
             )
-            val status: Int = values!!.getAsInteger(MetadataDbHelper.Companion.STATUS_COLUMN)
-            if (MetadataDbHelper.Companion.STATUS_INSTALLED == status) {
+            val status: Int = values!!.getAsInteger(MetadataDbHelper.STATUS_COLUMN)
+            if (MetadataDbHelper.STATUS_INSTALLED == status) {
                 // Disabling an installed word list
-                MetadataDbHelper.Companion.markEntryAsDisabled(
+                MetadataDbHelper.markEntryAsDisabled(
                     db,
                     mWordList.mId,
                     mWordList.mVersion
                 )
             } else {
-                if (MetadataDbHelper.Companion.STATUS_DOWNLOADING != status) {
+                if (MetadataDbHelper.STATUS_DOWNLOADING != status) {
                     Log.e(
                         TAG, ("Unexpected state of the word list '" + mWordList.mId + "' : "
                                 + status + " for a disable action. Fall back to marking as available.")
@@ -329,8 +329,8 @@ class ActionBatch {
                 // The word list is still downloading. Cancel the download and revert the
                 // word list status to "available".
                 val manager: DownloadManagerWrapper = DownloadManagerWrapper(context)
-                manager.remove(values.getAsLong(MetadataDbHelper.Companion.PENDINGID_COLUMN))
-                MetadataDbHelper.Companion.markEntryAsAvailable(
+                manager.remove(values.getAsLong(MetadataDbHelper.PENDINGID_COLUMN))
+                MetadataDbHelper.markEntryAsAvailable(
                     db,
                     mWordList.mId,
                     mWordList.mVersion
@@ -363,8 +363,8 @@ class ActionBatch {
                 Log.e(TAG, "MakeAvailableAction with a null word list!")
                 return
             }
-            val db: SQLiteDatabase = MetadataDbHelper.Companion.getDb(context, mClientId)
-            if (null != MetadataDbHelper.Companion.getContentValuesByWordListId(
+            val db: SQLiteDatabase = MetadataDbHelper.getDb(context, mClientId)
+            if (null != MetadataDbHelper.getContentValuesByWordListId(
                     db,
                     mWordList.mId, mWordList.mVersion
                 )
@@ -377,9 +377,9 @@ class ActionBatch {
             DebugLogUtils.l("Making word list available : " + mWordList)
             // If mLocalFilename is null, then it's a remote file that hasn't been downloaded
             // yet, so we set the local filename to the empty string.
-            val values: ContentValues = MetadataDbHelper.Companion.makeContentValues(
+            val values: ContentValues = MetadataDbHelper.makeContentValues(
                 0,
-                MetadataDbHelper.Companion.TYPE_BULK, MetadataDbHelper.Companion.STATUS_AVAILABLE,
+                MetadataDbHelper.TYPE_BULK, MetadataDbHelper.STATUS_AVAILABLE,
                 mWordList.mId, mWordList.mLocale, mWordList.mDescription,
                 if (null == mWordList.mLocalFilename) "" else mWordList.mLocalFilename,
                 mWordList.mRemoteFilename, mWordList.mLastUpdate, mWordList.mRawChecksum,
@@ -390,7 +390,7 @@ class ActionBatch {
                 ("Insert 'available' record for " + mWordList.mDescription
                         + " and locale " + mWordList.mLocale)
             )
-            db.insert(MetadataDbHelper.Companion.METADATA_TABLE_NAME, null, values)
+            db.insert(MetadataDbHelper.METADATA_TABLE_NAME, null, values)
         }
 
         companion object {
@@ -426,8 +426,8 @@ class ActionBatch {
                 Log.e(TAG, "MarkPreInstalledAction with a null word list!")
                 return
             }
-            val db: SQLiteDatabase = MetadataDbHelper.Companion.getDb(context, mClientId)
-            if (null != MetadataDbHelper.Companion.getContentValuesByWordListId(
+            val db: SQLiteDatabase = MetadataDbHelper.getDb(context, mClientId)
+            if (null != MetadataDbHelper.getContentValuesByWordListId(
                     db,
                     mWordList.mId, mWordList.mVersion
                 )
@@ -441,9 +441,9 @@ class ActionBatch {
             // This word list is pre-installed : we don't have its file. We should reset
             // the local file name to the empty string so that we don't try to open it
             // accidentally. The remote filename may be set by the application if it so wishes.
-            val values: ContentValues = MetadataDbHelper.Companion.makeContentValues(
+            val values: ContentValues = MetadataDbHelper.makeContentValues(
                 0,
-                MetadataDbHelper.Companion.TYPE_BULK, MetadataDbHelper.Companion.STATUS_INSTALLED,
+                MetadataDbHelper.TYPE_BULK, MetadataDbHelper.STATUS_INSTALLED,
                 mWordList.mId, mWordList.mLocale, mWordList.mDescription,
                 if (TextUtils.isEmpty(mWordList.mLocalFilename)) "" else mWordList.mLocalFilename,
                 mWordList.mRemoteFilename, mWordList.mLastUpdate,
@@ -454,7 +454,7 @@ class ActionBatch {
                 ("Insert 'preinstalled' record for " + mWordList.mDescription
                         + " and locale " + mWordList.mLocale)
             )
-            db.insert(MetadataDbHelper.Companion.METADATA_TABLE_NAME, null, values)
+            db.insert(MetadataDbHelper.METADATA_TABLE_NAME, null, values)
         }
 
         companion object {
@@ -481,8 +481,8 @@ class ActionBatch {
                 Log.e(TAG, "UpdateDataAction with a null word list!")
                 return
             }
-            val db: SQLiteDatabase = MetadataDbHelper.Companion.getDb(context, mClientId)
-            val oldValues: ContentValues? = MetadataDbHelper.Companion.getContentValuesByWordListId(
+            val db: SQLiteDatabase = MetadataDbHelper.getDb(context, mClientId)
+            val oldValues: ContentValues? = MetadataDbHelper.getContentValuesByWordListId(
                 db,
                 mWordList.mId, mWordList.mVersion
             )
@@ -491,12 +491,12 @@ class ActionBatch {
                 return
             }
             DebugLogUtils.l("Updating data about a word list : " + mWordList)
-            val values: ContentValues = MetadataDbHelper.Companion.makeContentValues(
-                oldValues.getAsInteger(MetadataDbHelper.Companion.PENDINGID_COLUMN),
-                oldValues.getAsInteger(MetadataDbHelper.Companion.TYPE_COLUMN),
-                oldValues.getAsInteger(MetadataDbHelper.Companion.STATUS_COLUMN),
+            val values: ContentValues = MetadataDbHelper.makeContentValues(
+                oldValues.getAsInteger(MetadataDbHelper.PENDINGID_COLUMN),
+                oldValues.getAsInteger(MetadataDbHelper.TYPE_COLUMN),
+                oldValues.getAsInteger(MetadataDbHelper.STATUS_COLUMN),
                 mWordList.mId, mWordList.mLocale, mWordList.mDescription,
-                oldValues.getAsString(MetadataDbHelper.Companion.LOCAL_FILENAME_COLUMN),
+                oldValues.getAsString(MetadataDbHelper.LOCAL_FILENAME_COLUMN),
                 mWordList.mRemoteFilename, mWordList.mLastUpdate, mWordList.mRawChecksum,
                 mWordList.mChecksum, mWordList.mRetryCount, mWordList.mFileSize,
                 mWordList.mVersion, mWordList.mFormatVersion
@@ -506,9 +506,9 @@ class ActionBatch {
                         + " and locale " + mWordList.mLocale)
             )
             db.update(
-                MetadataDbHelper.Companion.METADATA_TABLE_NAME, values,
-                (MetadataDbHelper.Companion.WORDLISTID_COLUMN + " = ? AND "
-                        + MetadataDbHelper.Companion.VERSION_COLUMN + " = ?"),
+                MetadataDbHelper.METADATA_TABLE_NAME, values,
+                (MetadataDbHelper.WORDLISTID_COLUMN + " = ? AND "
+                        + MetadataDbHelper.VERSION_COLUMN + " = ?"),
                 arrayOf<String?>(mWordList.mId, mWordList.mVersion.toString())
             )
         }
@@ -549,8 +549,8 @@ class ActionBatch {
                 return
             }
             DebugLogUtils.l("Trying to remove word list : " + mWordList)
-            val db: SQLiteDatabase = MetadataDbHelper.Companion.getDb(context, mClientId)
-            val values: ContentValues? = MetadataDbHelper.Companion.getContentValuesByWordListId(
+            val db: SQLiteDatabase = MetadataDbHelper.getDb(context, mClientId)
+            val values: ContentValues? = MetadataDbHelper.getContentValuesByWordListId(
                 db,
                 mWordList.mId, mWordList.mVersion
             )
@@ -558,8 +558,8 @@ class ActionBatch {
                 Log.e(TAG, "Trying to update the metadata of a non-existing wordlist. Cancelling.")
                 return
             }
-            val status: Int = values.getAsInteger(MetadataDbHelper.Companion.STATUS_COLUMN)
-            if (mHasNewerVersion && MetadataDbHelper.Companion.STATUS_AVAILABLE != status) {
+            val status: Int = values.getAsInteger(MetadataDbHelper.STATUS_COLUMN)
+            if (mHasNewerVersion && MetadataDbHelper.STATUS_AVAILABLE != status) {
                 // If we have a newer version of this word list, we should be here ONLY if it was
                 // not installed - else we should be upgrading it.
                 Log.e(
@@ -567,30 +567,30 @@ class ActionBatch {
                             + ", removing URL to prevent re-download")
                 )
             }
-            if (MetadataDbHelper.Companion.STATUS_INSTALLED == status || MetadataDbHelper.Companion.STATUS_DISABLED == status || MetadataDbHelper.Companion.STATUS_DELETING == status) {
+            if (MetadataDbHelper.STATUS_INSTALLED == status || MetadataDbHelper.STATUS_DISABLED == status || MetadataDbHelper.STATUS_DELETING == status) {
                 // If it is installed or disabled, we need to mark it as deleted so that LatinIME
                 // will remove it next time it enquires for dictionaries.
                 // If it is deleting and we don't have a new version, then we have to wait until
                 // LatinIME actually has deleted it before we can remove its metadata.
                 // In both cases, remove the URI from the database since it is not supposed to
                 // be accessible any more.
-                values.put(MetadataDbHelper.Companion.REMOTE_FILENAME_COLUMN, "")
+                values.put(MetadataDbHelper.REMOTE_FILENAME_COLUMN, "")
                 values.put(
-                    MetadataDbHelper.Companion.STATUS_COLUMN,
-                    MetadataDbHelper.Companion.STATUS_DELETING
+                    MetadataDbHelper.STATUS_COLUMN,
+                    MetadataDbHelper.STATUS_DELETING
                 )
                 db.update(
-                    MetadataDbHelper.Companion.METADATA_TABLE_NAME, values,
-                    (MetadataDbHelper.Companion.WORDLISTID_COLUMN + " = ? AND "
-                            + MetadataDbHelper.Companion.VERSION_COLUMN + " = ?"),
+                    MetadataDbHelper.METADATA_TABLE_NAME, values,
+                    (MetadataDbHelper.WORDLISTID_COLUMN + " = ? AND "
+                            + MetadataDbHelper.VERSION_COLUMN + " = ?"),
                     arrayOf<String?>(mWordList.mId, mWordList.mVersion.toString())
                 )
             } else {
                 // If it's AVAILABLE or DOWNLOADING or even UNKNOWN, delete the entry.
                 db.delete(
-                    MetadataDbHelper.Companion.METADATA_TABLE_NAME,
-                    (MetadataDbHelper.Companion.WORDLISTID_COLUMN + " = ? AND "
-                            + MetadataDbHelper.Companion.VERSION_COLUMN + " = ?"),
+                    MetadataDbHelper.METADATA_TABLE_NAME,
+                    (MetadataDbHelper.WORDLISTID_COLUMN + " = ? AND "
+                            + MetadataDbHelper.VERSION_COLUMN + " = ?"),
                     arrayOf<String?>(mWordList.mId, mWordList.mVersion.toString())
                 )
             }
@@ -633,8 +633,8 @@ class ActionBatch {
                 return
             }
             DebugLogUtils.l("Trying to delete word list : " + mWordList)
-            val db: SQLiteDatabase = MetadataDbHelper.Companion.getDb(context, mClientId)
-            val values: ContentValues? = MetadataDbHelper.Companion.getContentValuesByWordListId(
+            val db: SQLiteDatabase = MetadataDbHelper.getDb(context, mClientId)
+            val values: ContentValues? = MetadataDbHelper.getContentValuesByWordListId(
                 db,
                 mWordList.mId, mWordList.mVersion
             )
@@ -642,11 +642,11 @@ class ActionBatch {
                 Log.e(TAG, "Trying to set a non-existing wordlist for removal. Cancelling.")
                 return
             }
-            val status: Int = values.getAsInteger(MetadataDbHelper.Companion.STATUS_COLUMN)
-            if (MetadataDbHelper.Companion.STATUS_DISABLED != status) {
+            val status: Int = values.getAsInteger(MetadataDbHelper.STATUS_COLUMN)
+            if (MetadataDbHelper.STATUS_DISABLED != status) {
                 Log.e(TAG, "Unexpected status for deleting a word list info : " + status)
             }
-            MetadataDbHelper.Companion.markEntryAsDeleting(db, mWordList.mId, mWordList.mVersion)
+            MetadataDbHelper.markEntryAsDeleting(db, mWordList.mId, mWordList.mVersion)
         }
 
         companion object {
@@ -678,8 +678,8 @@ class ActionBatch {
                 return
             }
             DebugLogUtils.l("Trying to delete word list : " + mWordList)
-            val db: SQLiteDatabase = MetadataDbHelper.Companion.getDb(context, mClientId)
-            val values: ContentValues? = MetadataDbHelper.Companion.getContentValuesByWordListId(
+            val db: SQLiteDatabase = MetadataDbHelper.getDb(context, mClientId)
+            val values: ContentValues? = MetadataDbHelper.getContentValuesByWordListId(
                 db,
                 mWordList.mId, mWordList.mVersion
             )
@@ -687,25 +687,25 @@ class ActionBatch {
                 Log.e(TAG, "Trying to set a non-existing wordlist for removal. Cancelling.")
                 return
             }
-            val status: Int = values.getAsInteger(MetadataDbHelper.Companion.STATUS_COLUMN)
-            if (MetadataDbHelper.Companion.STATUS_DELETING != status) {
+            val status: Int = values.getAsInteger(MetadataDbHelper.STATUS_COLUMN)
+            if (MetadataDbHelper.STATUS_DELETING != status) {
                 Log.e(TAG, "Unexpected status for finish-deleting a word list info : " + status)
             }
             val remoteFilename: String =
-                values.getAsString(MetadataDbHelper.Companion.REMOTE_FILENAME_COLUMN)
+                values.getAsString(MetadataDbHelper.REMOTE_FILENAME_COLUMN)
             // If there isn't a remote filename any more, then we don't know where to get the file
             // from any more, so we remove the entry entirely. As a matter of fact, if the file was
             // marked DELETING but disappeared from the metadata on the server, it ended up
             // this way.
             if (TextUtils.isEmpty(remoteFilename)) {
                 db.delete(
-                    MetadataDbHelper.Companion.METADATA_TABLE_NAME,
-                    (MetadataDbHelper.Companion.WORDLISTID_COLUMN + " = ? AND "
-                            + MetadataDbHelper.Companion.VERSION_COLUMN + " = ?"),
+                    MetadataDbHelper.METADATA_TABLE_NAME,
+                    (MetadataDbHelper.WORDLISTID_COLUMN + " = ? AND "
+                            + MetadataDbHelper.VERSION_COLUMN + " = ?"),
                     arrayOf<String?>(mWordList.mId, mWordList.mVersion.toString())
                 )
             } else {
-                MetadataDbHelper.Companion.markEntryAsAvailable(
+                MetadataDbHelper.markEntryAsAvailable(
                     db,
                     mWordList.mId,
                     mWordList.mVersion

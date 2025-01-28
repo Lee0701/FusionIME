@@ -30,7 +30,7 @@ class KeyboardTextsSet {
     private var mResources: Resources? = null
     private var mResourceLocale: Locale? = null
     private var mResourcePackageName: String? = null
-    private var mTextsTable: Array<String?>?
+    private var mTextsTable: Array<String?>? = null
 
     fun setLocale(locale: Locale, context: Context) {
         val res: Resources = context.getResources()

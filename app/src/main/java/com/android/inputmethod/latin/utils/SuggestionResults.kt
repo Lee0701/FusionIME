@@ -28,8 +28,8 @@ class SuggestionResults private constructor(
     isBeginningOfSentence: Boolean,
     firstSuggestionExceedsConfidenceThreshold: Boolean
 ) :
-    TreeSet<SuggestedWordInfo?>(comparator) {
-    var mRawSuggestions: ArrayList<SuggestedWordInfo?>? = null
+    TreeSet<SuggestedWordInfo>(comparator) {
+    var mRawSuggestions: ArrayList<SuggestedWordInfo>? = null
 
     // TODO: Instead of a boolean , we may want to include the context of this suggestion results,
     // such as {@link NgramContext}.
@@ -45,17 +45,12 @@ class SuggestionResults private constructor(
         firstSuggestionExceedsConfidenceThreshold
     )
 
-    override fun add(e: SuggestedWordInfo?): Boolean {
+    override fun add(e: SuggestedWordInfo): Boolean {
         if (size < mCapacity) return super.add(e)
         if (comparator().compare(e, last()) > 0) return false
         super.add(e)
         pollLast() // removes the last element
         return true
-    }
-
-    override fun addAll(e: Collection<SuggestedWordInfo?>?): Boolean {
-        if (null == e) return false
-        return super.addAll(e)
     }
 
     internal class SuggestedWordInfoComparator : Comparator<SuggestedWordInfo> {
@@ -66,7 +61,7 @@ class SuggestionResults private constructor(
             if (o1.mScore < o2.mScore) return 1
             if (o1.mCodePointCount < o2.mCodePointCount) return -1
             if (o1.mCodePointCount > o2.mCodePointCount) return 1
-            return o1.mWord.compareTo(o2.mWord)
+            return o1.word.compareTo(o2.word)
         }
     }
 

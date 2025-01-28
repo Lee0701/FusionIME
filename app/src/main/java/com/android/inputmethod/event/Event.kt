@@ -72,7 +72,6 @@ class Event private constructor(// The type of event - one of the constants abov
 
     // This method is private - to create a new event, use one of the create* utility methods.
     init {
-        mText = mText
         mCodePoint = codePoint
         mKeyCode = keyCode
         mX = x
@@ -270,7 +269,7 @@ class Event private constructor(// The type of event - one of the constants abov
         @Nonnull
         fun createSuggestionPickedEvent(suggestedWordInfo: SuggestedWordInfo): Event {
             return Event(
-                EVENT_TYPE_SUGGESTION_PICKED, suggestedWordInfo.mWord,
+                EVENT_TYPE_SUGGESTION_PICKED, suggestedWordInfo.word,
                 NOT_A_CODE_POINT, NOT_A_KEY_CODE,
                 Constants.SUGGESTION_STRIP_COORDINATE, Constants.SUGGESTION_STRIP_COORDINATE,
                 suggestedWordInfo, FLAG_NONE, null /* next */
@@ -302,9 +301,9 @@ class Event private constructor(// The type of event - one of the constants abov
         fun createPunctuationSuggestionPickedEvent(
             suggestedWordInfo: SuggestedWordInfo
         ): Event {
-            val primaryCode = suggestedWordInfo.mWord[0].code
+            val primaryCode = suggestedWordInfo.word[0].code
             return Event(
-                EVENT_TYPE_SUGGESTION_PICKED, suggestedWordInfo.mWord, primaryCode,
+                EVENT_TYPE_SUGGESTION_PICKED, suggestedWordInfo.word, primaryCode,
                 NOT_A_KEY_CODE, Constants.SUGGESTION_STRIP_COORDINATE,
                 Constants.SUGGESTION_STRIP_COORDINATE, suggestedWordInfo, FLAG_NONE,
                 null /* next */

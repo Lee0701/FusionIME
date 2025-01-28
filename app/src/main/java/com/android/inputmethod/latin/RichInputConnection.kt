@@ -169,7 +169,7 @@ class RichInputConnection(parent: InputMethodService) : PrivateCommandPerformer 
         if (++mNestLevel == 1) {
             mIC = mParent.getCurrentInputConnection()
             if (isConnected) {
-                mIC.beginBatchEdit()
+                mIC!!.beginBatchEdit()
             }
         } else {
             if (DBG) {
@@ -427,7 +427,7 @@ class RichInputConnection(parent: InputMethodService) : PrivateCommandPerformer 
             return null
         }
         val startTime: Long = SystemClock.uptimeMillis()
-        val result: CharSequence? = mIC.getTextBeforeCursor(n, flags)
+        val result: CharSequence? = mIC!!.getTextBeforeCursor(n, flags)
         detectLaggyConnection(operation, timeout, startTime)
         return result
     }
@@ -448,7 +448,7 @@ class RichInputConnection(parent: InputMethodService) : PrivateCommandPerformer 
             return null
         }
         val startTime: Long = SystemClock.uptimeMillis()
-        val result: CharSequence? = mIC.getTextAfterCursor(n, flags)
+        val result: CharSequence? = mIC!!.getTextAfterCursor(n, flags)
         detectLaggyConnection(operation, timeout, startTime)
         return result
     }
@@ -498,7 +498,7 @@ class RichInputConnection(parent: InputMethodService) : PrivateCommandPerformer 
     fun performEditorAction(actionId: Int) {
         mIC = mParent.getCurrentInputConnection()
         if (isConnected) {
-            mIC.performEditorAction(actionId)
+            mIC!!.performEditorAction(actionId)
         }
     }
 
@@ -664,7 +664,7 @@ class RichInputConnection(parent: InputMethodService) : PrivateCommandPerformer 
     ): NgramContext? {
         mIC = mParent.getCurrentInputConnection()
         if (!isConnected) {
-            return NgramContext.Companion.EMPTY_PREV_WORDS_INFO
+            return NgramContext.EMPTY_PREV_WORDS_INFO
         }
         val prev: CharSequence? = getTextBeforeCursor(NUM_CHARS_TO_GET_BEFORE_CURSOR, 0)
         if (DEBUG_PREVIOUS_TEXT && null != prev) {
@@ -952,7 +952,7 @@ class RichInputConnection(parent: InputMethodService) : PrivateCommandPerformer 
             Constants.EDITOR_CONTENTS_CACHE_SIZE, 0
         )
         val selectedText: CharSequence? =
-            if (isConnected) mIC.getSelectedText(0 /* flags */) else null
+            if (isConnected) mIC!!.getSelectedText(0 /* flags */) else null
         if (null == textBeforeCursor ||
             (!TextUtils.isEmpty(selectedText) && expectedSelectionEnd == expectedSelectionStart)
         ) {
@@ -996,7 +996,7 @@ class RichInputConnection(parent: InputMethodService) : PrivateCommandPerformer 
         if (!isConnected) {
             return false
         }
-        return mIC.performPrivateCommand(action, data)
+        return mIC!!.performPrivateCommand(action, data)
     }
 
     /**

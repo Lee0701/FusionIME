@@ -192,14 +192,14 @@ class UserDictionarySettings : ListFragment() {
     private fun showAddOrEditDialog(editingWord: String?, editingShortcut: String?) {
         val args: Bundle = Bundle()
         args.putInt(
-            UserDictionaryAddWordContents.Companion.EXTRA_MODE, if (null == editingWord)
-                UserDictionaryAddWordContents.Companion.MODE_INSERT
+            UserDictionaryAddWordContents.EXTRA_MODE, if (null == editingWord)
+                UserDictionaryAddWordContents.MODE_INSERT
             else
-                UserDictionaryAddWordContents.Companion.MODE_EDIT
+                UserDictionaryAddWordContents.MODE_EDIT
         )
-        args.putString(UserDictionaryAddWordContents.Companion.EXTRA_WORD, editingWord)
-        args.putString(UserDictionaryAddWordContents.Companion.EXTRA_SHORTCUT, editingShortcut)
-        args.putString(UserDictionaryAddWordContents.Companion.EXTRA_LOCALE, mLocale)
+        args.putString(UserDictionaryAddWordContents.EXTRA_WORD, editingWord)
+        args.putString(UserDictionaryAddWordContents.EXTRA_SHORTCUT, editingShortcut)
+        args.putString(UserDictionaryAddWordContents.EXTRA_LOCALE, mLocale)
         val pa: PreferenceActivity =
             getActivity() as PreferenceActivity
         pa.startPreferencePanel(
@@ -233,7 +233,7 @@ class UserDictionarySettings : ListFragment() {
 
     private class MyAdapter(
         context: Context, layout: Int, c: Cursor?,
-        from: Array<String?>?, to: IntArray?
+        from: Array<String>?, to: IntArray?
     ) :
         SimpleCursorAdapter(context, layout, c, from, to, 0 /* flags */),
         SectionIndexer {
@@ -271,15 +271,15 @@ class UserDictionarySettings : ListFragment() {
         }
 
         override fun getPositionForSection(section: Int): Int {
-            return if (null == mIndexer) 0 else mIndexer.getPositionForSection(section)
+            return mIndexer?.getPositionForSection(section) ?: 0
         }
 
         override fun getSectionForPosition(position: Int): Int {
-            return if (null == mIndexer) 0 else mIndexer.getSectionForPosition(position)
+            return mIndexer?.getSectionForPosition(position) ?: 0
         }
 
         override fun getSections(): Array<Any>? {
-            return if (null == mIndexer) null else mIndexer.getSections()
+            return mIndexer?.sections
         }
     }
 
@@ -300,11 +300,11 @@ class UserDictionarySettings : ListFragment() {
             Words.WORD,
         )
 
-        private val ADAPTER_FROM_SHORTCUT_SUPPORTED: Array<String?> = arrayOf(
+        private val ADAPTER_FROM_SHORTCUT_SUPPORTED: Array<String> = arrayOf(
             Words.WORD, Words.SHORTCUT
         )
 
-        private val ADAPTER_FROM: Array<String?> =
+        private val ADAPTER_FROM: Array<String> =
             if (IS_SHORTCUT_API_SUPPORTED) ADAPTER_FROM_SHORTCUT_SUPPORTED else ADAPTER_FROM_SHORTCUT_UNSUPPORTED
 
         private val ADAPTER_TO_SHORTCUT_UNSUPPORTED: IntArray = intArrayOf(

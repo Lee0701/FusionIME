@@ -61,12 +61,12 @@ class DictionaryCollection : Dictionary {
         settingsValuesForSuggestion: SettingsValuesForSuggestion,
         sessionId: Int, weightForLocale: Float,
         inOutWeightOfLangModelVsSpatialModel: FloatArray?
-    ): ArrayList<SuggestedWordInfo?>? {
+    ): ArrayList<SuggestedWordInfo>? {
         val dictionaries: CopyOnWriteArrayList<Dictionary> = mDictionaries
         if (dictionaries.isEmpty()) return null
         // To avoid creating unnecessary objects, we get the list out of the first
         // dictionary and add the rest to it if not null, hence the get(0)
-        var suggestions: ArrayList<SuggestedWordInfo?>? = dictionaries.get(0).getSuggestions(
+        var suggestions: ArrayList<SuggestedWordInfo>? = dictionaries.get(0).getSuggestions(
             composedData,
             ngramContext, proximityInfoHandle, settingsValuesForSuggestion, sessionId,
             weightForLocale, inOutWeightOfLangModelVsSpatialModel
@@ -74,7 +74,7 @@ class DictionaryCollection : Dictionary {
         if (null == suggestions) suggestions = ArrayList()
         val length: Int = dictionaries.size
         for (i in 1 until length) {
-            val sugg: ArrayList<SuggestedWordInfo?>? = dictionaries.get(i).getSuggestions(
+            val sugg: ArrayList<SuggestedWordInfo>? = dictionaries.get(i).getSuggestions(
                 composedData, ngramContext, proximityInfoHandle, settingsValuesForSuggestion,
                 sessionId, weightForLocale, inOutWeightOfLangModelVsSpatialModel
             )
@@ -83,14 +83,14 @@ class DictionaryCollection : Dictionary {
         return suggestions
     }
 
-    override fun isInDictionary(word: String?): Boolean {
+    override fun isInDictionary(word: String): Boolean {
         for (i in mDictionaries.indices.reversed()) if (mDictionaries.get(i)
                 .isInDictionary(word)
         ) return true
         return false
     }
 
-    override fun getFrequency(word: String?): Int {
+    override fun getFrequency(word: String): Int {
         var maxFreq: Int = -1
         for (i in mDictionaries.indices.reversed()) {
             val tempFreq: Int = mDictionaries.get(i).getFrequency(word)
@@ -99,7 +99,7 @@ class DictionaryCollection : Dictionary {
         return maxFreq
     }
 
-    override fun getMaxFrequencyOfExactMatches(word: String?): Int {
+    override fun getMaxFrequencyOfExactMatches(word: String): Int {
         var maxFreq: Int = -1
         for (i in mDictionaries.indices.reversed()) {
             val tempFreq: Int = mDictionaries.get(i).getMaxFrequencyOfExactMatches(word)

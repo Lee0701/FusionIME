@@ -118,7 +118,7 @@ internal class EmojiCategory(
 
     fun setCurrentCategoryId(categoryId: Int) {
         mCurrentCategoryId = categoryId
-        Settings.Companion.writeLastShownEmojiCategoryId(mPrefs, categoryId)
+        Settings.writeLastShownEmojiCategoryId(mPrefs, categoryId)
     }
 
     fun setCurrentCategoryPageId(id: Int) {
@@ -130,7 +130,7 @@ internal class EmojiCategory(
     }
 
     fun saveLastTypedCategoryPage() {
-        Settings.Companion.writeLastTypedEmojiCategoryPageId(
+        Settings.writeLastTypedEmojiCategoryPageId(
             mPrefs, mCurrentCategoryId, mCurrentCategoryPageId
         )
     }
@@ -152,7 +152,7 @@ internal class EmojiCategory(
     // Returns the view pager's page position for the categoryId
     fun getPageIdFromCategoryId(categoryId: Int): Int {
         val lastSavedCategoryPageId: Int =
-            Settings.Companion.readLastTypedEmojiCategoryPageId(mPrefs, categoryId)
+            Settings.readLastTypedEmojiCategoryPageId(mPrefs, categoryId)
         var sum: Int = 0
         for (i in mShownCategories.indices) {
             val props: CategoryProperties = mShownCategories.get(i)
@@ -173,7 +173,7 @@ internal class EmojiCategory(
         val keyboard: Keyboard = mLayoutSet.getKeyboard(
             sCategoryElementId.get(categoryId)
         )
-        return (keyboard.getSortedKeys().size - 1) / mMaxPageKeyCount + 1
+        return (keyboard.sortedKeys.size - 1) / mMaxPageKeyCount + 1
     }
 
     // Returns a pair of the category id and the category page id from the view pager's page
@@ -212,7 +212,7 @@ internal class EmojiCategory(
             if (categoryId == ID_RECENTS) {
                 val kbd: DynamicGridKeyboard = DynamicGridKeyboard(
                     mPrefs,
-                    mLayoutSet.getKeyboard(KeyboardId.Companion.ELEMENT_EMOJI_RECENTS),
+                    mLayoutSet.getKeyboard(KeyboardId.ELEMENT_EMOJI_RECENTS),
                     mMaxPageKeyCount, categoryId
                 )
                 mCategoryKeyboardMap.put(categoryKeyboardMapKey, kbd)
@@ -223,12 +223,12 @@ internal class EmojiCategory(
                 sCategoryElementId.get(categoryId)
             )
             val sortedKeys: Array<Array<Key?>> = sortKeysIntoPages(
-                keyboard.getSortedKeys(), mMaxPageKeyCount
+                keyboard.sortedKeys, mMaxPageKeyCount
             )
             for (pageId in sortedKeys.indices) {
                 val tempKeyboard: DynamicGridKeyboard = DynamicGridKeyboard(
                     mPrefs,
-                    mLayoutSet.getKeyboard(KeyboardId.Companion.ELEMENT_EMOJI_RECENTS),
+                    mLayoutSet.getKeyboard(KeyboardId.ELEMENT_EMOJI_RECENTS),
                     mMaxPageKeyCount, categoryId
                 )
                 for (emojiKey: Key? in sortedKeys.get(pageId)) {
@@ -260,7 +260,7 @@ internal class EmojiCategory(
         mLayoutSet = layoutSet
         for (i in sCategoryName.indices) {
             mCategoryNameToIdMap.put(sCategoryName.get(i), i)
-            mCategoryTabIconId.get(i) = emojiPaletteViewAttr.getResourceId(
+            mCategoryTabIconId[i] = emojiPaletteViewAttr.getResourceId(
                 sCategoryTabIconAttr.get(i), 0
             )
         }
@@ -299,7 +299,7 @@ internal class EmojiCategory(
         recentsKbd!!.loadRecentKeys(mCategoryKeyboardMap.values)
 
         mCurrentCategoryId =
-            Settings.Companion.readLastShownEmojiCategoryId(mPrefs, defaultCategoryId)
+            Settings.readLastShownEmojiCategoryId(mPrefs, defaultCategoryId)
         Log.i(TAG, "Last Emoji category id is " + mCurrentCategoryId)
         if (!isShownCategoryId(mCurrentCategoryId)) {
             Log.i(
@@ -308,7 +308,7 @@ internal class EmojiCategory(
             )
             mCurrentCategoryId = defaultCategoryId
         } else if (mCurrentCategoryId == ID_RECENTS &&
-            recentsKbd.getSortedKeys().isEmpty()
+            recentsKbd.sortedKeys.isEmpty()
         ) {
             Log.i(TAG, "No recent emojis found, starting in category " + defaultCategoryId)
             mCurrentCategoryId = defaultCategoryId
@@ -396,23 +396,23 @@ internal class EmojiCategory(
         )
 
         private val sCategoryElementId: IntArray = intArrayOf(
-            KeyboardId.Companion.ELEMENT_EMOJI_RECENTS,
-            KeyboardId.Companion.ELEMENT_EMOJI_CATEGORY1,
-            KeyboardId.Companion.ELEMENT_EMOJI_CATEGORY2,
-            KeyboardId.Companion.ELEMENT_EMOJI_CATEGORY3,
-            KeyboardId.Companion.ELEMENT_EMOJI_CATEGORY4,
-            KeyboardId.Companion.ELEMENT_EMOJI_CATEGORY5,
-            KeyboardId.Companion.ELEMENT_EMOJI_CATEGORY6,
-            KeyboardId.Companion.ELEMENT_EMOJI_CATEGORY7,
-            KeyboardId.Companion.ELEMENT_EMOJI_CATEGORY8,
-            KeyboardId.Companion.ELEMENT_EMOJI_CATEGORY9,
-            KeyboardId.Companion.ELEMENT_EMOJI_CATEGORY10,
-            KeyboardId.Companion.ELEMENT_EMOJI_CATEGORY11,
-            KeyboardId.Companion.ELEMENT_EMOJI_CATEGORY12,
-            KeyboardId.Companion.ELEMENT_EMOJI_CATEGORY13,
-            KeyboardId.Companion.ELEMENT_EMOJI_CATEGORY14,
-            KeyboardId.Companion.ELEMENT_EMOJI_CATEGORY15,
-            KeyboardId.Companion.ELEMENT_EMOJI_CATEGORY16
+            KeyboardId.ELEMENT_EMOJI_RECENTS,
+            KeyboardId.ELEMENT_EMOJI_CATEGORY1,
+            KeyboardId.ELEMENT_EMOJI_CATEGORY2,
+            KeyboardId.ELEMENT_EMOJI_CATEGORY3,
+            KeyboardId.ELEMENT_EMOJI_CATEGORY4,
+            KeyboardId.ELEMENT_EMOJI_CATEGORY5,
+            KeyboardId.ELEMENT_EMOJI_CATEGORY6,
+            KeyboardId.ELEMENT_EMOJI_CATEGORY7,
+            KeyboardId.ELEMENT_EMOJI_CATEGORY8,
+            KeyboardId.ELEMENT_EMOJI_CATEGORY9,
+            KeyboardId.ELEMENT_EMOJI_CATEGORY10,
+            KeyboardId.ELEMENT_EMOJI_CATEGORY11,
+            KeyboardId.ELEMENT_EMOJI_CATEGORY12,
+            KeyboardId.ELEMENT_EMOJI_CATEGORY13,
+            KeyboardId.ELEMENT_EMOJI_CATEGORY14,
+            KeyboardId.ELEMENT_EMOJI_CATEGORY15,
+            KeyboardId.ELEMENT_EMOJI_CATEGORY16
         )
 
         fun getCategoryName(categoryId: Int, categoryPageId: Int): String {
@@ -423,11 +423,11 @@ internal class EmojiCategory(
             return ((categoryId.toLong()) shl Integer.SIZE) or id.toLong()
         }
 
-        private val EMOJI_KEY_COMPARATOR: Comparator<Key?> = object : Comparator<Key> {
+        private val EMOJI_KEY_COMPARATOR: Comparator<Key> = object : Comparator<Key> {
             override fun compare(lhs: Key, rhs: Key): Int {
-                val lHitBox: Rect? = lhs.getHitBox()
-                val rHitBox: Rect? = rhs.getHitBox()
-                if (lHitBox!!.top < rHitBox!!.top) {
+                val lHitBox: Rect = lhs.hitBox
+                val rHitBox: Rect = rhs.hitBox
+                if (lHitBox.top < rHitBox.top) {
                     return -1
                 } else if (lHitBox.top > rHitBox.top) {
                     return 1
@@ -437,20 +437,20 @@ internal class EmojiCategory(
                 } else if (lHitBox.left > rHitBox.left) {
                     return 1
                 }
-                if (lhs.getCode() == rhs.getCode()) {
+                if (lhs.code == rhs.code) {
                     return 0
                 }
-                return if (lhs.getCode() < rhs.getCode()) -1 else 1
+                return if (lhs.code < rhs.code) -1 else 1
             }
         }
 
-        private fun sortKeysIntoPages(inKeys: List<Key?>, maxPageCount: Int): Array<Array<Key?>> {
-            val keys: ArrayList<Key?> = ArrayList(inKeys)
+        private fun sortKeysIntoPages(inKeys: List<Key>, maxPageCount: Int): Array<Array<Key?>> {
+            val keys: ArrayList<Key> = ArrayList(inKeys)
             Collections.sort(keys, EMOJI_KEY_COMPARATOR)
             val pageCount: Int = (keys.size - 1) / maxPageCount + 1
             val retval: Array<Array<Key?>> = Array(pageCount) { arrayOfNulls(maxPageCount) }
             for (i in keys.indices) {
-                retval.get(i / maxPageCount).get(i % maxPageCount) = keys.get(i)
+                retval[i / maxPageCount][i % maxPageCount] = keys[i]
             }
             return retval
         }

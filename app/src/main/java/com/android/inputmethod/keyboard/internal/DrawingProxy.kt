@@ -64,7 +64,7 @@ interface DrawingProxy {
      * @param showsFloatingPreviewText when true, a gesture floating preview text will be shown
      * with this `tracker`'s trail.
      */
-    fun showGestureTrail(@Nonnull tracker: PointerTracker?, showsFloatingPreviewText: Boolean)
+    fun showGestureTrail(tracker: PointerTracker, showsFloatingPreviewText: Boolean)
 
     /**
      * Dismiss a gesture floating preview text without delay.

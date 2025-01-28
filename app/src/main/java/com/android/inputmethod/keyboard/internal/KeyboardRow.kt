@@ -70,7 +70,7 @@ class KeyboardRow(
             mDefaultKeyLabelFlags = keyAttr.getInt(R.styleable.Keyboard_Key_keyLabelFlags, 0)
             mDefaultBackgroundType = keyAttr.getInt(
                 R.styleable.Keyboard_Key_backgroundType,
-                Key.Companion.BACKGROUND_TYPE_NORMAL
+                Key.BACKGROUND_TYPE_NORMAL
             )
         }
 

@@ -29,7 +29,7 @@ object AutoCorrectionUtils {
     ): Boolean {
         if (null != suggestion) {
             // Shortlist a whitelisted word
-            if (suggestion.isKindOf(SuggestedWordInfo.Companion.KIND_WHITELIST)) {
+            if (suggestion.isKindOf(SuggestedWordInfo.KIND_WHITELIST)) {
                 return true
             }
             // TODO: return suggestion.isAprapreateForAutoCorrection();
@@ -40,7 +40,7 @@ object AutoCorrectionUtils {
             // TODO: when the normalized score of the first suggestion is nearly equals to
             //       the normalized score of the second suggestion, behave less aggressive.
             val normalizedScore = BinaryDictionaryUtils.calcNormalizedScore(
-                consideredWord, suggestion.mWord, autoCorrectionSuggestionScore
+                consideredWord, suggestion.word, autoCorrectionSuggestionScore
             )
             if (DBG) {
                 Log.d(

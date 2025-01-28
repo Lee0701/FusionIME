@@ -42,28 +42,28 @@ object MetadataHandler {
     private fun makeMetadataObject(results: Cursor?): List<WordListMetadata> {
         val buildingMetadata: ArrayList<WordListMetadata> = ArrayList()
         if (null != results && results.moveToFirst()) {
-            val localeColumn: Int = results.getColumnIndex(MetadataDbHelper.Companion.LOCALE_COLUMN)
-            val typeColumn: Int = results.getColumnIndex(MetadataDbHelper.Companion.TYPE_COLUMN)
+            val localeColumn: Int = results.getColumnIndex(MetadataDbHelper.LOCALE_COLUMN)
+            val typeColumn: Int = results.getColumnIndex(MetadataDbHelper.TYPE_COLUMN)
             val descriptionColumn: Int =
-                results.getColumnIndex(MetadataDbHelper.Companion.DESCRIPTION_COLUMN)
-            val idIndex: Int = results.getColumnIndex(MetadataDbHelper.Companion.WORDLISTID_COLUMN)
-            val updateIndex: Int = results.getColumnIndex(MetadataDbHelper.Companion.DATE_COLUMN)
+                results.getColumnIndex(MetadataDbHelper.DESCRIPTION_COLUMN)
+            val idIndex: Int = results.getColumnIndex(MetadataDbHelper.WORDLISTID_COLUMN)
+            val updateIndex: Int = results.getColumnIndex(MetadataDbHelper.DATE_COLUMN)
             val fileSizeIndex: Int =
-                results.getColumnIndex(MetadataDbHelper.Companion.FILESIZE_COLUMN)
+                results.getColumnIndex(MetadataDbHelper.FILESIZE_COLUMN)
             val rawChecksumIndex: Int =
-                results.getColumnIndex(MetadataDbHelper.Companion.RAW_CHECKSUM_COLUMN)
+                results.getColumnIndex(MetadataDbHelper.RAW_CHECKSUM_COLUMN)
             val checksumIndex: Int =
-                results.getColumnIndex(MetadataDbHelper.Companion.CHECKSUM_COLUMN)
+                results.getColumnIndex(MetadataDbHelper.CHECKSUM_COLUMN)
             val retryCountIndex: Int =
-                results.getColumnIndex(MetadataDbHelper.Companion.RETRY_COUNT_COLUMN)
+                results.getColumnIndex(MetadataDbHelper.RETRY_COUNT_COLUMN)
             val localFilenameIndex: Int =
-                results.getColumnIndex(MetadataDbHelper.Companion.LOCAL_FILENAME_COLUMN)
+                results.getColumnIndex(MetadataDbHelper.LOCAL_FILENAME_COLUMN)
             val remoteFilenameIndex: Int =
-                results.getColumnIndex(MetadataDbHelper.Companion.REMOTE_FILENAME_COLUMN)
+                results.getColumnIndex(MetadataDbHelper.REMOTE_FILENAME_COLUMN)
             val versionIndex: Int =
-                results.getColumnIndex(MetadataDbHelper.Companion.VERSION_COLUMN)
+                results.getColumnIndex(MetadataDbHelper.VERSION_COLUMN)
             val formatVersionIndex: Int =
-                results.getColumnIndex(MetadataDbHelper.Companion.FORMATVERSION_COLUMN)
+                results.getColumnIndex(MetadataDbHelper.FORMATVERSION_COLUMN)
             do {
                 buildingMetadata.add(
                     WordListMetadata(
@@ -99,7 +99,7 @@ object MetadataHandler {
     ): List<WordListMetadata> {
         // If clientId is null, we get a cursor on the default database (see
         // MetadataDbHelper#getInstance() for more on this)
-        val results: Cursor = MetadataDbHelper.Companion.queryCurrentMetadata(context, clientId)
+        val results: Cursor = MetadataDbHelper.queryCurrentMetadata(context, clientId)
         // If null, we should return makeMetadataObject(null), so we go through.
         try {
             return makeMetadataObject(results)
@@ -123,8 +123,8 @@ object MetadataHandler {
         context: Context?,
         clientId: String, wordListId: String?, version: Int
     ): WordListMetadata? {
-        val contentValues: ContentValues? = MetadataDbHelper.Companion.getContentValuesByWordListId(
-            MetadataDbHelper.Companion.getDb(context, clientId), wordListId, version
+        val contentValues: ContentValues? = MetadataDbHelper.getContentValuesByWordListId(
+            MetadataDbHelper.getDb(context, clientId), wordListId, version
         )
         if (contentValues == null) {
             // TODO: Figure out why this would happen.
@@ -138,7 +138,7 @@ object MetadataHandler {
             )
             return null
         }
-        return WordListMetadata.Companion.createFromContentValues(contentValues)
+        return WordListMetadata.createFromContentValues(contentValues)
     }
 
     /**
@@ -149,7 +149,7 @@ object MetadataHandler {
      * @throws BadFormatException if the stream is not in a known format
      */
     @Throws(IOException::class, BadFormatException::class)
-    fun readMetadata(input: InputStreamReader?): List<WordListMetadata?> {
+    fun readMetadata(input: InputStreamReader?): List<WordListMetadata> {
         return MetadataParser.parseMetadata(input)
     }
 

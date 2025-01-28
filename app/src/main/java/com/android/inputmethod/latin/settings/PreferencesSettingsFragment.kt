@@ -46,19 +46,19 @@ class PreferencesSettingsFragment : SubScreenFragment() {
         // When we are called from the Settings application but we are not already running, some
         // singleton and utility classes may not have been initialized.  We have to call
         // initialization method of these classes here. See {@link LatinIME#onCreate()}.
-        RichInputMethodManager.Companion.init(context)
+        RichInputMethodManager.init(context)
 
         val showVoiceKeyOption = res.getBoolean(
             R.bool.config_enable_show_voice_key_option
         )
         if (!showVoiceKeyOption) {
-            removePreference(Settings.Companion.PREF_VOICE_INPUT_KEY)
+            removePreference(Settings.PREF_VOICE_INPUT_KEY, preferenceScreen)
         }
-        if (!AudioAndHapticFeedbackManager.Companion.getInstance().hasVibrator()) {
-            removePreference(Settings.Companion.PREF_VIBRATE_ON)
+        if (!AudioAndHapticFeedbackManager.instance.hasVibrator()) {
+            removePreference(Settings.PREF_VIBRATE_ON, preferenceScreen)
         }
-        if (!Settings.Companion.readFromBuildConfigIfToShowKeyPreviewPopupOption(res)) {
-            removePreference(Settings.Companion.PREF_POPUP_ON)
+        if (!Settings.readFromBuildConfigIfToShowKeyPreviewPopupOption(res)) {
+            removePreference(Settings.PREF_POPUP_ON, preferenceScreen)
         }
 
         refreshEnablingsOfKeypressSoundAndVibrationSettings()
@@ -66,9 +66,9 @@ class PreferencesSettingsFragment : SubScreenFragment() {
 
     override fun onResume() {
         super.onResume()
-        val voiceInputKeyOption = findPreference(Settings.Companion.PREF_VOICE_INPUT_KEY)
+        val voiceInputKeyOption = findPreference(Settings.PREF_VOICE_INPUT_KEY)
         if (voiceInputKeyOption != null) {
-            RichInputMethodManager.Companion.getInstance().refreshSubtypeCaches()
+            RichInputMethodManager.instance.refreshSubtypeCaches()
             voiceInputKeyOption.isEnabled = VOICE_IME_ENABLED
             voiceInputKeyOption.summary =
                 if (VOICE_IME_ENABLED)
@@ -78,12 +78,12 @@ class PreferencesSettingsFragment : SubScreenFragment() {
         }
     }
 
-    override fun onSharedPreferenceChanged(prefs: SharedPreferences, key: String) {
+    override fun onSharedPreferenceChanged(prefs: SharedPreferences, key: String?) {
         val res = resources
-        if (key == Settings.Companion.PREF_POPUP_ON) {
+        if (key == Settings.PREF_POPUP_ON) {
             setPreferenceEnabled(
-                Settings.Companion.PREF_KEY_PREVIEW_POPUP_DISMISS_DELAY,
-                Settings.Companion.readKeyPreviewPopupEnabled(prefs, res)
+                Settings.PREF_KEY_PREVIEW_POPUP_DISMISS_DELAY,
+                Settings.readKeyPreviewPopupEnabled(prefs, res)
             )
         }
         refreshEnablingsOfKeypressSoundAndVibrationSettings()
@@ -93,12 +93,12 @@ class PreferencesSettingsFragment : SubScreenFragment() {
         val prefs = sharedPreferences
         val res = resources
         setPreferenceEnabled(
-            Settings.Companion.PREF_VIBRATION_DURATION_SETTINGS,
-            Settings.Companion.readVibrationEnabled(prefs!!, res)
+            Settings.PREF_VIBRATION_DURATION_SETTINGS,
+            Settings.readVibrationEnabled(prefs, res)
         )
         setPreferenceEnabled(
-            Settings.Companion.PREF_KEYPRESS_SOUND_VOLUME,
-            Settings.Companion.readKeypressSoundEnabled(prefs, res)
+            Settings.PREF_KEYPRESS_SOUND_VOLUME,
+            Settings.readKeypressSoundEnabled(prefs, res)
         )
     }
 

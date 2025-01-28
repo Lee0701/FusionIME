@@ -36,11 +36,11 @@ object CombinedFormatUtils {
     fun formatAttributeMap(attributeMap: HashMap<String, String?>): String {
         val builder = StringBuilder()
         builder.append(DICTIONARY_TAG + "=")
-        if (attributeMap.containsKey(DictionaryHeader.Companion.DICTIONARY_ID_KEY)) {
-            builder.append(attributeMap[DictionaryHeader.Companion.DICTIONARY_ID_KEY])
+        if (attributeMap.containsKey(DictionaryHeader.DICTIONARY_ID_KEY)) {
+            builder.append(attributeMap[DictionaryHeader.DICTIONARY_ID_KEY])
         }
         for (key in attributeMap.keys) {
-            if (key == DictionaryHeader.Companion.DICTIONARY_ID_KEY) {
+            if (key == DictionaryHeader.DICTIONARY_ID_KEY) {
                 continue
             }
             val value = attributeMap[key]

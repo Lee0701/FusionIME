@@ -38,7 +38,7 @@ class NonDistinctMultitouchHelper {
         }
 
         // Use only main pointer tracker.
-        val mainTracker: PointerTracker = PointerTracker.Companion.getPointerTracker(
+        val mainTracker: PointerTracker = PointerTracker.getPointerTracker(
             MAIN_POINTER_TRACKER_ID
         )
         val action: Int = me.getActionMasked()

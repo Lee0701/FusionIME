@@ -66,6 +66,6 @@ object UserManagerCompatUtils {
     }
 
     @Retention(AnnotationRetention.SOURCE)
-    @IntDef([LOCK_STATE_UNKNOWN, LOCK_STATE_UNLOCKED, LOCK_STATE_LOCKED])
+    @IntDef(LOCK_STATE_UNKNOWN, LOCK_STATE_UNLOCKED, LOCK_STATE_LOCKED)
     annotation class LockState
 }

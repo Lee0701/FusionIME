@@ -56,8 +56,8 @@ object StringUtils {
      */
     @Nonnull
     fun join(
-        @Nonnull delimiter: CharSequence?,
-        @Nonnull tokens: Iterable<*>
+        delimiter: CharSequence,
+        tokens: Iterable<*>
     ): String {
         val sb = StringBuilder()
         var firstTime = true
@@ -70,35 +70,6 @@ object StringUtils {
             sb.append(token)
         }
         return sb.toString()
-    }
-
-    // Taken from android.text.TextUtils to cut the dependency to the Android framework.
-    /**
-     * Returns true if a and b are equal, including if they are both null.
-     *
-     * *Note: In platform versions 1.1 and earlier, this method only worked well if
-     * both the arguments were instances of String.*
-     * @param a first CharSequence to check
-     * @param b second CharSequence to check
-     * @return true if a and b are equal
-     */
-    fun equals(a: CharSequence?, b: CharSequence?): Boolean {
-        if (a === b) {
-            return true
-        }
-        val length: Int
-        if (a != null && b != null && (a.length.also { length = it }) == b.length) {
-            if (a is String && b is String) {
-                return a == b
-            }
-            for (i in 0 until length) {
-                if (a[i] != b[i]) {
-                    return false
-                }
-            }
-            return true
-        }
-        return false
     }
 
     fun codePointCount(text: CharSequence?): Int {
@@ -120,8 +91,8 @@ object StringUtils {
     }
 
     fun containsInArray(
-        @Nonnull text: String,
-        @Nonnull array: Array<String>
+        text: String,
+        array: Array<String>
     ): Boolean {
         for (element in array) {
             if (text == element) {
@@ -140,7 +111,7 @@ object StringUtils {
     private const val SEPARATOR_FOR_COMMA_SPLITTABLE_TEXT = ","
 
     fun containsInCommaSplittableText(
-        @Nonnull text: String,
+        text: String,
         extraValues: String?
     ): Boolean {
         if (isEmpty(extraValues)) {
@@ -153,11 +124,10 @@ object StringUtils {
         )
     }
 
-    @Nonnull
     fun removeFromCommaSplittableTextIfExists(
-        @Nonnull text: String,
+        text: String,
         extraValues: String?
-    ): String? {
+    ): String {
         if (isEmpty(extraValues)) {
             return EMPTY_STRING
         }
@@ -181,7 +151,7 @@ object StringUtils {
      * This method will always keep the first occurrence of all strings at their position
      * in the array, removing the subsequent ones.
      */
-    fun removeDupes(@Nonnull suggestions: ArrayList<String?>) {
+    fun removeDupes(suggestions: ArrayList<String?>) {
         if (suggestions.size < 2) {
             return
         }
@@ -193,7 +163,7 @@ object StringUtils {
             var j = 0
             while (j < i) {
                 val previous = suggestions[j]
-                if (equals(cur, previous)) {
+                if (cur == previous) {
                     suggestions.removeAt(i)
                     i--
                     break
@@ -206,8 +176,8 @@ object StringUtils {
 
     @Nonnull
     fun capitalizeFirstCodePoint(
-        @Nonnull s: String,
-        @Nonnull locale: Locale
+        s: String,
+        locale: Locale
     ): String {
         if (s.length <= 1) {
             return s.uppercase(getLocaleUsedForToTitleCase(locale))
@@ -221,13 +191,13 @@ object StringUtils {
 
     @Nonnull
     fun capitalizeFirstAndDowncaseRest(
-        @Nonnull s: String,
-        @Nonnull locale: Locale?
+        s: String,
+        locale: Locale
     ): String {
         if (s.length <= 1) {
             return s.uppercase(
                 getLocaleUsedForToTitleCase(
-                    locale!!
+                    locale
                 )
             )
         }
@@ -241,14 +211,14 @@ object StringUtils {
         val cutoff = s.offsetByCodePoints(0, 1)
         return (s.substring(0, cutoff).uppercase(
             getLocaleUsedForToTitleCase(
-                locale!!
+                locale
             )
         )
                 + s.substring(cutoff).lowercase(locale))
     }
 
     @Nonnull
-    fun toCodePointArray(@Nonnull charSequence: CharSequence?): IntArray {
+    fun toCodePointArray(charSequence: CharSequence): IntArray {
         return toCodePointArray(charSequence!!, 0, charSequence.length)
     }
 
@@ -264,7 +234,7 @@ object StringUtils {
      */
     @Nonnull
     fun toCodePointArray(
-        @Nonnull charSequence: CharSequence,
+        charSequence: CharSequence,
         startIndex: Int, endIndex: Int
     ): IntArray {
         val length = charSequence.length
@@ -299,8 +269,8 @@ object StringUtils {
      * @return the number of copied code points.
      */
     fun copyCodePointsAndReturnCodePointCount(
-        @Nonnull destination: IntArray,
-        @Nonnull charSequence: CharSequence?, startIndex: Int, endIndex: Int,
+        destination: IntArray,
+        charSequence: CharSequence, startIndex: Int, endIndex: Int,
         downCase: Boolean
     ): Int {
         var destIndex = 0
@@ -310,7 +280,7 @@ object StringUtils {
             val codePoint = Character.codePointAt(charSequence, index)
             // TODO: stop using this, as it's not aware of the locale and does not always do
             // the right thing.
-            destination[destIndex] = if (downCase) codePoint.lowercaseChar() else codePoint
+            destination[destIndex] = if (downCase) codePoint.toChar().lowercaseChar().code else codePoint
             destIndex++
             index = Character.offsetByCodePoints(charSequence, index, 1)
         }
@@ -318,7 +288,7 @@ object StringUtils {
     }
 
     @Nonnull
-    fun toSortedCodePointArray(@Nonnull string: String?): IntArray {
+    fun toSortedCodePointArray(string: String): IntArray {
         val codePoints = toCodePointArray(string)
         Arrays.sort(codePoints)
         return codePoints
@@ -333,7 +303,7 @@ object StringUtils {
      */
     @Nonnull
     fun getStringFromNullTerminatedCodePointArray(
-        @Nonnull codePoints: IntArray
+        codePoints: IntArray
     ): String {
         var stringLength = codePoints.size
         for (i in codePoints.indices) {
@@ -346,7 +316,7 @@ object StringUtils {
     }
 
     // This method assumes the text is not null. For the empty string, it returns CAPITALIZE_NONE.
-    fun getCapitalizationType(@Nonnull text: String): Int {
+    fun getCapitalizationType(text: String): Int {
         // If the first char is not uppercase, then the word is either all lower case or
         // camel case, and in either case we return CAPITALIZE_NONE.
         val len = text.length
@@ -385,7 +355,7 @@ object StringUtils {
         return (if (letterCount == capsCount) CAPITALIZE_ALL else CAPITALIZE_NONE)
     }
 
-    fun isIdenticalAfterUpcase(@Nonnull text: String): Boolean {
+    fun isIdenticalAfterUpcase(text: String): Boolean {
         val length = text.length
         var i = 0
         while (i < length) {
@@ -398,7 +368,7 @@ object StringUtils {
         return true
     }
 
-    fun isIdenticalAfterDowncase(@Nonnull text: String): Boolean {
+    fun isIdenticalAfterDowncase(text: String): Boolean {
         val length = text.length
         var i = 0
         while (i < length) {
@@ -412,8 +382,8 @@ object StringUtils {
     }
 
     fun isIdenticalAfterCapitalizeEachWord(
-        @Nonnull text: String,
-        @Nonnull sortedSeparators: IntArray?
+        text: String,
+        sortedSeparators: IntArray
     ): Boolean {
         var needsCapsNext = true
         val len = text.length
@@ -438,8 +408,8 @@ object StringUtils {
     // which should be capitalized together in *some* cases.
     @Nonnull
     fun capitalizeEachWord(
-        @Nonnull text: String,
-        @Nonnull sortedSeparators: IntArray?, @Nonnull locale: Locale?
+        text: String,
+        sortedSeparators: IntArray, locale: Locale
     ): String {
         val builder = StringBuilder()
         var needsCapsNext = true
@@ -448,9 +418,9 @@ object StringUtils {
         while (i < len) {
             val nextChar = text.substring(i, text.offsetByCodePoints(i, 1))
             if (needsCapsNext) {
-                builder.append(nextChar.uppercase(locale!!))
+                builder.append(nextChar.uppercase(locale))
             } else {
-                builder.append(nextChar.lowercase(locale!!))
+                builder.append(nextChar.lowercase(locale))
             }
             // We need a capital letter next if this is a separator.
             needsCapsNext = (Arrays.binarySearch(sortedSeparators, nextChar.codePointAt(0)) >= 0)
@@ -476,7 +446,7 @@ object StringUtils {
      * TODO: This will return that "abc./def" and ".abc/def" look like URLs to keep down the
      * code complexity, but ideally it should not. It's acceptable for now.
      */
-    fun lastPartLooksLikeURL(@Nonnull text: CharSequence): Boolean {
+    fun lastPartLooksLikeURL(text: CharSequence): Boolean {
         var i = text.length
         if (0 == i) {
             return false
@@ -548,7 +518,7 @@ object StringUtils {
      * @param text the text to examine.
      * @return whether we're inside a double quote.
      */
-    fun isInsideDoubleQuoteOrAfterDigit(@Nonnull text: CharSequence): Boolean {
+    fun isInsideDoubleQuoteOrAfterDigit(text: CharSequence): Boolean {
         var i = text.length
         if (0 == i) {
             return false
@@ -580,7 +550,7 @@ object StringUtils {
         return Constants.CODE_DOUBLE_QUOTE == codePoint
     }
 
-    fun isEmptyStringOrWhiteSpaces(@Nonnull s: String): Boolean {
+    fun isEmptyStringOrWhiteSpaces(s: String): Boolean {
         val N = codePointCount(s)
         for (i in 0 until N) {
             if (!Character.isWhitespace(s.codePointAt(i))) {
@@ -621,8 +591,8 @@ object StringUtils {
         val bytes = ByteArray(N / 2)
         var i = 0
         while (i < N) {
-            bytes[i / 2] = ((hexString[i].digitToIntOrNull(16) ?: -1 shl 4)
-            + hexString[i + 1].digitToIntOrNull(16)!! ?: -1).toByte()
+            bytes[i / 2] = ((((hexString[i].digitToIntOrNull(16)
+                ?: (-1 shl 4)) + hexString[i + 1].digitToIntOrNull(16)!!) ?: -1)).toByte()
             i += 2
         }
         return bytes
@@ -631,7 +601,7 @@ object StringUtils {
     private const val LANGUAGE_GREEK = "el"
 
     @Nonnull
-    private fun getLocaleUsedForToTitleCase(@Nonnull locale: Locale): Locale {
+    private fun getLocaleUsedForToTitleCase(locale: Locale): Locale {
         // In Greek locale {@link String#toUpperCase(Locale)} eliminates accents from its result.
         // In order to get accented upper case letter, {@link Locale#ROOT} should be used.
         if (LANGUAGE_GREEK == locale.language) {
@@ -642,7 +612,7 @@ object StringUtils {
 
     fun toTitleCaseOfKeyLabel(
         label: String?,
-        @Nonnull locale: Locale
+        locale: Locale
     ): String? {
         if (label == null) {
             return label
@@ -650,7 +620,7 @@ object StringUtils {
         return label.uppercase(getLocaleUsedForToTitleCase(locale))
     }
 
-    fun toTitleCaseOfKeyCode(code: Int, @Nonnull locale: Locale): Int {
+    fun toTitleCaseOfKeyCode(code: Int, locale: Locale): Int {
         if (!Constants.isLetterCode(code)) {
             return code
         }
@@ -663,7 +633,7 @@ object StringUtils {
             Constants.CODE_UNSPECIFIED
     }
 
-    fun getTrailingSingleQuotesCount(@Nonnull charSequence: CharSequence): Int {
+    fun getTrailingSingleQuotesCount(charSequence: CharSequence): Int {
         val lastIndex = charSequence.length - 1
         var i = lastIndex
         while (i >= 0 && charSequence[i].code == Constants.CODE_SINGLE_QUOTE) {
@@ -726,7 +696,7 @@ object StringUtils {
 
         @Nonnull
         protected fun joinStringArray(
-            @Nonnull stringArray: Array<String?>,
+            stringArray: Array<String?>,
             delimiter: String?
         ): String {
             if (delimiter == null) {

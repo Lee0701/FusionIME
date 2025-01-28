@@ -44,7 +44,7 @@ import com.android.inputmethod.latin.settings.SettingsValues
  * virtual views, thus conveying their logical structure.
  *
  */
-class KeyboardAccessibilityNodeProvider<KV : KeyboardView?>
+class KeyboardAccessibilityNodeProvider<KV : KeyboardView>
     (
     keyboardView: KV,
     delegate: KeyboardAccessibilityDelegate<KV>
@@ -74,14 +74,14 @@ class KeyboardAccessibilityNodeProvider<KV : KeyboardView?>
     private var mKeyboard: Keyboard? = null
 
     init {
-        mKeyCodeDescriptionMapper = KeyCodeDescriptionMapper.Companion.getInstance()
-        mAccessibilityUtils = AccessibilityUtils.Companion.getInstance()
+        mKeyCodeDescriptionMapper = KeyCodeDescriptionMapper.getInstance()
+        mAccessibilityUtils = AccessibilityUtils.instance
         mKeyboardView = keyboardView
         mDelegate = delegate
 
         // Since this class is constructed lazily, we might not get a subsequent
         // call to setKeyboard() and therefore need to call it now.
-        setKeyboard(keyboardView.getKeyboard())
+        setKeyboard(keyboardView.keyboard)
     }
 
     /**
@@ -97,7 +97,7 @@ class KeyboardAccessibilityNodeProvider<KV : KeyboardView?>
         if (mKeyboard == null) {
             return null
         }
-        val sortedKeys: List<Key?> = mKeyboard.getSortedKeys()
+        val sortedKeys: List<Key?> = mKeyboard?.sortedKeys ?: emptyList()
         // Use a virtual view id as an index of the sorted keys list.
         if (virtualViewId >= 0 && virtualViewId < sortedKeys.size) {
             return sortedKeys.get(virtualViewId)
@@ -109,7 +109,7 @@ class KeyboardAccessibilityNodeProvider<KV : KeyboardView?>
         if (mKeyboard == null) {
             return View.NO_ID
         }
-        val sortedKeys: List<Key?> = mKeyboard.getSortedKeys()
+        val sortedKeys: List<Key?> = mKeyboard?.sortedKeys ?: emptyList()
         val size: Int = sortedKeys.size
         for (index in 0 until size) {
             if (sortedKeys.get(index) === key) {
@@ -200,11 +200,11 @@ class KeyboardAccessibilityNodeProvider<KV : KeyboardView?>
             updateParentLocation()
 
             // Add the virtual children of the root View.
-            val sortedKeys: List<Key?> = mKeyboard.getSortedKeys()
+            val sortedKeys: List<Key?> = mKeyboard?.sortedKeys ?: listOf()
             val size: Int = sortedKeys.size
             for (index in 0 until size) {
-                val key: Key? = sortedKeys.get(index)
-                if (key!!.isSpacer()) {
+                val key: Key? = sortedKeys[index]
+                if (key!!.isSpacer) {
                     continue
                 }
                 // Use an index of the sorted keys list as a virtual view id.
@@ -220,7 +220,7 @@ class KeyboardAccessibilityNodeProvider<KV : KeyboardView?>
             return null
         }
         val keyDescription: String? = getKeyDescription(key)
-        val boundsInParent: Rect = key.getHitBox()
+        val boundsInParent: Rect = key.hitBox
 
         // Calculate the key's in-screen bounds.
         mTempBoundsInScreen.set(boundsInParent)
@@ -231,7 +231,7 @@ class KeyboardAccessibilityNodeProvider<KV : KeyboardView?>
 
         // Obtain and initialize an AccessibilityNodeInfo with information about the virtual view.
         val info: AccessibilityNodeInfoCompat = AccessibilityNodeInfoCompat.obtain()
-        info.setPackageName(mKeyboardView!!.getContext().getPackageName())
+        info.setPackageName(mKeyboardView.getContext().getPackageName())
         info.setTextEntryKey(true)
         info.setClassName(key.javaClass.getName())
         info.setContentDescription(keyDescription)
@@ -239,10 +239,10 @@ class KeyboardAccessibilityNodeProvider<KV : KeyboardView?>
         info.setBoundsInScreen(boundsInScreen)
         info.setParent(mKeyboardView)
         info.setSource(mKeyboardView, virtualViewId)
-        info.setEnabled(key.isEnabled())
+        info.setEnabled(key.isEnabled)
         info.setVisibleToUser(true)
         info.addAction(AccessibilityNodeInfoCompat.ACTION_CLICK)
-        if (key.isLongPressEnabled()) {
+        if (key.isLongPressEnabled) {
             info.addAction(AccessibilityNodeInfoCompat.ACTION_LONG_CLICK)
         }
 
@@ -326,11 +326,11 @@ class KeyboardAccessibilityNodeProvider<KV : KeyboardView?>
     private fun getKeyDescription(key: Key): String? {
         val editorInfo: EditorInfo? = mKeyboard!!.mId!!.mEditorInfo
         val shouldObscure: Boolean = mAccessibilityUtils.shouldObscureInput(editorInfo)
-        val currentSettings: SettingsValues? = Settings.Companion.getInstance().getCurrent()
+        val currentSettings: SettingsValues? = Settings.instance.current
         val keyCodeDescription: String? = mKeyCodeDescriptionMapper.getDescriptionForKey(
-            mKeyboardView!!.getContext(), mKeyboard!!, key, shouldObscure
+            mKeyboardView.context, mKeyboard!!, key, shouldObscure
         )
-        if (currentSettings!!.isWordSeparator(key.getCode())) {
+        if (currentSettings!!.isWordSeparator(key.code)) {
             return mAccessibilityUtils.getAutoCorrectionDescription(
                 keyCodeDescription, shouldObscure
             )
@@ -342,7 +342,7 @@ class KeyboardAccessibilityNodeProvider<KV : KeyboardView?>
      * Updates the parent's on-screen location.
      */
     private fun updateParentLocation() {
-        mKeyboardView!!.getLocationOnScreen(mParentLocation)
+        mKeyboardView.getLocationOnScreen(mParentLocation)
     }
 
     companion object {

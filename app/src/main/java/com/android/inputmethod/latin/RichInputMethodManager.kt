@@ -73,7 +73,7 @@ class RichInputMethodManager private constructor() {
 
         // Initialize additional subtypes.
         SubtypeLocaleUtils.init(context)
-        val additionalSubtypes: Array<InputMethodSubtype?> = additionalSubtypes
+        val additionalSubtypes: Array<InputMethodSubtype> = additionalSubtypes
         mImmWrapper!!.mImm.setAdditionalInputMethodSubtypes(
             inputMethodIdOfThisIme, additionalSubtypes
         )
@@ -82,12 +82,12 @@ class RichInputMethodManager private constructor() {
         refreshSubtypeCaches()
     }
 
-    val additionalSubtypes: Array<InputMethodSubtype?>
+    val additionalSubtypes: Array<InputMethodSubtype>
         get() {
             val prefs: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext)
             val prefAdditionalSubtypes: String =
-                Settings.Companion.readPrefAdditionalSubtypes(
-                    prefs, mContext!!.getResources()
+                Settings.readPrefAdditionalSubtypes(
+                    prefs, mContext!!.resources
                 )
             return AdditionalSubtypeUtils.createAdditionalSubtypesArray(prefAdditionalSubtypes)
         }
@@ -194,11 +194,9 @@ class RichInputMethodManager private constructor() {
         @get:Synchronized
         val inputMethodOfThisIme: InputMethodInfo
             get() {
-                if (mCachedThisImeInfo != null) {
-                    return mCachedThisImeInfo
-                }
+                mCachedThisImeInfo?.let { return it }
                 for (imi: InputMethodInfo in mImm!!.getInputMethodList()) {
-                    if (imi.getPackageName() == mImePackageName) {
+                    if (imi.packageName == mImePackageName) {
                         mCachedThisImeInfo = imi
                         return imi
                     }
@@ -236,7 +234,7 @@ class RichInputMethodManager private constructor() {
 
     val inputMethodInfoOfThisIme: InputMethodInfo
         get() {
-            return mInputMethodInfoCache.getInputMethodOfThisIme()
+            return mInputMethodInfoCache?.inputMethodOfThisIme!!
         }
 
     val inputMethodIdOfThisIme: String
@@ -265,36 +263,24 @@ class RichInputMethodManager private constructor() {
         return subtypeEnabled && !subtypeExplicitlyEnabled
     }
 
-    fun onSubtypeChanged(@Nonnull newSubtype: InputMethodSubtype?) {
+    fun onSubtypeChanged(newSubtype: InputMethodSubtype) {
         updateCurrentSubtype(newSubtype)
         updateShortcutIme()
         if (DEBUG) {
-            Log.w(TAG, "onSubtypeChanged: " + mCurrentRichInputMethodSubtype.getNameForLogging())
+            Log.w(TAG, "onSubtypeChanged: " + mCurrentRichInputMethodSubtype?.nameForLogging)
         }
     }
 
-    @get:Nonnull
     val currentSubtypeLocale: Locale?
-        get() {
-            if (null != sForcedSubtypeForTesting) {
-                return sForcedSubtypeForTesting.getLocale()
-            }
-            return currentSubtype.getLocale()
-        }
+        get() = sForcedSubtypeForTesting?.locale ?: currentSubtype?.locale
 
-    @get:Nonnull
     val currentSubtype: RichInputMethodSubtype?
-        get() {
-            if (null != sForcedSubtypeForTesting) {
-                return sForcedSubtypeForTesting
-            }
-            return mCurrentRichInputMethodSubtype
-        }
+        get() = sForcedSubtypeForTesting ?: mCurrentRichInputMethodSubtype
 
 
-    val combiningRulesExtraValueOfCurrentSubtype: String?
+    val combiningRulesExtraValueOfCurrentSubtype: String
         get() {
-            return SubtypeLocaleUtils.getCombiningRulesExtraValue(currentSubtype.getRawSubtype())
+            return SubtypeLocaleUtils.getCombiningRulesExtraValue(currentSubtype?.rawSubtype!!)
         }
 
     fun hasMultipleEnabledIMEsOrSubtypes(shouldIncludeAuxiliarySubtypes: Boolean): Boolean {
@@ -495,7 +481,7 @@ class RichInputMethodManager private constructor() {
 
     private fun updateCurrentSubtype(subtype: InputMethodSubtype?) {
         mCurrentRichInputMethodSubtype =
-            RichInputMethodSubtype.Companion.getRichInputMethodSubtype(subtype)
+            RichInputMethodSubtype.getRichInputMethodSubtype(subtype)
     }
 
     private fun updateShortcutIme() {
@@ -511,7 +497,7 @@ class RichInputMethodManager private constructor() {
         }
         val richSubtype: RichInputMethodSubtype? = mCurrentRichInputMethodSubtype
         val implicitlyEnabledSubtype: Boolean = checkIfSubtypeBelongsToThisImeAndImplicitlyEnabled(
-            richSubtype.getRawSubtype()
+            richSubtype?.rawSubtype
         )
         val systemLocale: Locale = mContext!!.getResources().getConfiguration().locale
         LanguageOnSpacebarUtils.onSubtypeChanged(
@@ -529,7 +515,7 @@ class RichInputMethodManager private constructor() {
         mShortcutInputMethodInfo = null
         mShortcutSubtype = null
         for (imi: InputMethodInfo in shortcuts.keys) {
-            val subtypes: List<InputMethodSubtype>? = shortcuts.get(imi)
+            val subtypes: List<InputMethodSubtype>? = shortcuts[imi]
             // TODO: Returns the first found IMI for now. Should handle all shortcuts as
             // appropriate.
             mShortcutInputMethodInfo = imi
@@ -539,13 +525,14 @@ class RichInputMethodManager private constructor() {
             break
         }
         if (DEBUG) {
+            val shortcutInputMethodInfo = this.mShortcutInputMethodInfo
             Log.d(
                 TAG, ("Update shortcut IME to : "
-                        + (if (mShortcutInputMethodInfo == null)
+                        + (if (shortcutInputMethodInfo == null)
                     "<null>"
                 else
-                    mShortcutInputMethodInfo.getId()) + ", "
-                        + (if (mShortcutSubtype == null) "<null>" else (mShortcutSubtype.getLocale() + ", " + mShortcutSubtype.getMode())))
+                    shortcutInputMethodInfo.id) + ", "
+                        + (if (mShortcutSubtype == null) "<null>" else (mShortcutSubtype?.locale + ", " + mShortcutSubtype?.mode)))
             )
         }
     }
@@ -569,7 +556,7 @@ class RichInputMethodManager private constructor() {
         }
         val imm: InputMethodManager? = inputMethodManager
         object : AsyncTask<Void?, Void?, Void?>() {
-            override fun doInBackground(vararg params: Void): Void? {
+            override fun doInBackground(vararg params: Void?): Void? {
                 imm!!.setInputMethodAndSubtype(token, imiId, subtype)
                 return null
             }
@@ -674,9 +661,8 @@ class RichInputMethodManager private constructor() {
         private var sForcedSubtypeForTesting: RichInputMethodSubtype? = null
 
         @UsedForTesting
-        fun forceSubtype(@Nonnull subtype: InputMethodSubtype?) {
-            sForcedSubtypeForTesting =
-                RichInputMethodSubtype.Companion.getRichInputMethodSubtype(subtype)
+        fun forceSubtype(subtype: InputMethodSubtype) {
+            sForcedSubtypeForTesting = RichInputMethodSubtype.getRichInputMethodSubtype(subtype)
         }
     }
 }

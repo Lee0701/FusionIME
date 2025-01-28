@@ -62,7 +62,7 @@ class WordProperty : Comparable<WordProperty> {
         mIsBeginningOfSentence = false
         mIsNotAWord = isNotAWord
         mIsPossiblyOffensive = isPossiblyOffensive
-        mHasNgrams = bigrams != null && !bigrams.isEmpty()
+        mHasNgrams = !bigrams.isNullOrEmpty()
     }
 
     // Construct word property using information from native code.
@@ -99,7 +99,7 @@ class WordProperty : Comparable<WordProperty> {
             val wordInfoArray = arrayOfNulls<WordInfo>(prevWords.size)
             for (j in prevWords.indices) {
                 wordInfoArray[j] = if (isBeginningOfSentenceArray[j])
-                    WordInfo.Companion.BEGINNING_OF_SENTENCE_WORD_INFO
+                    WordInfo.BEGINNING_OF_SENTENCE_WORD_INFO
                 else
                     WordInfo(
                         StringUtils.getStringFromNullTerminatedCodePointArray(
@@ -169,7 +169,7 @@ class WordProperty : Comparable<WordProperty> {
 
     @get:UsedForTesting
     val isValid: Boolean
-        get() = probability != Dictionary.Companion.NOT_A_PROBABILITY
+        get() = probability != Dictionary.NOT_A_PROBABILITY
 
     override fun toString(): String {
         return CombinedFormatUtils.formatWordProperty(this)
@@ -178,10 +178,10 @@ class WordProperty : Comparable<WordProperty> {
     companion object {
         private fun createProbabilityInfoFromArray(probabilityInfo: IntArray): ProbabilityInfo {
             return ProbabilityInfo(
-                probabilityInfo[BinaryDictionary.Companion.FORMAT_WORD_PROPERTY_PROBABILITY_INDEX],
-                probabilityInfo[BinaryDictionary.Companion.FORMAT_WORD_PROPERTY_TIMESTAMP_INDEX],
-                probabilityInfo[BinaryDictionary.Companion.FORMAT_WORD_PROPERTY_LEVEL_INDEX],
-                probabilityInfo[BinaryDictionary.Companion.FORMAT_WORD_PROPERTY_COUNT_INDEX]
+                probabilityInfo[BinaryDictionary.FORMAT_WORD_PROPERTY_PROBABILITY_INDEX],
+                probabilityInfo[BinaryDictionary.FORMAT_WORD_PROPERTY_TIMESTAMP_INDEX],
+                probabilityInfo[BinaryDictionary.FORMAT_WORD_PROPERTY_LEVEL_INDEX],
+                probabilityInfo[BinaryDictionary.FORMAT_WORD_PROPERTY_COUNT_INDEX]
             )
         }
 

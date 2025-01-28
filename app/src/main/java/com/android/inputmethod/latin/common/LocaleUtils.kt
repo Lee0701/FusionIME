@@ -16,7 +16,6 @@
 package com.android.inputmethod.latin.common
 
 import java.util.Locale
-import javax.annotation.Nonnull
 
 /**
  * A class to help with handling Locales in string form.
@@ -158,20 +157,17 @@ object LocaleUtils {
         return LOCALE_MATCH <= level
     }
 
-    private val sLocaleCache = HashMap<String?, Locale>()
+    private val sLocaleCache = HashMap<String, Locale>()
 
     /**
      * Creates a locale from a string specification.
      * @param localeString a string specification of a locale, in a format of "ll_cc_variant" where
      * "ll" is a language code, "cc" is a country code.
      */
-    @Nonnull
-    fun constructLocaleFromString(@Nonnull localeString: String?): Locale? {
+    fun constructLocaleFromString(localeString: String): Locale {
         synchronized(sLocaleCache) {
-            if (sLocaleCache.containsKey(localeString)) {
-                return sLocaleCache[localeString]
-            }
-            val elements = localeString!!.split("_".toRegex(), limit = 3).toTypedArray()
+            sLocaleCache[localeString]?.let { return it }
+            val elements = localeString.split("_".toRegex(), limit = 3).toTypedArray()
             val locale = if (elements.size == 1) {
                 Locale(elements[0] /* language */)
             } else if (elements.size == 2) {
@@ -203,7 +199,7 @@ object LocaleUtils {
         sRtlLanguageCodes.add("yi") // Yiddish
     }
 
-    fun isRtlLanguage(@Nonnull locale: Locale): Boolean {
+    fun isRtlLanguage(locale: Locale): Boolean {
         return sRtlLanguageCodes.contains(locale.language)
     }
 }

@@ -72,11 +72,11 @@ class SpacingAndPunctuations {
         // English variants. German rules (not "German typography") also have small gotchas.
         mUsesAmericanTypography = Locale.ENGLISH.language == locale.language
         mUsesGermanRules = Locale.GERMAN.language == locale.language
-        val suggestPuncsSpec: Array<String> = MoreKeySpec.Companion.splitKeySpecs(
+        val suggestPuncsSpec: Array<String?> = MoreKeySpec.splitKeySpecs(
             res.getString(R.string.suggested_punctuations)
-        )
+        ) ?: emptyArray()
         mSuggestPuncList =
-            PunctuationSuggestions.Companion.newPunctuationSuggestions(suggestPuncsSpec)
+            PunctuationSuggestions.newPunctuationSuggestions(suggestPuncsSpec)
     }
 
     @UsedForTesting

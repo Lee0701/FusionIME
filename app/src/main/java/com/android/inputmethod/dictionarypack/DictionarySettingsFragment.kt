@@ -92,8 +92,8 @@ class DictionarySettingsFragment
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         object : AsyncTask<Void?, Void?, String?>() {
-            override fun doInBackground(vararg params: Void): String? {
-                return MetadataDbHelper.Companion.getMetadataUriAsString(getActivity(), mClientId)
+            override fun doInBackground(vararg params: Void?): String? {
+                return MetadataDbHelper.getMetadataUriAsString(getActivity(), mClientId)
             }
 
             override fun onPostExecute(metadataUri: String?) {
@@ -105,8 +105,9 @@ class DictionarySettingsFragment
                         mUpdateNowMenu = menu.add(
                             Menu.NONE, MENU_UPDATE_NOW, 0,
                             R.string.check_for_updates_now
-                        )
-                        mUpdateNowMenu.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+                        ).apply {
+                            setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+                        }
                     }
                     refreshNetworkState()
                 }
@@ -126,7 +127,7 @@ class DictionarySettingsFragment
 
         object : Thread("onResume") {
             override fun run() {
-                if (!MetadataDbHelper.Companion.isClientKnown(activity, mClientId)) {
+                if (!MetadataDbHelper.isClientKnown(activity, mClientId)) {
                     Log.i(
                         TAG, ("Unknown dictionary pack client: " + mClientId
                                 + ". Requesting info.")
@@ -254,7 +255,7 @@ class DictionarySettingsFragment
             .appendPath(clientId)
             .appendPath(DICT_LIST_ID) // Need to use version 2 to get this client's list
             .appendQueryParameter(
-                DictionaryProvider.Companion.QUERY_PARAMETER_PROTOCOL_VERSION,
+                DictionaryProvider.QUERY_PARAMETER_PROTOCOL_VERSION,
                 "2"
             )
             .build()
@@ -277,14 +278,14 @@ class DictionarySettingsFragment
             }
             val systemLocaleString: String = Locale.getDefault().toString()
             val prefMap: TreeMap<String, WordListPreference> = TreeMap()
-            val idIndex: Int = cursor.getColumnIndex(MetadataDbHelper.Companion.WORDLISTID_COLUMN)
-            val versionIndex: Int = cursor.getColumnIndex(MetadataDbHelper.Companion.VERSION_COLUMN)
-            val localeIndex: Int = cursor.getColumnIndex(MetadataDbHelper.Companion.LOCALE_COLUMN)
+            val idIndex: Int = cursor.getColumnIndex(MetadataDbHelper.WORDLISTID_COLUMN)
+            val versionIndex: Int = cursor.getColumnIndex(MetadataDbHelper.VERSION_COLUMN)
+            val localeIndex: Int = cursor.getColumnIndex(MetadataDbHelper.LOCALE_COLUMN)
             val descriptionIndex: Int =
-                cursor.getColumnIndex(MetadataDbHelper.Companion.DESCRIPTION_COLUMN)
-            val statusIndex: Int = cursor.getColumnIndex(MetadataDbHelper.Companion.STATUS_COLUMN)
+                cursor.getColumnIndex(MetadataDbHelper.DESCRIPTION_COLUMN)
+            val statusIndex: Int = cursor.getColumnIndex(MetadataDbHelper.STATUS_COLUMN)
             val filesizeIndex: Int =
-                cursor.getColumnIndex(MetadataDbHelper.Companion.FILESIZE_COLUMN)
+                cursor.getColumnIndex(MetadataDbHelper.FILESIZE_COLUMN)
             do {
                 val wordlistId: String = cursor.getString(idIndex)
                 val version: Int = cursor.getInt(versionIndex)

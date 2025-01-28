@@ -21,7 +21,6 @@ import com.android.inputmethod.latin.define.DecoderSpecificConstants
 import com.android.inputmethod.latin.settings.SpacingAndPunctuations
 import java.util.Arrays
 import java.util.regex.Pattern
-import javax.annotation.Nonnull
 
 object NgramContextUtils {
     private val NEWLINE_REGEX: Pattern = Pattern.compile("[\\r\\n]+")
@@ -49,7 +48,6 @@ object NgramContextUtils {
     // (n = 2) "abc|" -> beginning-of-sentence
     // (n = 2) "abc |" -> beginning-of-sentence
     // (n = 2) "abc. def|" -> beginning-of-sentence
-    @Nonnull
     fun getNgramContextFromNthPreviousWord(
         prev: CharSequence?,
         spacingAndPunctuations: SpacingAndPunctuations, n: Int

@@ -36,6 +36,7 @@ class InputView(context: Context, attrs: AttributeSet?) :
     private var mActiveForwarder: MotionEventForwarder<*, *>? = null
 
     override fun onFinishInflate() {
+        super.onFinishInflate()
         val suggestionStripView: SuggestionStripView =
             findViewById<View>(R.id.suggestion_strip_view) as SuggestionStripView
         mMainKeyboardView = findViewById<View>(R.id.keyboard_view) as MainKeyboardView?
@@ -52,7 +53,7 @@ class InputView(context: Context, attrs: AttributeSet?) :
     }
 
     override fun dispatchHoverEvent(event: MotionEvent): Boolean {
-        if (AccessibilityUtils.Companion.getInstance().isTouchExplorationEnabled()
+        if (AccessibilityUtils.instance.isTouchExplorationEnabled()
             && mMainKeyboardView!!.isShowingMoreKeysPanel()
         ) {
             // With accessibility mode on, discard hover events while a more keys keyboard is shown.
@@ -239,7 +240,7 @@ class InputView(context: Context, attrs: AttributeSet?) :
         suggestionStripView
     ) {
         override fun needsToForward(x: Int, y: Int): Boolean {
-            return mReceiverView!!.isShowingMoreSuggestionPanel() && mEventSendingRect.contains(
+            return mReceiverView!!.isShowingMoreSuggestionPanel && mEventSendingRect.contains(
                 x,
                 y
             )

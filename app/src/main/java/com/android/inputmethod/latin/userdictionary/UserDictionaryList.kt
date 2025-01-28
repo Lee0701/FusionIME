@@ -129,7 +129,7 @@ class UserDictionaryList : PreferenceFragment() {
             } finally {
                 cursor.close()
             }
-            if (!UserDictionarySettings.Companion.IS_SHORTCUT_API_SUPPORTED) {
+            if (!UserDictionarySettings.IS_SHORTCUT_API_SUPPORTED) {
                 // For ICS, we need to show "For all languages" in case that the keyboard locale
                 // is different from the system locale
                 localeSet.add("")

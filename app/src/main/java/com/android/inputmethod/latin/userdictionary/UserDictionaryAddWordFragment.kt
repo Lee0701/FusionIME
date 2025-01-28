@@ -64,7 +64,7 @@ class UserDictionaryAddWordFragment : Fragment(), AdapterView.OnItemSelectedList
         // If we have a non-null mContents object, it's the old value before a configuration
         // change (eg rotation) so we need to use its values. Otherwise, read from the arguments.
         if (null == mContents) {
-            mContents = UserDictionaryAddWordContents(mRootView, getArguments())
+            mContents = UserDictionaryAddWordContents(mRootView!!, getArguments())
         } else {
             // We create a new mContents object to account for the new situation : a word has
             // been added to the user dictionary when we started rotating, and we are now editing
@@ -72,13 +72,13 @@ class UserDictionaryAddWordFragment : Fragment(), AdapterView.OnItemSelectedList
             // be updated, so the mContents object needs to switch to EDIT mode if it was in
             // INSERT mode.
             mContents = UserDictionaryAddWordContents(
-                mRootView,
+                mRootView!!,
                 mContents!! /* oldInstanceToBeEdited */
             )
         }
         getActivity().getActionBar()!!.setSubtitle(
             UserDictionarySettingsUtils.getLocaleDisplayName(
-                getActivity(), mContents.getCurrentUserDictionaryLocale()
+                getActivity(), mContents?.currentUserDictionaryLocale
             )
         )
         return mRootView
@@ -129,16 +129,16 @@ class UserDictionaryAddWordFragment : Fragment(), AdapterView.OnItemSelectedList
     }
 
     private fun updateSpinner() {
-        val localesList: ArrayList<LocaleRenderer?> = mContents!!.getLocalesList(getActivity())
+        val localesList: ArrayList<LocaleRenderer> = mContents!!.getLocalesList(getActivity())
 
         val localeSpinner: Spinner =
             mRootView!!.findViewById<View>(R.id.user_dictionary_add_locale) as Spinner
-        val adapter: ArrayAdapter<LocaleRenderer?> = ArrayAdapter(
+        val adapter: ArrayAdapter<LocaleRenderer> = ArrayAdapter(
             getActivity(), android.R.layout.simple_spinner_item, localesList
         )
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         localeSpinner.setAdapter(adapter)
-        localeSpinner.setOnItemSelectedListener(this)
+        localeSpinner.onItemSelectedListener = this
     }
 
     override fun onPause() {
@@ -154,18 +154,18 @@ class UserDictionaryAddWordFragment : Fragment(), AdapterView.OnItemSelectedList
         id: Long
     ) {
         val locale: LocaleRenderer = parent.getItemAtPosition(pos) as LocaleRenderer
-        if (locale.isMoreLanguages()) {
+        if (locale.isMoreLanguages) {
             val preferenceActivity: PreferenceActivity = getActivity() as PreferenceActivity
             preferenceActivity.startPreferenceFragment(UserDictionaryLocalePicker(), true)
         } else {
-            mContents!!.updateLocale(locale.getLocaleString())
+            mContents!!.updateLocale(locale.localeString)
         }
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
         // I'm not sure we can come here, but if we do, that's the right thing to do.
         val args: Bundle = getArguments()
-        mContents!!.updateLocale(args.getString(UserDictionaryAddWordContents.Companion.EXTRA_LOCALE))
+        mContents!!.updateLocale(args.getString(UserDictionaryAddWordContents.EXTRA_LOCALE))
     }
 
     // Called by the locale picker

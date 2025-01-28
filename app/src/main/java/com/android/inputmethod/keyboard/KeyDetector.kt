@@ -95,7 +95,8 @@ open class KeyDetector @JvmOverloads constructor(
 
         var minDistance: Int = Int.MAX_VALUE
         var primaryKey: Key? = null
-        for (key: Key in mKeyboard!!.getNearestKeys(touchX, touchY)) {
+        for (key in mKeyboard!!.getNearestKeys(touchX, touchY)) {
+            if(key == null) continue
             // An edge key always has its enlarged hitbox to respond to an event that occurred in
             // the empty area around the key. (@see Key#markAsLeftEdge(KeyboardParams)} etc.)
             if (!key.isOnKey(touchX, touchY)) {
@@ -106,7 +107,7 @@ open class KeyDetector @JvmOverloads constructor(
                 continue
             }
             // To take care of hitbox overlaps, we compare key's code here too.
-            if (primaryKey == null || distance < minDistance || key.getCode() > primaryKey.getCode()) {
+            if (primaryKey == null || distance < minDistance || key.code > primaryKey.code) {
                 minDistance = distance
                 primaryKey = key
             }

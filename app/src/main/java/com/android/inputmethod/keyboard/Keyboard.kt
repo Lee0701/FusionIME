@@ -46,8 +46,7 @@ import kotlin.math.min
 </pre> *
  */
 open class Keyboard {
-    @Nonnull
-    val mId: KeyboardId?
+    val mId: KeyboardId
     val mThemeId: Int
 
     /** Total height of the keyboard, including the padding and keys  */
@@ -87,33 +86,24 @@ open class Keyboard {
      * @return the sorted unmodifiable list of [Key]s of this keyboard.
      */
     /** List of keys in this keyboard  */
-    @get:Nonnull
-    @Nonnull
-    open val sortedKeys: List<Key?>
+    open val sortedKeys: List<Key>
 
-    @Nonnull
-    val mShiftKeys: List<Key?>
+    val mShiftKeys: List<Key>
 
-    @Nonnull
-    val mAltCodeKeysWhileTyping: List<Key?>
+    val mAltCodeKeysWhileTyping: List<Key>
 
-    @Nonnull
     val mIconsSet: KeyboardIconsSet
 
     private val mKeyCache: SparseArray<Key?> = SparseArray()
 
-    @get:Nonnull
-    @Nonnull
     val proximityInfo: ProximityInfo
 
-    @get:Nonnull
-    @Nonnull
     val keyboardLayout: KeyboardLayout
 
     private val mProximityCharsCorrectionEnabled: Boolean
 
-    constructor(@Nonnull params: KeyboardParams) {
-        mId = params.mId
+    constructor(params: KeyboardParams) {
+        mId = params.mId!!
         mThemeId = params.mThemeId
         mOccupiedHeight = params.mOccupiedHeight
         mOccupiedWidth = params.mOccupiedWidth
@@ -138,7 +128,7 @@ open class Keyboard {
             sortedKeys, params.mTouchPositionCorrection
         )
         mProximityCharsCorrectionEnabled = params.mProximityCharsCorrectionEnabled
-        keyboardLayout = KeyboardLayout.Companion.newKeyboardLayout(
+        keyboardLayout = KeyboardLayout.newKeyboardLayout(
             sortedKeys, mMostCommonKeyWidth,
             mMostCommonKeyHeight, mOccupiedWidth, mOccupiedHeight
         )
@@ -176,8 +166,8 @@ open class Keyboard {
         // Note: The native code has the main keyboard layout only at this moment.
         // TODO: Figure out how to handle proximity characters information of all layouts.
         val canAssumeNativeHasProximityCharsInfoOfAllKeys: Boolean =
-            (mId!!.mElementId == KeyboardId.Companion.ELEMENT_ALPHABET
-                    || mId.mElementId == KeyboardId.Companion.ELEMENT_ALPHABET_AUTOMATIC_SHIFTED)
+            (mId!!.mElementId == KeyboardId.ELEMENT_ALPHABET
+                    || mId.mElementId == KeyboardId.ELEMENT_ALPHABET_AUTOMATIC_SHIFTED)
         return canAssumeNativeHasProximityCharsInfoOfAllKeys || Character.isLetter(code)
     }
 
@@ -192,7 +182,7 @@ open class Keyboard {
             }
 
             for (key: Key in sortedKeys) {
-                if (key.getCode() == code) {
+                if (key.code == code) {
                     mKeyCache.put(code, key)
                     return key
                 }
@@ -209,7 +199,7 @@ open class Keyboard {
 
         for (key: Key? in sortedKeys) {
             if (key === aKey) {
-                mKeyCache.put(key.getCode(), key)
+                mKeyCache.put(key.code, key)
                 return true
             }
         }
@@ -246,7 +236,7 @@ open class Keyboard {
             if (null != key) {
                 CoordinateUtils.setXYInArray(
                     coordinates, i,
-                    key.getX() + key.getWidth() / 2, key.getY() + key.getHeight() / 2
+                    key.x + key.width / 2, key.y + key.height / 2
                 )
             } else {
                 CoordinateUtils.setXYInArray(

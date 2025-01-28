@@ -50,8 +50,8 @@ object SuggestionSpanUtils {
 
     @UsedForTesting
     fun getTextWithAutoCorrectionIndicatorUnderline(
-        context: Context?, text: String, @Nonnull locale: Locale?
-    ): CharSequence? {
+        context: Context?, text: String, locale: Locale
+    ): CharSequence {
         if (TextUtils.isEmpty(text) || OBJ_FLAG_AUTO_CORRECTION == null) {
             return text
         }
@@ -71,9 +71,9 @@ object SuggestionSpanUtils {
     fun getTextWithSuggestionSpan(
         context: Context?,
         pickedWord: String, suggestedWords: SuggestedWords, locale: Locale?
-    ): CharSequence? {
-        if (TextUtils.isEmpty(pickedWord) || suggestedWords.isEmpty()
-            || suggestedWords.isPrediction() || suggestedWords.isPunctuationSuggestions()
+    ): CharSequence {
+        if (TextUtils.isEmpty(pickedWord) || suggestedWords.isEmpty
+            || suggestedWords.isPrediction || suggestedWords.isPunctuationSuggestions
         ) {
             return pickedWord
         }
@@ -83,8 +83,8 @@ object SuggestionSpanUtils {
             if (suggestionsList.size >= SuggestionSpan.SUGGESTIONS_MAX_SIZE) {
                 break
             }
-            val info: SuggestedWordInfo? = suggestedWords.getInfo(i)
-            if (info!!.isKindOf(SuggestedWordInfo.Companion.KIND_PREDICTION)) {
+            val info: SuggestedWordInfo = suggestedWords.getInfo(i)
+            if (info.isKindOf(SuggestedWordInfo.KIND_PREDICTION)) {
                 continue
             }
             val word: String? = suggestedWords.getWord(i)
@@ -112,7 +112,7 @@ object SuggestionSpanUtils {
         suggestionSpans: Array<SuggestionSpan>
     ): Locale? {
         for (suggestionSpan: SuggestionSpan in suggestionSpans) {
-            val localeString: String = suggestionSpan.getLocale()
+            val localeString: String = suggestionSpan.locale
             if (TextUtils.isEmpty(localeString)) {
                 continue
             }

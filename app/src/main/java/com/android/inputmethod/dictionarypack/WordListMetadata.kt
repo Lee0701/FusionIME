@@ -24,14 +24,14 @@ import javax.annotation.Nonnull
  * Instances of this class are always immutable.
  */
 class WordListMetadata(
-    id: String?, type: Int,
+    id: String, type: Int,
     description: String?, lastUpdate: Long, fileSize: Long,
     rawChecksum: String?, checksum: String?, retryCount: Int,
     localFilename: String?, remoteFilename: String?,
     version: Int, formatVersion: Int,
     flags: Int, locale: String?
 ) {
-    val mId: String?
+    val mId: String
     val mType: Int // Type, as of MetadataDbHelper#TYPE_*
     val mDescription: String?
     val mLastUpdate: Long
@@ -99,25 +99,25 @@ class WordListMetadata(
          * If this lacks any required field, IllegalArgumentException is thrown.
          */
         fun createFromContentValues(@Nonnull values: ContentValues): WordListMetadata {
-            val id: String? = values.getAsString(MetadataDbHelper.Companion.WORDLISTID_COLUMN)
-            val type: Int = values.getAsInteger(MetadataDbHelper.Companion.TYPE_COLUMN)
+            val id: String = values.getAsString(MetadataDbHelper.WORDLISTID_COLUMN)
+            val type: Int = values.getAsInteger(MetadataDbHelper.TYPE_COLUMN)
             val description: String? =
-                values.getAsString(MetadataDbHelper.Companion.DESCRIPTION_COLUMN)
-            val lastUpdate: Long = values.getAsLong(MetadataDbHelper.Companion.DATE_COLUMN)
-            val fileSize: Long = values.getAsLong(MetadataDbHelper.Companion.FILESIZE_COLUMN)
+                values.getAsString(MetadataDbHelper.DESCRIPTION_COLUMN)
+            val lastUpdate: Long = values.getAsLong(MetadataDbHelper.DATE_COLUMN)
+            val fileSize: Long = values.getAsLong(MetadataDbHelper.FILESIZE_COLUMN)
             val rawChecksum: String =
-                values.getAsString(MetadataDbHelper.Companion.RAW_CHECKSUM_COLUMN)
-            val checksum: String? = values.getAsString(MetadataDbHelper.Companion.CHECKSUM_COLUMN)
-            val retryCount: Int = values.getAsInteger(MetadataDbHelper.Companion.RETRY_COUNT_COLUMN)
+                values.getAsString(MetadataDbHelper.RAW_CHECKSUM_COLUMN)
+            val checksum: String? = values.getAsString(MetadataDbHelper.CHECKSUM_COLUMN)
+            val retryCount: Int = values.getAsInteger(MetadataDbHelper.RETRY_COUNT_COLUMN)
             val localFilename: String? =
-                values.getAsString(MetadataDbHelper.Companion.LOCAL_FILENAME_COLUMN)
+                values.getAsString(MetadataDbHelper.LOCAL_FILENAME_COLUMN)
             val remoteFilename: String? =
-                values.getAsString(MetadataDbHelper.Companion.REMOTE_FILENAME_COLUMN)
-            val version: Int = values.getAsInteger(MetadataDbHelper.Companion.VERSION_COLUMN)
+                values.getAsString(MetadataDbHelper.REMOTE_FILENAME_COLUMN)
+            val version: Int = values.getAsInteger(MetadataDbHelper.VERSION_COLUMN)
             val formatVersion: Int =
-                values.getAsInteger(MetadataDbHelper.Companion.FORMATVERSION_COLUMN)
-            val flags: Int = values.getAsInteger(MetadataDbHelper.Companion.FLAGS_COLUMN)
-            val locale: String? = values.getAsString(MetadataDbHelper.Companion.LOCALE_COLUMN)
+                values.getAsInteger(MetadataDbHelper.FORMATVERSION_COLUMN)
+            val flags: Int = values.getAsInteger(MetadataDbHelper.FLAGS_COLUMN)
+            val locale: String? = values.getAsString(MetadataDbHelper.LOCALE_COLUMN)
             require(!(null == id || null == type || null == description || null == lastUpdate || null == fileSize || null == checksum || null == localFilename || null == remoteFilename || null == version || null == formatVersion || null == flags || null == locale))
             return WordListMetadata(
                 id, type, description, lastUpdate, fileSize, rawChecksum,

@@ -111,14 +111,10 @@ class AudioAndHapticFeedbackManager private constructor() {
     }
 
     companion object {
-        private val sInstance: AudioAndHapticFeedbackManager = AudioAndHapticFeedbackManager()
-
-        fun getInstance(): AudioAndHapticFeedbackManager {
-            return sInstance
-        }
+        val instance: AudioAndHapticFeedbackManager = AudioAndHapticFeedbackManager()
 
         fun init(context: Context) {
-            sInstance.initInternal(context)
+            instance.initInternal(context)
         }
     }
 }

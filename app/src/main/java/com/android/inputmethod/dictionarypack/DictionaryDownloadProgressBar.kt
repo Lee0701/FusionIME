@@ -69,6 +69,7 @@ class DictionaryDownloadProgressBar : ProgressBar {
     }
 
     override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
         mIsCurrentlyAttachedToWindow = true
         updateReporterThreadRunningStatusAccordingToVisibility()
     }
@@ -146,12 +147,11 @@ class DictionaryDownloadProgressBar : ProgressBar {
             }
         }
 
-        companion object {
-            private const val REPORT_PERIOD: Int = 150 // how often to report progress, in ms
-        }
     }
 
     companion object {
+        private const val REPORT_PERIOD: Int = 150 // how often to report progress, in ms
+
         private val TAG: String = DictionaryDownloadProgressBar::class.java.getSimpleName()
         private const val NOT_A_DOWNLOADMANAGER_PENDING_ID: Int = 0
 
@@ -159,9 +159,9 @@ class DictionaryDownloadProgressBar : ProgressBar {
             context: Context,
             clientId: String?, wordlistId: String?
         ): Int {
-            val db: SQLiteDatabase = MetadataDbHelper.Companion.getDb(context, clientId)
+            val db: SQLiteDatabase = MetadataDbHelper.getDb(context, clientId)
             val wordlistValues: ContentValues? =
-                MetadataDbHelper.Companion.getContentValuesOfLatestAvailableWordlistById(
+                MetadataDbHelper.getContentValuesOfLatestAvailableWordlistById(
                     db,
                     wordlistId
                 )
@@ -171,7 +171,7 @@ class DictionaryDownloadProgressBar : ProgressBar {
                 Log.e(TAG, "Unexpected word list ID: " + wordlistId)
                 return NOT_A_DOWNLOADMANAGER_PENDING_ID
             }
-            return wordlistValues.getAsInteger(MetadataDbHelper.Companion.PENDINGID_COLUMN)
+            return wordlistValues.getAsInteger(MetadataDbHelper.PENDINGID_COLUMN)
         }
     }
 }

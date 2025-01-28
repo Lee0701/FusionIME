@@ -42,7 +42,7 @@ import com.android.inputmethod.keyboard.KeyboardView
  *
  * @param <KV> The keyboard view class type.
 </KV> */
-open class KeyboardAccessibilityDelegate<KV : KeyboardView?>
+open class KeyboardAccessibilityDelegate<KV : KeyboardView>
     (keyboardView: KV, keyDetector: KeyDetector) : AccessibilityDelegateCompat() {
     protected val mKeyboardView: KV
     protected val mKeyDetector: KeyDetector
@@ -97,7 +97,7 @@ open class KeyboardAccessibilityDelegate<KV : KeyboardView?>
         if (resId == 0) {
             return
         }
-        val context: Context = mKeyboardView!!.getContext()
+        val context: Context = mKeyboardView.context
         sendWindowStateChanged(context.getString(resId))
     }
 
@@ -110,11 +110,11 @@ open class KeyboardAccessibilityDelegate<KV : KeyboardView?>
         val stateChange: AccessibilityEvent = AccessibilityEvent.obtain(
             AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
         )
-        mKeyboardView!!.onInitializeAccessibilityEvent(stateChange)
+        mKeyboardView.onInitializeAccessibilityEvent(stateChange)
         stateChange.getText().add(text)
         stateChange.setContentDescription(null)
 
-        val parent: ViewParent? = mKeyboardView.getParent()
+        val parent: ViewParent? = mKeyboardView.parent
         if (parent != null) {
             parent.requestSendAccessibilityEvent(mKeyboardView, stateChange)
         }
@@ -255,13 +255,13 @@ open class KeyboardAccessibilityDelegate<KV : KeyboardView?>
      * @param key The key that a synthesized touch event is on.
      */
     private fun simulateTouchEvent(touchAction: Int, key: Key) {
-        val x: Int = key.getHitBox().centerX()
-        val y: Int = key.getHitBox().centerY()
+        val x: Int = key.hitBox.centerX()
+        val y: Int = key.hitBox.centerY()
         val eventTime: Long = SystemClock.uptimeMillis()
         val touchEvent: MotionEvent = MotionEvent.obtain(
             eventTime, eventTime, touchAction, x.toFloat(), y.toFloat(), 0 /* metaState */
         )
-        mKeyboardView!!.onTouchEvent(touchEvent)
+        mKeyboardView.onTouchEvent(touchEvent)
         touchEvent.recycle()
     }
 
@@ -275,7 +275,7 @@ open class KeyboardAccessibilityDelegate<KV : KeyboardView?>
             Log.d(TAG, "onHoverEnterTo: key=" + key)
         }
         key.onPressed()
-        mKeyboardView!!.invalidateKey(key)
+        mKeyboardView.invalidateKey(key)
         val provider: KeyboardAccessibilityNodeProvider<KV> = getAccessibilityNodeProvider()
         provider.onHoverEnterTo(key)
         provider.performActionForKey(key, AccessibilityNodeInfoCompat.ACTION_ACCESSIBILITY_FOCUS)
@@ -314,7 +314,7 @@ open class KeyboardAccessibilityDelegate<KV : KeyboardView?>
 
     companion object {
         private val TAG: String = KeyboardAccessibilityDelegate::class.java.getSimpleName()
-        protected const val DEBUG_HOVER: Boolean = false
+        const val DEBUG_HOVER: Boolean = false
 
         const val HOVER_EVENT_POINTER_ID: Int = 0
     }

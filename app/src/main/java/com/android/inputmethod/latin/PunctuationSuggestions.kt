@@ -33,8 +33,8 @@ class PunctuationSuggestions private constructor(punctuationsList: ArrayList<Sug
         false,  /* typedWordValid */
         false,  /* hasAutoCorrectionCandidate */
         false,  /* isObsoleteSuggestions */
-        SuggestedWords.Companion.INPUT_STYLE_NONE,  /* inputStyle */
-        SuggestedWords.Companion.NOT_A_SEQUENCE_NUMBER
+        SuggestedWords.INPUT_STYLE_NONE,  /* inputStyle */
+        SuggestedWords.NOT_A_SEQUENCE_NUMBER
     ) {
     /**
      * {@inheritDoc}
@@ -92,7 +92,7 @@ class PunctuationSuggestions private constructor(punctuationsList: ArrayList<Sug
          * @return The [PunctuationSuggestions] object.
          */
         fun newPunctuationSuggestions(
-            punctuationSpecs: Array<String>?
+            punctuationSpecs: Array<String?>?
         ): PunctuationSuggestions {
             if (punctuationSpecs == null || punctuationSpecs.size == 0) {
                 return PunctuationSuggestions(ArrayList(0))
@@ -108,11 +108,11 @@ class PunctuationSuggestions private constructor(punctuationsList: ArrayList<Sug
         private fun newHardCodedWordInfo(keySpec: String?): SuggestedWordInfo {
             return SuggestedWordInfo(
                 keySpec!!, "",  /* prevWordsContext */
-                SuggestedWordInfo.Companion.MAX_SCORE,
-                SuggestedWordInfo.Companion.KIND_HARDCODED,
-                Dictionary.Companion.DICTIONARY_HARDCODED,
-                SuggestedWordInfo.Companion.NOT_AN_INDEX,  /* indexOfTouchPointOfSecondWord */
-                SuggestedWordInfo.Companion.NOT_A_CONFIDENCE /* autoCommitFirstWordConfidence */
+                SuggestedWordInfo.MAX_SCORE,
+                SuggestedWordInfo.KIND_HARDCODED,
+                Dictionary.DICTIONARY_HARDCODED,
+                SuggestedWordInfo.NOT_AN_INDEX,  /* indexOfTouchPointOfSecondWord */
+                SuggestedWordInfo.NOT_A_CONFIDENCE /* autoCommitFirstWordConfidence */
             )
         }
     }

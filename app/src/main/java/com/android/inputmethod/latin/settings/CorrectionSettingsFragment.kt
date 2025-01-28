@@ -59,16 +59,16 @@ class CorrectionSettingsFragment : SubScreenFragment(), OnSharedPreferenceChange
         val context: Context = activity
         val pm = context.packageManager
 
-        val dictionaryLink = findPreference(Settings.Companion.PREF_CONFIGURE_DICTIONARIES_KEY)
+        val dictionaryLink = findPreference(Settings.PREF_CONFIGURE_DICTIONARIES_KEY)
         val intent = dictionaryLink.intent
         intent.setClassName(context.packageName, DictionarySettingsActivity::class.java.name)
         val number = pm.queryIntentActivities(intent, 0).size
         if (0 >= number) {
-            removePreference(Settings.Companion.PREF_CONFIGURE_DICTIONARIES_KEY)
+            removePreference(Settings.PREF_CONFIGURE_DICTIONARIES_KEY, preferenceScreen)
         }
 
         val editPersonalDictionary =
-            findPreference(Settings.Companion.PREF_EDIT_PERSONAL_DICTIONARY)
+            findPreference(Settings.PREF_EDIT_PERSONAL_DICTIONARY)
         val editPersonalDictionaryIntent = editPersonalDictionary.intent
         val ri = if (USE_INTERNAL_PERSONAL_DICTIONARY_SETTINGS)
             null
@@ -81,14 +81,14 @@ class CorrectionSettingsFragment : SubScreenFragment(), OnSharedPreferenceChange
         }
 
         mUseContactsPreference =
-            findPreference(Settings.Companion.PREF_KEY_USE_CONTACTS_DICT) as SwitchPreference
+            findPreference(Settings.PREF_KEY_USE_CONTACTS_DICT) as SwitchPreference
         turnOffUseContactsIfNoPermission()
     }
 
     private fun overwriteUserDictionaryPreference(userDictionaryPreference: Preference) {
         val activity = activity
-        val localeList: TreeSet<String?> =
-            UserDictionaryList.Companion.getUserDictionaryLocalesSet(activity)
+        val localeList: TreeSet<String?>? =
+            UserDictionaryList.getUserDictionaryLocalesSet(activity)
         if (null == localeList) {
             // The locale list is null if and only if the user dictionary service is
             // not present or disabled. In this case we need to remove the preference.
@@ -111,7 +111,7 @@ class CorrectionSettingsFragment : SubScreenFragment(), OnSharedPreferenceChange
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String?) {
-        if (!TextUtils.equals(key, Settings.Companion.PREF_KEY_USE_CONTACTS_DICT)) {
+        if (!TextUtils.equals(key, Settings.PREF_KEY_USE_CONTACTS_DICT)) {
             return
         }
         if (!sharedPreferences.getBoolean(key, false)) {
@@ -127,7 +127,7 @@ class CorrectionSettingsFragment : SubScreenFragment(), OnSharedPreferenceChange
             return  // all permissions granted, no need to request permissions.
         }
 
-        PermissionsManager.Companion.get(activity /* context */)!!.requestPermissions(
+        PermissionsManager.get(activity /* context */)!!.requestPermissions(
             this,  /* PermissionsResultCallback */
             activity,  /* activity */
             permission.READ_CONTACTS

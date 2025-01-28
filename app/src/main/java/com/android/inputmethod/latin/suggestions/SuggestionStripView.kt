@@ -78,7 +78,7 @@ class SuggestionStripView @JvmOverloads constructor(
     private val mDividerViews: ArrayList<View> = ArrayList()
 
     var mListener: Listener? = null
-    private var mSuggestedWords: SuggestedWords = SuggestedWords.Companion.getEmptyInstance()
+    private var mSuggestedWords: SuggestedWords = SuggestedWords.emptyInstance
     private var mStartIndexOfMoreSuggestions: Int = 0
 
     private val mLayoutHelper: SuggestionStripLayoutHelper
@@ -138,7 +138,7 @@ class SuggestionStripView @JvmOverloads constructor(
         val visibility: Int =
             if (shouldBeVisible) VISIBLE else (if (isFullscreenMode) GONE else INVISIBLE)
         setVisibility(visibility)
-        val currentSettingsValues: SettingsValues? = Settings.Companion.getInstance().getCurrent()
+        val currentSettingsValues: SettingsValues? = Settings.instance.current
         mVoiceKey.setVisibility(if (currentSettingsValues!!.mShowsVoiceInputKey) VISIBLE else INVISIBLE)
     }
 
@@ -153,14 +153,14 @@ class SuggestionStripView @JvmOverloads constructor(
     }
 
     fun setMoreSuggestionsHeight(remainingHeight: Int) {
-        mLayoutHelper.setMoreSuggestionsHeight(remainingHeight)
+        mLayoutHelper.mMoreSuggestionsRowHeight = remainingHeight
     }
 
     // This method checks if we should show the important notice (checks on permanent storage if
     // it has been shown once already or not, and if in the setup wizard). If applicable, it shows
     // the notice. In all cases, it returns true if it was shown, false otherwise.
     fun maybeShowImportantNoticeTitle(): Boolean {
-        val currentSettingsValues: SettingsValues? = Settings.Companion.getInstance().getCurrent()
+        val currentSettingsValues: SettingsValues? = Settings.instance.current
         if (!ImportantNoticeUtils.shouldShowImportantNotice(
                 getContext(),
                 currentSettingsValues!!
@@ -232,7 +232,7 @@ class SuggestionStripView @JvmOverloads constructor(
 
     val isShowingMoreSuggestionPanel: Boolean
         get() {
-            return mMoreSuggestionsView.isShowingInParent()
+            return mMoreSuggestionsView.isShowingInParent
         }
 
     fun dismissMoreSuggestionsPanel() {
@@ -240,14 +240,14 @@ class SuggestionStripView @JvmOverloads constructor(
     }
 
     override fun onLongClick(view: View): Boolean {
-        AudioAndHapticFeedbackManager.Companion.getInstance().performHapticAndAudioFeedback(
+        AudioAndHapticFeedbackManager.instance.performHapticAndAudioFeedback(
             Constants.NOT_A_CODE, this
         )
         return showMoreSuggestions()
     }
 
     fun showMoreSuggestions(): Boolean {
-        val parentKeyboard: Keyboard? = mMainKeyboardView.getKeyboard()
+        val parentKeyboard: Keyboard? = mMainKeyboardView?.keyboard
         if (parentKeyboard == null) {
             return false
         }
@@ -262,9 +262,9 @@ class SuggestionStripView @JvmOverloads constructor(
         builder.layout(
             mSuggestedWords, mStartIndexOfMoreSuggestions, maxWidth,
             (maxWidth * layoutHelper.mMinMoreSuggestionsWidth).toInt(),
-            layoutHelper.getMaxMoreSuggestionsRow(), parentKeyboard
+            layoutHelper.maxMoreSuggestionsRow, parentKeyboard
         )
-        mMoreSuggestionsView.setKeyboard(builder.build())
+        mMoreSuggestionsView.keyboard = builder.build()
         container.measure(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
 
         val moreKeysPanel: MoreKeysPanel = mMoreSuggestionsView
@@ -328,7 +328,7 @@ class SuggestionStripView @JvmOverloads constructor(
             mImportantNoticeStrip
         )
 
-        for (pos in 0 until SuggestedWords.Companion.MAX_SUGGESTIONS) {
+        for (pos in 0 until SuggestedWords.MAX_SUGGESTIONS) {
             val word: TextView = TextView(context, null, R.attr.suggestionWordStyle)
             word.setContentDescription(getResources().getString(R.string.spoken_empty_suggestion))
             word.setOnClickListener(this)
@@ -370,16 +370,16 @@ class SuggestionStripView @JvmOverloads constructor(
     }
 
     override fun onInterceptTouchEvent(me: MotionEvent): Boolean {
-        if (mStripVisibilityGroup.isShowingImportantNoticeStrip()) {
+        if (mStripVisibilityGroup.isShowingImportantNoticeStrip) {
             return false
         }
         // Detecting sliding up finger to show {@link MoreSuggestionsView}.
-        if (!mMoreSuggestionsView.isShowingInParent()) {
+        if (!mMoreSuggestionsView.isShowingInParent) {
             mLastX = me.getX().toInt()
             mLastY = me.getY().toInt()
             return mMoreSuggestionsSlidingDetector.onTouchEvent(me)
         }
-        if (mMoreSuggestionsView.isInModalMode()) {
+        if (mMoreSuggestionsView.isInModalMode) {
             return false
         }
 
@@ -394,7 +394,7 @@ class SuggestionStripView @JvmOverloads constructor(
             // upward. Further {@link MotionEvent}s will be delivered to
             // {@link #onTouchEvent(MotionEvent)}.
             mNeedsToTransformTouchEventToHoverEvent =
-                AccessibilityUtils.Companion.getInstance().isTouchExplorationEnabled()
+                AccessibilityUtils.instance.isTouchExplorationEnabled()
             mIsDispatchingHoverEventToMoreSuggestions = false
             return true
         }
@@ -412,7 +412,7 @@ class SuggestionStripView @JvmOverloads constructor(
     }
 
     override fun onTouchEvent(me: MotionEvent): Boolean {
-        if (!mMoreSuggestionsView.isShowingInParent()) {
+        if (!mMoreSuggestionsView.isShowingInParent) {
             // Ignore any touch event while more suggestions panel hasn't been shown.
             // Detecting sliding up is done at {@link #onInterceptTouchEvent}.
             return true
@@ -459,7 +459,7 @@ class SuggestionStripView @JvmOverloads constructor(
     }
 
     override fun onClick(view: View) {
-        AudioAndHapticFeedbackManager.Companion.getInstance().performHapticAndAudioFeedback(
+        AudioAndHapticFeedbackManager.instance.performHapticAndAudioFeedback(
             Constants.CODE_UNSPECIFIED, this
         )
         if (view === mImportantNoticeStrip) {

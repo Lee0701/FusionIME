@@ -60,7 +60,7 @@ class GestureTrailsDrawingPreview(mainKeyboardViewAttr: TypedArray) : AbstractDr
     ) {
         super.setKeyboardViewGeometry(originCoords, width, height)
         mOffscreenOffsetY = (height
-                * GestureStrokeRecognitionPoints.Companion.EXTRA_GESTURE_TRAIL_AREA_ABOVE_KEYBOARD_RATIO).toInt()
+                * GestureStrokeRecognitionPoints.EXTRA_GESTURE_TRAIL_AREA_ABOVE_KEYBOARD_RATIO).toInt()
         mOffscreenWidth = width
         mOffscreenHeight = mOffscreenOffsetY + height
     }

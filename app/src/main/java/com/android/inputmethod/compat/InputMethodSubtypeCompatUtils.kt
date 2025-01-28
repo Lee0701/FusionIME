@@ -84,7 +84,7 @@ object InputMethodSubtypeCompatUtils {
     }
 
     fun isAsciiCapable(subtype: RichInputMethodSubtype): Boolean {
-        return isAsciiCapable(subtype.getRawSubtype())
+        return isAsciiCapable(subtype.rawSubtype)
     }
 
     fun isAsciiCapable(subtype: InputMethodSubtype): Boolean {

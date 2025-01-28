@@ -44,15 +44,15 @@ class HardwareKeyboardEventDecoder(deviceId: Int) : HardwareEventDecoder {
         val keyCode = keyEvent.keyCode
         val isKeyRepeat = (0 != keyEvent.repeatCount)
         if (KeyEvent.KEYCODE_DEL == keyCode) {
-            return Event.Companion.createHardwareKeypressEvent(
-                Event.Companion.NOT_A_CODE_POINT, Constants.CODE_DELETE,
+            return Event.createHardwareKeypressEvent(
+                Event.NOT_A_CODE_POINT, Constants.CODE_DELETE,
                 null,  /* next */isKeyRepeat
             )
         }
         if (keyEvent.isPrintingKey || KeyEvent.KEYCODE_SPACE == keyCode || KeyEvent.KEYCODE_ENTER == keyCode) {
             if (0 != (codePointAndFlags and KeyCharacterMap.COMBINING_ACCENT)) {
                 // A dead key.
-                return Event.Companion.createDeadEvent(
+                return Event.createDeadEvent(
                     codePointAndFlags and KeyCharacterMap.COMBINING_ACCENT_MASK, keyCode,
                     null /* next */
                 )
@@ -63,23 +63,23 @@ class HardwareKeyboardEventDecoder(deviceId: Int) : HardwareEventDecoder {
                 // Shift key is being pressed, this should send a CODE_SHIFT_ENTER and let
                 // Latin IME decide what to do with it.
                 if (keyEvent.isShiftPressed) {
-                    return Event.Companion.createHardwareKeypressEvent(
-                        Event.Companion.NOT_A_CODE_POINT,
+                    return Event.createHardwareKeypressEvent(
+                        Event.NOT_A_CODE_POINT,
                         Constants.CODE_SHIFT_ENTER, null,  /* next */isKeyRepeat
                     )
                 }
-                return Event.Companion.createHardwareKeypressEvent(
+                return Event.createHardwareKeypressEvent(
                     Constants.CODE_ENTER, keyCode,
                     null,  /* next */isKeyRepeat
                 )
             }
             // If not Enter, then this is just a regular keypress event for a normal character
             // that can be committed right away, taking into account the current state.
-            return Event.Companion.createHardwareKeypressEvent(
+            return Event.createHardwareKeypressEvent(
                 codePointAndFlags, keyCode, null,  /* next */
                 isKeyRepeat
             )
         }
-        return Event.Companion.createNotHandledEvent()
+        return Event.createNotHandledEvent()
     }
 }

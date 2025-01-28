@@ -41,7 +41,7 @@ class UserHistoryDictionary internal constructor(
         context,
         getUserHistoryDictName(NAME, locale, null,  /* dictFile */account),
         locale,
-        Dictionary.Companion.TYPE_USER_HISTORY,
+        Dictionary.TYPE_USER_HISTORY,
         null
     ) {
     // TODO: Make this constructor private
@@ -60,14 +60,14 @@ class UserHistoryDictionary internal constructor(
     override val headerAttributeMap: MutableMap<String?, String?>
         get() {
             val attributeMap: MutableMap<String?, String?>? =
-                super.getHeaderAttributeMap()
+                super.headerAttributeMap
             attributeMap!!.put(
-                DictionaryHeader.Companion.USES_FORGETTING_CURVE_KEY,
-                DictionaryHeader.Companion.ATTRIBUTE_VALUE_TRUE
+                DictionaryHeader.USES_FORGETTING_CURVE_KEY,
+                DictionaryHeader.ATTRIBUTE_VALUE_TRUE
             )
             attributeMap.put(
-                DictionaryHeader.Companion.HAS_HISTORICAL_INFO_KEY,
-                DictionaryHeader.Companion.ATTRIBUTE_VALUE_TRUE
+                DictionaryHeader.HAS_HISTORICAL_INFO_KEY,
+                DictionaryHeader.ATTRIBUTE_VALUE_TRUE
             )
             return attributeMap
         }
@@ -76,7 +76,7 @@ class UserHistoryDictionary internal constructor(
         // No initial contents.
     }
 
-    override fun isValidWord(word: String?): Boolean {
+    override fun isValidWord(word: String): Boolean {
         // Strings out of this dictionary should not be considered existing words.
         return false
     }
@@ -93,7 +93,7 @@ class UserHistoryDictionary internal constructor(
             dictFile: File?, account: String?
         ): String {
             if (!ProductionFlags.ENABLE_PER_ACCOUNT_USER_HISTORY_DICTIONARY) {
-                return ExpandableBinaryDictionary.Companion.getDictName(name, locale, dictFile)
+                return ExpandableBinaryDictionary.getDictName(name, locale, dictFile)
             }
             return getUserHistoryDictNamePerAccount(name, locale, dictFile, account)
         }
@@ -139,7 +139,7 @@ class UserHistoryDictionary internal constructor(
             @Nonnull ngramContext: NgramContext, word: String, isValid: Boolean,
             timestamp: Int
         ) {
-            if (word.length > BinaryDictionary.Companion.DICTIONARY_MAX_WORD_LENGTH) {
+            if (word.length > BinaryDictionary.DICTIONARY_MAX_WORD_LENGTH) {
                 return
             }
             userHistoryDictionary.updateEntriesForWord(

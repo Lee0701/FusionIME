@@ -257,8 +257,8 @@ object FormatSpec {
     /**
      * Options global to the dictionary.
      */
-    class DictionaryOptions(attributes: HashMap<String?, String?>) {
-        val mAttributes: HashMap<String?, String?> = attributes
+    class DictionaryOptions(attributes: HashMap<String, String?>) {
+        val mAttributes: HashMap<String, String?> = attributes
         override fun toString(): String { // Convenience method
             return toString(0, false)
         }

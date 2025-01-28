@@ -21,13 +21,13 @@ import android.util.Log
 internal class ShiftKeyState(name: String) : ModifierKeyState(name) {
     override fun onOtherKeyPressed() {
         val oldState: Int = mState
-        if (oldState == ModifierKeyState.Companion.PRESSING) {
-            mState = ModifierKeyState.Companion.CHORDING
+        if (oldState == PRESSING) {
+            mState = CHORDING
         } else if (oldState == PRESSING_ON_SHIFTED) {
             mState = IGNORING
         }
-        if (ModifierKeyState.Companion.DEBUG) Log.d(
-            ModifierKeyState.Companion.TAG,
+        if (DEBUG) Log.d(
+            TAG,
             mName + ".onOtherKeyPressed: " + toString(oldState) + " > " + this
         )
     }
@@ -35,8 +35,8 @@ internal class ShiftKeyState(name: String) : ModifierKeyState(name) {
     fun onPressOnShifted() {
         val oldState: Int = mState
         mState = PRESSING_ON_SHIFTED
-        if (ModifierKeyState.Companion.DEBUG) Log.d(
-            ModifierKeyState.Companion.TAG,
+        if (DEBUG) Log.d(
+            TAG,
             mName + ".onPressOnShifted: " + toString(oldState) + " > " + this
         )
     }
@@ -50,10 +50,10 @@ internal class ShiftKeyState(name: String) : ModifierKeyState(name) {
     }
 
     override fun toString(): String {
-        return toString(mState)!!
+        return toString(mState)
     }
 
-    override fun toString(state: Int): String? {
+    override fun toString(state: Int): String {
         when (state) {
             PRESSING_ON_SHIFTED -> return "PRESSING_ON_SHIFTED"
             IGNORING -> return "IGNORING"

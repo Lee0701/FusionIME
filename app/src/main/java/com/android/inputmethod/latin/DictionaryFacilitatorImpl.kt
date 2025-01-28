@@ -140,7 +140,7 @@ class DictionaryFacilitatorImpl : DictionaryFacilitator {
         }
 
         fun getDict(dictType: String): Dictionary? {
-            if (Dictionary.Companion.TYPE_MAIN == dictType) {
+            if (Dictionary.TYPE_MAIN == dictType) {
                 return mMainDict
             }
             return getSubDict(dictType)
@@ -151,10 +151,10 @@ class DictionaryFacilitatorImpl : DictionaryFacilitator {
         }
 
         fun hasDict(dictType: String, account: String?): Boolean {
-            if (Dictionary.Companion.TYPE_MAIN == dictType) {
+            if (Dictionary.TYPE_MAIN == dictType) {
                 return mMainDict != null
             }
-            if (Dictionary.Companion.TYPE_USER_HISTORY == dictType &&
+            if (Dictionary.TYPE_USER_HISTORY == dictType &&
                 !TextUtils.equals(account, mAccount)
             ) {
                 // If the dictionary type is user history, & if the account doesn't match,
@@ -167,7 +167,7 @@ class DictionaryFacilitatorImpl : DictionaryFacilitator {
 
         fun closeDict(dictType: String) {
             val dict: Dictionary?
-            if (Dictionary.Companion.TYPE_MAIN == dictType) {
+            if (Dictionary.TYPE_MAIN == dictType) {
                 dict = mMainDict
             } else {
                 dict = mSubDictMap.remove(dictType)
@@ -198,13 +198,13 @@ class DictionaryFacilitatorImpl : DictionaryFacilitator {
             return mDictionaryGroup.mLocale != null
         }
 
-    override val locale: Locale?
+    override val locale: Locale
         get() {
-            return mDictionaryGroup.mLocale
+            return mDictionaryGroup.mLocale!!
         }
 
     override fun usesContacts(): Boolean {
-        return mDictionaryGroup.getSubDict(Dictionary.Companion.TYPE_CONTACTS) != null
+        return mDictionaryGroup.getSubDict(Dictionary.TYPE_CONTACTS) != null
     }
 
     override val account: String?
@@ -225,17 +225,17 @@ class DictionaryFacilitatorImpl : DictionaryFacilitator {
         val existingDictionariesToCleanup: HashMap<Locale, ArrayList<String>> = HashMap()
         // TODO: Make subDictTypesToUse configurable by resource or a static final list.
         val subDictTypesToUse: HashSet<String> = HashSet()
-        subDictTypesToUse.add(Dictionary.Companion.TYPE_USER)
+        subDictTypesToUse.add(Dictionary.TYPE_USER)
 
         // Do not use contacts dictionary if we do not have permissions to read contacts.
         val contactsPermissionGranted: Boolean = PermissionsUtil.checkAllPermissionsGranted(
             context, permission.READ_CONTACTS
         )
         if (useContactsDict && contactsPermissionGranted) {
-            subDictTypesToUse.add(Dictionary.Companion.TYPE_CONTACTS)
+            subDictTypesToUse.add(Dictionary.TYPE_CONTACTS)
         }
         if (usePersonalizedDicts) {
-            subDictTypesToUse.add(Dictionary.Companion.TYPE_USER_HISTORY)
+            subDictTypesToUse.add(Dictionary.TYPE_USER_HISTORY)
         }
 
         // Gather all dictionaries. We'll remove them from the list to clean up later.
@@ -244,13 +244,13 @@ class DictionaryFacilitatorImpl : DictionaryFacilitator {
         val currentDictionaryGroupForLocale: DictionaryGroup? =
             findDictionaryGroupWithLocale(mDictionaryGroup, newLocale)
         if (currentDictionaryGroupForLocale != null) {
-            for (dictType: String in DictionaryFacilitator.Companion.DYNAMIC_DICTIONARY_TYPES) {
+            for (dictType: String in DictionaryFacilitator.DYNAMIC_DICTIONARY_TYPES) {
                 if (currentDictionaryGroupForLocale.hasDict(dictType, account)) {
                     dictTypeForLocale.add(dictType)
                 }
             }
-            if (currentDictionaryGroupForLocale.hasDict(Dictionary.Companion.TYPE_MAIN, account)) {
-                dictTypeForLocale.add(Dictionary.Companion.TYPE_MAIN)
+            if (currentDictionaryGroupForLocale.hasDict(Dictionary.TYPE_MAIN, account)) {
+                dictTypeForLocale.add(Dictionary.TYPE_MAIN)
             }
         }
 
@@ -262,12 +262,12 @@ class DictionaryFacilitatorImpl : DictionaryFacilitator {
 
         val mainDict: Dictionary?
         if (forceReloadMainDictionary || noExistingDictsForThisLocale
-            || !dictionaryGroupForLocale!!.hasDict(Dictionary.Companion.TYPE_MAIN, account)
+            || !dictionaryGroupForLocale!!.hasDict(Dictionary.TYPE_MAIN, account)
         ) {
             mainDict = null
         } else {
-            mainDict = dictionaryGroupForLocale.getDict(Dictionary.Companion.TYPE_MAIN)
-            dictTypesToCleanupForLocale!!.remove(Dictionary.Companion.TYPE_MAIN)
+            mainDict = dictionaryGroupForLocale.getDict(Dictionary.TYPE_MAIN)
+            dictTypesToCleanupForLocale!!.remove(Dictionary.TYPE_MAIN)
         }
 
         val subDicts: MutableMap<String, ExpandableBinaryDictionary?> = HashMap()
@@ -374,7 +374,7 @@ class DictionaryFacilitatorImpl : DictionaryFacilitator {
         val subDicts: MutableMap<String, ExpandableBinaryDictionary?> = HashMap()
 
         for (dictType: String in dictionaryTypes) {
-            if (dictType == Dictionary.Companion.TYPE_MAIN) {
+            if (dictType == Dictionary.TYPE_MAIN) {
                 mainDictionary = DictionaryFactory.createMainDictionaryFromManager(
                     context,
                     locale
@@ -406,7 +406,7 @@ class DictionaryFacilitatorImpl : DictionaryFacilitator {
             dictionaryGroupToClose = mDictionaryGroup
             mDictionaryGroup = DictionaryGroup()
         }
-        for (dictType: String in DictionaryFacilitator.Companion.ALL_DICTIONARY_TYPES) {
+        for (dictType: String in DictionaryFacilitator.ALL_DICTIONARY_TYPES) {
             dictionaryGroupToClose.closeDict(dictType)
         }
     }
@@ -419,16 +419,16 @@ class DictionaryFacilitatorImpl : DictionaryFacilitator {
     // The main dictionaries are loaded asynchronously.  Don't cache the return value
     // of these methods.
     override fun hasAtLeastOneInitializedMainDictionary(): Boolean {
-        val mainDict: Dictionary? = mDictionaryGroup.getDict(Dictionary.Companion.TYPE_MAIN)
-        if (mainDict != null && mainDict.isInitialized()) {
+        val mainDict: Dictionary? = mDictionaryGroup.getDict(Dictionary.TYPE_MAIN)
+        if (mainDict != null && mainDict.isInitialized) {
             return true
         }
         return false
     }
 
     override fun hasAtLeastOneUninitializedMainDictionary(): Boolean {
-        val mainDict: Dictionary? = mDictionaryGroup.getDict(Dictionary.Companion.TYPE_MAIN)
-        if (mainDict == null || !mainDict.isInitialized()) {
+        val mainDict: Dictionary? = mDictionaryGroup.getDict(Dictionary.TYPE_MAIN)
+        if (mainDict == null || !mainDict.isInitialized) {
             return true
         }
         return false
@@ -507,7 +507,7 @@ class DictionaryFacilitatorImpl : DictionaryFacilitator {
         timeStampInSeconds: Int, blockPotentiallyOffensive: Boolean
     ) {
         val userHistoryDictionary: ExpandableBinaryDictionary? =
-            dictionaryGroup.getSubDict(Dictionary.Companion.TYPE_USER_HISTORY)
+            dictionaryGroup.getSubDict(Dictionary.TYPE_USER_HISTORY)
         if (userHistoryDictionary == null || !isForLocale(userHistoryDictionary.mLocale)) {
             return
         }
@@ -536,11 +536,11 @@ class DictionaryFacilitatorImpl : DictionaryFacilitator {
             // consolidation is done.
             // TODO: Remove this hack when ready.
             val lowerCaseFreqInMainDict: Int = if (dictionaryGroup.hasDict(
-                    Dictionary.Companion.TYPE_MAIN,
+                    Dictionary.TYPE_MAIN,
                     null /* account */
                 )
-            ) dictionaryGroup.getDict(Dictionary.Companion.TYPE_MAIN)!!
-                .getFrequency(lowerCasedWord) else Dictionary.Companion.NOT_A_PROBABILITY
+            ) dictionaryGroup.getDict(Dictionary.TYPE_MAIN)!!
+                .getFrequency(lowerCasedWord) else Dictionary.NOT_A_PROBABILITY
             if (maxFreq < lowerCaseFreqInMainDict
                 && lowerCaseFreqInMainDict >= CAPITALIZED_FORM_MAX_PROBABILITY_FOR_INSERT
             ) {
@@ -553,7 +553,7 @@ class DictionaryFacilitatorImpl : DictionaryFacilitator {
         // We demote unrecognized words (frequency < 0, below) by specifying them as "invalid".
         // We don't add words with 0-frequency (assuming they would be profanity etc.).
         val isValid: Boolean = maxFreq > 0
-        UserHistoryDictionary.Companion.addToDictionary(
+        UserHistoryDictionary.addToDictionary(
             userHistoryDictionary, ngramContext, secondWord,
             isValid, timeStampInSeconds
         )
@@ -568,12 +568,12 @@ class DictionaryFacilitatorImpl : DictionaryFacilitator {
 
     override fun unlearnFromUserHistory(
         word: String,
-        @Nonnull ngramContext: NgramContext?, timeStampInSeconds: Long,
+        ngramContext: NgramContext, timeStampInSeconds: Long,
         eventType: Int
     ) {
         // TODO: Decide whether or not to remove the word on EVENT_BACKSPACE.
         if (eventType != Constants.EVENT_BACKSPACE) {
-            removeWord(Dictionary.Companion.TYPE_USER_HISTORY, word)
+            removeWord(Dictionary.TYPE_USER_HISTORY, word)
         }
 
         // Update the spelling cache after unlearning. Words that are removed from user history
@@ -592,21 +592,21 @@ class DictionaryFacilitatorImpl : DictionaryFacilitator {
         settingsValuesForSuggestion: SettingsValuesForSuggestion, sessionId: Int,
         inputStyle: Int
     ): SuggestionResults {
-        val proximityInfoHandle: Long = keyboard.getProximityInfo().getNativeProximityInfo()
-        val suggestionResults: SuggestionResults = SuggestionResults(
-            SuggestedWords.Companion.MAX_SUGGESTIONS, ngramContext.isBeginningOfSentenceContext(),
+        val proximityInfoHandle: Long = keyboard.proximityInfo.getNativeProximityInfo()
+        val suggestionResults = SuggestionResults(
+            SuggestedWords.MAX_SUGGESTIONS, ngramContext.isBeginningOfSentenceContext,
             false /* firstSuggestionExceedsConfidenceThreshold */
         )
         val weightOfLangModelVsSpatialModel: FloatArray =
-            floatArrayOf(Dictionary.Companion.NOT_A_WEIGHT_OF_LANG_MODEL_VS_SPATIAL_MODEL)
-        for (dictType: String in DictionaryFacilitator.Companion.ALL_DICTIONARY_TYPES) {
+            floatArrayOf(Dictionary.NOT_A_WEIGHT_OF_LANG_MODEL_VS_SPATIAL_MODEL)
+        for (dictType: String in DictionaryFacilitator.ALL_DICTIONARY_TYPES) {
             val dictionary: Dictionary? = mDictionaryGroup.getDict(dictType)
             if (null == dictionary) continue
             val weightForLocale: Float = if (composedData.mIsBatchMode)
                 mDictionaryGroup.mWeightForGesturingInLocale
             else
                 mDictionaryGroup.mWeightForTypingInLocale
-            val dictionarySuggestions: ArrayList<SuggestedWordInfo?>? =
+            val dictionarySuggestions: ArrayList<SuggestedWordInfo>? =
                 dictionary.getSuggestions(
                     composedData, ngramContext,
                     proximityInfoHandle, settingsValuesForSuggestion, sessionId,
@@ -614,14 +614,12 @@ class DictionaryFacilitatorImpl : DictionaryFacilitator {
                 )
             if (null == dictionarySuggestions) continue
             suggestionResults.addAll(dictionarySuggestions)
-            if (null != suggestionResults.mRawSuggestions) {
-                suggestionResults.mRawSuggestions.addAll(dictionarySuggestions)
-            }
+            suggestionResults.mRawSuggestions?.addAll(dictionarySuggestions)
         }
         return suggestionResults
     }
 
-    override fun isValidSpellingWord(word: String?): Boolean {
+    override fun isValidSpellingWord(word: String): Boolean {
         if (mValidSpellingWordReadCache != null) {
             val cachedValue: Boolean = mValidSpellingWordReadCache!!.get(word)
             if (cachedValue != null) {
@@ -629,14 +627,14 @@ class DictionaryFacilitatorImpl : DictionaryFacilitator {
             }
         }
 
-        return isValidWord(word, DictionaryFacilitator.Companion.ALL_DICTIONARY_TYPES)
+        return isValidWord(word, DictionaryFacilitator.ALL_DICTIONARY_TYPES)
     }
 
-    override fun isValidSuggestionWord(word: String?): Boolean {
-        return isValidWord(word, DictionaryFacilitator.Companion.ALL_DICTIONARY_TYPES)
+    override fun isValidSuggestionWord(word: String): Boolean {
+        return isValidWord(word, DictionaryFacilitator.ALL_DICTIONARY_TYPES)
     }
 
-    private fun isValidWord(word: String?, dictionariesToCheck: Array<String>): Boolean {
+    private fun isValidWord(word: String, dictionariesToCheck: Array<String>): Boolean {
         if (TextUtils.isEmpty(word)) {
             return false
         }
@@ -658,10 +656,10 @@ class DictionaryFacilitatorImpl : DictionaryFacilitator {
 
     private fun getFrequency(word: String): Int {
         if (TextUtils.isEmpty(word)) {
-            return Dictionary.Companion.NOT_A_PROBABILITY
+            return Dictionary.NOT_A_PROBABILITY
         }
-        var maxFreq: Int = Dictionary.Companion.NOT_A_PROBABILITY
-        for (dictType: String in DictionaryFacilitator.Companion.ALL_DICTIONARY_TYPES) {
+        var maxFreq: Int = Dictionary.NOT_A_PROBABILITY
+        for (dictType: String in DictionaryFacilitator.ALL_DICTIONARY_TYPES) {
             val dictionary: Dictionary? = mDictionaryGroup.getDict(dictType)
             if (dictionary == null) continue
             val tempFreq: Int = dictionary.getFrequency(word)
@@ -682,7 +680,7 @@ class DictionaryFacilitatorImpl : DictionaryFacilitator {
     }
 
     override fun clearUserHistoryDictionary(context: Context?): Boolean {
-        return clearSubDictionary(Dictionary.Companion.TYPE_USER_HISTORY)
+        return clearSubDictionary(Dictionary.TYPE_USER_HISTORY)
     }
 
     override fun dumpDictionaryForDebug(dictName: String) {
@@ -700,10 +698,10 @@ class DictionaryFacilitatorImpl : DictionaryFacilitator {
     @Nonnull
     override fun getDictionaryStats(context: Context?): List<DictionaryStats?> {
         val statsOfEnabledSubDicts: ArrayList<DictionaryStats?> = ArrayList()
-        for (dictType: String in DictionaryFacilitator.Companion.DYNAMIC_DICTIONARY_TYPES) {
+        for (dictType: String in DictionaryFacilitator.DYNAMIC_DICTIONARY_TYPES) {
             val dictionary: ExpandableBinaryDictionary? = mDictionaryGroup.getSubDict(dictType)
             if (dictionary == null) continue
-            statsOfEnabledSubDicts.add(dictionary.getDictionaryStats())
+            statsOfEnabledSubDicts.add(dictionary.dictionaryStats)
         }
         return statsOfEnabledSubDicts
     }
@@ -725,15 +723,15 @@ class DictionaryFacilitatorImpl : DictionaryFacilitator {
 
         init {
             DICT_TYPE_TO_CLASS.put(
-                Dictionary.Companion.TYPE_USER_HISTORY,
+                Dictionary.TYPE_USER_HISTORY,
                 UserHistoryDictionary::class.java
             )
             DICT_TYPE_TO_CLASS.put(
-                Dictionary.Companion.TYPE_USER,
+                Dictionary.TYPE_USER,
                 UserBinaryDictionary::class.java
             )
             DICT_TYPE_TO_CLASS.put(
-                Dictionary.Companion.TYPE_CONTACTS,
+                Dictionary.TYPE_CONTACTS,
                 ContactsBinaryDictionary::class.java
             )
         }

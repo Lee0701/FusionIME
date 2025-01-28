@@ -47,9 +47,9 @@ class PermissionsManager(context: Context) {
     fun requestPermissions(
         @Nonnull callback: PermissionsResultCallback,
         activity: Activity?,
-        vararg permissionsToRequest: String?
+        vararg permissionsToRequest: String
     ) {
-        val deniedPermissions: List<String?> = PermissionsUtil.getDeniedPermissions(
+        val deniedPermissions: List<String> = PermissionsUtil.getDeniedPermissions(
             mContext, *permissionsToRequest
         )
         if (deniedPermissions.isEmpty()) {
@@ -57,13 +57,13 @@ class PermissionsManager(context: Context) {
         }
         // otherwise request the permissions.
         val requestId: Int = nextRequestId
-        val permissionsArray: Array<String?> = deniedPermissions.toTypedArray<String?>()
+        val permissionsArray: Array<String> = deniedPermissions.toTypedArray()
 
         mRequestIdToCallback.put(requestId, callback)
         if (activity != null) {
             PermissionsUtil.requestPermissions(activity, requestId, permissionsArray)
         } else {
-            PermissionsActivity.Companion.run(mContext, requestId, *permissionsArray)
+            PermissionsActivity.run(mContext, requestId, *permissionsArray)
         }
     }
 
@@ -82,13 +82,12 @@ class PermissionsManager(context: Context) {
     companion object {
         private var sInstance: PermissionsManager? = null
 
-        @Nonnull
         @Synchronized
-        fun get(@Nonnull context: Context): PermissionsManager? {
+        fun get(context: Context): PermissionsManager {
             if (sInstance == null) {
                 sInstance = PermissionsManager(context)
             }
-            return sInstance
+            return sInstance!!
         }
     }
 }

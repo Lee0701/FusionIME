@@ -123,20 +123,16 @@ class InputPointers(defaultCapacity: Int) {
     val pointerSize: Int
         get() = mXCoordinates.length
 
-    @get:Nonnull
-    val xCoordinates: IntArray?
+    val xCoordinates: IntArray
         get() = mXCoordinates.primitiveArray
 
-    @get:Nonnull
-    val yCoordinates: IntArray?
+    val yCoordinates: IntArray
         get() = mYCoordinates.primitiveArray
 
-    @get:Nonnull
-    val pointerIds: IntArray?
+    val pointerIds: IntArray
         get() = mPointerIds.primitiveArray
 
-    @get:Nonnull
-    val times: IntArray?
+    val times: IntArray
         /**
          * Gets the time each point was registered, in milliseconds, relative to the first event in the
          * sequence.

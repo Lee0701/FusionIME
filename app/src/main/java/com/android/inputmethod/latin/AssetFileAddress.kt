@@ -25,15 +25,9 @@ import java.io.File
  * also the offset in the file and the length of this data. This class encapsulates these three.
  */
 class AssetFileAddress(filename: String, offset: Long, length: Long) {
-    val mFilename: String
-    val mOffset: Long
-    val mLength: Long
-
-    init {
-        mFilename = filename
-        mOffset = offset
-        mLength = length
-    }
+    val mFilename: String = filename
+    val mOffset: Long = offset
+    val mLength: Long = length
 
     fun pointsToPhysicalFile(): Boolean {
         return 0L == mOffset
@@ -50,7 +44,7 @@ class AssetFileAddress(filename: String, offset: Long, length: Long) {
     companion object {
         fun makeFromFile(file: File): AssetFileAddress? {
             if (!file.isFile()) return null
-            return AssetFileAddress(file.getAbsolutePath(), 0L, file.length())
+            return AssetFileAddress(file.absolutePath, 0L, file.length())
         }
 
         fun makeFromFileName(filename: String?): AssetFileAddress? {
@@ -63,7 +57,7 @@ class AssetFileAddress(filename: String, offset: Long, length: Long) {
             offset: Long, length: Long
         ): AssetFileAddress? {
             if (null == filename) return null
-            val f: File = File(filename)
+            val f = File(filename)
             if (!f.isFile()) return null
             return AssetFileAddress(filename, offset, length)
         }

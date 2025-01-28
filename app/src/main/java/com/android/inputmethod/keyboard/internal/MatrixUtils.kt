@@ -38,21 +38,21 @@ object MatrixUtils {
         squareMatrix1: Array<FloatArray>, size: Int
     ) {
         var ip: Int = row
-        var pivot: Float = abs(squareMatrix0.get(row).get(row).toDouble()).toFloat()
+        var pivot: Float = abs(squareMatrix0[row][row].toDouble()).toFloat()
         for (i in row + 1 until size) {
-            if (pivot < abs(squareMatrix0.get(i).get(row).toDouble())) {
+            if (pivot < abs(squareMatrix0[i][row].toDouble())) {
                 ip = i
-                pivot = abs(squareMatrix0.get(i).get(row).toDouble()).toFloat()
+                pivot = abs(squareMatrix0[i][row].toDouble()).toFloat()
             }
         }
         if (ip != row) {
             for (j in 0 until size) {
-                val temp0: Float = squareMatrix0.get(ip).get(j)
-                squareMatrix0.get(ip).get(j) = squareMatrix0.get(row).get(j)
-                squareMatrix0.get(row).get(j) = temp0
-                val temp1: Float = squareMatrix1.get(ip).get(j)
-                squareMatrix1.get(ip).get(j) = squareMatrix1.get(row).get(j)
-                squareMatrix1.get(row).get(j) = temp1
+                val temp0: Float = squareMatrix0[ip][j]
+                squareMatrix0[ip][j] = squareMatrix0[row][j]
+                squareMatrix0[row][j] = temp0
+                val temp1: Float = squareMatrix1[ip][j]
+                squareMatrix1[ip][j] = squareMatrix1[row][j]
+                squareMatrix1[row][j] = temp1
             }
         }
     }
@@ -66,22 +66,22 @@ object MatrixUtils {
         row: Int, squareMatrix0: Array<FloatArray>,
         squareMatrix1: Array<FloatArray>, size: Int
     ) {
-        val pivot: Float = squareMatrix0.get(row).get(row)
+        val pivot: Float = squareMatrix0[row][row]
         if (pivot == 0f) {
             throw MatrixOperationFailedException("Inverse failed. Invalid pivot")
         }
         for (j in 0 until size) {
-            squareMatrix0.get(row).get(j) /= pivot
-            squareMatrix1.get(row).get(j) /= pivot
+            squareMatrix0[row][j] /= pivot
+            squareMatrix1[row][j] /= pivot
         }
         for (i in 0 until size) {
-            val sweepTargetValue: Float = squareMatrix0.get(i).get(row)
+            val sweepTargetValue: Float = squareMatrix0[i][row]
             if (i != row) {
                 for (j in row until size) {
-                    squareMatrix0.get(i).get(j) -= sweepTargetValue * squareMatrix0.get(row).get(j)
+                    squareMatrix0[i][j] -= sweepTargetValue * squareMatrix0[row][j]
                 }
                 for (j in 0 until size) {
-                    squareMatrix1.get(i).get(j) -= sweepTargetValue * squareMatrix1.get(row).get(j)
+                    squareMatrix1[i][j] -= sweepTargetValue * squareMatrix1[row][j]
                 }
             }
         }
@@ -105,8 +105,8 @@ object MatrixUtils {
             )
         }
         for (i in 0 until size) {
-            Arrays.fill(inverseMatrix.get(i), 0.0f)
-            inverseMatrix.get(i).get(i) = 1.0f
+            Arrays.fill(inverseMatrix[i], 0.0f)
+            inverseMatrix[i][i] = 1.0f
         }
         for (i in 0 until size) {
             findPivotAndSwapRow(i, squareMatrix, inverseMatrix, size)
@@ -138,10 +138,10 @@ object MatrixUtils {
         }
 
         for (i in 0 until m0h) {
-            Arrays.fill(retval.get(i), 0f)
+            Arrays.fill(retval[i], 0f)
             for (j in 0 until m1w) {
                 for (k in 0 until m0w) {
-                    retval.get(i).get(j) += m0.get(i).get(k) * m1.get(k).get(j)
+                    retval[i][j] += m0[i].get(k) * m1.get(k)[j]
                 }
             }
         }
@@ -160,7 +160,7 @@ object MatrixUtils {
         for (i in 0 until row) {
             sb.setLength(0)
             for (j in 0 until column) {
-                sb.append(String.format("%4f", a.get(i).get(j))).append(' ')
+                sb.append(String.format("%4f", a[i][j])).append(' ')
             }
             Log.d(TAG, sb.toString())
         }

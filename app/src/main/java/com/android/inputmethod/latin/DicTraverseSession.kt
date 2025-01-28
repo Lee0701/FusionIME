@@ -72,7 +72,7 @@ class DicTraverseSession(locale: Locale?, dictionary: Long, dictSize: Long) {
         try {
             closeInternal()
         } finally {
-            super.finalize()
+//            super.finalize()
         }
     }
 

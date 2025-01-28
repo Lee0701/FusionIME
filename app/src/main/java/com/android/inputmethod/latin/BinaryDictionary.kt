@@ -112,8 +112,8 @@ class BinaryDictionary : Dictionary {
         val valueArray: Array<String?> = arrayOfNulls(attributeMap.size)
         var index: Int = 0
         for (key: String? in attributeMap.keys) {
-            keyArray.get(index) = key
-            valueArray.get(index) = attributeMap.get(key)
+            keyArray[index] = key
+            valueArray[index] = attributeMap.get(key)
             index++
         }
         mNativeDict = createOnMemoryNative(formatVersion, locale.toString(), keyArray, valueArray)
@@ -165,7 +165,7 @@ class BinaryDictionary : Dictionary {
                 mNativeDict, outHeaderSize, outFormatVersion, outAttributeKeys,
                 outAttributeValues
             )
-            val attributes: HashMap<String?, String?> =
+            val attributes: HashMap<String, String?> =
                 HashMap()
             for (i in outAttributeKeys.indices) {
                 val attributeKey: String =
@@ -179,10 +179,10 @@ class BinaryDictionary : Dictionary {
                 attributes.put(attributeKey, attributeValue)
             }
             val hasHistoricalInfo: Boolean =
-                DictionaryHeader.Companion.ATTRIBUTE_VALUE_TRUE == attributes.get(DictionaryHeader.Companion.HAS_HISTORICAL_INFO_KEY)
+                DictionaryHeader.ATTRIBUTE_VALUE_TRUE == attributes.get(DictionaryHeader.HAS_HISTORICAL_INFO_KEY)
             return DictionaryHeader(
-                outHeaderSize.get(0), DictionaryOptions(attributes),
-                FormatOptions(outFormatVersion.get(0), hasHistoricalInfo)
+                outHeaderSize[0], DictionaryOptions(attributes),
+                FormatOptions(outFormatVersion[0], hasHistoricalInfo)
             )
         }
 
@@ -192,7 +192,7 @@ class BinaryDictionary : Dictionary {
         settingsValuesForSuggestion: SettingsValuesForSuggestion,
         sessionId: Int, weightForLocale: Float,
         inOutWeightOfLangModelVsSpatialModel: FloatArray?
-    ): ArrayList<SuggestedWordInfo?>? {
+    ): ArrayList<SuggestedWordInfo>? {
         if (!isValidDictionary) {
             return null
         }
@@ -214,7 +214,7 @@ class BinaryDictionary : Dictionary {
                 return null
             }
         } else {
-            inputSize = inputPointers.getPointerSize()
+            inputSize = inputPointers.pointerSize
         }
         session.mNativeSuggestOptions.setUseFullEditDistance(mUseFullEditDistance)
         session.mNativeSuggestOptions.setIsGesture(isGesture)
@@ -223,31 +223,31 @@ class BinaryDictionary : Dictionary {
         )
         session.mNativeSuggestOptions.setWeightForLocale(weightForLocale)
         if (inOutWeightOfLangModelVsSpatialModel != null) {
-            session.mInputOutputWeightOfLangModelVsSpatialModel.get(0) =
-                inOutWeightOfLangModelVsSpatialModel.get(0)
+            session.mInputOutputWeightOfLangModelVsSpatialModel[0] =
+                inOutWeightOfLangModelVsSpatialModel[0]
         } else {
-            session.mInputOutputWeightOfLangModelVsSpatialModel.get(0) =
-                Dictionary.Companion.NOT_A_WEIGHT_OF_LANG_MODEL_VS_SPATIAL_MODEL
+            session.mInputOutputWeightOfLangModelVsSpatialModel[0] =
+                Dictionary.NOT_A_WEIGHT_OF_LANG_MODEL_VS_SPATIAL_MODEL
         }
         // TOOD: Pass multiple previous words information for n-gram.
         getSuggestionsNative(
             mNativeDict, proximityInfoHandle,
-            getTraverseSession(sessionId).getSession(), inputPointers.getXCoordinates(),
-            inputPointers.getYCoordinates(), inputPointers.getTimes(),
-            inputPointers.getPointerIds(), session.mInputCodePoints, inputSize,
-            session.mNativeSuggestOptions.getOptions(), session.mPrevWordCodePointArrays,
-            session.mIsBeginningOfSentenceArray, ngramContext.getPrevWordCount(),
+            getTraverseSession(sessionId).session, inputPointers.xCoordinates,
+            inputPointers.yCoordinates, inputPointers.times,
+            inputPointers.pointerIds, session.mInputCodePoints, inputSize,
+            session.mNativeSuggestOptions.options, session.mPrevWordCodePointArrays,
+            session.mIsBeginningOfSentenceArray, ngramContext.prevWordCount,
             session.mOutputSuggestionCount, session.mOutputCodePoints, session.mOutputScores,
             session.mSpaceIndices, session.mOutputTypes,
             session.mOutputAutoCommitFirstWordConfidence,
             session.mInputOutputWeightOfLangModelVsSpatialModel
         )
         if (inOutWeightOfLangModelVsSpatialModel != null) {
-            inOutWeightOfLangModelVsSpatialModel.get(0) =
-                session.mInputOutputWeightOfLangModelVsSpatialModel.get(0)
+            inOutWeightOfLangModelVsSpatialModel[0] =
+                session.mInputOutputWeightOfLangModelVsSpatialModel[0]
         }
-        val count: Int = session.mOutputSuggestionCount.get(0)
-        val suggestions: ArrayList<SuggestedWordInfo?> = ArrayList()
+        val count: Int = session.mOutputSuggestionCount[0]
+        val suggestions: ArrayList<SuggestedWordInfo> = ArrayList()
         for (j in 0 until count) {
             val start: Int = j * DICTIONARY_MAX_WORD_LENGTH
             var len: Int = 0
@@ -265,7 +265,7 @@ class BinaryDictionary : Dictionary {
                         session.mOutputTypes.get(j),
                         this,  /* sourceDict */
                         session.mSpaceIndices.get(j),  /* indexOfTouchPointOfSecondWord */
-                        session.mOutputAutoCommitFirstWordConfidence.get(0)
+                        session.mOutputAutoCommitFirstWordConfidence[0]
                     )
                 )
             }
@@ -283,38 +283,38 @@ class BinaryDictionary : Dictionary {
             return getFormatVersionNative(mNativeDict)
         }
 
-    override fun isInDictionary(word: String?): Boolean {
-        return getFrequency(word) != Dictionary.Companion.NOT_A_PROBABILITY
+    override fun isInDictionary(word: String): Boolean {
+        return getFrequency(word) != NOT_A_PROBABILITY
     }
 
-    override fun getFrequency(word: String?): Int {
+    override fun getFrequency(word: String): Int {
         if (TextUtils.isEmpty(word)) {
-            return Dictionary.Companion.NOT_A_PROBABILITY
+            return NOT_A_PROBABILITY
         }
         val codePoints: IntArray = StringUtils.toCodePointArray(word)
         return getProbabilityNative(mNativeDict, codePoints)
     }
 
-    override fun getMaxFrequencyOfExactMatches(word: String?): Int {
+    override fun getMaxFrequencyOfExactMatches(word: String): Int {
         if (TextUtils.isEmpty(word)) {
-            return Dictionary.Companion.NOT_A_PROBABILITY
+            return NOT_A_PROBABILITY
         }
         val codePoints: IntArray = StringUtils.toCodePointArray(word)
         return getMaxProbabilityOfExactMatchesNative(mNativeDict, codePoints)
     }
 
     @UsedForTesting
-    fun isValidNgram(ngramContext: NgramContext, word: String?): Boolean {
-        return getNgramProbability(ngramContext, word) != Dictionary.Companion.NOT_A_PROBABILITY
+    fun isValidNgram(ngramContext: NgramContext, word: String): Boolean {
+        return getNgramProbability(ngramContext, word) != NOT_A_PROBABILITY
     }
 
-    fun getNgramProbability(ngramContext: NgramContext, word: String?): Int {
-        if (!ngramContext.isValid() || TextUtils.isEmpty(word)) {
-            return Dictionary.Companion.NOT_A_PROBABILITY
+    fun getNgramProbability(ngramContext: NgramContext, word: String): Int {
+        if (!ngramContext.isValid || TextUtils.isEmpty(word)) {
+            return NOT_A_PROBABILITY
         }
         val prevWordCodePointArrays: Array<IntArray?> =
-            arrayOfNulls(ngramContext.getPrevWordCount())
-        val isBeginningOfSentenceArray: BooleanArray = BooleanArray(ngramContext.getPrevWordCount())
+            arrayOfNulls(ngramContext.prevWordCount)
+        val isBeginningOfSentenceArray = BooleanArray(ngramContext.prevWordCount)
         ngramContext.outputToArray(prevWordCodePointArrays, isBeginningOfSentenceArray)
         val wordCodePoints: IntArray = StringUtils.toCodePointArray(word)
         return getNgramProbabilityNative(
@@ -328,9 +328,9 @@ class BinaryDictionary : Dictionary {
             return null
         }
         val codePoints: IntArray = StringUtils.toCodePointArray(word)
-        val outCodePoints: IntArray = IntArray(DICTIONARY_MAX_WORD_LENGTH)
-        val outFlags: BooleanArray = BooleanArray(FORMAT_WORD_PROPERTY_OUTPUT_FLAG_COUNT)
-        val outProbabilityInfo: IntArray =
+        val outCodePoints = IntArray(DICTIONARY_MAX_WORD_LENGTH)
+        val outFlags = BooleanArray(FORMAT_WORD_PROPERTY_OUTPUT_FLAG_COUNT)
+        val outProbabilityInfo =
             IntArray(FORMAT_WORD_PROPERTY_OUTPUT_PROBABILITY_INFO_COUNT)
         val outNgramPrevWordsArray: ArrayList<Array<IntArray>> = ArrayList()
         val outNgramPrevWordIsBeginningOfSentenceArray: ArrayList<BooleanArray> =
@@ -379,7 +379,7 @@ class BinaryDictionary : Dictionary {
         )
         val word: String = StringUtils.getStringFromNullTerminatedCodePointArray(codePoints)
         return GetNextWordPropertyResult(
-            getWordProperty(word, isBeginningOfSentence.get(0)), nextToken
+            getWordProperty(word, isBeginningOfSentence[0]), nextToken
         )
     }
 
@@ -405,7 +405,7 @@ class BinaryDictionary : Dictionary {
     }
 
     // Remove a unigram entry from the binary dictionary in native code.
-    fun removeUnigramEntry(word: String?): Boolean {
+    fun removeUnigramEntry(word: String): Boolean {
         if (TextUtils.isEmpty(word)) {
             return false
         }
@@ -419,15 +419,15 @@ class BinaryDictionary : Dictionary {
 
     // Add an n-gram entry to the binary dictionary with timestamp in native code.
     fun addNgramEntry(
-        ngramContext: NgramContext, word: String?,
+        ngramContext: NgramContext, word: String,
         probability: Int, timestamp: Int
     ): Boolean {
-        if (!ngramContext.isValid() || TextUtils.isEmpty(word)) {
+        if (!ngramContext.isValid || TextUtils.isEmpty(word)) {
             return false
         }
         val prevWordCodePointArrays: Array<IntArray?> =
-            arrayOfNulls(ngramContext.getPrevWordCount())
-        val isBeginningOfSentenceArray: BooleanArray = BooleanArray(ngramContext.getPrevWordCount())
+            arrayOfNulls(ngramContext.prevWordCount)
+        val isBeginningOfSentenceArray: BooleanArray = BooleanArray(ngramContext.prevWordCount)
         ngramContext.outputToArray(prevWordCodePointArrays, isBeginningOfSentenceArray)
         val wordCodePoints: IntArray = StringUtils.toCodePointArray(word)
         if (!addNgramEntryNative(
@@ -443,15 +443,15 @@ class BinaryDictionary : Dictionary {
 
     // Update entries for the word occurrence with the ngramContext.
     fun updateEntriesForWordWithNgramContext(
-        @Nonnull ngramContext: NgramContext,
-        word: String?, isValidWord: Boolean, count: Int, timestamp: Int
+        ngramContext: NgramContext,
+        word: String, isValidWord: Boolean, count: Int, timestamp: Int
     ): Boolean {
         if (TextUtils.isEmpty(word)) {
             return false
         }
         val prevWordCodePointArrays: Array<IntArray?> =
-            arrayOfNulls(ngramContext.getPrevWordCount())
-        val isBeginningOfSentenceArray: BooleanArray = BooleanArray(ngramContext.getPrevWordCount())
+            arrayOfNulls(ngramContext.prevWordCount)
+        val isBeginningOfSentenceArray: BooleanArray = BooleanArray(ngramContext.prevWordCount)
         ngramContext.outputToArray(prevWordCodePointArrays, isBeginningOfSentenceArray)
         val wordCodePoints: IntArray = StringUtils.toCodePointArray(word)
         if (!updateEntriesForWordWithNgramContextNative(
@@ -630,7 +630,7 @@ class BinaryDictionary : Dictionary {
         try {
             closeInternalLocked()
         } finally {
-            super.finalize()
+//            super.finalize()
         }
     }
 

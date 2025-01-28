@@ -52,7 +52,7 @@ class UserDictionaryAddWordContents {
     internal constructor(view: View, args: Bundle) {
         mWordEditText = view.findViewById<View>(R.id.user_dictionary_add_word_text) as EditText
         mShortcutEditText = view.findViewById<View>(R.id.user_dictionary_add_shortcut) as EditText?
-        if (!UserDictionarySettings.Companion.IS_SHORTCUT_API_SUPPORTED) {
+        if (!UserDictionarySettings.IS_SHORTCUT_API_SUPPORTED) {
             mShortcutEditText!!.setVisibility(View.GONE)
             view.findViewById<View>(R.id.user_dictionary_add_shortcut_label)
                 .setVisibility(View.GONE)
@@ -65,7 +65,7 @@ class UserDictionaryAddWordContents {
             mWordEditText.setSelection(mWordEditText.getText().length)
         }
         val shortcut: String?
-        if (UserDictionarySettings.Companion.IS_SHORTCUT_API_SUPPORTED) {
+        if (UserDictionarySettings.IS_SHORTCUT_API_SUPPORTED) {
             shortcut = args.getString(EXTRA_SHORTCUT)
             if (null != shortcut && null != mShortcutEditText) {
                 mShortcutEditText.setText(shortcut)
@@ -121,7 +121,7 @@ class UserDictionaryAddWordContents {
         if (MODE_EDIT == mMode && !TextUtils.isEmpty(mOldWord)) {
             // Mode edit: remove the old entry.
             val resolver: ContentResolver = context.getContentResolver()
-            UserDictionarySettings.Companion.deleteWord(mOldWord, mOldShortcut, resolver)
+            UserDictionarySettings.deleteWord(mOldWord, mOldShortcut, resolver)
         }
         // If we are in add mode, nothing was added, so we don't need to do anything.
     }
@@ -132,11 +132,11 @@ class UserDictionaryAddWordContents {
         val resolver: ContentResolver = context.getContentResolver()
         if (MODE_EDIT == mMode && !TextUtils.isEmpty(mOldWord)) {
             // Mode edit: remove the old entry.
-            UserDictionarySettings.Companion.deleteWord(mOldWord, mOldShortcut, resolver)
+            UserDictionarySettings.deleteWord(mOldWord, mOldShortcut, resolver)
         }
         val newWord: String = mWordEditText.getText().toString()
         val newShortcut: String?
-        if (!UserDictionarySettings.Companion.IS_SHORTCUT_API_SUPPORTED) {
+        if (!UserDictionarySettings.IS_SHORTCUT_API_SUPPORTED) {
             newShortcut = null
         } else if (null == mShortcutEditText) {
             newShortcut = null
@@ -165,21 +165,21 @@ class UserDictionaryAddWordContents {
         // Disallow duplicates. If the same word with no shortcut is defined, remove it; if
         // the same word with the same shortcut is defined, remove it; but we don't mind if
         // there is the same word with a different, non-empty shortcut.
-        UserDictionarySettings.Companion.deleteWord(newWord, null, resolver)
+        UserDictionarySettings.deleteWord(newWord, null, resolver)
         if (!TextUtils.isEmpty(newShortcut)) {
             // If newShortcut is empty we just deleted this, no need to do it again
-            UserDictionarySettings.Companion.deleteWord(newWord, newShortcut, resolver)
+            UserDictionarySettings.deleteWord(newWord, newShortcut, resolver)
         }
 
         // In this class we use the empty string to represent 'all locales' and mLocale cannot
         // be null. However the addWord method takes null to mean 'all locales'.
         UserDictionaryCompatUtils.addWord(
-            context, newWord.toString(),
+            context, newWord,
             FREQUENCY_FOR_USER_DICTIONARY_ADDS, newShortcut, if (TextUtils.isEmpty(
                     currentUserDictionaryLocale
                 )
             ) null else LocaleUtils.constructLocaleFromString(
-                currentUserDictionaryLocale
+                currentUserDictionaryLocale!!
             )
         )
 
@@ -191,13 +191,13 @@ class UserDictionaryAddWordContents {
         // mLocale == "" indicates this is an entry for all languages. Here, mLocale can't
         // be null at all (it's ensured by the updateLocale method).
         if ("" == currentUserDictionaryLocale) {
-            cursor = context.getContentResolver().query(
+            cursor = context.contentResolver.query(
                 Words.CONTENT_URI,
                 HAS_WORD_PROJECTION, HAS_WORD_SELECTION_ALL_LOCALES,
                 arrayOf(word), null /* sort order */
             )
         } else {
-            cursor = context.getContentResolver().query(
+            cursor = context.contentResolver.query(
                 Words.CONTENT_URI,
                 HAS_WORD_PROJECTION, HAS_WORD_SELECTION_ONE_LOCALE,
                 arrayOf(word, currentUserDictionaryLocale), null /* sort order */
@@ -243,7 +243,7 @@ class UserDictionaryAddWordContents {
     // Helper method to get the list of locales to display for this word
     fun getLocalesList(activity: Activity): ArrayList<LocaleRenderer> {
         val locales: TreeSet<String?>? =
-            UserDictionaryList.Companion.getUserDictionaryLocalesSet(activity)
+            UserDictionaryList.getUserDictionaryLocalesSet(activity)
         // Remove our locale if it's in, because we're always gonna put it at the top
         locales!!.remove(currentUserDictionaryLocale) // mLocale may not be null
         val systemLocale: String = Locale.getDefault().toString()

@@ -94,7 +94,7 @@ class EmojiPalettesView @JvmOverloads constructor(
     private var mEmojiCategoryPageIndicatorView: EmojiCategoryPageIndicatorView? = null
 
     private var mKeyboardActionListener: KeyboardActionListener? =
-        KeyboardActionListener.Companion.EMPTY_LISTENER
+        KeyboardActionListener.EMPTY_LISTENER
 
     private val mEmojiCategory: EmojiCategory
 
@@ -118,7 +118,7 @@ class EmojiPalettesView @JvmOverloads constructor(
         )
         val res: Resources = context.getResources()
         mEmojiLayoutParams = EmojiLayoutParams(context)
-        builder.setSubtype(RichInputMethodSubtype.Companion.getEmojiSubtype())
+        builder.setSubtype(RichInputMethodSubtype.emojiSubtype)
         builder.setKeyboardGeometry(
             ResourceUtils.getDefaultKeyboardWidth(context),
             mEmojiLayoutParams.mEmojiKeyboardHeight
@@ -165,7 +165,7 @@ class EmojiPalettesView @JvmOverloads constructor(
 
     private fun addTab(host: TabHost, categoryId: Int) {
         val tabId: String =
-            EmojiCategory.Companion.getCategoryName(categoryId, 0 /* categoryPageId */)
+            EmojiCategory.getCategoryName(categoryId, 0 /* categoryPageId */)
         val tspec: TabSpec = host.newTabSpec(tabId)
         tspec.setContent(R.id.emoji_keyboard_dummy)
         val iconView: ImageView = LayoutInflater.from(getContext()).inflate(
@@ -181,6 +181,7 @@ class EmojiPalettesView @JvmOverloads constructor(
     }
 
     override fun onFinishInflate() {
+        super.onFinishInflate()
         mTabHost = findViewById<View>(R.id.emoji_category_tabhost) as TabHost?
         mTabHost!!.setup()
         for (properties: CategoryProperties
@@ -242,12 +243,13 @@ class EmojiPalettesView @JvmOverloads constructor(
         mAlphabetKeyRight!!.setTag(Constants.CODE_ALPHA_FROM_EMOJI)
         mAlphabetKeyRight!!.setOnTouchListener(this)
         mAlphabetKeyRight!!.setOnClickListener(this)
-        mSpacebar = findViewById(R.id.emoji_keyboard_space)
-        mSpacebar.setBackgroundResource(mSpacebarBackgroundId)
-        mSpacebar.setTag(Constants.CODE_SPACE)
-        mSpacebar.setOnTouchListener(this)
-        mSpacebar.setOnClickListener(this)
-        mEmojiLayoutParams.setKeyProperties(mSpacebar)
+        val spaceBar = findViewById<View>(R.id.emoji_keyboard_space)
+        this.mSpacebar = spaceBar
+        spaceBar.setBackgroundResource(mSpacebarBackgroundId)
+        spaceBar.setTag(Constants.CODE_SPACE)
+        spaceBar.setOnTouchListener(this)
+        spaceBar.setOnClickListener(this)
+        mEmojiLayoutParams.setKeyProperties(spaceBar)
         mSpacebarIcon = findViewById(R.id.emoji_keyboard_space_icon)
     }
 
@@ -259,7 +261,7 @@ class EmojiPalettesView @JvmOverloads constructor(
     }
 
     override fun onTabChanged(tabId: String) {
-        AudioAndHapticFeedbackManager.Companion.getInstance().performHapticAndAudioFeedback(
+        AudioAndHapticFeedbackManager.instance.performHapticAndAudioFeedback(
             Constants.CODE_UNSPECIFIED, this
         )
         val categoryId: Int = mEmojiCategory.getCategoryId(tabId)
@@ -268,7 +270,7 @@ class EmojiPalettesView @JvmOverloads constructor(
     }
 
     override fun onPageSelected(position: Int) {
-        val newPos: Pair<Int?, Int?>? =
+        val newPos: Pair<Int, Int>? =
             mEmojiCategory.getCategoryIdAndPageIdFromPagePosition(position)
         setCurrentCategoryId(newPos!!.first!!,  /* categoryId */false /* force */)
         mEmojiCategory.setCurrentCategoryPageId(newPos.second!! /* categoryPageId */)
@@ -285,7 +287,7 @@ class EmojiPalettesView @JvmOverloads constructor(
         positionOffsetPixels: Int
     ) {
         mEmojiPalettesAdapter!!.onPageScrolled()
-        val newPos: Pair<Int, Int?>? =
+        val newPos: Pair<Int, Int>? =
             mEmojiCategory.getCategoryIdAndPageIdFromPagePosition(position)
         val newCategoryId: Int = newPos!!.first
         val newCategorySize: Int = mEmojiCategory.getCategoryPageSize(newCategoryId)
@@ -354,7 +356,7 @@ class EmojiPalettesView @JvmOverloads constructor(
      * interface to handle touch events from non-View-based elements such as Emoji buttons.
      */
     override fun onPressKey(key: Key) {
-        val code: Int = key.getCode()
+        val code: Int = key.code
         mKeyboardActionListener!!.onPressKey(code, 0,  /* repeatCount */true /* isSinglePointer */)
     }
 
@@ -366,9 +368,9 @@ class EmojiPalettesView @JvmOverloads constructor(
     override fun onReleaseKey(key: Key) {
         mEmojiPalettesAdapter!!.addRecentKey(key)
         mEmojiCategory.saveLastTypedCategoryPage()
-        val code: Int = key.getCode()
+        val code: Int = key.code
         if (code == Constants.CODE_OUTPUT_TEXT) {
-            mKeyboardActionListener!!.onTextInput(key.getOutputText())
+            mKeyboardActionListener!!.onTextInput(key.outputText)
         } else {
             mKeyboardActionListener!!.onCodeInput(
                 code, Constants.NOT_A_COORDINATE, Constants.NOT_A_COORDINATE,
@@ -390,12 +392,12 @@ class EmojiPalettesView @JvmOverloads constructor(
         iconSet: KeyboardIconsSet
     ) {
         val deleteIconResId: Int =
-            iconSet.getIconResourceId(KeyboardIconsSet.Companion.NAME_DELETE_KEY)
+            iconSet.getIconResourceId(KeyboardIconsSet.NAME_DELETE_KEY)
         if (deleteIconResId != 0) {
             mDeleteKey!!.setImageResource(deleteIconResId)
         }
         val spacebarResId: Int =
-            iconSet.getIconResourceId(KeyboardIconsSet.Companion.NAME_SPACE_KEY)
+            iconSet.getIconResourceId(KeyboardIconsSet.NAME_SPACE_KEY)
         if (spacebarResId != 0) {
             // TODO: Remove this workaround to place the spacebar icon.
             mSpacebarIcon!!.setBackgroundResource(spacebarResId)
@@ -435,7 +437,7 @@ class EmojiPalettesView @JvmOverloads constructor(
             return
         }
 
-        if (oldCategoryId == EmojiCategory.Companion.ID_RECENTS) {
+        if (oldCategoryId == EmojiCategory.ID_RECENTS) {
             // Needs to save pending updates for recent keys when we get out of the recents
             // category because we don't want to move the recent emojis around while the user
             // is in the recents category.
@@ -458,7 +460,7 @@ class EmojiPalettesView @JvmOverloads constructor(
 
     private class DeleteKeyOnTouchListener : OnTouchListener {
         private var mKeyboardActionListener: KeyboardActionListener? =
-            KeyboardActionListener.Companion.EMPTY_LISTENER
+            KeyboardActionListener.EMPTY_LISTENER
 
         fun setKeyboardActionListener(listener: KeyboardActionListener?) {
             mKeyboardActionListener = listener

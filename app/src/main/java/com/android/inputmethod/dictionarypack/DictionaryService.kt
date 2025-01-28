@@ -254,7 +254,7 @@ class DictionaryService : Service() {
          */
         private fun isLastUpdateAtLeastThisOld(context: Context?, time: Long): Boolean {
             val now: Long = System.currentTimeMillis()
-            val lastUpdate: Long = MetadataDbHelper.Companion.getOldestUpdateTime(context)
+            val lastUpdate: Long = MetadataDbHelper.getOldestUpdateTime(context)
             PrivateLog.log("Last update was " + lastUpdate)
             return lastUpdate + time < now
         }

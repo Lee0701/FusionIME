@@ -40,7 +40,7 @@ internal class EmojiPalettesAdapter(
     init {
         mEmojiCategory = emojiCategory
         mListener = listener
-        mRecentsKeyboard = mEmojiCategory.getKeyboard(EmojiCategory.Companion.ID_RECENTS, 0)
+        mRecentsKeyboard = mEmojiCategory.getKeyboard(EmojiCategory.ID_RECENTS, 0)
     }
 
     fun flushPendingRecentKeys() {
@@ -115,7 +115,7 @@ internal class EmojiPalettesAdapter(
         val keyboardView: EmojiPageKeyboardView = inflater.inflate(
             R.layout.emoji_keyboard_page, container, false /* attachToRoot */
         ) as EmojiPageKeyboardView
-        keyboardView.setKeyboard(keyboard!!)
+        keyboardView.keyboard = keyboard
         keyboardView.setOnKeyEventListener(mListener)
         container.addView(keyboardView)
         mActiveKeyboardViews.put(position, keyboardView)

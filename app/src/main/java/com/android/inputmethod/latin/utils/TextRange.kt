@@ -46,7 +46,7 @@ class TextRange(
         return mWord.length
     }
 
-    val suggestionSpansAtWord: Array<SuggestionSpan?>
+    val suggestionSpansAtWord: Array<SuggestionSpan>
         /**
          * Gets the suggestion spans that are put squarely on the word, with the exact start
          * and end of the span matching the boundaries of the word.
@@ -54,7 +54,7 @@ class TextRange(
          */
         get() {
             if (!(mTextAtCursor is Spanned && mWord is Spanned)) {
-                return arrayOfNulls(0)
+                return arrayOf()
             }
             val text = mTextAtCursor
             // Note: it's fine to pass indices negative or greater than the length of the string

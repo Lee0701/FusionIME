@@ -28,7 +28,7 @@ object CharacterCompat {
         if (METHOD_isAlphabetic != null) {
             return CompatUtils.invoke(null, false, METHOD_isAlphabetic, code) as Boolean
         }
-        when (Character.getType(code)) {
+        when (Character.getType(code).toByte()) {
             Character.UPPERCASE_LETTER, Character.LOWERCASE_LETTER, Character.TITLECASE_LETTER, Character.MODIFIER_LETTER, Character.OTHER_LETTER, Character.LETTER_NUMBER -> return true
             else -> return false
         }

@@ -30,7 +30,7 @@ import com.android.inputmethod.latin.common.StringUtils
 object AdditionalSubtypeUtils {
     private val TAG: String = AdditionalSubtypeUtils::class.java.simpleName
 
-    private val EMPTY_SUBTYPE_ARRAY = arrayOfNulls<InputMethodSubtype>(0)
+    private val EMPTY_SUBTYPE_ARRAY = arrayOf<InputMethodSubtype>()
 
     @UsedForTesting
     fun isAdditionalSubtype(subtype: InputMethodSubtype): Boolean {
@@ -101,14 +101,14 @@ object AdditionalSubtypeUtils {
             basePrefSubtype + LOCALE_AND_LAYOUT_SEPARATOR + extraValue
     }
 
-    fun createAdditionalSubtypesArray(prefSubtypes: String): Array<InputMethodSubtype?> {
+    fun createAdditionalSubtypesArray(prefSubtypes: String): Array<InputMethodSubtype> {
         if (TextUtils.isEmpty(prefSubtypes)) {
             return EMPTY_SUBTYPE_ARRAY
         }
         val prefSubtypeArray =
             prefSubtypes.split(PREF_SUBTYPE_SEPARATOR.toRegex()).dropLastWhile { it.isEmpty() }
                 .toTypedArray()
-        val subtypesList = ArrayList<InputMethodSubtype?>(prefSubtypeArray.size)
+        val subtypesList = ArrayList<InputMethodSubtype>(prefSubtypeArray.size)
         for (prefSubtype in prefSubtypeArray) {
             val elems = prefSubtype.split(LOCALE_AND_LAYOUT_SEPARATOR.toRegex())
                 .dropLastWhile { it.isEmpty() }.toTypedArray()
@@ -135,7 +135,7 @@ object AdditionalSubtypeUtils {
             }
             subtypesList.add(subtype)
         }
-        return subtypesList.toTypedArray<InputMethodSubtype?>()
+        return subtypesList.toTypedArray<InputMethodSubtype>()
     }
 
     fun createPrefSubtypes(subtypes: Array<InputMethodSubtype>?): String {

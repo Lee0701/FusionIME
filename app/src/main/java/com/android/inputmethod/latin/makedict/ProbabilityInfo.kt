@@ -21,7 +21,7 @@ import com.android.inputmethod.latin.utils.CombinedFormatUtils
 
 class ProbabilityInfo @JvmOverloads constructor(
     probability: Int,
-    timestamp: Int = BinaryDictionary.Companion.NOT_A_VALID_TIMESTAMP,
+    timestamp: Int = BinaryDictionary.NOT_A_VALID_TIMESTAMP,
     level: Int = 0,
     count: Int = 0
 ) {
@@ -35,7 +35,7 @@ class ProbabilityInfo @JvmOverloads constructor(
     val mCount: Int = count
 
     fun hasHistoricalInfo(): Boolean {
-        return mTimestamp != BinaryDictionary.Companion.NOT_A_VALID_TIMESTAMP
+        return mTimestamp != BinaryDictionary.NOT_A_VALID_TIMESTAMP
     }
 
     override fun hashCode(): Int {

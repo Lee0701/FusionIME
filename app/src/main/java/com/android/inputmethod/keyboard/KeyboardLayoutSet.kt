@@ -114,14 +114,14 @@ class KeyboardLayoutSet internal constructor(context: Context, @Nonnull params: 
     fun getKeyboard(baseKeyboardLayoutSetElementId: Int): Keyboard {
         val keyboardLayoutSetElementId: Int
         when (mParams.mMode) {
-            KeyboardId.Companion.MODE_PHONE -> if (baseKeyboardLayoutSetElementId == KeyboardId.Companion.ELEMENT_SYMBOLS) {
-                keyboardLayoutSetElementId = KeyboardId.Companion.ELEMENT_PHONE_SYMBOLS
+            KeyboardId.MODE_PHONE -> if (baseKeyboardLayoutSetElementId == KeyboardId.ELEMENT_SYMBOLS) {
+                keyboardLayoutSetElementId = KeyboardId.ELEMENT_PHONE_SYMBOLS
             } else {
-                keyboardLayoutSetElementId = KeyboardId.Companion.ELEMENT_PHONE
+                keyboardLayoutSetElementId = KeyboardId.ELEMENT_PHONE
             }
 
-            KeyboardId.Companion.MODE_NUMBER, KeyboardId.Companion.MODE_DATE, KeyboardId.Companion.MODE_TIME, KeyboardId.Companion.MODE_DATETIME -> keyboardLayoutSetElementId =
-                KeyboardId.Companion.ELEMENT_NUMBER
+            KeyboardId.MODE_NUMBER, KeyboardId.MODE_DATE, KeyboardId.MODE_TIME, KeyboardId.MODE_DATETIME -> keyboardLayoutSetElementId =
+                KeyboardId.ELEMENT_NUMBER
 
             else -> keyboardLayoutSetElementId = baseKeyboardLayoutSetElementId
         }
@@ -131,7 +131,7 @@ class KeyboardLayoutSet internal constructor(context: Context, @Nonnull params: 
         )
         if (elementParams == null) {
             elementParams = mParams.mKeyboardLayoutSetElementIdToParamsMap.get(
-                KeyboardId.Companion.ELEMENT_ALPHABET
+                KeyboardId.ELEMENT_ALPHABET
             )
         }
 
@@ -173,17 +173,17 @@ class KeyboardLayoutSet internal constructor(context: Context, @Nonnull params: 
         builder.setProximityCharsCorrectionEnabled(elementParams.mProximityCharsCorrectionEnabled)
         val keyboard: Keyboard = builder.build()
         sKeyboardCache.put(id, SoftReference(keyboard))
-        if ((id.mElementId == KeyboardId.Companion.ELEMENT_ALPHABET
-                    || id.mElementId == KeyboardId.Companion.ELEMENT_ALPHABET_AUTOMATIC_SHIFTED)
+        if ((id.mElementId == KeyboardId.ELEMENT_ALPHABET
+                    || id.mElementId == KeyboardId.ELEMENT_ALPHABET_AUTOMATIC_SHIFTED)
             && !mParams.mIsSpellChecker
         ) {
             // We only forcibly cache the primary, "ALPHABET", layouts.
             for (i in sForcibleKeyboardCache.size - 1 downTo 1) {
-                sForcibleKeyboardCache.get(i) = sForcibleKeyboardCache.get(i - 1)
+                sForcibleKeyboardCache[i] = sForcibleKeyboardCache.get(i - 1)
             }
-            sForcibleKeyboardCache.get(0) = keyboard
+            sForcibleKeyboardCache[0] = keyboard
             if (DEBUG_CACHE) {
-                Log.d(TAG, "forcing caching of keyboard with id=" + id)
+                Log.d(TAG, "forcing caching of keyboard with id=$id")
             }
         }
         if (DEBUG_CACHE) {
@@ -217,7 +217,7 @@ class KeyboardLayoutSet internal constructor(context: Context, @Nonnull params: 
             // TODO: Consolidate those with {@link InputAttributes}.
             params.mEditorInfo = editorInfo
             params.mIsPasswordField = InputTypeUtils.isPasswordInputType(editorInfo.inputType)
-            params.mNoSettingsKey = InputAttributes.Companion.inPrivateImeOptions(
+            params.mNoSettingsKey = InputAttributes.inPrivateImeOptions(
                 mPackageName, ImeOption.NO_SETTINGS_KEY, editorInfo
             )
 
@@ -238,11 +238,11 @@ class KeyboardLayoutSet internal constructor(context: Context, @Nonnull params: 
             return this
         }
 
-        fun setSubtype(@Nonnull subtype: RichInputMethodSubtype?): Builder {
+        fun setSubtype(subtype: RichInputMethodSubtype): Builder {
             val asciiCapable: Boolean = InputMethodSubtypeCompatUtils.isAsciiCapable(subtype!!)
             // TODO: Consolidate with {@link InputAttributes}.
             @Suppress("deprecation") val deprecatedForceAscii: Boolean =
-                InputAttributes.Companion.inPrivateImeOptions(
+                InputAttributes.inPrivateImeOptions(
                     mPackageName, ImeOption.FORCE_ASCII, mParams.mEditorInfo
                 )
             val forceAscii: Boolean = EditorInfoCompatUtils.hasFlagForceAscii(
@@ -250,12 +250,12 @@ class KeyboardLayoutSet internal constructor(context: Context, @Nonnull params: 
             )
                     || deprecatedForceAscii
             val keyboardSubtype: RichInputMethodSubtype = if ((forceAscii && !asciiCapable))
-                RichInputMethodSubtype.Companion.getNoLanguageSubtype()
+                RichInputMethodSubtype.noLanguageSubtype
             else
                 subtype
             mParams.mSubtype = keyboardSubtype
             mParams.mKeyboardLayoutSetName = (KEYBOARD_LAYOUT_SET_RESOURCE_PREFIX
-                    + keyboardSubtype.getKeyboardLayoutSetName())
+                    + keyboardSubtype.keyboardLayoutSetName)
             return this
         }
 
@@ -452,27 +452,27 @@ class KeyboardLayoutSet internal constructor(context: Context, @Nonnull params: 
                 val variation: Int = inputType and InputType.TYPE_MASK_VARIATION
 
                 when (inputType and InputType.TYPE_MASK_CLASS) {
-                    InputType.TYPE_CLASS_NUMBER -> return KeyboardId.Companion.MODE_NUMBER
+                    InputType.TYPE_CLASS_NUMBER -> return KeyboardId.MODE_NUMBER
                     InputType.TYPE_CLASS_DATETIME -> when (variation) {
-                        InputType.TYPE_DATETIME_VARIATION_DATE -> return KeyboardId.Companion.MODE_DATE
-                        InputType.TYPE_DATETIME_VARIATION_TIME -> return KeyboardId.Companion.MODE_TIME
-                        else -> return KeyboardId.Companion.MODE_DATETIME
+                        InputType.TYPE_DATETIME_VARIATION_DATE -> return KeyboardId.MODE_DATE
+                        InputType.TYPE_DATETIME_VARIATION_TIME -> return KeyboardId.MODE_TIME
+                        else -> return KeyboardId.MODE_DATETIME
                     }
 
-                    InputType.TYPE_CLASS_PHONE -> return KeyboardId.Companion.MODE_PHONE
+                    InputType.TYPE_CLASS_PHONE -> return KeyboardId.MODE_PHONE
                     InputType.TYPE_CLASS_TEXT -> if (InputTypeUtils.isEmailVariation(variation)) {
-                        return KeyboardId.Companion.MODE_EMAIL
+                        return KeyboardId.MODE_EMAIL
                     } else if (variation == InputType.TYPE_TEXT_VARIATION_URI) {
-                        return KeyboardId.Companion.MODE_URL
+                        return KeyboardId.MODE_URL
                     } else if (variation == InputType.TYPE_TEXT_VARIATION_SHORT_MESSAGE) {
-                        return KeyboardId.Companion.MODE_IM
+                        return KeyboardId.MODE_IM
                     } else if (variation == InputType.TYPE_TEXT_VARIATION_FILTER) {
-                        return KeyboardId.Companion.MODE_TEXT
+                        return KeyboardId.MODE_TEXT
                     } else {
-                        return KeyboardId.Companion.MODE_TEXT
+                        return KeyboardId.MODE_TEXT
                     }
 
-                    else -> return KeyboardId.Companion.MODE_TEXT
+                    else -> return KeyboardId.MODE_TEXT
                 }
             }
         }
@@ -500,7 +500,7 @@ class KeyboardLayoutSet internal constructor(context: Context, @Nonnull params: 
         private val sKeyboardCache: HashMap<KeyboardId, SoftReference<Keyboard>> = HashMap()
 
         @Nonnull
-        private val sUniqueKeysCache: UniqueKeysCache = UniqueKeysCache.Companion.newInstance()
+        private val sUniqueKeysCache: UniqueKeysCache = UniqueKeysCache.newInstance()
         private val sScriptIdsForSubtypes: HashMap<InputMethodSubtype, Int> = HashMap()
 
         fun onSystemLocaleChanged() {

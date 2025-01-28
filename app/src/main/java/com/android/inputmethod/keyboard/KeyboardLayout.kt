@@ -52,12 +52,12 @@ class KeyboardLayout(
         mKeyHeights = IntArray(layoutKeys.size)
 
         for (i in layoutKeys.indices) {
-            val key: Key = layoutKeys.get(i)
-            mKeyCodes.get(i) = key.getCode().lowercaseChar()
-            mKeyXCoordinates.get(i) = key.getX()
-            mKeyYCoordinates.get(i) = key.getY()
-            mKeyWidths.get(i) = key.getWidth()
-            mKeyHeights.get(i) = key.getHeight()
+            val key: Key = layoutKeys[i]
+            mKeyCodes[i] = key.code.toChar().lowercaseChar().code
+            mKeyXCoordinates[i] = key.x
+            mKeyYCoordinates[i] = key.y
+            mKeyWidths[i] = key.width
+            mKeyHeights[i] = key.height
         }
     }
 
@@ -110,10 +110,10 @@ class KeyboardLayout(
         ): KeyboardLayout {
             val layoutKeys: ArrayList<Key> = ArrayList()
             for (key: Key in sortedKeys) {
-                if (!ProximityInfo.Companion.needsProximityInfo(key)) {
+                if (!ProximityInfo.needsProximityInfo(key)) {
                     continue
                 }
-                if (key.getCode() != ','.code) {
+                if (key.code != ','.code) {
                     layoutKeys.add(key)
                 }
             }

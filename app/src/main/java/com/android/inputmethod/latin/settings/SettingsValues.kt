@@ -58,11 +58,11 @@ class SettingsValues(
     // From preferences, in the same order as xml/prefs.xml:
 
     // Get the settings preferences
-    val mAutoCap: Boolean = prefs.getBoolean(Settings.Companion.PREF_AUTO_CAP, true)
+    val mAutoCap: Boolean = prefs.getBoolean(Settings.PREF_AUTO_CAP, true)
     val mVibrateOn: Boolean =
-        Settings.Companion.readVibrationEnabled(prefs, res)
-    val mSoundOn: Boolean = Settings.Companion.readKeypressSoundEnabled(prefs, res)
-    val mKeyPreviewPopupOn: Boolean = Settings.Companion.readKeyPreviewPopupEnabled(prefs, res)
+        Settings.readVibrationEnabled(prefs, res)
+    val mSoundOn: Boolean = Settings.readKeypressSoundEnabled(prefs, res)
+    val mKeyPreviewPopupOn: Boolean = Settings.readKeyPreviewPopupEnabled(prefs, res)
     val mShowsVoiceInputKey: Boolean
     val mIncludesOtherImesInLanguageSwitchList: Boolean
     val mShowsLanguageSwitchKey: Boolean
@@ -160,7 +160,7 @@ class SettingsValues(
             if (!mShowsLanguageSwitchKey) {
                 return false
             }
-            val imm: RichInputMethodManager = RichInputMethodManager.Companion.getInstance()
+            val imm: RichInputMethodManager = RichInputMethodManager.instance
             if (mIncludesOtherImesInLanguageSwitchList) {
                 return imm.hasMultipleEnabledIMEsOrSubtypes(false /* include aux subtypes */)
             }
@@ -178,13 +178,13 @@ class SettingsValues(
     val isBeforeJellyBean: Boolean
         get() {
             val appWorkaroundUtils = mAppWorkarounds[null, TIMEOUT_TO_GET_TARGET_PACKAGE.toLong()]
-            return appWorkaroundUtils?.isBeforeJellyBean ?: false
+            return appWorkaroundUtils?.isBeforeJellyBean() ?: false
         }
 
     val isBrokenByRecorrection: Boolean
         get() {
             val appWorkaroundUtils = mAppWorkarounds[null, TIMEOUT_TO_GET_TARGET_PACKAGE.toLong()]
-            return appWorkaroundUtils?.isBrokenByRecorrection ?: false
+            return appWorkaroundUtils?.isBrokenByRecorrection() ?: false
         }
 
     init {
@@ -192,25 +192,25 @@ class SettingsValues(
                 && mInputAttributes.mShouldShowVoiceInputKey
                 && Build.VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN
         mIncludesOtherImesInLanguageSwitchList =
-            if (Settings.Companion.ENABLE_SHOW_LANGUAGE_SWITCH_KEY_SETTINGS)
+            if (Settings.ENABLE_SHOW_LANGUAGE_SWITCH_KEY_SETTINGS)
                 prefs.getBoolean(
-                    Settings.Companion.PREF_INCLUDE_OTHER_IMES_IN_LANGUAGE_SWITCH_LIST,
+                    Settings.PREF_INCLUDE_OTHER_IMES_IN_LANGUAGE_SWITCH_LIST,
                     false
                 )
             else
                 true /* forcibly */
-        mShowsLanguageSwitchKey = if (Settings.Companion.ENABLE_SHOW_LANGUAGE_SWITCH_KEY_SETTINGS)
-            Settings.Companion.readShowsLanguageSwitchKey(prefs)
+        mShowsLanguageSwitchKey = if (Settings.ENABLE_SHOW_LANGUAGE_SWITCH_KEY_SETTINGS)
+            Settings.readShowsLanguageSwitchKey(prefs)
         else
             true /* forcibly */
-        mUseContactsDict = prefs.getBoolean(Settings.Companion.PREF_KEY_USE_CONTACTS_DICT, true)
+        mUseContactsDict = prefs.getBoolean(Settings.PREF_KEY_USE_CONTACTS_DICT, true)
         isPersonalizationEnabled =
-            prefs.getBoolean(Settings.Companion.PREF_KEY_USE_PERSONALIZED_DICTS, true)
+            prefs.getBoolean(Settings.PREF_KEY_USE_PERSONALIZED_DICTS, true)
         mUseDoubleSpacePeriod =
-            prefs.getBoolean(Settings.Companion.PREF_KEY_USE_DOUBLE_SPACE_PERIOD, true)
+            prefs.getBoolean(Settings.PREF_KEY_USE_DOUBLE_SPACE_PERIOD, true)
                     && inputAttributes.mIsGeneralTextInput
-        mBlockPotentiallyOffensive = Settings.Companion.readBlockPotentiallyOffensive(prefs, res)
-        mAutoCorrectEnabled = Settings.Companion.readAutoCorrectEnabled(prefs, res)
+        mBlockPotentiallyOffensive = Settings.readBlockPotentiallyOffensive(prefs, res)
+        mAutoCorrectEnabled = Settings.readAutoCorrectEnabled(prefs, res)
         val autoCorrectionThresholdRawValue = if (mAutoCorrectEnabled)
             res.getString(R.string.auto_correction_threshold_mode_index_modest)
         else
@@ -218,55 +218,55 @@ class SettingsValues(
         mBigramPredictionEnabled = readBigramPredictionEnabled(prefs, res)
         mDoubleSpacePeriodTimeout =
             res.getInteger(R.integer.config_double_space_period_timeout).toLong()
-        mHasHardwareKeyboard = Settings.Companion.readHasHardwareKeyboard(res.configuration)
+        mHasHardwareKeyboard = Settings.readHasHardwareKeyboard(res.configuration)
         isMetricsLoggingEnabled =
-            prefs.getBoolean(Settings.Companion.PREF_ENABLE_METRICS_LOGGING, true)
+            prefs.getBoolean(Settings.PREF_ENABLE_METRICS_LOGGING, true)
         mIsSplitKeyboardEnabled =
-            prefs.getBoolean(Settings.Companion.PREF_ENABLE_SPLIT_KEYBOARD, false)
-        mScreenMetrics = Settings.Companion.readScreenMetrics(res)
+            prefs.getBoolean(Settings.PREF_ENABLE_SPLIT_KEYBOARD, false)
+        mScreenMetrics = Settings.readScreenMetrics(res)
 
-        mShouldShowLxxSuggestionUi = Settings.Companion.SHOULD_SHOW_LXX_SUGGESTION_UI
+        mShouldShowLxxSuggestionUi = Settings.SHOULD_SHOW_LXX_SUGGESTION_UI
                 && prefs.getBoolean(DebugSettings.PREF_SHOULD_SHOW_LXX_SUGGESTION_UI, true)
         // Compute other readable settings
-        mKeyLongpressTimeout = Settings.Companion.readKeyLongpressTimeout(prefs, res)
-        mKeypressVibrationDuration = Settings.Companion.readKeypressVibrationDuration(prefs, res)
-        mKeypressSoundVolume = Settings.Companion.readKeypressSoundVolume(prefs, res)
+        mKeyLongpressTimeout = Settings.readKeyLongpressTimeout(prefs, res)
+        mKeypressVibrationDuration = Settings.readKeypressVibrationDuration(prefs, res)
+        mKeypressSoundVolume = Settings.readKeypressSoundVolume(prefs, res)
         mKeyPreviewPopupDismissDelay =
-            Settings.Companion.readKeyPreviewPopupDismissDelay(prefs, res)
+            Settings.readKeyPreviewPopupDismissDelay(prefs, res)
         mEnableEmojiAltPhysicalKey = prefs.getBoolean(
-            Settings.Companion.PREF_ENABLE_EMOJI_ALT_PHYSICAL_KEY, true
+            Settings.PREF_ENABLE_EMOJI_ALT_PHYSICAL_KEY, true
         )
-        mShowAppIcon = Settings.Companion.readShowSetupWizardIcon(prefs, context)
+        mShowAppIcon = Settings.readShowSetupWizardIcon(prefs, context)
         mIsShowAppIconSettingInPreferences =
-            prefs.contains(Settings.Companion.PREF_SHOW_SETUP_WIZARD_ICON)
+            prefs.contains(Settings.PREF_SHOW_SETUP_WIZARD_ICON)
         mAutoCorrectionThreshold = readAutoCorrectionThreshold(
             res,
             autoCorrectionThresholdRawValue
         )
-        mPlausibilityThreshold = Settings.Companion.readPlausibilityThreshold(res)
-        mGestureInputEnabled = Settings.Companion.readGestureInputEnabled(prefs, res)
-        mGestureTrailEnabled = prefs.getBoolean(Settings.Companion.PREF_GESTURE_PREVIEW_TRAIL, true)
+        mPlausibilityThreshold = Settings.readPlausibilityThreshold(res)
+        mGestureInputEnabled = Settings.readGestureInputEnabled(prefs, res)
+        mGestureTrailEnabled = prefs.getBoolean(Settings.PREF_GESTURE_PREVIEW_TRAIL, true)
         mCloudSyncEnabled = prefs.getBoolean(LocalSettingsConstants.PREF_ENABLE_CLOUD_SYNC, false)
         mAccount = prefs.getString(
             LocalSettingsConstants.PREF_ACCOUNT_NAME,
             null /* default */
         )
         mGestureFloatingPreviewTextEnabled = !mInputAttributes.mDisableGestureFloatingPreviewText
-                && prefs.getBoolean(Settings.Companion.PREF_GESTURE_FLOATING_PREVIEW_TEXT, true)
+                && prefs.getBoolean(Settings.PREF_GESTURE_FLOATING_PREVIEW_TEXT, true)
         mAutoCorrectionEnabledPerUserSettings = mAutoCorrectEnabled
                 && !mInputAttributes.mInputTypeNoAutoCorrect
         isSuggestionsEnabledPerUserSettings = readSuggestionsEnabled(prefs)
-        mIsInternal = Settings.Companion.isInternal(prefs)
+        mIsInternal = Settings.isInternal(prefs)
         mHasCustomKeyPreviewAnimationParams = prefs.getBoolean(
             DebugSettings.PREF_HAS_CUSTOM_KEY_PREVIEW_ANIMATION_PARAMS, false
         )
         mHasKeyboardResize = prefs.getBoolean(DebugSettings.PREF_RESIZE_KEYBOARD, false)
-        mKeyboardHeightScale = Settings.Companion.readKeyboardHeight(prefs, DEFAULT_SIZE_SCALE)
-        mKeyPreviewShowUpDuration = Settings.Companion.readKeyPreviewAnimationDuration(
+        mKeyboardHeightScale = Settings.readKeyboardHeight(prefs, DEFAULT_SIZE_SCALE)
+        mKeyPreviewShowUpDuration = Settings.readKeyPreviewAnimationDuration(
             prefs, DebugSettings.PREF_KEY_PREVIEW_SHOW_UP_DURATION,
             res.getInteger(R.integer.config_key_preview_show_up_duration)
         )
-        mKeyPreviewDismissDuration = Settings.Companion.readKeyPreviewAnimationDuration(
+        mKeyPreviewDismissDuration = Settings.readKeyPreviewAnimationDuration(
             prefs, DebugSettings.PREF_KEY_PREVIEW_DISMISS_DURATION,
             res.getInteger(R.integer.config_key_preview_dismiss_duration)
         )
@@ -276,25 +276,25 @@ class SettingsValues(
         val defaultKeyPreviewDismissEndScale = ResourceUtils.getFloatFromFraction(
             res, R.fraction.config_key_preview_dismiss_end_scale
         )
-        mKeyPreviewShowUpStartXScale = Settings.Companion.readKeyPreviewAnimationScale(
+        mKeyPreviewShowUpStartXScale = Settings.readKeyPreviewAnimationScale(
             prefs, DebugSettings.PREF_KEY_PREVIEW_SHOW_UP_START_X_SCALE,
             defaultKeyPreviewShowUpStartScale
         )
-        mKeyPreviewShowUpStartYScale = Settings.Companion.readKeyPreviewAnimationScale(
+        mKeyPreviewShowUpStartYScale = Settings.readKeyPreviewAnimationScale(
             prefs, DebugSettings.PREF_KEY_PREVIEW_SHOW_UP_START_Y_SCALE,
             defaultKeyPreviewShowUpStartScale
         )
-        mKeyPreviewDismissEndXScale = Settings.Companion.readKeyPreviewAnimationScale(
+        mKeyPreviewDismissEndXScale = Settings.readKeyPreviewAnimationScale(
             prefs, DebugSettings.PREF_KEY_PREVIEW_DISMISS_END_X_SCALE,
             defaultKeyPreviewDismissEndScale
         )
-        mKeyPreviewDismissEndYScale = Settings.Companion.readKeyPreviewAnimationScale(
+        mKeyPreviewDismissEndYScale = Settings.readKeyPreviewAnimationScale(
             prefs, DebugSettings.PREF_KEY_PREVIEW_DISMISS_END_Y_SCALE,
             defaultKeyPreviewDismissEndScale
         )
         mDisplayOrientation = res.configuration.orientation
         mAppWorkarounds = AsyncResultHolder("AppWorkarounds")
-        val packageInfo: PackageInfo = TargetPackageInfoGetterTask.Companion.getCachedPackageInfo(
+        val packageInfo: PackageInfo? = TargetPackageInfoGetterTask.getCachedPackageInfo(
             mInputAttributes.mTargetApplicationPackageName
         )
         if (null != packageInfo) {
@@ -398,16 +398,16 @@ class SettingsValues(
         private const val SUGGESTIONS_VISIBILITY_HIDE_VALUE_OBSOLETE = "2"
 
         private fun readSuggestionsEnabled(prefs: SharedPreferences): Boolean {
-            if (prefs.contains(Settings.Companion.PREF_SHOW_SUGGESTIONS_SETTING_OBSOLETE)) {
+            if (prefs.contains(Settings.PREF_SHOW_SUGGESTIONS_SETTING_OBSOLETE)) {
                 val alwaysHide = SUGGESTIONS_VISIBILITY_HIDE_VALUE_OBSOLETE == prefs.getString(
-                    Settings.Companion.PREF_SHOW_SUGGESTIONS_SETTING_OBSOLETE, null
+                    Settings.PREF_SHOW_SUGGESTIONS_SETTING_OBSOLETE, null
                 )
                 prefs.edit()
-                    .remove(Settings.Companion.PREF_SHOW_SUGGESTIONS_SETTING_OBSOLETE)
-                    .putBoolean(Settings.Companion.PREF_SHOW_SUGGESTIONS, !alwaysHide)
+                    .remove(Settings.PREF_SHOW_SUGGESTIONS_SETTING_OBSOLETE)
+                    .putBoolean(Settings.PREF_SHOW_SUGGESTIONS, !alwaysHide)
                     .apply()
             }
-            return prefs.getBoolean(Settings.Companion.PREF_SHOW_SUGGESTIONS, true)
+            return prefs.getBoolean(Settings.PREF_SHOW_SUGGESTIONS, true)
         }
 
         private fun readBigramPredictionEnabled(
@@ -415,7 +415,7 @@ class SettingsValues(
             res: Resources
         ): Boolean {
             return prefs.getBoolean(
-                Settings.Companion.PREF_BIGRAM_PREDICTIONS, res.getBoolean(
+                Settings.PREF_BIGRAM_PREDICTIONS, res.getBoolean(
                     R.bool.config_default_next_word_prediction
                 )
             )
@@ -464,21 +464,21 @@ class SettingsValues(
         ): Boolean {
             // Migrate preference from {@link Settings#PREF_VOICE_MODE_OBSOLETE} to
             // {@link Settings#PREF_VOICE_INPUT_KEY}.
-            if (prefs.contains(Settings.Companion.PREF_VOICE_MODE_OBSOLETE)) {
+            if (prefs.contains(Settings.PREF_VOICE_MODE_OBSOLETE)) {
                 val voiceModeMain = res.getString(R.string.voice_mode_main)
                 val voiceMode = prefs.getString(
-                    Settings.Companion.PREF_VOICE_MODE_OBSOLETE, voiceModeMain
+                    Settings.PREF_VOICE_MODE_OBSOLETE, voiceModeMain
                 )!!
                 val shouldShowVoiceInputKey = voiceModeMain == voiceMode
                 prefs.edit()
                     .putBoolean(
-                        Settings.Companion.PREF_VOICE_INPUT_KEY,
+                        Settings.PREF_VOICE_INPUT_KEY,
                         shouldShowVoiceInputKey
                     ) // Remove the obsolete preference if exists.
-                    .remove(Settings.Companion.PREF_VOICE_MODE_OBSOLETE)
+                    .remove(Settings.PREF_VOICE_MODE_OBSOLETE)
                     .apply()
             }
-            return prefs.getBoolean(Settings.Companion.PREF_VOICE_INPUT_KEY, true)
+            return prefs.getBoolean(Settings.PREF_VOICE_INPUT_KEY, true)
         }
     }
 }

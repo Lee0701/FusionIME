@@ -63,13 +63,13 @@ internal class GestureTrailDrawingParams(mainKeyboardViewAttr: TypedArray) {
         )
         mTrailShadowEnabled = (trailShadowRatioInt > 0)
         mTrailShadowRatio = trailShadowRatioInt.toFloat() / PERCENTAGE_INT.toFloat()
-        mFadeoutStartDelay = if (GestureTrailDrawingPoints.Companion.DEBUG_SHOW_POINTS)
+        mFadeoutStartDelay = if (GestureTrailDrawingPoints.DEBUG_SHOW_POINTS)
             FADEOUT_START_DELAY_FOR_DEBUG
         else
             mainKeyboardViewAttr.getInt(
                 R.styleable.MainKeyboardView_gestureTrailFadeoutStartDelay, 0
             )
-        mFadeoutDuration = if (GestureTrailDrawingPoints.Companion.DEBUG_SHOW_POINTS)
+        mFadeoutDuration = if (GestureTrailDrawingPoints.DEBUG_SHOW_POINTS)
             FADEOUT_DURATION_FOR_DEBUG
         else
             mainKeyboardViewAttr.getInt(

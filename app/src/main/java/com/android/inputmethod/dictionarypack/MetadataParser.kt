@@ -27,17 +27,17 @@ import java.util.TreeMap
  */
 object MetadataParser {
     // Name of the fields in the JSON-formatted file.
-    private val ID_FIELD_NAME: String = MetadataDbHelper.Companion.WORDLISTID_COLUMN
+    private val ID_FIELD_NAME: String = MetadataDbHelper.WORDLISTID_COLUMN
     private const val LOCALE_FIELD_NAME: String = "locale"
-    private val DESCRIPTION_FIELD_NAME: String = MetadataDbHelper.Companion.DESCRIPTION_COLUMN
+    private val DESCRIPTION_FIELD_NAME: String = MetadataDbHelper.DESCRIPTION_COLUMN
     private const val UPDATE_FIELD_NAME: String = "update"
-    private val FILESIZE_FIELD_NAME: String = MetadataDbHelper.Companion.FILESIZE_COLUMN
-    private val RAW_CHECKSUM_FIELD_NAME: String = MetadataDbHelper.Companion.RAW_CHECKSUM_COLUMN
-    private val CHECKSUM_FIELD_NAME: String = MetadataDbHelper.Companion.CHECKSUM_COLUMN
+    private val FILESIZE_FIELD_NAME: String = MetadataDbHelper.FILESIZE_COLUMN
+    private val RAW_CHECKSUM_FIELD_NAME: String = MetadataDbHelper.RAW_CHECKSUM_COLUMN
+    private val CHECKSUM_FIELD_NAME: String = MetadataDbHelper.CHECKSUM_COLUMN
     private val REMOTE_FILENAME_FIELD_NAME: String =
-        MetadataDbHelper.Companion.REMOTE_FILENAME_COLUMN
-    private val VERSION_FIELD_NAME: String = MetadataDbHelper.Companion.VERSION_COLUMN
-    private val FORMATVERSION_FIELD_NAME: String = MetadataDbHelper.Companion.FORMATVERSION_COLUMN
+        MetadataDbHelper.REMOTE_FILENAME_COLUMN
+    private val VERSION_FIELD_NAME: String = MetadataDbHelper.VERSION_COLUMN
+    private val FORMATVERSION_FIELD_NAME: String = MetadataDbHelper.FORMATVERSION_COLUMN
 
     /**
      * Parse one JSON-formatted word list metadata.
@@ -72,20 +72,20 @@ object MetadataParser {
         // The null argument is the local file name, which is not known at this time and will
         // be decided later.
         return WordListMetadata(
-            arguments.get(ID_FIELD_NAME),
-            MetadataDbHelper.Companion.TYPE_BULK,
-            arguments.get(DESCRIPTION_FIELD_NAME),
-            arguments.get(UPDATE_FIELD_NAME)!!.toLong(),
-            arguments.get(FILESIZE_FIELD_NAME)!!.toLong(),
-            arguments.get(RAW_CHECKSUM_FIELD_NAME),
-            arguments.get(CHECKSUM_FIELD_NAME),
-            MetadataDbHelper.Companion.DICTIONARY_RETRY_THRESHOLD,  /* retryCount */
+            arguments[ID_FIELD_NAME]!!,
+            MetadataDbHelper.TYPE_BULK,
+            arguments[DESCRIPTION_FIELD_NAME],
+            arguments[UPDATE_FIELD_NAME]!!.toLong(),
+            arguments[FILESIZE_FIELD_NAME]!!.toLong(),
+            arguments[RAW_CHECKSUM_FIELD_NAME],
+            arguments[CHECKSUM_FIELD_NAME],
+            MetadataDbHelper.DICTIONARY_RETRY_THRESHOLD,  /* retryCount */
             null,
-            arguments.get(REMOTE_FILENAME_FIELD_NAME),
-            arguments.get(VERSION_FIELD_NAME)!!.toInt(),
-            arguments.get(FORMATVERSION_FIELD_NAME)!!
+            arguments[REMOTE_FILENAME_FIELD_NAME],
+            arguments[VERSION_FIELD_NAME]!!.toInt(),
+            arguments[FORMATVERSION_FIELD_NAME]!!
                 .toInt(),
-            0, arguments.get(LOCALE_FIELD_NAME)
+            0, arguments[LOCALE_FIELD_NAME]
         )
     }
 

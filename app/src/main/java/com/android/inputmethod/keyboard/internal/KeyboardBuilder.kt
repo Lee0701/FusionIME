@@ -116,8 +116,7 @@ import kotlin.math.max
 </pre> *
  */
 // TODO: Write unit tests for this class.
-open class KeyboardBuilder<KP : KeyboardParams?>(context: Context, @Nonnull params: KP) {
-    @Nonnull
+open class KeyboardBuilder<KP : KeyboardParams>(context: Context, @Nonnull params: KP) {
     protected val mParams: KP
     protected val mContext: Context
     protected val mResources: Resources
@@ -261,7 +260,7 @@ open class KeyboardBuilder<KP : KeyboardParams?>(context: Context, @Nonnull para
                 (baseHeight / DEFAULT_KEYBOARD_ROWS).toFloat()
             ).toInt()
 
-            params.mKeyVisualAttributes = KeyVisualAttributes.Companion.newInstance(keyAttr)
+            params.mKeyVisualAttributes = KeyVisualAttributes.newInstance(keyAttr)
 
             params.mMoreKeysTemplate = keyboardAttr.getResourceId(
                 R.styleable.Keyboard_moreKeysTemplate, 0
@@ -458,7 +457,7 @@ open class KeyboardBuilder<KP : KeyboardParams?>(context: Context, @Nonnull para
                 val width: Int = keyWidth.toInt()
                 val height: Int = row.getRowHeight()
                 val key: Key = Key(
-                    label, KeyboardIconsSet.Companion.ICON_UNDEFINED, code, outputText,
+                    label, KeyboardIconsSet.ICON_UNDEFINED, code, outputText,
                     null,  /* hintLabel */labelFlags, backgroundType, x, y, width, height,
                     mParams.mHorizontalGap, mParams.mVerticalGap
                 )
@@ -491,8 +490,8 @@ open class KeyboardBuilder<KP : KeyboardParams?>(context: Context, @Nonnull para
         keyAttr.recycle()
         if (DEBUG) {
             startEndTag(
-                "<%s%s %s moreKeys=%s />", TAG_KEY, (if (key.isEnabled()) "" else " disabled"),
-                key, key.getMoreKeys().contentToString()
+                "<%s%s %s moreKeys=%s />", TAG_KEY, (if (key.isEnabled) "" else " disabled"),
+                key, key.moreKeys.contentToString()
             )
         }
         XmlParseUtils.checkEndTag(TAG_KEY, parser)
@@ -677,21 +676,21 @@ open class KeyboardBuilder<KP : KeyboardParams?>(context: Context, @Nonnull para
             val keyboardLayoutSetMatched: Boolean = matchString(
                 caseAttr,
                 R.styleable.Keyboard_Case_keyboardLayoutSet,
-                id.mSubtype.getKeyboardLayoutSetName()
+                id.mSubtype?.keyboardLayoutSetName!!
             )
             val keyboardLayoutSetElementMatched: Boolean = matchTypedValue(
                 caseAttr,
                 R.styleable.Keyboard_Case_keyboardLayoutSetElement, id.mElementId,
-                KeyboardId.Companion.elementIdToName(id.mElementId)!!
+                KeyboardId.elementIdToName(id.mElementId)!!
             )
             val keyboardThemeMacthed: Boolean = matchTypedValue(
                 caseAttr,
                 R.styleable.Keyboard_Case_keyboardTheme, mParams.mThemeId,
-                KeyboardTheme.Companion.getKeyboardThemeName(mParams.mThemeId)
+                KeyboardTheme.getKeyboardThemeName(mParams.mThemeId)
             )
             val modeMatched: Boolean = matchTypedValue(
                 caseAttr,
-                R.styleable.Keyboard_Case_mode, id.mMode, KeyboardId.Companion.modeName(id.mMode)!!
+                R.styleable.Keyboard_Case_mode, id.mMode, KeyboardId.modeName(id.mMode)!!
             )
             val navigateNextMatched: Boolean = matchBoolean(
                 caseAttr,
@@ -1022,7 +1021,7 @@ open class KeyboardBuilder<KP : KeyboardParams?>(context: Context, @Nonnull para
                 return true
             }
             val iconName: String? = a.getString(index)
-            val iconId: Int = KeyboardIconsSet.Companion.getIconId(iconName)
+            val iconId: Int = KeyboardIconsSet.getIconId(iconName)
             return iconsSet.getIconDrawable(iconId) != null
         }
 

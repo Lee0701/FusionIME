@@ -114,27 +114,27 @@ class KeyPreviewChoreographer(params: KeyPreviewDrawParams) {
         mParams.setGeometry(keyPreviewView)
         val previewWidth: Int = keyPreviewView.getMeasuredWidth()
         val previewHeight: Int = mParams.mPreviewHeight
-        val keyDrawWidth: Int = key.getDrawWidth()
+        val keyDrawWidth: Int = key.drawWidth
         // The key preview is horizontally aligned with the center of the visible part of the
         // parent key. If it doesn't fit in this {@link KeyboardView}, it is moved inward to fit and
         // the left/right background is used if such background is specified.
         val keyPreviewPosition: Int
-        var previewX: Int = (key.getDrawX() - (previewWidth - keyDrawWidth) / 2
+        var previewX: Int = (key.drawX - (previewWidth - keyDrawWidth) / 2
                 + CoordinateUtils.x(originCoords))
         if (previewX < 0) {
             previewX = 0
-            keyPreviewPosition = KeyPreviewView.Companion.POSITION_LEFT
+            keyPreviewPosition = KeyPreviewView.POSITION_LEFT
         } else if (previewX > keyboardViewWidth - previewWidth) {
             previewX = keyboardViewWidth - previewWidth
-            keyPreviewPosition = KeyPreviewView.Companion.POSITION_RIGHT
+            keyPreviewPosition = KeyPreviewView.POSITION_RIGHT
         } else {
-            keyPreviewPosition = KeyPreviewView.Companion.POSITION_MIDDLE
+            keyPreviewPosition = KeyPreviewView.POSITION_MIDDLE
         }
-        val hasMoreKeys: Boolean = (key.getMoreKeys() != null)
+        val hasMoreKeys: Boolean = (key.moreKeys != null)
         keyPreviewView.setPreviewBackground(hasMoreKeys, keyPreviewPosition)
         // The key preview is placed vertically above the top edge of the parent key with an
         // arbitrary offset.
-        val previewY: Int = (key.getY() - previewHeight + mParams.mPreviewOffset
+        val previewY: Int = (key.y - previewHeight + mParams.mPreviewOffset
                 + CoordinateUtils.y(originCoords))
 
         ViewLayoutUtils.placeViewAt(

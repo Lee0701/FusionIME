@@ -20,9 +20,9 @@ import com.android.inputmethod.latin.define.DebugFlags
 
 class TouchPositionCorrection {
     private var mEnabled: Boolean = false
-    private var mXs: FloatArray?
-    private var mYs: FloatArray?
-    private var mRadii: FloatArray?
+    private var mXs: FloatArray? = null
+    private var mYs: FloatArray? = null
+    private var mRadii: FloatArray? = null
 
     fun load(data: Array<String>) {
         val dataLength: Int = data.size
@@ -45,11 +45,11 @@ class TouchPositionCorrection {
                 val index: Int = i / TOUCH_POSITION_CORRECTION_RECORD_SIZE
                 val value: Float = data.get(i).toFloat()
                 if (type == 0) {
-                    mXs!!.get(index) = value
+                    mXs!![index] = value
                 } else if (type == 1) {
-                    mYs!!.get(index) = value
+                    mYs!![index] = value
                 } else {
-                    mRadii!!.get(index) = value
+                    mRadii!![index] = value
                 }
             }
             mEnabled = dataLength > 0

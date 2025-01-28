@@ -49,24 +49,23 @@ internal class EmojiPageKeyboardView @JvmOverloads constructor(
     private val mGestureDetector: GestureDetector
     private var mAccessibilityDelegate: KeyboardAccessibilityDelegate<EmojiPageKeyboardView>? = null
 
+    override var keyboard: Keyboard?
+        get() = super.keyboard
+        set(value) {
+            super.keyboard = value
+            mKeyDetector.setKeyboard(value!!, 0f,  /* correctionX */0f /* correctionY */)
+            if (AccessibilityUtils.instance.isAccessibilityEnabled()) {
+                if (mAccessibilityDelegate == null) {
+                    mAccessibilityDelegate = KeyboardAccessibilityDelegate(this, mKeyDetector)
+                }
+                mAccessibilityDelegate!!.setKeyboard(keyboard)
+            } else {
+                mAccessibilityDelegate = null
+            }
+        }
+
     fun setOnKeyEventListener(listener: OnKeyEventListener) {
         mListener = listener
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    override fun setKeyboard(keyboard: Keyboard) {
-        super.setKeyboard(keyboard)
-        mKeyDetector.setKeyboard(keyboard, 0f,  /* correctionX */0f /* correctionY */)
-        if (AccessibilityUtils.Companion.getInstance().isAccessibilityEnabled()) {
-            if (mAccessibilityDelegate == null) {
-                mAccessibilityDelegate = KeyboardAccessibilityDelegate(this, mKeyDetector)
-            }
-            mAccessibilityDelegate!!.setKeyboard(keyboard)
-        } else {
-            mAccessibilityDelegate = null
-        }
     }
 
     override fun dispatchPopulateAccessibilityEvent(event: AccessibilityEvent): Boolean {
@@ -81,7 +80,7 @@ internal class EmojiPageKeyboardView @JvmOverloads constructor(
         val accessibilityDelegate: KeyboardAccessibilityDelegate<EmojiPageKeyboardView>? =
             mAccessibilityDelegate
         if (accessibilityDelegate != null
-            && AccessibilityUtils.Companion.getInstance().isTouchExplorationEnabled()
+            && AccessibilityUtils.instance.isTouchExplorationEnabled()
         ) {
             return accessibilityDelegate.onHoverEvent(event)
         }
@@ -154,12 +153,8 @@ internal class EmojiPageKeyboardView @JvmOverloads constructor(
             return false
         }
         // Do not trigger key-down effect right now in case this is actually a fling action.
-        mPendingKeyDown = object : Runnable {
-            override fun run() {
-                callListenerOnPressKey(key)
-            }
-        }
-        mHandler.postDelayed(mPendingKeyDown, KEY_PRESS_DELAY_TIME)
+        mPendingKeyDown = Runnable { callListenerOnPressKey(key) }
+        mHandler.postDelayed(mPendingKeyDown!!, KEY_PRESS_DELAY_TIME)
         return false
     }
 

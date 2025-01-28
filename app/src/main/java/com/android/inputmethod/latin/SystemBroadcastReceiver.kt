@@ -67,9 +67,9 @@ class SystemBroadcastReceiver : BroadcastReceiver() {
             Log.i(TAG, "Package has been replaced: " + context.getPackageName())
             // Need to restore additional subtypes because system always clears additional
             // subtypes when the package is replaced.
-            RichInputMethodManager.Companion.init(context)
-            val richImm: RichInputMethodManager = RichInputMethodManager.Companion.getInstance()
-            val additionalSubtypes: Array<InputMethodSubtype?>? = richImm.getAdditionalSubtypes()
+            RichInputMethodManager.init(context)
+            val richImm: RichInputMethodManager = RichInputMethodManager.instance
+            val additionalSubtypes: Array<InputMethodSubtype> = richImm.additionalSubtypes
             richImm.setAdditionalInputMethodSubtypes(additionalSubtypes)
             toggleAppIcon(context)
 
@@ -83,7 +83,7 @@ class SystemBroadcastReceiver : BroadcastReceiver() {
             toggleAppIcon(context)
         } else if (Intent.ACTION_LOCALE_CHANGED == intentAction) {
             Log.i(TAG, "System locale changed")
-            KeyboardLayoutSet.Companion.onSystemLocaleChanged()
+            KeyboardLayoutSet.onSystemLocaleChanged()
         }
 
         // The process that hosts this broadcast receiver is invoked and remains alive even after
@@ -155,7 +155,7 @@ class SystemBroadcastReceiver : BroadcastReceiver() {
             val prefs: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
             context.getPackageManager().setComponentEnabledSetting(
                 ComponentName(context, SetupActivity::class.java),
-                if (Settings.Companion.readShowSetupWizardIcon(prefs, context))
+                if (Settings.readShowSetupWizardIcon(prefs, context))
                     PackageManager.COMPONENT_ENABLED_STATE_ENABLED
                 else
                     PackageManager.COMPONENT_ENABLED_STATE_DISABLED,

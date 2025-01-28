@@ -82,12 +82,12 @@ object PersonalizationHelper {
                 return
             }
             val filesDeleted: Boolean = FileUtils.deleteFilteredFiles(
-                filesDir, DictFilter(UserHistoryDictionary.Companion.NAME)
+                filesDir, DictFilter(UserHistoryDictionary.NAME)
             )
             if (!filesDeleted) {
                 Log.e(
                     TAG, ("Cannot remove dictionary files. filesDir: " + filesDir.getAbsolutePath()
-                            + ", dictNamePrefix: " + UserHistoryDictionary.Companion.NAME)
+                            + ", dictNamePrefix: " + UserHistoryDictionary.NAME)
                 )
             }
         }

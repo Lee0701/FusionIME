@@ -27,13 +27,13 @@ import java.util.Locale
  */
 object UserDictionarySettingsUtils {
     fun getLocaleDisplayName(context: Context, localeStr: String?): String {
-        if (TextUtils.isEmpty(localeStr)) {
+        if (localeStr == null || TextUtils.isEmpty(localeStr)) {
             // CAVEAT: localeStr should not be null because a null locale stands for the system
             // locale in UserDictionary.Words.addWord.
-            return context.getResources().getString(R.string.user_dict_settings_all_languages)
+            return context.resources.getString(R.string.user_dict_settings_all_languages)
         }
-        val locale: Locale = LocaleUtils.constructLocaleFromString(localeStr)!!
-        val systemLocale: Locale = context.getResources().getConfiguration().locale
+        val locale: Locale = LocaleUtils.constructLocaleFromString(localeStr)
+        val systemLocale: Locale = context.resources.configuration.locale
         return locale.getDisplayName(systemLocale)
     }
 }

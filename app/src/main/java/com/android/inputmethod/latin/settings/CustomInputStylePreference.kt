@@ -40,7 +40,7 @@ class CustomInputStylePreference(
     context: Context?, subtype: InputMethodSubtype?,
     proxy: Listener
 ) : DialogPreference(context, null), DialogInterface.OnCancelListener {
-    internal interface Listener {
+    interface Listener {
         fun onRemoveCustomInputStyle(stylePref: CustomInputStylePreference?)
         fun onSaveCustomInputStyle(stylePref: CustomInputStylePreference)
         fun onAddCustomInputStyle(stylePref: CustomInputStylePreference)
@@ -55,6 +55,25 @@ class CustomInputStylePreference(
     private var mSubtypeLocaleSpinner: Spinner? = null
     private var mKeyboardLayoutSetSpinner: Spinner? = null
 
+    var subtype: InputMethodSubtype?
+        get() = mSubtype
+        set(subtype) {
+            mPreviousSubtype = mSubtype
+            mSubtype = subtype
+            if (isIncomplete) {
+                title = null
+                setDialogTitle(R.string.add_style)
+                key = KEY_NEW_SUBTYPE
+            } else {
+                val displayName =
+                    SubtypeLocaleUtils.getSubtypeDisplayNameInSystemLocale(subtype!!)
+                title = displayName
+                dialogTitle = displayName
+                key = (KEY_PREFIX + subtype.locale + "_"
+                        + SubtypeLocaleUtils.getKeyboardLayoutSetName(subtype))
+            }
+        }
+
     init {
         dialogLayoutResource = R.layout.additional_subtype_dialog
         isPersistent = false
@@ -68,25 +87,6 @@ class CustomInputStylePreference(
 
     val isIncomplete: Boolean
         get() = mSubtype == null
-
-    var subtype: InputMethodSubtype?
-        get() = mSubtype
-        set(subtype) {
-            mPreviousSubtype = mSubtype
-            mSubtype = subtype
-            if (isIncomplete) {
-                title = null
-                setDialogTitle(R.string.add_style)
-                key = KEY_NEW_SUBTYPE
-            } else {
-                val displayName =
-                    SubtypeLocaleUtils.getSubtypeDisplayNameInSystemLocale(subtype)!!
-                title = displayName
-                dialogTitle = displayName
-                key = (KEY_PREFIX + subtype!!.locale + "_"
-                        + SubtypeLocaleUtils.getKeyboardLayoutSetName(subtype))
-            }
-        }
 
     fun revert() {
         subtype = mPreviousSubtype
@@ -200,8 +200,9 @@ class CustomInputStylePreference(
         }
 
         companion object {
-            val CREATOR: Parcelable.Creator<SavedState> = object : Parcelable.Creator<SavedState?> {
-                override fun createFromParcel(source: Parcel): SavedState? {
+            @JvmField
+            val CREATOR: Parcelable.Creator<SavedState> = object : Parcelable.Creator<SavedState> {
+                override fun createFromParcel(source: Parcel): SavedState {
                     return SavedState(source)
                 }
 
@@ -212,7 +213,7 @@ class CustomInputStylePreference(
         }
     }
 
-    internal class SubtypeLocaleItem(subtype: InputMethodSubtype) :
+    class SubtypeLocaleItem(subtype: InputMethodSubtype) :
         Comparable<SubtypeLocaleItem> {
         val mLocaleString: String = subtype.locale
         private val mDisplayName: String =
@@ -237,8 +238,8 @@ class CustomInputStylePreference(
             setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
             val items = TreeSet<SubtypeLocaleItem>()
-            val imi: InputMethodInfo = RichInputMethodManager.Companion.getInstance()
-                .getInputMethodInfoOfThisIme()
+            val imi: InputMethodInfo = RichInputMethodManager.instance
+                .inputMethodInfoOfThisIme
             val count = imi.subtypeCount
             for (i in 0 until count) {
                 val subtype = imi.getSubtypeAt(i)
@@ -264,7 +265,7 @@ class CustomInputStylePreference(
         }
     }
 
-    internal class KeyboardLayoutSetItem(subtype: InputMethodSubtype) {
+    class KeyboardLayoutSetItem(subtype: InputMethodSubtype) {
         val mLayoutName: String = SubtypeLocaleUtils.getKeyboardLayoutSetName(subtype)
         private val mDisplayName = SubtypeLocaleUtils.getKeyboardLayoutSetDisplayName(subtype)!!
 

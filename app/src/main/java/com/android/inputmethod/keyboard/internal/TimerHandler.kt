@@ -25,7 +25,7 @@ import com.android.inputmethod.latin.utils.LeakGuardHandlerWrapper
 import javax.annotation.Nonnull
 
 class TimerHandler(
-    @Nonnull ownerInstance: DrawingProxy,
+    ownerInstance: DrawingProxy,
     ignoreAltCodeKeyTimeout: Int, gestureRecognitionUpdateTime: Int
 ) :
     LeakGuardHandlerWrapper<DrawingProxy?>(ownerInstance), TimerProxy {
@@ -38,12 +38,12 @@ class TimerHandler(
     }
 
     override fun handleMessage(msg: Message) {
-        val drawingProxy: DrawingProxy? = getOwnerInstance()
+        val drawingProxy: DrawingProxy? = ownerInstance
         if (drawingProxy == null) {
             return
         }
         when (msg.what) {
-            MSG_TYPING_STATE_EXPIRED -> drawingProxy.startWhileTypingAnimation(DrawingProxy.Companion.FADE_IN)
+            MSG_TYPING_STATE_EXPIRED -> drawingProxy.startWhileTypingAnimation(DrawingProxy.FADE_IN)
             MSG_REPEAT_KEY -> {
                 val tracker1: PointerTracker = msg.obj as PointerTracker
                 tracker1.onKeyRepeat(msg.arg1,  /* code */msg.arg2 /* repeatCount */)
@@ -71,7 +71,7 @@ class TimerHandler(
     }
 
     override fun startKeyRepeatTimerOf(
-        @Nonnull tracker: PointerTracker, repeatCount: Int,
+        tracker: PointerTracker, repeatCount: Int,
         delay: Int
     ) {
         val key: Key? = tracker.getKey()
@@ -79,7 +79,7 @@ class TimerHandler(
             return
         }
         sendMessageDelayed(
-            obtainMessage(MSG_REPEAT_KEY, key.getCode(), repeatCount, tracker), delay.toLong()
+            obtainMessage(MSG_REPEAT_KEY, key.code, repeatCount, tracker), delay.toLong()
         )
     }
 
@@ -96,21 +96,21 @@ class TimerHandler(
         return hasMessages(MSG_REPEAT_KEY)
     }
 
-    override fun startLongPressTimerOf(@Nonnull tracker: PointerTracker, delay: Int) {
+    override fun startLongPressTimerOf(tracker: PointerTracker, delay: Int) {
         val key: Key? = tracker.getKey()
         if (key == null) {
             return
         }
         // Use a separate message id for long pressing shift key, because long press shift key
         // timers should be canceled when other key is pressed.
-        val messageId: Int = if ((key.getCode() == Constants.CODE_SHIFT))
+        val messageId: Int = if ((key.code == Constants.CODE_SHIFT))
             MSG_LONGPRESS_SHIFT_KEY
         else
             MSG_LONGPRESS_KEY
         sendMessageDelayed(obtainMessage(messageId, tracker), delay.toLong())
     }
 
-    override fun cancelLongPressTimersOf(@Nonnull tracker: PointerTracker?) {
+    override fun cancelLongPressTimersOf(tracker: PointerTracker) {
         removeMessages(MSG_LONGPRESS_KEY, tracker)
         removeMessages(MSG_LONGPRESS_SHIFT_KEY, tracker)
     }
@@ -124,23 +124,23 @@ class TimerHandler(
         removeMessages(MSG_LONGPRESS_SHIFT_KEY)
     }
 
-    override fun startTypingStateTimer(@Nonnull typedKey: Key) {
-        if (typedKey.isModifier() || typedKey.altCodeWhileTyping()) {
+    override fun startTypingStateTimer(typedKey: Key) {
+        if (typedKey.isModifier || typedKey.altCodeWhileTyping()) {
             return
         }
 
         val isTyping: Boolean = isTypingState()
         removeMessages(MSG_TYPING_STATE_EXPIRED)
-        val drawingProxy: DrawingProxy? = getOwnerInstance()
+        val drawingProxy: DrawingProxy? = ownerInstance
         if (drawingProxy == null) {
             return
         }
 
         // When user hits the space or the enter key, just cancel the while-typing timer.
-        val typedCode: Int = typedKey.getCode()
+        val typedCode: Int = typedKey.code
         if (typedCode == Constants.CODE_SPACE || typedCode == Constants.CODE_ENTER) {
             if (isTyping) {
-                drawingProxy.startWhileTypingAnimation(DrawingProxy.Companion.FADE_IN)
+                drawingProxy.startWhileTypingAnimation(DrawingProxy.FADE_IN)
             }
             return
         }
@@ -151,7 +151,7 @@ class TimerHandler(
         if (isTyping) {
             return
         }
-        drawingProxy.startWhileTypingAnimation(DrawingProxy.Companion.FADE_OUT)
+        drawingProxy.startWhileTypingAnimation(DrawingProxy.FADE_OUT)
     }
 
     override fun isTypingState(): Boolean {
@@ -173,7 +173,7 @@ class TimerHandler(
         return hasMessages(MSG_DOUBLE_TAP_SHIFT_KEY)
     }
 
-    override fun cancelKeyTimersOf(@Nonnull tracker: PointerTracker?) {
+    override fun cancelKeyTimersOf(tracker: PointerTracker) {
         cancelKeyRepeatTimerOf(tracker)
         cancelLongPressTimersOf(tracker)
     }
@@ -183,7 +183,7 @@ class TimerHandler(
         cancelLongPressTimers()
     }
 
-    override fun startUpdateBatchInputTimer(@Nonnull tracker: PointerTracker?) {
+    override fun startUpdateBatchInputTimer(tracker: PointerTracker) {
         if (mGestureRecognitionUpdateTime <= 0) {
             return
         }
@@ -194,7 +194,7 @@ class TimerHandler(
         )
     }
 
-    override fun cancelUpdateBatchInputTimer(@Nonnull tracker: PointerTracker?) {
+    override fun cancelUpdateBatchInputTimer(tracker: PointerTracker) {
         removeMessages(MSG_UPDATE_BATCH_INPUT, tracker)
     }
 
@@ -202,7 +202,7 @@ class TimerHandler(
         removeMessages(MSG_UPDATE_BATCH_INPUT)
     }
 
-    fun postDismissKeyPreview(@Nonnull key: Key?, delay: Long) {
+    fun postDismissKeyPreview(key: Key, delay: Long) {
         sendMessageDelayed(obtainMessage(MSG_DISMISS_KEY_PREVIEW, key), delay)
     }
 

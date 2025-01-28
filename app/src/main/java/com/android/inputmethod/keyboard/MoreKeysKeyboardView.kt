@@ -47,7 +47,7 @@ open class MoreKeysKeyboardView @JvmOverloads constructor(
 
     private val mDivider: Drawable?
     protected val mKeyDetector: KeyDetector
-    private var mController: MoreKeysPanel.Controller = MoreKeysPanel.Companion.EMPTY_CONTROLLER
+    private var mController: MoreKeysPanel.Controller = MoreKeysPanel.EMPTY_CONTROLLER
     protected var mListener: KeyboardActionListener? = null
     private var mOriginX: Int = 0
     private var mOriginY: Int = 0
@@ -76,7 +76,7 @@ open class MoreKeysKeyboardView @JvmOverloads constructor(
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        val keyboard: Keyboard? = getKeyboard()
+        val keyboard: Keyboard? = this.keyboard
         if (keyboard != null) {
             val width: Int = keyboard.mOccupiedWidth + getPaddingLeft() + getPaddingRight()
             val height: Int = keyboard.mOccupiedHeight + getPaddingTop() + getPaddingBottom()
@@ -90,28 +90,28 @@ open class MoreKeysKeyboardView @JvmOverloads constructor(
         key: Key, canvas: Canvas, paint: Paint,
         params: KeyDrawParams
     ) {
-        if (!key.isSpacer() || key !is MoreKeyDivider || mDivider == null) {
+        if (!key.isSpacer || key !is MoreKeyDivider || mDivider == null) {
             super.onDrawKeyTopVisuals(key, canvas, paint, params)
             return
         }
-        val keyWidth: Int = key.getDrawWidth()
-        val keyHeight: Int = key.getHeight()
+        val keyWidth: Int = key.drawWidth
+        val keyHeight: Int = key.height
         val iconWidth: Int =
             min(mDivider.getIntrinsicWidth().toDouble(), keyWidth.toDouble()).toInt()
         val iconHeight: Int = mDivider.getIntrinsicHeight()
         val iconX: Int = (keyWidth - iconWidth) / 2 // Align horizontally center
         val iconY: Int = (keyHeight - iconHeight) / 2 // Align vertically center
-        KeyboardView.Companion.drawIcon(canvas, mDivider, iconX, iconY, iconWidth, iconHeight)
+        drawIcon(canvas, mDivider, iconX, iconY, iconWidth, iconHeight)
     }
 
     override var keyboard: Keyboard?
         get() = super.keyboard
         set(keyboard) {
-            super.setKeyboard(keyboard)
+            super.keyboard = keyboard
             mKeyDetector.setKeyboard(
-                keyboard!!, -getPaddingLeft().toFloat(), -getPaddingTop() + getVerticalCorrection()
+                keyboard!!, -getPaddingLeft().toFloat(), -paddingTop + verticalCorrection
             )
-            if (AccessibilityUtils.Companion.getInstance().isAccessibilityEnabled()) {
+            if (AccessibilityUtils.instance.isAccessibilityEnabled()) {
                 if (mAccessibilityDelegate == null) {
                     mAccessibilityDelegate = MoreKeysKeyboardAccessibilityDelegate(
                         this, mKeyDetector
@@ -156,7 +156,7 @@ open class MoreKeysKeyboardView @JvmOverloads constructor(
         controller.onShowMoreKeysPanel(this)
         val accessibilityDelegate: MoreKeysKeyboardAccessibilityDelegate? = mAccessibilityDelegate
         if (accessibilityDelegate != null
-            && AccessibilityUtils.Companion.getInstance().isAccessibilityEnabled()
+            && AccessibilityUtils.instance.isAccessibilityEnabled()
         ) {
             accessibilityDelegate.onShowMoreKeysKeyboard()
         }
@@ -167,7 +167,7 @@ open class MoreKeysKeyboardView @JvmOverloads constructor(
          * Returns the default x coordinate for showing this panel.
          */
         get() {
-            return (getKeyboard() as MoreKeysKeyboard).getDefaultCoordX()
+            return (keyboard as MoreKeysKeyboard).getDefaultCoordX()
         }
 
     override fun onDownEvent(x: Int, y: Int, pointerId: Int, eventTime: Long) {
@@ -205,11 +205,11 @@ open class MoreKeysKeyboardView @JvmOverloads constructor(
      * Performs the specific action for this panel when the user presses a key on the panel.
      */
     protected open fun onKeyInput(key: Key, x: Int, y: Int) {
-        val code: Int = key.getCode()
+        val code: Int = key.code
         if (code == Constants.CODE_OUTPUT_TEXT) {
-            mListener!!.onTextInput(mCurrentKey.getOutputText())
+            mListener!!.onTextInput(mCurrentKey?.outputText)
         } else if (code != Constants.CODE_UNSPECIFIED) {
-            if (getKeyboard().hasProximityCharsCorrection(code)) {
+            if (keyboard?.hasProximityCharsCorrection(code) == true) {
                 mListener!!.onCodeInput(code, x, y, false /* isKeyRepeat */)
             } else {
                 mListener!!.onCodeInput(
@@ -254,7 +254,7 @@ open class MoreKeysKeyboardView @JvmOverloads constructor(
         }
         val accessibilityDelegate: MoreKeysKeyboardAccessibilityDelegate? = mAccessibilityDelegate
         if (accessibilityDelegate != null
-            && AccessibilityUtils.Companion.getInstance().isAccessibilityEnabled()
+            && AccessibilityUtils.instance.isAccessibilityEnabled()
         ) {
             accessibilityDelegate.onDismissMoreKeysKeyboard()
         }
@@ -302,7 +302,7 @@ open class MoreKeysKeyboardView @JvmOverloads constructor(
     override fun onHoverEvent(event: MotionEvent): Boolean {
         val accessibilityDelegate: MoreKeysKeyboardAccessibilityDelegate? = mAccessibilityDelegate
         if (accessibilityDelegate != null
-            && AccessibilityUtils.Companion.getInstance().isTouchExplorationEnabled()
+            && AccessibilityUtils.instance.isTouchExplorationEnabled()
         ) {
             return accessibilityDelegate.onHoverEvent(event)
         }

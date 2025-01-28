@@ -59,7 +59,7 @@ class MoreKeySpec(
             mOutputText,
             null,  /* hintLabel */
             labelFlags,
-            Key.Companion.BACKGROUND_TYPE_NORMAL,
+            Key.BACKGROUND_TYPE_NORMAL,
             x,
             y,
             params.mDefaultKeyWidth,
@@ -96,10 +96,10 @@ class MoreKeySpec(
     }
 
     override fun toString(): String {
-        val label: String? = (if (mIconId == KeyboardIconsSet.Companion.ICON_UNDEFINED)
+        val label: String? = (if (mIconId == KeyboardIconsSet.ICON_UNDEFINED)
             mLabel
         else
-            KeyboardIconsSet.Companion.PREFIX_ICON + KeyboardIconsSet.Companion.getIconName(mIconId))
+            KeyboardIconsSet.PREFIX_ICON + KeyboardIconsSet.getIconName(mIconId))
         val output: String? = (if (mCode == Constants.CODE_OUTPUT_TEXT)
             mOutputText
         else
@@ -115,11 +115,11 @@ class MoreKeySpec(
         private val mTexts: HashSet<String?> = HashSet()
 
         fun addLetter(@Nonnull key: Key) {
-            val code: Int = key.getCode()
+            val code: Int = key.code
             if (CharacterCompat.isAlphabetic(code)) {
                 mCodes.put(code, 0)
             } else if (code == Constants.CODE_OUTPUT_TEXT) {
-                mTexts.add(key.getOutputText())
+                mTexts.add(key.outputText)
             }
         }
 
@@ -164,7 +164,7 @@ class MoreKeySpec(
     companion object {
         fun removeRedundantMoreKeys(
             moreKeys: Array<MoreKeySpec>?,
-            @Nonnull lettersOnBaseLayout: LettersOnBaseLayout
+            lettersOnBaseLayout: LettersOnBaseLayout
         ): Array<MoreKeySpec>? {
             if (moreKeys == null) {
                 return null
@@ -203,14 +203,14 @@ class MoreKeySpec(
          * @return an array of key specification text. Null if the specified `text` is empty
          * or has no key specifications.
          */
-        fun splitKeySpecs(text: String?): Array<String>? {
+        fun splitKeySpecs(text: String?): Array<String?>? {
             if (TextUtils.isEmpty(text)) {
                 return null
             }
             val size: Int = text!!.length
             // Optimization for one-letter key specification.
             if (size == 1) {
-                return if (text.get(0) == COMMA) null else arrayOf<String?>(text)
+                return if (text.get(0) == COMMA) null else arrayOf(text)
             }
 
             var list: ArrayList<String>? = null
@@ -244,7 +244,7 @@ class MoreKeySpec(
             if (remain != null) {
                 list.add(remain)
             }
-            return list.toTypedArray<String>()
+            return list.toTypedArray<String?>()
         }
 
         @Nonnull
@@ -291,7 +291,7 @@ class MoreKeySpec(
                         if (out != null) {
                             out.add(additionalMoreKey)
                         } else {
-                            moreKeys.get(moreKeyIndex) = additionalMoreKey
+                            moreKeys[moreKeyIndex] = additionalMoreKey
                         }
                         additionalIndex++
                     } else {
@@ -349,7 +349,7 @@ class MoreKeySpec(
                 if (moreKeySpec == null || !moreKeySpec.startsWith(key)) {
                     continue
                 }
-                moreKeys.get(i) = null
+                moreKeys[i] = null
                 try {
                     if (!foundValue) {
                         value = moreKeySpec.substring(keyLen).toInt()
@@ -374,7 +374,7 @@ class MoreKeySpec(
                 if (moreKeySpec == null || moreKeySpec != key) {
                     continue
                 }
-                moreKeys.get(i) = null
+                moreKeys[i] = null
                 value = true
             }
             return value

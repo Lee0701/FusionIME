@@ -57,11 +57,11 @@ object SmoothingUtils {
 
         // m0
         for (i in 0 until COEFF_COUNT) {
-            Arrays.fill(m0.get(i), 0f)
+            Arrays.fill(m0[i], 0f)
             for (j in 0 until COEFF_COUNT) {
                 val pow: Int = i + j
                 for (k in 0 until N) {
-                    m0.get(i).get(j) += xs.get(k).pow(pow.toDouble()) as Float
+                    m0[i][j] += xs[k].pow(pow)
                 }
             }
         }
@@ -74,13 +74,13 @@ object SmoothingUtils {
         // m1
         for (i in 0 until COEFF_COUNT) {
             for (j in 0 until N) {
-                m1.get(i).get(j) = if ((i == 0)) 1.0f else m1.get(i - 1).get(j) * xs.get(j)
+                m1[i][j] = if ((i == 0)) 1.0f else m1.get(i - 1)[j] * xs[j]
             }
         }
 
         // m2
         for (i in 0 until N) {
-            m2.get(i).get(0) = ys.get(i)
+            m2[i][0] = ys[i]
         }
 
         val m0Invxm1: Array<FloatArray> = Array(COEFF_COUNT) { FloatArray(N) }

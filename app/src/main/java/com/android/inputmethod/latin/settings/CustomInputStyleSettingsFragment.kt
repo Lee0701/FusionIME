@@ -59,8 +59,8 @@ class CustomInputStyleSettingsFragment : PreferenceFragment(), CustomInputStyleP
         super.onCreate(savedInstanceState)
 
         mPrefs = preferenceManager.sharedPreferences
-        RichInputMethodManager.Companion.init(activity)
-        mRichImm = RichInputMethodManager.Companion.getInstance()
+        RichInputMethodManager.init(activity)
+        mRichImm = RichInputMethodManager.instance
         addPreferencesFromResource(R.xml.additional_subtype_settings)
         setHasOptionsMenu(true)
     }
@@ -83,7 +83,7 @@ class CustomInputStyleSettingsFragment : PreferenceFragment(), CustomInputStyleP
             KeyboardLayoutSetAdapter(context)
 
         val prefSubtypes: String =
-            Settings.Companion.readPrefAdditionalSubtypes(
+            Settings.readPrefAdditionalSubtypes(
                 mPrefs!!,
                 resources
             )
@@ -99,7 +99,7 @@ class CustomInputStyleSettingsFragment : PreferenceFragment(), CustomInputStyleP
                 && savedInstanceState.containsKey(KEY_IS_ADDING_NEW_SUBTYPE)
         if (mIsAddingNewSubtype) {
             preferenceScreen.addPreference(
-                CustomInputStylePreference.Companion.newIncompleteSubtypePreference(context, this)
+                CustomInputStylePreference.newIncompleteSubtypePreference(context, this)
             )
         }
 
@@ -193,7 +193,7 @@ class CustomInputStyleSettingsFragment : PreferenceFragment(), CustomInputStyleP
     }
 
     private fun createDialog(): AlertDialog {
-        val imeId = mRichImm.getInputMethodIdOfThisIme()
+        val imeId = mRichImm?.inputMethodIdOfThisIme
         val builder = AlertDialog.Builder(
             DialogUtils.getPlatformDialogThemeContext(activity)
         )
@@ -233,8 +233,7 @@ class CustomInputStyleSettingsFragment : PreferenceFragment(), CustomInputStyleP
     private val subtypes: Array<InputMethodSubtype>
         get() {
             val group: PreferenceGroup = preferenceScreen
-            val subtypes =
-                ArrayList<InputMethodSubtype?>()
+            val subtypes = ArrayList<InputMethodSubtype>()
             val count = group.preferenceCount
             for (i in 0 until count) {
                 val pref = group.getPreference(i)
@@ -242,7 +241,7 @@ class CustomInputStyleSettingsFragment : PreferenceFragment(), CustomInputStyleP
                     val subtypePref = pref
                     // We should not save newly adding subtype to preference because it is incomplete.
                     if (subtypePref.isIncomplete) continue
-                    subtypes.add(subtypePref.subtype)
+                    subtypes.add(subtypePref.subtype ?: continue)
                 }
             }
             return subtypes.toTypedArray<InputMethodSubtype>()
@@ -250,7 +249,7 @@ class CustomInputStyleSettingsFragment : PreferenceFragment(), CustomInputStyleP
 
     override fun onPause() {
         super.onPause()
-        val oldSubtypes: String = Settings.Companion.readPrefAdditionalSubtypes(
+        val oldSubtypes: String = Settings.readPrefAdditionalSubtypes(
             mPrefs!!, resources
         )
         val subtypes = subtypes
@@ -264,7 +263,7 @@ class CustomInputStyleSettingsFragment : PreferenceFragment(), CustomInputStyleP
         if (prefSubtypes == oldSubtypes) {
             return
         }
-        Settings.Companion.writePrefAdditionalSubtypes(mPrefs!!, prefSubtypes)
+        Settings.writePrefAdditionalSubtypes(mPrefs!!, prefSubtypes)
         mRichImm!!.setAdditionalInputMethodSubtypes(subtypes)
     }
 
@@ -276,7 +275,7 @@ class CustomInputStyleSettingsFragment : PreferenceFragment(), CustomInputStyleP
         val itemId = item.itemId
         if (itemId == R.id.action_add_style) {
             val newSubtype: CustomInputStylePreference =
-                CustomInputStylePreference.Companion.newIncompleteSubtypePreference(activity, this)
+                CustomInputStylePreference.newIncompleteSubtypePreference(activity, this)
             preferenceScreen.addPreference(newSubtype)
             newSubtype.show()
             mIsAddingNewSubtype = true
@@ -305,10 +304,10 @@ class CustomInputStyleSettingsFragment : PreferenceFragment(), CustomInputStyleP
 
             val res = pref.context.resources
             val prefs = pref.sharedPreferences
-            val prefSubtype: String = Settings.Companion.readPrefAdditionalSubtypes(prefs, res)
+            val prefSubtype: String = Settings.readPrefAdditionalSubtypes(prefs, res)
             val subtypes =
                 AdditionalSubtypeUtils.createAdditionalSubtypesArray(prefSubtype)
-            val subtypeNames = ArrayList<String?>()
+            val subtypeNames = ArrayList<String>()
             for (subtype in subtypes) {
                 subtypeNames.add(SubtypeLocaleUtils.getSubtypeDisplayNameInSystemLocale(subtype))
             }

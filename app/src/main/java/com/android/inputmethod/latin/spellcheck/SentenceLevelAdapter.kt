@@ -33,9 +33,8 @@ import java.util.Locale
  * rewrite everything for any small change.
  */
 class SentenceLevelAdapter(res: Resources, locale: Locale?) {
-    private object EmptySentenceSuggestionsInfosInitializationHolder {
-        val emptySentenceSuggestionsInfo: Array<SentenceSuggestionsInfo?> = arrayOf()
-            get() = EmptySentenceSuggestionsInfosInitializationHolder.field
+    object EmptySentenceSuggestionsInfosInitializationHolder {
+        val emptySentenceSuggestionsInfo: Array<SentenceSuggestionsInfo> = arrayOf()
     }
 
     /**

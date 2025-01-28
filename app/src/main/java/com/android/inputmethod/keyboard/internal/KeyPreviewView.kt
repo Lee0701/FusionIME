@@ -31,19 +31,19 @@ import com.android.inputmethod.latin.R
  * The pop up key preview view.
  */
 class KeyPreviewView @JvmOverloads constructor(
-    context: Context?,
+    context: Context,
     attrs: AttributeSet?,
     defStyleAttr: Int = 0
 ) :
-    TextView(context, attrs, defStyleAttr) {
+    androidx.appcompat.widget.AppCompatTextView(context, attrs, defStyleAttr) {
     private val mBackgroundPadding: Rect = Rect()
     fun setPreviewVisual(
         key: Key, iconsSet: KeyboardIconsSet,
         drawParams: KeyDrawParams
     ) {
         // What we show as preview should match what we show on a key top in onDraw().
-        val iconId: Int = key.getIconId()
-        if (iconId != KeyboardIconsSet.Companion.ICON_UNDEFINED) {
+        val iconId: Int = key.iconId
+        if (iconId != KeyboardIconsSet.ICON_UNDEFINED) {
             setCompoundDrawables(null, null, null, key.getPreviewIcon(iconsSet))
             setText(null)
             return
@@ -54,7 +54,7 @@ class KeyPreviewView @JvmOverloads constructor(
         setTextSize(TypedValue.COMPLEX_UNIT_PX, key.selectPreviewTextSize(drawParams).toFloat())
         setTypeface(key.selectPreviewTypeface(drawParams))
         // TODO Should take care of temporaryShiftLabel here.
-        setTextAndScaleX(key.getPreviewLabel())
+        setTextAndScaleX(key.previewLabel)
     }
 
     private fun setTextAndScaleX(text: String?) {
@@ -65,14 +65,11 @@ class KeyPreviewView @JvmOverloads constructor(
         }
         // TODO: Override {@link #setBackground(Drawable)} that is supported from API 16 and
         // calculate maximum text width.
-        val background: Drawable? = getBackground()
-        if (background == null) {
-            return
-        }
+        val background: Drawable = background ?: return
         background.getPadding(mBackgroundPadding)
-        val maxWidth: Int = (background.getIntrinsicWidth() - mBackgroundPadding.left
+        val maxWidth: Int = (background.intrinsicWidth - mBackgroundPadding.left
                 - mBackgroundPadding.right)
-        val width: Float = getTextWidth(text, getPaint())
+        val width: Float = getTextWidth(text, paint)
         if (width <= maxWidth) {
             sNoScaleXTextSet.add(text)
             return

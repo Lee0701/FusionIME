@@ -231,7 +231,7 @@ class ContactsManager(context: Context) {
      * Updates the local state of the manager. This should be called when the callers
      * are done with all the updates of the content provider successfully.
      */
-    fun updateLocalState(names: ArrayList<String?>) {
+    fun updateLocalState(names: ArrayList<String>) {
         mContactCountAtLastRebuild.set(contactCount)
         mHashCodeAtLastRebuild.set(names.hashCode())
     }

@@ -58,7 +58,7 @@ class WordInputEventForPersonalization @UsedForTesting constructor(
         ): ArrayList<WordInputEventForPersonalization> {
             val inputEvents = ArrayList<WordInputEventForPersonalization>()
             val N = tokens.size
-            var ngramContext: NgramContext = NgramContext.Companion.EMPTY_PREV_WORDS_INFO
+            var ngramContext: NgramContext = NgramContext.EMPTY_PREV_WORDS_INFO
             for (i in 0 until N) {
                 val tempWord = tokens[i]
                 if (StringUtils.isEmptyStringOrWhiteSpaces(tempWord)) {
@@ -83,7 +83,7 @@ class WordInputEventForPersonalization @UsedForTesting constructor(
                     }
                     // Sentence terminator found. Split.
                     // TODO: Detect whether the context is beginning-of-sentence.
-                    ngramContext = NgramContext.Companion.EMPTY_PREV_WORDS_INFO
+                    ngramContext = NgramContext.EMPTY_PREV_WORDS_INFO
                     continue
                 }
                 if (DEBUG_TOKEN) {

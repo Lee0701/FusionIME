@@ -63,7 +63,7 @@ internal class SuggestionStripLayoutHelper(
     val mDividerWidth: Int
     val mSuggestionsStripHeight: Int
     private val mSuggestionsCountInStrip: Int
-    val mMoreSuggestionsRowHeight: Int
+    var mMoreSuggestionsRowHeight: Int
     var maxMoreSuggestionsRow: Int
         private set
     val mMinMoreSuggestionsWidth: Float
@@ -158,7 +158,7 @@ internal class SuggestionStripLayoutHelper(
         )
     }
 
-    private var moreSuggestionsHeight: Int
+    private var moreSuggestionsHeight: Int = 0
         get() {
             return maxMoreSuggestionsRow * mMoreSuggestionsRowHeight + mMoreSuggestionsBottomGap
         }
@@ -170,6 +170,7 @@ internal class SuggestionStripLayoutHelper(
 
             maxMoreSuggestionsRow = ((remainingHeight - mMoreSuggestionsBottomGap)
                     / mMoreSuggestionsRowHeight)
+            field = remainingHeight
         }
 
     private fun getStyledSuggestedWord(
@@ -183,9 +184,9 @@ internal class SuggestionStripLayoutHelper(
         // TODO: don't use the index to decide whether this is the auto-correction/typed word, as
         // this is brittle
         val isAutoCorrection: Boolean = suggestedWords.mWillAutoCorrect
-                && indexInSuggestedWords == SuggestedWords.Companion.INDEX_OF_AUTO_CORRECTION
+                && indexInSuggestedWords == SuggestedWords.INDEX_OF_AUTO_CORRECTION
         val isTypedWordValid: Boolean = suggestedWords.mTypedWordValid
-                && indexInSuggestedWords == SuggestedWords.Companion.INDEX_OF_TYPED_WORD
+                && indexInSuggestedWords == SuggestedWords.INDEX_OF_TYPED_WORD
         if (!isAutoCorrection && !isTypedWordValid) {
             return word
         }
@@ -214,7 +215,7 @@ internal class SuggestionStripLayoutHelper(
         indexInSuggestedWords: Int,
         suggestedWords: SuggestedWords
     ): Int {
-        val settingsValues: SettingsValues? = Settings.Companion.getInstance().getCurrent()
+        val settingsValues: SettingsValues? = Settings.instance.current
         val shouldOmitTypedWord: Boolean = shouldOmitTypedWord(
             suggestedWords.mInputStyle,
             settingsValues!!.mGestureFloatingPreviewTextEnabled,
@@ -233,11 +234,11 @@ internal class SuggestionStripLayoutHelper(
     ): Int {
         // Use identity for strings, not #equals : it's the typed word if it's the same object
         val isTypedWord: Boolean = suggestedWords.getInfo(indexInSuggestedWords).isKindOf(
-            SuggestedWordInfo.Companion.KIND_TYPED
+            SuggestedWordInfo.KIND_TYPED
         )
 
         val color: Int
-        if (indexInSuggestedWords == SuggestedWords.Companion.INDEX_OF_AUTO_CORRECTION
+        if (indexInSuggestedWords == SuggestedWords.INDEX_OF_AUTO_CORRECTION
             && suggestedWords.mWillAutoCorrect
         ) {
             color = mColorAutoCorrect
@@ -269,14 +270,14 @@ internal class SuggestionStripLayoutHelper(
         stripView: ViewGroup,
         placerView: ViewGroup
     ): Int {
-        if (suggestedWords.isPunctuationSuggestions()) {
+        if (suggestedWords.isPunctuationSuggestions) {
             return layoutPunctuationsAndReturnStartIndexOfMoreSuggestions(
                 suggestedWords as PunctuationSuggestions, stripView
             )
         }
 
         val wordCountToShow: Int = suggestedWords.getWordCountToShow(
-            Settings.Companion.getInstance().getCurrent().mShouldShowLxxSuggestionUi
+            Settings.instance.current!!.mShouldShowLxxSuggestionUi
         )
         val startIndexOfMoreSuggestions: Int = setupWordViewsAndReturnStartIndexOfMoreSuggestions(
             suggestedWords, mSuggestionsCountInStrip
@@ -296,7 +297,7 @@ internal class SuggestionStripLayoutHelper(
             layoutWord(context, mCenterPositionInStrip, stripWidth - mPadding)
             stripView.addView(centerWordView)
             setLayoutWeight(centerWordView, 1.0f, ViewGroup.LayoutParams.MATCH_PARENT)
-            if (SuggestionStripView.Companion.DBG) {
+            if (SuggestionStripView.DBG) {
                 layoutDebugInfo(mCenterPositionInStrip, placerView, stripWidth)
             }
             val lastIndex: Int? = centerWordView.getTag() as Int?
@@ -323,7 +324,7 @@ internal class SuggestionStripLayoutHelper(
             )
             x += wordView.getMeasuredWidth()
 
-            if (SuggestionStripView.Companion.DBG) {
+            if (SuggestionStripView.DBG) {
                 layoutDebugInfo(positionInStrip, placerView, x)
             }
         }
@@ -379,7 +380,7 @@ internal class SuggestionStripLayoutHelper(
         // when it is empty to avoid announcing as "disabled".
         wordView.setEnabled(
             !TextUtils.isEmpty(word)
-                    || AccessibilityUtils.Companion.getInstance().isTouchExplorationEnabled()
+                    || AccessibilityUtils.instance.isTouchExplorationEnabled()
         )
         return wordView
     }
@@ -428,7 +429,7 @@ internal class SuggestionStripLayoutHelper(
             wordView.setText(null)
             wordView.setTag(null)
             // Make this inactive for touches in {@link #layoutWord(int,int)}.
-            if (SuggestionStripView.Companion.DBG) {
+            if (SuggestionStripView.DBG) {
                 mDebugInfoViews.get(positionInStrip).setText(null)
             }
         }
@@ -450,7 +451,7 @@ internal class SuggestionStripLayoutHelper(
             wordView.setTag(indexInSuggestedWords)
             wordView.setText(getStyledSuggestedWord(suggestedWords, indexInSuggestedWords))
             wordView.setTextColor(getSuggestionTextColor(suggestedWords, indexInSuggestedWords))
-            if (SuggestionStripView.Companion.DBG) {
+            if (SuggestionStripView.DBG) {
                 mDebugInfoViews.get(positionInStrip).setText(
                     suggestedWords.getDebugString(indexInSuggestedWords)
                 )
@@ -552,9 +553,9 @@ internal class SuggestionStripLayoutHelper(
             gestureFloatingPreviewTextEnabled: Boolean,
             shouldShowUiToAcceptTypedWord: Boolean
         ): Boolean {
-            val omitTypedWord: Boolean = (inputStyle == SuggestedWords.Companion.INPUT_STYLE_TYPING)
-                    || (inputStyle == SuggestedWords.Companion.INPUT_STYLE_TAIL_BATCH)
-                    || (inputStyle == SuggestedWords.Companion.INPUT_STYLE_UPDATE_BATCH
+            val omitTypedWord: Boolean = (inputStyle == SuggestedWords.INPUT_STYLE_TYPING)
+                    || (inputStyle == SuggestedWords.INPUT_STYLE_TAIL_BATCH)
+                    || (inputStyle == SuggestedWords.INPUT_STYLE_UPDATE_BATCH
                     && gestureFloatingPreviewTextEnabled)
             return shouldShowUiToAcceptTypedWord && omitTypedWord
         }
@@ -566,11 +567,11 @@ internal class SuggestionStripLayoutHelper(
             centerPositionInStrip: Int, typedWordPositionWhenAutoCorrect: Int
         ): Int {
             if (omitTypedWord) {
-                if (indexInSuggestedWords == SuggestedWords.Companion.INDEX_OF_TYPED_WORD) {
+                if (indexInSuggestedWords == SuggestedWords.INDEX_OF_TYPED_WORD) {
                     // Ignore.
                     return -1
                 }
-                if (indexInSuggestedWords == SuggestedWords.Companion.INDEX_OF_AUTO_CORRECTION) {
+                if (indexInSuggestedWords == SuggestedWords.INDEX_OF_AUTO_CORRECTION) {
                     // Center in the suggestion strip.
                     return centerPositionInStrip
                 }
@@ -586,13 +587,13 @@ internal class SuggestionStripLayoutHelper(
             val indexToDisplaySecondMostImportantSuggestion: Int
             if (willAutoCorrect) {
                 indexToDisplayMostImportantSuggestion =
-                    SuggestedWords.Companion.INDEX_OF_AUTO_CORRECTION
+                    SuggestedWords.INDEX_OF_AUTO_CORRECTION
                 indexToDisplaySecondMostImportantSuggestion =
-                    SuggestedWords.Companion.INDEX_OF_TYPED_WORD
+                    SuggestedWords.INDEX_OF_TYPED_WORD
             } else {
-                indexToDisplayMostImportantSuggestion = SuggestedWords.Companion.INDEX_OF_TYPED_WORD
+                indexToDisplayMostImportantSuggestion = SuggestedWords.INDEX_OF_TYPED_WORD
                 indexToDisplaySecondMostImportantSuggestion =
-                    SuggestedWords.Companion.INDEX_OF_AUTO_CORRECTION
+                    SuggestedWords.INDEX_OF_AUTO_CORRECTION
             }
             if (indexInSuggestedWords == indexToDisplayMostImportantSuggestion) {
                 // Center in the suggestion strip.

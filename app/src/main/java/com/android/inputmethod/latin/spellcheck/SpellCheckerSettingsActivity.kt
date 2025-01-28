@@ -47,7 +47,7 @@ class SpellCheckerSettingsActivity : PreferenceActivity(), OnRequestPermissionsR
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<String>, grantResults: IntArray
     ) {
-        PermissionsManager.Companion.get(this)!!.onRequestPermissionsResult(
+        PermissionsManager.get(this)!!.onRequestPermissionsResult(
             requestCode, permissions, grantResults
         )
     }

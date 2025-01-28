@@ -100,7 +100,7 @@ object LocaleSpanCompatUtils {
         val searchEnd: Int =
             min((end + 1).toDouble(), spannable.length.toDouble()).toInt()
         // LocaleSpans found in the target range. See the step 1 in the above comment.
-        val existingLocaleSpans: Array<Any> = spannable.getSpans(
+        val existingLocaleSpans: Array<out Any> = spannable.getSpans(
             searchStart, searchEnd,
             LOCALE_SPAN_TYPE
         )

@@ -166,20 +166,20 @@ class KeyStylesSet(@Nonnull textsSet: KeyboardTextsSet) {
         val styleName: String? = keyStyleAttr.getString(R.styleable.Keyboard_KeyStyle_styleName)
         if (styleName == null) {
             throw XmlParseUtils.ParseException(
-                KeyboardBuilder.Companion.TAG_KEY_STYLE + " has no styleName attribute", parser
+                KeyboardBuilder.TAG_KEY_STYLE + " has no styleName attribute", parser
             )
         }
         if (DEBUG) {
             Log.d(
                 TAG, String.format(
                     "<%s styleName=%s />",
-                    KeyboardBuilder.Companion.TAG_KEY_STYLE, styleName
+                    KeyboardBuilder.TAG_KEY_STYLE, styleName
                 )
             )
             if (mStyles.containsKey(styleName)) {
                 Log.d(
                     TAG,
-                    (KeyboardBuilder.Companion.TAG_KEY_STYLE + " " + styleName + " is overridden at "
+                    (KeyboardBuilder.TAG_KEY_STYLE + " " + styleName + " is overridden at "
                             + parser.getPositionDescription())
                 )
             }

@@ -45,7 +45,7 @@ object SpannableStringUtils {
         source: Spanned, start: Int, end: Int,
         dest: Spannable, destoff: Int
     ) {
-        val spans: Array<Any> = source.getSpans(
+        val spans: Array<SuggestionSpan> = source.getSpans(
             start, end,
             SuggestionSpan::class.java
         )

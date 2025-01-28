@@ -85,13 +85,13 @@ class WordListPreference(
     private fun getSummary(status: Int): String {
         val context: Context = getContext()
         when (status) {
-            MetadataDbHelper.Companion.STATUS_DELETING, MetadataDbHelper.Companion.STATUS_AVAILABLE -> return context.getString(
+            MetadataDbHelper.STATUS_DELETING, MetadataDbHelper.STATUS_AVAILABLE -> return context.getString(
                 R.string.dictionary_available
             )
 
-            MetadataDbHelper.Companion.STATUS_DOWNLOADING -> return context.getString(R.string.dictionary_downloading)
-            MetadataDbHelper.Companion.STATUS_INSTALLED -> return context.getString(R.string.dictionary_installed)
-            MetadataDbHelper.Companion.STATUS_DISABLED -> return context.getString(R.string.dictionary_disabled)
+            MetadataDbHelper.STATUS_DOWNLOADING -> return context.getString(R.string.dictionary_downloading)
+            MetadataDbHelper.STATUS_INSTALLED -> return context.getString(R.string.dictionary_installed)
+            MetadataDbHelper.STATUS_DISABLED -> return context.getString(R.string.dictionary_disabled)
             else -> return NO_STATUS_MESSAGE
         }
     }
@@ -120,12 +120,12 @@ class WordListPreference(
             context,
             mClientId!!, mWordlistId, mVersion, mStatus
         )
-        if (MetadataDbHelper.Companion.STATUS_DOWNLOADING == mStatus) {
-            setStatus(MetadataDbHelper.Companion.STATUS_AVAILABLE)
-        } else if (MetadataDbHelper.Companion.STATUS_INSTALLED == mStatus) {
+        if (MetadataDbHelper.STATUS_DOWNLOADING == mStatus) {
+            setStatus(MetadataDbHelper.STATUS_AVAILABLE)
+        } else if (MetadataDbHelper.STATUS_INSTALLED == mStatus) {
             // Interface-wise, we should no longer be able to come here. However, this is still
             // the right thing to do if we do come here.
-            setStatus(MetadataDbHelper.Companion.STATUS_DISABLED)
+            setStatus(MetadataDbHelper.STATUS_DISABLED)
         } else {
             Log.e(TAG, "Unexpected state of the word list for disabling " + mStatus)
         }
@@ -140,17 +140,17 @@ class WordListPreference(
             context,
             mClientId!!, mWordlistId, mVersion, mStatus, true
         )
-        if (MetadataDbHelper.Companion.STATUS_AVAILABLE == mStatus) {
-            setStatus(MetadataDbHelper.Companion.STATUS_DOWNLOADING)
-        } else if (MetadataDbHelper.Companion.STATUS_DISABLED == mStatus
-            || MetadataDbHelper.Companion.STATUS_DELETING == mStatus
+        if (MetadataDbHelper.STATUS_AVAILABLE == mStatus) {
+            setStatus(MetadataDbHelper.STATUS_DOWNLOADING)
+        } else if (MetadataDbHelper.STATUS_DISABLED == mStatus
+            || MetadataDbHelper.STATUS_DELETING == mStatus
         ) {
             // If the status is DELETING, it means Android Keyboard
             // has not deleted the word list yet, so we can safely
             // turn it to 'installed'. The status DISABLED is still supported internally to
             // avoid breaking older installations and all but there should not be a way to
             // disable a word list through the interface any more.
-            setStatus(MetadataDbHelper.Companion.STATUS_INSTALLED)
+            setStatus(MetadataDbHelper.STATUS_INSTALLED)
         } else {
             Log.e(TAG, "Unexpected state of the word list for enabling " + mStatus)
         }
@@ -160,7 +160,7 @@ class WordListPreference(
         val context: Context = getContext()
         val prefs: SharedPreferences? = CommonPreferences.getCommonPreferences(context)
         CommonPreferences.disable(prefs!!, mWordlistId)
-        setStatus(MetadataDbHelper.Companion.STATUS_DELETING)
+        setStatus(MetadataDbHelper.STATUS_DELETING)
         UpdateHandler.markAsDeleting(
             context,
             mClientId!!, mWordlistId, mVersion, mStatus
@@ -176,7 +176,7 @@ class WordListPreference(
         val status: TextView = view.findViewById<View>(android.R.id.summary) as TextView
         progressBar.setIds(mClientId, mWordlistId)
         progressBar.setMax(mFilesize)
-        val showProgressBar: Boolean = (MetadataDbHelper.Companion.STATUS_DOWNLOADING == mStatus)
+        val showProgressBar: Boolean = (MetadataDbHelper.STATUS_DOWNLOADING == mStatus)
         setSummary(getSummary(mStatus))
         status.setVisibility(if (showProgressBar) View.INVISIBLE else View.VISIBLE)
         progressBar.setVisibility(if (showProgressBar) View.VISIBLE else View.INVISIBLE)
@@ -199,7 +199,7 @@ class WordListPreference(
             }
         } else {
             // The button is closed.
-            buttonSwitcher.setStatusAndUpdateVisuals(ButtonSwitcher.Companion.STATUS_NO_BUTTON)
+            buttonSwitcher.setStatusAndUpdateVisuals(ButtonSwitcher.STATUS_NO_BUTTON)
         }
         buttonSwitcher.setInternalOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View) {
@@ -242,7 +242,7 @@ class WordListPreference(
             if (i == indexToOpen) {
                 buttonSwitcher.setStatusAndUpdateVisuals(getButtonSwitcherStatus(mStatus))
             } else {
-                buttonSwitcher.setStatusAndUpdateVisuals(ButtonSwitcher.Companion.STATUS_NO_BUTTON)
+                buttonSwitcher.setStatusAndUpdateVisuals(ButtonSwitcher.STATUS_NO_BUTTON)
             }
         }
     }
@@ -275,30 +275,30 @@ class WordListPreference(
             arrayOf<IntArray>( // MetadataDbHelper.STATUS_UNKNOWN
                 intArrayOf(),  // MetadataDbHelper.STATUS_AVAILABLE
                 intArrayOf(
-                    ButtonSwitcher.Companion.STATUS_INSTALL,
+                    ButtonSwitcher.STATUS_INSTALL,
                     ACTION_ENABLE_DICT
                 ),  // MetadataDbHelper.STATUS_DOWNLOADING
                 intArrayOf(
-                    ButtonSwitcher.Companion.STATUS_CANCEL,
+                    ButtonSwitcher.STATUS_CANCEL,
                     ACTION_DISABLE_DICT
                 ),  // MetadataDbHelper.STATUS_INSTALLED
                 intArrayOf(
-                    ButtonSwitcher.Companion.STATUS_DELETE,
+                    ButtonSwitcher.STATUS_DELETE,
                     ACTION_DELETE_DICT
                 ),  // MetadataDbHelper.STATUS_DISABLED
                 intArrayOf(
-                    ButtonSwitcher.Companion.STATUS_DELETE,
+                    ButtonSwitcher.STATUS_DELETE,
                     ACTION_DELETE_DICT
                 ),  // MetadataDbHelper.STATUS_DELETING
                 // We show 'install' because the file is supposed to be deleted.
                 // The user may reinstall it.
-                intArrayOf(ButtonSwitcher.Companion.STATUS_INSTALL, ACTION_ENABLE_DICT)
+                intArrayOf(ButtonSwitcher.STATUS_INSTALL, ACTION_ENABLE_DICT)
             )
 
         fun getButtonSwitcherStatus(status: Int): Int {
             if (status >= sStatusActionList.size) {
                 Log.e(TAG, "Unknown status " + status)
-                return ButtonSwitcher.Companion.STATUS_NO_BUTTON
+                return ButtonSwitcher.STATUS_NO_BUTTON
             }
             return sStatusActionList.get(status).get(0)
         }

@@ -44,22 +44,32 @@ internal class DynamicGridKeyboard(
     private val mGridKeys: ArrayDeque<GridKey> = ArrayDeque()
     private val mPendingKeys: ArrayDeque<Key> = ArrayDeque()
 
-    private var mCachedGridKeys: List<Key?>? = null
+    private var mCachedGridKeys: List<Key>? = null
+
+    override val sortedKeys: List<Key>
+        get() = synchronized(mLock) {
+            if (mCachedGridKeys != null) {
+                return mCachedGridKeys!!
+            }
+            val cachedKeys: ArrayList<Key> = ArrayList(mGridKeys)
+            mCachedGridKeys = Collections.unmodifiableList(cachedKeys)
+            return mCachedGridKeys!!
+        }
 
     init {
         val key0: Key = getTemplateKey(TEMPLATE_KEY_CODE_0)
         val key1: Key = getTemplateKey(TEMPLATE_KEY_CODE_1)
-        mHorizontalStep = abs((key1.getX() - key0.getX()).toDouble())
-        mVerticalStep = key0.getHeight() + mVerticalGap
+        mHorizontalStep = abs((key1.x - key0.x))
+        mVerticalStep = key0.height + mVerticalGap
         mColumnsNum = mBaseWidth / mHorizontalStep
         mMaxKeyCount = maxKeyCount
-        mIsRecents = categoryId == EmojiCategory.Companion.ID_RECENTS
+        mIsRecents = categoryId == EmojiCategory.ID_RECENTS
         mPrefs = prefs
     }
 
     private fun getTemplateKey(code: Int): Key {
-        for (key: Key in super.getSortedKeys()) {
-            if (key.getCode() == code) {
+        for (key: Key in super.sortedKeys) {
+            if (key.code == code) {
                 return key
             }
         }
@@ -125,18 +135,18 @@ internal class DynamicGridKeyboard(
     private fun saveRecentKeys() {
         val keys: ArrayList<Any?> = ArrayList()
         for (key: Key in mGridKeys) {
-            if (key.getOutputText() != null) {
-                keys.add(key.getOutputText())
+            if (key.outputText != null) {
+                keys.add(key.outputText)
             } else {
-                keys.add(key.getCode())
+                keys.add(key.code)
             }
         }
         val jsonStr: String = JsonUtils.listToJsonStr(keys)
-        Settings.Companion.writeEmojiRecentKeys(mPrefs, jsonStr)
+        Settings.writeEmojiRecentKeys(mPrefs, jsonStr)
     }
 
     fun loadRecentKeys(keyboards: Collection<DynamicGridKeyboard>) {
-        val str: String = Settings.Companion.readEmojiRecentKeys(mPrefs)
+        val str: String = Settings.readEmojiRecentKeys(mPrefs)
         val keys: List<Any?> = JsonUtils.jsonStrToList(str)
         for (o: Any? in keys) {
             val key: Key?
@@ -172,46 +182,33 @@ internal class DynamicGridKeyboard(
         return row * mVerticalStep + mVerticalGap / 2
     }
 
-    override fun getSortedKeys(): List<Key?> {
-        synchronized(mLock) {
-            if (mCachedGridKeys != null) {
-                return mCachedGridKeys
-            }
-            val cachedKeys: ArrayList<Key> = ArrayList(mGridKeys)
-            mCachedGridKeys = Collections.unmodifiableList(cachedKeys)
-            return mCachedGridKeys
-        }
-    }
-
     override fun getNearestKeys(x: Int, y: Int): List<Key?> {
         // TODO: Calculate the nearest key index in mGridKeys from x and y.
-        return getSortedKeys()
+        return sortedKeys
     }
 
     internal class GridKey(originalKey: Key) : Key(originalKey) {
         private var mCurrentX: Int = 0
         private var mCurrentY: Int = 0
 
+        override val x: Int
+            get() = mCurrentX
+
+        override val y: Int
+            get() = mCurrentY
+
         fun updateCoordinates(x0: Int, y0: Int, x1: Int, y1: Int) {
             mCurrentX = x0
             mCurrentY = y0
-            getHitBox().set(x0, y0, x1, y1)
-        }
-
-        override fun getX(): Int {
-            return mCurrentX
-        }
-
-        override fun getY(): Int {
-            return mCurrentY
+            hitBox.set(x0, y0, x1, y1)
         }
 
         override fun equals(o: Any?): Boolean {
             if (o !is Key) return false
             val key: Key = o
-            if (getCode() != key.getCode()) return false
-            if (!TextUtils.equals(getLabel(), key.getLabel())) return false
-            return TextUtils.equals(getOutputText(), key.getOutputText())
+            if (code != key.code) return false
+            if (!TextUtils.equals(label, key.label)) return false
+            return TextUtils.equals(outputText, key.outputText)
         }
 
         override fun toString(): String {
@@ -228,8 +225,8 @@ internal class DynamicGridKeyboard(
             code: Int
         ): Key? {
             for (keyboard: DynamicGridKeyboard in keyboards) {
-                for (key: Key in keyboard.getSortedKeys()) {
-                    if (key.getCode() == code) {
+                for (key in keyboard.sortedKeys) {
+                    if (key.code == code) {
                         return key
                     }
                 }
@@ -242,8 +239,8 @@ internal class DynamicGridKeyboard(
             outputText: String
         ): Key? {
             for (keyboard: DynamicGridKeyboard in keyboards) {
-                for (key: Key in keyboard.getSortedKeys()) {
-                    if (outputText == key.getOutputText()) {
+                for (key in keyboard.sortedKeys) {
+                    if (outputText == key.outputText) {
                         return key
                     }
                 }

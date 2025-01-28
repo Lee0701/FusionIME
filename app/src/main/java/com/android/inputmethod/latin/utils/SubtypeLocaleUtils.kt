@@ -26,7 +26,6 @@ import com.android.inputmethod.latin.common.Constants.Subtype.ExtraValue
 import com.android.inputmethod.latin.common.LocaleUtils
 import com.android.inputmethod.latin.common.StringUtils
 import java.util.Locale
-import javax.annotation.Nonnull
 import kotlin.concurrent.Volatile
 
 /**
@@ -169,32 +168,29 @@ object SubtypeLocaleUtils {
         return nameId ?: UNKNOWN_KEYBOARD_LAYOUT
     }
 
-    @Nonnull
-    fun getDisplayLocaleOfSubtypeLocale(@Nonnull localeString: String): Locale {
+    fun getDisplayLocaleOfSubtypeLocale(localeString: String): Locale {
         if (NO_LANGUAGE == localeString) {
             return sResources!!.configuration.locale
         }
         if (sExceptionalLocaleDisplayedInRootLocale.containsKey(localeString)) {
             return Locale.ROOT
         }
-        return LocaleUtils.constructLocaleFromString(localeString)!!
+        return LocaleUtils.constructLocaleFromString(localeString)
     }
 
     fun getSubtypeLocaleDisplayNameInSystemLocale(
-        @Nonnull localeString: String
+        localeString: String
     ): String {
         val displayLocale = sResources!!.configuration.locale
-        return getSubtypeLocaleDisplayNameInternal(localeString, displayLocale)!!
+        return getSubtypeLocaleDisplayNameInternal(localeString, displayLocale)
     }
 
-    @Nonnull
-    fun getSubtypeLocaleDisplayName(@Nonnull localeString: String): String? {
+    fun getSubtypeLocaleDisplayName(localeString: String): String {
         val displayLocale = getDisplayLocaleOfSubtypeLocale(localeString)
         return getSubtypeLocaleDisplayNameInternal(localeString, displayLocale)
     }
 
-    @Nonnull
-    fun getSubtypeLanguageDisplayName(@Nonnull localeString: String): String? {
+    fun getSubtypeLanguageDisplayName(localeString: String): String {
         val displayLocale = getDisplayLocaleOfSubtypeLocale(localeString)
         val languageString =
             if (sExceptionalLocaleDisplayedInRootLocale.containsKey(localeString)) {
@@ -202,17 +198,15 @@ object SubtypeLocaleUtils {
             } else {
                 LocaleUtils.constructLocaleFromString(
                     localeString
-                )!!
-                    .language
+                ).language
             }
         return getSubtypeLocaleDisplayNameInternal(languageString, displayLocale)
     }
 
-    @Nonnull
     private fun getSubtypeLocaleDisplayNameInternal(
-        @Nonnull localeString: String,
-        @Nonnull displayLocale: Locale
-    ): String? {
+        localeString: String,
+        displayLocale: Locale
+    ): String {
         if (NO_LANGUAGE == localeString) {
             // No language subtype should be displayed in system locale.
             return sResources!!.getString(R.string.subtype_no_language)
@@ -259,28 +253,25 @@ object SubtypeLocaleUtils {
     //  de    qwerty  T  Deutsch (QWERTY)
     //  en_US azerty  T  English (US) (AZERTY)   exception
     //  zz    azerty  T  Alphabet (AZERTY)       in system locale
-    @Nonnull
     private fun getReplacementString(
-        @Nonnull subtype: InputMethodSubtype?,
-        @Nonnull displayLocale: Locale
+        subtype: InputMethodSubtype,
+        displayLocale: Locale
     ): String {
         if (Build.VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN
-            && subtype!!.containsExtraValueKey(ExtraValue.UNTRANSLATABLE_STRING_IN_SUBTYPE_NAME)
+            && subtype.containsExtraValueKey(ExtraValue.UNTRANSLATABLE_STRING_IN_SUBTYPE_NAME)
         ) {
             return subtype.getExtraValueOf(ExtraValue.UNTRANSLATABLE_STRING_IN_SUBTYPE_NAME)
         }
-        return getSubtypeLocaleDisplayNameInternal(subtype!!.locale, displayLocale)!!
+        return getSubtypeLocaleDisplayNameInternal(subtype.locale, displayLocale)!!
     }
 
-    @Nonnull
     fun getSubtypeDisplayNameInSystemLocale(
-        @Nonnull subtype: InputMethodSubtype?
-    ): String? {
+        subtype: InputMethodSubtype
+    ): String {
         val displayLocale = sResources!!.configuration.locale
         return getSubtypeDisplayNameInternal(subtype, displayLocale)
     }
 
-    @Nonnull
     fun getSubtypeNameForLogging(subtype: InputMethodSubtype?): String {
         if (subtype == null) {
             return "<null subtype>"
@@ -288,11 +279,10 @@ object SubtypeLocaleUtils {
         return getSubtypeLocale(subtype).toString() + "/" + getKeyboardLayoutSetName(subtype)
     }
 
-    @Nonnull
     private fun getSubtypeDisplayNameInternal(
-        @Nonnull subtype: InputMethodSubtype?,
-        @Nonnull displayLocale: Locale
-    ): String? {
+        subtype: InputMethodSubtype,
+        displayLocale: Locale
+    ): String {
         val replacementString = getReplacementString(subtype, displayLocale)
         // TODO: rework this for multi-lingual subtypes
         val nameResId = subtype!!.nameResId
@@ -306,7 +296,7 @@ object SubtypeLocaleUtils {
                     Log.w(
                         TAG,
                         ("""Unknown subtype: mode=${subtype.mode} nameResId=${subtype.nameResId} locale=${subtype.locale} extra=${subtype.extraValue}
-${DebugLogUtils.getStackTrace()}""")
+${DebugLogUtils.getStackTrace(e)}""")
                     )
                     return ""
                 }
@@ -317,26 +307,22 @@ ${DebugLogUtils.getStackTrace()}""")
         )
     }
 
-    @Nonnull
-    fun getSubtypeLocale(@Nonnull subtype: InputMethodSubtype): Locale? {
+    fun getSubtypeLocale(subtype: InputMethodSubtype): Locale {
         val localeString = subtype.locale
         return LocaleUtils.constructLocaleFromString(localeString)
     }
 
-    @Nonnull
     fun getKeyboardLayoutSetDisplayName(
-        @Nonnull subtype: InputMethodSubtype
-    ): String? {
+        subtype: InputMethodSubtype
+    ): String {
         val layoutName = getKeyboardLayoutSetName(subtype)
         return getKeyboardLayoutSetDisplayName(layoutName)
     }
 
-    @Nonnull
-    fun getKeyboardLayoutSetDisplayName(@Nonnull layoutName: String): String? {
-        return sKeyboardLayoutToDisplayNameMap[layoutName]
+    fun getKeyboardLayoutSetDisplayName(layoutName: String): String {
+        return sKeyboardLayoutToDisplayNameMap[layoutName]!!
     }
 
-    @Nonnull
     fun getKeyboardLayoutSetName(subtype: InputMethodSubtype): String {
         var keyboardLayoutSet = subtype.getExtraValueOf(ExtraValue.KEYBOARD_LAYOUT_SET)
         if (keyboardLayoutSet == null) {

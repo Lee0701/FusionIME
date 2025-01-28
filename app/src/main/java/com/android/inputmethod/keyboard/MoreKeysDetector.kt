@@ -39,7 +39,7 @@ class MoreKeysDetector(slideAllowance: Float) : KeyDetector() {
 
         var nearestKey: Key? = null
         var nearestDist: Int = if ((y < 0)) mSlideAllowanceSquareTop else mSlideAllowanceSquare
-        for (key: Key in keyboard.getSortedKeys()) {
+        for (key: Key in keyboard.sortedKeys) {
             val dist: Int = key.squaredDistanceToEdge(touchX, touchY)
             if (dist < nearestDist) {
                 nearestKey = key

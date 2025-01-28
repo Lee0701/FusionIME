@@ -270,7 +270,7 @@ class MoreKeysKeyboard internal constructor(params: MoreKeysKeyboardParams) : Ke
         isSingleMoreKeyWithPreview: Boolean, keyPreviewVisibleWidth: Int,
         keyPreviewVisibleHeight: Int, paintToMeasure: Paint
     ) :
-        KeyboardBuilder<MoreKeysKeyboardParams?>(context, MoreKeysKeyboardParams()) {
+        KeyboardBuilder<MoreKeysKeyboardParams>(context, MoreKeysKeyboardParams()) {
         private val mParentKey: Key
 
         /**
@@ -322,25 +322,25 @@ class MoreKeysKeyboard internal constructor(params: MoreKeysKeyboardParams) : Ke
             } else {
                 dividerWidth = 0
             }
-            val moreKeys: Array<MoreKeySpec?>? = key.getMoreKeys()
+            val moreKeys: Array<MoreKeySpec> = key.moreKeys
             mParams.setParameters(
-                moreKeys!!.size, key.getMoreKeysColumnNumber(), keyWidth,
-                rowHeight, key.getX() + key.getWidth() / 2, keyboard.mId!!.mWidth,
-                key.isMoreKeysFixedColumn(), key.isMoreKeysFixedOrder(), dividerWidth
+                moreKeys.size, key.moreKeysColumnNumber, keyWidth,
+                rowHeight, key.x + key.width / 2, keyboard.mId.mWidth,
+                key.isMoreKeysFixedColumn, key.isMoreKeysFixedOrder, dividerWidth
             )
         }
 
         @Nonnull
         override fun build(): MoreKeysKeyboard {
-            val params: MoreKeysKeyboardParams = mParams!!
-            val moreKeyFlags: Int = mParentKey.getMoreKeyLabelFlags()
-            val moreKeys: Array<MoreKeySpec?>? = mParentKey.getMoreKeys()
-            for (n in moreKeys!!.indices) {
-                val moreKeySpec: MoreKeySpec? = moreKeys.get(n)
+            val params: MoreKeysKeyboardParams = mParams
+            val moreKeyFlags: Int = mParentKey.moreKeyLabelFlags
+            val moreKeys: Array<MoreKeySpec> = mParentKey.moreKeys
+            for (n in moreKeys.indices) {
+                val moreKeySpec: MoreKeySpec = moreKeys[n]
                 val row: Int = n / params.mNumColumns
                 val x: Int = params.getX(n, row)
                 val y: Int = params.getY(row)
-                val key: Key = moreKeySpec!!.buildKey(x, y, moreKeyFlags, params)
+                val key: Key = moreKeySpec.buildKey(x, y, moreKeyFlags, params)
                 params.markAsEdgeKey(key, row)
                 params.onAddKey(key)
 
@@ -370,7 +370,7 @@ class MoreKeysKeyboard internal constructor(params: MoreKeysKeyboardParams) : Ke
                 padding: Float, paint: Paint
             ): Int {
                 var maxWidth: Int = minKeyWidth
-                for (spec: MoreKeySpec in parentKey.getMoreKeys()) {
+                for (spec: MoreKeySpec in parentKey.moreKeys) {
                     val label: String? = spec.mLabel
                     // If the label is single letter, minKeyWidth is enough to hold the label.
                     if (label != null && StringUtils.codePointCount(label) > 1) {

@@ -48,8 +48,8 @@ class PermissionsActivity
         super.onResume()
         // Only do request when there is no pending request to avoid duplicated requests.
         if (mPendingRequestCode == INVALID_REQUEST_CODE) {
-            val extras: Bundle? = getIntent().getExtras()
-            val permissionsToRequest: Array<String?>? =
+            val extras: Bundle? = intent.extras
+            val permissionsToRequest: Array<String>? =
                 extras!!.getStringArray(EXTRA_PERMISSION_REQUESTED_PERMISSIONS)
             mPendingRequestCode = extras.getInt(EXTRA_PERMISSION_REQUEST_CODE)
             // Assuming that all supplied permissions are not granted yet, so that we don't need to
@@ -65,7 +65,7 @@ class PermissionsActivity
         requestCode: Int, permissions: Array<String>, grantResults: IntArray
     ) {
         mPendingRequestCode = INVALID_REQUEST_CODE
-        PermissionsManager.Companion.get(this)!!.onRequestPermissionsResult(
+        PermissionsManager.get(this).onRequestPermissionsResult(
             requestCode, permissions, grantResults
         )
         finish()

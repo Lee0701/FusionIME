@@ -29,20 +29,20 @@ class AppearanceSettingsFragment : SubScreenFragment() {
         addPreferencesFromResource(R.xml.prefs_screen_appearance)
         if (!ProductionFlags.IS_SPLIT_KEYBOARD_SUPPORTED ||
             Constants.isPhone(
-                Settings.Companion.readScreenMetrics(
+                Settings.readScreenMetrics(
                     resources
                 )
             )
         ) {
-            removePreference(Settings.Companion.PREF_ENABLE_SPLIT_KEYBOARD)
+            removePreference(Settings.PREF_ENABLE_SPLIT_KEYBOARD, preferenceScreen)
         }
     }
 
     override fun onResume() {
         super.onResume()
-        CustomInputStyleSettingsFragment.Companion.updateCustomInputStylesSummary(
-            findPreference(Settings.Companion.PREF_CUSTOM_INPUT_STYLES)
+        CustomInputStyleSettingsFragment.updateCustomInputStylesSummary(
+            findPreference(Settings.PREF_CUSTOM_INPUT_STYLES)
         )
-        ThemeSettingsFragment.Companion.updateKeyboardThemeSummary(findPreference(Settings.Companion.SCREEN_THEME))
+        ThemeSettingsFragment.updateKeyboardThemeSummary(findPreference(Settings.SCREEN_THEME))
     }
 }

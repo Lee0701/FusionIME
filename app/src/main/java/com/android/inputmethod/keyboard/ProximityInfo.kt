@@ -30,8 +30,8 @@ import kotlin.math.min
 class ProximityInfo internal constructor(
     gridWidth: Int, gridHeight: Int, minWidth: Int, height: Int,
     mostCommonKeyWidth: Int, mostCommonKeyHeight: Int,
-    @Nonnull sortedKeys: List<Key>,
-    @Nonnull touchPositionCorrection: TouchPositionCorrection
+    sortedKeys: List<Key>,
+    touchPositionCorrection: TouchPositionCorrection
 ) {
     private val mGridWidth: Int
     private val mGridHeight: Int
@@ -45,13 +45,11 @@ class ProximityInfo internal constructor(
     private val mMostCommonKeyWidth: Int
     private val mMostCommonKeyHeight: Int
 
-    @Nonnull
     private val mSortedKeys: List<Key>
 
-    @Nonnull
-    private val mGridNeighbors: Array<List<Key>>
+    private val mGridNeighbors: Array<List<Key>?>
 
-    private var mNativeProximityInfo: Long
+    private var mNativeProximityInfo: Long = 0
 
     init {
         mGridWidth = gridWidth
@@ -64,32 +62,32 @@ class ProximityInfo internal constructor(
         mMostCommonKeyHeight = mostCommonKeyHeight
         mMostCommonKeyWidth = mostCommonKeyWidth
         mSortedKeys = sortedKeys
-        mGridNeighbors = arrayOfNulls<List<*>>(mGridSize)
+        mGridNeighbors = arrayOfNulls(mGridSize)
         if (minWidth == 0 || height == 0) {
             // No proximity required. Keyboard might be more keys keyboard.
-            return
+        } else {
+            computeNearestNeighbors()
+            mNativeProximityInfo = createNativeProximityInfo(touchPositionCorrection)
         }
-        computeNearestNeighbors()
-        mNativeProximityInfo = createNativeProximityInfo(touchPositionCorrection)
     }
 
     private fun createNativeProximityInfo(
         @Nonnull touchPositionCorrection: TouchPositionCorrection
     ): Long {
-        val gridNeighborKeys: Array<List<Key>> = mGridNeighbors
-        val proximityCharsArray: IntArray = IntArray(mGridSize * MAX_PROXIMITY_CHARS_SIZE)
+        val gridNeighborKeys: Array<List<Key>?> = mGridNeighbors
+        val proximityCharsArray = IntArray(mGridSize * MAX_PROXIMITY_CHARS_SIZE)
         Arrays.fill(proximityCharsArray, Constants.NOT_A_CODE)
         for (i in 0 until mGridSize) {
-            val neighborKeys: List<Key> = gridNeighborKeys.get(i)
+            val neighborKeys: List<Key> = gridNeighborKeys[i]!!
             val proximityCharsLength: Int = neighborKeys.size
             var infoIndex: Int = i * MAX_PROXIMITY_CHARS_SIZE
             for (j in 0 until proximityCharsLength) {
-                val neighborKey: Key = neighborKeys.get(j)
+                val neighborKey: Key = neighborKeys[j]
                 // Excluding from proximityCharsArray
                 if (!needsProximityInfo(neighborKey)) {
                     continue
                 }
-                proximityCharsArray.get(infoIndex) = neighborKey.getCode()
+                proximityCharsArray[infoIndex] = neighborKey.code
                 infoIndex++
             }
         }
@@ -111,11 +109,11 @@ class ProximityInfo internal constructor(
 
         val sortedKeys: List<Key> = mSortedKeys
         val keyCount: Int = getProximityInfoKeysCount(sortedKeys)
-        val keyXCoordinates: IntArray = IntArray(keyCount)
-        val keyYCoordinates: IntArray = IntArray(keyCount)
-        val keyWidths: IntArray = IntArray(keyCount)
-        val keyHeights: IntArray = IntArray(keyCount)
-        val keyCharCodes: IntArray = IntArray(keyCount)
+        val keyXCoordinates = IntArray(keyCount)
+        val keyYCoordinates = IntArray(keyCount)
+        val keyWidths = IntArray(keyCount)
+        val keyHeights = IntArray(keyCount)
+        val keyCharCodes = IntArray(keyCount)
         val sweetSpotCenterXs: FloatArray?
         val sweetSpotCenterYs: FloatArray?
         val sweetSpotRadii: FloatArray?
@@ -129,11 +127,11 @@ class ProximityInfo internal constructor(
                 keyIndex++
                 continue
             }
-            keyXCoordinates.get(infoIndex) = key.getX()
-            keyYCoordinates.get(infoIndex) = key.getY()
-            keyWidths.get(infoIndex) = key.getWidth()
-            keyHeights.get(infoIndex) = key.getHeight()
-            keyCharCodes.get(infoIndex) = key.getCode()
+            keyXCoordinates[infoIndex] = key.x
+            keyYCoordinates[infoIndex] = key.y
+            keyWidths[infoIndex] = key.width
+            keyHeights[infoIndex] = key.height
+            keyCharCodes[infoIndex] = key.code
             infoIndex++
             keyIndex++
         }
@@ -160,21 +158,21 @@ class ProximityInfo internal constructor(
                     keyIndex++
                     continue
                 }
-                val hitBox: Rect = key.getHitBox()
-                sweetSpotCenterXs.get(infoIndex) = hitBox.exactCenterX()
-                sweetSpotCenterYs.get(infoIndex) = hitBox.exactCenterY()
-                sweetSpotRadii.get(infoIndex) = defaultRadius
+                val hitBox: Rect = key.hitBox
+                sweetSpotCenterXs[infoIndex] = hitBox.exactCenterX()
+                sweetSpotCenterYs[infoIndex] = hitBox.exactCenterY()
+                sweetSpotRadii[infoIndex] = defaultRadius
                 val row: Int = hitBox.top / mMostCommonKeyHeight
                 if (row < rows) {
                     val hitBoxWidth: Int = hitBox.width()
                     val hitBoxHeight: Int = hitBox.height()
                     val hitBoxDiagonal: Float =
                         hypot(hitBoxWidth.toDouble(), hitBoxHeight.toDouble()) as Float
-                    sweetSpotCenterXs.get(infoIndex) +=
+                    sweetSpotCenterXs[infoIndex] +=
                         touchPositionCorrection.getX(row) * hitBoxWidth
-                    sweetSpotCenterYs.get(infoIndex) +=
+                    sweetSpotCenterYs[infoIndex] +=
                         touchPositionCorrection.getY(row) * hitBoxHeight
-                    sweetSpotRadii.get(infoIndex) =
+                    sweetSpotRadii[infoIndex] =
                         touchPositionCorrection.getRadius(row) * hitBoxDiagonal
                 }
                 if (DEBUG) {
@@ -183,11 +181,11 @@ class ProximityInfo internal constructor(
                             "  [%2d] row=%d x/y/r=%7.2f/%7.2f/%5.2f %s code=%s",
                             infoIndex,
                             row,
-                            sweetSpotCenterXs.get(infoIndex),
-                            sweetSpotCenterYs.get(infoIndex),
-                            sweetSpotRadii.get(infoIndex),
+                            sweetSpotCenterXs[infoIndex],
+                            sweetSpotCenterYs[infoIndex],
+                            sweetSpotRadii[infoIndex],
                             (if (row < rows) "correct" else "default"),
-                            Constants.printableCode(key.getCode())
+                            Constants.printableCode(key.code)
                         )
                     )
                 }
@@ -224,7 +222,7 @@ class ProximityInfo internal constructor(
                 mNativeProximityInfo = 0
             }
         } finally {
-            super.finalize()
+//            super.finalize()
         }
     }
 
@@ -246,11 +244,11 @@ class ProximityInfo internal constructor(
         // Since in the practice each cell does not have a lot of neighbors, most of this space is
         // actually just empty padding in this fixed-size buffer.
         val neighborsFlatBuffer: Array<Key?> = arrayOfNulls(gridSize * keyCount)
-        val neighborCountPerCell: IntArray = IntArray(gridSize)
+        val neighborCountPerCell = IntArray(gridSize)
         val halfCellWidth: Int = mCellWidth / 2
         val halfCellHeight: Int = mCellHeight / 2
         for (key: Key in mSortedKeys) {
-            if (key.isSpacer()) continue
+            if (key.isSpacer) continue
 
             /* HOW WE PRE-SELECT THE CELLS (iterate over only the relevant cells, instead of all of them)
 
@@ -312,8 +310,8 @@ y |---+---+---+---+-v-+-|-+---+---+---+---+---|          | thresholdBase and get
   have to align this on the center of the key. Hence, we don't need a separate value for
   bottomPixelWithinThreshold and call this yEnd right away.
 */
-            val keyX: Int = key.getX()
-            val keyY: Int = key.getY()
+            val keyX: Int = key.x
+            val keyY: Int = key.y
             val topPixelWithinThreshold: Int = keyY - threshold
             val yDeltaToGrid: Int = topPixelWithinThreshold % mCellHeight
             val yMiddleOfTopCell: Int = topPixelWithinThreshold - yDeltaToGrid + halfCellHeight
@@ -323,7 +321,7 @@ y |---+---+---+---+-v-+-|-+---+---+---+---+---|          | thresholdBase and get
             ).toInt()
             val yEnd: Int = min(
                 lastPixelYCoordinate.toDouble(),
-                (keyY + key.getHeight() + threshold).toDouble()
+                (keyY + key.height + threshold).toDouble()
             ).toInt()
 
             val leftPixelWithinThreshold: Int = keyX - threshold
@@ -335,7 +333,7 @@ y |---+---+---+---+-v-+-|-+---+---+---+---+---|          | thresholdBase and get
             ).toInt()
             val xEnd: Int = min(
                 lastPixelXCoordinate.toDouble(),
-                (keyX + key.getWidth() + threshold).toDouble()
+                (keyX + key.width + threshold).toDouble()
             ).toInt()
 
             var baseIndexOfCurrentRow: Int =
@@ -346,9 +344,9 @@ y |---+---+---+---+-v-+-|-+---+---+---+---+---|          | thresholdBase and get
                 var centerX: Int = xStart
                 while (centerX <= xEnd) {
                     if (key.squaredDistanceToEdge(centerX, centerY) < thresholdSquared) {
-                        neighborsFlatBuffer.get(index * keyCount + neighborCountPerCell.get(index)) =
+                        neighborsFlatBuffer[index * keyCount + neighborCountPerCell[index]] =
                             key
-                        ++neighborCountPerCell.get(index)
+                        ++neighborCountPerCell[index]
                     }
                     ++index
                     centerX += mCellWidth
@@ -361,11 +359,11 @@ y |---+---+---+---+-v-+-|-+---+---+---+---+---|          | thresholdBase and get
         for (i in 0 until gridSize) {
             val indexStart: Int = i * keyCount
             val indexEnd: Int = indexStart + neighborCountPerCell.get(i)
-            val neighbors: ArrayList<Key?> = ArrayList(indexEnd - indexStart)
+            val neighbors: ArrayList<Key> = ArrayList(indexEnd - indexStart)
             for (index in indexStart until indexEnd) {
-                neighbors.add(neighborsFlatBuffer.get(index))
+                neighbors.add(neighborsFlatBuffer[index]!!)
             }
-            mGridNeighbors.get(i) = Collections.unmodifiableList(neighbors)
+            mGridNeighbors[i] = Collections.unmodifiableList(neighbors)
         }
     }
 
@@ -379,30 +377,30 @@ y |---+---+---+---+-v-+-|-+---+---+---+---+---|          | thresholdBase and get
         }
         var index: Int = 0
         if (primaryKeyCode > Constants.CODE_SPACE) {
-            dest.get(index++) = primaryKeyCode
+            dest[index++] = primaryKeyCode
         }
         val nearestKeys: List<Key> = getNearestKeys(x, y)
         for (key: Key in nearestKeys) {
             if (index >= destLength) {
                 break
             }
-            val code: Int = key.getCode()
+            val code: Int = key.code
             if (code <= Constants.CODE_SPACE) {
                 break
             }
-            dest.get(index++) = code
+            dest[index++] = code
         }
         if (index < destLength) {
-            dest.get(index) = Constants.NOT_A_CODE
+            dest[index] = Constants.NOT_A_CODE
         }
     }
 
     @Nonnull
     fun getNearestKeys(x: Int, y: Int): List<Key> {
-        if (x >= 0 && x < mKeyboardMinWidth && y >= 0 && y < mKeyboardHeight) {
+        if (x in 0..<mKeyboardMinWidth && y in 0..<mKeyboardHeight) {
             val index: Int = (y / mCellHeight) * mGridWidth + (x / mCellWidth)
             if (index < mGridSize) {
-                return mGridNeighbors.get(index)
+                return mGridNeighbors[index]!!
             }
         }
         return EMPTY_KEY_LIST
@@ -450,7 +448,7 @@ y |---+---+---+---+-v-+-|-+---+---+---+---+---|          | thresholdBase and get
 
         fun needsProximityInfo(key: Key): Boolean {
             // Don't include special keys into ProximityInfo.
-            return key.getCode() >= Constants.CODE_SPACE
+            return key.code >= Constants.CODE_SPACE
         }
 
         private fun getProximityInfoKeysCount(keys: List<Key>): Int {

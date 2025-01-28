@@ -19,8 +19,8 @@ package com.android.inputmethod.keyboard.internal
  * Interpolates XY-coordinates using Cubic Hermite Curve.
  */
 class HermiteInterpolator {
-    private var mXCoords: IntArray
-    private var mYCoords: IntArray
+    private var mXCoords: IntArray = intArrayOf()
+    private var mYCoords: IntArray = intArrayOf()
     private var mMinPos: Int = 0
     private var mMaxPos: Int = 0
 

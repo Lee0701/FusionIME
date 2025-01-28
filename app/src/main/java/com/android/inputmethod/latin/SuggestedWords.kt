@@ -24,7 +24,7 @@ import javax.annotation.Nonnull
 
 open class SuggestedWords(
     @Nonnull suggestedWordInfoList: ArrayList<SuggestedWordInfo>,
-    rawSuggestions: ArrayList<SuggestedWordInfo?>?,
+    rawSuggestions: ArrayList<SuggestedWordInfo>?,
     typedWordInfo: SuggestedWordInfo?,
     typedWordValid: Boolean,
     willAutoCorrect: Boolean,
@@ -50,9 +50,8 @@ open class SuggestedWords(
     val mInputStyle: Int
     val mSequenceNumber: Int // Sequence number for auto-commit.
 
-    @Nonnull
     protected val mSuggestedWordInfoList: ArrayList<SuggestedWordInfo>
-    val mRawSuggestions: ArrayList<SuggestedWordInfo?>?
+    val mRawSuggestions: ArrayList<SuggestedWordInfo>?
 
     init {
         mSuggestedWordInfoList = suggestedWordInfoList
@@ -231,7 +230,7 @@ open class SuggestedWords(
             mApplicationSpecifiedCompletionInfo = applicationSpecifiedCompletion
             mScore = MAX_SCORE
             mKindAndFlags = KIND_APP_DEFINED
-            sourceDictionary = Dictionary.Companion.DICTIONARY_APPLICATION_DEFINED
+            sourceDictionary = Dictionary.DICTIONARY_APPLICATION_DEFINED
             mCodePointCount = StringUtils.codePointCount(word)
             mIndexOfTouchPointOfSecondWord = NOT_AN_INDEX
             mAutoCommitFirstWordConfidence = NOT_A_CONFIDENCE
@@ -330,7 +329,7 @@ open class SuggestedWords(
                     return -1
                 }
                 var firstOccurrenceOfWord: Int = -1
-                if (!TextUtils.isEmpty(typedWord)) {
+                if (typedWord != null && !TextUtils.isEmpty(typedWord)) {
                     firstOccurrenceOfWord = removeSuggestedWordInfoFromList(
                         typedWord, candidates, -1 /* startIndexExclusive */
                     )
@@ -344,8 +343,8 @@ open class SuggestedWords(
             }
 
             private fun removeSuggestedWordInfoFromList(
-                @Nonnull word: String?,
-                @Nonnull candidates: ArrayList<SuggestedWordInfo>,
+                word: String,
+                candidates: ArrayList<SuggestedWordInfo>,
                 startIndexExclusive: Int
             ): Int {
                 var firstOccurrenceOfWord: Int = -1

@@ -102,10 +102,10 @@ class WordComposer {
      * @param combiningSpec The spec string for combining. This is found in the extra value.
      */
     fun restartCombining(combiningSpec: String?) {
-        val nonNullCombiningSpec: String = if (null == combiningSpec) "" else combiningSpec
+        val nonNullCombiningSpec: String = combiningSpec ?: ""
         if (nonNullCombiningSpec != mCombiningSpec) {
             mCombinerChain = CombinerChain(
-                mCombinerChain.getComposingWordWithCombiningFeedback().toString()
+                mCombinerChain.composingWordWithCombiningFeedback.toString()
             )
             mCombiningSpec = nonNullCombiningSpec
         }
@@ -129,7 +129,7 @@ class WordComposer {
     }
 
     private fun refreshTypedWordCache() {
-        mTypedWordCache = mCombinerChain.getComposingWordWithCombiningFeedback()
+        mTypedWordCache = mCombinerChain.composingWordWithCombiningFeedback
         mCodePointSize = Character.codePointCount(mTypedWordCache, 0, mTypedWordCache!!.length)
     }
 
@@ -237,7 +237,7 @@ class WordComposer {
         var actualMoveAmount: Int = 0
         var cursorPos: Int = mCursorPositionWithinWord
         // TODO: Don't make that copy. We can do this directly from mTypedWordCache.
-        val codePoints: IntArray = StringUtils.toCodePointArray(mTypedWordCache)
+        val codePoints: IntArray = StringUtils.toCodePointArray(mTypedWordCache!!)
         if (expectedMoveAmount >= 0) {
             // Moving the cursor forward for the expected amount or until the end of the word has
             // been reached, whichever comes first.
@@ -261,7 +261,7 @@ class WordComposer {
         mCursorPositionWithinWord = cursorPos
         mCombinerChain.applyProcessedEvent(
             mCombinerChain.processEvent(
-                mEvents, Event.Companion.createCursorMovedEvent(cursorPos)
+                mEvents, Event.createCursorMovedEvent(cursorPos)
             )
         )
         return true
@@ -282,7 +282,7 @@ class WordComposer {
             // We don't want to override the batch input points that are held in mInputPointers
             // (See {@link #add(int,int,int)}).
             val processedEvent: Event =
-                processEvent(Event.Companion.createEventForCodePointFromUnknownSource(codePoint))
+                processEvent(Event.createEventForCodePointFromUnknownSource(codePoint))
             applyProcessedEvent(processedEvent)
             i = Character.offsetByCodePoints(word, i, 1)
         }
@@ -300,7 +300,7 @@ class WordComposer {
         for (i in 0 until length) {
             val processedEvent: Event =
                 processEvent(
-                    Event.Companion.createEventForCodePointFromAlreadyTypedText(
+                    Event.createEventForCodePointFromAlreadyTypedText(
                         codePoints.get(i),
                         CoordinateUtils.xFromArray(coordinates, i),
                         CoordinateUtils.yFromArray(coordinates, i)
@@ -431,8 +431,8 @@ class WordComposer {
             ngramContext, mCapitalizedMode
         )
         inputPointers.reset()
-        if (type != LastComposedWord.Companion.COMMIT_TYPE_DECIDED_WORD
-            && type != LastComposedWord.Companion.COMMIT_TYPE_MANUAL_PICK
+        if (type != LastComposedWord.COMMIT_TYPE_DECIDED_WORD
+            && type != LastComposedWord.COMMIT_TYPE_MANUAL_PICK
         ) {
             lastComposedWord.deactivate()
         }

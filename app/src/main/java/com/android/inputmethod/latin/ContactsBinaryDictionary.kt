@@ -34,9 +34,9 @@ class ContactsBinaryDictionary protected constructor(
     dictFile: File?, name: String
 ) : ExpandableBinaryDictionary(
     context,
-    ExpandableBinaryDictionary.Companion.getDictName(name, locale, dictFile),
+    getDictName(name, locale, dictFile),
     locale,
-    Dictionary.Companion.TYPE_CONTACTS,
+    TYPE_CONTACTS,
     dictFile
 ), ContactsChangedListener {
     /**
@@ -87,7 +87,7 @@ class ContactsBinaryDictionary protected constructor(
             addUnigramLocked(
                 word!!, ContactsDictionaryConstants.FREQUENCY_FOR_CONTACTS,
                 false,  /* isNotAWord */false,  /* isPossiblyOffensive */
-                BinaryDictionary.Companion.NOT_A_VALID_TIMESTAMP
+                BinaryDictionary.NOT_A_VALID_TIMESTAMP
             )
         }
     }
@@ -103,8 +103,8 @@ class ContactsBinaryDictionary protected constructor(
             Log.i(TAG, "No permission to read contacts. Not loading the Dictionary.")
         }
 
-        val validNames: ArrayList<String?> = mContactsManager.getValidNames(uri)
-        for (name: String in validNames) {
+        val validNames: ArrayList<String> = mContactsManager.getValidNames(uri)
+        for (name in validNames) {
             addNameLocked(name)
         }
         if (uri == ContactsContract.Contacts.CONTENT_URI) {
@@ -120,8 +120,8 @@ class ContactsBinaryDictionary protected constructor(
      */
     private fun addNameLocked(name: String) {
         val len: Int = StringUtils.codePointCount(name)
-        var ngramContext: NgramContext = NgramContext.Companion.getEmptyPrevWordsContext(
-            BinaryDictionary.Companion.MAX_PREV_WORD_COUNT_FOR_N_GRAM
+        var ngramContext: NgramContext = NgramContext.getEmptyPrevWordsContext(
+            BinaryDictionary.MAX_PREV_WORD_COUNT_FOR_N_GRAM
         )
         // TODO: Better tokenization for non-Latin writing systems
         var i: Int = 0
@@ -136,7 +136,7 @@ class ContactsBinaryDictionary protected constructor(
                 // Don't add single letter words, possibly confuses
                 // capitalization of i.
                 val wordLen: Int = StringUtils.codePointCount(word)
-                if (wordLen <= ExpandableBinaryDictionary.Companion.MAX_WORD_LENGTH && wordLen > 1) {
+                if (wordLen <= ExpandableBinaryDictionary.MAX_WORD_LENGTH && wordLen > 1) {
                     if (DEBUG) {
                         Log.d(TAG, "addName " + name + ", " + word + ", " + ngramContext)
                     }
@@ -145,15 +145,15 @@ class ContactsBinaryDictionary protected constructor(
                         word,
                         ContactsDictionaryConstants.FREQUENCY_FOR_CONTACTS, false,  /* isNotAWord */
                         false,  /* isPossiblyOffensive */
-                        BinaryDictionary.Companion.NOT_A_VALID_TIMESTAMP
+                        BinaryDictionary.NOT_A_VALID_TIMESTAMP
                     )
-                    if (ngramContext.isValid() && mUseFirstLastBigrams) {
+                    if (ngramContext.isValid && mUseFirstLastBigrams) {
                         runGCIfRequiredLocked(true /* mindsBlockByGC */)
                         addNgramEntryLocked(
                             ngramContext,
                             word,
                             ContactsDictionaryConstants.FREQUENCY_FOR_CONTACTS_BIGRAM,
-                            BinaryDictionary.Companion.NOT_A_VALID_TIMESTAMP
+                            BinaryDictionary.NOT_A_VALID_TIMESTAMP
                         )
                     }
                     ngramContext = ngramContext.getNextNgramContext(

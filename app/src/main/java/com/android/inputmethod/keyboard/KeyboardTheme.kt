@@ -71,7 +71,7 @@ class KeyboardTheme private constructor(
         const val THEME_ID_LXX_DARK: Int = 4
         val DEFAULT_THEME_ID: Int = THEME_ID_KLP
 
-        private var AVAILABLE_KEYBOARD_THEMES: Array<KeyboardTheme>
+        private var AVAILABLE_KEYBOARD_THEMES: Array<KeyboardTheme> = arrayOf()
 
         /* package private for testing */
         val KEYBOARD_THEMES: Array<KeyboardTheme> = arrayOf(

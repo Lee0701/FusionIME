@@ -85,7 +85,7 @@ interface DictionaryFacilitator {
 
     val isActive: Boolean
 
-    val locale: Locale?
+    val locale: Locale
 
     fun usesContacts(): Boolean
 
@@ -138,7 +138,7 @@ interface DictionaryFacilitator {
 
     fun unlearnFromUserHistory(
         word: String,
-        @Nonnull ngramContext: NgramContext?, timeStampInSeconds: Long,
+        ngramContext: NgramContext, timeStampInSeconds: Long,
         eventType: Int
     )
 
@@ -151,9 +151,9 @@ interface DictionaryFacilitator {
         inputStyle: Int
     ): SuggestionResults
 
-    fun isValidSpellingWord(word: String?): Boolean
+    fun isValidSpellingWord(word: String): Boolean
 
-    fun isValidSuggestionWord(word: String?): Boolean
+    fun isValidSuggestionWord(word: String): Boolean
 
     fun clearUserHistoryDictionary(context: Context?): Boolean
 
@@ -166,16 +166,16 @@ interface DictionaryFacilitator {
 
     companion object {
         val ALL_DICTIONARY_TYPES: Array<String> = arrayOf<String>(
-            Dictionary.Companion.TYPE_MAIN,
-            Dictionary.Companion.TYPE_CONTACTS,
-            Dictionary.Companion.TYPE_USER_HISTORY,
-            Dictionary.Companion.TYPE_USER
+            Dictionary.TYPE_MAIN,
+            Dictionary.TYPE_CONTACTS,
+            Dictionary.TYPE_USER_HISTORY,
+            Dictionary.TYPE_USER
         )
 
         val DYNAMIC_DICTIONARY_TYPES: Array<String> = arrayOf<String>(
-            Dictionary.Companion.TYPE_CONTACTS,
-            Dictionary.Companion.TYPE_USER_HISTORY,
-            Dictionary.Companion.TYPE_USER
+            Dictionary.TYPE_CONTACTS,
+            Dictionary.TYPE_USER_HISTORY,
+            Dictionary.TYPE_USER
         )
     }
 }

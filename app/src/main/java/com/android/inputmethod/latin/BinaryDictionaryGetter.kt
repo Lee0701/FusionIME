@@ -43,7 +43,7 @@ object BinaryDictionaryGetter {
     /**
      * Used to return empty lists
      */
-    private val EMPTY_FILE_ARRAY: Array<File?> = arrayOfNulls(0)
+    private val EMPTY_FILE_ARRAY: Array<File> = arrayOf()
 
     /**
      * Name of the common preferences name to know which word list are on and which are off.
@@ -96,7 +96,7 @@ object BinaryDictionaryGetter {
             return null
         }
         try {
-            return AssetFileAddress.Companion.makeFromFileNameAndOffset(
+            return AssetFileAddress.makeFromFileNameAndOffset(
                 context.getApplicationInfo().sourceDir, afd.getStartOffset(), afd.getLength()
             )
         } finally {
@@ -121,9 +121,9 @@ object BinaryDictionaryGetter {
      * @param context the context on which to open the files upon.
      * @return an array of binary dictionary files, which may be empty but may not be null.
      */
-    fun getCachedWordLists(locale: String?, context: Context): Array<File?> {
-        val directoryList: Array<File?>? = DictionaryInfoUtils.getCachedDirectoryList(context)
-        if (null == directoryList) return EMPTY_FILE_ARRAY
+    fun getCachedWordLists(locale: String?, context: Context): Array<File> {
+        val directoryList: Array<File> = DictionaryInfoUtils.getCachedDirectoryList(context)
+            ?: return EMPTY_FILE_ARRAY
         val cacheFiles: HashMap<String?, FileAndMatchLevel> = HashMap()
         for (directory: File in directoryList) {
             if (!directory.isDirectory()) continue
@@ -145,12 +145,7 @@ object BinaryDictionaryGetter {
             }
         }
         if (cacheFiles.isEmpty()) return EMPTY_FILE_ARRAY
-        val result: Array<File?> = arrayOfNulls(cacheFiles.size)
-        var index: Int = 0
-        for (entry: FileAndMatchLevel in cacheFiles.values) {
-            result.get(index++) = entry.mFile
-        }
-        return result
+        return cacheFiles.values.map { it.mFile }.toTypedArray()
     }
 
     // ## HACK ## we prevent usage of a dictionary before version 18. The reason for this is, since
@@ -216,7 +211,7 @@ object BinaryDictionaryGetter {
             // Move a staging files to the cache ddirectories if any.
             DictionaryInfoUtils.moveStagingFilesIfExists(context)
         }
-        val cachedWordLists: Array<File?> = getCachedWordLists(locale.toString(), context)
+        val cachedWordLists: Array<File> = getCachedWordLists(locale.toString(), context)
         val mainDictId: String = DictionaryInfoUtils.getMainDictId(locale)
         val dictPackSettings: DictPackSettings = DictPackSettings(context)
 
@@ -232,7 +227,7 @@ object BinaryDictionaryGetter {
             if (!dictPackSettings.isWordListActive(wordListId)) continue
             if (canUse) {
                 val afa: AssetFileAddress? =
-                    AssetFileAddress.Companion.makeFromFileName(f.getPath())
+                    AssetFileAddress.makeFromFileName(f.getPath())
                 if (null != afa) fileList.add(afa)
             } else {
                 Log.e(

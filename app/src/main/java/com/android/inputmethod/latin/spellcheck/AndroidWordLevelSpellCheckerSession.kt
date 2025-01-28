@@ -148,7 +148,7 @@ abstract class AndroidWordLevelSpellCheckerSession internal constructor(service:
         // according to the dictionary. E.g. "GERMANS" only exists in the dictionary as "Germans".
         return mService.isValidWord(
             mLocale,
-            StringUtils.capitalizeFirstAndDowncaseRest(lowerCaseText, mLocale)
+            StringUtils.capitalizeFirstAndDowncaseRest(lowerCaseText, mLocale!!)
         )
     }
 
@@ -169,13 +169,13 @@ abstract class AndroidWordLevelSpellCheckerSession internal constructor(service:
         textInfo: TextInfo, ngramContext: NgramContext?, suggestionsLimit: Int
     ): SuggestionsInfo {
         try {
-            val text: String = textInfo.getText().replace
-            (AndroidSpellCheckerService.Companion.APOSTROPHE.toRegex(), AndroidSpellCheckerService.Companion.SINGLE_QUOTE).replace
-            (("^" + quotesRegexp).toRegex(), "").replace
-            ((quotesRegexp + "$").toRegex(), "")
+            val text: String = textInfo.getText()
+                .replace(AndroidSpellCheckerService.APOSTROPHE.toRegex(), AndroidSpellCheckerService.SINGLE_QUOTE)
+                .replace(("^" + quotesRegexp).toRegex(), "")
+                .replace((quotesRegexp + "$").toRegex(), "")
 
             if (!mService.hasMainDictionaryForLocale(mLocale)) {
-                return AndroidSpellCheckerService.Companion.getNotInDictEmptySuggestions(
+                return AndroidSpellCheckerService.getNotInDictEmptySuggestions(
                     false /* reportAsTypo */
                 )
             }
@@ -187,8 +187,8 @@ abstract class AndroidWordLevelSpellCheckerSession internal constructor(service:
                     val splitText: Array<String> =
                         text.split(Constants.REGEXP_PERIOD.toRegex()).dropLastWhile { it.isEmpty() }
                             .toTypedArray()
-                    var allWordsAreValid: Boolean = true
-                    for (word: String? in splitText) {
+                    var allWordsAreValid = true
+                    for (word: String in splitText) {
                         if (!mService.isValidWord(mLocale, word)) {
                             allWordsAreValid = false
                             break
@@ -206,7 +206,7 @@ abstract class AndroidWordLevelSpellCheckerSession internal constructor(service:
                         mLocale,
                         text
                     )
-                ) AndroidSpellCheckerService.Companion.getInDictEmptySuggestions() else AndroidSpellCheckerService.Companion.getNotInDictEmptySuggestions(
+                ) AndroidSpellCheckerService.inDictEmptySuggestions else AndroidSpellCheckerService.getNotInDictEmptySuggestions(
                     CHECKABILITY_CONTAINS_PERIOD == checkability /* reportAsTypo */
                 )
             }
@@ -218,7 +218,7 @@ abstract class AndroidWordLevelSpellCheckerSession internal constructor(service:
                 if (DebugFlags.DEBUG_ENABLED) {
                     Log.i(TAG, "onGetSuggestionsInternal() : [" + text + "] is a valid word")
                 }
-                return AndroidSpellCheckerService.Companion.getInDictEmptySuggestions()
+                return AndroidSpellCheckerService.inDictEmptySuggestions
             }
             if (DebugFlags.DEBUG_ENABLED) {
                 Log.i(TAG, "onGetSuggestionsInternal() : [" + text + "] is NOT a valid word")
@@ -230,7 +230,7 @@ abstract class AndroidWordLevelSpellCheckerSession internal constructor(service:
             if (null == keyboard) {
                 Log.w(TAG, "onGetSuggestionsInternal() : No keyboard for locale: " + mLocale)
                 // If there is no keyboard for this locale, don't do any spell-checking.
-                return AndroidSpellCheckerService.Companion.getNotInDictEmptySuggestions(
+                return AndroidSpellCheckerService.getNotInDictEmptySuggestions(
                     false /* reportAsTypo */
                 )
             }
@@ -242,12 +242,12 @@ abstract class AndroidWordLevelSpellCheckerSession internal constructor(service:
             composer.setComposingWord(codePoints, coordinates)
             // TODO: Don't gather suggestions if the limit is <= 0 unless necessary
             val suggestionResults: SuggestionResults = mService.getSuggestionResults(
-                mLocale, composer.getComposedDataSnapshot(), ngramContext!!, keyboard
+                mLocale, composer.composedDataSnapshot, ngramContext!!, keyboard
             )
             val result: Result = getResult(
                 capitalizeType,
                 mLocale!!, suggestionsLimit,
-                mService.getRecommendedThreshold(), text, suggestionResults
+                mService.recommendedThreshold, text, suggestionResults
             )
             if (DebugFlags.DEBUG_ENABLED) {
                 if (result.mSuggestions != null && result.mSuggestions.size > 0) {
@@ -280,7 +280,7 @@ abstract class AndroidWordLevelSpellCheckerSession internal constructor(service:
         } catch (e: RuntimeException) {
             // Don't kill the keyboard if there is a bug in the spell checker
             Log.e(TAG, "Exception while spellchecking", e)
-            return AndroidSpellCheckerService.Companion.getNotInDictEmptySuggestions(
+            return AndroidSpellCheckerService.getNotInDictEmptySuggestions(
                 false /* reportAsTypo */
             )
         }
@@ -396,13 +396,13 @@ abstract class AndroidWordLevelSpellCheckerSession internal constructor(service:
             for (suggestedWordInfo: SuggestedWordInfo in suggestionResults) {
                 val suggestion: String?
                 if (StringUtils.CAPITALIZE_ALL == capitalizeType) {
-                    suggestion = suggestedWordInfo.mWord.uppercase(locale)
+                    suggestion = suggestedWordInfo.word.uppercase(locale)
                 } else if (StringUtils.CAPITALIZE_FIRST == capitalizeType) {
                     suggestion = StringUtils.capitalizeFirstCodePoint(
-                        suggestedWordInfo.mWord, locale
+                        suggestedWordInfo.word, locale
                     )
                 } else {
-                    suggestion = suggestedWordInfo.mWord
+                    suggestion = suggestedWordInfo.word
                 }
                 suggestions.add(suggestion)
             }

@@ -74,7 +74,7 @@ class DictionaryPackInstallBroadcastReceiver : BroadcastReceiver {
             val packageName: String? = packageUri.getSchemeSpecificPart()
             if (null == packageName) return
             // TODO: do this in a more appropriate place
-            TargetPackageInfoGetterTask.Companion.removeCachedPackageInfo(packageName)
+            TargetPackageInfoGetterTask.removeCachedPackageInfo(packageName)
             val packageInfo: PackageInfo
             try {
                 packageInfo = manager.getPackageInfo(packageName, PackageManager.GET_PROVIDERS)

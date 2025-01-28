@@ -130,7 +130,7 @@ class KeyboardState(switchActions: SwitchActions) {
 
     init {
         mSwitchActions = switchActions
-        mRecapitalizeMode = RecapitalizeStatus.Companion.NOT_A_RECAPITALIZE_MODE
+        mRecapitalizeMode = RecapitalizeStatus.NOT_A_RECAPITALIZE_MODE
     }
 
     fun onSaveKeyboardState() {
@@ -301,7 +301,7 @@ class KeyboardState(switchActions: SwitchActions) {
         mIsAlphabetMode = true
         mIsEmojiMode = false
         mIsSymbolShifted = false
-        mRecapitalizeMode = RecapitalizeStatus.Companion.NOT_A_RECAPITALIZE_MODE
+        mRecapitalizeMode = RecapitalizeStatus.NOT_A_RECAPITALIZE_MODE
         mSwitchState = SWITCH_STATE_ALPHA
         mSwitchActions.requestUpdatingShiftState(autoCapsFlags, recapitalizeMode)
     }
@@ -313,7 +313,7 @@ class KeyboardState(switchActions: SwitchActions) {
         mSwitchActions.setSymbolsKeyboard()
         mIsAlphabetMode = false
         mIsSymbolShifted = false
-        mRecapitalizeMode = RecapitalizeStatus.Companion.NOT_A_RECAPITALIZE_MODE
+        mRecapitalizeMode = RecapitalizeStatus.NOT_A_RECAPITALIZE_MODE
         // Reset alphabet shift state.
         mAlphabetShiftState.setShiftLocked(false)
         mSwitchState = SWITCH_STATE_SYMBOL_BEGIN
@@ -326,7 +326,7 @@ class KeyboardState(switchActions: SwitchActions) {
         mSwitchActions.setSymbolsShiftedKeyboard()
         mIsAlphabetMode = false
         mIsSymbolShifted = true
-        mRecapitalizeMode = RecapitalizeStatus.Companion.NOT_A_RECAPITALIZE_MODE
+        mRecapitalizeMode = RecapitalizeStatus.NOT_A_RECAPITALIZE_MODE
         // Reset alphabet shift state.
         mAlphabetShiftState.setShiftLocked(false)
         mSwitchState = SWITCH_STATE_SYMBOL_BEGIN
@@ -338,7 +338,7 @@ class KeyboardState(switchActions: SwitchActions) {
         }
         mIsAlphabetMode = false
         mIsEmojiMode = true
-        mRecapitalizeMode = RecapitalizeStatus.Companion.NOT_A_RECAPITALIZE_MODE
+        mRecapitalizeMode = RecapitalizeStatus.NOT_A_RECAPITALIZE_MODE
         // Remember caps lock mode and reset alphabet shift state.
         mPrevMainKeyboardWasShiftLocked = mAlphabetShiftState.isShiftLocked()
         mAlphabetShiftState.setShiftLocked(false)
@@ -461,12 +461,12 @@ class KeyboardState(switchActions: SwitchActions) {
 
     private fun updateShiftStateForRecapitalize(recapitalizeMode: Int) {
         when (recapitalizeMode) {
-            RecapitalizeStatus.Companion.CAPS_MODE_ALL_UPPER -> setShifted(
+            RecapitalizeStatus.CAPS_MODE_ALL_UPPER -> setShifted(
                 SHIFT_LOCK_SHIFTED
             )
 
-            RecapitalizeStatus.Companion.CAPS_MODE_FIRST_WORD_UPPER -> setShifted(AUTOMATIC_SHIFT)
-            RecapitalizeStatus.Companion.CAPS_MODE_ALL_LOWER, RecapitalizeStatus.Companion.CAPS_MODE_ORIGINAL_MIXED_CASE -> setShifted(
+            RecapitalizeStatus.CAPS_MODE_FIRST_WORD_UPPER -> setShifted(AUTOMATIC_SHIFT)
+            RecapitalizeStatus.CAPS_MODE_ALL_LOWER, RecapitalizeStatus.CAPS_MODE_ORIGINAL_MIXED_CASE -> setShifted(
                 UNSHIFT
             )
 
@@ -476,7 +476,7 @@ class KeyboardState(switchActions: SwitchActions) {
 
     private fun updateAlphabetShiftState(autoCapsFlags: Int, recapitalizeMode: Int) {
         if (!mIsAlphabetMode) return
-        if (RecapitalizeStatus.Companion.NOT_A_RECAPITALIZE_MODE != recapitalizeMode) {
+        if (RecapitalizeStatus.NOT_A_RECAPITALIZE_MODE != recapitalizeMode) {
             // We are recapitalizing. Match the keyboard to the current recapitalize state.
             updateShiftStateForRecapitalize(recapitalizeMode)
             return
@@ -499,7 +499,7 @@ class KeyboardState(switchActions: SwitchActions) {
     private fun onPressShift() {
         // If we are recapitalizing, we don't do any of the normal processing, including
         // importantly the double tap timer.
-        if (RecapitalizeStatus.Companion.NOT_A_RECAPITALIZE_MODE != mRecapitalizeMode) {
+        if (RecapitalizeStatus.NOT_A_RECAPITALIZE_MODE != mRecapitalizeMode) {
             return
         }
         if (mIsAlphabetMode) {
@@ -551,7 +551,7 @@ class KeyboardState(switchActions: SwitchActions) {
         withSliding: Boolean, autoCapsFlags: Int,
         recapitalizeMode: Int
     ) {
-        if (RecapitalizeStatus.Companion.NOT_A_RECAPITALIZE_MODE != mRecapitalizeMode) {
+        if (RecapitalizeStatus.NOT_A_RECAPITALIZE_MODE != mRecapitalizeMode) {
             // We are recapitalizing. We should match the keyboard state to the recapitalize
             // state in priority.
             updateShiftStateForRecapitalize(mRecapitalizeMode)
@@ -633,7 +633,7 @@ class KeyboardState(switchActions: SwitchActions) {
     }
 
     fun onEvent(event: Event, autoCapsFlags: Int, recapitalizeMode: Int) {
-        val code: Int = if (event.isFunctionalKeyEvent()) event.mKeyCode else event.mCodePoint
+        val code: Int = if (event.isFunctionalKeyEvent) event.mKeyCode else event.mCodePoint
         if (DEBUG_EVENT) {
             Log.d(
                 TAG, ("onEvent: code=" + Constants.printableCode(code)
@@ -661,12 +661,12 @@ class KeyboardState(switchActions: SwitchActions) {
                 if (mIsEmojiMode) {
                     // When in the Emoji keyboard, we don't want to switch back to the main layout even
                     // after the user hits an emoji letter followed by an enter or a space.
-                    break
-                }
-                if (!isSpaceOrEnter(code) && (Constants.isLetterCode(code)
-                            || code == Constants.CODE_OUTPUT_TEXT)
-                ) {
-                    mSwitchState = SWITCH_STATE_SYMBOL
+                } else {
+                    if (!isSpaceOrEnter(code) && (Constants.isLetterCode(code)
+                                || code == Constants.CODE_OUTPUT_TEXT)
+                    ) {
+                        mSwitchState = SWITCH_STATE_SYMBOL
+                    }
                 }
             }
 
@@ -700,7 +700,7 @@ class KeyboardState(switchActions: SwitchActions) {
 
     private fun stateToString(autoCapsFlags: Int, recapitalizeMode: Int): String {
         return (this.toString() + " autoCapsFlags=" + CapsModeUtils.flagsToString(autoCapsFlags)
-                + " recapitalizeMode=" + RecapitalizeStatus.Companion.modeToString(recapitalizeMode))
+                + " recapitalizeMode=" + RecapitalizeStatus.modeToString(recapitalizeMode))
     }
 
     companion object {

@@ -146,10 +146,9 @@ object BinaryDictionaryFileDumper {
         context: Context, hasDefaultWordList: Boolean
     ): List<WordListInfo> {
         val clientId: String = context.getString(R.string.dictionary_pack_client_id)
-        val client: ContentProviderClient? =
-            context.getContentResolver().acquireContentProviderClient
-        (getProviderUriBuilder("").build())
-        if (null == client) return emptyList()
+        val client: ContentProviderClient =
+            context.contentResolver.acquireContentProviderClient(getProviderUriBuilder("").build())
+                ?: return emptyList()
         var cursor: Cursor? = null
         try {
             val builder: Uri.Builder = getContentUriBuilderForType(
@@ -449,8 +448,7 @@ object BinaryDictionaryFileDumper {
     ) {
         val providerClient: ContentProviderClient?
         try {
-            providerClient = context.getContentResolver().acquireContentProviderClient
-            (getProviderUriBuilder("").build())
+            providerClient = context.contentResolver.acquireContentProviderClient(getProviderUriBuilder("").build())
         } catch (e: SecurityException) {
             Log.e(TAG, "No permission to communicate with the dictionary provider", e)
             return
@@ -560,14 +558,14 @@ object BinaryDictionaryFileDumper {
             .appendPath(QUERY_PATH_DICT_INFO)
             .appendQueryParameter(QUERY_PARAMETER_PROTOCOL, QUERY_PARAMETER_PROTOCOL_VALUE)
             .build()
-        val dictionaryList: ArrayList<DictionaryInfo?> =
+        val dictionaryList: ArrayList<DictionaryInfo> =
             DictionaryInfoUtils.getCurrentDictionaryFileNameAndVersionInfo(context)
         val length: Int = dictionaryList.size
         for (i in 0 until length) {
-            val info: DictionaryInfo? = dictionaryList.get(i)
-            Log.i(TAG, "reinitializeClientRecordInDictionaryContentProvider() : Insert " + info)
+            val info: DictionaryInfo = dictionaryList.get(i)
+            Log.i(TAG, "reinitializeClientRecordInDictionaryContentProvider() : Insert $info")
             client.insert(
-                Uri.withAppendedPath(dictionaryContentUriBase, info!!.mId),
+                Uri.withAppendedPath(dictionaryContentUriBase, info.mId),
                 info.toContentValues()
             )
         }
@@ -610,10 +608,9 @@ object BinaryDictionaryFileDumper {
      */
     fun initializeClientRecordHelper(context: Context, clientId: String) {
         try {
-            val client: ContentProviderClient? =
-                context.getContentResolver().acquireContentProviderClient
-            (getProviderUriBuilder("").build())
-            if (null == client) return
+            val client: ContentProviderClient =
+                context.contentResolver.acquireContentProviderClient(getProviderUriBuilder("").build())
+                    ?: return
             reinitializeClientRecordInDictionaryContentProvider(context, client, clientId)
         } catch (e: RemoteException) {
             Log.e(TAG, "Cannot contact the dictionary content provider", e)

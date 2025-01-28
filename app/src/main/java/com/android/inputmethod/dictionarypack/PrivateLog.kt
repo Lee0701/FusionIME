@@ -28,7 +28,7 @@ import java.util.Locale
  * Class to keep long-term log. This is inactive in production, and is only for debug purposes.
  */
 object PrivateLog {
-    val DEBUG: Boolean = DictionaryProvider.Companion.DEBUG
+    val DEBUG: Boolean = DictionaryProvider.DEBUG
 
     private const val LOG_DATABASE_NAME: String = "log"
     private const val LOG_TABLE_NAME: String = "log"
@@ -45,7 +45,7 @@ object PrivateLog {
         "yyyy/MM/dd HH:mm:ss", Locale.ROOT
     )
 
-    private val sInstance: PrivateLog = PrivateLog()
+    private val sInstance: PrivateLog = PrivateLog
     private var sDebugHelper: DebugHelper? = null
 
     @Synchronized

@@ -48,22 +48,22 @@ object DictionaryFactory {
         if (null == locale) {
             Log.e(TAG, "No locale defined for dictionary")
             return DictionaryCollection(
-                Dictionary.Companion.TYPE_MAIN, locale,
+                Dictionary.TYPE_MAIN, locale,
                 createReadOnlyBinaryDictionary(context, locale!!)!!
             )
         }
 
         val dictList: LinkedList<Dictionary> = LinkedList()
-        val assetFileList: ArrayList<AssetFileAddress?> =
+        val assetFileList: ArrayList<AssetFileAddress> =
             BinaryDictionaryGetter.getDictionaryFiles(locale, context, true)
         if (null != assetFileList) {
             for (f: AssetFileAddress in assetFileList) {
                 val readOnlyBinaryDictionary: ReadOnlyBinaryDictionary =
                     ReadOnlyBinaryDictionary(
                         f.mFilename, f.mOffset, f.mLength,
-                        false,  /* useFullEditDistance */locale, Dictionary.Companion.TYPE_MAIN
+                        false,  /* useFullEditDistance */locale, Dictionary.TYPE_MAIN
                     )
-                if (readOnlyBinaryDictionary.isValidDictionary()) {
+                if (readOnlyBinaryDictionary.isValidDictionary) {
                     dictList.add(readOnlyBinaryDictionary)
                 } else {
                     readOnlyBinaryDictionary.close()
@@ -76,7 +76,7 @@ object DictionaryFactory {
         // If the list is empty, that means we should not use any dictionary (for example, the user
         // explicitly disabled the main dictionary), so the following is okay. dictList is never
         // null, but if for some reason it is, DictionaryCollection handles it gracefully.
-        return DictionaryCollection(Dictionary.Companion.TYPE_MAIN, locale, dictList)
+        return DictionaryCollection(Dictionary.TYPE_MAIN, locale, dictList)
     }
 
     /**
@@ -154,7 +154,7 @@ object DictionaryFactory {
             }
             return ReadOnlyBinaryDictionary(
                 sourceDir, afd.getStartOffset(), afd.getLength(),
-                false,  /* useFullEditDistance */locale, Dictionary.Companion.TYPE_MAIN
+                false,  /* useFullEditDistance */locale, Dictionary.TYPE_MAIN
             )
         } catch (e: Resources.NotFoundException) {
             Log.e(TAG, "Could not find the resource")

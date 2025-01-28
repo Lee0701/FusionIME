@@ -47,7 +47,7 @@ class ReadOnlyBinaryDictionary(
 
     val isValidDictionary: Boolean
         get() {
-            return mBinaryDictionary.isValidDictionary()
+            return mBinaryDictionary.isValidDictionary
         }
 
     override fun getSuggestions(
@@ -56,7 +56,7 @@ class ReadOnlyBinaryDictionary(
         settingsValuesForSuggestion: SettingsValuesForSuggestion,
         sessionId: Int, weightForLocale: Float,
         inOutWeightOfLangModelVsSpatialModel: FloatArray?
-    ): ArrayList<SuggestedWordInfo?>? {
+    ): ArrayList<SuggestedWordInfo>? {
         if (mLock.readLock().tryLock()) {
             try {
                 return mBinaryDictionary.getSuggestions(
@@ -71,7 +71,7 @@ class ReadOnlyBinaryDictionary(
         return null
     }
 
-    override fun isInDictionary(word: String?): Boolean {
+    override fun isInDictionary(word: String): Boolean {
         if (mLock.readLock().tryLock()) {
             try {
                 return mBinaryDictionary.isInDictionary(word)
@@ -93,7 +93,7 @@ class ReadOnlyBinaryDictionary(
         return false
     }
 
-    override fun getFrequency(word: String?): Int {
+    override fun getFrequency(word: String): Int {
         if (mLock.readLock().tryLock()) {
             try {
                 return mBinaryDictionary.getFrequency(word)
@@ -101,10 +101,10 @@ class ReadOnlyBinaryDictionary(
                 mLock.readLock().unlock()
             }
         }
-        return Dictionary.Companion.NOT_A_PROBABILITY
+        return Dictionary.NOT_A_PROBABILITY
     }
 
-    override fun getMaxFrequencyOfExactMatches(word: String?): Int {
+    override fun getMaxFrequencyOfExactMatches(word: String): Int {
         if (mLock.readLock().tryLock()) {
             try {
                 return mBinaryDictionary.getMaxFrequencyOfExactMatches(word)
@@ -112,7 +112,7 @@ class ReadOnlyBinaryDictionary(
                 mLock.readLock().unlock()
             }
         }
-        return Dictionary.Companion.NOT_A_PROBABILITY
+        return Dictionary.NOT_A_PROBABILITY
     }
 
     override fun close() {

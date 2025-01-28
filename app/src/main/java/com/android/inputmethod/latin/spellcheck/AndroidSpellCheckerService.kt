@@ -98,7 +98,7 @@ class AndroidSpellCheckerService : SpellCheckerService(), OnSharedPreferenceChan
         return AndroidSpellCheckerSessionFactory.newInstance(this)
     }
 
-    fun isValidWord(locale: Locale?, word: String?): Boolean {
+    fun isValidWord(locale: Locale?, word: String): Boolean {
         mSemaphore.acquireUninterruptibly()
         try {
             val dictionaryFacilitatorForLocale: DictionaryFacilitator =
@@ -123,7 +123,7 @@ class AndroidSpellCheckerService : SpellCheckerService(), OnSharedPreferenceChan
             return dictionaryFacilitatorForLocale.getSuggestionResults(
                 composedData, ngramContext,
                 keyboard, mSettingsValuesForSuggestion,
-                sessionId, SuggestedWords.Companion.INPUT_STYLE_TYPING
+                sessionId, SuggestedWords.INPUT_STYLE_TYPING
             )
         } finally {
             if (sessionId != null) {
@@ -172,7 +172,7 @@ class AndroidSpellCheckerService : SpellCheckerService(), OnSharedPreferenceChan
             locale.toString(), keyboardLayoutName
         )
         val keyboardLayoutSet: KeyboardLayoutSet = createKeyboardSetForSpellChecker(subtype)
-        return keyboardLayoutSet.getKeyboard(KeyboardId.Companion.ELEMENT_ALPHABET)
+        return keyboardLayoutSet.getKeyboard(KeyboardId.ELEMENT_ALPHABET)
     }
 
     private fun createKeyboardSetForSpellChecker(subtype: InputMethodSubtype): KeyboardLayoutSet {
@@ -184,7 +184,7 @@ class AndroidSpellCheckerService : SpellCheckerService(), OnSharedPreferenceChan
         builder.setKeyboardGeometry(
             SPELLCHECKER_DUMMY_KEYBOARD_WIDTH, SPELLCHECKER_DUMMY_KEYBOARD_HEIGHT
         )
-        builder.setSubtype(RichInputMethodSubtype.Companion.getRichInputMethodSubtype(subtype))
+        builder.setSubtype(RichInputMethodSubtype.getRichInputMethodSubtype(subtype))
         builder.setIsSpellChecker(true /* isSpellChecker */)
         builder.disableTouchPositionCorrectionData()
         return builder.build()

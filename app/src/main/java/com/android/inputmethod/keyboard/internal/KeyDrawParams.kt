@@ -20,8 +20,7 @@ import com.android.inputmethod.latin.utils.ResourceUtils
 import javax.annotation.Nonnull
 
 class KeyDrawParams {
-    @Nonnull
-    var mTypeface: Typeface? = Typeface.DEFAULT
+    var mTypeface: Typeface = Typeface.DEFAULT
 
     var mLetterSize: Int = 0
     var mLabelSize: Int = 0
@@ -83,7 +82,7 @@ class KeyDrawParams {
         }
 
         if (attr.mTypeface != null) {
-            mTypeface = attr.mTypeface
+            mTypeface = attr.mTypeface!!
         }
 
         mLetterSize = selectTextSizeFromDimensionOrRatio(

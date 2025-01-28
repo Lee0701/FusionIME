@@ -56,7 +56,7 @@ object PermissionsUtil {
      */
     fun requestPermissions(
         activity: Activity, requestCode: Int,
-        permissions: Array<String?>
+        permissions: Array<String>
     ) {
         ActivityCompat.requestPermissions(activity, permissions, requestCode)
     }

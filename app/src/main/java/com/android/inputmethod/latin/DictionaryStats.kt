@@ -74,7 +74,7 @@ class DictionaryStats {
 
     override fun toString(): String {
         val builder: StringBuilder = StringBuilder(mDictType)
-        if (mDictType == Dictionary.Companion.TYPE_MAIN) {
+        if (mDictType == Dictionary.TYPE_MAIN) {
             builder.append(" (")
             builder.append(mContentVersion)
             builder.append(")")

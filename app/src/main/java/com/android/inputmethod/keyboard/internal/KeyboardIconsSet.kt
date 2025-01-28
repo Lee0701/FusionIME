@@ -35,8 +35,8 @@ class KeyboardIconsSet {
                 val icon: Drawable? = keyboardAttrs.getDrawable(attrId)
                 setDefaultBounds(icon)
                 val iconId: Int = ATTR_ID_TO_ICON_ID.get(attrId)
-                mIcons.get(iconId) = icon
-                mIconResourceIds.get(iconId) = keyboardAttrs.getResourceId(attrId, 0)
+                mIcons[iconId] = icon
+                mIconResourceIds[iconId] = keyboardAttrs.getResourceId(attrId, 0)
             } catch (e: Resources.NotFoundException) {
                 Log.w(
                     TAG, ("Drawable resource for icon #"
@@ -50,14 +50,14 @@ class KeyboardIconsSet {
     fun getIconResourceId(name: String): Int {
         val iconId: Int = getIconId(name)
         if (isValidIconId(iconId)) {
-            return mIconResourceIds.get(iconId)
+            return mIconResourceIds[iconId]
         }
         throw RuntimeException("unknown icon name: " + name)
     }
 
     fun getIconDrawable(iconId: Int): Drawable? {
         if (isValidIconId(iconId)) {
-            return mIcons.get(iconId)
+            return mIcons[iconId]
         }
         throw RuntimeException("unknown icon id: " + getIconName(iconId))
     }
@@ -134,8 +134,8 @@ class KeyboardIconsSet {
                 if (attrId != ATTR_UNDEFINED) {
                     ATTR_ID_TO_ICON_ID.put(attrId, iconId)
                 }
-                sNameToIdsMap.put(name, iconId)
-                ICON_NAMES.get(iconId) = name
+                sNameToIdsMap[name] = iconId
+                ICON_NAMES[iconId] = name
                 iconId++
                 i += 2
             }
@@ -145,9 +145,8 @@ class KeyboardIconsSet {
             return iconId >= 0 && iconId < ICON_NAMES.size
         }
 
-        @Nonnull
-        fun getIconName(iconId: Int): String? {
-            return if (isValidIconId(iconId)) ICON_NAMES.get(iconId) else "unknown<" + iconId + ">"
+        fun getIconName(iconId: Int): String {
+            return if (isValidIconId(iconId)) ICON_NAMES[iconId]!! else "unknown<" + iconId + ">"
         }
 
         fun getIconId(name: String?): Int {

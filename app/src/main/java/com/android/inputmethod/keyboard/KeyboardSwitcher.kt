@@ -65,7 +65,7 @@ class KeyboardSwitcher private constructor() : SwitchActions {
 
     private fun initInternal(latinIme: LatinIME) {
         mLatinIME = latinIme
-        mRichImm = RichInputMethodManager.Companion.getInstance()
+        mRichImm = RichInputMethodManager.instance
         mState = KeyboardState(this)
         mIsHardwareAcceleratedDrawingEnabled =
             InputMethodServiceCompatUtils.enableHardwareAcceleration(mLatinIME)
@@ -73,7 +73,7 @@ class KeyboardSwitcher private constructor() : SwitchActions {
 
     fun updateKeyboardTheme(displayContext: Context) {
         val themeUpdated: Boolean = updateKeyboardThemeAndContextThemeWrapper(
-            displayContext, KeyboardTheme.Companion.getKeyboardTheme(displayContext /* context */)!!
+            displayContext, KeyboardTheme.getKeyboardTheme(displayContext /* context */)!!
         )
         if (themeUpdated && mKeyboardView != null) {
             mLatinIME!!.setInputView(
@@ -89,7 +89,7 @@ class KeyboardSwitcher private constructor() : SwitchActions {
         if (mThemeContext == null || keyboardTheme != mKeyboardTheme || mThemeContext!!.getResources() != context.getResources()) {
             mKeyboardTheme = keyboardTheme
             mThemeContext = ContextThemeWrapper(context, keyboardTheme.mStyleId)
-            KeyboardLayoutSet.Companion.onKeyboardThemeChanged()
+            KeyboardLayoutSet.onKeyboardThemeChanged()
             return true
         }
         return false
@@ -108,7 +108,7 @@ class KeyboardSwitcher private constructor() : SwitchActions {
         )
         val keyboardHeight: Int = ResourceUtils.getKeyboardHeight(res, settingsValues)
         builder.setKeyboardGeometry(keyboardWidth, keyboardHeight)
-        builder.setSubtype(mRichImm.getCurrentSubtype())
+        builder.setSubtype(mRichImm!!.currentSubtype!!)
         builder.setVoiceInputKeyEnabled(settingsValues.mShowsVoiceInputKey)
         builder.setLanguageSwitchKeyEnabled(mLatinIME!!.shouldShowLanguageSwitchKey())
         builder.setSplitLayoutEnabledByUser(
@@ -118,7 +118,7 @@ class KeyboardSwitcher private constructor() : SwitchActions {
         mKeyboardLayoutSet = builder.build()
         try {
             mState!!.onLoadKeyboard(currentAutoCapsState, currentRecapitalizeState)
-            mKeyboardTextsSet.setLocale(mRichImm.getCurrentSubtypeLocale(), mThemeContext!!)
+            mKeyboardTextsSet.setLocale(mRichImm!!.currentSubtypeLocale!!, mThemeContext!!)
         } catch (e: KeyboardLayoutSetException) {
             Log.w(TAG, "loading keyboard failed: " + e.mKeyboardId, e.cause)
         }
@@ -137,20 +137,20 @@ class KeyboardSwitcher private constructor() : SwitchActions {
     }
 
     private fun setKeyboard(
-        @Nonnull keyboardId: Int,
-        @Nonnull toggleState: KeyboardSwitchState
+        keyboardId: Int,
+        toggleState: KeyboardSwitchState
     ) {
         // Make {@link MainKeyboardView} visible and hide {@link EmojiPalettesView}.
-        val currentSettingsValues: SettingsValues? = Settings.Companion.getInstance().getCurrent()
-        setMainKeyboardFrame(currentSettingsValues, toggleState)
+        val currentSettingsValues: SettingsValues? = Settings.instance.current
+        setMainKeyboardFrame(currentSettingsValues!!, toggleState)
         // TODO: pass this object to setKeyboard instead of getting the current values.
         val keyboardView: MainKeyboardView? = mKeyboardView
-        val oldKeyboard: Keyboard? = keyboardView.getKeyboard()
+        val oldKeyboard: Keyboard? = keyboardView?.keyboard
         val newKeyboard: Keyboard = mKeyboardLayoutSet!!.getKeyboard(keyboardId)
-        keyboardView!!.setKeyboard(newKeyboard)
+        keyboardView!!.keyboard = newKeyboard
         mCurrentInputView!!.setKeyboardTopPadding(newKeyboard.mTopPadding)
         keyboardView.setKeyPreviewPopupEnabled(
-            currentSettingsValues!!.mKeyPreviewPopupOn,
+            currentSettingsValues.mKeyPreviewPopupOn,
             currentSettingsValues.mKeyPreviewPopupDismissDelay
         )
         keyboardView.setKeyPreviewAnimationParams(
@@ -162,7 +162,7 @@ class KeyboardSwitcher private constructor() : SwitchActions {
             currentSettingsValues.mKeyPreviewDismissEndYScale,
             currentSettingsValues.mKeyPreviewDismissDuration
         )
-        keyboardView.updateShortcutKey(mRichImm!!.isShortcutImeReady())
+        keyboardView.updateShortcutKey(mRichImm!!.isShortcutImeReady)
         val subtypeChanged: Boolean = (oldKeyboard == null)
                 || newKeyboard.mId!!.mSubtype != oldKeyboard.mId!!.mSubtype
         val languageOnSpacebarFormatType: Int =
@@ -170,7 +170,7 @@ class KeyboardSwitcher private constructor() : SwitchActions {
                 newKeyboard.mId!!.mSubtype!!
             )
         val hasMultipleEnabledIMEsOrSubtypes: Boolean = mRichImm
-            .hasMultipleEnabledIMEsOrSubtypes(true /* shouldIncludeAuxiliarySubtypes */)
+            ?.hasMultipleEnabledIMEsOrSubtypes(true /* shouldIncludeAuxiliarySubtypes */) == true
         keyboardView.startDisplayLanguageOnSpacebar(
             subtypeChanged, languageOnSpacebarFormatType,
             hasMultipleEnabledIMEsOrSubtypes
@@ -179,7 +179,7 @@ class KeyboardSwitcher private constructor() : SwitchActions {
 
     fun getKeyboard(): Keyboard? {
         if (mKeyboardView != null) {
-            return mKeyboardView.getKeyboard()
+            return mKeyboardView?.keyboard
         }
         return null
     }
@@ -216,79 +216,79 @@ class KeyboardSwitcher private constructor() : SwitchActions {
 
     // Implements {@link KeyboardState.SwitchActions}.
     override fun setAlphabetKeyboard() {
-        if (SwitchActions.Companion.DEBUG_ACTION) {
+        if (SwitchActions.DEBUG_ACTION) {
             Log.d(TAG, "setAlphabetKeyboard")
         }
-        setKeyboard(KeyboardId.Companion.ELEMENT_ALPHABET, KeyboardSwitchState.OTHER)
+        setKeyboard(KeyboardId.ELEMENT_ALPHABET, KeyboardSwitchState.OTHER)
     }
 
     // Implements {@link KeyboardState.SwitchActions}.
     override fun setAlphabetManualShiftedKeyboard() {
-        if (SwitchActions.Companion.DEBUG_ACTION) {
+        if (SwitchActions.DEBUG_ACTION) {
             Log.d(TAG, "setAlphabetManualShiftedKeyboard")
         }
-        setKeyboard(KeyboardId.Companion.ELEMENT_ALPHABET_MANUAL_SHIFTED, KeyboardSwitchState.OTHER)
+        setKeyboard(KeyboardId.ELEMENT_ALPHABET_MANUAL_SHIFTED, KeyboardSwitchState.OTHER)
     }
 
     // Implements {@link KeyboardState.SwitchActions}.
     override fun setAlphabetAutomaticShiftedKeyboard() {
-        if (SwitchActions.Companion.DEBUG_ACTION) {
+        if (SwitchActions.DEBUG_ACTION) {
             Log.d(TAG, "setAlphabetAutomaticShiftedKeyboard")
         }
         setKeyboard(
-            KeyboardId.Companion.ELEMENT_ALPHABET_AUTOMATIC_SHIFTED,
+            KeyboardId.ELEMENT_ALPHABET_AUTOMATIC_SHIFTED,
             KeyboardSwitchState.OTHER
         )
     }
 
     // Implements {@link KeyboardState.SwitchActions}.
     override fun setAlphabetShiftLockedKeyboard() {
-        if (SwitchActions.Companion.DEBUG_ACTION) {
+        if (SwitchActions.DEBUG_ACTION) {
             Log.d(TAG, "setAlphabetShiftLockedKeyboard")
         }
-        setKeyboard(KeyboardId.Companion.ELEMENT_ALPHABET_SHIFT_LOCKED, KeyboardSwitchState.OTHER)
+        setKeyboard(KeyboardId.ELEMENT_ALPHABET_SHIFT_LOCKED, KeyboardSwitchState.OTHER)
     }
 
     // Implements {@link KeyboardState.SwitchActions}.
     override fun setAlphabetShiftLockShiftedKeyboard() {
-        if (SwitchActions.Companion.DEBUG_ACTION) {
+        if (SwitchActions.DEBUG_ACTION) {
             Log.d(TAG, "setAlphabetShiftLockShiftedKeyboard")
         }
         setKeyboard(
-            KeyboardId.Companion.ELEMENT_ALPHABET_SHIFT_LOCK_SHIFTED,
+            KeyboardId.ELEMENT_ALPHABET_SHIFT_LOCK_SHIFTED,
             KeyboardSwitchState.OTHER
         )
     }
 
     // Implements {@link KeyboardState.SwitchActions}.
     override fun setSymbolsKeyboard() {
-        if (SwitchActions.Companion.DEBUG_ACTION) {
+        if (SwitchActions.DEBUG_ACTION) {
             Log.d(TAG, "setSymbolsKeyboard")
         }
-        setKeyboard(KeyboardId.Companion.ELEMENT_SYMBOLS, KeyboardSwitchState.OTHER)
+        setKeyboard(KeyboardId.ELEMENT_SYMBOLS, KeyboardSwitchState.OTHER)
     }
 
     // Implements {@link KeyboardState.SwitchActions}.
     override fun setSymbolsShiftedKeyboard() {
-        if (SwitchActions.Companion.DEBUG_ACTION) {
+        if (SwitchActions.DEBUG_ACTION) {
             Log.d(TAG, "setSymbolsShiftedKeyboard")
         }
         setKeyboard(
-            KeyboardId.Companion.ELEMENT_SYMBOLS_SHIFTED,
+            KeyboardId.ELEMENT_SYMBOLS_SHIFTED,
             KeyboardSwitchState.SYMBOLS_SHIFTED
         )
     }
 
     fun isImeSuppressedByHardwareKeyboard(
-        @Nonnull settingsValues: SettingsValues,
-        @Nonnull toggleState: KeyboardSwitchState
+        settingsValues: SettingsValues,
+        toggleState: KeyboardSwitchState
     ): Boolean {
         return settingsValues.mHasHardwareKeyboard && toggleState == KeyboardSwitchState.HIDDEN
     }
 
     private fun setMainKeyboardFrame(
-        @Nonnull settingsValues: SettingsValues?,
-        @Nonnull toggleState: KeyboardSwitchState
+        settingsValues: SettingsValues,
+        toggleState: KeyboardSwitchState
     ) {
         val visibility: Int = if (isImeSuppressedByHardwareKeyboard(settingsValues!!, toggleState))
             View.GONE
@@ -305,27 +305,27 @@ class KeyboardSwitcher private constructor() : SwitchActions {
 
     // Implements {@link KeyboardState.SwitchActions}.
     override fun setEmojiKeyboard() {
-        if (SwitchActions.Companion.DEBUG_ACTION) {
+        if (SwitchActions.DEBUG_ACTION) {
             Log.d(TAG, "setEmojiKeyboard")
         }
         val keyboard: Keyboard =
-            mKeyboardLayoutSet!!.getKeyboard(KeyboardId.Companion.ELEMENT_ALPHABET)
+            mKeyboardLayoutSet!!.getKeyboard(KeyboardId.ELEMENT_ALPHABET)
         mMainKeyboardFrame!!.setVisibility(View.GONE)
         // The visibility of {@link #mKeyboardView} must be aligned with {@link #MainKeyboardFrame}.
         // @see #getVisibleKeyboardView() and
         // @see LatinIME#onComputeInset(android.inputmethodservice.InputMethodService.Insets)
         mKeyboardView!!.setVisibility(View.GONE)
         mEmojiPalettesView!!.startEmojiPalettes(
-            mKeyboardTextsSet.getText(KeyboardTextsSet.Companion.SWITCH_TO_ALPHA_KEY_LABEL),
-            mKeyboardView.getKeyVisualAttribute(), keyboard.mIconsSet
+            mKeyboardTextsSet.getText(KeyboardTextsSet.SWITCH_TO_ALPHA_KEY_LABEL),
+            mKeyboardView?.keyVisualAttribute, keyboard.mIconsSet
         )
         mEmojiPalettesView!!.setVisibility(View.VISIBLE)
     }
 
     enum class KeyboardSwitchState(keyboardId: Int) {
         HIDDEN(-1),
-        SYMBOLS_SHIFTED(KeyboardId.Companion.ELEMENT_SYMBOLS_SHIFTED),
-        EMOJI(KeyboardId.Companion.ELEMENT_EMOJI_RECENTS),
+        SYMBOLS_SHIFTED(KeyboardId.ELEMENT_SYMBOLS_SHIFTED),
+        EMOJI(KeyboardId.ELEMENT_EMOJI_RECENTS),
         OTHER(-1);
 
         val mKeyboardId: Int
@@ -343,13 +343,13 @@ class KeyboardSwitcher private constructor() : SwitchActions {
             return KeyboardSwitchState.HIDDEN
         } else if (isShowingEmojiPalettes()) {
             return KeyboardSwitchState.EMOJI
-        } else if (isShowingKeyboardId(KeyboardId.Companion.ELEMENT_SYMBOLS_SHIFTED)) {
+        } else if (isShowingKeyboardId(KeyboardId.ELEMENT_SYMBOLS_SHIFTED)) {
             return KeyboardSwitchState.SYMBOLS_SHIFTED
         }
         return KeyboardSwitchState.OTHER
     }
 
-    fun onToggleKeyboard(@Nonnull toggleState: KeyboardSwitchState) {
+    fun onToggleKeyboard(toggleState: KeyboardSwitchState) {
         val currentState: KeyboardSwitchState = getKeyboardSwitchState()
         Log.w(TAG, "onToggleKeyboard() : Current = " + currentState + " : Toggle = " + toggleState)
         if (currentState == toggleState) {
@@ -373,11 +373,11 @@ class KeyboardSwitcher private constructor() : SwitchActions {
 
     // Future method for requesting an updating to the shift state.
     override fun requestUpdatingShiftState(autoCapsFlags: Int, recapitalizeMode: Int) {
-        if (SwitchActions.Companion.DEBUG_ACTION) {
+        if (SwitchActions.DEBUG_ACTION) {
             Log.d(
                 TAG, ("requestUpdatingShiftState: "
                         + " autoCapsFlags=" + CapsModeUtils.flagsToString(autoCapsFlags)
-                        + " recapitalizeMode=" + RecapitalizeStatus.Companion.modeToString(
+                        + " recapitalizeMode=" + RecapitalizeStatus.modeToString(
                     recapitalizeMode
                 ))
             )
@@ -387,7 +387,7 @@ class KeyboardSwitcher private constructor() : SwitchActions {
 
     // Implements {@link KeyboardState.SwitchActions}.
     override fun startDoubleTapShiftKeyTimer() {
-        if (SwitchActions.Companion.DEBUG_TIMER_ACTION) {
+        if (SwitchActions.DEBUG_TIMER_ACTION) {
             Log.d(TAG, "startDoubleTapShiftKeyTimer")
         }
         val keyboardView: MainKeyboardView? = getMainKeyboardView()
@@ -398,7 +398,7 @@ class KeyboardSwitcher private constructor() : SwitchActions {
 
     // Implements {@link KeyboardState.SwitchActions}.
     override fun cancelDoubleTapShiftKeyTimer() {
-        if (SwitchActions.Companion.DEBUG_TIMER_ACTION) {
+        if (SwitchActions.DEBUG_TIMER_ACTION) {
             Log.d(TAG, "setAlphabetKeyboard")
         }
         val keyboardView: MainKeyboardView? = getMainKeyboardView()
@@ -409,7 +409,7 @@ class KeyboardSwitcher private constructor() : SwitchActions {
 
     // Implements {@link KeyboardState.SwitchActions}.
     override fun isInDoubleTapShiftKeyTimeout(): Boolean {
-        if (SwitchActions.Companion.DEBUG_TIMER_ACTION) {
+        if (SwitchActions.DEBUG_TIMER_ACTION) {
             Log.d(TAG, "isInDoubleTapShiftKeyTimeout")
         }
         val keyboardView: MainKeyboardView? = getMainKeyboardView()
@@ -426,11 +426,11 @@ class KeyboardSwitcher private constructor() : SwitchActions {
         mState!!.onEvent(event, currentAutoCapsState, currentRecapitalizeState)
     }
 
-    fun isShowingKeyboardId(@Nonnull vararg keyboardIds: Int): Boolean {
+    fun isShowingKeyboardId(vararg keyboardIds: Int): Boolean {
         if (mKeyboardView == null || !mKeyboardView!!.isShown()) {
             return false
         }
-        val activeKeyboardId: Int = mKeyboardView.getKeyboard().mId.mElementId
+        val activeKeyboardId: Int = mKeyboardView?.keyboard?.mId?.mElementId!!
         for (keyboardId: Int in keyboardIds) {
             if (activeKeyboardId == keyboardId) {
                 return true
@@ -480,7 +480,7 @@ class KeyboardSwitcher private constructor() : SwitchActions {
         }
 
         updateKeyboardThemeAndContextThemeWrapper(
-            displayContext, KeyboardTheme.Companion.getKeyboardTheme(displayContext /* context */)!!
+            displayContext, KeyboardTheme.getKeyboardTheme(displayContext /* context */)!!
         )
         mCurrentInputView = LayoutInflater.from(mThemeContext).inflate(
             R.layout.input_view, null
@@ -504,13 +504,13 @@ class KeyboardSwitcher private constructor() : SwitchActions {
     fun getKeyboardShiftMode(): Int {
         val keyboard: Keyboard? = getKeyboard()
         if (keyboard == null) {
-            return WordComposer.Companion.CAPS_MODE_OFF
+            return WordComposer.CAPS_MODE_OFF
         }
         when (keyboard.mId!!.mElementId) {
-            KeyboardId.Companion.ELEMENT_ALPHABET_SHIFT_LOCKED, KeyboardId.Companion.ELEMENT_ALPHABET_SHIFT_LOCK_SHIFTED -> return WordComposer.Companion.CAPS_MODE_MANUAL_SHIFT_LOCKED
-            KeyboardId.Companion.ELEMENT_ALPHABET_MANUAL_SHIFTED -> return WordComposer.Companion.CAPS_MODE_MANUAL_SHIFTED
-            KeyboardId.Companion.ELEMENT_ALPHABET_AUTOMATIC_SHIFTED -> return WordComposer.Companion.CAPS_MODE_AUTO_SHIFTED
-            else -> return WordComposer.Companion.CAPS_MODE_OFF
+            KeyboardId.ELEMENT_ALPHABET_SHIFT_LOCKED, KeyboardId.ELEMENT_ALPHABET_SHIFT_LOCK_SHIFTED -> return WordComposer.CAPS_MODE_MANUAL_SHIFT_LOCKED
+            KeyboardId.ELEMENT_ALPHABET_MANUAL_SHIFTED -> return WordComposer.CAPS_MODE_MANUAL_SHIFTED
+            KeyboardId.ELEMENT_ALPHABET_AUTOMATIC_SHIFTED -> return WordComposer.CAPS_MODE_AUTO_SHIFTED
+            else -> return WordComposer.CAPS_MODE_OFF
         }
     }
 

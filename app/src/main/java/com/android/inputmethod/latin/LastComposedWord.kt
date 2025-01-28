@@ -91,7 +91,7 @@ class LastComposedWord(
 
         val NOT_A_COMPOSED_WORD: LastComposedWord = LastComposedWord(
             ArrayList<Event?>(), null, "", "",
-            NOT_A_SEPARATOR, null, WordComposer.Companion.CAPS_MODE_OFF
+            NOT_A_SEPARATOR, null, WordComposer.CAPS_MODE_OFF
         )
     }
 }

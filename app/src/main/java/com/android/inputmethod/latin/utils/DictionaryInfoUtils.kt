@@ -483,15 +483,15 @@ object DictionaryInfoUtils {
                     if (!isMainWordListId(wordListId)) {
                         continue
                     }
-                    val locale = LocaleUtils.constructLocaleFromString(localeString)!!
-                    val fileAddress: AssetFileAddress =
-                        AssetFileAddress.Companion.makeFromFile(dict)
+                    val locale = LocaleUtils.constructLocaleFromString(localeString)
+                    val fileAddress: AssetFileAddress? =
+                        AssetFileAddress.makeFromFile(dict)
                     val dictionaryInfo =
                         createDictionaryInfoFromFileAddress(fileAddress, locale)
                     // Protect against cases of a less-specific dictionary being found, like an
                     // en dictionary being used for an en_US locale. In this case, the en dictionary
                     // should be used for en_US but discounted for listing purposes.
-                    if (dictionaryInfo == null || dictionaryInfo.mLocale != locale) {
+                    if (dictionaryInfo.mLocale != locale) {
                         continue
                     }
                     addOrUpdateDictInfo(dictList, dictionaryInfo)
@@ -510,8 +510,8 @@ object DictionaryInfoUtils {
                 }
                 val locale = fileName.substring(0, index)
                 val dictionaryInfo = createDictionaryInfoForUnCachedFile(
-                    AssetFileAddress.Companion.makeFromFile(dictionaryFile),
-                    LocaleUtils.constructLocaleFromString(locale)!!
+                    AssetFileAddress.makeFromFile(dictionaryFile),
+                    LocaleUtils.constructLocaleFromString(locale)
                 )
                 if (dictionaryInfo != null) {
                     addOrUpdateDictInfo(dictList, dictionaryInfo)
@@ -523,7 +523,7 @@ object DictionaryInfoUtils {
         val resources = context.resources
         val assets = resources.assets
         for (localeString in assets.locales) {
-            val locale = LocaleUtils.constructLocaleFromString(localeString)!!
+            val locale = LocaleUtils.constructLocaleFromString(localeString)
             val resourceId =
                 getMainDictionaryResourceIdIfAvailableForLocale(
                     context.resources, locale
@@ -541,7 +541,7 @@ object DictionaryInfoUtils {
             // en dictionary being used for an en_US locale. In this case, the en dictionary
             // should be used for en_US but discounted for listing purposes.
             // TODO: Remove dictionaryInfo == null when the static LMs have the headers.
-            if (dictionaryInfo == null || dictionaryInfo.mLocale != locale) {
+            if (dictionaryInfo.mLocale != locale) {
                 continue
             }
             addOrUpdateDictInfo(dictList, dictionaryInfo)
@@ -549,11 +549,11 @@ object DictionaryInfoUtils {
 
         // Generate the dictionary information from  the enabled subtypes. This will not
         // overwrite the real records.
-        RichInputMethodManager.Companion.init(context)
+        RichInputMethodManager.init(context)
         val enabledSubtypes: List<InputMethodSubtype> =
-            RichInputMethodManager.Companion.getInstance().getMyEnabledInputMethodSubtypeList(true)
+            RichInputMethodManager.instance.getMyEnabledInputMethodSubtypeList(true)
         for (subtype in enabledSubtypes) {
-            val locale = LocaleUtils.constructLocaleFromString(subtype.locale)!!
+            val locale = LocaleUtils.constructLocaleFromString(subtype.locale)
             val dictionaryInfo = createDictionaryInfoFromLocale(locale)
             addOrUpdateDictInfo(dictList, dictionaryInfo)
         }

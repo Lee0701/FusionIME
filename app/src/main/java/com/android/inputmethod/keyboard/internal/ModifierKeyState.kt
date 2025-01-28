@@ -70,11 +70,11 @@ internal open class ModifierKeyState(name: String) {
     }
 
     companion object {
-        protected val TAG: String = ModifierKeyState::class.java.getSimpleName()
-        protected const val DEBUG: Boolean = false
+        val TAG: String = ModifierKeyState::class.java.getSimpleName()
+        const val DEBUG: Boolean = false
 
-        protected const val RELEASING: Int = 0
-        protected const val PRESSING: Int = 1
-        protected const val CHORDING: Int = 2
+        const val RELEASING: Int = 0
+        const val PRESSING: Int = 1
+        const val CHORDING: Int = 2
     }
 }

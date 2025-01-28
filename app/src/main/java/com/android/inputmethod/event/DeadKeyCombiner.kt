@@ -223,7 +223,7 @@ class DeadKeyCombiner : Combiner {
             if (event.isDead) {
                 // The event was a dead key. Start tracking it.
                 mDeadSequence.appendCodePoint(event.mCodePoint)
-                return Event.Companion.createConsumedEvent(event)
+                return Event.createConsumedEvent(event)
             }
             // Regular keystroke when not keeping track of a dead key. Simply said, there are
             // no dead keys at all in the current input, so this combiner has nothing to do and
@@ -248,13 +248,13 @@ class DeadKeyCombiner : Combiner {
                     mDeadSequence.codePointBefore(mDeadSequence.length)
                 )
                 mDeadSequence.setLength(trimIndex)
-                return Event.Companion.createConsumedEvent(event)
+                return Event.createConsumedEvent(event)
             }
             return event
         }
         if (event.isDead) {
             mDeadSequence.appendCodePoint(event.mCodePoint)
-            return Event.Companion.createConsumedEvent(event)
+            return Event.createConsumedEvent(event)
         }
         // Combine normally.
         val sb = StringBuilder()
@@ -298,7 +298,7 @@ class DeadKeyCombiner : Combiner {
             var lastEvent: Event? = null
             do {
                 val codePoint = Character.codePointBefore(text, index)
-                lastEvent = Event.Companion.createHardwareKeypressEvent(
+                lastEvent = Event.createHardwareKeypressEvent(
                     codePoint,
                     originalEvent.mKeyCode, lastEvent, false /* isKeyRepeat */
                 )

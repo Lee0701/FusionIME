@@ -44,10 +44,10 @@ class MoreSuggestions internal constructor(
     }
 
     class MoreSuggestionsParam : KeyboardParams() {
-        private val mWidths: IntArray = IntArray(SuggestedWords.Companion.MAX_SUGGESTIONS)
-        private val mRowNumbers: IntArray = IntArray(SuggestedWords.Companion.MAX_SUGGESTIONS)
-        private val mColumnOrders: IntArray = IntArray(SuggestedWords.Companion.MAX_SUGGESTIONS)
-        private val mNumColumnsInRow: IntArray = IntArray(SuggestedWords.Companion.MAX_SUGGESTIONS)
+        private val mWidths: IntArray = IntArray(SuggestedWords.MAX_SUGGESTIONS)
+        private val mRowNumbers: IntArray = IntArray(SuggestedWords.MAX_SUGGESTIONS)
+        private val mColumnOrders: IntArray = IntArray(SuggestedWords.MAX_SUGGESTIONS)
+        private val mNumColumnsInRow: IntArray = IntArray(SuggestedWords.MAX_SUGGESTIONS)
         private var mNumRows: Int = 0
         var mDivider: Drawable? = null
         var mDividerWidth: Int = 0
@@ -58,8 +58,9 @@ class MoreSuggestions internal constructor(
             res: Resources
         ): Int {
             clearKeys()
-            mDivider = res.getDrawable(R.drawable.more_suggestions_divider)
-            mDividerWidth = mDivider.getIntrinsicWidth()
+            val divider = res.getDrawable(R.drawable.more_suggestions_divider)
+            this.mDivider = divider
+            mDividerWidth = divider.getIntrinsicWidth()
             val padding: Float = res.getDimension(
                 R.dimen.config_more_suggestions_key_horizontal_padding
             )
@@ -69,18 +70,18 @@ class MoreSuggestions internal constructor(
             var rowStartIndex: Int = fromIndex
             val size: Int = min(
                 suggestedWords.size().toDouble(),
-                SuggestedWords.Companion.MAX_SUGGESTIONS.toDouble()
+                SuggestedWords.MAX_SUGGESTIONS.toDouble()
             ).toInt()
             while (index < size) {
                 val word: String?
                 if (isIndexSubjectToAutoCorrection(suggestedWords, index)) {
                     // INDEX_OF_AUTO_CORRECTION and INDEX_OF_TYPED_WORD got swapped.
-                    word = suggestedWords.getLabel(SuggestedWords.Companion.INDEX_OF_TYPED_WORD)
+                    word = suggestedWords.getLabel(SuggestedWords.INDEX_OF_TYPED_WORD)
                 } else {
                     word = suggestedWords.getLabel(index)
                 }
                 // TODO: Should take care of text x-scaling.
-                mWidths.get(index) = (TypefaceUtils.getStringWidth(
+                mWidths[index] = (TypefaceUtils.getStringWidth(
                     word!!, paint
                 ) + padding).toInt()
                 val numColumn: Int = index - rowStartIndex + 1
@@ -92,15 +93,15 @@ class MoreSuggestions internal constructor(
                     if ((row + 1) >= maxRow) {
                         break
                     }
-                    mNumColumnsInRow.get(row) = index - rowStartIndex
+                    mNumColumnsInRow[row] = index - rowStartIndex
                     rowStartIndex = index
                     row++
                 }
-                mColumnOrders.get(index) = index - rowStartIndex
-                mRowNumbers.get(index) = row
+                mColumnOrders[index] = index - rowStartIndex
+                mRowNumbers[index] = row
                 index++
             }
-            mNumColumnsInRow.get(row) = index - rowStartIndex
+            mNumColumnsInRow[row] = index - rowStartIndex
             mNumRows = row + 1
             mOccupiedWidth = max(
                 minWidth.toDouble(), calcurateMaxRowWidth(fromIndex, index).toDouble()
@@ -184,7 +185,7 @@ class MoreSuggestions internal constructor(
     }
 
     class Builder(context: Context, paneView: MoreSuggestionsView) :
-        KeyboardBuilder<MoreSuggestionsParam?>(context, MoreSuggestionsParam()) {
+        KeyboardBuilder<MoreSuggestionsParam>(context, MoreSuggestionsParam()) {
         private val mPaneView: MoreSuggestionsView
         private var mSuggestedWords: SuggestedWords? = null
         private var mFromIndex: Int = 0
@@ -224,9 +225,9 @@ class MoreSuggestions internal constructor(
                 val info: String?
                 if (isIndexSubjectToAutoCorrection(mSuggestedWords!!, index)) {
                     // INDEX_OF_AUTO_CORRECTION and INDEX_OF_TYPED_WORD got swapped.
-                    word = mSuggestedWords!!.getLabel(SuggestedWords.Companion.INDEX_OF_TYPED_WORD)
+                    word = mSuggestedWords!!.getLabel(SuggestedWords.INDEX_OF_TYPED_WORD)
                     info =
-                        mSuggestedWords!!.getDebugString(SuggestedWords.Companion.INDEX_OF_TYPED_WORD)
+                        mSuggestedWords!!.getDebugString(SuggestedWords.INDEX_OF_TYPED_WORD)
                 } else {
                     word = mSuggestedWords!!.getLabel(index)
                     info = mSuggestedWords!!.getDebugString(index)
@@ -252,9 +253,9 @@ class MoreSuggestions internal constructor(
         word: String?, info: String?, index: Int,
         params: MoreSuggestionsParam
     ) : Key(
-        word,  /* label */KeyboardIconsSet.Companion.ICON_UNDEFINED, Constants.CODE_OUTPUT_TEXT,
+        word,  /* label */KeyboardIconsSet.ICON_UNDEFINED, Constants.CODE_OUTPUT_TEXT,
         word,  /* outputText */info, 0,  /* labelFlags */
-        Key.Companion.BACKGROUND_TYPE_NORMAL,
+        Key.BACKGROUND_TYPE_NORMAL,
         params.getX(index), params.getY(index), params.getWidth(index),
         params.mDefaultRowHeight, params.mHorizontalGap, params.mVerticalGap
     ) {
@@ -290,7 +291,7 @@ class MoreSuggestions internal constructor(
             suggestedWords: SuggestedWords,
             index: Int
         ): Boolean {
-            return suggestedWords.mWillAutoCorrect && index == SuggestedWords.Companion.INDEX_OF_AUTO_CORRECTION
+            return suggestedWords.mWillAutoCorrect && index == SuggestedWords.INDEX_OF_AUTO_CORRECTION
         }
     }
 }

@@ -104,7 +104,7 @@ class AccountsSettingsFragment : SubScreenFragment() {
 
         if (ProductionFlags.IS_METRICS_LOGGING_SUPPORTED) {
             val enableMetricsLogging =
-                findPreference(Settings.Companion.PREF_ENABLE_METRICS_LOGGING)
+                findPreference(Settings.PREF_ENABLE_METRICS_LOGGING)
             val res = resources
             if (enableMetricsLogging != null) {
                 val enableMetricsLoggingTitle = res.getString(
@@ -113,7 +113,7 @@ class AccountsSettingsFragment : SubScreenFragment() {
                 enableMetricsLogging.title = enableMetricsLoggingTitle
             }
         } else {
-            removePreference(Settings.Companion.PREF_ENABLE_METRICS_LOGGING)
+            removePreference(Settings.PREF_ENABLE_METRICS_LOGGING, preferenceScreen)
         }
 
         if (!ProductionFlags.ENABLE_USER_HISTORY_DICTIONARY_SYNC) {
@@ -137,8 +137,8 @@ class AccountsSettingsFragment : SubScreenFragment() {
             mFragment.mManagedProfileBeingDetected.set(true)
         }
 
-        override fun doInBackground(vararg params: Void): Boolean {
-            return ManagedProfileUtils.Companion.getInstance().hasWorkProfile(mFragment.activity)
+        override fun doInBackground(vararg params: Void?): Boolean {
+            return ManagedProfileUtils.instance.hasWorkProfile(mFragment.activity)
         }
 
         override fun onPostExecute(hasWorkProfile: Boolean) {
@@ -172,7 +172,7 @@ class AccountsSettingsFragment : SubScreenFragment() {
                     if (accountsForLogin.size > 0) {
                         // TODO: Add addition of account.
                         createAccountPicker(
-                            accountsForLogin, this.signedInAccountName,
+                            accountsForLogin, this@AccountsSettingsFragment.signedInAccountName,
                             AccountChangedListener(null)
                         ).show()
                     }
@@ -200,10 +200,10 @@ class AccountsSettingsFragment : SubScreenFragment() {
      * Called only when ProductionFlag is turned off.
      */
     private fun removeSyncPreferences() {
-        removePreference(PREF_ACCCOUNT_SWITCHER)
-        removePreference(LocalSettingsConstants.PREF_ENABLE_CLOUD_SYNC)
-        removePreference(PREF_SYNC_NOW)
-        removePreference(PREF_CLEAR_SYNC_DATA)
+        removePreference(PREF_ACCCOUNT_SWITCHER, preferenceScreen)
+        removePreference(LocalSettingsConstants.PREF_ENABLE_CLOUD_SYNC, preferenceScreen)
+        removePreference(PREF_SYNC_NOW, preferenceScreen)
+        removePreference(PREF_CLEAR_SYNC_DATA, preferenceScreen)
     }
 
     override fun onResume() {
@@ -377,7 +377,7 @@ class AccountsSettingsFragment : SubScreenFragment() {
         private val mDependentPreference = dependentPreference
 
         override fun onClick(dialog: DialogInterface, which: Int) {
-            val oldAccount: String = this.signedInAccountName
+            val oldAccount: String? = this@AccountsSettingsFragment.signedInAccountName
             when (which) {
                 DialogInterface.BUTTON_POSITIVE -> {
                     val lv = (dialog as AlertDialog).listView
@@ -394,7 +394,7 @@ class AccountsSettingsFragment : SubScreenFragment() {
                 }
 
                 DialogInterface.BUTTON_NEUTRAL -> {
-                    AccountStateChangedListener.onAccountSignedOut(oldAccount)
+                    AccountStateChangedListener.onAccountSignedOut(oldAccount!!)
                     sharedPreferences
                         .edit()
                         .remove(LocalSettingsConstants.PREF_ACCOUNT_NAME)
@@ -409,7 +409,7 @@ class AccountsSettingsFragment : SubScreenFragment() {
      */
     internal inner class SyncNowListener : OnPreferenceClickListener {
         override fun onPreferenceClick(preference: Preference): Boolean {
-            AccountStateChangedListener.forceSync(this.signedInAccountName)
+            AccountStateChangedListener.forceSync(this@AccountsSettingsFragment.signedInAccountName)
             return true
         }
     }
@@ -429,7 +429,7 @@ class AccountsSettingsFragment : SubScreenFragment() {
                         override fun onClick(dialog: DialogInterface, which: Int) {
                             if (which == DialogInterface.BUTTON_POSITIVE) {
                                 AccountStateChangedListener.forceDelete(
-                                    this.signedInAccountName
+                                    this@AccountsSettingsFragment.signedInAccountName
                                 )
                             }
                         }
@@ -468,7 +468,7 @@ class AccountsSettingsFragment : SubScreenFragment() {
                                         LoginAccountUtils.getAccountsForLogin(context)
                                     createAccountPicker(
                                         accountsForLogin,
-                                        this.signedInAccountName,
+                                        this@AccountsSettingsFragment.signedInAccountName,
                                         AccountChangedListener(syncPreference)
                                     )
                                         .show()

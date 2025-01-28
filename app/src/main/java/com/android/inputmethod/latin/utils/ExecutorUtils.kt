@@ -86,7 +86,7 @@ object ExecutorUtils {
     }
 
     @UsedForTesting
-    fun chain(vararg runnables: Runnable?): Runnable {
+    fun chain(vararg runnables: Runnable): Runnable {
         return RunnableChain(*runnables)
     }
 
@@ -108,11 +108,11 @@ object ExecutorUtils {
     @UsedForTesting
     class RunnableChain(vararg runnables: Runnable) : Runnable {
         @get:UsedForTesting
-        val runnables: Array<Runnable>
+        var runnables: List<Runnable>
 
         init {
-            require(!(runnables == null || runnables.size == 0)) { "Attempting to construct an empty chain" }
-            this.runnables = runnables
+            require(runnables.isNotEmpty()) { "Attempting to construct an empty chain" }
+            this.runnables = runnables.toList()
         }
 
         override fun run() {

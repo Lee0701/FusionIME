@@ -44,13 +44,13 @@ class DebugSettingsFragment : SubScreenFragment(), OnPreferenceClickListener {
         super.onCreate(icicle)
         addPreferencesFromResource(R.xml.prefs_screen_debug)
 
-        if (!Settings.Companion.SHOULD_SHOW_LXX_SUGGESTION_UI) {
-            removePreference(DebugSettings.PREF_SHOULD_SHOW_LXX_SUGGESTION_UI)
+        if (!Settings.SHOULD_SHOW_LXX_SUGGESTION_UI) {
+            removePreference(DebugSettings.PREF_SHOULD_SHOW_LXX_SUGGESTION_UI, preferenceScreen)
         }
 
         val dictDumpPreferenceGroup =
             findPreference(PREF_KEY_DUMP_DICTS) as PreferenceGroup
-        for (dictName in DictionaryFacilitatorImpl.Companion.DICT_TYPE_TO_CLASS.keys) {
+        for (dictName in DictionaryFacilitatorImpl.DICT_TYPE_TO_CLASS.keys) {
             val pref: Preference = DictDumpPreference(activity, dictName)
             pref.onPreferenceClickListener = this
             dictDumpPreferenceGroup.addPreference(pref)
@@ -87,7 +87,7 @@ class DebugSettingsFragment : SubScreenFragment(), OnPreferenceClickListener {
             defaultKeyPreviewDismissEndScale
         )
         setupKeyboardHeight(
-            DebugSettings.PREF_KEYBOARD_HEIGHT_SCALE, SettingsValues.Companion.DEFAULT_SIZE_SCALE
+            DebugSettings.PREF_KEYBOARD_HEIGHT_SCALE, SettingsValues.DEFAULT_SIZE_SCALE
         )
 
         mServiceNeedsRestart = false
@@ -111,9 +111,9 @@ class DebugSettingsFragment : SubScreenFragment(), OnPreferenceClickListener {
         if (pref is DictDumpPreference) {
             val dictName = pref.mDictName
             val intent: Intent = Intent(
-                DictionaryDumpBroadcastReceiver.Companion.DICTIONARY_DUMP_INTENT_ACTION
+                DictionaryDumpBroadcastReceiver.DICTIONARY_DUMP_INTENT_ACTION
             )
-            intent.putExtra(DictionaryDumpBroadcastReceiver.Companion.DICTIONARY_NAME_KEY, dictName)
+            intent.putExtra(DictionaryDumpBroadcastReceiver.DICTIONARY_NAME_KEY, dictName)
             context.sendBroadcast(intent)
             return true
         }
@@ -127,7 +127,7 @@ class DebugSettingsFragment : SubScreenFragment(), OnPreferenceClickListener {
         }
     }
 
-    override fun onSharedPreferenceChanged(prefs: SharedPreferences, key: String) {
+    override fun onSharedPreferenceChanged(prefs: SharedPreferences, key: String?) {
         if (key == DebugSettings.PREF_DEBUG_MODE && mDebugMode != null) {
             mDebugMode!!.isChecked = prefs.getBoolean(
                 DebugSettings.PREF_DEBUG_MODE,
@@ -150,7 +150,7 @@ class DebugSettingsFragment : SubScreenFragment(), OnPreferenceClickListener {
         )
         if (!isDebugMode) {
             mDebugMode!!.title = version
-            mDebugMode.setSummary(null)
+            mDebugMode!!.setSummary(null)
         } else {
             mDebugMode!!.title = getString(R.string.prefs_debug_mode)
             mDebugMode!!.summary = version
@@ -183,7 +183,7 @@ class DebugSettingsFragment : SubScreenFragment(), OnPreferenceClickListener {
 
             override fun readValue(key: String?): Int {
                 return getPercentageFromValue(
-                    Settings.Companion.readKeyPreviewAnimationScale(
+                    Settings.readKeyPreviewAnimationScale(
                         prefs!!, key, defaultValue
                     )
                 )
@@ -219,7 +219,7 @@ class DebugSettingsFragment : SubScreenFragment(), OnPreferenceClickListener {
             }
 
             override fun readValue(key: String?): Int {
-                return Settings.Companion.readKeyPreviewAnimationDuration(
+                return Settings.readKeyPreviewAnimationDuration(
                     prefs!!, key, defaultValue
                 )
             }
@@ -260,7 +260,7 @@ class DebugSettingsFragment : SubScreenFragment(), OnPreferenceClickListener {
 
             override fun readValue(key: String?): Int {
                 return getPercentageFromValue(
-                    Settings.Companion.readKeyboardHeight(
+                    Settings.readKeyboardHeight(
                         prefs!!, defaultValue
                     )
                 )

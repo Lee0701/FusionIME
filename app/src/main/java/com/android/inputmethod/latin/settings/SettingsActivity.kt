@@ -71,7 +71,7 @@ class SettingsActivity : PreferenceActivity(), OnRequestPermissionsResultCallbac
         permissions: Array<String>,
         grantResults: IntArray
     ) {
-        PermissionsManager.Companion.get(this)!!
+        PermissionsManager.get(this)!!
             .onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 

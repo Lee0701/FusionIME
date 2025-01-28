@@ -173,7 +173,7 @@ open class KeyboardView @JvmOverloads constructor(
             R.styleable.Keyboard_Key, defStyle, R.style.KeyboardView
         )
         mDefaultKeyLabelFlags = keyAttr.getInt(R.styleable.Keyboard_Key_keyLabelFlags, 0)
-        keyVisualAttribute = KeyVisualAttributes.Companion.newInstance(keyAttr)
+        keyVisualAttribute = KeyVisualAttributes.newInstance(keyAttr)
         keyAttr.recycle()
 
         mPaint.setAntiAlias(true)
@@ -269,7 +269,7 @@ open class KeyboardView @JvmOverloads constructor(
         }
     }
 
-    private fun onDrawKeyboard(@Nonnull canvas: Canvas) {
+    private fun onDrawKeyboard(canvas: Canvas) {
         val keyboard: Keyboard? = keyboard
         if (keyboard == null) {
             return
@@ -288,7 +288,7 @@ open class KeyboardView @JvmOverloads constructor(
                 background.draw(canvas)
             }
             // Draw all keys.
-            for (key: Key in keyboard.getSortedKeys()) {
+            for (key: Key in keyboard.sortedKeys) {
                 onDrawKey(key, canvas, paint)
             }
         } else {
@@ -298,9 +298,9 @@ open class KeyboardView @JvmOverloads constructor(
                 }
                 if (background != null) {
                     // Need to redraw key's background on {@link #mOffscreenBuffer}.
-                    val x: Int = key.getX() + getPaddingLeft()
-                    val y: Int = key.getY() + getPaddingTop()
-                    mClipRect.set(x, y, x + key.getWidth(), y + key.getHeight())
+                    val x: Int = key.x + getPaddingLeft()
+                    val y: Int = key.y + getPaddingTop()
+                    mClipRect.set(x, y, x + key.width, y + key.height)
                     canvas.save()
                     canvas.clipRect(mClipRect)
                     canvas.drawColor(Color.BLACK, PorterDuff.Mode.CLEAR)
@@ -316,18 +316,18 @@ open class KeyboardView @JvmOverloads constructor(
     }
 
     private fun onDrawKey(
-        @Nonnull key: Key, @Nonnull canvas: Canvas,
-        @Nonnull paint: Paint
+        key: Key, canvas: Canvas,
+        paint: Paint
     ) {
-        val keyDrawX: Int = key.getDrawX() + getPaddingLeft()
-        val keyDrawY: Int = key.getY() + getPaddingTop()
+        val keyDrawX: Int = key.drawX + getPaddingLeft()
+        val keyDrawY: Int = key.y + getPaddingTop()
         canvas.translate(keyDrawX.toFloat(), keyDrawY.toFloat())
 
-        val attr: KeyVisualAttributes? = key.getVisualAttributes()
-        val params: KeyDrawParams = keyDrawParams.mayCloneAndUpdateParams(key.getHeight(), attr)
+        val attr: KeyVisualAttributes? = key.visualAttributes
+        val params: KeyDrawParams = keyDrawParams.mayCloneAndUpdateParams(key.height, attr)
         params.mAnimAlpha = Constants.Color.ALPHA_OPAQUE
 
-        if (!key.isSpacer()) {
+        if (!key.isSpacer) {
             val background: Drawable = key.selectBackgroundDrawable(
                 mKeyBackground!!, mFunctionalKeyBackground, mSpacebarBackground
             )
@@ -342,11 +342,11 @@ open class KeyboardView @JvmOverloads constructor(
 
     // Draw key background.
     protected fun onDrawKeyBackground(
-        @Nonnull key: Key, @Nonnull canvas: Canvas,
-        @Nonnull background: Drawable
+        key: Key, canvas: Canvas,
+        background: Drawable
     ) {
-        val keyWidth: Int = key.getDrawWidth()
-        val keyHeight: Int = key.getHeight()
+        val keyWidth: Int = key.drawWidth
+        val keyHeight: Int = key.height
         val bgWidth: Int
         val bgHeight: Int
         val bgX: Int
@@ -382,11 +382,11 @@ open class KeyboardView @JvmOverloads constructor(
 
     // Draw key top visuals.
     protected open fun onDrawKeyTopVisuals(
-        @Nonnull key: Key, @Nonnull canvas: Canvas,
-        @Nonnull paint: Paint, @Nonnull params: KeyDrawParams
+        key: Key, canvas: Canvas,
+        paint: Paint, params: KeyDrawParams
     ) {
-        val keyWidth: Int = key.getDrawWidth()
-        val keyHeight: Int = key.getHeight()
+        val keyWidth: Int = key.drawWidth
+        val keyHeight: Int = key.height
         val centerX: Float = keyWidth * 0.5f
         val centerY: Float = keyHeight * 0.5f
 
@@ -398,7 +398,7 @@ open class KeyboardView @JvmOverloads constructor(
             key.getIcon(keyboard.mIconsSet, params.mAnimAlpha)
         var labelX: Float = centerX
         var labelBaseline: Float = centerY
-        val label: String? = key.getLabel()
+        val label: String? = key.label
         if (label != null) {
             paint.setTypeface(key.selectTypeface(params))
             paint.setTextSize(key.selectTextSize(params).toFloat())
@@ -409,7 +409,7 @@ open class KeyboardView @JvmOverloads constructor(
             labelBaseline = centerY + labelCharHeight / 2.0f
 
             // Horizontal label text alignment
-            if (key.isAlignLabelOffCenter()) {
+            if (key.isAlignLabelOffCenter) {
                 // The label is placed off center of the key. Used mainly on "phone number" layout.
                 labelX = centerX + params.mLabelOffCenterRatio * labelCharWidth
                 paint.setTextAlign(Align.LEFT)
@@ -434,7 +434,7 @@ open class KeyboardView @JvmOverloads constructor(
                 }
             }
 
-            if (key.isEnabled()) {
+            if (key.isEnabled) {
                 paint.setColor(key.selectTextColor(params))
                 // Set a drop shadow for the text if the shadow radius is positive value.
                 if (mKeyTextShadowRadius > 0.0f) {
@@ -455,7 +455,7 @@ open class KeyboardView @JvmOverloads constructor(
         }
 
         // Draw hint label.
-        val hintLabel: String? = key.getHintLabel()
+        val hintLabel: String? = key.hintLabel
         if (hintLabel != null) {
             paint.setTextSize(key.selectHintTextSize(params).toFloat())
             paint.setColor(key.selectHintTextColor(params))
@@ -503,7 +503,7 @@ open class KeyboardView @JvmOverloads constructor(
         // Draw key icon.
         if (label == null && icon != null) {
             val iconWidth: Int
-            if (key.getCode() == Constants.CODE_SPACE && icon is NinePatchDrawable) {
+            if (key.code == Constants.CODE_SPACE && icon is NinePatchDrawable) {
                 iconWidth = (keyWidth * mSpacebarIconWidthRatio).toInt()
             } else {
                 iconWidth =
@@ -511,7 +511,7 @@ open class KeyboardView @JvmOverloads constructor(
             }
             val iconHeight: Int = icon.getIntrinsicHeight()
             val iconY: Int
-            if (key.isAlignIconToBottom()) {
+            if (key.isAlignIconToBottom) {
                 iconY = keyHeight - iconHeight
             } else {
                 iconY = (keyHeight - iconHeight) / 2 // Align vertically center.
@@ -520,21 +520,21 @@ open class KeyboardView @JvmOverloads constructor(
             drawIcon(canvas, icon, iconX, iconY, iconWidth, iconHeight)
         }
 
-        if (key.hasPopupHint() && key.getMoreKeys() != null) {
+        if (key.hasPopupHint() && key.moreKeys != null) {
             drawKeyPopupHint(key, canvas, paint, params)
         }
     }
 
     // Draw popup hint "..." at the bottom right corner of the key.
     protected fun drawKeyPopupHint(
-        @Nonnull key: Key, @Nonnull canvas: Canvas,
-        @Nonnull paint: Paint, @Nonnull params: KeyDrawParams
+        key: Key, canvas: Canvas,
+        paint: Paint, params: KeyDrawParams
     ) {
         if (TextUtils.isEmpty(mKeyPopupHintLetter)) {
             return
         }
-        val keyWidth: Int = key.getDrawWidth()
-        val keyHeight: Int = key.getHeight()
+        val keyWidth: Int = key.drawWidth
+        val keyHeight: Int = key.height
 
         paint.setTypeface(params.mTypeface)
         paint.setTextSize(params.mHintLetterSize.toFloat())
@@ -584,9 +584,9 @@ open class KeyboardView @JvmOverloads constructor(
             return
         }
         mInvalidatedKeys.add(key)
-        val x: Int = key.getX() + getPaddingLeft()
-        val y: Int = key.getY() + getPaddingTop()
-        invalidate(x, y, x + key.getWidth(), y + key.getHeight())
+        val x: Int = key.x + getPaddingLeft()
+        val y: Int = key.y + getPaddingTop()
+        invalidate(x, y, x + key.width, y + key.height)
     }
 
     override fun onDetachedFromWindow() {
@@ -604,7 +604,7 @@ open class KeyboardView @JvmOverloads constructor(
         // The maximum key label width in the proportion to the key width.
         private const val MAX_LABEL_RATIO: Float = 0.90f
 
-        private fun blendAlpha(@Nonnull paint: Paint, alpha: Int) {
+        private fun blendAlpha(paint: Paint, alpha: Int) {
             val color: Int = paint.getColor()
             paint.setARGB(
                 (paint.getAlpha() * alpha) / Constants.Color.ALPHA_OPAQUE,
@@ -612,8 +612,8 @@ open class KeyboardView @JvmOverloads constructor(
             )
         }
 
-        protected fun drawIcon(
-            @Nonnull canvas: Canvas, @Nonnull icon: Drawable,
+        fun drawIcon(
+            canvas: Canvas, icon: Drawable,
             x: Int, y: Int, width: Int, height: Int
         ) {
             canvas.translate(x.toFloat(), y.toFloat())

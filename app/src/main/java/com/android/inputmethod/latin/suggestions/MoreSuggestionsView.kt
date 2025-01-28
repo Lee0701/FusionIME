@@ -38,7 +38,7 @@ class MoreSuggestionsView @JvmOverloads constructor(
 ) :
     MoreKeysKeyboardView(context, attrs, defStyle) {
     abstract class MoreSuggestionsListener : KeyboardActionListener.Adapter() {
-        abstract fun onSuggestionSelected(info: SuggestedWordInfo?)
+        abstract fun onSuggestionSelected(info: SuggestedWordInfo)
     }
 
     var isInModalMode: Boolean = false
@@ -48,7 +48,7 @@ class MoreSuggestionsView @JvmOverloads constructor(
         get() = super.keyboard
         // TODO: Remove redundant override method.
         set(keyboard) {
-            super.setKeyboard(keyboard)
+            super.keyboard = keyboard
             isInModalMode = false
             // With accessibility mode off, {@link #mAccessibilityDelegate} is set to null at the
             // above {@link MoreKeysKeyboardView#setKeyboard(Keyboard)} call.
@@ -63,7 +63,7 @@ class MoreSuggestionsView @JvmOverloads constructor(
 
     override val defaultCoordX: Int
         get() {
-            val pane: MoreSuggestions? = getKeyboard() as MoreSuggestions?
+            val pane: MoreSuggestions? = keyboard as MoreSuggestions?
             return pane!!.mOccupiedWidth / 2
         }
 
@@ -76,7 +76,7 @@ class MoreSuggestionsView @JvmOverloads constructor(
         // Set vertical correction to zero (Reset more keys keyboard sliding allowance
         // {@link R#dimen.config_more_keys_keyboard_slide_allowance}).
         mKeyDetector.setKeyboard(
-            getKeyboard(),
+            keyboard!!,
             -getPaddingLeft().toFloat(),
             -getPaddingTop().toFloat()
         )
@@ -90,7 +90,7 @@ class MoreSuggestionsView @JvmOverloads constructor(
             )
             return
         }
-        val keyboard: Keyboard? = getKeyboard()
+        val keyboard: Keyboard? = this.keyboard
         if (keyboard !is MoreSuggestions) {
             Log.e(
                 TAG, "Expected keyboard is MoreSuggestions, but found "

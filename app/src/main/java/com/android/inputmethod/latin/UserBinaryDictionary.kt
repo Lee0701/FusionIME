@@ -39,9 +39,9 @@ class UserBinaryDictionary protected constructor(
     dictFile: File?, name: String
 ) : ExpandableBinaryDictionary(
     context,
-    ExpandableBinaryDictionary.Companion.getDictName(name, locale, dictFile),
+    ExpandableBinaryDictionary.getDictName(name, locale, dictFile),
     locale,
-    Dictionary.Companion.TYPE_USER,
+    Dictionary.TYPE_USER,
     dictFile
 ) {
     private var mObserver: ContentObserver?
@@ -76,7 +76,7 @@ class UserBinaryDictionary protected constructor(
                 setNeedsToRecreate()
             }
         }
-        cres.registerContentObserver(Words.CONTENT_URI, true, mObserver)
+        cres.registerContentObserver(Words.CONTENT_URI, true, mObserver!!)
         reloadDictionaryIfRequired()
     }
 
@@ -110,7 +110,7 @@ class UserBinaryDictionary protected constructor(
             // 0 | ""             | ["en", "US", "POSIX"]
             // 1 | "en_"          | ["en", "US", "POSIX"]
             // 2 | "en_US_"       | ["en", "en_US", "POSIX"]
-            localeElements.get(i) = localeSoFar + localeElements.get(i)
+            localeElements[i] = localeSoFar + localeElements.get(i)
             localeSoFar = localeElements.get(i) + "_"
             // i | request
             // 0 | "(locale is NULL)"
@@ -129,7 +129,7 @@ class UserBinaryDictionary protected constructor(
             // The following creates an array with one more (null) position
             val localeElementsWithMoreRestrictiveLocalesIncluded: Array<String?> =
                 localeElements.copyOf(length + 1)
-            localeElementsWithMoreRestrictiveLocalesIncluded.get(length) =
+            localeElementsWithMoreRestrictiveLocalesIncluded[length] =
                 localeElements.get(length - 1) + "_%"
             requestArguments = localeElementsWithMoreRestrictiveLocalesIncluded
             // If for example localeElements = ["en"]
@@ -177,12 +177,12 @@ class UserBinaryDictionary protected constructor(
                 val frequency: Int = cursor.getInt(indexFrequency)
                 val adjustedFrequency: Int = scaleFrequencyFromDefaultToLatinIme(frequency)
                 // Safeguard against adding really long words.
-                if (word.length <= ExpandableBinaryDictionary.Companion.MAX_WORD_LENGTH) {
+                if (word.length <= MAX_WORD_LENGTH) {
                     runGCIfRequiredLocked(true /* mindsBlockByGC */)
                     addUnigramLocked(
                         word, adjustedFrequency, false,  /* isNotAWord */
                         false,  /* isPossiblyOffensive */
-                        BinaryDictionary.Companion.NOT_A_VALID_TIMESTAMP
+                        BinaryDictionary.NOT_A_VALID_TIMESTAMP
                     )
                 }
                 cursor.moveToNext()

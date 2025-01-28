@@ -28,7 +28,7 @@ class GestureEnabler {
         mShouldHandleGesture = mMainDictionaryAvailable
                 && mGestureHandlingEnabledByInputField
                 && mGestureHandlingEnabledByUser
-                && !AccessibilityUtils.Companion.getInstance().isTouchExplorationEnabled()
+                && !AccessibilityUtils.instance.isTouchExplorationEnabled()
     }
 
     // Note that this method is called from a non-UI thread.

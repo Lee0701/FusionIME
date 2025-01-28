@@ -62,7 +62,7 @@ import java.util.TreeSet
  */
 object UpdateHandler {
     val TAG: String = "DictionaryProvider:" + UpdateHandler::class.java.getSimpleName()
-    private val DEBUG: Boolean = DictionaryProvider.Companion.DEBUG
+    private val DEBUG: Boolean = DictionaryProvider.DEBUG
 
     // Used to prevent trying to read the id of the downloaded file before it is written
     val sSharedIdProtector: Any = Any()
@@ -128,7 +128,7 @@ object UpdateHandler {
         context: Context, uri: String?,
         downloadId: Long
     ) {
-        MetadataDbHelper.Companion.registerMetadataDownloadId(context, uri, downloadId)
+        MetadataDbHelper.registerMetadataDownloadId(context, uri, downloadId)
     }
 
     const val DOWNLOAD_OVER_METERED_SETTING_UNKNOWN: Int = 0
@@ -175,14 +175,14 @@ object UpdateHandler {
     fun tryUpdate(context: Context): Boolean {
         // TODO: loop through all clients instead of only doing the default one.
         val uris: TreeSet<String?> = TreeSet()
-        val cursor: Cursor = MetadataDbHelper.Companion.queryClientIds(context)
+        val cursor: Cursor = MetadataDbHelper.queryClientIds(context)
         if (null == cursor) return false
         try {
             if (!cursor.moveToFirst()) return false
             do {
                 val clientId: String = cursor.getString(0)
                 val metadataUri: String? =
-                    MetadataDbHelper.Companion.getMetadataUriAsString(context, clientId)
+                    MetadataDbHelper.getMetadataUriAsString(context, clientId)
                 PrivateLog.log("Update for clientId " + DebugLogUtils.s(clientId))
                 DebugLogUtils.l("Update for clientId", clientId, " which uses URI ", metadataUri)
                 uris.add(metadataUri)
@@ -236,7 +236,7 @@ object UpdateHandler {
         val manager: DownloadManagerWrapper = DownloadManagerWrapper(context)
         if (maybeCancelUpdateAndReturnIfStillRunning(
                 context, metadataUri, manager,
-                DictionaryService.Companion.NO_CANCEL_DOWNLOAD_PERIOD_MILLIS
+                DictionaryService.NO_CANCEL_DOWNLOAD_PERIOD_MILLIS
             )
         ) {
             // We already have a recent download in progress. Don't register a new download.
@@ -274,7 +274,7 @@ object UpdateHandler {
     ): Boolean {
         synchronized(sSharedIdProtector) {
             val metadataDownloadIdAndStartDate: DownloadIdAndStartDate? =
-                MetadataDbHelper.Companion.getMetadataDownloadIdAndStartDateForURI(
+                MetadataDbHelper.getMetadataDownloadIdAndStartDateForURI(
                     context,
                     metadataUri
                 )
@@ -308,7 +308,7 @@ object UpdateHandler {
     fun cancelUpdate(context: Context, clientId: String?) {
         val manager: DownloadManagerWrapper = DownloadManagerWrapper(context)
         val metadataUri: String? =
-            MetadataDbHelper.Companion.getMetadataUriAsString(context, clientId)
+            MetadataDbHelper.getMetadataUriAsString(context, clientId)
         maybeCancelUpdateAndReturnIfStillRunning(context, metadataUri, manager, 0 /* graceTime */)
     }
 
@@ -339,7 +339,7 @@ object UpdateHandler {
         synchronized(sSharedIdProtector) {
             downloadId = manager.enqueue(request)
             Log.i(TAG, "registerDownloadRequest() : DownloadId = " + downloadId)
-            MetadataDbHelper.Companion.markEntryAsDownloading(db, id, version, downloadId)
+            MetadataDbHelper.markEntryAsDownloading(db, id, version, downloadId)
         }
         return downloadId
     }
@@ -394,7 +394,7 @@ object UpdateHandler {
         // Get and check the ID of the file we are waiting for, compare them to downloaded ones
         synchronized(sSharedIdProtector) {
             val downloadRecords: ArrayList<DownloadRecord> =
-                MetadataDbHelper.Companion.getDownloadRecordsForDownloadId(
+                MetadataDbHelper.getDownloadRecordsForDownloadId(
                     context,
                     downloadInfo.mDownloadId
                 )
@@ -408,7 +408,7 @@ object UpdateHandler {
             }
             if (hasMetadata) {
                 writeMetadataDownloadId(context, downloadInfo.mUri, NOT_AN_ID.toLong())
-                MetadataDbHelper.Companion.saveLastUpdateTimeOfUri(context, downloadInfo.mUri)
+                MetadataDbHelper.saveLastUpdateTimeOfUri(context, downloadInfo.mUri)
             }
             return downloadRecords
         }
@@ -464,7 +464,7 @@ object UpdateHandler {
                 } else {
                     Log.i(TAG, "downloadFinished() : WordList " + resultMessage)
                     val db: SQLiteDatabase =
-                        MetadataDbHelper.Companion.getDb(context, record.mClientId)
+                        MetadataDbHelper.getDb(context, record.mClientId)
                     publishUpdateWordListCompleted(
                         context, downloadSuccessful, fileId,
                         db,
@@ -520,7 +520,7 @@ object UpdateHandler {
                 )
                 actions.execute(context, LogProblemReporter(TAG))
             } else {
-                MetadataDbHelper.Companion.deleteDownloadingEntry(db, fileId)
+                MetadataDbHelper.deleteDownloadingEntry(db, fileId)
             }
         }
         // See comment above about #linkedCopyOfLists
@@ -529,7 +529,7 @@ object UpdateHandler {
         )) {
             listener.wordListDownloadFinished(
                 downloadedFileRecord.getAsString(
-                    MetadataDbHelper.Companion.WORDLISTID_COLUMN
+                    MetadataDbHelper.WORDLISTID_COLUMN
                 ), downloadSuccessful
             )
         }
@@ -565,9 +565,9 @@ object UpdateHandler {
             } else {
                 DebugLogUtils.l("Data D/L'd is a word list")
                 val wordListStatus: Int = downloadRecord.mAttributes!!.getAsInteger(
-                    MetadataDbHelper.Companion.STATUS_COLUMN
+                    MetadataDbHelper.STATUS_COLUMN
                 )
-                if (MetadataDbHelper.Companion.STATUS_DOWNLOADING == wordListStatus) {
+                if (MetadataDbHelper.STATUS_DOWNLOADING == wordListStatus) {
                     // #handleWordList() closes its InputStream argument
                     handleWordList(
                         context, ParcelFileDescriptor.AutoCloseInputStream(
@@ -633,7 +633,7 @@ object UpdateHandler {
         clientId: String?
     ) {
         DebugLogUtils.l("Entering handleMetadata")
-        val newMetadata: List<WordListMetadata?>
+        val newMetadata: List<WordListMetadata>
         val reader: InputStreamReader = InputStreamReader(stream)
         try {
             // According to the doc InputStreamReader buffers, so no need to add a buffering layer
@@ -671,20 +671,20 @@ object UpdateHandler {
 
         DebugLogUtils.l(
             "Downloaded a new word list :", downloadRecord.mAttributes!!.getAsString(
-                MetadataDbHelper.Companion.DESCRIPTION_COLUMN
+                MetadataDbHelper.DESCRIPTION_COLUMN
             ), "for", downloadRecord.mClientId
         )
         PrivateLog.log(
             ("Downloaded a new word list with description : "
-                    + downloadRecord.mAttributes.getAsString(MetadataDbHelper.Companion.DESCRIPTION_COLUMN)
+                    + downloadRecord.mAttributes.getAsString(MetadataDbHelper.DESCRIPTION_COLUMN)
                     + " for " + downloadRecord.mClientId)
         )
 
         val locale: String =
-            downloadRecord.mAttributes.getAsString(MetadataDbHelper.Companion.LOCALE_COLUMN)
+            downloadRecord.mAttributes.getAsString(MetadataDbHelper.LOCALE_COLUMN)
         val destinationFile: String = getTempFileName(context, locale)
         downloadRecord.mAttributes.put(
-            MetadataDbHelper.Companion.LOCAL_FILENAME_COLUMN,
+            MetadataDbHelper.LOCAL_FILENAME_COLUMN,
             destinationFile
         )
 
@@ -716,13 +716,13 @@ object UpdateHandler {
             return  // We can't compute the checksum anyway, so return and hope for the best
         }
         if (md5sum != downloadRecord.mAttributes.getAsString(
-                MetadataDbHelper.Companion.CHECKSUM_COLUMN
+                MetadataDbHelper.CHECKSUM_COLUMN
             )
         ) {
             context.deleteFile(destinationFile)
             throw BadFormatException(
                 ("MD5 checksum check failed : \"" + md5sum + "\" <> \""
-                        + downloadRecord.mAttributes.getAsString(MetadataDbHelper.Companion.CHECKSUM_COLUMN)
+                        + downloadRecord.mAttributes.getAsString(MetadataDbHelper.CHECKSUM_COLUMN)
                         + "\"")
             )
         }
@@ -809,13 +809,13 @@ object UpdateHandler {
      */
     private fun compareMetadataForUpgrade(
         context: Context?,
-        clientId: String?, from: List<WordListMetadata?>?,
-        to: List<WordListMetadata?>?
+        clientId: String?, from: List<WordListMetadata>?,
+        to: List<WordListMetadata>?
     ): ActionBatch {
         val actions: ActionBatch = ActionBatch()
         // Upgrade existing word lists
         DebugLogUtils.l("Comparing dictionaries")
-        val wordListIds: MutableSet<String?> = TreeSet()
+        val wordListIds: MutableSet<String> = TreeSet()
         // TODO: Can these be null?
         val fromList: List<WordListMetadata> = if ((from == null))
             ArrayList()
@@ -867,7 +867,7 @@ object UpdateHandler {
                 // the record will be removed when the file is actually deleted.
                 actions.add(ForgetAction(clientId, currentInfo, false))
             } else {
-                val db: SQLiteDatabase = MetadataDbHelper.Companion.getDb(context, clientId)
+                val db: SQLiteDatabase = MetadataDbHelper.getDb(context, clientId)
                 if (newInfo.mVersion == currentInfo.mVersion) {
                     if (TextUtils.equals(newInfo.mRemoteFilename, currentInfo.mRemoteFilename)) {
                         // If the dictionary url hasn't changed, we should preserve the retryCount.
@@ -880,15 +880,15 @@ object UpdateHandler {
                     // If it's a new version, it's a different entry in the database. Make it
                     // available, and if it's installed, also start the download.
                     val values: ContentValues? =
-                        MetadataDbHelper.Companion.getContentValuesByWordListId(
+                        MetadataDbHelper.getContentValuesByWordListId(
                             db,
                             currentInfo.mId, currentInfo.mVersion
                         )
                     val status: Int =
-                        values!!.getAsInteger(MetadataDbHelper.Companion.STATUS_COLUMN)
+                        values!!.getAsInteger(MetadataDbHelper.STATUS_COLUMN)
                     actions.add(MakeAvailableAction(clientId, newInfo))
-                    if (status == MetadataDbHelper.Companion.STATUS_INSTALLED
-                        || status == MetadataDbHelper.Companion.STATUS_DISABLED
+                    if (status == MetadataDbHelper.STATUS_INSTALLED
+                        || status == MetadataDbHelper.STATUS_DISABLED
                     ) {
                         actions.add(StartDownloadAction(clientId, newInfo))
                     } else {
@@ -920,9 +920,9 @@ object UpdateHandler {
      */
     fun computeUpgradeTo(
         context: Context?, clientId: String?,
-        newMetadata: List<WordListMetadata?>?
+        newMetadata: List<WordListMetadata>?
     ): ActionBatch {
-        val currentMetadata: List<WordListMetadata?> =
+        val currentMetadata: List<WordListMetadata> =
             MetadataHandler.getCurrentMetadata(context, clientId)
         return compareMetadataForUpgrade(context, clientId, currentMetadata, newMetadata)
     }
@@ -952,7 +952,7 @@ object UpdateHandler {
                     + " : WordListId = " + wordlistId)
         )
         val idArray: Array<String> =
-            wordlistId.split(DictionaryProvider.Companion.ID_CATEGORY_SEPARATOR.toRegex())
+            wordlistId.split(DictionaryProvider.ID_CATEGORY_SEPARATOR.toRegex())
                 .dropLastWhile { it.isEmpty() }.toTypedArray()
         // If we have a new-format dictionary id (category:manual_id), then use the
         // specified category. Otherwise, it is a main dictionary, so force the
@@ -972,11 +972,11 @@ object UpdateHandler {
             return
         }
 
-        val db: SQLiteDatabase = MetadataDbHelper.Companion.getDb(context, clientId)
+        val db: SQLiteDatabase = MetadataDbHelper.getDb(context, clientId)
         val installCandidate: ContentValues? =
-            MetadataDbHelper.Companion.getContentValuesOfLatestAvailableWordlistById(db, wordlistId)
-        if (MetadataDbHelper.Companion.STATUS_AVAILABLE
-            != installCandidate!!.getAsInteger(MetadataDbHelper.Companion.STATUS_COLUMN)
+            MetadataDbHelper.getContentValuesOfLatestAvailableWordlistById(db, wordlistId)
+        if (MetadataDbHelper.STATUS_AVAILABLE
+            != installCandidate!!.getAsInteger(MetadataDbHelper.STATUS_COLUMN)
         ) {
             // If it's not "AVAILABLE", we want to stop now. Because candidates for auto-install
             // are lists that we know are available, but we also know have never been installed.
@@ -997,12 +997,12 @@ object UpdateHandler {
         // change the shared preferences. So there is no way for a word list that has been
         // auto-installed once to get auto-installed again, and that's what we want.
         val actions: ActionBatch = ActionBatch()
-        val metadata: WordListMetadata = WordListMetadata.Companion.createFromContentValues(
+        val metadata: WordListMetadata = WordListMetadata.createFromContentValues(
             installCandidate
         )
         actions.add(StartDownloadAction(clientId, metadata))
         val localeString: String =
-            installCandidate.getAsString(MetadataDbHelper.Companion.LOCALE_COLUMN)
+            installCandidate.getAsString(MetadataDbHelper.LOCALE_COLUMN)
 
         // We are in a content provider: we can't do any UI at all. We have to defer the displaying
         // itself to the service. Also, we only display this when the user does not have a
@@ -1015,8 +1015,8 @@ object UpdateHandler {
         if (deviceProvisioned) {
             val intent: Intent = Intent()
             intent.setClass(context, DictionaryService::class.java)
-            intent.setAction(DictionaryService.Companion.SHOW_DOWNLOAD_TOAST_INTENT_ACTION)
-            intent.putExtra(DictionaryService.Companion.LOCALE_INTENT_ARGUMENT, localeString)
+            intent.setAction(DictionaryService.SHOW_DOWNLOAD_TOAST_INTENT_ACTION)
+            intent.putExtra(DictionaryService.LOCALE_INTENT_ARGUMENT, localeString)
             context.startService(intent)
         } else {
             Log.i(TAG, "installIfNeverRequested() : Don't show download toast")
@@ -1057,11 +1057,11 @@ object UpdateHandler {
         if (null == wordListMetaData) return
 
         val actions: ActionBatch = ActionBatch()
-        if (MetadataDbHelper.Companion.STATUS_DISABLED == status
-            || MetadataDbHelper.Companion.STATUS_DELETING == status
+        if (MetadataDbHelper.STATUS_DISABLED == status
+            || MetadataDbHelper.STATUS_DELETING == status
         ) {
             actions.add(EnableAction(clientId, wordListMetaData))
-        } else if (MetadataDbHelper.Companion.STATUS_AVAILABLE == status) {
+        } else if (MetadataDbHelper.STATUS_AVAILABLE == status) {
             actions.add(StartDownloadAction(clientId, wordListMetaData))
         } else {
             Log.e(TAG, "Unexpected state of the word list for markAsUsed : " + status)
@@ -1173,8 +1173,8 @@ object UpdateHandler {
         context: Context?, clientId: String?,
         wordlistId: String?, version: Int
     ) {
-        val isRetryPossible: Boolean = MetadataDbHelper.Companion.maybeMarkEntryAsRetrying(
-            MetadataDbHelper.Companion.getDb(context, clientId), wordlistId, version
+        val isRetryPossible: Boolean = MetadataDbHelper.maybeMarkEntryAsRetrying(
+            MetadataDbHelper.getDb(context, clientId), wordlistId, version
         )
 
         if (isRetryPossible) {
@@ -1195,8 +1195,8 @@ object UpdateHandler {
             if (DEBUG) {
                 Log.d(TAG, "Retries for wordlist exhausted, deleting the wordlist from table.")
             }
-            MetadataDbHelper.Companion.deleteEntry(
-                MetadataDbHelper.Companion.getDb(context, clientId),
+            MetadataDbHelper.deleteEntry(
+                MetadataDbHelper.getDb(context, clientId),
                 wordlistId, version
             )
         }

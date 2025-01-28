@@ -15,6 +15,7 @@
  */
 package com.android.inputmethod.latin
 
+import android.annotation.SuppressLint
 import android.content.res.Resources
 import android.util.Log
 import android.util.Pair
@@ -27,10 +28,11 @@ import javax.annotation.Nonnull
 /**
  * A class for detecting Emoji-Alt physical key.
  */
+@SuppressLint("LongLogTag")
 internal class EmojiAltPhysicalKeyDetector(@Nonnull resources: Resources) {
     private val mHotKeysList: MutableList<EmojiHotKeys>
 
-    private class HotKeySet : HashSet<Pair<Int?, Int?>?>()
+    private class HotKeySet : HashSet<Pair<Int, Int>>()
 
     private abstract inner class EmojiHotKeys(name: String, keySet: HotKeySet) {
         private val mName: String
@@ -121,7 +123,7 @@ internal class EmojiAltPhysicalKeyDetector(@Nonnull resources: Resources) {
         )
         val emojiHotKeys: EmojiHotKeys = object : EmojiHotKeys("emoji", emojiSwitchSet) {
             override fun action() {
-                val switcher: KeyboardSwitcher = KeyboardSwitcher.Companion.getInstance()
+                val switcher: KeyboardSwitcher = KeyboardSwitcher.getInstance()
                 switcher.onToggleKeyboard(KeyboardSwitchState.EMOJI)
             }
         }
@@ -132,7 +134,7 @@ internal class EmojiAltPhysicalKeyDetector(@Nonnull resources: Resources) {
         )
         val symbolsHotKeys: EmojiHotKeys = object : EmojiHotKeys("symbols", symbolsSwitchSet) {
             override fun action() {
-                val switcher: KeyboardSwitcher = KeyboardSwitcher.Companion.getInstance()
+                val switcher: KeyboardSwitcher = KeyboardSwitcher.getInstance()
                 switcher.onToggleKeyboard(KeyboardSwitchState.SYMBOLS_SHIFTED)
             }
         }
@@ -167,8 +169,8 @@ internal class EmojiAltPhysicalKeyDetector(@Nonnull resources: Resources) {
         private const val TAG: String = "EmojiAltPhysicalKeyDetector"
         private const val DEBUG: Boolean = false
 
-        private fun shouldProcessEvent(@Nonnull keyEvent: KeyEvent): Boolean {
-            if (!Settings.Companion.getInstance().getCurrent().mEnableEmojiAltPhysicalKey) {
+        private fun shouldProcessEvent(keyEvent: KeyEvent): Boolean {
+            if (Settings.instance.current?.mEnableEmojiAltPhysicalKey != true) {
                 // The feature is disabled.
                 if (DEBUG) {
                     Log.d(TAG, "shouldProcessEvent(): Disabled")
@@ -182,10 +184,10 @@ internal class EmojiAltPhysicalKeyDetector(@Nonnull resources: Resources) {
         private fun parseHotKeys(
             @Nonnull resources: Resources, resourceId: Int
         ): HotKeySet {
-            val keySet: HotKeySet = HotKeySet()
+            val keySet = HotKeySet()
             val name: String = resources.getResourceEntryName(resourceId)
             val values: Array<String> = resources.getStringArray(resourceId)
-            var i: Int = 0
+            var i = 0
             while (values != null && i < values.size) {
                 val valuePair: Array<String> =
                     values.get(i).split(",".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()

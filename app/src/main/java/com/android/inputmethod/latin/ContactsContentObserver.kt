@@ -61,14 +61,14 @@ class ContactsContentObserver(manager: ContactsManager, context: Context) : Runn
         mContentObserver = object : ContentObserver(null /* handler */) {
             override fun onChange(self: Boolean) {
                 ExecutorUtils.getBackgroundExecutor(ExecutorUtils.KEYBOARD)
-                    .execute(this@ContactsContentObserver)
+                    ?.execute(this@ContactsContentObserver)
             }
         }
         val contentResolver: ContentResolver = mContext.getContentResolver()
         contentResolver.registerContentObserver(
             ContactsContract.Contacts.CONTENT_URI,
             true,
-            mContentObserver
+            mContentObserver!!
         )
     }
 
@@ -107,25 +107,25 @@ class ContactsContentObserver(manager: ContactsManager, context: Context) : Runn
         }
 
         val startTime: Long = SystemClock.uptimeMillis()
-        val contactCount: Int = mManager.getContactCount()
+        val contactCount: Int = mManager.contactCount
         if (contactCount > ContactsDictionaryConstants.MAX_CONTACTS_PROVIDER_QUERY_LIMIT) {
             // If there are too many contacts then return false. In this rare case it is impossible
             // to include all of them anyways and the cost of rebuilding the dictionary is too high.
             // TODO: Sort and check only the most recent contacts?
             return false
         }
-        if (contactCount != mManager.getContactCountAtLastRebuild()) {
+        if (contactCount != mManager.contactCountAtLastRebuild) {
             if (DebugFlags.DEBUG_ENABLED) {
                 Log.d(
                     TAG, ("haveContentsChanged() : Count changed from "
-                            + mManager.getContactCountAtLastRebuild() + " to " + contactCount)
+                            + mManager.contactCountAtLastRebuild + " to " + contactCount)
                 )
             }
             return true
         }
-        val names: ArrayList<String?> =
+        val names: ArrayList<String> =
             mManager.getValidNames(ContactsContract.Contacts.CONTENT_URI)
-        if (names.hashCode() != mManager.getHashCodeAtLastRebuild()) {
+        if (names.hashCode() != mManager.hashCodeAtLastRebuild) {
             return true
         }
         if (DebugFlags.DEBUG_ENABLED) {

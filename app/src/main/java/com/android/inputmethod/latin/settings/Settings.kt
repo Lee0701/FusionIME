@@ -50,9 +50,10 @@ class Settings private constructor() : OnSharedPreferenceChangeListener {
     private fun onCreate(context: Context) {
         mContext = context
         mRes = context.resources
-        mPrefs = PreferenceManager.getDefaultSharedPreferences(context)
-        mPrefs.registerOnSharedPreferenceChangeListener(this)
-        upgradeAutocorrectionSettings(mPrefs, mRes)
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        this.mPrefs = prefs
+        prefs.registerOnSharedPreferenceChangeListener(this)
+        upgradeAutocorrectionSettings(prefs, mRes!!)
     }
 
     fun onDestroy() {
@@ -248,7 +249,7 @@ class Settings private constructor() : OnSharedPreferenceChangeListener {
             res: Resources
         ): Boolean {
             val hasVibrator: Boolean =
-                AudioAndHapticFeedbackManager.Companion.getInstance().hasVibrator()
+                AudioAndHapticFeedbackManager.instance.hasVibrator()
             return hasVibrator && prefs.getBoolean(
                 PREF_VIBRATE_ON,
                 res.getBoolean(R.bool.config_default_vibration_enabled)
@@ -362,7 +363,7 @@ class Settings private constructor() : OnSharedPreferenceChangeListener {
 
         // Default keypress sound volume for unknown devices.
         // The negative value means system default.
-        private val DEFAULT_KEYPRESS_SOUND_VOLUME: String = -1.0f.toString()
+        private val DEFAULT_KEYPRESS_SOUND_VOLUME: String = (-1.0f).toString()
 
         fun readDefaultKeypressSoundVolume(res: Resources): Float {
             return ResourceUtils.getDeviceOverrideValue(
@@ -404,7 +405,7 @@ class Settings private constructor() : OnSharedPreferenceChangeListener {
 
         // Default keypress vibration duration for unknown devices.
         // The negative value means system default.
-        private val DEFAULT_KEYPRESS_VIBRATION_DURATION: String = -1.toString()
+        private val DEFAULT_KEYPRESS_VIBRATION_DURATION: String = (-1).toString()
 
         fun readDefaultKeypressVibrationDuration(res: Resources): Int {
             return ResourceUtils.getDeviceOverrideValue(

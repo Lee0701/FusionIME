@@ -47,7 +47,7 @@ object KeySpecParser {
     private const val PREFIX_HEX: String = "0x"
 
     private fun hasIcon(@Nonnull keySpec: String): Boolean {
-        return keySpec.startsWith(KeyboardIconsSet.Companion.PREFIX_ICON)
+        return keySpec.startsWith(KeyboardIconsSet.PREFIX_ICON)
     }
 
     private fun hasCode(@Nonnull keySpec: String, labelEnd: Int): Boolean {
@@ -229,15 +229,15 @@ object KeySpecParser {
     fun getIconId(keySpec: String?): Int {
         if (keySpec == null) {
             // TODO: Throw {@link KeySpecParserError} once Key.keyLabel attribute becomes mandatory.
-            return KeyboardIconsSet.Companion.ICON_UNDEFINED
+            return KeyboardIconsSet.ICON_UNDEFINED
         }
         if (!hasIcon(keySpec)) {
-            return KeyboardIconsSet.Companion.ICON_UNDEFINED
+            return KeyboardIconsSet.ICON_UNDEFINED
         }
         val labelEnd: Int = indexOfLabelEnd(keySpec)
         val iconName: String = getBeforeLabelEnd(keySpec, labelEnd)
-            .substring(KeyboardIconsSet.Companion.PREFIX_ICON.length)
-        return KeyboardIconsSet.Companion.getIconId(iconName)
+            .substring(KeyboardIconsSet.PREFIX_ICON.length)
+        return KeyboardIconsSet.getIconId(iconName)
     }
 
     class KeySpecParserError(message: String?) : RuntimeException(message)

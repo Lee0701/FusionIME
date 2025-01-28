@@ -49,13 +49,13 @@ class SpellCheckerSettingsFragment : SubScreenFragment(), OnSharedPreferenceChan
         TwoStatePreferenceHelper.replaceCheckBoxPreferencesBySwitchPreferences(preferenceScreen)
 
         mLookupContactsPreference = findPreference(
-            AndroidSpellCheckerService.Companion.PREF_USE_CONTACTS_KEY
+            AndroidSpellCheckerService.PREF_USE_CONTACTS_KEY
         ) as SwitchPreference?
         turnOffLookupContactsIfNoPermission()
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String?) {
-        if (!TextUtils.equals(key, AndroidSpellCheckerService.Companion.PREF_USE_CONTACTS_KEY)) {
+        if (!TextUtils.equals(key, AndroidSpellCheckerService.PREF_USE_CONTACTS_KEY)) {
             return
         }
 
@@ -72,7 +72,7 @@ class SpellCheckerSettingsFragment : SubScreenFragment(), OnSharedPreferenceChan
             return  // all permissions granted, no need to request permissions.
         }
 
-        PermissionsManager.Companion.get(getActivity() /* context */)!!.requestPermissions(
+        PermissionsManager.get(getActivity() /* context */)!!.requestPermissions(
             this,  /* PermissionsResultCallback */
             getActivity(),  /* activity */permission.READ_CONTACTS
         )

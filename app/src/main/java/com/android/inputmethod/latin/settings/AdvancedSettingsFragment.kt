@@ -46,25 +46,25 @@ class AdvancedSettingsFragment : SubScreenFragment() {
         // When we are called from the Settings application but we are not already running, some
         // singleton and utility classes may not have been initialized.  We have to call
         // initialization method of these classes here. See {@link LatinIME#onCreate()}.
-        AudioAndHapticFeedbackManager.Companion.init(context)
+        AudioAndHapticFeedbackManager.init(context)
 
         val prefs = preferenceManager.sharedPreferences
 
-        if (!Settings.Companion.isInternal(prefs)) {
-            removePreference(Settings.Companion.SCREEN_DEBUG)
+        if (!Settings.isInternal(prefs)) {
+            removePreference(Settings.SCREEN_DEBUG, preferenceScreen)
         }
 
-        if (!AudioAndHapticFeedbackManager.Companion.getInstance().hasVibrator()) {
-            removePreference(Settings.Companion.PREF_VIBRATION_DURATION_SETTINGS)
+        if (!AudioAndHapticFeedbackManager.instance.hasVibrator()) {
+            removePreference(Settings.PREF_VIBRATION_DURATION_SETTINGS, preferenceScreen)
         }
 
         // TODO: consolidate key preview dismiss delay with the key preview animation parameters.
-        if (!Settings.Companion.readFromBuildConfigIfToShowKeyPreviewPopupOption(res)) {
-            removePreference(Settings.Companion.PREF_KEY_PREVIEW_POPUP_DISMISS_DELAY)
+        if (!Settings.readFromBuildConfigIfToShowKeyPreviewPopupOption(res)) {
+            removePreference(Settings.PREF_KEY_PREVIEW_POPUP_DISMISS_DELAY, preferenceScreen)
         } else {
             // TODO: Cleanup this setup.
             val keyPreviewPopupDismissDelay =
-                findPreference(Settings.Companion.PREF_KEY_PREVIEW_POPUP_DISMISS_DELAY) as ListPreference
+                findPreference(Settings.PREF_KEY_PREVIEW_POPUP_DISMISS_DELAY) as ListPreference
             val popupDismissDelayDefaultValue = res.getInteger(
                 R.integer.config_key_preview_linger_timeout
             ).toString()
@@ -80,7 +80,7 @@ class AdvancedSettingsFragment : SubScreenFragment() {
                 keyPreviewPopupDismissDelay.value = popupDismissDelayDefaultValue
             }
             keyPreviewPopupDismissDelay.isEnabled =
-                Settings.Companion.readKeyPreviewPopupEnabled(
+                Settings.readKeyPreviewPopupEnabled(
                     prefs,
                     res
                 )
@@ -95,20 +95,20 @@ class AdvancedSettingsFragment : SubScreenFragment() {
     override fun onResume() {
         super.onResume()
         val prefs = preferenceManager.sharedPreferences
-        updateListPreferenceSummaryToCurrentValue(Settings.Companion.PREF_KEY_PREVIEW_POPUP_DISMISS_DELAY)
+        updateListPreferenceSummaryToCurrentValue(Settings.PREF_KEY_PREVIEW_POPUP_DISMISS_DELAY, preferenceScreen)
     }
 
-    override fun onSharedPreferenceChanged(prefs: SharedPreferences, key: String) {
+    override fun onSharedPreferenceChanged(prefs: SharedPreferences, key: String?) {
         val res = resources
-        if (key == Settings.Companion.PREF_POPUP_ON) {
+        if (key == Settings.PREF_POPUP_ON) {
             setPreferenceEnabled(
-                Settings.Companion.PREF_KEY_PREVIEW_POPUP_DISMISS_DELAY,
-                Settings.Companion.readKeyPreviewPopupEnabled(prefs, res)
+                Settings.PREF_KEY_PREVIEW_POPUP_DISMISS_DELAY,
+                Settings.readKeyPreviewPopupEnabled(prefs, res)
             )
-        } else if (key == Settings.Companion.PREF_SHOW_SETUP_WIZARD_ICON) {
-            SystemBroadcastReceiver.Companion.toggleAppIcon(activity)
+        } else if (key == Settings.PREF_SHOW_SETUP_WIZARD_ICON) {
+            SystemBroadcastReceiver.toggleAppIcon(activity)
         }
-        updateListPreferenceSummaryToCurrentValue(Settings.Companion.PREF_KEY_PREVIEW_POPUP_DISMISS_DELAY)
+        updateListPreferenceSummaryToCurrentValue(Settings.PREF_KEY_PREVIEW_POPUP_DISMISS_DELAY, preferenceScreen)
         refreshEnablingsOfKeypressSoundAndVibrationSettings()
     }
 
@@ -116,18 +116,18 @@ class AdvancedSettingsFragment : SubScreenFragment() {
         val prefs = sharedPreferences
         val res = resources
         setPreferenceEnabled(
-            Settings.Companion.PREF_VIBRATION_DURATION_SETTINGS,
-            Settings.Companion.readVibrationEnabled(prefs!!, res)
+            Settings.PREF_VIBRATION_DURATION_SETTINGS,
+            Settings.readVibrationEnabled(prefs, res)
         )
         setPreferenceEnabled(
-            Settings.Companion.PREF_KEYPRESS_SOUND_VOLUME,
-            Settings.Companion.readKeypressSoundEnabled(prefs, res)
+            Settings.PREF_KEYPRESS_SOUND_VOLUME,
+            Settings.readKeypressSoundEnabled(prefs, res)
         )
     }
 
     private fun setupKeypressVibrationDurationSettings() {
         val pref = findPreference(
-            Settings.Companion.PREF_VIBRATION_DURATION_SETTINGS
+            Settings.PREF_VIBRATION_DURATION_SETTINGS
         ) as SeekBarDialogPreference
         if (pref == null) {
             return
@@ -144,31 +144,31 @@ class AdvancedSettingsFragment : SubScreenFragment() {
             }
 
             override fun readValue(key: String?): Int {
-                return Settings.Companion.readKeypressVibrationDuration(
+                return Settings.readKeypressVibrationDuration(
                     prefs!!, res
                 )
             }
 
             override fun readDefaultValue(key: String?): Int {
-                return Settings.Companion.readDefaultKeypressVibrationDuration(res)
+                return Settings.readDefaultKeypressVibrationDuration(res)
             }
 
             override fun feedbackValue(value: Int) {
-                AudioAndHapticFeedbackManager.Companion.getInstance().vibrate(value.toLong())
+                AudioAndHapticFeedbackManager.instance.vibrate(value.toLong())
             }
 
             override fun getValueText(value: Int): String {
                 if (value < 0) {
                     return res.getString(R.string.settings_system_default)
                 }
-                return res.getString(R.string.abbreviation_unit_milliseconds, value)
+                return res.getString(R.string.abbreviation_unit_milliseconds, value.toString())
             }
         })
     }
 
     private fun setupKeypressSoundVolumeSettings() {
         val pref = findPreference(
-            Settings.Companion.PREF_KEYPRESS_SOUND_VOLUME
+            Settings.PREF_KEYPRESS_SOUND_VOLUME
         ) as SeekBarDialogPreference
         if (pref == null) {
             return
@@ -197,14 +197,14 @@ class AdvancedSettingsFragment : SubScreenFragment() {
 
             override fun readValue(key: String?): Int {
                 return getPercentageFromValue(
-                    Settings.Companion.readKeypressSoundVolume(
+                    Settings.readKeypressSoundVolume(
                         prefs!!, res
                     )
                 )
             }
 
             override fun readDefaultValue(key: String?): Int {
-                return getPercentageFromValue(Settings.Companion.readDefaultKeypressSoundVolume(res))
+                return getPercentageFromValue(Settings.readDefaultKeypressSoundVolume(res))
             }
 
             override fun getValueText(value: Int): String {
@@ -226,32 +226,32 @@ class AdvancedSettingsFragment : SubScreenFragment() {
         val prefs = sharedPreferences
         val res = resources
         val pref = findPreference(
-            Settings.Companion.PREF_KEY_LONGPRESS_TIMEOUT
+            Settings.PREF_KEY_LONGPRESS_TIMEOUT
         ) as SeekBarDialogPreference
         if (pref == null) {
             return
         }
         pref.setInterface(object : SeekBarDialogPreference.ValueProxy {
             override fun writeValue(value: Int, key: String?) {
-                prefs!!.edit().putInt(key, value).apply()
+                prefs.edit().putInt(key, value).apply()
             }
 
             override fun writeDefaultValue(key: String?) {
-                prefs!!.edit().remove(key).apply()
+                prefs.edit().remove(key).apply()
             }
 
             override fun readValue(key: String?): Int {
-                return Settings.Companion.readKeyLongpressTimeout(
-                    prefs!!, res
+                return Settings.readKeyLongpressTimeout(
+                    prefs, res
                 )
             }
 
             override fun readDefaultValue(key: String?): Int {
-                return Settings.Companion.readDefaultKeyLongpressTimeout(res)
+                return Settings.readDefaultKeyLongpressTimeout(res)
             }
 
             override fun getValueText(value: Int): String {
-                return res.getString(R.string.abbreviation_unit_milliseconds, value)
+                return res.getString(R.string.abbreviation_unit_milliseconds, value.toString())
             }
 
             override fun feedbackValue(value: Int) {}

@@ -31,7 +31,7 @@ class MoreKeysKeyboardAccessibilityDelegate
     (
     moreKeysKeyboardView: MoreKeysKeyboardView,
     keyDetector: KeyDetector
-) : KeyboardAccessibilityDelegate<MoreKeysKeyboardView?>(moreKeysKeyboardView, keyDetector) {
+) : KeyboardAccessibilityDelegate<MoreKeysKeyboardView>(moreKeysKeyboardView, keyDetector) {
     private val mMoreKeysKeyboardValidBounds: Rect = Rect()
     private var mOpenAnnounceResId: Int = 0
     private var mCloseAnnounceResId: Int = 0
@@ -53,7 +53,7 @@ class MoreKeysKeyboardAccessibilityDelegate
     }
 
     override fun onHoverEnter(event: MotionEvent) {
-        if (KeyboardAccessibilityDelegate.Companion.DEBUG_HOVER) {
+        if (KeyboardAccessibilityDelegate.DEBUG_HOVER) {
             Log.d(TAG, "onHoverEnter: key=" + getHoverKeyOf(event))
         }
         super.onHoverEnter(event)
@@ -77,7 +77,7 @@ class MoreKeysKeyboardAccessibilityDelegate
 
     override fun onHoverExit(event: MotionEvent) {
         val lastKey: Key? = getLastHoverKey()
-        if (KeyboardAccessibilityDelegate.Companion.DEBUG_HOVER) {
+        if (KeyboardAccessibilityDelegate.DEBUG_HOVER) {
             Log.d(TAG, "onHoverExit: key=" + getHoverKeyOf(event) + " last=" + lastKey)
         }
         if (lastKey != null) {
@@ -104,13 +104,13 @@ class MoreKeysKeyboardAccessibilityDelegate
             mKeyboardView.onUpEvent(x, y, pointerId, eventTime)
             // TODO: Should fix this reference. This is a hack to clear the state of
             // {@link PointerTracker}.
-            PointerTracker.Companion.dismissAllMoreKeysPanels()
+            PointerTracker.dismissAllMoreKeysPanels()
             return
         }
         // Close the more keys keyboard.
         // TODO: Should fix this reference. This is a hack to clear the state of
         // {@link PointerTracker}.
-        PointerTracker.Companion.dismissAllMoreKeysPanels()
+        PointerTracker.dismissAllMoreKeysPanels()
     }
 
     companion object {

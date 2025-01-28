@@ -92,7 +92,7 @@ object CursorAnchorInfoUtils {
         if (BuildCompatUtils.EFFECTIVE_SDK_INT < VERSION_CODES.LOLLIPOP) {
             return null
         }
-        return CursorAnchorInfoCompatWrapper.Companion.wrap(extractFromTextViewInternal(textView))
+        return CursorAnchorInfoCompatWrapper.wrap(extractFromTextViewInternal(textView))
     }
 
     /**

@@ -59,10 +59,10 @@ class NgramContext(maxPrevWordCount: Int, vararg prevWordsInfo: WordInfo?) {
             return arrayOf(mWord, mIsBeginningOfSentence).contentHashCode()
         }
 
-        override fun equals(o: Any?): Boolean {
-            if (this === o) return true
-            if (o !is WordInfo) return false
-            val wordInfo: WordInfo = o
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (other !is WordInfo) return false
+            val wordInfo: WordInfo = other
             if (mWord == null || wordInfo.mWord == null) {
                 return mWord === wordInfo.mWord
                         && mIsBeginningOfSentence == wordInfo.mIsBeginningOfSentence
@@ -73,7 +73,7 @@ class NgramContext(maxPrevWordCount: Int, vararg prevWordsInfo: WordInfo?) {
 
         companion object {
             @Nonnull
-            val EMPTY_WORD_INFO: WordInfo = WordInfo(null)
+            val EMPTY_WORD_INFO: WordInfo = WordInfo("")
 
             @Nonnull
             val BEGINNING_OF_SENTENCE_WORD_INFO: WordInfo = WordInfo()
@@ -86,22 +86,16 @@ class NgramContext(maxPrevWordCount: Int, vararg prevWordsInfo: WordInfo?) {
     // For simplicity of implementation, elements may also be EMPTY_WORD_INFO transiently after the
     // WordComposer was reset and before starting a new composing word, but we should never be
     // calling getSuggetions* in this situation.
-    private val mPrevWordsInfo: Array<WordInfo?>
-    val prevWordCount: Int
+    private val mPrevWordsInfo: Array<WordInfo?> = prevWordsInfo.toList().toTypedArray()
+    val prevWordCount: Int = prevWordsInfo.size
 
-    private val mMaxPrevWordCount: Int
+    private val mMaxPrevWordCount: Int = maxPrevWordCount
 
     // Construct from the previous word information.
     constructor(vararg prevWordsInfo: WordInfo?) : this(
         DecoderSpecificConstants.MAX_PREV_WORD_COUNT_FOR_N_GRAM,
         *prevWordsInfo
     )
-
-    init {
-        mPrevWordsInfo = prevWordsInfo
-        prevWordCount = prevWordsInfo.size
-        mMaxPrevWordCount = maxPrevWordCount
-    }
 
     /**
      * Create next prevWordsInfo using current prevWordsInfo.
@@ -111,7 +105,7 @@ class NgramContext(maxPrevWordCount: Int, vararg prevWordsInfo: WordInfo?) {
         val nextPrevWordCount: Int =
             min(mMaxPrevWordCount.toDouble(), (prevWordCount + 1).toDouble()).toInt()
         val prevWordsInfo: Array<WordInfo?> = arrayOfNulls(nextPrevWordCount)
-        prevWordsInfo.get(0) = wordInfo
+        prevWordsInfo[0] = wordInfo
         System.arraycopy(mPrevWordsInfo, 0, prevWordsInfo, 1, nextPrevWordCount - 1)
         return NgramContext(mMaxPrevWordCount, *prevWordsInfo)
     }
@@ -199,12 +193,12 @@ class NgramContext(maxPrevWordCount: Int, vararg prevWordsInfo: WordInfo?) {
         for (i in 0 until prevWordCount) {
             val wordInfo: WordInfo? = mPrevWordsInfo.get(i)
             if (wordInfo == null || !wordInfo.isValid) {
-                codePointArrays.get(i) = IntArray(0)
-                isBeginningOfSentenceArray.get(i) = false
+                codePointArrays[i] = IntArray(0)
+                isBeginningOfSentenceArray[i] = false
                 continue
             }
-            codePointArrays.get(i) = StringUtils.toCodePointArray(wordInfo.mWord)
-            isBeginningOfSentenceArray.get(i) = wordInfo.mIsBeginningOfSentence
+            codePointArrays[i] = StringUtils.toCodePointArray(wordInfo.mWord!!)
+            isBeginningOfSentenceArray[i] = wordInfo.mIsBeginningOfSentence
         }
     }
 
@@ -219,10 +213,10 @@ class NgramContext(maxPrevWordCount: Int, vararg prevWordsInfo: WordInfo?) {
         return hashValue
     }
 
-    override fun equals(o: Any?): Boolean {
-        if (this === o) return true
-        if (o !is NgramContext) return false
-        val prevWordsInfo: NgramContext = o
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is NgramContext) return false
+        val prevWordsInfo: NgramContext = other
 
         val minLength: Int =
             min(prevWordCount.toDouble(), prevWordsInfo.prevWordCount.toDouble()).toInt()

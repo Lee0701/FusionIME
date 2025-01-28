@@ -181,10 +181,12 @@ class SetupWizardActivity : Activity(), View.OnClickListener {
         mWelcomeVideoView = welcomeVideoView
         mWelcomeImageView = findViewById<View>(R.id.setup_welcome_image) as ImageView
 
-        mActionStart = findViewById(R.id.setup_start_label)
-        mActionStart.setOnClickListener(this)
-        mActionNext = findViewById(R.id.setup_next)
-        mActionNext.setOnClickListener(this)
+        mActionStart = findViewById<View?>(R.id.setup_start_label).apply {
+            setOnClickListener(this@SetupWizardActivity)
+        }
+        mActionNext = findViewById<View?>(R.id.setup_next).apply {
+            setOnClickListener(this@SetupWizardActivity)
+        }
         mActionFinish = findViewById<View>(R.id.setup_finish) as TextView
         TextViewCompatUtils.setCompoundDrawablesRelativeWithIntrinsicBounds(
             mActionFinish!!,
@@ -234,8 +236,8 @@ class SetupWizardActivity : Activity(), View.OnClickListener {
                     or Intent.FLAG_ACTIVITY_CLEAR_TOP
         )
         intent.putExtra(
-            SettingsActivity.Companion.EXTRA_ENTRY_KEY,
-            SettingsActivity.Companion.EXTRA_ENTRY_VALUE_APP_ICON
+            SettingsActivity.EXTRA_ENTRY_KEY,
+            SettingsActivity.EXTRA_ENTRY_VALUE_APP_ICON
         )
         startActivity(intent)
     }

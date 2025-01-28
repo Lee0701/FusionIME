@@ -46,9 +46,9 @@ class GestureStrokeDrawingPoints(drawingParams: GestureStrokeDrawingParams?) {
         mStrokeId++
         mLastPreviewSize = 0
         mLastInterpolatedPreviewIndex = 0
-        mPreviewEventTimes.setLength(0)
-        mPreviewXCoordinates.setLength(0)
-        mPreviewYCoordinates.setLength(0)
+        mPreviewEventTimes.length = 0
+        mPreviewXCoordinates.length = 0
+        mPreviewYCoordinates.length = 0
     }
 
     fun getGestureStrokeId(): Int {
@@ -64,7 +64,7 @@ class GestureStrokeDrawingPoints(drawingParams: GestureStrokeDrawingParams?) {
         mDistanceFromLastSample += hypot((x - mLastX).toDouble(), (y - mLastY).toDouble())
         mLastX = x
         mLastY = y
-        val isDownEvent: Boolean = (mPreviewEventTimes.getLength() == 0)
+        val isDownEvent: Boolean = (mPreviewEventTimes.length == 0)
         if (mDistanceFromLastSample >= mDrawingParams!!.mMinSamplingDistance || isDownEvent) {
             mDistanceFromLastSample = 0.0
             return true
@@ -94,21 +94,21 @@ class GestureStrokeDrawingPoints(drawingParams: GestureStrokeDrawingParams?) {
         xCoords: ResizableIntArray, yCoords: ResizableIntArray,
         types: ResizableIntArray
     ) {
-        val length: Int = mPreviewEventTimes.getLength() - mLastPreviewSize
+        val length: Int = mPreviewEventTimes.length - mLastPreviewSize
         if (length <= 0) {
             return
         }
         eventTimes.append(mPreviewEventTimes, mLastPreviewSize, length)
         xCoords.append(mPreviewXCoordinates, mLastPreviewSize, length)
         yCoords.append(mPreviewYCoordinates, mLastPreviewSize, length)
-        if (GestureTrailDrawingPoints.Companion.DEBUG_SHOW_POINTS) {
+        if (GestureTrailDrawingPoints.DEBUG_SHOW_POINTS) {
             types.fill(
-                GestureTrailDrawingPoints.Companion.POINT_TYPE_SAMPLED,
-                types.getLength(),
+                GestureTrailDrawingPoints.POINT_TYPE_SAMPLED,
+                types.length,
                 length
             )
         }
-        mLastPreviewSize = mPreviewEventTimes.getLength()
+        mLastPreviewSize = mPreviewEventTimes.length
     }
 
     /**
@@ -131,10 +131,10 @@ class GestureStrokeDrawingPoints(drawingParams: GestureStrokeDrawingParams?) {
         eventTimes: ResizableIntArray, xCoords: ResizableIntArray,
         yCoords: ResizableIntArray, types: ResizableIntArray
     ): Int {
-        val size: Int = mPreviewEventTimes.getLength()
-        val pt: IntArray = mPreviewEventTimes.getPrimitiveArray()
-        val px: IntArray = mPreviewXCoordinates.getPrimitiveArray()
-        val py: IntArray = mPreviewYCoordinates.getPrimitiveArray()
+        val size: Int = mPreviewEventTimes.length
+        val pt: IntArray = mPreviewEventTimes.primitiveArray
+        val px: IntArray = mPreviewXCoordinates.primitiveArray
+        val py: IntArray = mPreviewYCoordinates.primitiveArray
         mInterpolator.reset(px, py, 0, size)
         // The last segment of gesture stroke needs to be interpolated again because the slope of
         // the tangent at the last point isn't determined.
@@ -176,16 +176,16 @@ class GestureStrokeDrawingPoints(drawingParams: GestureStrokeDrawingParams?) {
                 eventTimes.addAt(d1, (dt * t).toInt() + t1)
                 xCoords.addAt(d1, mInterpolator.mInterpolatedX.toInt())
                 yCoords.addAt(d1, mInterpolator.mInterpolatedY.toInt())
-                if (GestureTrailDrawingPoints.Companion.DEBUG_SHOW_POINTS) {
-                    types.addAt(d1, GestureTrailDrawingPoints.Companion.POINT_TYPE_INTERPOLATED)
+                if (GestureTrailDrawingPoints.DEBUG_SHOW_POINTS) {
+                    types.addAt(d1, GestureTrailDrawingPoints.POINT_TYPE_INTERPOLATED)
                 }
                 d1++
             }
             eventTimes.addAt(d1, pt.get(p2))
             xCoords.addAt(d1, px.get(p2))
             yCoords.addAt(d1, py.get(p2))
-            if (GestureTrailDrawingPoints.Companion.DEBUG_SHOW_POINTS) {
-                types.addAt(d1, GestureTrailDrawingPoints.Companion.POINT_TYPE_SAMPLED)
+            if (GestureTrailDrawingPoints.DEBUG_SHOW_POINTS) {
+                types.addAt(d1, GestureTrailDrawingPoints.POINT_TYPE_SAMPLED)
             }
         }
         return lastInterpolatedDrawIndex

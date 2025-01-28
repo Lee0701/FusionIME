@@ -99,7 +99,7 @@ interface KeyboardActionListener {
      */
     fun onCustomRequest(requestCode: Int): Boolean
 
-    class Adapter : KeyboardActionListener {
+    open class Adapter : KeyboardActionListener {
         override fun onPressKey(primaryCode: Int, repeatCount: Int, isSinglePointer: Boolean) {}
         override fun onReleaseKey(primaryCode: Int, withSliding: Boolean) {}
         override fun onCodeInput(primaryCode: Int, x: Int, y: Int, isKeyRepeat: Boolean) {}

@@ -78,7 +78,7 @@ internal class KeyCodeDescriptionMapper private constructor() {
         context: Context, keyboard: Keyboard,
         key: Key, shouldObscure: Boolean
     ): String? {
-        val code: Int = key.getCode()
+        val code: Int = key.code
 
         if (code == Constants.CODE_SWITCH_ALPHA_SYMBOL) {
             val description: String? = getDescriptionForSwitchAlphaSymbol(context, keyboard)
@@ -98,7 +98,7 @@ internal class KeyCodeDescriptionMapper private constructor() {
         }
 
         if (code == Constants.CODE_OUTPUT_TEXT) {
-            val outputText: String? = key.getOutputText()
+            val outputText: String? = key.outputText
             val description: String? = getSpokenEmoticonDescription(
                 context,
                 outputText!!
@@ -118,8 +118,8 @@ internal class KeyCodeDescriptionMapper private constructor() {
             if (description != null) {
                 return description
             }
-            if (!TextUtils.isEmpty(key.getLabel())) {
-                return key.getLabel()
+            if (!TextUtils.isEmpty(key.label)) {
+                return key.label
             }
             return context.getString(R.string.spoken_description_unknown)
         }
@@ -162,7 +162,7 @@ internal class KeyCodeDescriptionMapper private constructor() {
     // TODO: Remove this method once TTS supports those accented letters' verbalization.
     private fun getSpokenAccentedLetterDescription(context: Context, code: Int): String? {
         val isUpperCase: Boolean = Character.isUpperCase(code)
-        val baseCode: Int = if (isUpperCase) code.lowercaseChar() else code
+        val baseCode: Int = if (isUpperCase) code.toChar().lowercaseChar().code else code
         val baseIndex: Int = mKeyCodeMap.indexOfKey(baseCode)
         val resId: Int = if ((baseIndex >= 0))
             mKeyCodeMap.valueAt(baseIndex)
@@ -258,14 +258,14 @@ internal class KeyCodeDescriptionMapper private constructor() {
             val resId: Int
 
             when (elementId) {
-                KeyboardId.Companion.ELEMENT_ALPHABET, KeyboardId.Companion.ELEMENT_ALPHABET_AUTOMATIC_SHIFTED, KeyboardId.Companion.ELEMENT_ALPHABET_MANUAL_SHIFTED, KeyboardId.Companion.ELEMENT_ALPHABET_SHIFT_LOCK_SHIFTED, KeyboardId.Companion.ELEMENT_ALPHABET_SHIFT_LOCKED -> resId =
+                KeyboardId.ELEMENT_ALPHABET, KeyboardId.ELEMENT_ALPHABET_AUTOMATIC_SHIFTED, KeyboardId.ELEMENT_ALPHABET_MANUAL_SHIFTED, KeyboardId.ELEMENT_ALPHABET_SHIFT_LOCK_SHIFTED, KeyboardId.ELEMENT_ALPHABET_SHIFT_LOCKED -> resId =
                     R.string.spoken_description_to_symbol
 
-                KeyboardId.Companion.ELEMENT_SYMBOLS, KeyboardId.Companion.ELEMENT_SYMBOLS_SHIFTED -> resId =
+                KeyboardId.ELEMENT_SYMBOLS, KeyboardId.ELEMENT_SYMBOLS_SHIFTED -> resId =
                     R.string.spoken_description_to_alpha
 
-                KeyboardId.Companion.ELEMENT_PHONE -> resId = R.string.spoken_description_to_symbol
-                KeyboardId.Companion.ELEMENT_PHONE_SYMBOLS -> resId =
+                KeyboardId.ELEMENT_PHONE -> resId = R.string.spoken_description_to_symbol
+                KeyboardId.ELEMENT_PHONE_SYMBOLS -> resId =
                     R.string.spoken_description_to_numeric
 
                 else -> {
@@ -292,16 +292,16 @@ internal class KeyCodeDescriptionMapper private constructor() {
             val resId: Int
 
             when (elementId) {
-                KeyboardId.Companion.ELEMENT_ALPHABET_SHIFT_LOCK_SHIFTED, KeyboardId.Companion.ELEMENT_ALPHABET_SHIFT_LOCKED -> resId =
+                KeyboardId.ELEMENT_ALPHABET_SHIFT_LOCK_SHIFTED, KeyboardId.ELEMENT_ALPHABET_SHIFT_LOCKED -> resId =
                     R.string.spoken_description_caps_lock
 
-                KeyboardId.Companion.ELEMENT_ALPHABET_AUTOMATIC_SHIFTED, KeyboardId.Companion.ELEMENT_ALPHABET_MANUAL_SHIFTED -> resId =
+                KeyboardId.ELEMENT_ALPHABET_AUTOMATIC_SHIFTED, KeyboardId.ELEMENT_ALPHABET_MANUAL_SHIFTED -> resId =
                     R.string.spoken_description_shift_shifted
 
-                KeyboardId.Companion.ELEMENT_SYMBOLS -> resId =
+                KeyboardId.ELEMENT_SYMBOLS -> resId =
                     R.string.spoken_description_symbols_shift
 
-                KeyboardId.Companion.ELEMENT_SYMBOLS_SHIFTED -> resId =
+                KeyboardId.ELEMENT_SYMBOLS_SHIFTED -> resId =
                     R.string.spoken_description_symbols_shift_shifted
 
                 else -> resId = R.string.spoken_description_shift
@@ -326,8 +326,9 @@ internal class KeyCodeDescriptionMapper private constructor() {
             val resId: Int
 
             // Always use the label, if available.
-            if (!TextUtils.isEmpty(key.getLabel())) {
-                return key.getLabel().trim { it <= ' ' }
+            val label = key.label
+            if (label != null && !TextUtils.isEmpty(label)) {
+                return label.trim { it <= ' ' }
             }
 
             // Otherwise, use the action ID.

@@ -35,33 +35,27 @@ import javax.annotation.Nonnull
 // non final for easy mocking.
 class RichInputMethodSubtype(@Nonnull subtype: InputMethodSubtype) {
     // TODO: remove this method
-    @get:Nonnull
-    @Nonnull
     val rawSubtype: InputMethodSubtype
 
-    @get:Nonnull
-    @Nonnull
     val locale: Locale
 
-    @get:Nonnull
-    @Nonnull
     val originalLocale: Locale
 
     // Extra values are determined by the primary subtype. This is probably right, but
     // we may have to revisit this later.
-    fun getExtraValueOf(@Nonnull key: String?): String {
+    fun getExtraValueOf(key: String): String {
         return rawSubtype.getExtraValueOf(key)
     }
 
     val mode: String
         // The mode is also determined by the primary subtype.
         get() {
-            return rawSubtype.getMode()
+            return rawSubtype.mode
         }
 
     val isNoLanguage: Boolean
         get() {
-            return SubtypeLocaleUtils.NO_LANGUAGE == rawSubtype.getLocale()
+            return SubtypeLocaleUtils.NO_LANGUAGE == rawSubtype.locale
         }
 
     val nameForLogging: String
@@ -69,24 +63,22 @@ class RichInputMethodSubtype(@Nonnull subtype: InputMethodSubtype) {
             return toString()
         }
 
-    @get:Nonnull
-    val fullDisplayName: String?
+    val fullDisplayName: String
         // InputMethodSubtype's display name for spacebar text in its locale.
         get() {
             if (isNoLanguage) {
                 return SubtypeLocaleUtils.getKeyboardLayoutSetDisplayName(rawSubtype)
             }
-            return SubtypeLocaleUtils.getSubtypeLocaleDisplayName(rawSubtype.getLocale())
+            return SubtypeLocaleUtils.getSubtypeLocaleDisplayName(rawSubtype.locale)
         }
 
-    @get:Nonnull
-    val middleDisplayName: String?
+    val middleDisplayName: String
         // Get the RichInputMethodSubtype's middle display name in its locale.
         get() {
             if (isNoLanguage) {
                 return SubtypeLocaleUtils.getKeyboardLayoutSetDisplayName(rawSubtype)
             }
-            return SubtypeLocaleUtils.getSubtypeLanguageDisplayName(rawSubtype.getLocale())
+            return SubtypeLocaleUtils.getSubtypeLanguageDisplayName(rawSubtype.locale)
         }
 
     override fun equals(o: Any?): Boolean {
@@ -102,7 +94,7 @@ class RichInputMethodSubtype(@Nonnull subtype: InputMethodSubtype) {
     }
 
     override fun toString(): String {
-        return "Multi-lingual subtype: " + rawSubtype + ", " + locale
+        return "Multi-lingual subtype: $rawSubtype, $locale"
     }
 
     val isRtlSubtype: Boolean
@@ -111,8 +103,7 @@ class RichInputMethodSubtype(@Nonnull subtype: InputMethodSubtype) {
             return LocaleUtils.isRtlLanguage(locale)
         }
 
-    @get:Nonnull
-    val keyboardLayoutSetName: String?
+    val keyboardLayoutSetName: String
         get() {
             return SubtypeLocaleUtils.getKeyboardLayoutSetName(rawSubtype)
         }
@@ -120,10 +111,9 @@ class RichInputMethodSubtype(@Nonnull subtype: InputMethodSubtype) {
     init {
         rawSubtype = subtype
         originalLocale = InputMethodSubtypeCompatUtils.getLocaleObject(rawSubtype)
-        val mappedLocale: Locale? = sLocaleMap.get(
+        locale = sLocaleMap.get(
             originalLocale
-        )
-        locale = if (mappedLocale != null) mappedLocale else originalLocale
+        ) ?: originalLocale
     }
 
     companion object {
@@ -197,7 +187,7 @@ class RichInputMethodSubtype(@Nonnull subtype: InputMethodSubtype) {
                     sNoLanguageSubtype
                 if (noLanguageSubtype == null) {
                     val rawNoLanguageSubtype: InputMethodSubtype? =
-                        RichInputMethodManager.Companion.getInstance()
+                        RichInputMethodManager.instance
                             .findSubtypeByLocaleAndKeyboardLayoutSet(
                                 SubtypeLocaleUtils.NO_LANGUAGE, SubtypeLocaleUtils.QWERTY
                             )
@@ -228,7 +218,7 @@ class RichInputMethodSubtype(@Nonnull subtype: InputMethodSubtype) {
                     sEmojiSubtype
                 if (emojiSubtype == null) {
                     val rawEmojiSubtype: InputMethodSubtype? =
-                        RichInputMethodManager.Companion.getInstance()
+                        RichInputMethodManager.instance
                             .findSubtypeByLocaleAndKeyboardLayoutSet(
                                 SubtypeLocaleUtils.NO_LANGUAGE, SubtypeLocaleUtils.EMOJI
                             )

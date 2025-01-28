@@ -30,7 +30,7 @@ import android.view.View
 class DictionaryListInterfaceState {
     internal class State {
         var mOpen: Boolean = false
-        var mStatus: Int = MetadataDbHelper.Companion.STATUS_UNKNOWN
+        var mStatus: Int = MetadataDbHelper.STATUS_UNKNOWN
     }
 
     private val mWordlistToState: HashMap<String, State> = HashMap()
@@ -44,7 +44,7 @@ class DictionaryListInterfaceState {
 
     fun getStatus(wordlistId: String): Int {
         val state: State? = mWordlistToState.get(wordlistId)
-        if (null == state) return MetadataDbHelper.Companion.STATUS_UNKNOWN
+        if (null == state) return MetadataDbHelper.STATUS_UNKNOWN
         return state.mStatus
     }
 

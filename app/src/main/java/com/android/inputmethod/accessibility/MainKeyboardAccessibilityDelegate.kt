@@ -39,7 +39,7 @@ class MainKeyboardAccessibilityDelegate
     (
     mainKeyboardView: MainKeyboardView,
     keyDetector: KeyDetector
-) : KeyboardAccessibilityDelegate<MainKeyboardView?>(mainKeyboardView, keyDetector),
+) : KeyboardAccessibilityDelegate<MainKeyboardView>(mainKeyboardView, keyDetector),
     LongPressTimerCallback {
     /** The most recently set keyboard mode.  */
     private var mLastKeyboardMode: Int = KEYBOARD_IS_HIDDEN
@@ -62,7 +62,7 @@ class MainKeyboardAccessibilityDelegate
 
         // Since this method is called even when accessibility is off, make sure
         // to check the state before announcing anything.
-        if (!AccessibilityUtils.Companion.getInstance().isAccessibilityEnabled()) {
+        if (!AccessibilityUtils.instance.isAccessibilityEnabled()) {
             return
         }
         // Announce the language name only when the language is changed.
@@ -99,8 +99,8 @@ class MainKeyboardAccessibilityDelegate
      */
     private fun announceKeyboardLanguage(keyboard: Keyboard) {
         val languageText: String = SubtypeLocaleUtils.getSubtypeDisplayNameInSystemLocale(
-            keyboard.mId!!.mSubtype.getRawSubtype()
-        )!!
+            keyboard.mId?.mSubtype?.rawSubtype!!
+        )
         sendWindowStateChanged(languageText)
     }
 
@@ -133,9 +133,9 @@ class MainKeyboardAccessibilityDelegate
         val lastElementId: Int = lastKeyboard.mId!!.mElementId
         val resId: Int
         when (keyboard.mId!!.mElementId) {
-            KeyboardId.Companion.ELEMENT_ALPHABET_AUTOMATIC_SHIFTED, KeyboardId.Companion.ELEMENT_ALPHABET -> {
-                if (lastElementId == KeyboardId.Companion.ELEMENT_ALPHABET
-                    || lastElementId == KeyboardId.Companion.ELEMENT_ALPHABET_AUTOMATIC_SHIFTED
+            KeyboardId.ELEMENT_ALPHABET_AUTOMATIC_SHIFTED, KeyboardId.ELEMENT_ALPHABET -> {
+                if (lastElementId == KeyboardId.ELEMENT_ALPHABET
+                    || lastElementId == KeyboardId.ELEMENT_ALPHABET_AUTOMATIC_SHIFTED
                 ) {
                     // Transition between alphabet mode and automatic shifted mode should be silently
                     // ignored because it can be determined by each key's talk back announce.
@@ -144,8 +144,8 @@ class MainKeyboardAccessibilityDelegate
                 resId = R.string.spoken_description_mode_alpha
             }
 
-            KeyboardId.Companion.ELEMENT_ALPHABET_MANUAL_SHIFTED -> {
-                if (lastElementId == KeyboardId.Companion.ELEMENT_ALPHABET_AUTOMATIC_SHIFTED) {
+            KeyboardId.ELEMENT_ALPHABET_MANUAL_SHIFTED -> {
+                if (lastElementId == KeyboardId.ELEMENT_ALPHABET_AUTOMATIC_SHIFTED) {
                     // Resetting automatic shifted mode by pressing the shift key causes the transition
                     // from automatic shifted to manual shifted that should be silently ignored.
                     return
@@ -153,8 +153,8 @@ class MainKeyboardAccessibilityDelegate
                 resId = R.string.spoken_description_shiftmode_on
             }
 
-            KeyboardId.Companion.ELEMENT_ALPHABET_SHIFT_LOCK_SHIFTED -> {
-                if (lastElementId == KeyboardId.Companion.ELEMENT_ALPHABET_SHIFT_LOCKED) {
+            KeyboardId.ELEMENT_ALPHABET_SHIFT_LOCK_SHIFTED -> {
+                if (lastElementId == KeyboardId.ELEMENT_ALPHABET_SHIFT_LOCKED) {
                     // Resetting caps locked mode by pressing the shift key causes the transition
                     // from shift locked to shift lock shifted that should be silently ignored.
                     return
@@ -162,15 +162,15 @@ class MainKeyboardAccessibilityDelegate
                 resId = R.string.spoken_description_shiftmode_locked
             }
 
-            KeyboardId.Companion.ELEMENT_ALPHABET_SHIFT_LOCKED -> resId =
+            KeyboardId.ELEMENT_ALPHABET_SHIFT_LOCKED -> resId =
                 R.string.spoken_description_shiftmode_locked
 
-            KeyboardId.Companion.ELEMENT_SYMBOLS -> resId = R.string.spoken_description_mode_symbol
-            KeyboardId.Companion.ELEMENT_SYMBOLS_SHIFTED -> resId =
+            KeyboardId.ELEMENT_SYMBOLS -> resId = R.string.spoken_description_mode_symbol
+            KeyboardId.ELEMENT_SYMBOLS_SHIFTED -> resId =
                 R.string.spoken_description_mode_symbol_shift
 
-            KeyboardId.Companion.ELEMENT_PHONE -> resId = R.string.spoken_description_mode_phone
-            KeyboardId.Companion.ELEMENT_PHONE_SYMBOLS -> resId =
+            KeyboardId.ELEMENT_PHONE -> resId = R.string.spoken_description_mode_phone
+            KeyboardId.ELEMENT_PHONE_SYMBOLS -> resId =
                 R.string.spoken_description_mode_phone_shift
 
             else -> return
@@ -186,9 +186,9 @@ class MainKeyboardAccessibilityDelegate
     }
 
     override fun performClickOn(key: Key) {
-        val x: Int = key.getHitBox().centerX()
-        val y: Int = key.getHitBox().centerY()
-        if (KeyboardAccessibilityDelegate.Companion.DEBUG_HOVER) {
+        val x: Int = key.hitBox.centerX()
+        val y: Int = key.hitBox.centerY()
+        if (DEBUG_HOVER) {
             Log.d(
                 TAG, ("performClickOn: key=" + key
                         + " inIgnoreBounds=" + mBoundsToIgnoreHoverEvent.contains(x, y))
@@ -204,9 +204,9 @@ class MainKeyboardAccessibilityDelegate
     }
 
     override fun onHoverEnterTo(key: Key) {
-        val x: Int = key.getHitBox().centerX()
-        val y: Int = key.getHitBox().centerY()
-        if (KeyboardAccessibilityDelegate.Companion.DEBUG_HOVER) {
+        val x: Int = key.hitBox.centerX()
+        val y: Int = key.hitBox.centerY()
+        if (DEBUG_HOVER) {
             Log.d(
                 TAG, ("onHoverEnterTo: key=" + key
                         + " inIgnoreBounds=" + mBoundsToIgnoreHoverEvent.contains(x, y))
@@ -222,9 +222,9 @@ class MainKeyboardAccessibilityDelegate
     }
 
     override fun onHoverExitFrom(key: Key) {
-        val x: Int = key.getHitBox().centerX()
-        val y: Int = key.getHitBox().centerY()
-        if (KeyboardAccessibilityDelegate.Companion.DEBUG_HOVER) {
+        val x: Int = key.hitBox.centerX()
+        val y: Int = key.hitBox.centerY()
+        if (DEBUG_HOVER) {
             Log.d(
                 TAG, ("onHoverExitFrom: key=" + key
                         + " inIgnoreBounds=" + mBoundsToIgnoreHoverEvent.contains(x, y))
@@ -234,14 +234,14 @@ class MainKeyboardAccessibilityDelegate
     }
 
     override fun performLongClickOn(key: Key) {
-        if (KeyboardAccessibilityDelegate.Companion.DEBUG_HOVER) {
+        if (DEBUG_HOVER) {
             Log.d(TAG, "performLongClickOn: key=" + key)
         }
         val tracker: PointerTracker =
-            PointerTracker.Companion.getPointerTracker(KeyboardAccessibilityDelegate.Companion.HOVER_EVENT_POINTER_ID)
+            PointerTracker.getPointerTracker(KeyboardAccessibilityDelegate.HOVER_EVENT_POINTER_ID)
         val eventTime: Long = SystemClock.uptimeMillis()
-        val x: Int = key.getHitBox().centerX()
-        val y: Int = key.getHitBox().centerY()
+        val x: Int = key.hitBox.centerX()
+        val y: Int = key.hitBox.centerY()
         val downEvent: MotionEvent = MotionEvent.obtain(
             eventTime,
             eventTime,
@@ -267,14 +267,14 @@ class MainKeyboardAccessibilityDelegate
         }
         // This long press has handled at {@link MainKeyboardView#onLongPress(PointerTracker)}.
         // We should ignore further hover events on this key.
-        mBoundsToIgnoreHoverEvent.set(key.getHitBox())
+        mBoundsToIgnoreHoverEvent.set(key.hitBox)
         if (key.hasNoPanelAutoMoreKey()) {
             // This long press has registered a code point without showing a more keys keyboard.
             // We should talk back the code point if possible.
-            val codePointOfNoPanelAutoMoreKey: Int = key.getMoreKeys().get(0).mCode
+            val codePointOfNoPanelAutoMoreKey: Int = key.moreKeys.get(0).mCode
             val text: String? =
-                KeyCodeDescriptionMapper.Companion.getInstance().getDescriptionForCodePoint(
-                    mKeyboardView!!.getContext(), codePointOfNoPanelAutoMoreKey
+                KeyCodeDescriptionMapper.getInstance().getDescriptionForCodePoint(
+                    mKeyboardView.context, codePointOfNoPanelAutoMoreKey
                 )
             if (text != null) {
                 sendWindowStateChanged(text)
@@ -289,21 +289,21 @@ class MainKeyboardAccessibilityDelegate
         private val KEYBOARD_MODE_RES_IDS: SparseIntArray = SparseIntArray()
 
         init {
-            KEYBOARD_MODE_RES_IDS.put(KeyboardId.Companion.MODE_DATE, R.string.keyboard_mode_date)
+            KEYBOARD_MODE_RES_IDS.put(KeyboardId.MODE_DATE, R.string.keyboard_mode_date)
             KEYBOARD_MODE_RES_IDS.put(
-                KeyboardId.Companion.MODE_DATETIME,
+                KeyboardId.MODE_DATETIME,
                 R.string.keyboard_mode_date_time
             )
-            KEYBOARD_MODE_RES_IDS.put(KeyboardId.Companion.MODE_EMAIL, R.string.keyboard_mode_email)
-            KEYBOARD_MODE_RES_IDS.put(KeyboardId.Companion.MODE_IM, R.string.keyboard_mode_im)
+            KEYBOARD_MODE_RES_IDS.put(KeyboardId.MODE_EMAIL, R.string.keyboard_mode_email)
+            KEYBOARD_MODE_RES_IDS.put(KeyboardId.MODE_IM, R.string.keyboard_mode_im)
             KEYBOARD_MODE_RES_IDS.put(
-                KeyboardId.Companion.MODE_NUMBER,
+                KeyboardId.MODE_NUMBER,
                 R.string.keyboard_mode_number
             )
-            KEYBOARD_MODE_RES_IDS.put(KeyboardId.Companion.MODE_PHONE, R.string.keyboard_mode_phone)
-            KEYBOARD_MODE_RES_IDS.put(KeyboardId.Companion.MODE_TEXT, R.string.keyboard_mode_text)
-            KEYBOARD_MODE_RES_IDS.put(KeyboardId.Companion.MODE_TIME, R.string.keyboard_mode_time)
-            KEYBOARD_MODE_RES_IDS.put(KeyboardId.Companion.MODE_URL, R.string.keyboard_mode_url)
+            KEYBOARD_MODE_RES_IDS.put(KeyboardId.MODE_PHONE, R.string.keyboard_mode_phone)
+            KEYBOARD_MODE_RES_IDS.put(KeyboardId.MODE_TEXT, R.string.keyboard_mode_text)
+            KEYBOARD_MODE_RES_IDS.put(KeyboardId.MODE_TIME, R.string.keyboard_mode_time)
+            KEYBOARD_MODE_RES_IDS.put(KeyboardId.MODE_URL, R.string.keyboard_mode_url)
         }
 
         private val KEYBOARD_IS_HIDDEN: Int = -1

@@ -106,7 +106,7 @@ class GestureStrokeRecognitionPoints(
 
     // TODO: Make this package private
     fun getLength(): Int {
-        return mEventTimes.getLength()
+        return mEventTimes.length
     }
 
     // TODO: Make this package private
@@ -211,9 +211,9 @@ class GestureStrokeRecognitionPoints(
     private fun reset() {
         mIncrementalRecognitionSize = 0
         mLastIncrementalBatchSize = 0
-        mEventTimes.setLength(0)
-        mXCoordinates.setLength(0)
-        mYCoordinates.setLength(0)
+        mEventTimes.length = 0
+        mXCoordinates.length = 0
+        mYCoordinates.length = 0
         mLastMajorEventTime = 0
         mDetectFastMoveTime = 0
         mAfterFastTyping = false

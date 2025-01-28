@@ -116,9 +116,9 @@ internal open class InputLogicHandler : Handler.Callback {
                 }
             getSuggestedWords(
                 if (isTailBatchInput)
-                    SuggestedWords.Companion.INPUT_STYLE_TAIL_BATCH
+                    SuggestedWords.INPUT_STYLE_TAIL_BATCH
                 else
-                    SuggestedWords.Companion.INPUT_STYLE_UPDATE_BATCH, sequenceNumber, callback
+                    SuggestedWords.INPUT_STYLE_UPDATE_BATCH, sequenceNumber, callback
             )
         }
     }

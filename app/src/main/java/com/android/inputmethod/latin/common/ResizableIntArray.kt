@@ -21,9 +21,7 @@ import javax.annotation.Nonnull
 
 // TODO: This class is not thread-safe.
 class ResizableIntArray(capacity: Int) {
-    @get:Nonnull
-    @Nonnull
-    var primitiveArray: IntArray
+    var primitiveArray: IntArray = intArrayOf()
         private set
     private var mLength = 0
 
@@ -31,7 +29,7 @@ class ResizableIntArray(capacity: Int) {
         reset(capacity)
     }
 
-    fun get(index: Int): Int {
+    operator fun get(index: Int): Int {
         if (index < mLength) {
             return primitiveArray[index]
         }

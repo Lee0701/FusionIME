@@ -30,7 +30,6 @@ import android.view.ViewParent
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityManager
 import android.view.inputmethod.EditorInfo
-import androidx.core.view.accessibility.AccessibilityEventCompat
 import com.android.inputmethod.compat.SettingsSecureCompatUtils
 import com.android.inputmethod.latin.R
 import com.android.inputmethod.latin.SuggestedWords
@@ -114,12 +113,12 @@ class AccessibilityUtils private constructor() {
     fun setAutoCorrection(suggestedWords: SuggestedWords) {
         if (suggestedWords.mWillAutoCorrect) {
             mAutoCorrectionWord =
-                suggestedWords.getWord(SuggestedWords.Companion.INDEX_OF_AUTO_CORRECTION)
-            val typedWordInfo: SuggestedWordInfo? = suggestedWords.mTypedWordInfo
+                suggestedWords.getWord(SuggestedWords.INDEX_OF_AUTO_CORRECTION)
+            val typedWordInfo: SuggestedWordInfo? = suggestedWords.typedWordInfo
             if (null == typedWordInfo) {
                 mTypedWord = null
             } else {
-                mTypedWord = typedWordInfo.mWord
+                mTypedWord = typedWordInfo.word
             }
         } else {
             mAutoCorrectionWord = null
@@ -186,7 +185,7 @@ class AccessibilityUtils private constructor() {
         // Platforms starting at SDK version 16 (Build.VERSION_CODES.JELLY_BEAN) should use
         // announce events.
         if (Build.VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN) {
-            event.setEventType(AccessibilityEventCompat.TYPE_ANNOUNCEMENT)
+            event.setEventType(AccessibilityEvent.TYPE_ANNOUNCEMENT)
         } else {
             event.setEventType(AccessibilityEvent.TYPE_VIEW_FOCUSED)
         }
@@ -235,7 +234,7 @@ class AccessibilityUtils private constructor() {
         private val CLASS: String = AccessibilityUtils::class.java.getName()
         private val PACKAGE: String = AccessibilityUtils::class.java.getPackage().getName()
 
-        private val sInstance: AccessibilityUtils = AccessibilityUtils()
+        val instance: AccessibilityUtils = AccessibilityUtils()
 
         /*
      * Setting this constant to {@code false} will disable all keyboard
@@ -248,11 +247,7 @@ class AccessibilityUtils private constructor() {
             if (!ENABLE_ACCESSIBILITY) return
 
             // These only need to be initialized if the kill switch is off.
-            sInstance.initInternal(context)
-        }
-
-        fun getInstance(): AccessibilityUtils {
-            return sInstance
+            instance.initInternal(context)
         }
 
         /**

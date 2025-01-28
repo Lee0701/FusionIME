@@ -90,11 +90,11 @@ class DictionaryProvider : ContentProvider() {
         }
 
         override fun getDouble(column: Int): Double {
-            return 0
+            return 0.0
         }
 
         override fun getFloat(column: Int): Float {
-            return 0
+            return 0f
         }
 
         override fun getInt(column: Int): Int {
@@ -126,9 +126,9 @@ class DictionaryProvider : ContentProvider() {
         companion object {
             // Column names for the cursor returned by this content provider.
             private val columnNames: Array<String> = arrayOf<String>(
-                MetadataDbHelper.Companion.WORDLISTID_COLUMN,
-                MetadataDbHelper.Companion.LOCALE_COLUMN,
-                MetadataDbHelper.Companion.RAW_CHECKSUM_COLUMN
+                MetadataDbHelper.WORDLISTID_COLUMN,
+                MetadataDbHelper.LOCALE_COLUMN,
+                MetadataDbHelper.RAW_CHECKSUM_COLUMN
             )
         }
     }
@@ -178,7 +178,7 @@ class DictionaryProvider : ContentProvider() {
         val match: Int = matchUri(uri)
         when (match) {
             DICTIONARY_V1_WHOLE_LIST, DICTIONARY_V2_WHOLE_LIST -> {
-                val c: Cursor = MetadataDbHelper.Companion.queryDictionaries(getContext(), clientId)
+                val c: Cursor = MetadataDbHelper.queryDictionaries(getContext(), clientId)
                 DebugLogUtils.l("List of dictionaries with count", c.getCount())
                 PrivateLog.log("Returned a list of " + c.getCount() + " items")
                 return c
@@ -187,12 +187,12 @@ class DictionaryProvider : ContentProvider() {
             DICTIONARY_V2_DICT_INFO -> {
                 // In protocol version 2, we return null if the client is unknown. Otherwise
                 // we behave exactly like for protocol 1.
-                if (!MetadataDbHelper.Companion.isClientKnown(getContext(), clientId)) return null
+                if (!MetadataDbHelper.isClientKnown(getContext(), clientId)) return null
                 val locale: String? = uri.getLastPathSegment()
                 val dictFiles: Collection<WordListInfo> =
                     getDictionaryWordListsForLocale(clientId, locale)
                 // TODO: pass clientId to the following function
-                DictionaryService.Companion.updateNowIfNotUpdatedInAVeryLongTime(getContext())
+                DictionaryService.updateNowIfNotUpdatedInAVeryLongTime(getContext())
                 if (null != dictFiles && dictFiles.size > 0) {
                     PrivateLog.log("Returned " + dictFiles.size + " files")
                     return ResourcePathCursor(dictFiles)
@@ -205,7 +205,7 @@ class DictionaryProvider : ContentProvider() {
                 val locale: String? = uri.getLastPathSegment()
                 val dictFiles: Collection<WordListInfo> =
                     getDictionaryWordListsForLocale(clientId, locale)
-                DictionaryService.Companion.updateNowIfNotUpdatedInAVeryLongTime(getContext())
+                DictionaryService.updateNowIfNotUpdatedInAVeryLongTime(getContext())
                 if (null != dictFiles && dictFiles.size > 0) {
                     PrivateLog.log("Returned " + dictFiles.size + " files")
                     return ResourcePathCursor(dictFiles)
@@ -231,8 +231,8 @@ class DictionaryProvider : ContentProvider() {
     ): ContentValues? {
         val context: Context? = getContext()
         if (TextUtils.isEmpty(wordlistId)) return null
-        val db: SQLiteDatabase = MetadataDbHelper.Companion.getDb(context, clientId)
-        return MetadataDbHelper.Companion.getInstalledOrDeletingWordListContentValuesByWordListId(
+        val db: SQLiteDatabase = MetadataDbHelper.getDb(context, clientId)
+        return MetadataDbHelper.getInstalledOrDeletingWordListContentValuesByWordListId(
             db, wordlistId
         )
     }
@@ -248,7 +248,7 @@ class DictionaryProvider : ContentProvider() {
      * @param mode the mode to read the file. MUST be "r" for readonly.
      * @return the descriptor, or null if the file is not found or if mode is not equals to "r".
      */
-    override fun openAssetFile(uri: Uri, mode: String?): AssetFileDescriptor? {
+    override fun openAssetFile(uri: Uri, mode: String): AssetFileDescriptor? {
         if (null == mode || "r" != mode) return null
 
         val match: Int = matchUri(uri)
@@ -264,8 +264,8 @@ class DictionaryProvider : ContentProvider() {
         if (null == wordList) return null
 
         try {
-            val status: Int = wordList.getAsInteger(MetadataDbHelper.Companion.STATUS_COLUMN)
-            if (MetadataDbHelper.Companion.STATUS_DELETING == status) {
+            val status: Int = wordList.getAsInteger(MetadataDbHelper.STATUS_COLUMN)
+            if (MetadataDbHelper.STATUS_DELETING == status) {
                 // This will return an empty file (R.raw.empty points at an empty dictionary)
                 // This is how we "delete" the files. It allows Android Keyboard to fake deleting
                 // a default dictionary - which is actually in its assets and can't be really
@@ -276,7 +276,7 @@ class DictionaryProvider : ContentProvider() {
                 return afd
             }
             val localFilename: String =
-                wordList.getAsString(MetadataDbHelper.Companion.LOCAL_FILENAME_COLUMN)
+                wordList.getAsString(MetadataDbHelper.LOCAL_FILENAME_COLUMN)
             val f: File = getContext()!!.getFileStreamPath(localFilename)
             val pfd: ParcelFileDescriptor =
                 ParcelFileDescriptor.open(f, ParcelFileDescriptor.MODE_READ_ONLY)
@@ -306,7 +306,7 @@ class DictionaryProvider : ContentProvider() {
     ): Collection<WordListInfo> {
         val context: Context? = getContext()
         val results: Cursor =
-            MetadataDbHelper.Companion.queryInstalledOrDeletingOrAvailableDictionaryMetadata(
+            MetadataDbHelper.queryInstalledOrDeletingOrAvailableDictionaryMetadata(
                 context,
                 clientId
             )
@@ -315,13 +315,13 @@ class DictionaryProvider : ContentProvider() {
         }
         try {
             val dicts: HashMap<String, WordListInfo> = HashMap()
-            val idIndex: Int = results.getColumnIndex(MetadataDbHelper.Companion.WORDLISTID_COLUMN)
-            val localeIndex: Int = results.getColumnIndex(MetadataDbHelper.Companion.LOCALE_COLUMN)
+            val idIndex: Int = results.getColumnIndex(MetadataDbHelper.WORDLISTID_COLUMN)
+            val localeIndex: Int = results.getColumnIndex(MetadataDbHelper.LOCALE_COLUMN)
             val localFileNameIndex: Int =
-                results.getColumnIndex(MetadataDbHelper.Companion.LOCAL_FILENAME_COLUMN)
+                results.getColumnIndex(MetadataDbHelper.LOCAL_FILENAME_COLUMN)
             val rawChecksumIndex: Int =
-                results.getColumnIndex(MetadataDbHelper.Companion.RAW_CHECKSUM_COLUMN)
-            val statusIndex: Int = results.getColumnIndex(MetadataDbHelper.Companion.STATUS_COLUMN)
+                results.getColumnIndex(MetadataDbHelper.RAW_CHECKSUM_COLUMN)
+            val statusIndex: Int = results.getColumnIndex(MetadataDbHelper.STATUS_COLUMN)
             if (results.moveToFirst()) {
                 do {
                     val wordListId: String = results.getString(idIndex)
@@ -359,7 +359,7 @@ class DictionaryProvider : ContentProvider() {
                         // Skip this wordlist and go to the next.
                         continue
                     }
-                    if (MetadataDbHelper.Companion.STATUS_INSTALLED == wordListStatus) {
+                    if (MetadataDbHelper.STATUS_INSTALLED == wordListStatus) {
                         // If the file does not exist, it has been deleted and the IME should
                         // already have it. Do not return it. However, this only applies if the
                         // word list is INSTALLED, for if it is DELETING we should return it always
@@ -368,7 +368,7 @@ class DictionaryProvider : ContentProvider() {
                         if (!f.isFile()) {
                             continue
                         }
-                    } else if (MetadataDbHelper.Companion.STATUS_AVAILABLE == wordListStatus) {
+                    } else if (MetadataDbHelper.STATUS_AVAILABLE == wordListStatus) {
                         // The locale is the id for the main dictionary.
                         UpdateHandler.installIfNeverRequested(
                             context!!, clientId, wordListId
@@ -410,7 +410,7 @@ class DictionaryProvider : ContentProvider() {
             return deleteDataFile(uri)
         }
         if (DICTIONARY_V2_METADATA == match) {
-            if (MetadataDbHelper.Companion.deleteClient(getContext(), getClientId(uri))) {
+            if (MetadataDbHelper.deleteClient(getContext(), getClientId(uri))) {
                 return 1
             }
             return 0
@@ -426,13 +426,13 @@ class DictionaryProvider : ContentProvider() {
         if (null == wordList) {
             return 0
         }
-        val status: Int = wordList.getAsInteger(MetadataDbHelper.Companion.STATUS_COLUMN)
-        val version: Int = wordList.getAsInteger(MetadataDbHelper.Companion.VERSION_COLUMN)
-        if (MetadataDbHelper.Companion.STATUS_DELETING == status) {
+        val status: Int = wordList.getAsInteger(MetadataDbHelper.STATUS_COLUMN)
+        val version: Int = wordList.getAsInteger(MetadataDbHelper.VERSION_COLUMN)
+        if (MetadataDbHelper.STATUS_DELETING == status) {
             UpdateHandler.markAsDeleted(getContext()!!, clientId, wordlistId, version, status)
             return 1
         }
-        if (MetadataDbHelper.Companion.STATUS_INSTALLED == status) {
+        if (MetadataDbHelper.STATUS_INSTALLED == status) {
             val result: String? = uri.getQueryParameter(QUERY_PARAMETER_DELETE_RESULT)
             if (QUERY_PARAMETER_FAILURE == result) {
                 if (DEBUG) {
@@ -444,7 +444,7 @@ class DictionaryProvider : ContentProvider() {
                 UpdateHandler.markAsBrokenOrRetrying(getContext(), clientId, wordlistId, version)
             }
             val localFilename: String =
-                wordList.getAsString(MetadataDbHelper.Companion.LOCAL_FILENAME_COLUMN)
+                wordList.getAsString(MetadataDbHelper.LOCAL_FILENAME_COLUMN)
             val f: File = getContext()!!.getFileStreamPath(localFilename)
             // f.delete() returns true if the file was successfully deleted, false otherwise
             return if (f.delete()) 1 else 0
@@ -460,8 +460,9 @@ class DictionaryProvider : ContentProvider() {
      * @param values the values to insert for this content uri
      * @return the URI for the newly inserted item. May be null if arguments don't allow for insert
      */
+
     @Throws(UnsupportedOperationException::class)
-    override fun insert(uri: Uri?, values: ContentValues?): Uri? {
+    override fun insert(uri: Uri, values: ContentValues?): Uri? {
         if (null == uri || null == values) return null // Should never happen but let's be safe
 
         PrivateLog.log("Insert, uri = " + uri.toString())
@@ -472,13 +473,13 @@ class DictionaryProvider : ContentProvider() {
                 // is reserved for internal use.
                 // The metadata URI may not be null, but it may be empty if the client does not
                 // want the dictionary pack to update the metadata automatically.
-                MetadataDbHelper.Companion.updateClientInfo(getContext(), clientId!!, values)
+                MetadataDbHelper.updateClientInfo(getContext(), clientId!!, values)
 
             DICTIONARY_V2_DICT_INFO -> {
                 try {
                     val newDictionaryMetadata: WordListMetadata =
-                        WordListMetadata.Companion.createFromContentValues(
-                            MetadataDbHelper.Companion.completeWithDefaultValues(values)
+                        WordListMetadata.createFromContentValues(
+                            MetadataDbHelper.completeWithDefaultValues(values)
                         )
                     MarkPreInstalledAction(clientId, newDictionaryMetadata)
                         .execute(getContext()!!)

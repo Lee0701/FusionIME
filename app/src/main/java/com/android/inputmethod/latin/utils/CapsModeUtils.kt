@@ -37,9 +37,9 @@ object CapsModeUtils {
         s: String, capitalizeMode: Int,
         locale: Locale
     ): String? {
-        return if (WordComposer.Companion.CAPS_MODE_AUTO_SHIFT_LOCKED == capitalizeMode) {
+        return if (WordComposer.CAPS_MODE_AUTO_SHIFT_LOCKED == capitalizeMode) {
             s.uppercase(locale)
-        } else if (WordComposer.Companion.CAPS_MODE_AUTO_SHIFTED == capitalizeMode) {
+        } else if (WordComposer.CAPS_MODE_AUTO_SHIFTED == capitalizeMode) {
             StringUtils.capitalizeFirstCodePoint(s, locale)
         } else {
             s
@@ -52,8 +52,8 @@ object CapsModeUtils {
      * @return true if this represents an auto-caps mode, false otherwise
      */
     fun isAutoCapsMode(mode: Int): Boolean {
-        return WordComposer.Companion.CAPS_MODE_AUTO_SHIFTED == mode
-                || WordComposer.Companion.CAPS_MODE_AUTO_SHIFT_LOCKED == mode
+        return WordComposer.CAPS_MODE_AUTO_SHIFTED == mode
+                || WordComposer.CAPS_MODE_AUTO_SHIFT_LOCKED == mode
     }
 
     /**

@@ -41,19 +41,19 @@ class SettingsFragment : InputMethodSettingsFragment() {
             ApplicationUtils.getActivityTitleResId(activity, SettingsActivity::class.java)
         )
         if (!ProductionFlags.ENABLE_ACCOUNT_SIGN_IN) {
-            val accountsPreference = findPreference(Settings.Companion.SCREEN_ACCOUNTS)
+            val accountsPreference = findPreference(Settings.SCREEN_ACCOUNTS)
             preferenceScreen.removePreference(accountsPreference)
         }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        if (FeedbackUtils.isHelpAndFeedbackFormSupported()) {
+        if (FeedbackUtils.isHelpAndFeedbackFormSupported) {
             menu.add(
                 NO_MENU_GROUP, MENU_HELP_AND_FEEDBACK,  /* itemId */
                 MENU_HELP_AND_FEEDBACK,  /* order */R.string.help_and_feedback
             )
         }
-        val aboutResId = FeedbackUtils.getAboutKeyboardTitleResId()
+        val aboutResId = FeedbackUtils.aboutKeyboardTitleResId
         if (aboutResId != 0) {
             menu.add(NO_MENU_GROUP, MENU_ABOUT,  /* itemId */MENU_ABOUT,  /* order */aboutResId)
         }

@@ -57,7 +57,7 @@ abstract class Dictionary(dictType: String, locale: Locale?) {
         settingsValuesForSuggestion: SettingsValuesForSuggestion,
         sessionId: Int, weightForLocale: Float,
         inOutWeightOfLangModelVsSpatialModel: FloatArray?
-    ): ArrayList<SuggestedWordInfo?>?
+    ): ArrayList<SuggestedWordInfo>?
 
     /**
      * Checks if the given word has to be treated as a valid word. Please note that some
@@ -65,20 +65,20 @@ abstract class Dictionary(dictType: String, locale: Locale?) {
      * @param word the word to search for. The search should be case-insensitive.
      * @return true if the word is valid, false otherwise
      */
-    open fun isValidWord(word: String?): Boolean {
+    open fun isValidWord(word: String): Boolean {
         return isInDictionary(word)
     }
 
     /**
      * Checks if the given word is in the dictionary regardless of it being valid or not.
      */
-    abstract fun isInDictionary(word: String?): Boolean
+    abstract fun isInDictionary(word: String): Boolean
 
     /**
      * Get the frequency of the word.
      * @param word the word to get the frequency of.
      */
-    open fun getFrequency(word: String?): Int {
+    open fun getFrequency(word: String): Int {
         return NOT_A_PROBABILITY
     }
 
@@ -86,7 +86,7 @@ abstract class Dictionary(dictType: String, locale: Locale?) {
      * Get the maximum frequency of the word.
      * @param word the word to get the maximum frequency of.
      */
-    open fun getMaxFrequencyOfExactMatches(word: String?): Int {
+    open fun getMaxFrequencyOfExactMatches(word: String): Int {
         return NOT_A_PROBABILITY
     }
 
@@ -162,11 +162,11 @@ abstract class Dictionary(dictType: String, locale: Locale?) {
             settingsValuesForSuggestion: SettingsValuesForSuggestion,
             sessionId: Int, weightForLocale: Float,
             inOutWeightOfLangModelVsSpatialModel: FloatArray?
-        ): ArrayList<SuggestedWordInfo?>? {
+        ): ArrayList<SuggestedWordInfo>? {
             return null
         }
 
-        override fun isInDictionary(word: String?): Boolean {
+        override fun isInDictionary(word: String): Boolean {
             return false
         }
     }

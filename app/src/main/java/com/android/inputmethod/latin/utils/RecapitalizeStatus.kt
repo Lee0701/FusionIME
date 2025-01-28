@@ -35,7 +35,7 @@ class RecapitalizeStatus {
     private var mRotationStyleCurrentIndex = 0
     private var mSkipOriginalMixedCaseMode = false
     private var mLocale: Locale? = null
-    private var mSortedSeparators: IntArray
+    private var mSortedSeparators: IntArray = intArrayOf()
     var recapitalizedString: String? = null
         private set
     var isStarted: Boolean = false
@@ -124,7 +124,7 @@ class RecapitalizeStatus {
 
                 CAPS_MODE_FIRST_WORD_UPPER -> recapitalizedString = StringUtils.capitalizeEachWord(
                     mStringBefore!!, mSortedSeparators,
-                    mLocale
+                    mLocale!!
                 )
 
                 CAPS_MODE_ALL_UPPER -> recapitalizedString = mStringBefore!!.uppercase(

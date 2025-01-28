@@ -367,7 +367,7 @@ class MetadataDbHelper private constructor(context: Context?, clientId: String) 
             return null != getMetadataUriAsString(context, clientId)
         }
 
-        private val sMetadataUriGetter: MetadataUriGetter = MetadataUriGetter()
+        private val sMetadataUriGetter: MetadataUriGetter = MetadataUriGetter
 
         /**
          * Returns the metadata URI as a string.
