@@ -126,14 +126,9 @@ class KeyboardLayoutSet internal constructor(context: Context, @Nonnull params: 
             else -> keyboardLayoutSetElementId = baseKeyboardLayoutSetElementId
         }
 
-        var elementParams: ElementParams = mParams.mKeyboardLayoutSetElementIdToParamsMap.get(
+        val elementParams: ElementParams = mParams.mKeyboardLayoutSetElementIdToParamsMap.get(
             keyboardLayoutSetElementId
-        )
-        if (elementParams == null) {
-            elementParams = mParams.mKeyboardLayoutSetElementIdToParamsMap.get(
-                KeyboardId.ELEMENT_ALPHABET
-            )
-        }
+        ) ?: mParams.mKeyboardLayoutSetElementIdToParamsMap.get(KeyboardId.ELEMENT_ALPHABET)
 
         // Note: The keyboard for each shift state, and mode are represented as an elementName
         // attribute in a keyboard_layout_set XML file.  Also each keyboard layout XML resource is

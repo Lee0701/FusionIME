@@ -129,8 +129,8 @@ class KeyboardIconsSet {
             var iconId: Int = ICON_UNDEFINED
             var i: Int = 0
             while (i < NAMES_AND_ATTR_IDS.size) {
-                val name: String = NAMES_AND_ATTR_IDS.get(i) as String
-                val attrId: Int = NAMES_AND_ATTR_IDS.get(i + 1) as Int
+                val name: String = NAMES_AND_ATTR_IDS[i] as String
+                val attrId: Int = NAMES_AND_ATTR_IDS[i + 1] as Int
                 if (attrId != ATTR_UNDEFINED) {
                     ATTR_ID_TO_ICON_ID.put(attrId, iconId)
                 }

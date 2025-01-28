@@ -323,7 +323,7 @@ open class SuggestedWords(
              */
             fun removeDups(
                 typedWord: String?,
-                @Nonnull candidates: ArrayList<SuggestedWordInfo>
+                candidates: ArrayList<SuggestedWordInfo>
             ): Int {
                 if (candidates.isEmpty()) {
                     return -1
@@ -334,9 +334,9 @@ open class SuggestedWords(
                         typedWord, candidates, -1 /* startIndexExclusive */
                     )
                 }
-                for (i in candidates.indices) {
+                candidates.indices.reversed().forEach { i ->
                     removeSuggestedWordInfoFromList(
-                        candidates.get(i).word, candidates, i /* startIndexExclusive */
+                        candidates[i].word, candidates, i /* startIndexExclusive */
                     )
                 }
                 return firstOccurrenceOfWord

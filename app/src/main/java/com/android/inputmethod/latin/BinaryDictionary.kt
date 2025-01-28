@@ -58,7 +58,7 @@ class BinaryDictionary : Dictionary {
     // {@code mDicTraverseSessions}.
     private fun getTraverseSession(traverseSessionId: Int): DicTraverseSession {
         synchronized(mDicTraverseSessions) {
-            var traverseSession: DicTraverseSession = mDicTraverseSessions.get(traverseSessionId)
+            var traverseSession: DicTraverseSession? = mDicTraverseSessions.get(traverseSessionId)
             if (traverseSession == null) {
                 traverseSession = DicTraverseSession(mLocale, mNativeDict, mDictSize)
                 mDicTraverseSessions.put(traverseSessionId, traverseSession)
@@ -680,11 +680,13 @@ class BinaryDictionary : Dictionary {
             JniUtils.loadNativeLibrary()
         }
 
+        @JvmStatic
         private external fun openNative(
             sourceDir: String?, dictOffset: Long, dictSize: Long,
             isUpdatable: Boolean
         ): Long
 
+        @JvmStatic
         private external fun createOnMemoryNative(
             formatVersion: Long,
             locale: String,
@@ -692,24 +694,34 @@ class BinaryDictionary : Dictionary {
             attributeValueStringArray: Array<String?>
         ): Long
 
+        @JvmStatic
         private external fun getHeaderInfoNative(
             dict: Long, outHeaderSize: IntArray,
             outFormatVersion: IntArray, outAttributeKeys: ArrayList<IntArray>,
             outAttributeValues: ArrayList<IntArray>
         )
 
+        @JvmStatic
         private external fun flushNative(dict: Long, filePath: String?): Boolean
+        @JvmStatic
         private external fun needsToRunGCNative(dict: Long, mindsBlockByGC: Boolean): Boolean
+        @JvmStatic
         private external fun flushWithGCNative(dict: Long, filePath: String?): Boolean
+        @JvmStatic
         private external fun closeNative(dict: Long)
+        @JvmStatic
         private external fun getFormatVersionNative(dict: Long): Int
+        @JvmStatic
         private external fun getProbabilityNative(dict: Long, word: IntArray): Int
+        @JvmStatic
         private external fun getMaxProbabilityOfExactMatchesNative(dict: Long, word: IntArray): Int
+        @JvmStatic
         private external fun getNgramProbabilityNative(
             dict: Long, prevWordCodePointArrays: Array<IntArray?>,
             isBeginningOfSentenceArray: BooleanArray, word: IntArray
         ): Int
 
+        @JvmStatic
         private external fun getWordPropertyNative(
             dict: Long, word: IntArray,
             isBeginningOfSentence: Boolean, outCodePoints: IntArray, outFlags: BooleanArray,
@@ -719,11 +731,13 @@ class BinaryDictionary : Dictionary {
             outShortcutTargets: ArrayList<IntArray>, outShortcutProbabilities: ArrayList<Int>
         )
 
+        @JvmStatic
         private external fun getNextWordNative(
             dict: Long, token: Int, outCodePoints: IntArray,
             outIsBeginningOfSentence: BooleanArray
         ): Int
 
+        @JvmStatic
         private external fun getSuggestionsNative(
             dict: Long,
             proximityInfo: Long,
@@ -747,19 +761,23 @@ class BinaryDictionary : Dictionary {
             inOutWeightOfLangModelVsSpatialModel: FloatArray
         )
 
+        @JvmStatic
         private external fun addUnigramEntryNative(
             dict: Long, word: IntArray, probability: Int,
             shortcutTarget: IntArray?, shortcutProbability: Int, isBeginningOfSentence: Boolean,
             isNotAWord: Boolean, isPossiblyOffensive: Boolean, timestamp: Int
         ): Boolean
 
+        @JvmStatic
         private external fun removeUnigramEntryNative(dict: Long, word: IntArray): Boolean
+        @JvmStatic
         private external fun addNgramEntryNative(
             dict: Long,
             prevWordCodePointArrays: Array<IntArray?>, isBeginningOfSentenceArray: BooleanArray,
             word: IntArray, probability: Int, timestamp: Int
         ): Boolean
 
+        @JvmStatic
         private external fun removeNgramEntryNative(
             dict: Long,
             prevWordCodePointArrays: Array<IntArray>,
@@ -767,19 +785,24 @@ class BinaryDictionary : Dictionary {
             word: IntArray
         ): Boolean
 
+        @JvmStatic
         private external fun updateEntriesForWordWithNgramContextNative(
             dict: Long,
             prevWordCodePointArrays: Array<IntArray?>, isBeginningOfSentenceArray: BooleanArray,
             word: IntArray, isValidWord: Boolean, count: Int, timestamp: Int
         ): Boolean
 
+        @JvmStatic
         private external fun updateEntriesForInputEventsNative(
             dict: Long,
             inputEvents: Array<WordInputEventForPersonalization>, startIndex: Int
         ): Int
 
+        @JvmStatic
         private external fun getPropertyNative(dict: Long, query: String): String
+        @JvmStatic
         private external fun isCorruptedNative(dict: Long): Boolean
+        @JvmStatic
         private external fun migrateNative(
             dict: Long, dictFilePath: String,
             newFormatVersion: Long

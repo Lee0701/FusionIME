@@ -170,7 +170,7 @@ internal class GestureTrailDrawingPoints {
                         if (params.mTrailShadowEnabled) {
                             val shadow2: Float = r2 * params.mTrailShadowRatio
                             paint.setShadowLayer(shadow2, 0.0f, 0.0f, params.mTrailColor)
-                            val shadowInset: Int = -ceil(shadow2.toDouble()) as Int
+                            val shadowInset: Int = -ceil(shadow2.toDouble()).toInt()
                             mRoundedLineBounds.inset(shadowInset, shadowInset)
                         }
                         // Take union for the bounds.

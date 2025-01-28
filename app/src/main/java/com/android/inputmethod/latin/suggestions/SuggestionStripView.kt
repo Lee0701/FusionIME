@@ -196,7 +196,7 @@ class SuggestionStripView @JvmOverloads constructor(
     private fun removeAllDebugInfoViews() {
         // The debug info views may be placed as children views of this {@link SuggestionStripView}.
         for (debugInfoView: View in mDebugInfoViews) {
-            val parent: ViewParent = debugInfoView.getParent()
+            val parent: ViewParent? = debugInfoView.parent
             if (parent is ViewGroup) {
                 parent.removeView(debugInfoView)
             }

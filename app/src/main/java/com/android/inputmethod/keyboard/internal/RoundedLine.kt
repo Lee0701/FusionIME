@@ -63,10 +63,10 @@ class RoundedLine {
         val aa: Double = a - (RIGHT_ANGLE + ar)
         // The end angle of trail cap arc at P2.
         val ab: Double = a + (RIGHT_ANGLE + ar)
-        val cosa: Float = cos(aa) as Float
-        val sina: Float = sin(aa) as Float
-        val cosb: Float = cos(ab) as Float
-        val sinb: Float = sin(ab) as Float
+        val cosa: Float = cos(aa).toFloat()
+        val sina: Float = sin(aa).toFloat()
+        val cosb: Float = cos(ab).toFloat()
+        val sinb: Float = sin(ab).toFloat()
         // Closing point of arc at P1.
         val p1ax: Float = p1x + r1 * cosa
         val p1ay: Float = p1y + r1 * sina

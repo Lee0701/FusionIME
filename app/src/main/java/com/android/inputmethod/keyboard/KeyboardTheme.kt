@@ -193,7 +193,7 @@ class KeyboardTheme private constructor(
 
         /* package private for testing */
         fun getAvailableThemeArray(context: Context): Array<KeyboardTheme> {
-            if (AVAILABLE_KEYBOARD_THEMES == null) {
+            if (AVAILABLE_KEYBOARD_THEMES.isEmpty()) {
                 val availableThemeIdStringArray: IntArray = context.getResources().getIntArray(
                     R.array.keyboard_theme_ids
                 )

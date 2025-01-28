@@ -154,7 +154,7 @@ class GestureStrokeDrawingPoints(drawingParams: GestureStrokeDrawingParams?) {
             val deltaAngle: Double = abs(angularDiff(m2, m1))
             val segmentsByAngle: Int = ceil(
                 deltaAngle / mDrawingParams!!.mMaxInterpolationAngularThreshold
-            ) as Int
+            ).toInt()
             val deltaDistance: Double = hypot(
                 (mInterpolator.mP1X - mInterpolator.mP2X).toDouble(),
                 (mInterpolator.mP1Y - mInterpolator.mP2Y).toDouble()
@@ -162,7 +162,7 @@ class GestureStrokeDrawingPoints(drawingParams: GestureStrokeDrawingParams?) {
             val segmentsByDistance: Int = ceil(
                 deltaDistance
                         / mDrawingParams.mMaxInterpolationDistanceThreshold
-            ) as Int
+            ).toInt()
             val segments: Int = min(
                 mDrawingParams.mMaxInterpolationSegments.toDouble(),
                 max(segmentsByAngle.toDouble(), segmentsByDistance.toDouble())

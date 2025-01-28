@@ -34,6 +34,7 @@ object BinaryDictionaryUtils {
     }
 
     @UsedForTesting
+    @JvmStatic
     private external fun createEmptyDictFileNative(
         filePath: String,
         dictVersion: Long,
@@ -42,12 +43,14 @@ object BinaryDictionaryUtils {
         attributeValueStringArray: Array<String?>
     ): Boolean
 
+    @JvmStatic
     private external fun calcNormalizedScoreNative(
         before: IntArray?,
         after: IntArray?,
         score: Int
     ): Float
 
+    @JvmStatic
     private external fun setCurrentTimeForTestNative(currentTime: Int): Int
 
     @Throws(IOException::class, UnsupportedFormatException::class)

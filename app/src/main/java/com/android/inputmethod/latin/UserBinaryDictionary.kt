@@ -204,6 +204,7 @@ class UserBinaryDictionary protected constructor(
 
         // Note: This method is called by {@link DictionaryFacilitator} using Java reflection.
         @ExternallyReferenced
+        @JvmStatic
         fun getDictionary(
             context: Context, locale: Locale, dictFile: File?,
             dictNamePrefix: String, account: String?

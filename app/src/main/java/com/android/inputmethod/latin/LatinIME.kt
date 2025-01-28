@@ -661,8 +661,8 @@ class LatinIME : InputMethodService(), KeyboardActionListener, SuggestionStripVi
     @UsedForTesting
     fun loadSettings() {
         val locale: Locale = mRichImm?.currentSubtypeLocale!!
-        val editorInfo: EditorInfo = currentInputEditorInfo
-        val inputAttributes: InputAttributes = InputAttributes(
+        val editorInfo: EditorInfo? = currentInputEditorInfo
+        val inputAttributes = InputAttributes(
             editorInfo, isFullscreenMode, packageName
         )
         mSettings.loadSettings(this, locale, inputAttributes)

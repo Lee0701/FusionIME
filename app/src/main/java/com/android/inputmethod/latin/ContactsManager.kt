@@ -86,7 +86,7 @@ class ContactsManager(context: Context) {
                     10,
                     TimeUnit.DAYS
                 ))).toDouble()
-            ) as Float
+            ).toFloat()
             val visibleWeight: Float = if (mInVisibleGroup) 1.0f else 0.0f
             affinity = (timesWeight + lastTimeWeight + visibleWeight) / 3
         }

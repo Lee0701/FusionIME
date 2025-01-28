@@ -234,9 +234,9 @@ object ResourceUtils {
         // Keyboard height will not exceed maxKeyboardHeight and will not be less than
         // minKeyboardHeight.
         return max(
-            min(keyboardHeight.toDouble(), maxKeyboardHeight.toDouble()),
-            minKeyboardHeight.toDouble()
-        ) as Int
+            min(keyboardHeight, maxKeyboardHeight),
+            minKeyboardHeight
+        ).toInt()
     }
 
     fun isValidFraction(fraction: Float): Boolean {

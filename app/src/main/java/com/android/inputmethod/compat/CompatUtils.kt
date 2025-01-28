@@ -230,13 +230,8 @@ object CompatUtils {
     }
 
     class ToFloatMethodWrapper(method: Method?, defaultValue: Float) {
-        private val mMethod: Method?
-        private val mDefaultValue: Float
-
-        init {
-            mMethod = method
-            mDefaultValue = defaultValue
-        }
+        private val mMethod: Method? = method
+        private val mDefaultValue: Float = defaultValue
 
         fun invoke(receiver: Any?, vararg args: Any?): Float {
             return CompatUtils.invoke(receiver, mDefaultValue, mMethod, *args) as Float

@@ -145,8 +145,7 @@ class KeyStylesSet(@Nonnull textsSet: KeyboardTextsSet) {
 
         fun readFlags(a: TypedArray, index: Int) {
             if (a.hasValue(index)) {
-                val value: Int? = mStyleAttributes.get(index) as Int?
-                val styleFlags: Int = if (value != null) value else 0
+                val styleFlags: Int = mStyleAttributes.get(index) as Int? ?: 0
                 mStyleAttributes.put(index, a.getInt(index, 0) or styleFlags)
             }
         }
@@ -163,12 +162,10 @@ class KeyStylesSet(@Nonnull textsSet: KeyboardTextsSet) {
         keyStyleAttr: TypedArray, keyAttrs: TypedArray,
         parser: XmlPullParser
     ) {
-        val styleName: String? = keyStyleAttr.getString(R.styleable.Keyboard_KeyStyle_styleName)
-        if (styleName == null) {
-            throw XmlParseUtils.ParseException(
+        val styleName: String = keyStyleAttr.getString(R.styleable.Keyboard_KeyStyle_styleName)
+            ?: throw XmlParseUtils.ParseException(
                 KeyboardBuilder.TAG_KEY_STYLE + " has no styleName attribute", parser
             )
-        }
         if (DEBUG) {
             Log.d(
                 TAG, String.format(

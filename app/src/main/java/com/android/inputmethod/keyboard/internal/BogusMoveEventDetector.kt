@@ -36,7 +36,7 @@ class BogusMoveEventDetector {
     private var mActualDownY: Int = 0
 
     fun setKeyboardGeometry(keyWidth: Int, keyHeight: Int) {
-        val keyDiagonal: Float = hypot(keyWidth.toDouble(), keyHeight.toDouble()) as Float
+        val keyDiagonal: Float = hypot(keyWidth.toDouble(), keyHeight.toDouble()).toFloat()
         mAccumulatedDistanceThreshold =
             (keyDiagonal * BOGUS_MOVE_ACCUMULATED_DISTANCE_THRESHOLD).toInt()
         mRadiusThreshold = (keyDiagonal * BOGUS_MOVE_RADIUS_THRESHOLD).toInt()
@@ -114,7 +114,7 @@ class BogusMoveEventDetector {
         }
 
         private fun getDistance(x1: Int, y1: Int, x2: Int, y2: Int): Int {
-            return hypot((x1 - x2).toDouble(), (y1 - y2).toDouble()) as Int
+            return hypot((x1 - x2).toDouble(), (y1 - y2).toDouble()).toInt()
         }
     }
 }

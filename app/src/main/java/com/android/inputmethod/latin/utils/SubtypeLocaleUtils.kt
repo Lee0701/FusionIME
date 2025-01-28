@@ -345,6 +345,6 @@ ${DebugLogUtils.getStackTrace(e)}""")
     }
 
     fun getCombiningRulesExtraValue(subtype: InputMethodSubtype): String {
-        return subtype.getExtraValueOf(ExtraValue.COMBINING_RULES)
+        return subtype.getExtraValueOf(ExtraValue.COMBINING_RULES) ?: ""
     }
 }

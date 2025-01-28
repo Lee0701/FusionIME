@@ -83,12 +83,15 @@ class DicTraverseSession(locale: Locale?, dictionary: Long, dictSize: Long) {
 
         // Must be equal to MAX_RESULTS in native/jni/src/defines.h
         private const val MAX_RESULTS: Int = 18
+        @JvmStatic
         private external fun setDicTraverseSessionNative(locale: String, dictSize: Long): Long
+        @JvmStatic
         private external fun initDicTraverseSessionNative(
             nativeDicTraverseSession: Long,
             dictionary: Long, previousWord: IntArray?, previousWordLength: Int
         )
 
+        @JvmStatic
         private external fun releaseDicTraverseSessionNative(nativeDicTraverseSession: Long)
 
         private fun createNativeDicTraverseSession(locale: String, dictSize: Long): Long {

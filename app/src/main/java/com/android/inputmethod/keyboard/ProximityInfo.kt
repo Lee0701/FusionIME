@@ -148,9 +148,9 @@ class ProximityInfo internal constructor(
                     * hypot(
                 mMostCommonKeyWidth.toDouble(),
                 mMostCommonKeyHeight.toDouble()
-            ) as Float)
-            var infoIndex: Int = 0
-            var keyIndex: Int = 0
+            ).toFloat())
+            var infoIndex = 0
+            var keyIndex = 0
             while (keyIndex < sortedKeys.size) {
                 val key: Key = sortedKeys.get(keyIndex)
                 // Excluding from touch position correction arrays
@@ -167,7 +167,7 @@ class ProximityInfo internal constructor(
                     val hitBoxWidth: Int = hitBox.width()
                     val hitBoxHeight: Int = hitBox.height()
                     val hitBoxDiagonal: Float =
-                        hypot(hitBoxWidth.toDouble(), hitBoxHeight.toDouble()) as Float
+                        hypot(hitBoxWidth.toDouble(), hitBoxHeight.toDouble()).toFloat()
                     sweetSpotCenterXs[infoIndex] +=
                         touchPositionCorrection.getX(row) * hitBoxWidth
                     sweetSpotCenterYs[infoIndex] +=
@@ -425,6 +425,7 @@ y |---+---+---+---+-v-+-|-+---+---+---+---+---|          | thresholdBase and get
         }
 
         // TODO: Stop passing proximityCharsArray
+        @JvmStatic
         private external fun setProximityInfoNative(
             displayWidth: Int,
             displayHeight: Int,
@@ -444,8 +445,10 @@ y |---+---+---+---+-v-+-|-+---+---+---+---+---|          | thresholdBase and get
             sweetSpotRadii: FloatArray?
         ): Long
 
+        @JvmStatic
         private external fun releaseProximityInfoNative(nativeProximityInfo: Long)
 
+        @JvmStatic
         fun needsProximityInfo(key: Key): Boolean {
             // Don't include special keys into ProximityInfo.
             return key.code >= Constants.CODE_SPACE

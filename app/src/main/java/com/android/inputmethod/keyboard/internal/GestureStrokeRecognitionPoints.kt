@@ -368,7 +368,7 @@ class GestureStrokeRecognitionPoints(
         private const val MSEC_PER_SEC: Int = 1000
 
         private fun getDistance(x1: Int, y1: Int, x2: Int, y2: Int): Int {
-            return hypot((x1 - x2).toDouble(), (y1 - y2).toDouble()) as Int
+            return hypot((x1 - x2).toDouble(), (y1 - y2).toDouble()).toInt()
         }
     }
 }

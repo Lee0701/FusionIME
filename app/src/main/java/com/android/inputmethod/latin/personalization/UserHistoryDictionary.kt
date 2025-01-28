@@ -118,6 +118,7 @@ class UserHistoryDictionary internal constructor(
         // Note: This method is called by {@link DictionaryFacilitator} using Java reflection.
         @Suppress("unused")
         @ExternallyReferenced
+        @JvmStatic
         fun getDictionary(
             context: Context, locale: Locale,
             dictFile: File?, dictNamePrefix: String?, account: String?
