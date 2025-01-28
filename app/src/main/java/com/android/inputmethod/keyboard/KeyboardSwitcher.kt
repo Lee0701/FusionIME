@@ -163,10 +163,10 @@ class KeyboardSwitcher private constructor() : SwitchActions {
         )
         keyboardView.updateShortcutKey(mRichImm!!.isShortcutImeReady)
         val subtypeChanged: Boolean = (oldKeyboard == null)
-                || newKeyboard.mId!!.mSubtype != oldKeyboard.mId!!.mSubtype
+                || newKeyboard.mId.mSubtype != oldKeyboard.mId.mSubtype
         val languageOnSpacebarFormatType: Int =
             LanguageOnSpacebarUtils.getLanguageOnSpacebarFormatType(
-                newKeyboard.mId!!.mSubtype!!
+                newKeyboard.mId.mSubtype!!
             )
         val hasMultipleEnabledIMEsOrSubtypes: Boolean = mRichImm
             ?.hasMultipleEnabledIMEsOrSubtypes(true /* shouldIncludeAuxiliarySubtypes */) == true
@@ -289,7 +289,7 @@ class KeyboardSwitcher private constructor() : SwitchActions {
         settingsValues: SettingsValues,
         toggleState: KeyboardSwitchState
     ) {
-        val visibility: Int = if (isImeSuppressedByHardwareKeyboard(settingsValues!!, toggleState))
+        val visibility: Int = if (isImeSuppressedByHardwareKeyboard(settingsValues, toggleState))
             View.GONE
         else
             View.VISIBLE
@@ -505,7 +505,7 @@ class KeyboardSwitcher private constructor() : SwitchActions {
         if (keyboard == null) {
             return WordComposer.CAPS_MODE_OFF
         }
-        when (keyboard.mId!!.mElementId) {
+        when (keyboard.mId.mElementId) {
             KeyboardId.ELEMENT_ALPHABET_SHIFT_LOCKED, KeyboardId.ELEMENT_ALPHABET_SHIFT_LOCK_SHIFTED -> return WordComposer.CAPS_MODE_MANUAL_SHIFT_LOCKED
             KeyboardId.ELEMENT_ALPHABET_MANUAL_SHIFTED -> return WordComposer.CAPS_MODE_MANUAL_SHIFTED
             KeyboardId.ELEMENT_ALPHABET_AUTOMATIC_SHIFTED -> return WordComposer.CAPS_MODE_AUTO_SHIFTED

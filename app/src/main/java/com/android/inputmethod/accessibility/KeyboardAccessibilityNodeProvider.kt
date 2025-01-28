@@ -133,7 +133,7 @@ class KeyboardAccessibilityNodeProvider<KV : KeyboardView>
         val virtualViewId: Int = getVirtualViewIdOf(key)
         val keyDescription: String? = getKeyDescription(key)
         val event: AccessibilityEvent = AccessibilityEvent.obtain(eventType)
-        event.setPackageName(mKeyboardView!!.getContext().getPackageName())
+        event.setPackageName(mKeyboardView.context.packageName)
         event.setClassName(key.javaClass.getName())
         event.setContentDescription(keyDescription)
         event.setEnabled(true)
@@ -324,7 +324,7 @@ class KeyboardAccessibilityNodeProvider<KV : KeyboardView>
      * @return The context-specific description of the key.
      */
     private fun getKeyDescription(key: Key): String? {
-        val editorInfo: EditorInfo? = mKeyboard!!.mId!!.mEditorInfo
+        val editorInfo: EditorInfo? = mKeyboard!!.mId.mEditorInfo
         val shouldObscure: Boolean = mAccessibilityUtils.shouldObscureInput(editorInfo)
         val currentSettings: SettingsValues? = Settings.instance.current
         val keyCodeDescription: String? = mKeyCodeDescriptionMapper.getDescriptionForKey(

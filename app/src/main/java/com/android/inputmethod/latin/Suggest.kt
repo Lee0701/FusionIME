@@ -106,14 +106,14 @@ class Suggest(dictionaryFacilitator: DictionaryFacilitator) {
             wordComposer.composedDataSnapshot, ngramContext, keyboard,
             settingsValuesForSuggestion, SESSION_ID_TYPING, inputStyleIfNotPrediction
         )
-        val locale: Locale? = mDictionaryFacilitator.locale
+        val locale: Locale = mDictionaryFacilitator.locale
         val suggestionsContainer: ArrayList<SuggestedWordInfo> =
             getTransformedSuggestedWordInfoList(
                 wordComposer, suggestionResults,
                 trailingSingleQuotesCount, locale
             )
 
-        var foundInDictionary: Boolean = false
+        var foundInDictionary = false
         var sourceDictionaryOfRemovedWord: Dictionary? = null
         for (info: SuggestedWordInfo in suggestionsContainer) {
             // Search for the best dictionary, defined as the first one with the highest match
@@ -165,11 +165,11 @@ class Suggest(dictionaryFacilitator: DictionaryFacilitator) {
             || !mDictionaryFacilitator.hasAtLeastOneInitializedMainDictionary() // If the first suggestion is a shortcut we never auto-correct to it, regardless
             // of how strong it is (allowlist entries are not KIND_SHORTCUT but KIND_WHITELIST).
             // TODO: we may want to have shortcut-only entries auto-correct in the future.
-            || suggestionResults.first()!!.isKindOf(SuggestedWordInfo.KIND_SHORTCUT)
+            || suggestionResults.first().isKindOf(SuggestedWordInfo.KIND_SHORTCUT)
         ) {
             hasAutoCorrection = false
         } else {
-            val firstSuggestion: SuggestedWordInfo? = suggestionResults.first()
+            val firstSuggestion = suggestionResults.first()
             if (suggestionResults.mFirstSuggestionExceedsConfidenceThreshold
                 && firstOcurrenceOfTypedWordInSuggestions != 0
             ) {
@@ -186,7 +186,7 @@ class Suggest(dictionaryFacilitator: DictionaryFacilitator) {
                 // is determined, see #isAllowedByAutoCorrectionWithSpaceFilter.
                 // TODO: this should not have its own logic here but be handled by the dictionary.
                 hasAutoCorrection = isAllowedByAutoCorrectionWithSpaceFilter(
-                    firstSuggestion!!
+                    firstSuggestion
                 )
             }
         }
@@ -253,7 +253,7 @@ class Suggest(dictionaryFacilitator: DictionaryFacilitator) {
             settingsValuesForSuggestion, SESSION_ID_GESTURE, inputStyle
         )
         // For transforming words that don't come from a dictionary, because it's our best bet
-        val locale: Locale? = mDictionaryFacilitator.locale
+        val locale: Locale = mDictionaryFacilitator.locale
         val suggestionsContainer: ArrayList<SuggestedWordInfo> =
             ArrayList(suggestionResults)
         val suggestionsCount: Int = suggestionsContainer.size
@@ -262,9 +262,8 @@ class Suggest(dictionaryFacilitator: DictionaryFacilitator) {
         if (isFirstCharCapitalized || isAllUpperCase) {
             for (i in 0 until suggestionsCount) {
                 val wordInfo: SuggestedWordInfo = suggestionsContainer.get(i)
-                val wordlocale: Locale? = wordInfo.sourceDictionary?.mLocale
                 val transformedWordInfo: SuggestedWordInfo = getTransformedSuggestedWordInfo(
-                    wordInfo, (if (null == wordlocale) locale else wordlocale)!!, isAllUpperCase,
+                    wordInfo, (wordInfo.sourceDictionary?.mLocale ?: locale), isAllUpperCase,
                     isFirstCharCapitalized, 0 /* trailingSingleQuotesCount */
                 )
                 suggestionsContainer.set(i, transformedWordInfo)
@@ -340,7 +339,7 @@ class Suggest(dictionaryFacilitator: DictionaryFacilitator) {
 
         private fun getTransformedSuggestedWordInfoList(
             wordComposer: WordComposer, results: SuggestionResults,
-            trailingSingleQuotesCount: Int, defaultLocale: Locale?
+            trailingSingleQuotesCount: Int, defaultLocale: Locale
         ): ArrayList<SuggestedWordInfo> {
             val shouldMakeSuggestionsAllUpperCase: Boolean = wordComposer.isAllUpperCase
                     && !wordComposer.isResumed
@@ -353,10 +352,9 @@ class Suggest(dictionaryFacilitator: DictionaryFacilitator) {
                 || 0 != trailingSingleQuotesCount
             ) {
                 for (i in 0 until suggestionsCount) {
-                    val wordInfo: SuggestedWordInfo = suggestionsContainer.get(i)
-                    val wordLocale: Locale? = wordInfo.sourceDictionary?.mLocale
-                    val transformedWordInfo: SuggestedWordInfo = getTransformedSuggestedWordInfo(
-                        wordInfo, (if (null == wordLocale) defaultLocale else wordLocale)!!,
+                    val wordInfo = suggestionsContainer.get(i)
+                    val transformedWordInfo = getTransformedSuggestedWordInfo(
+                        wordInfo, (wordInfo.sourceDictionary?.mLocale ?: defaultLocale),
                         shouldMakeSuggestionsAllUpperCase, isOnlyFirstCharCapitalized,
                         trailingSingleQuotesCount
                     )
@@ -430,16 +428,11 @@ class Suggest(dictionaryFacilitator: DictionaryFacilitator) {
          * @return whether it's fine to auto-correct to this.
          */
         private fun isAllowedByAutoCorrectionWithSpaceFilter(info: SuggestedWordInfo): Boolean {
-            val locale: Locale? = info.sourceDictionary?.mLocale
-            if (null == locale) {
-                return true
-            }
-            val maximumLengthForThisLanguage: Int? =
-                sLanguageToMaximumAutoCorrectionWithSpaceLength.get(locale.getLanguage())
-            if (null == maximumLengthForThisLanguage) {
-                // This language does not enforce a maximum length to auto-correction
-                return true
-            }
+            val locale: Locale = info.sourceDictionary?.mLocale ?: return true
+            val maximumLengthForThisLanguage: Int =
+                sLanguageToMaximumAutoCorrectionWithSpaceLength[locale.language]
+                    ?: // This language does not enforce a maximum length to auto-correction
+                    return true
             return info.word.length <= maximumLengthForThisLanguage
                     || -1 == info.word.indexOf(Constants.CODE_SPACE.toChar())
         }

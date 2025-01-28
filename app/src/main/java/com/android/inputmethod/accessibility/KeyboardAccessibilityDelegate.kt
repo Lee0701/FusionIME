@@ -20,7 +20,6 @@ import android.os.SystemClock
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
-import android.view.ViewParent
 import android.view.accessibility.AccessibilityEvent
 import androidx.core.view.AccessibilityDelegateCompat
 import androidx.core.view.ViewCompat
@@ -114,10 +113,7 @@ open class KeyboardAccessibilityDelegate<KV : KeyboardView>
         stateChange.getText().add(text)
         stateChange.setContentDescription(null)
 
-        val parent: ViewParent? = mKeyboardView.parent
-        if (parent != null) {
-            parent.requestSendAccessibilityEvent(mKeyboardView, stateChange)
-        }
+        mKeyboardView.parent?.requestSendAccessibilityEvent(mKeyboardView, stateChange)
     }
 
     /**
@@ -298,7 +294,7 @@ open class KeyboardAccessibilityDelegate<KV : KeyboardView>
             Log.d(TAG, "onHoverExitFrom: key=" + key)
         }
         key.onReleased()
-        mKeyboardView!!.invalidateKey(key)
+        mKeyboardView.invalidateKey(key)
         val provider: KeyboardAccessibilityNodeProvider<KV> = getAccessibilityNodeProvider()
         provider.onHoverExitFrom(key)
     }

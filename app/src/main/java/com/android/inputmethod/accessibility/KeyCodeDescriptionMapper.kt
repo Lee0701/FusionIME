@@ -253,7 +253,7 @@ internal class KeyCodeDescriptionMapper private constructor() {
             context: Context,
             keyboard: Keyboard
         ): String? {
-            val keyboardId: KeyboardId = keyboard.mId!!
+            val keyboardId: KeyboardId = keyboard.mId
             val elementId: Int = keyboardId.mElementId
             val resId: Int
 
@@ -287,7 +287,7 @@ internal class KeyCodeDescriptionMapper private constructor() {
             context: Context,
             keyboard: Keyboard
         ): String {
-            val keyboardId: KeyboardId = keyboard.mId!!
+            val keyboardId: KeyboardId = keyboard.mId
             val elementId: Int = keyboardId.mElementId
             val resId: Int
 
@@ -321,7 +321,7 @@ internal class KeyCodeDescriptionMapper private constructor() {
             context: Context, keyboard: Keyboard,
             key: Key
         ): String {
-            val keyboardId: KeyboardId = keyboard.mId!!
+            val keyboardId: KeyboardId = keyboard.mId
             val actionId: Int = keyboardId.imeAction()
             val resId: Int
 

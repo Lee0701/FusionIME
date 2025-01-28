@@ -232,7 +232,7 @@ class AccessibilityUtils private constructor() {
     companion object {
         private val TAG: String = AccessibilityUtils::class.java.getSimpleName()
         private val CLASS: String = AccessibilityUtils::class.java.getName()
-        private val PACKAGE: String = AccessibilityUtils::class.java.getPackage().getName()
+        private val PACKAGE: String = AccessibilityUtils::class.java.getPackage().name
 
         val instance: AccessibilityUtils = AccessibilityUtils()
 

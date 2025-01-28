@@ -58,7 +58,7 @@ class MainKeyboardAccessibilityDelegate
         val lastKeyboard: Keyboard? = getKeyboard()
         super.setKeyboard(keyboard)
         val lastKeyboardMode: Int = mLastKeyboardMode
-        mLastKeyboardMode = keyboard.mId!!.mMode
+        mLastKeyboardMode = keyboard.mId.mMode
 
         // Since this method is called even when accessibility is off, make sure
         // to check the state before announcing anything.
@@ -66,7 +66,7 @@ class MainKeyboardAccessibilityDelegate
             return
         }
         // Announce the language name only when the language is changed.
-        if (lastKeyboard == null || keyboard.mId.mSubtype != lastKeyboard.mId!!.mSubtype) {
+        if (lastKeyboard == null || keyboard.mId.mSubtype != lastKeyboard.mId.mSubtype) {
             announceKeyboardLanguage(keyboard)
             return
         }
@@ -99,7 +99,7 @@ class MainKeyboardAccessibilityDelegate
      */
     private fun announceKeyboardLanguage(keyboard: Keyboard) {
         val languageText: String = SubtypeLocaleUtils.getSubtypeDisplayNameInSystemLocale(
-            keyboard.mId?.mSubtype?.rawSubtype!!
+            keyboard.mId.mSubtype?.rawSubtype!!
         )
         sendWindowStateChanged(languageText)
     }
@@ -111,9 +111,9 @@ class MainKeyboardAccessibilityDelegate
      * @param keyboard The new keyboard.
      */
     private fun announceKeyboardMode(keyboard: Keyboard) {
-        val context: Context = mKeyboardView!!.getContext()
+        val context: Context = mKeyboardView.context
         val modeTextResId: Int = KEYBOARD_MODE_RES_IDS.get(
-            keyboard.mId!!.mMode
+            keyboard.mId.mMode
         )
         if (modeTextResId == 0) {
             return
@@ -130,9 +130,9 @@ class MainKeyboardAccessibilityDelegate
      * @param lastKeyboard The last keyboard.
      */
     private fun announceKeyboardType(keyboard: Keyboard, lastKeyboard: Keyboard) {
-        val lastElementId: Int = lastKeyboard.mId!!.mElementId
+        val lastElementId: Int = lastKeyboard.mId.mElementId
         val resId: Int
-        when (keyboard.mId!!.mElementId) {
+        when (keyboard.mId.mElementId) {
             KeyboardId.ELEMENT_ALPHABET_AUTOMATIC_SHIFTED, KeyboardId.ELEMENT_ALPHABET -> {
                 if (lastElementId == KeyboardId.ELEMENT_ALPHABET
                     || lastElementId == KeyboardId.ELEMENT_ALPHABET_AUTOMATIC_SHIFTED

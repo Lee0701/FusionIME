@@ -850,7 +850,7 @@ class LatinIME : InputMethodService(), KeyboardActionListener, SuggestionStripVi
             // keyboard layout with this context.
             val wm: WindowManager =
                 getSystemService(WINDOW_SERVICE) as WindowManager
-            return createDisplayContext(wm.getDefaultDisplay())
+            return createDisplayContext(wm.defaultDisplay)
         }
 
     override fun onCreateInputView(): View {
@@ -1508,7 +1508,7 @@ class LatinIME : InputMethodService(), KeyboardActionListener, SuggestionStripVi
 
     // Implementation of {@link KeyboardActionListener}.
     override fun onCodeInput(
-        codePoint: Int, x: Int, y: Int,
+        primaryCode: Int, x: Int, y: Int,
         isKeyRepeat: Boolean
     ) {
         // TODO: this processing does not belong inside LatinIME, the caller should be doing this.
@@ -1521,7 +1521,7 @@ class LatinIME : InputMethodService(), KeyboardActionListener, SuggestionStripVi
         val keyX: Int = mainKeyboardView!!.getKeyX(x)
         val keyY: Int = mainKeyboardView.getKeyY(y)
         val event: Event = createSoftwareKeypressEvent(
-            getCodePointForKeyboard(codePoint),
+            getCodePointForKeyboard(primaryCode),
             keyX, keyY, isKeyRepeat
         )
         onEvent(event)
@@ -1544,10 +1544,10 @@ class LatinIME : InputMethodService(), KeyboardActionListener, SuggestionStripVi
     }
 
     // Called from PointerTracker through the KeyboardActionListener interface
-    override fun onTextInput(rawText: String?) {
+    override fun onTextInput(text: String?) {
         // TODO: have the keyboard pass the correct key code when we need it.
         val event: Event =
-            Event.createSoftwareTextEvent(rawText, Constants.CODE_OUTPUT_TEXT)
+            Event.createSoftwareTextEvent(text, Constants.CODE_OUTPUT_TEXT)
         val completeInputTransaction: InputTransaction =
             mInputLogic.onTextInput(
                 mSettings.current!!, event,
@@ -1710,9 +1710,9 @@ class LatinIME : InputMethodService(), KeyboardActionListener, SuggestionStripVi
 
     // Called from {@link SuggestionStripView} through the {@link SuggestionStripView#Listener}
     // interface
-    override fun pickSuggestionManually(suggestionInfo: SuggestedWordInfo) {
+    override fun pickSuggestionManually(word: SuggestedWordInfo) {
         val completeInputTransaction: InputTransaction = mInputLogic.onPickSuggestionManually(
-            mSettings.current!!, suggestionInfo,
+            mSettings.current!!, word,
             mKeyboardSwitcher.getKeyboardShiftMode(),
             mKeyboardSwitcher.getCurrentKeyboardScriptId(),
             mHandler
@@ -2061,8 +2061,8 @@ class LatinIME : InputMethodService(), KeyboardActionListener, SuggestionStripVi
         p.println("  VersionCode = " + ApplicationUtils.getVersionCode(this))
         p.println("  VersionName = " + ApplicationUtils.getVersionName(this))
         val keyboard: Keyboard? = mKeyboardSwitcher.getKeyboard()
-        val keyboardMode: Int = if (keyboard != null) keyboard.mId!!.mMode else -1
-        p.println("  Keyboard mode = " + keyboardMode)
+        val keyboardMode: Int = keyboard?.mId?.mMode ?: -1
+        p.println("  Keyboard mode = $keyboardMode")
         val settingsValues: SettingsValues? = mSettings.current
         p.println(settingsValues!!.dump())
         p.println(mDictionaryFacilitator.dump(this /* context */))
@@ -2091,9 +2091,7 @@ class LatinIME : InputMethodService(), KeyboardActionListener, SuggestionStripVi
         if (BuildCompatUtils.EFFECTIVE_SDK_INT > VERSION_CODES.M) {
             // For N and later, IMEs can specify Color.TRANSPARENT to make the navigation bar
             // transparent.  For other colors the system uses the default color.
-            getWindow().getWindow()!!.setNavigationBarColor(
-                if (visible) Color.BLACK else Color.TRANSPARENT
-            )
+            window.window!!.navigationBarColor = if (visible) Color.BLACK else Color.TRANSPARENT
         }
     }
 

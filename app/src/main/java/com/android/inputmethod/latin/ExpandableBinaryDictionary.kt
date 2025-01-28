@@ -89,9 +89,7 @@ abstract class ExpandableBinaryDictionary(
     protected abstract fun loadInitialContentsLocked()
 
     val isValidDictionaryLocked: Boolean
-        get() {
-            return binaryDictionary!!.isValidDictionary
-        }
+        get() = binaryDictionary?.isValidDictionary == true
 
     /**
      * Creates a new expandable binary dictionary.

@@ -30,15 +30,10 @@ internal class AccessibilityLongPressTimer(
         fun performLongClickOn(key: Key)
     }
 
-    private val mCallback: LongPressTimerCallback
-    private val mConfigAccessibilityLongPressTimeout: Long
-
-    init {
-        mCallback = callback
-        mConfigAccessibilityLongPressTimeout = context.getResources().getInteger(
-            R.integer.config_accessibility_long_press_key_timeout
-        ).toLong()
-    }
+    private val mCallback: LongPressTimerCallback = callback
+    private val mConfigAccessibilityLongPressTimeout: Long = context.resources.getInteger(
+        R.integer.config_accessibility_long_press_key_timeout
+    ).toLong()
 
     override fun handleMessage(msg: Message) {
         when (msg.what) {

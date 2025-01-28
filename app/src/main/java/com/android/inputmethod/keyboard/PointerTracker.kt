@@ -435,7 +435,7 @@ class PointerTracker private constructor(id: Int) : PointerTrackerQueue.Element,
     }
 
     // Implements {@link BatchInputArbiterListener}.
-    override fun onUpdateBatchInput(aggregatedPointers: InputPointers, eventTime: Long) {
+    override fun onUpdateBatchInput(aggregatedPointers: InputPointers, moveEventTime: Long) {
         if (DEBUG_LISTENER) {
             Log.d(
                 TAG, String.format(
@@ -453,8 +453,8 @@ class PointerTracker private constructor(id: Int) : PointerTrackerQueue.Element,
     }
 
     // Implements {@link BatchInputArbiterListener}.
-    override fun onEndBatchInput(aggregatedPointers: InputPointers, eventTime: Long) {
-        sTypingTimeRecorder!!.onEndBatchInput(eventTime)
+    override fun onEndBatchInput(aggregatedPointers: InputPointers, upEventTime: Long) {
+        sTypingTimeRecorder!!.onEndBatchInput(upEventTime)
         sTimerProxy!!.cancelAllUpdateBatchInputTimers()
         if (mIsTrackingForActionDisabled) {
             return
@@ -559,7 +559,8 @@ class PointerTracker private constructor(id: Int) : PointerTrackerQueue.Element,
         }
         // A gesture should start only from a non-modifier key. Note that the gesture detection is
         // disabled when the key is repeating.
-        mIsDetectingGesture = (mKeyboard != null) && mKeyboard!!.mId!!.isAlphabetKeyboard()
+        val keyboard = mKeyboard
+        mIsDetectingGesture = keyboard != null && keyboard.mId.isAlphabetKeyboard()
                 && key != null && !key.isModifier
         if (mIsDetectingGesture) {
             mBatchInputArbiter.addDownEventPoint(
@@ -1259,7 +1260,7 @@ class PointerTracker private constructor(id: Int) : PointerTrackerQueue.Element,
                 val tracker: PointerTracker = sTrackers.get(i)
                 tracker.setKeyDetectorInner(keyDetector)
             }
-            sGestureEnabler.setPasswordMode(keyboard.mId!!.passwordInput())
+            sGestureEnabler.setPasswordMode(keyboard.mId.passwordInput())
         }
 
         fun setReleasedKeyGraphicsToAllKeys() {
