@@ -72,7 +72,7 @@ class DictionarySettingsFragment
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle
+        savedInstanceState: Bundle?
     ): View? {
         val v: View = inflater.inflate(R.layout.loading_page, container, true)
         mLoadingView = v.findViewById(R.id.loading_container)
