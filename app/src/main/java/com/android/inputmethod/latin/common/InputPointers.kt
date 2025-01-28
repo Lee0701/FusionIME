@@ -16,7 +16,6 @@
 package com.android.inputmethod.latin.common
 
 import com.android.inputmethod.annotations.UsedForTesting
-import javax.annotation.Nonnull
 
 // TODO: This class is not thread-safe.
 class InputPointers(defaultCapacity: Int) {
@@ -62,14 +61,14 @@ class InputPointers(defaultCapacity: Int) {
         mTimes.add(time)
     }
 
-    fun set(@Nonnull ip: InputPointers) {
+    fun set(ip: InputPointers) {
         mXCoordinates.set(ip.mXCoordinates)
         mYCoordinates.set(ip.mYCoordinates)
         mPointerIds.set(ip.mPointerIds)
         mTimes.set(ip.mTimes)
     }
 
-    fun copy(@Nonnull ip: InputPointers) {
+    fun copy(ip: InputPointers) {
         mXCoordinates.copy(ip.mXCoordinates)
         mYCoordinates.copy(ip.mYCoordinates)
         mPointerIds.copy(ip.mPointerIds)
@@ -87,9 +86,9 @@ class InputPointers(defaultCapacity: Int) {
      * @param length the number of data to be appended.
      */
     fun append(
-        pointerId: Int, @Nonnull times: ResizableIntArray,
-        @Nonnull xCoordinates: ResizableIntArray,
-        @Nonnull yCoordinates: ResizableIntArray, startPos: Int, length: Int
+        pointerId: Int, times: ResizableIntArray,
+        xCoordinates: ResizableIntArray,
+        yCoordinates: ResizableIntArray, startPos: Int, length: Int
     ) {
         if (length == 0) {
             return

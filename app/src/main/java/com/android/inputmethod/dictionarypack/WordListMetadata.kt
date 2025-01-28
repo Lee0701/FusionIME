@@ -16,7 +16,6 @@
 package com.android.inputmethod.dictionarypack
 
 import android.content.ContentValues
-import javax.annotation.Nonnull
 
 /**
  * The metadata for a single word list.
@@ -98,7 +97,7 @@ class WordListMetadata(
          *
          * If this lacks any required field, IllegalArgumentException is thrown.
          */
-        fun createFromContentValues(@Nonnull values: ContentValues): WordListMetadata {
+        fun createFromContentValues(values: ContentValues): WordListMetadata {
             val id: String = values.getAsString(MetadataDbHelper.WORDLISTID_COLUMN)
             val type: Int = values.getAsInteger(MetadataDbHelper.TYPE_COLUMN)
             val description: String? =

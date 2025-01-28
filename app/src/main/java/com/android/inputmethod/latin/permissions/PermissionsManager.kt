@@ -17,7 +17,6 @@ package com.android.inputmethod.latin.permissions
 
 import android.app.Activity
 import android.content.Context
-import javax.annotation.Nonnull
 
 /**
  * Manager to perform permission related tasks. Always call on the UI thread.
@@ -45,7 +44,7 @@ class PermissionsManager(context: Context) {
 
     @Synchronized
     fun requestPermissions(
-        @Nonnull callback: PermissionsResultCallback,
+        callback: PermissionsResultCallback,
         activity: Activity?,
         vararg permissionsToRequest: String
     ) {

@@ -18,7 +18,6 @@ package com.android.inputmethod.latin
 import java.io.File
 import java.math.BigDecimal
 import java.util.Locale
-import javax.annotation.Nonnull
 
 class DictionaryStats {
     val mLocale: Locale
@@ -29,8 +28,8 @@ class DictionaryStats {
     val mWordCount: Int
 
     constructor(
-        @Nonnull locale: Locale,
-        @Nonnull dictType: String,
+        locale: Locale,
+        dictType: String,
         dictFileName: String?,
         dictFile: File?,
         contentVersion: Int
@@ -44,8 +43,8 @@ class DictionaryStats {
     }
 
     constructor(
-        @Nonnull locale: Locale,
-        @Nonnull dictType: String,
+        locale: Locale,
+        dictType: String,
         wordCount: Int
     ) {
         mLocale = locale

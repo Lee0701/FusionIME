@@ -98,7 +98,6 @@ import java.io.FileDescriptor
 import java.io.PrintWriter
 import java.util.Locale
 import java.util.concurrent.TimeUnit
-import javax.annotation.Nonnull
 
 /**
  * Input method implementation for Qwerty'ish keyboard.
@@ -177,7 +176,7 @@ class LatinIME : InputMethodService(), KeyboardActionListener, SuggestionStripVi
 
     val mHandler: UIHandler = UIHandler(this)
 
-    class UIHandler(@Nonnull ownerInstance: LatinIME) :
+    class UIHandler(ownerInstance: LatinIME) :
         LeakGuardHandlerWrapper<LatinIME?>(ownerInstance) {
         private var mDelayInMillisecondsToUpdateSuggestions: Int = 0
         private var mDelayInMillisecondsToUpdateShiftState: Int = 0
@@ -1530,7 +1529,7 @@ class LatinIME : InputMethodService(), KeyboardActionListener, SuggestionStripVi
 
     // This method is public for testability of LatinIME, but also in the future it should
     // completely replace #onCodeInput.
-    fun onEvent(@Nonnull event: Event) {
+    fun onEvent(event: Event) {
         if (Constants.CODE_SHORTCUT == event.mKeyCode) {
             mRichImm!!.switchToShortcutIme(this)
         }
@@ -1598,7 +1597,7 @@ class LatinIME : InputMethodService(), KeyboardActionListener, SuggestionStripVi
 
     // This method must run on the UI Thread.
     fun showGesturePreviewAndSuggestionStrip(
-        @Nonnull suggestedWords: SuggestedWords,
+        suggestedWords: SuggestedWords,
         dismissGestureFloatingPreviewText: Boolean
     ) {
         showSuggestionStrip(suggestedWords)
@@ -2133,7 +2132,6 @@ class LatinIME : InputMethodService(), KeyboardActionListener, SuggestionStripVi
         // A helper method to split the code point and the key code. Ultimately, they should not be
         // squashed into the same variable, and this method should be removed.
         // public for testing, as we don't want to copy the same logic into test code
-        @Nonnull
         fun createSoftwareKeypressEvent(
             keyCodeOrCodePoint: Int, keyX: Int,
             keyY: Int, isKeyRepeat: Boolean

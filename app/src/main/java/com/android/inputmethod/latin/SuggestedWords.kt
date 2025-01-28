@@ -20,10 +20,9 @@ import android.view.inputmethod.CompletionInfo
 import com.android.inputmethod.annotations.UsedForTesting
 import com.android.inputmethod.latin.common.StringUtils
 import com.android.inputmethod.latin.define.DebugFlags
-import javax.annotation.Nonnull
 
 open class SuggestedWords(
-    @Nonnull suggestedWordInfoList: ArrayList<SuggestedWordInfo>,
+    suggestedWordInfoList: ArrayList<SuggestedWordInfo>,
     rawSuggestions: ArrayList<SuggestedWordInfo>?,
     typedWordInfo: SuggestedWordInfo?,
     typedWordValid: Boolean,
@@ -404,8 +403,6 @@ open class SuggestedWords(
 
         private val EMPTY_WORD_INFO_LIST: ArrayList<SuggestedWordInfo> = ArrayList(0)
 
-        @get:Nonnull
-        @Nonnull
         val emptyInstance: SuggestedWords = SuggestedWords(
             EMPTY_WORD_INFO_LIST, null,  /* rawSuggestions */null,  /* typedWord */
             false,  /* typedWordValid */false,  /* willAutoCorrect */
@@ -428,8 +425,8 @@ open class SuggestedWords(
         // Should get rid of the first one (what the user typed previously) from suggestions
         // and replace it with what the user currently typed.
         fun getTypedWordAndPreviousSuggestions(
-            @Nonnull typedWordInfo: SuggestedWordInfo,
-            @Nonnull previousSuggestions: SuggestedWords
+            typedWordInfo: SuggestedWordInfo,
+            previousSuggestions: SuggestedWords
         ): ArrayList<SuggestedWordInfo> {
             val suggestionsList: ArrayList<SuggestedWordInfo> = ArrayList()
             val alreadySeen: HashSet<String> = HashSet()

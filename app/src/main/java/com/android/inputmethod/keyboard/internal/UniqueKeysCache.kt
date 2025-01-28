@@ -16,14 +16,12 @@
 package com.android.inputmethod.keyboard.internal
 
 import com.android.inputmethod.keyboard.Key
-import javax.annotation.Nonnull
 
 abstract class UniqueKeysCache {
     abstract fun setEnabled(enabled: Boolean)
     abstract fun clear()
 
-    @Nonnull
-    abstract fun getUniqueKey(@Nonnull key: Key): Key
+    abstract fun getUniqueKey(key: Key): Key
 
     private class UniqueKeysCacheImpl : UniqueKeysCache() {
         private val mCache: HashMap<Key, Key>
@@ -58,7 +56,6 @@ abstract class UniqueKeysCache {
     }
 
     companion object {
-        @Nonnull
         val NO_CACHE: UniqueKeysCache = object : UniqueKeysCache() {
             override fun setEnabled(enabled: Boolean) {}
 
@@ -69,7 +66,6 @@ abstract class UniqueKeysCache {
             }
         }
 
-        @Nonnull
         fun newInstance(): UniqueKeysCache {
             return UniqueKeysCacheImpl()
         }

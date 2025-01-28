@@ -51,7 +51,6 @@ import com.android.inputmethod.latin.settings.Settings
 import com.android.inputmethod.latin.settings.SettingsValues
 import com.android.inputmethod.latin.utils.ResourceUtils
 import com.android.inputmethod.latin.utils.ViewLayoutUtils
-import javax.annotation.Nonnull
 import kotlin.math.min
 
 internal class SuggestionStripLayoutHelper(
@@ -647,7 +646,7 @@ internal class SuggestionStripLayoutHelper(
         }
 
         private fun getEllipsizedTextWithSettingScaleX(
-            text: CharSequence?, maxWidth: Int, @Nonnull paint: TextPaint
+            text: CharSequence?, maxWidth: Int, paint: TextPaint
         ): CharSequence? {
             if (text == null) {
                 return null
@@ -693,7 +692,7 @@ internal class SuggestionStripLayoutHelper(
             return false
         }
 
-        private fun addStyleSpan(@Nonnull text: Spannable, style: CharacterStyle) {
+        private fun addStyleSpan(text: Spannable, style: CharacterStyle) {
             text.removeSpan(style)
             text.setSpan(style, 0, text.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
         }

@@ -17,7 +17,6 @@ package com.android.inputmethod.keyboard.internal
 
 import com.android.inputmethod.latin.common.Constants
 import com.android.inputmethod.latin.common.StringUtils
-import javax.annotation.Nonnull
 
 /**
  * The string parser of the key specification.
@@ -46,11 +45,11 @@ object KeySpecParser {
     private val VERTICAL_BAR: Char = Constants.CODE_VERTICAL_BAR.toChar()
     private const val PREFIX_HEX: String = "0x"
 
-    private fun hasIcon(@Nonnull keySpec: String): Boolean {
+    private fun hasIcon(keySpec: String): Boolean {
         return keySpec.startsWith(KeyboardIconsSet.PREFIX_ICON)
     }
 
-    private fun hasCode(@Nonnull keySpec: String, labelEnd: Int): Boolean {
+    private fun hasCode(keySpec: String, labelEnd: Int): Boolean {
         if (labelEnd <= 0 || labelEnd + 1 >= keySpec.length) {
             return false
         }
@@ -65,8 +64,7 @@ object KeySpecParser {
         return false
     }
 
-    @Nonnull
-    private fun parseEscape(@Nonnull text: String): String {
+    private fun parseEscape(text: String): String {
         if (text.indexOf(BACKSLASH) < 0) {
             return text
         }
@@ -87,7 +85,7 @@ object KeySpecParser {
         return sb.toString()
     }
 
-    private fun indexOfLabelEnd(@Nonnull keySpec: String): Int {
+    private fun indexOfLabelEnd(keySpec: String): Int {
         val length: Int = keySpec.length
         if (keySpec.indexOf(BACKSLASH) < 0) {
             val labelEnd: Int = keySpec.indexOf(VERTICAL_BAR)
@@ -114,17 +112,15 @@ object KeySpecParser {
         return -1
     }
 
-    @Nonnull
-    private fun getBeforeLabelEnd(@Nonnull keySpec: String, labelEnd: Int): String {
+    private fun getBeforeLabelEnd(keySpec: String, labelEnd: Int): String {
         return if ((labelEnd < 0)) keySpec else keySpec.substring(0, labelEnd)
     }
 
-    @Nonnull
-    private fun getAfterLabelEnd(@Nonnull keySpec: String, labelEnd: Int): String {
+    private fun getAfterLabelEnd(keySpec: String, labelEnd: Int): String {
         return keySpec.substring(labelEnd +  /* VERTICAL_BAR */1)
     }
 
-    private fun checkDoubleLabelEnd(@Nonnull keySpec: String, labelEnd: Int) {
+    private fun checkDoubleLabelEnd(keySpec: String, labelEnd: Int) {
         if (indexOfLabelEnd(getAfterLabelEnd(keySpec, labelEnd)) < 0) {
             return
         }
@@ -147,7 +143,7 @@ object KeySpecParser {
         return label
     }
 
-    private fun getOutputTextInternal(@Nonnull keySpec: String, labelEnd: Int): String? {
+    private fun getOutputTextInternal(keySpec: String, labelEnd: Int): String? {
         if (labelEnd <= 0) {
             return null
         }

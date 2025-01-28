@@ -34,7 +34,6 @@ import com.android.inputmethod.latin.R
 import com.android.inputmethod.latin.settings.SettingsActivity
 import com.android.inputmethod.latin.utils.LeakGuardHandlerWrapper
 import com.android.inputmethod.latin.utils.UncachedInputMethodManagerUtils
-import javax.annotation.Nonnull
 
 // TODO: Use Fragment to implement welcome screen and setup steps.
 class SetupWizardActivity : Activity(), View.OnClickListener {
@@ -57,7 +56,7 @@ class SetupWizardActivity : Activity(), View.OnClickListener {
 
     private class SettingsPoolingHandler
         (
-        @Nonnull ownerInstance: SetupWizardActivity,
+        ownerInstance: SetupWizardActivity,
         imm: InputMethodManager?
     ) :
         LeakGuardHandlerWrapper<SetupWizardActivity?>(ownerInstance) {

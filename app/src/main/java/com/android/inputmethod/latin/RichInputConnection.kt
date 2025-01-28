@@ -44,7 +44,6 @@ import com.android.inputmethod.latin.utils.SpannableStringUtils
 import com.android.inputmethod.latin.utils.StatsUtils
 import com.android.inputmethod.latin.utils.TextRange
 import java.util.concurrent.TimeUnit
-import javax.annotation.Nonnull
 import kotlin.math.max
 import kotlin.math.min
 
@@ -658,7 +657,6 @@ class RichInputConnection(parent: InputMethodService) : PrivateCommandPerformer 
     }
 
     @Suppress("unused")
-    @Nonnull
     fun getNgramContextFromNthPreviousWord(
         spacingAndPunctuations: SpacingAndPunctuations, n: Int
     ): NgramContext? {

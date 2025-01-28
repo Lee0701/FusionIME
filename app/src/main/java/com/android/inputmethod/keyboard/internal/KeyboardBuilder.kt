@@ -43,7 +43,6 @@ import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
 import java.util.Locale
-import javax.annotation.Nonnull
 import kotlin.math.max
 
 /**
@@ -116,7 +115,7 @@ import kotlin.math.max
 </pre> *
  */
 // TODO: Write unit tests for this class.
-open class KeyboardBuilder<KP : KeyboardParams>(context: Context, @Nonnull params: KP) {
+open class KeyboardBuilder<KP : KeyboardParams>(context: Context, params: KP) {
     protected val mParams: KP
     protected val mContext: Context
     protected val mResources: Resources
@@ -157,7 +156,6 @@ open class KeyboardBuilder<KP : KeyboardParams>(context: Context, @Nonnull param
         mParams!!.mProximityCharsCorrectionEnabled = enabled
     }
 
-    @Nonnull
     open fun build(): Keyboard {
         return Keyboard(mParams)
     }
@@ -898,7 +896,7 @@ open class KeyboardBuilder<KP : KeyboardParams>(context: Context, @Nonnull param
         mTopEdge = false
     }
 
-    private fun endKey(@Nonnull key: Key) {
+    private fun endKey(key: Key) {
         mParams!!.onAddKey(key)
         if (mLeftEdge) {
             key.markAsLeftEdge(mParams)

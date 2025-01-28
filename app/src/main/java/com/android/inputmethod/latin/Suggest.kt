@@ -27,7 +27,6 @@ import com.android.inputmethod.latin.utils.AutoCorrectionUtils
 import com.android.inputmethod.latin.utils.BinaryDictionaryUtils
 import com.android.inputmethod.latin.utils.SuggestionResults
 import java.util.Locale
-import javax.annotation.Nonnull
 
 /**
  * This class loads a dictionary and provides a list of suggestions for a given sequence of
@@ -368,7 +367,7 @@ class Suggest(dictionaryFacilitator: DictionaryFacilitator) {
         }
 
         private fun getWhitelistedWordInfoOrNull(
-            @Nonnull suggestions: ArrayList<SuggestedWordInfo>
+            suggestions: ArrayList<SuggestedWordInfo>
         ): SuggestedWordInfo? {
             if (suggestions.isEmpty()) {
                 return null

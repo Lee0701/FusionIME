@@ -42,7 +42,6 @@ import com.android.inputmethod.latin.utils.LanguageOnSpacebarUtils
 import com.android.inputmethod.latin.utils.RecapitalizeStatus
 import com.android.inputmethod.latin.utils.ResourceUtils
 import com.android.inputmethod.latin.utils.ScriptUtils
-import javax.annotation.Nonnull
 
 class KeyboardSwitcher private constructor() : SwitchActions {
     private var mCurrentInputView: InputView? = null

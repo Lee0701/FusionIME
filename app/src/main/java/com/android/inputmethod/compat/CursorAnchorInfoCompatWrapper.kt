@@ -20,7 +20,6 @@ import android.graphics.Matrix
 import android.graphics.RectF
 import android.os.Build.VERSION_CODES
 import android.view.inputmethod.CursorAnchorInfo
-import javax.annotation.Nonnull
 
 /**
  * A wrapper for [CursorAnchorInfo], which has been introduced in API Level 21. You can use
@@ -78,9 +77,8 @@ open class CursorAnchorInfoCompatWrapper internal constructor() {
     }
 
     @TargetApi(VERSION_CODES.LOLLIPOP)
-    private class RealWrapper(@Nonnull info: CursorAnchorInfo) :
+    private class RealWrapper(info: CursorAnchorInfo) :
         CursorAnchorInfoCompatWrapper() {
-        @Nonnull
         private val mInstance: CursorAnchorInfo
 
         init {

@@ -22,7 +22,6 @@ import com.android.inputmethod.latin.common.Constants
 import com.android.inputmethod.latin.utils.JniUtils
 import java.util.Arrays
 import java.util.Collections
-import javax.annotation.Nonnull
 import kotlin.math.hypot
 import kotlin.math.max
 import kotlin.math.min
@@ -72,7 +71,7 @@ class ProximityInfo internal constructor(
     }
 
     private fun createNativeProximityInfo(
-        @Nonnull touchPositionCorrection: TouchPositionCorrection
+        touchPositionCorrection: TouchPositionCorrection
     ): Long {
         val gridNeighborKeys: Array<List<Key>?> = mGridNeighbors
         val proximityCharsArray = IntArray(mGridSize * MAX_PROXIMITY_CHARS_SIZE)
@@ -395,7 +394,6 @@ y |---+---+---+---+-v-+-|-+---+---+---+---+---|          | thresholdBase and get
         }
     }
 
-    @Nonnull
     fun getNearestKeys(x: Int, y: Int): List<Key> {
         if (x in 0..<mKeyboardMinWidth && y in 0..<mKeyboardHeight) {
             val index: Int = (y / mCellHeight) * mGridWidth + (x / mCellWidth)
@@ -416,7 +414,6 @@ y |---+---+---+---+-v-+-|-+---+---+---+---+---|          | thresholdBase and get
         /** Number of key widths from current touch point to search for nearest keys.  */
         private const val SEARCH_DISTANCE: Float = 1.2f
 
-        @Nonnull
         private val EMPTY_KEY_LIST: List<Key> = emptyList()
         private const val DEFAULT_TOUCH_POSITION_CORRECTION_RADIUS: Float = 0.15f
 

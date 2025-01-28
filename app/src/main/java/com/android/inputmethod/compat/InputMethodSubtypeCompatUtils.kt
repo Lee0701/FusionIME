@@ -27,7 +27,6 @@ import com.android.inputmethod.latin.common.LocaleUtils
 import java.lang.reflect.Constructor
 import java.lang.reflect.Method
 import java.util.Locale
-import javax.annotation.Nonnull
 
 object InputMethodSubtypeCompatUtils {
     private val TAG: String = InputMethodSubtypeCompatUtils::class.java.getSimpleName()
@@ -62,7 +61,6 @@ object InputMethodSubtypeCompatUtils {
     )
 
     @Suppress("deprecation")
-    @Nonnull
     fun newInputMethodSubtype(
         nameId: Int, iconId: Int, locale: String?,
         mode: String?, extraValue: String?, isAuxiliary: Boolean,

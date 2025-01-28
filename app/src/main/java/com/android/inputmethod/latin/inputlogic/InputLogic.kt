@@ -60,7 +60,6 @@ import com.android.inputmethod.latin.utils.StatsUtils
 import java.util.Locale
 import java.util.TreeSet
 import java.util.concurrent.TimeUnit
-import javax.annotation.Nonnull
 import kotlin.math.min
 
 /**
@@ -1515,7 +1514,7 @@ class InputLogic(
 
     private fun performAdditionToUserHistoryDictionary(
         settingsValues: SettingsValues,
-        suggestion: String?, @Nonnull ngramContext: NgramContext
+        suggestion: String?, ngramContext: NgramContext
     ) {
         // If correction is not enabled, we don't add words to the user history dictionary.
         // That's to avoid unintended additions in some sensitive fields, or fields that
@@ -2051,7 +2050,6 @@ class InputLogic(
         }
     }
 
-    @get:Nonnull
     private val dictionaryFacilitatorLocale: Locale
         /**
          * @return the [Locale] of the [.mDictionaryFacilitator] if available. Otherwise

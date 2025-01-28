@@ -26,7 +26,6 @@ import com.android.inputmethod.keyboard.internal.MoreKeySpec
 import com.android.inputmethod.latin.R
 import com.android.inputmethod.latin.common.StringUtils
 import com.android.inputmethod.latin.utils.TypefaceUtils
-import javax.annotation.Nonnull
 import kotlin.math.max
 import kotlin.math.min
 
@@ -330,7 +329,6 @@ class MoreKeysKeyboard internal constructor(params: MoreKeysKeyboardParams) : Ke
             )
         }
 
-        @Nonnull
         override fun build(): MoreKeysKeyboard {
             val params: MoreKeysKeyboardParams = mParams
             val moreKeyFlags: Int = mParentKey.moreKeyLabelFlags

@@ -42,7 +42,6 @@ import java.util.Locale
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.Semaphore
-import javax.annotation.Nonnull
 
 /**
  * Service for spell checking, using LatinIME's dictionaries and mechanisms.
@@ -112,7 +111,7 @@ class AndroidSpellCheckerService : SpellCheckerService(), OnSharedPreferenceChan
     fun getSuggestionResults(
         locale: Locale?,
         composedData: ComposedData, ngramContext: NgramContext,
-        @Nonnull keyboard: Keyboard
+        keyboard: Keyboard
     ): SuggestionResults {
         var sessionId: Int? = null
         mSemaphore.acquireUninterruptibly()

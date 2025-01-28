@@ -19,7 +19,6 @@ import android.text.TextUtils
 import android.util.SparseIntArray
 import com.android.inputmethod.latin.common.Constants
 import java.text.Normalizer
-import javax.annotation.Nonnull
 
 /**
  * A combiner that handles dead keys.
@@ -216,7 +215,6 @@ class DeadKeyCombiner : Combiner {
     // TODO: make this a list of events instead
     val mDeadSequence: StringBuilder = StringBuilder()
 
-    @Nonnull
     override fun processEvent(previousEvents: ArrayList<Event?>?, event: Event): Event {
         if (TextUtils.isEmpty(mDeadSequence)) {
             // No dead char is currently being tracked: this is the most common case.
@@ -286,10 +284,9 @@ class DeadKeyCombiner : Combiner {
         get() = mDeadSequence
 
     companion object {
-        @Nonnull
         private fun createEventChainFromSequence(
-            @Nonnull text: CharSequence,
-            @Nonnull originalEvent: Event
+            text: CharSequence,
+            originalEvent: Event
         ): Event {
             var index = text.length
             if (index <= 0) {

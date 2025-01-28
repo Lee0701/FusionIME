@@ -22,7 +22,6 @@ import com.android.inputmethod.keyboard.internal.KeyboardParams
 import com.android.inputmethod.latin.common.Constants
 import com.android.inputmethod.latin.common.CoordinateUtils
 import java.util.Collections
-import javax.annotation.Nonnull
 import kotlin.math.max
 import kotlin.math.min
 
@@ -134,7 +133,7 @@ open class Keyboard {
         )
     }
 
-    protected constructor(@Nonnull keyboard: Keyboard) {
+    protected constructor(keyboard: Keyboard) {
         mId = keyboard.mId
         mThemeId = keyboard.mThemeId
         mOccupiedHeight = keyboard.mOccupiedHeight
@@ -192,7 +191,7 @@ open class Keyboard {
         }
     }
 
-    fun hasKey(@Nonnull aKey: Key): Boolean {
+    fun hasKey(aKey: Key): Boolean {
         if (mKeyCache.indexOfValue(aKey) >= 0) {
             return true
         }
@@ -217,7 +216,6 @@ open class Keyboard {
      * @return the list of the nearest keys to the given point. If the given
      * point is out of range, then an array of size zero is returned.
      */
-    @Nonnull
     open fun getNearestKeys(x: Int, y: Int): List<Key?> {
         // Avoid dead pixels at edges of the keyboard
         val adjustedX: Int =
@@ -227,8 +225,7 @@ open class Keyboard {
         return proximityInfo.getNearestKeys(adjustedX, adjustedY)
     }
 
-    @Nonnull
-    fun getCoordinates(@Nonnull codePoints: IntArray): IntArray {
+    fun getCoordinates(codePoints: IntArray): IntArray {
         val length: Int = codePoints.size
         val coordinates: IntArray = CoordinateUtils.newCoordinateArray(length)
         for (i in 0 until length) {

@@ -16,7 +16,6 @@
 package com.android.inputmethod.latin.common
 
 import com.android.inputmethod.annotations.UsedForTesting
-import javax.annotation.Nonnull
 
 object Constants {
     const val NOT_A_CODE: Int = -1
@@ -117,7 +116,6 @@ object Constants {
         return code >= CODE_SPACE
     }
 
-    @Nonnull
     fun printableCode(code: Int): String {
         when (code) {
             CODE_SHIFT -> return "shift"
@@ -146,8 +144,7 @@ object Constants {
         }
     }
 
-    @Nonnull
-    fun printableCodes(@Nonnull codes: IntArray): String {
+    fun printableCodes(codes: IntArray): String {
         val sb = StringBuilder()
         var addDelimiter = false
         for (code in codes) {

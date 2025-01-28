@@ -26,7 +26,6 @@ import com.android.inputmethod.keyboard.PointerTracker
 import com.android.inputmethod.latin.R
 import com.android.inputmethod.latin.SuggestedWords
 import com.android.inputmethod.latin.common.CoordinateUtils
-import javax.annotation.Nonnull
 import kotlin.math.max
 import kotlin.math.min
 
@@ -124,7 +123,7 @@ class GestureFloatingTextDrawingPreview(mainKeyboardViewAttr: TypedArray) :
         setSuggetedWords(SuggestedWords.emptyInstance)
     }
 
-    fun setSuggetedWords(@Nonnull suggestedWords: SuggestedWords) {
+    fun setSuggetedWords(suggestedWords: SuggestedWords) {
         if (!isPreviewEnabled()) {
             return
         }

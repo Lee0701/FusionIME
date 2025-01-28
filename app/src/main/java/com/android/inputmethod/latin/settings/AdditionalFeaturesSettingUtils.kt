@@ -21,7 +21,6 @@ import android.preference.PreferenceFragment
 import android.view.inputmethod.InputMethodSubtype
 import com.android.inputmethod.latin.RichInputMethodManager
 import com.android.inputmethod.latin.RichInputMethodSubtype
-import javax.annotation.Nonnull
 
 /**
  * Utility class for managing additional features settings.
@@ -43,10 +42,9 @@ object AdditionalFeaturesSettingUtils {
         // do nothing.
     }
 
-    @Nonnull
     fun createRichInputMethodSubtype(
-        @Nonnull imm: RichInputMethodManager?,
-        @Nonnull subtype: InputMethodSubtype,
+        imm: RichInputMethodManager?,
+        subtype: InputMethodSubtype,
         context: Context?
     ): RichInputMethodSubtype {
         return RichInputMethodSubtype(subtype)

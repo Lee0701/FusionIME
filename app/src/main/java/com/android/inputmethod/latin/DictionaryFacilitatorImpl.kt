@@ -40,7 +40,6 @@ import java.util.Locale
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
-import javax.annotation.Nonnull
 import kotlin.concurrent.Volatile
 
 /**
@@ -450,7 +449,7 @@ class DictionaryFacilitatorImpl : DictionaryFacilitator {
 
     override fun addToUserHistory(
         suggestion: String, wasAutoCapitalized: Boolean,
-        @Nonnull ngramContext: NgramContext, timeStampInSeconds: Long,
+        ngramContext: NgramContext, timeStampInSeconds: Long,
         blockPotentiallyOffensive: Boolean
     ) {
         // Update the spelling cache before learning. Words that are not yet added to user history
@@ -475,8 +474,8 @@ class DictionaryFacilitatorImpl : DictionaryFacilitator {
     }
 
     private fun putWordIntoValidSpellingWordCache(
-        @Nonnull caller: String,
-        @Nonnull originalWord: String
+        caller: String,
+        originalWord: String
     ) {
         if (mValidSpellingWordWriteCache == null) {
             return
@@ -585,10 +584,9 @@ class DictionaryFacilitatorImpl : DictionaryFacilitator {
     }
 
     // TODO: Revise the way to fusion suggestion results.
-    @Nonnull
     override fun getSuggestionResults(
         composedData: ComposedData,
-        ngramContext: NgramContext, @Nonnull keyboard: Keyboard,
+        ngramContext: NgramContext, keyboard: Keyboard,
         settingsValuesForSuggestion: SettingsValuesForSuggestion, sessionId: Int,
         inputStyle: Int
     ): SuggestionResults {
@@ -695,7 +693,6 @@ class DictionaryFacilitatorImpl : DictionaryFacilitator {
         dictToDump.dumpAllWordsForDebug()
     }
 
-    @Nonnull
     override fun getDictionaryStats(context: Context?): List<DictionaryStats?> {
         val statsOfEnabledSubDicts: ArrayList<DictionaryStats?> = ArrayList()
         for (dictType: String in DictionaryFacilitator.DYNAMIC_DICTIONARY_TYPES) {

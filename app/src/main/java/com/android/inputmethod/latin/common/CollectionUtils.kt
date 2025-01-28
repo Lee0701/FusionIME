@@ -16,7 +16,6 @@
 package com.android.inputmethod.latin.common
 
 import com.android.inputmethod.annotations.UsedForTesting
-import javax.annotation.Nonnull
 
 /**
  * Utility methods for working with collections.
@@ -29,9 +28,8 @@ object CollectionUtils {
      * @param end Last index exclusive to be converted.
      * @throws IllegalArgumentException if start or end are out of range or start &gt; end.
      */
-    @Nonnull
     fun <E> arrayAsList(
-        @Nonnull array: Array<E>, start: Int,
+        array: Array<E>, start: Int,
         end: Int
     ): ArrayList<E> {
         require(!(start < 0 || start > end || end > array.size)) {

@@ -28,7 +28,6 @@ import com.android.inputmethod.latin.common.LocaleUtils
 import com.android.inputmethod.latin.define.DebugFlags
 import java.lang.reflect.Field
 import java.util.Locale
-import javax.annotation.Nonnull
 
 object SuggestionSpanUtils {
     // Note that SuggestionSpan.FLAG_AUTO_CORRECTION has been introduced

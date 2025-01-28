@@ -32,7 +32,6 @@ import com.android.inputmethod.latin.utils.AsyncResultHolder
 import com.android.inputmethod.latin.utils.ResourceUtils
 import com.android.inputmethod.latin.utils.TargetPackageInfoGetterTask
 import java.util.Locale
-import javax.annotation.Nonnull
 
 /**
  * When you call the constructor of this class, you may want to change the current system locale by
@@ -41,7 +40,7 @@ import javax.annotation.Nonnull
 // Non-final for testing via mock library.
 class SettingsValues(
     context: Context, prefs: SharedPreferences, res: Resources,
-    @Nonnull inputAttributes: InputAttributes
+    inputAttributes: InputAttributes
 ) {
     // From resources:
     val mSpacingAndPunctuations: SpacingAndPunctuations = SpacingAndPunctuations(res)
@@ -94,7 +93,6 @@ class SettingsValues(
     // From the input box
 
     // Store the input attributes
-    @Nonnull
     val mInputAttributes: InputAttributes = inputAttributes
 
     // Deduced settings

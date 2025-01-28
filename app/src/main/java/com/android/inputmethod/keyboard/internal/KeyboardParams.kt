@@ -22,7 +22,6 @@ import com.android.inputmethod.keyboard.internal.MoreKeySpec.LettersOnBaseLayout
 import com.android.inputmethod.latin.common.Constants
 import java.util.SortedSet
 import java.util.TreeSet
-import javax.annotation.Nonnull
 
 open class KeyboardParams @JvmOverloads constructor(keysCache: UniqueKeysCache = UniqueKeysCache.NO_CACHE) {
     var mId: KeyboardId? = null
@@ -57,27 +56,20 @@ open class KeyboardParams @JvmOverloads constructor(keysCache: UniqueKeysCache =
     var GRID_HEIGHT: Int = 0
 
     // Keys are sorted from top-left to bottom-right order.
-    @Nonnull
     val mSortedKeys: SortedSet<Key> = TreeSet(
         ROW_COLUMN_COMPARATOR
     )
 
-    @Nonnull
     val mShiftKeys: ArrayList<Key> = ArrayList()
 
-    @Nonnull
     val mAltCodeKeysWhileTyping: ArrayList<Key> = ArrayList()
 
-    @Nonnull
     val mIconsSet: KeyboardIconsSet = KeyboardIconsSet()
 
-    @Nonnull
     val mTextsSet: KeyboardTextsSet = KeyboardTextsSet()
 
-    @Nonnull
     val mKeyStyles: KeyStylesSet = KeyStylesSet(mTextsSet)
 
-    @Nonnull
     private val mUniqueKeysCache: UniqueKeysCache
     var mAllowRedundantMoreKeys: Boolean = false
 
@@ -86,7 +78,6 @@ open class KeyboardParams @JvmOverloads constructor(keysCache: UniqueKeysCache =
 
     var mProximityCharsCorrectionEnabled: Boolean = false
 
-    @Nonnull
     val mTouchPositionCorrection: TouchPositionCorrection = TouchPositionCorrection()
 
     protected fun clearKeys() {
@@ -95,7 +86,7 @@ open class KeyboardParams @JvmOverloads constructor(keysCache: UniqueKeysCache =
         clearHistogram()
     }
 
-    fun onAddKey(@Nonnull newKey: Key) {
+    fun onAddKey(newKey: Key) {
         val key: Key = mUniqueKeysCache.getUniqueKey(newKey)
         val isSpacer: Boolean = key.isSpacer
         if (isSpacer && key.width == 0) {

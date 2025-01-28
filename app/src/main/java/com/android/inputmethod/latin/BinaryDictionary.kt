@@ -38,7 +38,6 @@ import com.android.inputmethod.latin.utils.WordInputEventForPersonalization
 import java.io.File
 import java.util.Arrays
 import java.util.Locale
-import javax.annotation.Nonnull
 
 /**
  * Implements a static, compacted, binary dictionary of standard words.

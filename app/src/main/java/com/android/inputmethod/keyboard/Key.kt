@@ -33,7 +33,6 @@ import com.android.inputmethod.latin.R
 import com.android.inputmethod.latin.common.Constants
 import com.android.inputmethod.latin.common.StringUtils
 import java.util.Locale
-import javax.annotation.Nonnull
 
 /**
  * Class for describing the position and characteristics of a single key in the keyboard.
@@ -102,8 +101,6 @@ open class Key : Comparable<Key> {
     open val y: Int
 
     /** Hit bounding box of the key  */
-    @get:Nonnull
-    @Nonnull
     val hitBox: Rect = Rect()
 
     /** More keys. It is guaranteed that this is null or an array of one or more elements  */
@@ -218,9 +215,9 @@ open class Key : Comparable<Key> {
      * this key.
      */
     constructor(
-        keySpec: String?, @Nonnull keyAttr: TypedArray,
-        @Nonnull style: KeyStyle, @Nonnull params: KeyboardParams,
-        @Nonnull row: KeyboardRow
+        keySpec: String?, keyAttr: TypedArray,
+        style: KeyStyle, params: KeyboardParams,
+        row: KeyboardRow
     ) {
         horizontalGap = if (isSpacer) 0 else params.mHorizontalGap
         verticalGap = params.mVerticalGap
@@ -836,11 +833,10 @@ open class Key : Comparable<Key> {
      * @return the background drawable of the key.
      * @see android.graphics.drawable.StateListDrawable.setState
      */
-    @Nonnull
     fun selectBackgroundDrawable(
-        @Nonnull keyBackground: Drawable,
-        @Nonnull functionalKeyBackground: Drawable,
-        @Nonnull spacebarBackground: Drawable
+        keyBackground: Drawable,
+        functionalKeyBackground: Drawable,
+        spacebarBackground: Drawable
     ): Drawable {
         val background: Drawable
         if (mBackgroundType == BACKGROUND_TYPE_FUNCTIONAL) {
@@ -960,10 +956,9 @@ open class Key : Comparable<Key> {
         private const val ACTION_FLAGS_ALT_CODE_WHILE_TYPING: Int = 0x04
         private const val ACTION_FLAGS_ENABLE_LONG_PRESS: Int = 0x08
 
-        @Nonnull
         fun removeRedundantMoreKeys(
-            @Nonnull key: Key,
-            @Nonnull lettersOnBaseLayout: LettersOnBaseLayout
+            key: Key,
+            lettersOnBaseLayout: LettersOnBaseLayout
         ): Key {
             val moreKeys: Array<MoreKeySpec> = key.moreKeys
             val filteredMoreKeys: Array<MoreKeySpec> =

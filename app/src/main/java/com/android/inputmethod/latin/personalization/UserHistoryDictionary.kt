@@ -26,7 +26,6 @@ import com.android.inputmethod.latin.define.ProductionFlags
 import com.android.inputmethod.latin.makedict.DictionaryHeader
 import java.io.File
 import java.util.Locale
-import javax.annotation.Nonnull
 
 /**
  * Locally gathers statistics about the words user types and various other signals like
@@ -137,7 +136,7 @@ class UserHistoryDictionary internal constructor(
          */
         fun addToDictionary(
             userHistoryDictionary: ExpandableBinaryDictionary,
-            @Nonnull ngramContext: NgramContext, word: String, isValid: Boolean,
+            ngramContext: NgramContext, word: String, isValid: Boolean,
             timestamp: Int
         ) {
             if (word.length > BinaryDictionary.DICTIONARY_MAX_WORD_LENGTH) {

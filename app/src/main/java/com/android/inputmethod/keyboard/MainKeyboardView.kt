@@ -58,7 +58,6 @@ import com.android.inputmethod.latin.settings.DebugSettings
 import com.android.inputmethod.latin.utils.LanguageOnSpacebarUtils
 import com.android.inputmethod.latin.utils.TypefaceUtils
 import java.util.WeakHashMap
-import javax.annotation.Nonnull
 
 /**
  * A view that is responsible for detecting key presses and touch movements.
@@ -459,7 +458,7 @@ class MainKeyboardView @JvmOverloads constructor(
     }
 
     // Implements {@link DrawingProxy#onKeyPressed(Key,boolean)}.
-    override fun onKeyPressed(@Nonnull key: Key, withPreview: Boolean) {
+    override fun onKeyPressed(key: Key, withPreview: Boolean) {
         key.onPressed()
         invalidateKey(key)
         if (withPreview && !key.noKeyPreview()) {
@@ -467,7 +466,7 @@ class MainKeyboardView @JvmOverloads constructor(
         }
     }
 
-    private fun showKeyPreview(@Nonnull key: Key) {
+    private fun showKeyPreview(key: Key) {
         val keyboard: Keyboard = this.keyboard ?: return
         val previewParams: KeyPreviewDrawParams = mKeyPreviewDrawParams
         if (!previewParams.isPopupEnabled()) {
@@ -483,13 +482,13 @@ class MainKeyboardView @JvmOverloads constructor(
         )
     }
 
-    private fun dismissKeyPreviewWithoutDelay(@Nonnull key: Key) {
+    private fun dismissKeyPreviewWithoutDelay(key: Key) {
         mKeyPreviewChoreographer.dismissKeyPreview(key, false /* withAnimation */)
         invalidateKey(key)
     }
 
     // Implements {@link DrawingProxy#onKeyReleased(Key,boolean)}.
-    override fun onKeyReleased(@Nonnull key: Key, withAnimation: Boolean) {
+    override fun onKeyReleased(key: Key, withAnimation: Boolean) {
         key.onReleased()
         invalidateKey(key)
         if (!key.noKeyPreview()) {
@@ -501,7 +500,7 @@ class MainKeyboardView @JvmOverloads constructor(
         }
     }
 
-    private fun dismissKeyPreview(@Nonnull key: Key) {
+    private fun dismissKeyPreview(key: Key) {
         if (isHardwareAccelerated()) {
             mKeyPreviewChoreographer.dismissKeyPreview(key, true /* withAnimation */)
             return
@@ -532,7 +531,7 @@ class MainKeyboardView @JvmOverloads constructor(
     }
 
     fun showGestureFloatingPreviewText(
-        @Nonnull suggestedWords: SuggestedWords,
+        suggestedWords: SuggestedWords,
         dismissDelayed: Boolean
     ) {
         locatePreviewPlacerView()

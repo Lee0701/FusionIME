@@ -17,7 +17,6 @@ package com.android.inputmethod.latin.common
 
 import com.android.inputmethod.annotations.UsedForTesting
 import java.util.Arrays
-import javax.annotation.Nonnull
 
 // TODO: This class is not thread-safe.
 class ResizableIntArray(capacity: Int) {
@@ -89,13 +88,13 @@ class ResizableIntArray(capacity: Int) {
         mLength = 0
     }
 
-    fun set(@Nonnull ip: ResizableIntArray) {
+    fun set(ip: ResizableIntArray) {
         // TODO: Implement primitive array pool.
         primitiveArray = ip.primitiveArray
         mLength = ip.mLength
     }
 
-    fun copy(@Nonnull ip: ResizableIntArray) {
+    fun copy(ip: ResizableIntArray) {
         val newCapacity = calculateCapacity(ip.mLength)
         if (newCapacity > 0) {
             // TODO: Implement primitive array pool.
@@ -105,7 +104,7 @@ class ResizableIntArray(capacity: Int) {
         mLength = ip.mLength
     }
 
-    fun append(@Nonnull src: ResizableIntArray, startPos: Int, length: Int) {
+    fun append(src: ResizableIntArray, startPos: Int, length: Int) {
         if (length == 0) {
             return
         }

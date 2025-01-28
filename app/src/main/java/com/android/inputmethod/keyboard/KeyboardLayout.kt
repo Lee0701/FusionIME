@@ -16,7 +16,6 @@
 package com.android.inputmethod.keyboard
 
 import com.android.inputmethod.annotations.UsedForTesting
-import javax.annotation.Nonnull
 
 /**
  * KeyboardLayout maintains the keyboard layout information.
@@ -104,7 +103,7 @@ class KeyboardLayout(
          * Factory method to create [KeyboardLayout] objects.
          */
         fun newKeyboardLayout(
-            @Nonnull sortedKeys: List<Key>,
+            sortedKeys: List<Key>,
             mostCommonKeyWidth: Int, mostCommonKeyHeight: Int,
             occupiedWidth: Int, occupiedHeight: Int
         ): KeyboardLayout {

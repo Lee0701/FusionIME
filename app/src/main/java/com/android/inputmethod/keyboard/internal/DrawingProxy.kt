@@ -18,7 +18,6 @@ package com.android.inputmethod.keyboard.internal
 import com.android.inputmethod.keyboard.Key
 import com.android.inputmethod.keyboard.MoreKeysPanel
 import com.android.inputmethod.keyboard.PointerTracker
-import javax.annotation.Nonnull
 
 interface DrawingProxy {
     /**
@@ -26,14 +25,14 @@ interface DrawingProxy {
      * @param key the [Key] that is being pressed.
      * @param withPreview true if key popup preview should be displayed.
      */
-    fun onKeyPressed(@Nonnull key: Key, withPreview: Boolean)
+    fun onKeyPressed(key: Key, withPreview: Boolean)
 
     /**
      * Called when a key is being released.
      * @param key the [Key] that is being released.
      * @param withAnimation when true, key popup preview should be dismissed with animation.
      */
-    fun onKeyReleased(@Nonnull key: Key, withAnimation: Boolean)
+    fun onKeyReleased(key: Key, withAnimation: Boolean)
 
     /**
      * Start showing more keys keyboard of a key that is being long pressed.
@@ -42,7 +41,7 @@ interface DrawingProxy {
      * @return [MoreKeysPanel] that is being shown. null if there is no need to show more keys
      * keyboard.
      */
-    fun showMoreKeysKeyboard(@Nonnull key: Key, @Nonnull tracker: PointerTracker): MoreKeysPanel?
+    fun showMoreKeysKeyboard(key: Key, tracker: PointerTracker): MoreKeysPanel?
 
     /**
      * Start a while-typing-animation.

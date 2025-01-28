@@ -37,7 +37,6 @@ import java.io.File
 import java.io.IOException
 import java.util.Locale
 import java.util.concurrent.TimeUnit
-import javax.annotation.Nonnull
 
 /**
  * This class encapsulates the logic for the Latin-IME side of dictionary information management.
@@ -124,8 +123,7 @@ object DictionaryInfoUtils {
     /**
      * Reverse escaping done by [.replaceFileNameDangerousCharacters].
      */
-    @Nonnull
-    fun getWordListIdFromFileName(@Nonnull fname: String): String {
+    fun getWordListIdFromFileName(fname: String): String {
         val sb = StringBuilder()
         val fnameLength = fname.length
         var i = 0
@@ -170,7 +168,7 @@ object DictionaryInfoUtils {
      * [.getMainDictId] and [.isMainWordListId].
      * @return The category as a string or null if it can't be found in the file name.
      */
-    fun getCategoryFromFileName(@Nonnull fileName: String): String? {
+    fun getCategoryFromFileName(fileName: String): String? {
         val id = getWordListIdFromFileName(fileName)
         val idArray = id.split(BinaryDictionaryGetter.ID_CATEGORY_SEPARATOR.toRegex())
             .dropLastWhile { it.isEmpty() }.toTypedArray()
@@ -363,7 +361,7 @@ object DictionaryInfoUtils {
      * unique ID to them. This ID is just the name of the language (locale-wise) they
      * are for, and this method returns this ID.
      */
-    fun getMainDictId(@Nonnull locale: Locale): String {
+    fun getMainDictId(locale: Locale): String {
         // This works because we don't include by default different dictionaries for
         // different countries. This actually needs to return the id that we would
         // like to use for word lists included in resources, and the following is okay.
@@ -395,7 +393,7 @@ object DictionaryInfoUtils {
      * @return information of the specified dictionary.
      */
     private fun createDictionaryInfoFromFileAddress(
-        @Nonnull fileAddress: AssetFileAddress?, locale: Locale
+        fileAddress: AssetFileAddress?, locale: Locale
     ): DictionaryInfo {
         val id = getMainDictId(locale)
         val version = DictionaryHeaderUtils.getContentVersion(fileAddress!!)
@@ -416,7 +414,7 @@ object DictionaryInfoUtils {
      * value is returned.
      */
     private fun createDictionaryInfoForUnCachedFile(
-        @Nonnull fileAddress: AssetFileAddress?, locale: Locale
+        fileAddress: AssetFileAddress?, locale: Locale
     ): DictionaryInfo? {
         val id = getMainDictId(locale)
         val version = DictionaryHeaderUtils.getContentVersion(fileAddress!!)
@@ -596,14 +594,12 @@ object DictionaryInfoUtils {
     }
 
     class DictionaryInfo(
-        @Nonnull id: String, @Nonnull locale: Locale,
+        id: String, locale: Locale,
         description: String?, filename: String?,
         filesize: Long, modifiedTimeMillis: Long, version: Int
     ) {
-        @Nonnull
         val mId: String = id
 
-        @Nonnull
         val mLocale: Locale = locale
         val mDescription: String? = description
         val mFilename: String? = filename

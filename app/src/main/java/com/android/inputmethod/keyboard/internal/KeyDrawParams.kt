@@ -17,7 +17,6 @@ package com.android.inputmethod.keyboard.internal
 
 import android.graphics.Typeface
 import com.android.inputmethod.latin.utils.ResourceUtils
-import javax.annotation.Nonnull
 
 class KeyDrawParams {
     var mTypeface: Typeface = Typeface.DEFAULT
@@ -48,7 +47,7 @@ class KeyDrawParams {
 
     constructor()
 
-    private constructor(@Nonnull copyFrom: KeyDrawParams) {
+    private constructor(copyFrom: KeyDrawParams) {
         mTypeface = copyFrom.mTypeface
 
         mLetterSize = copyFrom.mLetterSize
@@ -127,7 +126,6 @@ class KeyDrawParams {
         )
     }
 
-    @Nonnull
     fun mayCloneAndUpdateParams(
         keyHeight: Int,
         attr: KeyVisualAttributes?

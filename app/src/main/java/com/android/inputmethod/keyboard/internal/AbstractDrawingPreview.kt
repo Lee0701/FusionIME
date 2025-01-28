@@ -19,7 +19,6 @@ import android.graphics.Canvas
 import android.view.View
 import com.android.inputmethod.keyboard.MainKeyboardView
 import com.android.inputmethod.keyboard.PointerTracker
-import javax.annotation.Nonnull
 
 /**
  * Abstract base class for previews that are drawn on DrawingPreviewPlacerView, e.g.,
@@ -31,7 +30,7 @@ abstract class AbstractDrawingPreview {
     private var mPreviewEnabled: Boolean = false
     private var mHasValidGeometry: Boolean = false
 
-    fun setDrawingView(@Nonnull drawingView: DrawingPreviewPlacerView) {
+    fun setDrawingView(drawingView: DrawingPreviewPlacerView) {
         mDrawingView = drawingView
         drawingView.addPreview(this)
     }
@@ -61,7 +60,7 @@ abstract class AbstractDrawingPreview {
      * @param height the height of [MainKeyboardView].
      */
     open fun setKeyboardViewGeometry(
-        @Nonnull originCoords: IntArray, width: Int,
+        originCoords: IntArray, width: Int,
         height: Int
     ) {
         mHasValidGeometry = (width > 0 && height > 0)
@@ -73,11 +72,11 @@ abstract class AbstractDrawingPreview {
      * Draws the preview
      * @param canvas The canvas where the preview is drawn.
      */
-    abstract fun drawPreview(@Nonnull canvas: Canvas)
+    abstract fun drawPreview(canvas: Canvas)
 
     /**
      * Set the position of the preview.
      * @param tracker The new location of the preview is based on the points in PointerTracker.
      */
-    abstract fun setPreviewPosition(@Nonnull tracker: PointerTracker)
+    abstract fun setPreviewPosition(tracker: PointerTracker)
 }

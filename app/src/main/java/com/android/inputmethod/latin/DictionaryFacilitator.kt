@@ -26,7 +26,6 @@ import com.android.inputmethod.latin.utils.SuggestionResults
 import java.io.File
 import java.util.Locale
 import java.util.concurrent.TimeUnit
-import javax.annotation.Nonnull
 
 /**
  * Interface that facilitates interaction with different kinds of dictionaries. Provides APIs to
@@ -132,7 +131,7 @@ interface DictionaryFacilitator {
 
     fun addToUserHistory(
         suggestion: String, wasAutoCapitalized: Boolean,
-        @Nonnull ngramContext: NgramContext, timeStampInSeconds: Long,
+        ngramContext: NgramContext, timeStampInSeconds: Long,
         blockPotentiallyOffensive: Boolean
     )
 
@@ -143,10 +142,9 @@ interface DictionaryFacilitator {
     )
 
     // TODO: Revise the way to fusion suggestion results.
-    @Nonnull
     fun getSuggestionResults(
         composedData: ComposedData,
-        ngramContext: NgramContext, @Nonnull keyboard: Keyboard,
+        ngramContext: NgramContext, keyboard: Keyboard,
         settingsValuesForSuggestion: SettingsValuesForSuggestion, sessionId: Int,
         inputStyle: Int
     ): SuggestionResults
@@ -161,7 +159,6 @@ interface DictionaryFacilitator {
 
     fun dumpDictionaryForDebug(dictName: String)
 
-    @Nonnull
     fun getDictionaryStats(context: Context?): List<DictionaryStats?>
 
     companion object {

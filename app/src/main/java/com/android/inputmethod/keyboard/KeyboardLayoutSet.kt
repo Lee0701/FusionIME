@@ -45,7 +45,6 @@ import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
 import java.lang.ref.SoftReference
-import javax.annotation.Nonnull
 
 /**
  * This class represents a set of keyboard layouts. Each of them represents a different keyboard
@@ -54,10 +53,9 @@ import javax.annotation.Nonnull
  * A [KeyboardLayoutSet] needs to be created for each
  * [EditorInfo].
  */
-class KeyboardLayoutSet internal constructor(context: Context, @Nonnull params: Params) {
+class KeyboardLayoutSet internal constructor(context: Context, params: Params) {
     private val mContext: Context
 
-    @Nonnull
     private val mParams: Params
 
     class KeyboardLayoutSetException(cause: Throwable?, keyboardId: KeyboardId) :
@@ -110,7 +108,6 @@ class KeyboardLayoutSet internal constructor(context: Context, @Nonnull params: 
         mParams = params
     }
 
-    @Nonnull
     fun getKeyboard(baseKeyboardLayoutSetElementId: Int): Keyboard {
         val keyboardLayoutSetElementId: Int
         when (mParams.mMode) {
@@ -145,7 +142,6 @@ class KeyboardLayoutSet internal constructor(context: Context, @Nonnull params: 
         }
     }
 
-    @Nonnull
     private fun getKeyboard(elementParams: ElementParams, id: KeyboardId): Keyboard {
         val ref: SoftReference<Keyboard>? = sKeyboardCache.get(id)
         val cachedKeyboard: Keyboard? = if ((ref == null)) null else ref.get()
@@ -494,7 +490,6 @@ class KeyboardLayoutSet internal constructor(context: Context, @Nonnull params: 
         private val sForcibleKeyboardCache: Array<Keyboard?> = arrayOfNulls(FORCIBLE_CACHE_SIZE)
         private val sKeyboardCache: HashMap<KeyboardId, SoftReference<Keyboard>> = HashMap()
 
-        @Nonnull
         private val sUniqueKeysCache: UniqueKeysCache = UniqueKeysCache.newInstance()
         private val sScriptIdsForSubtypes: HashMap<InputMethodSubtype, Int> = HashMap()
 
@@ -513,7 +508,7 @@ class KeyboardLayoutSet internal constructor(context: Context, @Nonnull params: 
 
         fun getScriptId(
             resources: Resources,
-            @Nonnull subtype: InputMethodSubtype
+            subtype: InputMethodSubtype
         ): Int {
             val value: Int? = sScriptIdsForSubtypes.get(subtype)
             if (null == value) {

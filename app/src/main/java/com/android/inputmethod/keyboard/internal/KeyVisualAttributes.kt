@@ -20,9 +20,8 @@ import android.graphics.Typeface
 import android.util.SparseIntArray
 import com.android.inputmethod.latin.R
 import com.android.inputmethod.latin.utils.ResourceUtils
-import javax.annotation.Nonnull
 
-class KeyVisualAttributes private constructor(@Nonnull keyAttr: TypedArray) {
+class KeyVisualAttributes private constructor(keyAttr: TypedArray) {
     var mTypeface: Typeface? = null
 
     val mLetterRatio: Float
@@ -158,7 +157,7 @@ class KeyVisualAttributes private constructor(@Nonnull keyAttr: TypedArray) {
             }
         }
 
-        fun newInstance(@Nonnull keyAttr: TypedArray): KeyVisualAttributes? {
+        fun newInstance(keyAttr: TypedArray): KeyVisualAttributes? {
             val indexCount: Int = keyAttr.getIndexCount()
             for (i in 0 until indexCount) {
                 val attrId: Int = keyAttr.getIndex(i)

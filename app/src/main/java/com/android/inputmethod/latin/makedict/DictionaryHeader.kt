@@ -17,32 +17,26 @@ package com.android.inputmethod.latin.makedict
 
 import com.android.inputmethod.latin.makedict.FormatSpec.DictionaryOptions
 import com.android.inputmethod.latin.makedict.FormatSpec.FormatOptions
-import javax.annotation.Nonnull
 
 /**
  * Class representing dictionary header.
  */
 class DictionaryHeader(
     headerSize: Int,
-    @Nonnull dictionaryOptions: DictionaryOptions,
-    @Nonnull formatOptions: FormatOptions
+    dictionaryOptions: DictionaryOptions,
+    formatOptions: FormatOptions
 ) {
     val mBodyOffset: Int =
         if (formatOptions.mVersion < FormatSpec.VERSION4) headerSize else 0
 
-    @Nonnull
     val mDictionaryOptions: DictionaryOptions = dictionaryOptions
 
-    @Nonnull
     val mFormatOptions: FormatOptions = formatOptions
 
-    @Nonnull
     val mLocaleString: String
 
-    @Nonnull
     val mVersionString: String
 
-    @Nonnull
     val mIdString: String
 
     init {

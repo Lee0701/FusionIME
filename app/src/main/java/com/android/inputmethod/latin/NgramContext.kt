@@ -19,7 +19,6 @@ import android.text.TextUtils
 import com.android.inputmethod.annotations.UsedForTesting
 import com.android.inputmethod.latin.common.StringUtils
 import com.android.inputmethod.latin.define.DecoderSpecificConstants
-import javax.annotation.Nonnull
 import kotlin.math.min
 
 /**
@@ -72,10 +71,8 @@ class NgramContext(maxPrevWordCount: Int, vararg prevWordsInfo: WordInfo?) {
         }
 
         companion object {
-            @Nonnull
             val EMPTY_WORD_INFO: WordInfo = WordInfo("")
 
-            @Nonnull
             val BEGINNING_OF_SENTENCE_WORD_INFO: WordInfo = WordInfo()
         }
     }
@@ -100,7 +97,6 @@ class NgramContext(maxPrevWordCount: Int, vararg prevWordsInfo: WordInfo?) {
     /**
      * Create next prevWordsInfo using current prevWordsInfo.
      */
-    @Nonnull
     fun getNextNgramContext(wordInfo: WordInfo?): NgramContext {
         val nextPrevWordCount: Int =
             min(mMaxPrevWordCount.toDouble(), (prevWordCount + 1).toDouble()).toInt()
@@ -268,10 +264,8 @@ class NgramContext(maxPrevWordCount: Int, vararg prevWordsInfo: WordInfo?) {
     }
 
     companion object {
-        @Nonnull
         val EMPTY_PREV_WORDS_INFO: NgramContext = NgramContext(WordInfo.EMPTY_WORD_INFO)
 
-        @Nonnull
         val BEGINNING_OF_SENTENCE: NgramContext =
             NgramContext(WordInfo.BEGINNING_OF_SENTENCE_WORD_INFO)
 

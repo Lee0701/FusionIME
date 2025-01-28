@@ -38,7 +38,6 @@ import com.android.inputmethod.latin.common.InputPointers
 import com.android.inputmethod.latin.define.DebugFlags
 import com.android.inputmethod.latin.settings.Settings
 import com.android.inputmethod.latin.utils.ResourceUtils
-import javax.annotation.Nonnull
 import kotlin.math.hypot
 import kotlin.math.sqrt
 
@@ -92,7 +91,6 @@ class PointerTracker private constructor(id: Int) : PointerTrackerQueue.Element,
     // The position and time at which first down event occurred.
     private var mDownTime: Long = 0
 
-    @Nonnull
     private val mDownCoordinates: IntArray = CoordinateUtils.newInstance()
     private val mUpTime: Long = 0
 
@@ -371,7 +369,7 @@ class PointerTracker private constructor(id: Int) : PointerTrackerQueue.Element,
         return mGestureStrokeDrawingPoints
     }
 
-    fun getLastCoordinates(@Nonnull outCoords: IntArray) {
+    fun getLastCoordinates(outCoords: IntArray) {
         CoordinateUtils.set(outCoords, mLastX, mLastY)
     }
 
@@ -379,7 +377,7 @@ class PointerTracker private constructor(id: Int) : PointerTrackerQueue.Element,
         return mDownTime
     }
 
-    fun getDownCoordinates(@Nonnull outCoords: IntArray) {
+    fun getDownCoordinates(outCoords: IntArray) {
         CoordinateUtils.copy(outCoords, mDownCoordinates)
     }
 

@@ -35,7 +35,6 @@ import com.android.inputmethod.keyboard.internal.KeyVisualAttributes
 import com.android.inputmethod.latin.R
 import com.android.inputmethod.latin.common.Constants
 import com.android.inputmethod.latin.utils.TypefaceUtils
-import javax.annotation.Nonnull
 import kotlin.math.max
 import kotlin.math.min
 
@@ -101,8 +100,6 @@ open class KeyboardView @JvmOverloads constructor(
     // TODO: Consider having a base keyboard object to make this @Nonnull
     private var mKeyboard: Keyboard? = null
 
-    @get:Nonnull
-    @Nonnull
     protected val keyDrawParams: KeyDrawParams = KeyDrawParams()
 
     // Drawing
@@ -119,10 +116,8 @@ open class KeyboardView @JvmOverloads constructor(
     private var mOffscreenBuffer: Bitmap? = null
 
     /** The canvas for the above mutable keyboard bitmap  */
-    @Nonnull
     private val mOffscreenCanvas: Canvas = Canvas()
 
-    @Nonnull
     private val mPaint: Paint = Paint()
     private val mFontMetrics: Paint.FontMetrics = Paint.FontMetrics()
 

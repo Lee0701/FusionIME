@@ -17,7 +17,6 @@ package com.android.inputmethod.latin.common
 
 import com.android.inputmethod.annotations.UsedForTesting
 import java.util.Random
-import javax.annotation.Nonnull
 import kotlin.math.abs
 
 // Utility methods related with code points used for tests.
@@ -85,10 +84,9 @@ object CodePointUtils {
     )
 
     @UsedForTesting
-    @Nonnull
     fun generateCodePointSet(
         codePointSetSize: Int,
-        @Nonnull random: Random
+        random: Random
     ): IntArray {
         val codePointSet = IntArray(codePointSetSize)
         var i = codePointSet.size - 1
@@ -116,10 +114,9 @@ object CodePointUtils {
      * Generates a random word.
      */
     @UsedForTesting
-    @Nonnull
     fun generateWord(
-        @Nonnull random: Random,
-        @Nonnull codePointSet: IntArray
+        random: Random,
+        codePointSet: IntArray
     ): String {
         val builder = StringBuilder()
         // 8 * 4 = 32 chars max, but we do it the following way so as to bias the random toward

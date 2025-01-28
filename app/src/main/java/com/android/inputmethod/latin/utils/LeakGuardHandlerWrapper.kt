@@ -18,10 +18,9 @@ package com.android.inputmethod.latin.utils
 import android.os.Handler
 import android.os.Looper
 import java.lang.ref.WeakReference
-import javax.annotation.Nonnull
 
 open class LeakGuardHandlerWrapper<T> @JvmOverloads constructor(
-    @Nonnull ownerInstance: T,
+    ownerInstance: T,
     looper: Looper = Looper.myLooper()!!
 ) :
     Handler(looper) {

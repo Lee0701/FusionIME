@@ -32,7 +32,6 @@ import java.util.Random
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
-import javax.annotation.Nonnull
 
 /**
  * Service that handles background tasks for the dictionary provider.
@@ -275,7 +274,7 @@ class DictionaryService : Service() {
          */
         private fun showStartDownloadingToast(
             context: Context,
-            @Nonnull locale: Locale
+            locale: Locale
         ) {
             val toastText: String = String.format(
                 context.getString(R.string.toast_downloading_suggestions),

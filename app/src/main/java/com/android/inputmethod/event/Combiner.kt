@@ -15,7 +15,6 @@
  */
 package com.android.inputmethod.event
 
-import javax.annotation.Nonnull
 
 /**
  * A generic interface for combiners. Combiners are objects that transform chains of input events
@@ -32,7 +31,6 @@ interface Combiner {
      * @param event the event to combine with the existing state.
      * @return the resulting event.
      */
-    @Nonnull
     fun processEvent(previousEvents: ArrayList<Event?>?, event: Event): Event
 
     /**

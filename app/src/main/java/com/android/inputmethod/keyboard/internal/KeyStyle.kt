@@ -16,9 +16,8 @@
 package com.android.inputmethod.keyboard.internal
 
 import android.content.res.TypedArray
-import javax.annotation.Nonnull
 
-abstract class KeyStyle protected constructor(@Nonnull textsSet: KeyboardTextsSet) {
+abstract class KeyStyle protected constructor(textsSet: KeyboardTextsSet) {
     private val mTextsSet: KeyboardTextsSet
 
     abstract fun getStringArray(a: TypedArray, index: Int): Array<String?>?

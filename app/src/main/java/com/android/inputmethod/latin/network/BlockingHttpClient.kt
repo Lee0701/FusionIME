@@ -21,7 +21,6 @@ import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 import java.net.HttpURLConnection
-import javax.annotation.Nonnull
 
 /**
  * A client for executing HTTP requests synchronously.
@@ -52,7 +51,7 @@ class BlockingHttpClient(connection: HttpURLConnection) {
      * @param responseProcessor A processor for the HTTP response.
      */
     @Throws(IOException::class, AuthException::class, HttpException::class)
-    fun <T> execute(request: ByteArray?, @Nonnull responseProcessor: ResponseProcessor<T>): T {
+    fun <T> execute(request: ByteArray?, responseProcessor: ResponseProcessor<T>): T {
         if (DEBUG) {
             Log.d(TAG, "execute: " + mConnection.url)
         }

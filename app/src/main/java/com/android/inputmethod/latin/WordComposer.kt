@@ -27,7 +27,6 @@ import com.android.inputmethod.latin.common.StringUtils
 import com.android.inputmethod.latin.define.DebugFlags
 import com.android.inputmethod.latin.define.DecoderSpecificConstants
 import java.util.Collections
-import javax.annotation.Nonnull
 
 /**
  * A place to store the currently composing word with information such as adjacent key codes as well
@@ -156,8 +155,7 @@ class WordComposer {
      * @param event the unprocessed event.
      * @return the processed event. Never null, but may be marked as consumed.
      */
-    @Nonnull
-    fun processEvent(@Nonnull event: Event): Event {
+    fun processEvent(event: Event): Event {
         val processedEvent: Event = mCombinerChain.processEvent(mEvents, event)
         // The retained state of the combiner chain may have changed while processing the event,
         // so we need to update our cache.

@@ -39,7 +39,6 @@ import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.locks.Lock
 import java.util.concurrent.locks.ReentrantReadWriteLock
-import javax.annotation.Nonnull
 
 /**
  * Abstract base class for an expandable dictionary that can be created and updated dynamically
@@ -213,7 +212,7 @@ abstract class ExpandableBinaryDictionary(
         }
     }
 
-    private fun updateDictionaryWithWriteLock(@Nonnull updateTask: Runnable) {
+    private fun updateDictionaryWithWriteLock(updateTask: Runnable) {
         reloadDictionaryIfRequired()
         val task: Runnable = object : Runnable {
             override fun run() {
@@ -276,7 +275,7 @@ abstract class ExpandableBinaryDictionary(
      * Adds n-gram information of a word to the dictionary. May overwrite an existing entry.
      */
     fun addNgramEntry(
-        @Nonnull ngramContext: NgramContext, word: String,
+        ngramContext: NgramContext, word: String,
         frequency: Int, timestamp: Int
     ) {
         reloadDictionaryIfRequired()
@@ -292,7 +291,7 @@ abstract class ExpandableBinaryDictionary(
     }
 
     protected fun addNgramEntryLocked(
-        @Nonnull ngramContext: NgramContext, word: String,
+        ngramContext: NgramContext, word: String,
         frequency: Int, timestamp: Int
     ) {
         if (!binaryDictionary!!.addNgramEntry(ngramContext, word, frequency, timestamp)) {
@@ -307,7 +306,7 @@ abstract class ExpandableBinaryDictionary(
      * Update dictionary for the word with the ngramContext.
      */
     fun updateEntriesForWord(
-        @Nonnull ngramContext: NgramContext,
+        ngramContext: NgramContext,
         word: String, isValidWord: Boolean, count: Int, timestamp: Int
     ) {
         updateDictionaryWithWriteLock(object : Runnable {
@@ -346,7 +345,7 @@ abstract class ExpandableBinaryDictionary(
      */
     @UsedForTesting
     fun updateEntriesForInputEvents(
-        @Nonnull inputEvents: ArrayList<WordInputEventForPersonalization>,
+        inputEvents: ArrayList<WordInputEventForPersonalization>,
         callback: UpdateEntriesForInputEventsCallback?
     ) {
         reloadDictionaryIfRequired()

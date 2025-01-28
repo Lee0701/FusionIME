@@ -36,7 +36,6 @@ import com.android.inputmethod.latin.utils.AdditionalSubtypeUtils
 import com.android.inputmethod.latin.utils.LanguageOnSpacebarUtils
 import com.android.inputmethod.latin.utils.SubtypeLocaleUtils
 import java.util.Locale
-import javax.annotation.Nonnull
 
 /**
  * Enrichment class for InputMethodManager to simplify interaction and add functionality.

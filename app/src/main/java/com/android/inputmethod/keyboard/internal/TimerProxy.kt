@@ -17,7 +17,6 @@ package com.android.inputmethod.keyboard.internal
 
 import com.android.inputmethod.keyboard.Key
 import com.android.inputmethod.keyboard.PointerTracker
-import javax.annotation.Nonnull
 
 interface TimerProxy {
     /**

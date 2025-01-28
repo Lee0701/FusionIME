@@ -22,16 +22,12 @@ import com.android.inputmethod.latin.R
 import com.android.inputmethod.latin.utils.XmlParseUtils
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
-import javax.annotation.Nonnull
 
-class KeyStylesSet(@Nonnull textsSet: KeyboardTextsSet) {
-    @Nonnull
+class KeyStylesSet(textsSet: KeyboardTextsSet) {
     private val mStyles: HashMap<String, KeyStyle> = HashMap()
 
-    @Nonnull
     private val mTextsSet: KeyboardTextsSet
 
-    @Nonnull
     private val mEmptyKeyStyle: KeyStyle
 
     init {
@@ -40,7 +36,7 @@ class KeyStylesSet(@Nonnull textsSet: KeyboardTextsSet) {
         mStyles.put(EMPTY_STYLE_NAME, mEmptyKeyStyle)
     }
 
-    private class EmptyKeyStyle(@Nonnull textsSet: KeyboardTextsSet) : KeyStyle(textsSet) {
+    private class EmptyKeyStyle(textsSet: KeyboardTextsSet) : KeyStyle(textsSet) {
         override fun getStringArray(a: TypedArray, index: Int): Array<String?>? {
             return parseStringArray(a, index)
         }
@@ -59,9 +55,9 @@ class KeyStylesSet(@Nonnull textsSet: KeyboardTextsSet) {
     }
 
     private class DeclaredKeyStyle(
-        @Nonnull parentStyleName: String,
-        @Nonnull textsSet: KeyboardTextsSet,
-        @Nonnull styles: HashMap<String, KeyStyle>
+        parentStyleName: String,
+        textsSet: KeyboardTextsSet,
+        styles: HashMap<String, KeyStyle>
     ) : KeyStyle(textsSet) {
         private val mStyles: HashMap<String, KeyStyle>
         private val mParentStyleName: String
@@ -199,7 +195,6 @@ class KeyStylesSet(@Nonnull textsSet: KeyboardTextsSet) {
         mStyles.put(styleName, style)
     }
 
-    @Nonnull
     @Throws(XmlParseUtils.ParseException::class)
     fun getKeyStyle(keyAttr: TypedArray, parser: XmlPullParser): KeyStyle {
         val styleName: String? = keyAttr.getString(R.styleable.Keyboard_Key_keyStyle)
@@ -217,7 +212,6 @@ class KeyStylesSet(@Nonnull textsSet: KeyboardTextsSet) {
         private val TAG: String = KeyStylesSet::class.java.getSimpleName()
         private const val DEBUG: Boolean = false
 
-        @Nonnull
         private const val EMPTY_STYLE_NAME: String = "<empty>"
     }
 }

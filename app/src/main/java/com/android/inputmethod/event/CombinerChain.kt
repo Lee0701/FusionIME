@@ -18,7 +18,6 @@ package com.android.inputmethod.event
 import android.text.SpannableStringBuilder
 import android.text.TextUtils
 import com.android.inputmethod.latin.common.Constants
-import javax.annotation.Nonnull
 
 /**
  * This class implements the logic chain between receiving events and generating code points.
@@ -80,10 +79,9 @@ class CombinerChain(initialText: String) {
      * @return the processed event. It may be the same event, or a consumed event, or a completely
      * new event. However it may never be null.
      */
-    @Nonnull
     fun processEvent(
         previousEvents: ArrayList<Event?>,
-        @Nonnull newEvent: Event
+        newEvent: Event
     ): Event {
         val modifiablePreviousEvents = ArrayList(previousEvents)
         var event = newEvent

@@ -35,7 +35,6 @@ import com.android.inputmethod.latin.utils.RunInLocale
 import com.android.inputmethod.latin.utils.StatsUtils
 import java.util.Locale
 import java.util.concurrent.locks.ReentrantLock
-import javax.annotation.Nonnull
 
 class Settings private constructor() : OnSharedPreferenceChangeListener {
     private var mContext: Context? = null
@@ -78,7 +77,7 @@ class Settings private constructor() : OnSharedPreferenceChangeListener {
 
     fun loadSettings(
         context: Context?, locale: Locale?,
-        @Nonnull inputAttributes: InputAttributes
+        inputAttributes: InputAttributes
     ) {
         mSettingsValuesLock.lock()
         mContext = context

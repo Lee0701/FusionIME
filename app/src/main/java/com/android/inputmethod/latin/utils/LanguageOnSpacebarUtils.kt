@@ -18,7 +18,6 @@ package com.android.inputmethod.latin.utils
 import android.view.inputmethod.InputMethodSubtype
 import com.android.inputmethod.latin.RichInputMethodSubtype
 import java.util.Locale
-import javax.annotation.Nonnull
 
 /**
  * This class determines that the language name on the spacebar should be displayed in what format.
@@ -32,7 +31,7 @@ object LanguageOnSpacebarUtils {
     private var sIsSystemLanguageSameAsInputLanguage = false
 
     fun getLanguageOnSpacebarFormatType(
-        @Nonnull subtype: RichInputMethodSubtype
+        subtype: RichInputMethodSubtype
     ): Int {
         if (subtype.isNoLanguage) {
             return FORMAT_TYPE_FULL_LOCALE
@@ -62,13 +61,13 @@ object LanguageOnSpacebarUtils {
             FORMAT_TYPE_LANGUAGE_ONLY
     }
 
-    fun setEnabledSubtypes(@Nonnull enabledSubtypes: List<InputMethodSubtype>) {
+    fun setEnabledSubtypes(enabledSubtypes: List<InputMethodSubtype>) {
         sEnabledSubtypes = enabledSubtypes
     }
 
     fun onSubtypeChanged(
-        @Nonnull subtype: RichInputMethodSubtype,
-        implicitlyEnabledSubtype: Boolean, @Nonnull systemLocale: Locale
+        subtype: RichInputMethodSubtype,
+        implicitlyEnabledSubtype: Boolean, systemLocale: Locale
     ) {
         val newLocale = subtype.locale
         if (systemLocale == newLocale) {

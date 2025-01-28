@@ -23,7 +23,6 @@ import java.io.FilenameFilter
 import java.lang.ref.SoftReference
 import java.util.Locale
 import java.util.concurrent.ConcurrentHashMap
-import javax.annotation.Nonnull
 
 /**
  * Helps handle and manage personalized dictionaries such as [UserHistoryDictionary].
@@ -35,7 +34,6 @@ object PersonalizationHelper {
     private val sLangUserHistoryDictCache: ConcurrentHashMap<String, SoftReference<UserHistoryDictionary>?> =
         ConcurrentHashMap()
 
-    @Nonnull
     fun getUserHistoryDictionary(
         context: Context, locale: Locale, accountName: String?
     ): UserHistoryDictionary {

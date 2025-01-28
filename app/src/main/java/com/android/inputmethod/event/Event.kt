@@ -19,7 +19,6 @@ import com.android.inputmethod.annotations.ExternallyReferenced
 import com.android.inputmethod.latin.SuggestedWords.SuggestedWordInfo
 import com.android.inputmethod.latin.common.Constants
 import com.android.inputmethod.latin.common.StringUtils
-import javax.annotation.Nonnull
 
 /**
  * Class representing a generic input event as handled by Latin IME.
@@ -190,7 +189,6 @@ class Event private constructor(// The type of event - one of the constants abov
         // This event has already been consumed.
         private const val FLAG_CONSUMED = 0x4
 
-        @Nonnull
         fun createSoftwareKeypressEvent(
             codePoint: Int, keyCode: Int,
             x: Int, y: Int, isKeyRepeat: Boolean
@@ -201,7 +199,6 @@ class Event private constructor(// The type of event - one of the constants abov
             )
         }
 
-        @Nonnull
         fun createHardwareKeypressEvent(
             codePoint: Int, keyCode: Int,
             next: Event?, isKeyRepeat: Boolean
@@ -215,7 +212,6 @@ class Event private constructor(// The type of event - one of the constants abov
 
         // This creates an input event for a dead character. @see {@link #FLAG_DEAD}
         @ExternallyReferenced
-        @Nonnull
         fun createDeadEvent(codePoint: Int, keyCode: Int, next: Event?): Event {
             // TODO: add an argument or something if we ever create a software layout with dead keys.
             return Event(
@@ -232,7 +228,6 @@ class Event private constructor(// The type of event - one of the constants abov
          * @param codePoint the code point.
          * @return an event for this code point.
          */
-        @Nonnull
         fun createEventForCodePointFromUnknownSource(codePoint: Int): Event {
             // TODO: should we have a different type of event for this? After all, it's not a key press.
             return Event(
@@ -250,7 +245,6 @@ class Event private constructor(// The type of event - one of the constants abov
          * @param y the Y coordinate.
          * @return an event for this code point and coordinates.
          */
-        @Nonnull
         fun createEventForCodePointFromAlreadyTypedText(
             codePoint: Int,
             x: Int, y: Int
@@ -266,7 +260,6 @@ class Event private constructor(// The type of event - one of the constants abov
          * Creates an input event representing the manual pick of a suggestion.
          * @return an event for this suggestion pick.
          */
-        @Nonnull
         fun createSuggestionPickedEvent(suggestedWordInfo: SuggestedWordInfo): Event {
             return Event(
                 EVENT_TYPE_SUGGESTION_PICKED, suggestedWordInfo.word,
@@ -284,7 +277,6 @@ class Event private constructor(// The type of event - one of the constants abov
          * @param keyCode the key code, or NOT_A_KEYCODE if not applicable.
          * @return an event for this text.
          */
-        @Nonnull
         fun createSoftwareTextEvent(text: CharSequence?, keyCode: Int): Event {
             return Event(
                 EVENT_TYPE_SOFTWARE_GENERATED_STRING, text, NOT_A_CODE_POINT, keyCode,
@@ -297,7 +289,6 @@ class Event private constructor(// The type of event - one of the constants abov
          * Creates an input event representing the manual pick of a punctuation suggestion.
          * @return an event for this suggestion pick.
          */
-        @Nonnull
         fun createPunctuationSuggestionPickedEvent(
             suggestedWordInfo: SuggestedWordInfo
         ): Event {
@@ -316,7 +307,6 @@ class Event private constructor(// The type of event - one of the constants abov
          * @param moveAmount the relative move amount.
          * @return an event for this cursor move.
          */
-        @Nonnull
         fun createCursorMovedEvent(moveAmount: Int): Event {
             return Event(
                 EVENT_TYPE_CURSOR_MOVE, null, NOT_A_CODE_POINT, NOT_A_KEY_CODE,
@@ -329,7 +319,6 @@ class Event private constructor(// The type of event - one of the constants abov
          * @param source the event to copy the properties of.
          * @return an identical event marked as consumed.
          */
-        @Nonnull
         fun createConsumedEvent(source: Event): Event {
             // A consumed event should not input any text at all, so we pass the empty string as text.
             return Event(
@@ -339,7 +328,6 @@ class Event private constructor(// The type of event - one of the constants abov
             )
         }
 
-        @Nonnull
         fun createNotHandledEvent(): Event {
             return Event(
                 EVENT_TYPE_NOT_HANDLED, null,  /* text */NOT_A_CODE_POINT, NOT_A_KEY_CODE,

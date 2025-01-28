@@ -24,7 +24,6 @@ import com.android.inputmethod.latin.common.CollectionUtils
 import com.android.inputmethod.latin.common.Constants
 import com.android.inputmethod.latin.common.StringUtils
 import java.util.Locale
-import javax.annotation.Nonnull
 
 /**
  * The more key specification object. The more keys are an array of [MoreKeySpec].
@@ -39,18 +38,17 @@ import javax.annotation.Nonnull
  */
 // TODO: Should extend the key specification object.
 class MoreKeySpec(
-    @Nonnull moreKeySpec: String, needsToUpperCase: Boolean,
-    @Nonnull locale: Locale
+    moreKeySpec: String, needsToUpperCase: Boolean,
+    locale: Locale
 ) {
     var mCode: Int = 0
     val mLabel: String?
     var mOutputText: String? = null
     val mIconId: Int
 
-    @Nonnull
     fun buildKey(
         x: Int, y: Int, labelFlags: Int,
-        @Nonnull params: KeyboardParams
+        params: KeyboardParams
     ): Key {
         return Key(
             mLabel,
@@ -114,7 +112,7 @@ class MoreKeySpec(
         private val mCodes: SparseIntArray = SparseIntArray()
         private val mTexts: HashSet<String?> = HashSet()
 
-        fun addLetter(@Nonnull key: Key) {
+        fun addLetter(key: Key) {
             val code: Int = key.code
             if (CharacterCompat.isAlphabetic(code)) {
                 mCodes.put(code, 0)
@@ -123,7 +121,7 @@ class MoreKeySpec(
             }
         }
 
-        fun contains(@Nonnull moreKey: MoreKeySpec): Boolean {
+        fun contains(moreKey: MoreKeySpec): Boolean {
             val code: Int = moreKey.mCode
             if (CharacterCompat.isAlphabetic(code) && mCodes.indexOfKey(code) >= 0) {
                 return true
@@ -247,10 +245,8 @@ class MoreKeySpec(
             return list.toTypedArray<String?>()
         }
 
-        @Nonnull
         private val EMPTY_STRING_ARRAY: Array<String?> = arrayOfNulls(0)
 
-        @Nonnull
         private fun filterOutEmptyString(array: Array<String?>?): Array<String?> {
             if (array == null) {
                 return EMPTY_STRING_ARRAY

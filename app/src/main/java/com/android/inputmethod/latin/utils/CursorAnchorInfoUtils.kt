@@ -28,7 +28,6 @@ import android.view.inputmethod.CursorAnchorInfo
 import android.widget.TextView
 import com.android.inputmethod.compat.BuildCompatUtils
 import com.android.inputmethod.compat.CursorAnchorInfoCompatWrapper
-import javax.annotation.Nonnull
 import kotlin.math.max
 import kotlin.math.min
 
@@ -87,7 +86,7 @@ object CursorAnchorInfoUtils {
      * ready to provide layout information.
      */
     fun extractFromTextView(
-        @Nonnull textView: TextView
+        textView: TextView
     ): CursorAnchorInfoCompatWrapper? {
         if (BuildCompatUtils.EFFECTIVE_SDK_INT < VERSION_CODES.LOLLIPOP) {
             return null
@@ -102,7 +101,7 @@ object CursorAnchorInfoUtils {
      * is not feasible.
      */
     @TargetApi(VERSION_CODES.LOLLIPOP)
-    private fun extractFromTextViewInternal(@Nonnull textView: TextView): CursorAnchorInfo? {
+    private fun extractFromTextViewInternal(textView: TextView): CursorAnchorInfo? {
         val layout = textView.layout ?: return null
 
         val builder = CursorAnchorInfo.Builder()

@@ -23,13 +23,12 @@ import android.view.KeyEvent
 import com.android.inputmethod.keyboard.KeyboardSwitcher
 import com.android.inputmethod.keyboard.KeyboardSwitcher.KeyboardSwitchState
 import com.android.inputmethod.latin.settings.Settings
-import javax.annotation.Nonnull
 
 /**
  * A class for detecting Emoji-Alt physical key.
  */
 @SuppressLint("LongLogTag")
-internal class EmojiAltPhysicalKeyDetector(@Nonnull resources: Resources) {
+internal class EmojiAltPhysicalKeyDetector(resources: Resources) {
     private val mHotKeysList: MutableList<EmojiHotKeys>
 
     private class HotKeySet : HashSet<Pair<Int, Int>>()
@@ -47,7 +46,7 @@ internal class EmojiAltPhysicalKeyDetector(@Nonnull resources: Resources) {
             mCanFire = false
         }
 
-        fun onKeyDown(@Nonnull keyEvent: KeyEvent) {
+        fun onKeyDown(keyEvent: KeyEvent) {
             if (DEBUG) {
                 Log.d(TAG, "EmojiHotKeys.onKeyDown() - " + mName + " - considering " + keyEvent)
             }
@@ -68,7 +67,7 @@ internal class EmojiAltPhysicalKeyDetector(@Nonnull resources: Resources) {
             }
         }
 
-        fun onKeyUp(@Nonnull keyEvent: KeyEvent) {
+        fun onKeyUp(keyEvent: KeyEvent) {
             if (DEBUG) {
                 Log.d(TAG, "EmojiHotKeys.onKeyUp() - " + mName + " - considering " + keyEvent)
             }
@@ -141,7 +140,7 @@ internal class EmojiAltPhysicalKeyDetector(@Nonnull resources: Resources) {
         mHotKeysList.add(symbolsHotKeys)
     }
 
-    fun onKeyDown(@Nonnull keyEvent: KeyEvent) {
+    fun onKeyDown(keyEvent: KeyEvent) {
         if (DEBUG) {
             Log.d(TAG, "onKeyDown(): " + keyEvent)
         }
@@ -153,7 +152,7 @@ internal class EmojiAltPhysicalKeyDetector(@Nonnull resources: Resources) {
         }
     }
 
-    fun onKeyUp(@Nonnull keyEvent: KeyEvent) {
+    fun onKeyUp(keyEvent: KeyEvent) {
         if (DEBUG) {
             Log.d(TAG, "onKeyUp(): " + keyEvent)
         }
@@ -182,7 +181,7 @@ internal class EmojiAltPhysicalKeyDetector(@Nonnull resources: Resources) {
         }
 
         private fun parseHotKeys(
-            @Nonnull resources: Resources, resourceId: Int
+            resources: Resources, resourceId: Int
         ): HotKeySet {
             val keySet = HotKeySet()
             val name: String = resources.getResourceEntryName(resourceId)

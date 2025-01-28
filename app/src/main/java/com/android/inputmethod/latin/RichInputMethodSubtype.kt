@@ -25,7 +25,6 @@ import com.android.inputmethod.latin.common.Constants.Subtype.ExtraValue
 import com.android.inputmethod.latin.common.LocaleUtils
 import com.android.inputmethod.latin.utils.SubtypeLocaleUtils
 import java.util.Locale
-import javax.annotation.Nonnull
 
 /**
  * Enrichment class for InputMethodSubtype to enable concurrent multi-lingual input.
@@ -33,7 +32,7 @@ import javax.annotation.Nonnull
  * Right now, this returns the extra value of its primary subtype.
  */
 // non final for easy mocking.
-class RichInputMethodSubtype(@Nonnull subtype: InputMethodSubtype) {
+class RichInputMethodSubtype(subtype: InputMethodSubtype) {
     // TODO: remove this method
     val rawSubtype: InputMethodSubtype
 
@@ -148,7 +147,6 @@ class RichInputMethodSubtype(@Nonnull subtype: InputMethodSubtype) {
                     + "," + ExtraValue.ENABLED_WHEN_DEFAULT_IS_NOT_ASCII_CAPABLE
                     + "," + ExtraValue.EMOJI_CAPABLE)
 
-        @Nonnull
         private val PLACEHOLDER_NO_LANGUAGE_SUBTYPE: RichInputMethodSubtype =
             RichInputMethodSubtype(
                 InputMethodSubtypeCompatUtils.newInputMethodSubtype(
@@ -167,7 +165,6 @@ class RichInputMethodSubtype(@Nonnull subtype: InputMethodSubtype) {
             ("KeyboardLayoutSet=" + SubtypeLocaleUtils.EMOJI
                     + "," + ExtraValue.EMOJI_CAPABLE)
 
-        @Nonnull
         private val PLACEHOLDER_EMOJI_SUBTYPE: RichInputMethodSubtype = RichInputMethodSubtype(
             InputMethodSubtypeCompatUtils.newInputMethodSubtype(
                 R.string.subtype_emoji, R.drawable.ic_ime_switcher_dark,
@@ -180,7 +177,6 @@ class RichInputMethodSubtype(@Nonnull subtype: InputMethodSubtype) {
         private var sNoLanguageSubtype: RichInputMethodSubtype? = null
         private var sEmojiSubtype: RichInputMethodSubtype? = null
 
-        @get:Nonnull
         val noLanguageSubtype: RichInputMethodSubtype
             get() {
                 var noLanguageSubtype: RichInputMethodSubtype? =
@@ -211,7 +207,6 @@ class RichInputMethodSubtype(@Nonnull subtype: InputMethodSubtype) {
                 return PLACEHOLDER_NO_LANGUAGE_SUBTYPE
             }
 
-        @get:Nonnull
         val emojiSubtype: RichInputMethodSubtype
             get() {
                 var emojiSubtype: RichInputMethodSubtype? =

@@ -15,20 +15,17 @@
  */
 package com.android.inputmethod.latin.common
 
-import javax.annotation.Nonnull
 
 /**
  * An immutable class that encapsulates a snapshot of word composition data.
  */
 class ComposedData(
-    @Nonnull inputPointers: InputPointers, isBatchMode: Boolean,
-    @Nonnull typedWord: String
+    inputPointers: InputPointers, isBatchMode: Boolean,
+    typedWord: String
 ) {
-    @Nonnull
     val mInputPointers: InputPointers = inputPointers
     val mIsBatchMode: Boolean = isBatchMode
 
-    @Nonnull
     val mTypedWord: String = typedWord
 
     /**
@@ -41,7 +38,7 @@ class ComposedData(
      * @return the number of copied code points.
      */
     fun copyCodePointsExceptTrailingSingleQuotesAndReturnCodePointCount(
-        @Nonnull destination: IntArray
+        destination: IntArray
     ): Int {
         // lastIndex is exclusive
         val lastIndex = (mTypedWord.length

@@ -18,14 +18,12 @@ package com.android.inputmethod.latin.common
 import com.android.inputmethod.annotations.UsedForTesting
 import java.util.Arrays
 import java.util.Locale
-import javax.annotation.Nonnull
 
 object StringUtils {
     const val CAPITALIZE_NONE: Int = 0 // No caps, or mixed case
     const val CAPITALIZE_FIRST: Int = 1 // First only
     const val CAPITALIZE_ALL: Int = 2 // All caps
 
-    @Nonnull
     private const val EMPTY_STRING = ""
 
     private const val CHAR_LINE_FEED = 0X000A.toChar()
@@ -54,7 +52,6 @@ object StringUtils {
      * @param tokens an array objects to be joined. Strings will be formed from
      * the objects by calling object.toString().
      */
-    @Nonnull
     fun join(
         delimiter: CharSequence,
         tokens: Iterable<*>
@@ -79,7 +76,6 @@ object StringUtils {
         return Character.codePointCount(text, 0, text!!.length)
     }
 
-    @Nonnull
     fun newSingleCodePointString(codePoint: Int): String {
         if (Character.charCount(codePoint) == 1) {
             // Optimization: avoid creating a temporary array for characters that are
@@ -107,7 +103,6 @@ object StringUtils {
      * Unlike CSV, Comma-Splittable Text has no escaping mechanism, so that the text can't contain
      * a comma character in it.
      */
-    @Nonnull
     private const val SEPARATOR_FOR_COMMA_SPLITTABLE_TEXT = ","
 
     fun containsInCommaSplittableText(
@@ -174,7 +169,6 @@ object StringUtils {
         }
     }
 
-    @Nonnull
     fun capitalizeFirstCodePoint(
         s: String,
         locale: Locale
@@ -189,7 +183,6 @@ object StringUtils {
                 + s.substring(cutoff))
     }
 
-    @Nonnull
     fun capitalizeFirstAndDowncaseRest(
         s: String,
         locale: Locale
@@ -217,12 +210,10 @@ object StringUtils {
                 + s.substring(cutoff).lowercase(locale))
     }
 
-    @Nonnull
     fun toCodePointArray(charSequence: CharSequence): IntArray {
         return toCodePointArray(charSequence!!, 0, charSequence.length)
     }
 
-    @Nonnull
     private val EMPTY_CODEPOINTS = intArrayOf()
 
     /**
@@ -232,7 +223,6 @@ object StringUtils {
      * @param endIndex the end index inside the string in java chars, exclusive.
      * @return a new array of code points. At most endIndex - startIndex, but possibly less.
      */
-    @Nonnull
     fun toCodePointArray(
         charSequence: CharSequence,
         startIndex: Int, endIndex: Int
@@ -287,7 +277,6 @@ object StringUtils {
         return destIndex
     }
 
-    @Nonnull
     fun toSortedCodePointArray(string: String): IntArray {
         val codePoints = toCodePointArray(string)
         Arrays.sort(codePoints)
@@ -301,7 +290,6 @@ object StringUtils {
      * shorter than the array length.
      * @return a string constructed from the code point array.
      */
-    @Nonnull
     fun getStringFromNullTerminatedCodePointArray(
         codePoints: IntArray
     ): String {
@@ -406,7 +394,6 @@ object StringUtils {
 
     // TODO: like capitalizeFirst*, this does not work perfectly for Dutch because of the IJ digraph
     // which should be capitalized together in *some* cases.
-    @Nonnull
     fun capitalizeEachWord(
         text: String,
         sortedSeparators: IntArray, locale: Locale
@@ -561,7 +548,6 @@ object StringUtils {
     }
 
     @UsedForTesting
-    @Nonnull
     fun byteArrayToHexString(bytes: ByteArray?): String {
         if (bytes == null || bytes.size == 0) {
             return EMPTY_STRING
@@ -600,7 +586,6 @@ object StringUtils {
 
     private const val LANGUAGE_GREEK = "el"
 
-    @Nonnull
     private fun getLocaleUsedForToTitleCase(locale: Locale): Locale {
         // In Greek locale {@link String#toUpperCase(Locale)} eliminates accents from its result.
         // In order to get accented upper case letter, {@link Locale#ROOT} should be used.
@@ -663,7 +648,6 @@ object StringUtils {
     @UsedForTesting
     class Stringizer<E> {
         @UsedForTesting
-        @Nonnull
         fun stringize(element: E?): String {
             if (element == null) {
                 return "null"
@@ -672,7 +656,6 @@ object StringUtils {
         }
 
         @UsedForTesting
-        @Nonnull
         fun join(array: Array<E>?): String {
             return joinStringArray(toStringArray(array), null /* delimiter */)
         }
@@ -682,7 +665,6 @@ object StringUtils {
             return joinStringArray(toStringArray(array), delimiter)
         }
 
-        @Nonnull
         protected fun toStringArray(array: Array<E>?): Array<String?> {
             if (array == null) {
                 return EMPTY_STRING_ARRAY
@@ -694,7 +676,6 @@ object StringUtils {
             return stringArray
         }
 
-        @Nonnull
         protected fun joinStringArray(
             stringArray: Array<String?>,
             delimiter: String?
@@ -711,7 +692,6 @@ object StringUtils {
         }
 
         companion object {
-            @Nonnull
             private val EMPTY_STRING_ARRAY = arrayOfNulls<String>(0)
         }
     }
