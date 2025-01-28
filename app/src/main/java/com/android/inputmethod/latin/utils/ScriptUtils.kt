@@ -178,12 +178,6 @@ object ScriptUtils {
      * {@see http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes}
      */
     fun getScriptFromSpellCheckerLocale(locale: Locale): Int {
-        val language = locale.language
-        var script = mLanguageCodeToScriptCode[language]
-        if (script == null) {
-            // Default to Latin.
-            script = mLanguageCodeToScriptCode[""]
-        }
-        return script!!
+        return mLanguageCodeToScriptCode[locale.language] ?: mLanguageCodeToScriptCode[""]!!
     }
 }

@@ -118,7 +118,7 @@ class RecapitalizeStatus {
             ++count
             when (ROTATION_STYLE[mRotationStyleCurrentIndex]) {
                 CAPS_MODE_ORIGINAL_MIXED_CASE -> recapitalizedString = mStringBefore
-                CAPS_MODE_ALL_LOWER -> recapitalizedString = mStringBefore!!.lowercase(
+                CAPS_MODE_ALL_LOWER -> recapitalizedString = mStringBefore?.lowercase(
                     mLocale!!
                 )
 
@@ -127,7 +127,7 @@ class RecapitalizeStatus {
                     mLocale!!
                 )
 
-                CAPS_MODE_ALL_UPPER -> recapitalizedString = mStringBefore!!.uppercase(
+                CAPS_MODE_ALL_UPPER -> recapitalizedString = mStringBefore?.uppercase(
                     mLocale!!
                 )
 
@@ -165,7 +165,7 @@ class RecapitalizeStatus {
             newCursorStart = mCursorStartBefore + nonWhitespaceStart
             mCursorStartBefore = newCursorStart
             mStringBefore =
-                mStringBefore!!.substring(nonWhitespaceStart, nonWhitespaceEnd)
+                mStringBefore?.substring(nonWhitespaceStart, nonWhitespaceEnd)
             recapitalizedString = mStringBefore
         }
     }

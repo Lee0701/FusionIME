@@ -262,7 +262,7 @@ object SubtypeLocaleUtils {
         ) {
             return subtype.getExtraValueOf(ExtraValue.UNTRANSLATABLE_STRING_IN_SUBTYPE_NAME)
         }
-        return getSubtypeLocaleDisplayNameInternal(subtype.locale, displayLocale)!!
+        return getSubtypeLocaleDisplayNameInternal(subtype.locale, displayLocale)
     }
 
     fun getSubtypeDisplayNameInSystemLocale(
@@ -285,7 +285,7 @@ object SubtypeLocaleUtils {
     ): String {
         val replacementString = getReplacementString(subtype, displayLocale)
         // TODO: rework this for multi-lingual subtypes
-        val nameResId = subtype!!.nameResId
+        val nameResId = subtype.nameResId
         val getSubtypeName: RunInLocale<String> = object : RunInLocale<String>() {
             override fun job(res: Resources): String {
                 try {

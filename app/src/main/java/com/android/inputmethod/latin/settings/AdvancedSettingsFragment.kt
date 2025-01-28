@@ -36,8 +36,8 @@ import com.android.inputmethod.latin.SystemBroadcastReceiver
  * - Debug settings
  */
 class AdvancedSettingsFragment : SubScreenFragment() {
-    override fun onCreate(icicle: Bundle?) {
-        super.onCreate(icicle)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         addPreferencesFromResource(R.xml.prefs_screen_advanced)
 
         val res = resources
@@ -129,23 +129,20 @@ class AdvancedSettingsFragment : SubScreenFragment() {
         val pref = findPreference(
             Settings.PREF_VIBRATION_DURATION_SETTINGS
         ) as SeekBarDialogPreference
-        if (pref == null) {
-            return
-        }
         val prefs = sharedPreferences
         val res = resources
         pref.setInterface(object : SeekBarDialogPreference.ValueProxy {
             override fun writeValue(value: Int, key: String?) {
-                prefs!!.edit().putInt(key, value).apply()
+                prefs.edit().putInt(key, value).apply()
             }
 
             override fun writeDefaultValue(key: String?) {
-                prefs!!.edit().remove(key).apply()
+                prefs.edit().remove(key).apply()
             }
 
             override fun readValue(key: String?): Int {
                 return Settings.readKeypressVibrationDuration(
-                    prefs!!, res
+                    prefs, res
                 )
             }
 
@@ -188,17 +185,17 @@ class AdvancedSettingsFragment : SubScreenFragment() {
             }
 
             override fun writeValue(value: Int, key: String?) {
-                prefs!!.edit().putFloat(key, getValueFromPercentage(value)).apply()
+                prefs.edit().putFloat(key, getValueFromPercentage(value)).apply()
             }
 
             override fun writeDefaultValue(key: String?) {
-                prefs!!.edit().remove(key).apply()
+                prefs.edit().remove(key).apply()
             }
 
             override fun readValue(key: String?): Int {
                 return getPercentageFromValue(
                     Settings.readKeypressSoundVolume(
-                        prefs!!, res
+                        prefs, res
                     )
                 )
             }
@@ -228,9 +225,7 @@ class AdvancedSettingsFragment : SubScreenFragment() {
         val pref = findPreference(
             Settings.PREF_KEY_LONGPRESS_TIMEOUT
         ) as SeekBarDialogPreference
-        if (pref == null) {
-            return
-        }
+
         pref.setInterface(object : SeekBarDialogPreference.ValueProxy {
             override fun writeValue(value: Int, key: String?) {
                 prefs.edit().putInt(key, value).apply()

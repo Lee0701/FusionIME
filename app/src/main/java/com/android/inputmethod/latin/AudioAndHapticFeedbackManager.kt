@@ -50,21 +50,18 @@ class AudioAndHapticFeedbackManager private constructor() {
     }
 
     fun hasVibrator(): Boolean {
-        return mVibrator != null && mVibrator!!.hasVibrator()
+        return mVibrator?.hasVibrator() == true
     }
 
     fun vibrate(milliseconds: Long) {
-        if (mVibrator == null) {
-            return
-        }
-        mVibrator!!.vibrate(milliseconds)
+        mVibrator?.vibrate(milliseconds)
     }
 
     private fun reevaluateIfSoundIsOn(): Boolean {
         if (mSettingsValues == null || !mSettingsValues!!.mSoundOn || mAudioManager == null) {
             return false
         }
-        return mAudioManager!!.getRingerMode() == AudioManager.RINGER_MODE_NORMAL
+        return mAudioManager?.getRingerMode() == AudioManager.RINGER_MODE_NORMAL
     }
 
     fun performAudioFeedback(code: Int) {
@@ -86,7 +83,7 @@ class AudioAndHapticFeedbackManager private constructor() {
     }
 
     fun performHapticFeedback(viewToPerformHapticFeedbackOn: View?) {
-        if (!mSettingsValues!!.mVibrateOn) {
+        if (mSettingsValues?.mVibrateOn != true) {
             return
         }
         if (mSettingsValues!!.mKeypressVibrationDuration >= 0) {
@@ -94,11 +91,9 @@ class AudioAndHapticFeedbackManager private constructor() {
             return
         }
         // Go ahead with the system default
-        if (viewToPerformHapticFeedbackOn != null) {
-            viewToPerformHapticFeedbackOn.performHapticFeedback(
-                HapticFeedbackConstants.KEYBOARD_TAP
-            )
-        }
+        viewToPerformHapticFeedbackOn?.performHapticFeedback(
+            HapticFeedbackConstants.KEYBOARD_TAP
+        )
     }
 
     fun onSettingsChanged(settingsValues: SettingsValues?) {

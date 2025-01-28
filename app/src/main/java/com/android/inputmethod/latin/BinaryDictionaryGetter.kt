@@ -84,15 +84,15 @@ object BinaryDictionaryGetter {
         context: Context,
         fallbackResId: Int
     ): AssetFileAddress? {
-        var afd: AssetFileDescriptor? = null
+        val afd: AssetFileDescriptor?
         try {
-            afd = context.getResources().openRawResourceFd(fallbackResId)
+            afd = context.resources.openRawResourceFd(fallbackResId)
         } catch (e: RuntimeException) {
-            Log.e(TAG, "Resource not found: " + fallbackResId)
+            Log.e(TAG, "Resource not found: $fallbackResId")
             return null
         }
         if (afd == null) {
-            Log.e(TAG, "Resource cannot be opened: " + fallbackResId)
+            Log.e(TAG, "Resource cannot be opened: $fallbackResId")
             return null
         }
         try {

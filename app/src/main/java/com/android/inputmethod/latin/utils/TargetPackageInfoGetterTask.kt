@@ -35,10 +35,10 @@ class TargetPackageInfoGetterTask(
     }
 
     override fun doInBackground(vararg packageName: String?): PackageInfo? {
-        val pm = mContext!!.packageManager
+        val pm = mContext?.packageManager
         mContext = null // Bazooka-powered anti-leak device
         try {
-            val packageInfo = pm.getPackageInfo(packageName[0] ?: return null, 0 /* flags */)
+            val packageInfo = pm?.getPackageInfo(packageName[0] ?: return null, 0 /* flags */)
             sCache.put(packageName[0], packageInfo)
             return packageInfo
         } catch (e: PackageManager.NameNotFoundException) {

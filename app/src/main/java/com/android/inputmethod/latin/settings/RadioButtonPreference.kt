@@ -54,15 +54,15 @@ open class RadioButtonPreference @JvmOverloads constructor(
 
     fun callListenerOnRadioButtonClicked() {
         if (mListener != null) {
-            mListener!!.onRadioButtonClicked(this)
+            mListener?.onRadioButtonClicked(this)
         }
     }
 
     override fun onBindView(view: View) {
         super.onBindView(view)
         mRadioButton = view.findViewById<View>(R.id.radio_button) as RadioButton
-        mRadioButton!!.isChecked = mIsSelected
-        mRadioButton!!.setOnClickListener(mClickListener)
+        mRadioButton?.isChecked = mIsSelected
+        mRadioButton?.setOnClickListener(mClickListener)
         view.setOnClickListener(mClickListener)
     }
 
@@ -74,7 +74,7 @@ open class RadioButtonPreference @JvmOverloads constructor(
             }
             mIsSelected = selected
             if (mRadioButton != null) {
-                mRadioButton!!.isChecked = selected
+                mRadioButton?.isChecked = selected
             }
             notifyChanged()
         }

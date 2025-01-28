@@ -255,7 +255,7 @@ class InputAttributes(
             editorInfo: EditorInfo?
         ): Boolean {
             if (editorInfo == null) return false
-            val findingKey: String = if ((packageName != null)) packageName + "." + key else key
+            val findingKey: String = if ((packageName != null)) "$packageName.$key" else key
             return StringUtils.containsInCommaSplittableText(
                 findingKey,
                 editorInfo.privateImeOptions

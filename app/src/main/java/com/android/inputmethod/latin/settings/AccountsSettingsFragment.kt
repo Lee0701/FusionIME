@@ -155,29 +155,27 @@ class AccountsSettingsFragment : SubScreenFragment() {
         if (!ProductionFlags.ENABLE_USER_HISTORY_DICTIONARY_SYNC) {
             return
         }
-        mAccountSwitcher!!.isEnabled = true
+        mAccountSwitcher?.isEnabled = true
 
-        mEnableSyncPreference!!.isEnabled = true
-        mEnableSyncPreference!!.onPreferenceClickListener = mEnableSyncClickListener
+        mEnableSyncPreference?.isEnabled = true
+        mEnableSyncPreference?.onPreferenceClickListener = mEnableSyncClickListener
 
-        mSyncNowPreference!!.isEnabled = true
-        mSyncNowPreference!!.onPreferenceClickListener = mSyncNowListener
+        mSyncNowPreference?.isEnabled = true
+        mSyncNowPreference?.onPreferenceClickListener = mSyncNowListener
 
-        mClearSyncDataPreference!!.isEnabled = true
-        mClearSyncDataPreference!!.onPreferenceClickListener = mDeleteSyncDataListener
+        mClearSyncDataPreference?.isEnabled = true
+        mClearSyncDataPreference?.onPreferenceClickListener = mDeleteSyncDataListener
 
         if (currentAccountName != null) {
-            mAccountSwitcher!!.onPreferenceClickListener = object : OnPreferenceClickListener {
-                override fun onPreferenceClick(preference: Preference): Boolean {
-                    if (accountsForLogin.size > 0) {
-                        // TODO: Add addition of account.
-                        createAccountPicker(
-                            accountsForLogin, this@AccountsSettingsFragment.signedInAccountName,
-                            AccountChangedListener(null)
-                        ).show()
-                    }
-                    return true
+            mAccountSwitcher?.onPreferenceClickListener = OnPreferenceClickListener {
+                if (accountsForLogin.isNotEmpty()) {
+                    // TODO: Add addition of account.
+                    createAccountPicker(
+                        accountsForLogin, this@AccountsSettingsFragment.signedInAccountName,
+                        AccountChangedListener(null)
+                    ).show()
                 }
+                true
             }
         }
     }
@@ -190,10 +188,10 @@ class AccountsSettingsFragment : SubScreenFragment() {
             return
         }
 
-        mAccountSwitcher!!.isEnabled = false
-        mEnableSyncPreference!!.isEnabled = false
-        mSyncNowPreference!!.isEnabled = false
-        mClearSyncDataPreference!!.isEnabled = false
+        mAccountSwitcher?.isEnabled = false
+        mEnableSyncPreference?.isEnabled = false
+        mSyncNowPreference?.isEnabled = false
+        mClearSyncDataPreference?.isEnabled = false
     }
 
     /**
@@ -218,9 +216,9 @@ class AccountsSettingsFragment : SubScreenFragment() {
             mEnableSyncPreference = findPreference(PREF_ENABLE_SYNC_NOW) as TwoStatePreference
             val syncEnabled = prefs.getBoolean(LocalSettingsConstants.PREF_ENABLE_CLOUD_SYNC, false)
             if (isSyncEnabled) {
-                mEnableSyncPreference!!.summary = getString(R.string.cloud_sync_summary)
+                mEnableSyncPreference?.summary = getString(R.string.cloud_sync_summary)
             } else {
-                mEnableSyncPreference!!.summary = getString(R.string.cloud_sync_summary_disabled)
+                mEnableSyncPreference?.summary = getString(R.string.cloud_sync_summary_disabled)
             }
             AccountStateChangedListener.onSyncPreferenceChanged(
                 signedInAccountName,
@@ -281,34 +279,34 @@ class AccountsSettingsFragment : SubScreenFragment() {
         }
 
         if (!hasAccountsPermission) {
-            mEnableSyncPreference!!.isChecked = false
-            mEnableSyncPreference!!.summary = getString(R.string.cloud_sync_summary_disabled)
-            mAccountSwitcher!!.summary = ""
+            mEnableSyncPreference?.isChecked = false
+            mEnableSyncPreference?.summary = getString(R.string.cloud_sync_summary_disabled)
+            mAccountSwitcher?.summary = ""
             return
         } else if (managedProfileBeingDetected) {
             // If we are determining eligiblity, we show empty summaries.
             // Once we have some deterministic result, we set summaries based on different results.
-            mEnableSyncPreference!!.summary = ""
-            mAccountSwitcher!!.summary = ""
+            mEnableSyncPreference?.summary = ""
+            mAccountSwitcher?.summary = ""
         } else if (hasManagedProfile) {
-            mEnableSyncPreference!!.summary =
+            mEnableSyncPreference?.summary =
                 getString(R.string.cloud_sync_summary_disabled_work_profile)
         } else if (!hasAccountsForLogin) {
-            mEnableSyncPreference!!.summary = getString(R.string.add_account_to_enable_sync)
+            mEnableSyncPreference?.summary = getString(R.string.add_account_to_enable_sync)
         } else if (isSyncEnabled) {
-            mEnableSyncPreference!!.summary = getString(R.string.cloud_sync_summary)
+            mEnableSyncPreference?.summary = getString(R.string.cloud_sync_summary)
         } else {
-            mEnableSyncPreference!!.summary = getString(R.string.cloud_sync_summary_disabled)
+            mEnableSyncPreference?.summary = getString(R.string.cloud_sync_summary_disabled)
         }
 
         // Set some interdependent settings.
         // No account automatically turns off sync.
         if (!managedProfileBeingDetected && !hasManagedProfile) {
             if (currentAccount != null) {
-                mAccountSwitcher!!.summary = getString(R.string.account_selected, currentAccount)
+                mAccountSwitcher?.summary = getString(R.string.account_selected, currentAccount)
             } else {
-                mEnableSyncPreference!!.isChecked = false
-                mAccountSwitcher!!.summary = getString(R.string.no_accounts_selected)
+                mEnableSyncPreference?.isChecked = false
+                mAccountSwitcher?.summary = getString(R.string.no_accounts_selected)
             }
         }
     }
@@ -394,7 +392,7 @@ class AccountsSettingsFragment : SubScreenFragment() {
                 }
 
                 DialogInterface.BUTTON_NEUTRAL -> {
-                    AccountStateChangedListener.onAccountSignedOut(oldAccount!!)
+                    AccountStateChangedListener.onAccountSignedOut(oldAccount)
                     sharedPreferences
                         .edit()
                         .remove(LocalSettingsConstants.PREF_ACCOUNT_NAME)

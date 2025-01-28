@@ -100,14 +100,14 @@ object LocaleUtils {
      * @return a constant that measures how well the tested locale matches the reference locale.
      */
     fun getMatchLevel(
-        referenceLocale: String?,
+        referenceLocale: String,
         testedLocale: String?
     ): Int {
         if (StringUtils.isEmpty(referenceLocale)) {
             return if (StringUtils.isEmpty(testedLocale)) LOCALE_FULL_MATCH else LOCALE_ANY_MATCH
         }
         if (null == testedLocale) return LOCALE_NO_MATCH
-        val referenceParams = referenceLocale!!.split("_".toRegex(), limit = 3).toTypedArray()
+        val referenceParams = referenceLocale.split("_".toRegex(), limit = 3).toTypedArray()
         val testedParams = testedLocale.split("_".toRegex(), limit = 3).toTypedArray()
         // By spec of String#split, [0] cannot be null and length cannot be 0.
         if (referenceParams[0] != testedParams[0]) return LOCALE_NO_MATCH

@@ -40,8 +40,8 @@ class DebugSettingsFragment : SubScreenFragment(), OnPreferenceClickListener {
     private var mServiceNeedsRestart = false
     private var mDebugMode: TwoStatePreference? = null
 
-    override fun onCreate(icicle: Bundle?) {
-        super.onCreate(icicle)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         addPreferencesFromResource(R.xml.prefs_screen_debug)
 
         if (!Settings.SHOULD_SHOW_LXX_SUGGESTION_UI) {
@@ -144,16 +144,16 @@ class DebugSettingsFragment : SubScreenFragment(), OnPreferenceClickListener {
     }
 
     private fun updateDebugMode() {
-        val isDebugMode = mDebugMode!!.isChecked
+        val isDebugMode = mDebugMode?.isChecked == true
         val version = getString(
             R.string.version_text, ApplicationUtils.getVersionName(activity)
         )
         if (!isDebugMode) {
-            mDebugMode!!.title = version
-            mDebugMode!!.setSummary(null)
+            mDebugMode?.title = version
+            mDebugMode?.summary = null
         } else {
-            mDebugMode!!.title = getString(R.string.prefs_debug_mode)
-            mDebugMode!!.summary = version
+            mDebugMode?.title = getString(R.string.prefs_debug_mode)
+            mDebugMode?.summary = version
         }
     }
 
@@ -174,17 +174,17 @@ class DebugSettingsFragment : SubScreenFragment(), OnPreferenceClickListener {
             }
 
             override fun writeValue(value: Int, key: String?) {
-                prefs!!.edit().putFloat(key, getValueFromPercentage(value)).apply()
+                prefs.edit().putFloat(key, getValueFromPercentage(value)).apply()
             }
 
             override fun writeDefaultValue(key: String?) {
-                prefs!!.edit().remove(key).apply()
+                prefs.edit().remove(key).apply()
             }
 
             override fun readValue(key: String?): Int {
                 return getPercentageFromValue(
                     Settings.readKeyPreviewAnimationScale(
-                        prefs!!, key, defaultValue
+                        prefs, key, defaultValue
                     )
                 )
             }
@@ -211,16 +211,16 @@ class DebugSettingsFragment : SubScreenFragment(), OnPreferenceClickListener {
             findPreference(prefKey) as SeekBarDialogPreference ?: return
         pref.setInterface(object : SeekBarDialogPreference.ValueProxy {
             override fun writeValue(value: Int, key: String?) {
-                prefs!!.edit().putInt(key, value).apply()
+                prefs.edit().putInt(key, value).apply()
             }
 
             override fun writeDefaultValue(key: String?) {
-                prefs!!.edit().remove(key).apply()
+                prefs.edit().remove(key).apply()
             }
 
             override fun readValue(key: String?): Int {
                 return Settings.readKeyPreviewAnimationDuration(
-                    prefs!!, key, defaultValue
+                    prefs, key, defaultValue
                 )
             }
 
@@ -229,7 +229,7 @@ class DebugSettingsFragment : SubScreenFragment(), OnPreferenceClickListener {
             }
 
             override fun getValueText(value: Int): String {
-                return res.getString(R.string.abbreviation_unit_milliseconds, value)
+                return res.getString(R.string.abbreviation_unit_milliseconds, value.toString())
             }
 
             override fun feedbackValue(value: Int) {}
@@ -251,17 +251,17 @@ class DebugSettingsFragment : SubScreenFragment(), OnPreferenceClickListener {
             }
 
             override fun writeValue(value: Int, key: String?) {
-                prefs!!.edit().putFloat(key, getValueFromPercentage(value)).apply()
+                prefs.edit().putFloat(key, getValueFromPercentage(value)).apply()
             }
 
             override fun writeDefaultValue(key: String?) {
-                prefs!!.edit().remove(key).apply()
+                prefs.edit().remove(key).apply()
             }
 
             override fun readValue(key: String?): Int {
                 return getPercentageFromValue(
                     Settings.readKeyboardHeight(
-                        prefs!!, defaultValue
+                        prefs, defaultValue
                     )
                 )
             }

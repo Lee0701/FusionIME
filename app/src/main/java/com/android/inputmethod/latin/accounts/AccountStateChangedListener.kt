@@ -26,7 +26,7 @@ object AccountStateChangedListener {
      *
      * @param oldAccount the account that was signed out of.
      */
-    fun onAccountSignedOut(oldAccount: String) {
+    fun onAccountSignedOut(oldAccount: String?) {
     }
 
     /**

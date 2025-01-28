@@ -15,6 +15,7 @@
  */
 package com.android.inputmethod.latin.setup
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ContentResolver
 import android.content.Intent
@@ -57,10 +58,10 @@ class SetupWizardActivity : Activity(), View.OnClickListener {
     private class SettingsPoolingHandler
         (
         ownerInstance: SetupWizardActivity,
-        imm: InputMethodManager?
+        imm: InputMethodManager
     ) :
         LeakGuardHandlerWrapper<SetupWizardActivity?>(ownerInstance) {
-        private val mImmInHandler = imm!!
+        private val mImmInHandler = imm
 
         override fun handleMessage(msg: Message) {
             val setupWizardActivity = ownerInstance ?: return
@@ -100,8 +101,9 @@ class SetupWizardActivity : Activity(), View.OnClickListener {
         setTheme(android.R.style.Theme_Translucent_NoTitleBar)
         super.onCreate(savedInstanceState)
 
-        mImm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-        mHandler = SettingsPoolingHandler(this, mImm)
+        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        mImm = imm
+        mHandler = SettingsPoolingHandler(this, imm)
 
         setContentView(R.layout.setup_wizard)
         mSetupWizard = findViewById(R.id.setup_wizard)
@@ -335,6 +337,7 @@ class SetupWizardActivity : Activity(), View.OnClickListener {
         super.onBackPressed()
     }
 
+    @SuppressLint("ResourceType")
     fun hideWelcomeVideoAndShowWelcomeImage() {
         mWelcomeVideoView!!.visibility = View.GONE
         mWelcomeImageView!!.setImageResource(R.raw.setup_welcome_image)
