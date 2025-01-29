@@ -19,72 +19,72 @@
 -->
 
 <merge
-    xmlns:latin="http://schemas.android.com/apk/res/com.android.inputmethod.latin"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
 >
     <switch>
         <case
-            latin:mode="email|url"
+            app:mode="email|url"
         >
             <Key
-                latin:keySpec="-"
-                latin:keyHintLabel="1"
-                latin:additionalMoreKeys="1" />
+                app:keySpec="-"
+                app:keyHintLabel="1"
+                app:additionalMoreKeys="1" />
             <Key
-                latin:keySpec="_"
-                latin:keyHintLabel="2"
-                latin:additionalMoreKeys="2" />
+                app:keySpec="_"
+                app:keyHintLabel="2"
+                app:additionalMoreKeys="2" />
         </case>
         <default>
             <Key
-                latin:keySpec="\'"
-                latin:keyHintLabel="1"
-                latin:additionalMoreKeys="1"
-                latin:moreKeys="&quot;" />
+                app:keySpec="\'"
+                app:keyHintLabel="1"
+                app:additionalMoreKeys="1"
+                app:moreKeys="&quot;" />
             <Key
-                latin:keySpec="-"
-                latin:keyHintLabel="2"
-                latin:additionalMoreKeys="2"
-                latin:moreKeys="_" />
+                app:keySpec="-"
+                app:keyHintLabel="2"
+                app:additionalMoreKeys="2"
+                app:moreKeys="_" />
         </default>
     </switch>
     <!-- U+05E7: "ק" HEBREW LETTER QOF -->
     <Key
-        latin:keySpec="&#x05E7;"
-        latin:keyHintLabel="3"
-        latin:additionalMoreKeys="3" />
+        app:keySpec="&#x05E7;"
+        app:keyHintLabel="3"
+        app:additionalMoreKeys="3" />
     <!-- U+05E8: "ר" HEBREW LETTER RESH -->
     <Key
-        latin:keySpec="&#x05E8;"
-        latin:keyHintLabel="4"
-        latin:additionalMoreKeys="4" />
+        app:keySpec="&#x05E8;"
+        app:keyHintLabel="4"
+        app:additionalMoreKeys="4" />
     <!-- U+05D0: "א" HEBREW LETTER ALEF -->
     <Key
-        latin:keySpec="&#x05D0;"
-        latin:keyHintLabel="5"
-        latin:additionalMoreKeys="5" />
+        app:keySpec="&#x05D0;"
+        app:keyHintLabel="5"
+        app:additionalMoreKeys="5" />
     <!-- U+05D8: "ט" HEBREW LETTER TET -->
     <Key
-        latin:keySpec="&#x05D8;"
-        latin:keyHintLabel="6"
-        latin:additionalMoreKeys="6" />
+        app:keySpec="&#x05D8;"
+        app:keyHintLabel="6"
+        app:additionalMoreKeys="6" />
     <!-- U+05D5: "ו" HEBREW LETTER VAV -->
     <Key
-        latin:keySpec="&#x05D5;"
-        latin:keyHintLabel="7"
-        latin:additionalMoreKeys="7" />
+        app:keySpec="&#x05D5;"
+        app:keyHintLabel="7"
+        app:additionalMoreKeys="7" />
     <!-- U+05DF: "ן" HEBREW LETTER FINAL NUN -->
     <Key
-        latin:keySpec="&#x05DF;"
-        latin:keyHintLabel="8"
-        latin:additionalMoreKeys="8" />
+        app:keySpec="&#x05DF;"
+        app:keyHintLabel="8"
+        app:additionalMoreKeys="8" />
     <!-- U+05DD: "ם" HEBREW LETTER FINAL MEM -->
     <Key
-        latin:keySpec="&#x05DD;"
-        latin:keyHintLabel="9"
-        latin:additionalMoreKeys="9" />
+        app:keySpec="&#x05DD;"
+        app:keyHintLabel="9"
+        app:additionalMoreKeys="9" />
     <!-- U+05E4: "פ" HEBREW LETTER PE -->
     <Key
-        latin:keySpec="&#x05E4;"
-        latin:keyHintLabel="0"
-        latin:additionalMoreKeys="0" />
+        app:keySpec="&#x05E4;"
+        app:keyHintLabel="0"
+        app:additionalMoreKeys="0" />
 </merge>

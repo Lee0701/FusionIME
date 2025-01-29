@@ -57,6 +57,7 @@ import android.view.inputmethod.InputMethodSubtype;
 
 import androidx.annotation.NonNull;
 
+import ee.oyatl.ime.fusion.R;
 import com.android.inputmethod.accessibility.AccessibilityUtils;
 import com.android.inputmethod.annotations.UsedForTesting;
 import com.android.inputmethod.compat.BuildCompatUtils;

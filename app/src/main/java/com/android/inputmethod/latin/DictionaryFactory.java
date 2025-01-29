@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.util.Log;
 
+import ee.oyatl.ime.fusion.R;
 import com.android.inputmethod.latin.utils.DictionaryInfoUtils;
 
 import java.io.File;

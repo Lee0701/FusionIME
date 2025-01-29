@@ -22,38 +22,38 @@
      API version 16 can't automatically render dotted circle for incomplete combining letter
      of some scripts. The files named res/xml/key_*.xml have this U+25CC hack, although the
      counterpart files named res/xml-v16/key_*.xml don't have this hack. -->
-<merge xmlns:latin="http://schemas.android.com/apk/res/com.android.inputmethod.latin">
+<merge xmlns:app="http://schemas.android.com/apk/res-auto">
     <switch>
-        <case latin:keyboardLayoutSet="hindi">
+        <case app:keyboardLayoutSet="hindi">
             <!-- U+25CC: "◌" DOTTED CIRCLE
                  U+093E/U+0902: "ां" DEVANAGARI VOWEL SIGN AA/DEVANAGARI SIGN ANUSVARA
                  U+093E/U+0901: "ाँ" DEVANAGARI VOWEL SIGN AA/DEVANAGARI SIGN CANDRABINDU -->
             <key-style
-                latin:styleName="moreKeysDevanagariVowelSignAa"
-                latin:moreKeys="&#x25CC;&#x093E;&#x0902;|&#x093E;&#x0902;,&#x25CC;&#x093E;&#x0901;|&#x093E;&#x0901;,%" />
+                app:styleName="moreKeysDevanagariVowelSignAa"
+                app:moreKeys="&#x25CC;&#x093E;&#x0902;|&#x093E;&#x0902;,&#x25CC;&#x093E;&#x0901;|&#x093E;&#x0901;,%" />
         </case>
-        <case latin:keyboardLayoutSet="hindi_compact">
+        <case app:keyboardLayoutSet="hindi_compact">
             <!-- U+25CC: "◌" DOTTED CIRCLE
                  U+093E: "ा" DEVANAGARI VOWEL SIGN AA -->
             <key-style
-                latin:styleName="moreKeysDevanagariVowelSignAa"
-                latin:moreKeys="&#x25CC;&#x093E;|&#x093E;,%" />
+                app:styleName="moreKeysDevanagariVowelSignAa"
+                app:moreKeys="&#x25CC;&#x093E;|&#x093E;,%" />
         </case>
-        <case latin:keyboardLayoutSet="marathi">
+        <case app:keyboardLayoutSet="marathi">
             <!-- U+0906: "आ" DEVANAGARI LETTER AA -->
             <key-style
-                latin:styleName="moreKeysDevanagariVowelSignAa"
-                latin:moreKeys="&#x0906;,%" />
+                app:styleName="moreKeysDevanagariVowelSignAa"
+                app:moreKeys="&#x0906;,%" />
         </case>
         <default>
-            <key-style latin:styleName="moreKeysDevanagariVowelSignAa" />
+            <key-style app:styleName="moreKeysDevanagariVowelSignAa" />
         </default>
     </switch>
     <!-- U+25CC: "◌" DOTTED CIRCLE
          U+093E: "ा" DEVANAGARI VOWEL SIGN AA -->
     <key-style
-        latin:styleName="baseKeyDevanagariVowelSignAa"
-        latin:parentStyle="moreKeysDevanagariVowelSignAa"
-        latin:keySpec="&#x25CC;&#x093E;|&#x093E;"
-        latin:keyLabelFlags="followKeyLetterRatio" />
+        app:styleName="baseKeyDevanagariVowelSignAa"
+        app:parentStyle="moreKeysDevanagariVowelSignAa"
+        app:keySpec="&#x25CC;&#x093E;|&#x093E;"
+        app:keyLabelFlags="followKeyLetterRatio" />
 </merge>

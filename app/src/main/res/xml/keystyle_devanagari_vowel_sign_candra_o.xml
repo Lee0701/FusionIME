@@ -22,30 +22,30 @@
      API version 16 can't automatically render dotted circle for incomplete combining letter
      of some scripts. The files named res/xml/key_*.xml have this U+25CC hack, although the
      counterpart files named res/xml-v16/key_*.xml don't have this hack. -->
-<merge xmlns:latin="http://schemas.android.com/apk/res/com.android.inputmethod.latin">
+<merge xmlns:app="http://schemas.android.com/apk/res-auto">
     <switch>
-        <case latin:keyboardLayoutSet="hindi_compact">
+        <case app:keyboardLayoutSet="hindi_compact">
             <!-- U+25CC: "◌" DOTTED CIRCLE
                  U+0949: "ॉ" DEVANAGARI VOWEL SIGN CANDRA O -->
             <key-style
-                latin:styleName="moreKeysDevanagariVowelSignCandraO"
-                latin:moreKeys="&#x25CC;&#x0949;|&#x0949;" />
+                app:styleName="moreKeysDevanagariVowelSignCandraO"
+                app:moreKeys="&#x25CC;&#x0949;|&#x0949;" />
         </case>
-        <case latin:keyboardLayoutSet="marathi">
+        <case app:keyboardLayoutSet="marathi">
             <!-- U+0911: "ऑ" DEVANAGARI LETTER CANDRA O -->
             <key-style
-                latin:styleName="moreKeysDevanagariVowelSignCandraO"
-                latin:moreKeys="&#x0911;" />
+                app:styleName="moreKeysDevanagariVowelSignCandraO"
+                app:moreKeys="&#x0911;" />
         </case>
         <default>
-            <key-style latin:styleName="moreKeysDevanagariVowelSignCandraO" />
+            <key-style app:styleName="moreKeysDevanagariVowelSignCandraO" />
         </default>
     </switch>
     <!-- U+25CC: "◌" DOTTED CIRCLE
          U+0949: "ॉ" DEVANAGARI VOWEL SIGN CANDRA O -->
     <key-style
-        latin:styleName="baseKeyDevanagariVowelSignCandraO"
-        latin:parentStyle="moreKeysDevanagariVowelSignCandraO"
-        latin:keySpec="&#x25CC;&#x0949;|&#x0949;"
-        latin:keyLabelFlags="followKeyLetterRatio" />
+        app:styleName="baseKeyDevanagariVowelSignCandraO"
+        app:parentStyle="moreKeysDevanagariVowelSignCandraO"
+        app:keySpec="&#x25CC;&#x0949;|&#x0949;"
+        app:keyLabelFlags="followKeyLetterRatio" />
 </merge>

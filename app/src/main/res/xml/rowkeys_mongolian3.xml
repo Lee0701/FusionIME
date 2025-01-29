@@ -19,39 +19,39 @@
 -->
 
 <merge
-    xmlns:latin="http://schemas.android.com/apk/res/com.android.inputmethod.latin"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
 >
     <!-- U+044F: "я" CYRILLIC SMALL LETTER YA -->
     <Key
-        latin:keySpec="&#x044F;" />
+        app:keySpec="&#x044F;" />
     <!-- U+0447: "ч" CYRILLIC SMALL LETTER CHE -->
     <Key
-        latin:keySpec="&#x0447;" />
+        app:keySpec="&#x0447;" />
     <!-- U+0451: "ё" CYRILLIC SMALL LETTER IO
          U+0435: "е" CYRILLIC SMALL LETTER IE -->
     <Key
-        latin:keySpec="&#x0451;"
-        latin:moreKeys="&#x0435;" />
+        app:keySpec="&#x0451;"
+        app:moreKeys="&#x0435;" />
     <!-- U+0441: "с" CYRILLIC SMALL LETTER ES -->
     <Key
-        latin:keySpec="&#x0441;" />
+        app:keySpec="&#x0441;" />
     <!-- U+043C: "м" CYRILLIC SMALL LETTER EM -->
     <Key
-        latin:keySpec="&#x043C;" />
+        app:keySpec="&#x043C;" />
     <!-- U+0438: "и" CYRILLIC SMALL LETTER I -->
     <Key
-        latin:keySpec="&#x0438;" />
+        app:keySpec="&#x0438;" />
     <!-- U+0442: "т" CYRILLIC SMALL LETTER TE -->
     <Key
-        latin:keySpec="&#x0442;" />
+        app:keySpec="&#x0442;" />
     <!-- U+044C: "ь" CYRILLIC SMALL LETTER SOFT SIGN
          U+044A: "ъ" CYRILLIC SMALL LETTER HARD SIGN -->
     <Key
-        latin:keySpec="&#x044C;"
-        latin:moreKeys="&#x044A;" />
+        app:keySpec="&#x044C;"
+        app:moreKeys="&#x044A;" />
     <!-- U+0432: "в" CYRILLIC SMALL LETTER VE
          U+044E: "ю" CYRILLIC SMALL LETTER YU -->
     <Key
-        latin:keySpec="&#x0432;"
-        latin:moreKeys="&#x044E;" />
+        app:keySpec="&#x0432;"
+        app:moreKeys="&#x044E;" />
 </merge>

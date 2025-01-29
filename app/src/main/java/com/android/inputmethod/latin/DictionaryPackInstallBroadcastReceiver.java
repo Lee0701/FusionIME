@@ -16,6 +16,7 @@
 
 package com.android.inputmethod.latin;
 
+import ee.oyatl.ime.fusion.R;
 import com.android.inputmethod.dictionarypack.DictionaryPackConstants;
 import com.android.inputmethod.latin.utils.TargetPackageInfoGetterTask;
 

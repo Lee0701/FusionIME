@@ -19,13 +19,13 @@
 -->
 
 <merge
-    xmlns:latin="http://schemas.android.com/apk/res/com.android.inputmethod.latin"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
 >
     <Key
-        latin:keySpec="b" />
+        app:keySpec="b" />
     <Key
-        latin:keySpec="n"
-        latin:moreKeys="!text/morekeys_n" />
+        app:keySpec="n"
+        app:moreKeys="!text/morekeys_n" />
     <Key
-        latin:keySpec="m" />
+        app:keySpec="m" />
 </merge>

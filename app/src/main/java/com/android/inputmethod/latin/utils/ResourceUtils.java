@@ -30,7 +30,7 @@ import android.view.WindowManager;
 import android.view.WindowMetrics;
 
 import com.android.inputmethod.annotations.UsedForTesting;
-import com.android.inputmethod.latin.R;
+import ee.oyatl.ime.fusion.R;
 import com.android.inputmethod.latin.settings.SettingsValues;
 
 import java.util.ArrayList;

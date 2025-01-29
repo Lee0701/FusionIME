@@ -21,13 +21,13 @@ import android.util.Log;
 import android.util.Pair;
 import android.view.KeyEvent;
 
+import ee.oyatl.ime.fusion.R;
 import com.android.inputmethod.keyboard.KeyboardSwitcher;
 import com.android.inputmethod.latin.settings.Settings;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.annotation.Nonnull;
 

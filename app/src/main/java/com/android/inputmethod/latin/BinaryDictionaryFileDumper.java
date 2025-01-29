@@ -27,6 +27,7 @@ import android.os.RemoteException;
 import android.text.TextUtils;
 import android.util.Log;
 
+import ee.oyatl.ime.fusion.R;
 import com.android.inputmethod.dictionarypack.DictionaryPackConstants;
 import com.android.inputmethod.dictionarypack.MD5Calculator;
 import com.android.inputmethod.dictionarypack.UpdateHandler;

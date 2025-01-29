@@ -19,39 +19,39 @@
 -->
 
 <merge
-    xmlns:latin="http://schemas.android.com/apk/res/com.android.inputmethod.latin"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
 >
     <include
-        latin:keyboardLayout="@xml/key_styles_common" />
+        app:keyboardLayout="@xml/key_styles_common" />
     <Row
-        latin:keyWidth="9.091%p"
+        app:keyWidth="9.091%p"
     >
         <include
-            latin:keyboardLayout="@xml/rowkeys_nordic1" />
+            app:keyboardLayout="@xml/rowkeys_nordic1" />
     </Row>
     <Row
-        latin:keyWidth="9.091%p"
+        app:keyWidth="9.091%p"
     >
         <include
-            latin:keyboardLayout="@xml/rowkeys_nordic2" />
+            app:keyboardLayout="@xml/rowkeys_nordic2" />
     </Row>
     <Row
-        latin:keyWidth="9.2%p"
+        app:keyWidth="9.2%p"
     >
         <Key
-            latin:keyStyle="shiftKeyStyle"
-            latin:keyWidth="15%p"
-            latin:visualInsetsRight="1%p" />
+            app:keyStyle="shiftKeyStyle"
+            app:keyWidth="15%p"
+            app:visualInsetsRight="1%p" />
         <Spacer
-            latin:keyWidth="2.8%p" />
+            app:keyWidth="2.8%p" />
         <include
-            latin:keyboardLayout="@xml/rowkeys_qwerty3" />
+            app:keyboardLayout="@xml/rowkeys_qwerty3" />
         <Key
-            latin:keyStyle="deleteKeyStyle"
-            latin:keyXPos="-15%p"
-            latin:keyWidth="fillRight"
-            latin:visualInsetsLeft="1%p" />
+            app:keyStyle="deleteKeyStyle"
+            app:keyXPos="-15%p"
+            app:keyWidth="fillRight"
+            app:visualInsetsLeft="1%p" />
     </Row>
     <include
-        latin:keyboardLayout="@xml/row_qwerty4" />
+        app:keyboardLayout="@xml/row_qwerty4" />
 </merge>

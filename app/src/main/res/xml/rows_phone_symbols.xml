@@ -19,76 +19,76 @@
 -->
 
 <merge
-    xmlns:latin="http://schemas.android.com/apk/res/com.android.inputmethod.latin"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
 >
     <include
-        latin:keyboardLayout="@xml/key_styles_common" />
+        app:keyboardLayout="@xml/key_styles_common" />
     <include
-        latin:keyboardLayout="@xml/key_styles_number" />
+        app:keyboardLayout="@xml/key_styles_number" />
     <Row>
         <Key
-            latin:keySpec="("
-            latin:keyStyle="numSymbolKeyStyle" />
+            app:keySpec="("
+            app:keyStyle="numSymbolKeyStyle" />
         <Key
-            latin:keySpec="/"
-            latin:keyStyle="numSymbolKeyStyle" />
+            app:keySpec="/"
+            app:keyStyle="numSymbolKeyStyle" />
         <Key
-            latin:keySpec=")"
-            latin:keyStyle="numSymbolKeyStyle" />
+            app:keySpec=")"
+            app:keyStyle="numSymbolKeyStyle" />
         <Key
-            latin:keySpec="-"
-            latin:moreKeys="+"
-            latin:keyLabelFlags="hasPopupHint"
-            latin:keyStyle="numKeyStyle"
-            latin:backgroundType="functional"
-            latin:keyWidth="fillRight" />
+            app:keySpec="-"
+            app:moreKeys="+"
+            app:keyLabelFlags="hasPopupHint"
+            app:keyStyle="numKeyStyle"
+            app:backgroundType="functional"
+            app:keyWidth="fillRight" />
     </Row>
     <Row>
         <Key
-            latin:keySpec="N"
-            latin:keyStyle="numSymbolKeyStyle" />
+            app:keySpec="N"
+            app:keyStyle="numSymbolKeyStyle" />
         <!-- Pause is a comma. Check PhoneNumberUtils.java to see if this
             has changed. -->
         <Key
-            latin:keySpec="!string/label_pause_key|,"
-            latin:keyLabelFlags="followKeyLabelRatio|autoXScale"
-            latin:keyStyle="numSymbolKeyStyle" />
+            app:keySpec="!string/label_pause_key|,"
+            app:keyLabelFlags="followKeyLabelRatio|autoXScale"
+            app:keyStyle="numSymbolKeyStyle" />
         <Key
-            latin:keySpec=","
-            latin:keyStyle="numSymbolKeyStyle" />
+            app:keySpec=","
+            app:keyStyle="numSymbolKeyStyle" />
         <Key
-            latin:keySpec="."
-            latin:keyStyle="numKeyStyle"
-            latin:backgroundType="functional"
-            latin:keyWidth="fillRight" />
+            app:keySpec="."
+            app:keyStyle="numKeyStyle"
+            app:backgroundType="functional"
+            app:keyWidth="fillRight" />
     </Row>
     <Row>
         <!-- U+FF0A: "＊" FULLWIDTH ASTERISK -->
         <Key
-            latin:keySpec="&#xFF0A;|*"
-            latin:keyStyle="numSymbolKeyStyle" />
+            app:keySpec="&#xFF0A;|*"
+            app:keyStyle="numSymbolKeyStyle" />
         <!-- Wait is a semicolon. -->
         <Key
-            latin:keySpec="!string/label_wait_key|;"
-            latin:keyLabelFlags="followKeyLabelRatio|autoXScale"
-            latin:keyStyle="numSymbolKeyStyle" />
+            app:keySpec="!string/label_wait_key|;"
+            app:keyLabelFlags="followKeyLabelRatio|autoXScale"
+            app:keyStyle="numSymbolKeyStyle" />
         <Key
-            latin:keySpec="\#"
-            latin:keyStyle="numSymbolKeyStyle" />
+            app:keySpec="\#"
+            app:keyStyle="numSymbolKeyStyle" />
         <Key
-            latin:keyStyle="deleteKeyStyle"
-            latin:keyWidth="fillRight" />
+            app:keyStyle="deleteKeyStyle"
+            app:keyWidth="fillRight" />
     </Row>
     <Row>
         <Key
-            latin:keyStyle="numPhoneToNumericKeyStyle" />
+            app:keyStyle="numPhoneToNumericKeyStyle" />
         <Key
-            latin:keySpec="+"
-            latin:keyStyle="numSymbolKeyStyle" />
+            app:keySpec="+"
+            app:keyStyle="numSymbolKeyStyle" />
         <Key
-            latin:keyStyle="numSpaceKeyStyle" />
+            app:keyStyle="numSpaceKeyStyle" />
         <Key
-            latin:keyStyle="enterKeyStyle"
-            latin:keyWidth="fillRight" />
+            app:keyStyle="enterKeyStyle"
+            app:keyWidth="fillRight" />
     </Row>
 </merge>
