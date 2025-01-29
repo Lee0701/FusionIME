@@ -54,7 +54,7 @@ class AudioAndHapticFeedbackManager private constructor() {
     }
 
     fun vibrate(milliseconds: Long) {
-        mVibrator?.vibrate(milliseconds)
+        if(milliseconds > 0) mVibrator?.vibrate(milliseconds)
     }
 
     private fun reevaluateIfSoundIsOn(): Boolean {
