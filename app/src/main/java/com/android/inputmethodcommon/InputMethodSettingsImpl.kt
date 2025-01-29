@@ -45,20 +45,22 @@ internal class InputMethodSettingsImpl : InputMethodSettingsInterface {
      * @return true if this application is an IME and has two or more subtypes, false otherwise.
      */
     fun init(context: Context, prefScreen: PreferenceScreen): Boolean {
-        mImm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
-        mImi = getMyImi(context, mImm!!)
-        if (mImi == null || mImi!!.getSubtypeCount() <= 1) {
+        val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val imi = getMyImi(context, imm)
+        mImm = imm
+        mImi = imi
+        if (imi == null || imi.subtypeCount <= 1) {
             return false
         }
-        val intent: Intent = Intent(Settings.ACTION_INPUT_METHOD_SUBTYPE_SETTINGS)
-        intent.putExtra(Settings.EXTRA_INPUT_METHOD_ID, mImi!!.getId())
+        val intent = Intent(Settings.ACTION_INPUT_METHOD_SUBTYPE_SETTINGS)
+        intent.putExtra(Settings.EXTRA_INPUT_METHOD_ID, mImi?.id)
         intent.setFlags(
             (Intent.FLAG_ACTIVITY_NEW_TASK
                     or Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED
                     or Intent.FLAG_ACTIVITY_CLEAR_TOP)
         )
         mSubtypeEnablerPreference = Preference(context)
-        mSubtypeEnablerPreference!!.setIntent(intent)
+        mSubtypeEnablerPreference?.intent = intent
         prefScreen.addPreference(mSubtypeEnablerPreference)
         updateSubtypeEnabler()
         return true
@@ -116,10 +118,7 @@ internal class InputMethodSettingsImpl : InputMethodSettingsInterface {
     }
 
     fun updateSubtypeEnabler() {
-        val pref: Preference? = mSubtypeEnablerPreference
-        if (pref == null) {
-            return
-        }
+        val pref: Preference = mSubtypeEnablerPreference ?: return
         val context: Context = pref.getContext()
         val title: CharSequence?
         if (mSubtypeEnablerTitleRes != 0) {
@@ -127,14 +126,11 @@ internal class InputMethodSettingsImpl : InputMethodSettingsInterface {
         } else {
             title = mSubtypeEnablerTitle
         }
-        pref.setTitle(title)
-        val intent: Intent? = pref.getIntent()
-        if (intent != null) {
-            intent.putExtra(Intent.EXTRA_TITLE, title)
-        }
-        val summary: String? = getEnabledSubtypesLabel(context, mImm, mImi)
+        pref.title = title
+        pref.intent?.putExtra(Intent.EXTRA_TITLE, title)
+        val summary = getEnabledSubtypesLabel(context, mImm, mImi)
         if (!TextUtils.isEmpty(summary)) {
-            pref.setSummary(summary)
+            pref.summary = summary
         }
         if (mSubtypeEnablerIconRes != 0) {
             pref.setIcon(mSubtypeEnablerIconRes)

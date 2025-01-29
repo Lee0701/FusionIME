@@ -127,11 +127,11 @@ open class KeyboardBuilder<KP : KeyboardParams>(context: Context, params: KP) {
     private var mRightEdgeKey: Key? = null
 
     fun setAllowRedundantMoreKes(enabled: Boolean) {
-        mParams!!.mAllowRedundantMoreKeys = enabled
+        mParams.mAllowRedundantMoreKeys = enabled
     }
 
     fun load(xmlId: Int, id: KeyboardId?): KeyboardBuilder<KP> {
-        mParams!!.mId = id
+        mParams.mId = id
         val parser: XmlResourceParser = mResources.getXml(xmlId)
         try {
             parseKeyboard(parser)
@@ -149,11 +149,11 @@ open class KeyboardBuilder<KP : KeyboardParams>(context: Context, params: KP) {
 
     @UsedForTesting
     fun disableTouchPositionCorrectionDataForTest() {
-        mParams!!.mTouchPositionCorrection.setEnabled(false)
+        mParams.mTouchPositionCorrection.setEnabled(false)
     }
 
     fun setProximityCharsCorrectionEnabled(enabled: Boolean) {
-        mParams!!.mProximityCharsCorrectionEnabled = enabled
+        mParams.mProximityCharsCorrectionEnabled = enabled
     }
 
     open fun build(): Keyboard {
@@ -169,7 +169,7 @@ open class KeyboardBuilder<KP : KeyboardParams>(context: Context, params: KP) {
 
         mParams = params
 
-        params!!.GRID_WIDTH = res.getInteger(R.integer.config_keyboard_grid_width)
+        params.GRID_WIDTH = res.getInteger(R.integer.config_keyboard_grid_width)
         params.GRID_HEIGHT = res.getInteger(R.integer.config_keyboard_grid_height)
     }
 
@@ -190,9 +190,9 @@ open class KeyboardBuilder<KP : KeyboardParams>(context: Context, params: KP) {
     private fun parseKeyboard(parser: XmlPullParser) {
         if (DEBUG) startTag(
             "<%s> %s", TAG_KEYBOARD,
-            mParams!!.mId!!
+            mParams.mId!!
         )
-        while (parser.getEventType() != XmlPullParser.END_DOCUMENT) {
+        while (parser.eventType != XmlPullParser.END_DOCUMENT) {
             val event: Int = parser.next()
             if (event == XmlPullParser.START_TAG) {
                 val tag: String = parser.getName()
@@ -415,7 +415,7 @@ open class KeyboardBuilder<KP : KeyboardParams>(context: Context, params: KP) {
         )
         val counts: Int = array.size
         val keyWidth: Float = gridRows.getKeyWidth(null, 0.0f)
-        val numColumns: Int = (mParams!!.mOccupiedWidth / keyWidth).toInt()
+        val numColumns: Int = (mParams.mOccupiedWidth / keyWidth).toInt()
         var index: Int = 0
         while (index < counts) {
             val row: KeyboardRow = KeyboardRow(mResources, mParams, parser, mCurrentY)
@@ -479,7 +479,7 @@ open class KeyboardBuilder<KP : KeyboardParams>(context: Context, params: KP) {
         val keyAttr: TypedArray = mResources.obtainAttributes(
             Xml.asAttributeSet(parser), R.styleable.Keyboard_Key
         )
-        val keyStyle: KeyStyle = mParams!!.mKeyStyles.getKeyStyle(keyAttr, parser)
+        val keyStyle: KeyStyle = mParams.mKeyStyles.getKeyStyle(keyAttr, parser)
         val keySpec: String? = keyStyle.getString(keyAttr, R.styleable.Keyboard_Key_keySpec)
         if (TextUtils.isEmpty(keySpec)) {
             throw XmlParseUtils.ParseException("Empty keySpec", parser)
@@ -506,7 +506,7 @@ open class KeyboardBuilder<KP : KeyboardParams>(context: Context, params: KP) {
         val keyAttr: TypedArray = mResources.obtainAttributes(
             Xml.asAttributeSet(parser), R.styleable.Keyboard_Key
         )
-        val keyStyle: KeyStyle = mParams!!.mKeyStyles.getKeyStyle(keyAttr, parser)
+        val keyStyle: KeyStyle = mParams.mKeyStyles.getKeyStyle(keyAttr, parser)
         val spacer: Key = Spacer(keyAttr, keyStyle, mParams, row)
         keyAttr.recycle()
         if (DEBUG) startEndTag("<%s />", TAG_SPACER)
@@ -543,7 +543,7 @@ open class KeyboardBuilder<KP : KeyboardParams>(context: Context, params: KP) {
             attr, R.styleable.Keyboard_Include
         )
         val keyAttr: TypedArray = mResources.obtainAttributes(attr, R.styleable.Keyboard_Key)
-        var keyboardLayout: Int = 0
+        var keyboardLayout: Int
         try {
             XmlParseUtils.checkAttributeExists(
                 keyboardAttr, R.styleable.Keyboard_Include_keyboardLayout, "keyboardLayout",
@@ -625,7 +625,7 @@ open class KeyboardBuilder<KP : KeyboardParams>(context: Context, params: KP) {
     ) {
         if (DEBUG) startTag(
             "<%s> %s", TAG_SWITCH,
-            mParams!!.mId!!
+            mParams.mId!!
         )
         var selected: Boolean = false
         while (parser.getEventType() != XmlPullParser.END_DOCUMENT) {
@@ -664,7 +664,7 @@ open class KeyboardBuilder<KP : KeyboardParams>(context: Context, params: KP) {
     }
 
     private fun parseCaseCondition(parser: XmlPullParser): Boolean {
-        val id: KeyboardId? = mParams!!.mId
+        val id: KeyboardId? = mParams.mId
         if (id == null) {
             return true
         }
@@ -861,7 +861,7 @@ open class KeyboardBuilder<KP : KeyboardParams>(context: Context, params: KP) {
                 )
             }
             if (!skip) {
-                mParams!!.mKeyStyles.parseKeyStyleAttributes(keyStyleAttr, keyAttrs, parser)
+                mParams.mKeyStyles.parseKeyStyleAttributes(keyStyleAttr, keyAttrs, parser)
             }
         } finally {
             keyStyleAttr.recycle()
@@ -871,12 +871,12 @@ open class KeyboardBuilder<KP : KeyboardParams>(context: Context, params: KP) {
     }
 
     private fun startKeyboard() {
-        mCurrentY += mParams!!.mTopPadding
+        mCurrentY += mParams.mTopPadding
         mTopEdge = true
     }
 
     private fun startRow(row: KeyboardRow) {
-        addEdgeSpace(mParams!!.mLeftPadding.toFloat(), row)
+        addEdgeSpace(mParams.mLeftPadding.toFloat(), row)
         mCurrentRow = row
         mLeftEdge = true
         mRightEdgeKey = null
@@ -890,14 +890,14 @@ open class KeyboardBuilder<KP : KeyboardParams>(context: Context, params: KP) {
             mRightEdgeKey!!.markAsRightEdge(mParams)
             mRightEdgeKey = null
         }
-        addEdgeSpace(mParams!!.mRightPadding.toFloat(), row)
+        addEdgeSpace(mParams.mRightPadding.toFloat(), row)
         mCurrentY += row.getRowHeight()
         mCurrentRow = null
         mTopEdge = false
     }
 
     private fun endKey(key: Key) {
-        mParams!!.onAddKey(key)
+        mParams.onAddKey(key)
         if (mLeftEdge) {
             key.markAsLeftEdge(mParams)
             mLeftEdge = false
@@ -909,7 +909,7 @@ open class KeyboardBuilder<KP : KeyboardParams>(context: Context, params: KP) {
     }
 
     private fun endKeyboard() {
-        mParams!!.removeRedundantMoreKeys()
+        mParams.removeRedundantMoreKeys()
         // {@link #parseGridRows(XmlPullParser,boolean)} may populate keyboard rows higher than
         // previously expected.
         val actualHeight: Int = mCurrentY - mParams.mVerticalGap + mParams.mBottomPadding

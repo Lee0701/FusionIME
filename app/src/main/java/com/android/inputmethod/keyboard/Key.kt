@@ -260,7 +260,7 @@ open class Key : Comparable<Key> {
 
         mLabelFlags = (style.getFlags(keyAttr, R.styleable.Keyboard_Key_keyLabelFlags)
                 or row.getDefaultKeyLabelFlags())
-        val needsToUpcase: Boolean = needsToUpcase(mLabelFlags, params.mId!!.mElementId)
+        val needsToUpcase = needsToUpcase(mLabelFlags, params.mId?.mElementId)
         val localeForUpcasing: Locale = params.mId!!.getLocale()
         var actionFlags: Int = style.getFlags(keyAttr, R.styleable.Keyboard_Key_keyActionFlags)
         var moreKeys: Array<String?>? =
@@ -327,7 +327,7 @@ open class Key : Comparable<Key> {
 
         val code: Int = KeySpecParser.getCode(keySpec)
         if ((mLabelFlags and LABEL_FLAGS_FROM_CUSTOM_ACTION_LABEL) != 0) {
-            label = params.mId!!.mCustomActionLabel
+            label = params.mId?.mCustomActionLabel
         } else if (code >= Character.MIN_SUPPLEMENTARY_CODE_POINT) {
             // This is a workaround to have a key that has a supplementary code point in its label.
             // Because we can put a string in resource neither as a XML entity of a supplementary
@@ -447,9 +447,9 @@ open class Key : Comparable<Key> {
                 && o.mActionFlags == mActionFlags && o.mLabelFlags == mLabelFlags
     }
 
-    override fun compareTo(o: Key): Int {
-        if (equalsInternal(o)) return 0
-        if (mHashCode > o.mHashCode) return 1
+    override fun compareTo(other: Key): Int {
+        if (equalsInternal(other)) return 0
+        if (mHashCode > other.mHashCode) return 1
         return -1
     }
 
@@ -457,8 +457,8 @@ open class Key : Comparable<Key> {
         return mHashCode
     }
 
-    override fun equals(o: Any?): Boolean {
-        return o is Key && equalsInternal(o)
+    override fun equals(other: Any?): Boolean {
+        return other is Key && equalsInternal(other)
     }
 
     override fun toString(): String {
@@ -965,14 +965,14 @@ open class Key : Comparable<Key> {
                 MoreKeySpec.removeRedundantMoreKeys(
                     moreKeys, lettersOnBaseLayout
                 ) ?: emptyArray()
-            return if ((filteredMoreKeys == moreKeys)) key else Key(key, filteredMoreKeys)
+            return if (filteredMoreKeys.contentEquals(moreKeys)) key else Key(key, filteredMoreKeys)
         }
 
-        private fun needsToUpcase(labelFlags: Int, keyboardElementId: Int): Boolean {
+        private fun needsToUpcase(labelFlags: Int, keyboardElementId: Int?): Boolean {
             if ((labelFlags and LABEL_FLAGS_PRESERVE_CASE) != 0) return false
-            when (keyboardElementId) {
-                KeyboardId.ELEMENT_ALPHABET_MANUAL_SHIFTED, KeyboardId.ELEMENT_ALPHABET_AUTOMATIC_SHIFTED, KeyboardId.ELEMENT_ALPHABET_SHIFT_LOCKED, KeyboardId.ELEMENT_ALPHABET_SHIFT_LOCK_SHIFTED -> return true
-                else -> return false
+            return when (keyboardElementId) {
+                KeyboardId.ELEMENT_ALPHABET_MANUAL_SHIFTED, KeyboardId.ELEMENT_ALPHABET_AUTOMATIC_SHIFTED, KeyboardId.ELEMENT_ALPHABET_SHIFT_LOCKED, KeyboardId.ELEMENT_ALPHABET_SHIFT_LOCK_SHIFTED -> true
+                else -> false
             }
         }
 

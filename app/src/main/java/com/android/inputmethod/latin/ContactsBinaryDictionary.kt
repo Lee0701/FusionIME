@@ -76,17 +76,17 @@ class ContactsBinaryDictionary protected constructor(
     private fun loadDeviceAccountsEmailAddressesLocked() {
         val accountVocabulary: List<String?> =
             AccountUtils.getDeviceAccountsEmailAddresses(mContext)
-        if (accountVocabulary == null || accountVocabulary.isEmpty()) {
+        if (accountVocabulary.isEmpty()) {
             return
         }
-        for (word: String? in accountVocabulary) {
+        for (word in accountVocabulary) {
             if (DEBUG) {
-                Log.d(TAG, "loadAccountVocabulary: " + word)
+                Log.d(TAG, "loadAccountVocabulary: $word")
             }
             runGCIfRequiredLocked(true /* mindsBlockByGC */)
             addUnigramLocked(
-                word!!, ContactsDictionaryConstants.FREQUENCY_FOR_CONTACTS,
-                false,  /* isNotAWord */false,  /* isPossiblyOffensive */
+                word ?: continue, ContactsDictionaryConstants.FREQUENCY_FOR_CONTACTS,
+                false, false,
                 BinaryDictionary.NOT_A_VALID_TIMESTAMP
             )
         }
@@ -178,6 +178,7 @@ class ContactsBinaryDictionary protected constructor(
 
         // Note: This method is called by {@link DictionaryFacilitator} using Java reflection.
         @ExternallyReferenced
+        @JvmStatic
         fun getDictionary(
             context: Context, locale: Locale,
             dictFile: File?, dictNamePrefix: String, account: String?

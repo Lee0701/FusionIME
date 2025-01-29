@@ -48,35 +48,25 @@ class RichInputMethodSubtype(subtype: InputMethodSubtype) {
 
     val mode: String
         // The mode is also determined by the primary subtype.
-        get() {
-            return rawSubtype.mode
-        }
+        get() = rawSubtype.mode
 
     val isNoLanguage: Boolean
-        get() {
-            return SubtypeLocaleUtils.NO_LANGUAGE == rawSubtype.locale
-        }
+        get() = SubtypeLocaleUtils.NO_LANGUAGE == rawSubtype.locale
 
     val nameForLogging: String
-        get() {
-            return toString()
-        }
+        get() = toString()
 
     val fullDisplayName: String
         // InputMethodSubtype's display name for spacebar text in its locale.
         get() {
-            if (isNoLanguage) {
-                return SubtypeLocaleUtils.getKeyboardLayoutSetDisplayName(rawSubtype)
-            }
+            if (isNoLanguage) return SubtypeLocaleUtils.getKeyboardLayoutSetDisplayName(rawSubtype)
             return SubtypeLocaleUtils.getSubtypeLocaleDisplayName(rawSubtype.locale)
         }
 
     val middleDisplayName: String
         // Get the RichInputMethodSubtype's middle display name in its locale.
         get() {
-            if (isNoLanguage) {
-                return SubtypeLocaleUtils.getKeyboardLayoutSetDisplayName(rawSubtype)
-            }
+            if (isNoLanguage) return SubtypeLocaleUtils.getKeyboardLayoutSetDisplayName(rawSubtype)
             return SubtypeLocaleUtils.getSubtypeLanguageDisplayName(rawSubtype.locale)
         }
 
@@ -84,8 +74,8 @@ class RichInputMethodSubtype(subtype: InputMethodSubtype) {
         if (o !is RichInputMethodSubtype) {
             return false
         }
-        val other: RichInputMethodSubtype = o
-        return rawSubtype == other.rawSubtype && locale == other.locale
+        val subtype: RichInputMethodSubtype = o
+        return rawSubtype == subtype.rawSubtype && locale == subtype.locale
     }
 
     override fun hashCode(): Int {

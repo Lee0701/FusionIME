@@ -115,13 +115,13 @@ class NgramContext(maxPrevWordCount: Int, vararg prevWordsInfo: WordInfo?) {
     fun extractPrevWordsContext(): String {
         val terms: ArrayList<String?> = ArrayList()
         for (i in mPrevWordsInfo.indices.reversed()) {
-            if (mPrevWordsInfo.get(i) != null && mPrevWordsInfo.get(i)!!.isValid) {
-                val wordInfo: WordInfo? = mPrevWordsInfo.get(i)
-                if (wordInfo!!.mIsBeginningOfSentence) {
+            if (mPrevWordsInfo[i]?.isValid == true) {
+                val wordInfo = mPrevWordsInfo[i]
+                if (wordInfo?.mIsBeginningOfSentence == true) {
                     terms.add(BEGINNING_OF_SENTENCE_TAG)
                 } else {
-                    val term: String = wordInfo.mWord.toString()
-                    if (!term.isEmpty()) {
+                    val term: String = wordInfo?.mWord.toString()
+                    if (term.isNotEmpty()) {
                         terms.add(term)
                     }
                 }
@@ -138,13 +138,13 @@ class NgramContext(maxPrevWordCount: Int, vararg prevWordsInfo: WordInfo?) {
     fun extractPrevWordsContextArray(): Array<String> {
         val prevTermList: ArrayList<String> = ArrayList()
         for (i in mPrevWordsInfo.indices.reversed()) {
-            if (mPrevWordsInfo.get(i) != null && mPrevWordsInfo.get(i)!!.isValid) {
+            if (mPrevWordsInfo[i]?.isValid == true) {
                 val wordInfo: WordInfo? = mPrevWordsInfo.get(i)
-                if (wordInfo!!.mIsBeginningOfSentence) {
+                if (wordInfo?.mIsBeginningOfSentence == true) {
                     prevTermList.add(BEGINNING_OF_SENTENCE_TAG)
                 } else {
-                    val term: String = wordInfo.mWord.toString()
-                    if (!term.isEmpty()) {
+                    val term: String = wordInfo?.mWord.toString()
+                    if (term.isNotEmpty()) {
                         prevTermList.add(term)
                     }
                 }
@@ -156,12 +156,12 @@ class NgramContext(maxPrevWordCount: Int, vararg prevWordsInfo: WordInfo?) {
 
     val isValid: Boolean
         get() {
-            return prevWordCount > 0 && mPrevWordsInfo.get(0)!!.isValid
+            return prevWordCount > 0 && mPrevWordsInfo[0]?.isValid == true
         }
 
     val isBeginningOfSentenceContext: Boolean
         get() {
-            return prevWordCount > 0 && mPrevWordsInfo.get(0)!!.mIsBeginningOfSentence
+            return prevWordCount > 0 && mPrevWordsInfo[0]?.mIsBeginningOfSentence == true
         }
 
     // n is 1-indexed.
@@ -170,7 +170,7 @@ class NgramContext(maxPrevWordCount: Int, vararg prevWordsInfo: WordInfo?) {
         if (n <= 0 || n > prevWordCount) {
             return null
         }
-        return mPrevWordsInfo.get(n - 1)!!.mWord
+        return mPrevWordsInfo[n - 1]?.mWord
     }
 
     // n is 1-indexed.
@@ -179,7 +179,7 @@ class NgramContext(maxPrevWordCount: Int, vararg prevWordsInfo: WordInfo?) {
         if (n <= 0 || n > prevWordCount) {
             return false
         }
-        return mPrevWordsInfo.get(n - 1)!!.mIsBeginningOfSentence
+        return mPrevWordsInfo[n - 1]?.mIsBeginningOfSentence == true
     }
 
     fun outputToArray(
@@ -193,7 +193,7 @@ class NgramContext(maxPrevWordCount: Int, vararg prevWordsInfo: WordInfo?) {
                 isBeginningOfSentenceArray[i] = false
                 continue
             }
-            codePointArrays[i] = StringUtils.toCodePointArray(wordInfo.mWord!!)
+            codePointArrays[i] = StringUtils.toCodePointArray(wordInfo.mWord ?: "")
             isBeginningOfSentenceArray[i] = wordInfo.mIsBeginningOfSentence
         }
     }

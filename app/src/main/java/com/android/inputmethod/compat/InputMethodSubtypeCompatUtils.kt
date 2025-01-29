@@ -98,13 +98,13 @@ object InputMethodSubtypeCompatUtils {
     fun getLocaleObject(subtype: InputMethodSubtype): Locale {
         // Locale.forLanguageTag() is available only in Android L and later.
         if (Build.VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP) {
-            val languageTag: String? =
-                CompatUtils.invoke(subtype, null, GET_LANGUAGE_TAG) as String?
+            val languageTag =
+                CompatUtils.invoke(subtype, null, GET_LANGUAGE_TAG) as String
             if (!TextUtils.isEmpty(languageTag)) {
                 return Locale.forLanguageTag(languageTag)
             }
         }
-        return LocaleUtils.constructLocaleFromString(subtype.getLocale())!!
+        return LocaleUtils.constructLocaleFromString(subtype.locale)
     }
 
     @UsedForTesting

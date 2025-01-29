@@ -16,6 +16,7 @@
 package com.android.inputmethod.latin
 
 import android.Manifest.permission
+import android.annotation.SuppressLint
 import android.app.ActivityOptions
 import android.app.AlertDialog
 import android.content.BroadcastReceiver
@@ -254,7 +255,7 @@ class LatinIME : InputMethodService(), KeyboardActionListener, SuggestionStripVi
                         // If we were able to reset the caches, then we can reload the keyboard.
                         // Otherwise, we'll do it when we can.
                         latinIme.mKeyboardSwitcher.loadKeyboard(
-                            latinIme.getCurrentInputEditorInfo(),
+                            latinIme.currentInputEditorInfo,
                             settingsValues!!, latinIme.currentAutoCapsState,
                             latinIme.currentRecapitalizeState
                         )
@@ -585,6 +586,7 @@ class LatinIME : InputMethodService(), KeyboardActionListener, SuggestionStripVi
         }
     }
 
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
     override fun onCreate() {
         Settings.init(this)
         DebugFlags.init(PreferenceManager.getDefaultSharedPreferences(this))
@@ -593,7 +595,6 @@ class LatinIME : InputMethodService(), KeyboardActionListener, SuggestionStripVi
         AudioAndHapticFeedbackManager.init(this)
         AccessibilityUtils.init(this)
         mStatsUtilsManager?.onCreate(this,  /* context */mDictionaryFacilitator)
-        val wm: WindowManager = getSystemService(WINDOW_SERVICE) as WindowManager
         mDisplayContext = displayContext
         KeyboardSwitcher.init(this)
         super.onCreate()
@@ -644,12 +645,12 @@ class LatinIME : InputMethodService(), KeyboardActionListener, SuggestionStripVi
         if (Build.VERSION.SDK_INT >= VERSION_CODES.TIRAMISU) {
             registerReceiver(
                 mHideSoftInputReceiver, hideSoftInputFilter,
-                PERMISSION_HIDE_SOFT_INPUT, null,  /* scheduler */RECEIVER_EXPORTED
+                PERMISSION_HIDE_SOFT_INPUT, null, RECEIVER_EXPORTED
             )
         } else {
             registerReceiver(
                 mHideSoftInputReceiver, hideSoftInputFilter,
-                PERMISSION_HIDE_SOFT_INPUT, null /* scheduler */
+                PERMISSION_HIDE_SOFT_INPUT, null
             )
         }
 
@@ -659,7 +660,7 @@ class LatinIME : InputMethodService(), KeyboardActionListener, SuggestionStripVi
     // Has to be package-visible for unit tests
     @UsedForTesting
     fun loadSettings() {
-        val locale: Locale = mRichImm?.currentSubtypeLocale!!
+        val locale = mRichImm?.currentSubtypeLocale!!
         val editorInfo: EditorInfo? = currentInputEditorInfo
         val inputAttributes = InputAttributes(
             editorInfo, isFullscreenMode, packageName
@@ -933,13 +934,13 @@ class LatinIME : InputMethodService(), KeyboardActionListener, SuggestionStripVi
         // Switch to the null consumer to handle cases leading to early exit below, for which we
         // also wouldn't be consuming gesture data.
         mGestureConsumer = GestureConsumer.NULL_GESTURE_CONSUMER
-        mRichImm!!.refreshSubtypeCaches()
+        mRichImm?.refreshSubtypeCaches()
         val switcher: KeyboardSwitcher = mKeyboardSwitcher
         switcher.updateKeyboardTheme(mDisplayContext!!)
         val mainKeyboardView: MainKeyboardView? = switcher.getMainKeyboardView()
         // If we are starting input in a different text field from before, we'll have to reload
         // settings, so currentSettingsValues can't be final.
-        var currentSettingsValues: SettingsValues? = mSettings.current
+        var currentSettingsValues = mSettings.current!!
 
         if (editorInfo == null) {
             Log.e(TAG, "Null EditorInfo in onStartInputView()")
@@ -977,10 +978,10 @@ class LatinIME : InputMethodService(), KeyboardActionListener, SuggestionStripVi
             )
         ) {
             Log.w(TAG, "Deprecated private IME option specified: " + editorInfo.privateImeOptions)
-            Log.w(TAG, "Use " + getPackageName() + "." + ImeOption.NO_MICROPHONE + " instead")
+            Log.w(TAG, "Use " + packageName + "." + ImeOption.NO_MICROPHONE + " instead")
         }
         if (InputAttributes.inPrivateImeOptions(
-                getPackageName(),
+                packageName,
                 ImeOption.FORCE_ASCII,
                 editorInfo
             )
@@ -1008,7 +1009,7 @@ class LatinIME : InputMethodService(), KeyboardActionListener, SuggestionStripVi
             accessUtils.onStartInputViewInternal(mainKeyboardView, editorInfo, restarting)
         }
 
-        val inputTypeChanged: Boolean = !currentSettingsValues!!.isSameInputType(editorInfo)
+        val inputTypeChanged: Boolean = currentSettingsValues?.isSameInputType(editorInfo) != true
         val isDifferentTextField: Boolean = !restarting || inputTypeChanged
 
         StatsUtils.onStartInputView(
@@ -1076,7 +1077,7 @@ class LatinIME : InputMethodService(), KeyboardActionListener, SuggestionStripVi
         }
         if (isDifferentTextField) {
             mainKeyboardView.closing()
-            currentSettingsValues = mSettings.current
+            currentSettingsValues = mSettings.current!!
 
             if (currentSettingsValues?.mAutoCorrectionEnabledPerUserSettings == true) {
                 suggest.setAutoCorrectionThreshold(
@@ -1248,7 +1249,7 @@ class LatinIME : InputMethodService(), KeyboardActionListener, SuggestionStripVi
 
         if (TRACE) Debug.stopMethodTracing()
         if (isShowingOptionDialog) {
-            mOptionsDialog!!.dismiss()
+            mOptionsDialog?.dismiss()
             mOptionsDialog = null
         }
         super.hideWindow()
@@ -1298,24 +1299,23 @@ class LatinIME : InputMethodService(), KeyboardActionListener, SuggestionStripVi
         if (mInputView == null) {
             return
         }
-        val settingsValues: SettingsValues? = mSettings.current
         val visibleKeyboardView: View? = mKeyboardSwitcher.getVisibleKeyboardView()
         if (visibleKeyboardView == null || !hasSuggestionStripView()) {
             return
         }
-        val inputHeight: Int = mInputView!!.getHeight()
+        val inputHeight: Int = mInputView!!.height
         if (isImeSuppressedByHardwareKeyboard && !visibleKeyboardView.isShown()) {
             // If there is a hardware keyboard and a visible software keyboard view has been hidden,
             // no visual element will be shown on the screen.
             outInsets.contentTopInsets = inputHeight
             outInsets.visibleTopInsets = inputHeight
-            mInsetsUpdater!!.setInsets(outInsets)
+            mInsetsUpdater?.setInsets(outInsets)
             return
         }
         val suggestionsHeight: Int = if ((!mKeyboardSwitcher.isShowingEmojiPalettes()
-                    && mSuggestionStripView!!.getVisibility() == View.VISIBLE)
+                    && mSuggestionStripView?.visibility == View.VISIBLE)
         )
-            mSuggestionStripView!!.getHeight()
+            mSuggestionStripView!!.height
         else
             0
         val visibleTopY: Int = inputHeight - visibleKeyboardView.getHeight() - suggestionsHeight
@@ -1324,14 +1324,14 @@ class LatinIME : InputMethodService(), KeyboardActionListener, SuggestionStripVi
         if (visibleKeyboardView.isShown()) {
             val touchLeft: Int = 0
             val touchTop: Int = if (mKeyboardSwitcher.isShowingMoreKeysPanel()) 0 else visibleTopY
-            val touchRight: Int = visibleKeyboardView.getWidth()
+            val touchRight: Int = visibleKeyboardView.width
             val touchBottom: Int = inputHeight
             outInsets.touchableInsets = Insets.TOUCHABLE_INSETS_REGION
             outInsets.touchableRegion.set(touchLeft, touchTop, touchRight, touchBottom)
         }
         outInsets.contentTopInsets = visibleTopY
         outInsets.visibleTopInsets = visibleTopY
-        mInsetsUpdater!!.setInsets(outInsets)
+        mInsetsUpdater?.setInsets(outInsets)
     }
 
     fun startShowingInputView(needsToLoadKeyboard: Boolean) {
@@ -1392,7 +1392,7 @@ class LatinIME : InputMethodService(), KeyboardActionListener, SuggestionStripVi
         // Override layout parameters to expand {@link SoftInputWindow} to the entire screen.
         // See {@link InputMethodService#setinputView(View)} and
         // {@link SoftInputWindow#updateWidthHeight(WindowManager.LayoutParams)}.
-        val window: Window? = getWindow().getWindow()
+        val window: Window? = window.window
         ViewLayoutUtils.updateLayoutHeightOf(window!!, ViewGroup.LayoutParams.MATCH_PARENT)
         // This method may be called before {@link #setInputView(View)}.
         if (mInputView != null) {
@@ -1427,14 +1427,12 @@ class LatinIME : InputMethodService(), KeyboardActionListener, SuggestionStripVi
      * @param codePoints code points to get coordinates for.
      * @return x,y coordinates for this keyboard, as a flattened array.
      */
-    fun getCoordinatesForCurrentKeyboard(codePoints: IntArray): IntArray? {
-        val keyboard: Keyboard? = mKeyboardSwitcher.getKeyboard()
-        if (null == keyboard) {
-            return CoordinateUtils.newCoordinateArray(
+    fun getCoordinatesForCurrentKeyboard(codePoints: IntArray): IntArray {
+        val keyboard: Keyboard = mKeyboardSwitcher.getKeyboard()
+            ?: return CoordinateUtils.newCoordinateArray(
                 codePoints.size,
                 Constants.NOT_A_COORDINATE, Constants.NOT_A_COORDINATE
             )
-        }
         return keyboard.getCoordinates(codePoints)
     }
 
@@ -1463,7 +1461,7 @@ class LatinIME : InputMethodService(), KeyboardActionListener, SuggestionStripVi
         if (isShowingOptionDialog) return false
         when (requestCode) {
             Constants.CUSTOM_CODE_SHOW_INPUT_METHOD_PICKER -> {
-                if (mRichImm!!.hasMultipleEnabledIMEsOrSubtypes(true /* include aux subtypes */)) {
+                if (mRichImm?.hasMultipleEnabledIMEsOrSubtypes(true) == true) {
                     mRichImm?.inputMethodManager?.showInputMethodPicker()!!
                     return true
                 }
@@ -1479,13 +1477,13 @@ class LatinIME : InputMethodService(), KeyboardActionListener, SuggestionStripVi
         }
 
     fun switchLanguage(subtype: InputMethodSubtype?) {
-        val token: IBinder = getWindow().getWindow()!!.getAttributes().token
+        val token: IBinder = window.window!!.attributes.token
         mRichImm!!.setInputMethodAndSubtype(token, subtype)
     }
 
     // TODO: Revise the language switch key behavior to make it much smarter and more reasonable.
     fun switchToNextSubtype() {
-        val token: IBinder = getWindow().getWindow()!!.getAttributes().token
+        val token: IBinder = window.window!!.attributes.token
         if (shouldSwitchToOtherInputMethods()) {
             mRichImm!!.switchToNextInputMethod(token, false /* onlyCurrentIme */)
             return
@@ -1920,10 +1918,14 @@ class LatinIME : InputMethodService(), KeyboardActionListener, SuggestionStripVi
         val currentDisplayId: Int = (getSystemService(WINDOW_SERVICE) as WindowManager)
             .defaultDisplay.displayId
 
-        startActivity(
-            intent,
-            ActivityOptions.makeBasic().setLaunchDisplayId(currentDisplayId).toBundle()
-        )
+        if (Build.VERSION.SDK_INT >= VERSION_CODES.O) {
+            startActivity(
+                intent,
+                ActivityOptions.makeBasic().setLaunchDisplayId(currentDisplayId).toBundle()
+            )
+        } else {
+            startActivity(intent)
+        }
     }
 
     fun launchSettings(extraEntryValue: String?) {
@@ -1981,10 +1983,7 @@ class LatinIME : InputMethodService(), KeyboardActionListener, SuggestionStripVi
 
     // TODO: Move this method out of {@link LatinIME}.
     private fun showOptionDialog(dialog: AlertDialog) {
-        val windowToken: IBinder? = mKeyboardSwitcher.getMainKeyboardView()!!.getWindowToken()
-        if (windowToken == null) {
-            return
-        }
+        val windowToken: IBinder = mKeyboardSwitcher.getMainKeyboardView()?.windowToken ?: return
 
         val window: Window? = dialog.getWindow()
         val lp: WindowManager.LayoutParams = window!!.getAttributes()

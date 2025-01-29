@@ -39,9 +39,9 @@ class UserBinaryDictionary protected constructor(
     dictFile: File?, name: String
 ) : ExpandableBinaryDictionary(
     context,
-    ExpandableBinaryDictionary.getDictName(name, locale, dictFile),
+    getDictName(name, locale, dictFile),
     locale,
-    Dictionary.TYPE_USER,
+    TYPE_USER,
     dictFile
 ) {
     private var mObserver: ContentObserver?
@@ -82,8 +82,9 @@ class UserBinaryDictionary protected constructor(
 
     @Synchronized
     override fun close() {
-        if (mObserver != null) {
-            mContext.getContentResolver().unregisterContentObserver(mObserver!!)
+        val observer = mObserver
+        if (observer != null) {
+            mContext.contentResolver.unregisterContentObserver(observer)
             mObserver = null
         }
         super.close()
@@ -95,10 +96,10 @@ class UserBinaryDictionary protected constructor(
         // This is correct for locale processing.
         // For this example, we'll look at the "en_US_POSIX" case.
         val localeElements: Array<String?> =
-            if (TextUtils.isEmpty(mLocaleString)) arrayOf() else mLocaleString!!.split(
+            if (TextUtils.isEmpty(mLocaleString)) arrayOf() else mLocaleString?.split(
                 "_".toRegex(),
                 limit = 3
-            ).toTypedArray()
+            )?.toTypedArray() ?: emptyArray()
         val length: Int = localeElements.size
 
         val request: StringBuilder = StringBuilder("(locale is NULL)")
@@ -152,7 +153,7 @@ class UserBinaryDictionary protected constructor(
     ) {
         var cursor: Cursor? = null
         try {
-            cursor = mContext.getContentResolver().query(
+            cursor = mContext.contentResolver.query(
                 Words.CONTENT_URI, query, request, requestArguments, null
             )
             addWordsLocked(cursor)
@@ -160,7 +161,7 @@ class UserBinaryDictionary protected constructor(
             Log.e(TAG, "SQLiteException in the remote User dictionary process.", e)
         } finally {
             try {
-                if (null != cursor) cursor.close()
+                cursor?.close()
             } catch (e: SQLiteException) {
                 Log.e(TAG, "SQLiteException in the remote User dictionary process.", e)
             }

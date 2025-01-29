@@ -58,17 +58,18 @@ class ContactsContentObserver(manager: ContactsManager, context: Context) : Runn
             Log.d(TAG, "registerObserver()")
         }
         mContactsChangedListener = listener
-        mContentObserver = object : ContentObserver(null /* handler */) {
+        val contentObserver = object : ContentObserver(null /* handler */) {
             override fun onChange(self: Boolean) {
                 ExecutorUtils.getBackgroundExecutor(ExecutorUtils.KEYBOARD)
                     ?.execute(this@ContactsContentObserver)
             }
         }
+        mContentObserver = contentObserver
         val contentResolver: ContentResolver = mContext.getContentResolver()
         contentResolver.registerContentObserver(
             ContactsContract.Contacts.CONTENT_URI,
             true,
-            mContentObserver!!
+            contentObserver
         )
     }
 
@@ -92,7 +93,7 @@ class ContactsContentObserver(manager: ContactsManager, context: Context) : Runn
             if (DebugFlags.DEBUG_ENABLED) {
                 Log.d(TAG, "run() : Contacts have changed. Notifying listeners.")
             }
-            mContactsChangedListener!!.onContactsChange()
+            mContactsChangedListener?.onContactsChange()
         }
         mRunning.set(false)
     }
@@ -138,7 +139,7 @@ class ContactsContentObserver(manager: ContactsManager, context: Context) : Runn
     }
 
     fun unregister() {
-        mContext.getContentResolver().unregisterContentObserver(mContentObserver!!)
+        mContext.contentResolver.unregisterContentObserver(mContentObserver ?: return)
     }
 
     companion object {

@@ -130,7 +130,7 @@ class RichInputConnection(parent: InputMethodService) : PrivateCommandPerformer 
         r.hintMaxLines = 0
         r.token = 1
         r.flags = 0
-        val et: ExtractedText? = mIC!!.getExtractedText(r, 0)
+        val et = mIC?.getExtractedText(r, 0)
         val beforeCursor: CharSequence? = getTextBeforeCursor(
             Constants.EDITOR_CONTENTS_CACHE_SIZE,
             0
@@ -168,7 +168,7 @@ class RichInputConnection(parent: InputMethodService) : PrivateCommandPerformer 
         if (++mNestLevel == 1) {
             mIC = mParent.getCurrentInputConnection()
             if (isConnected) {
-                mIC!!.beginBatchEdit()
+                mIC?.beginBatchEdit()
             }
         } else {
             if (DBG) {
@@ -184,7 +184,7 @@ class RichInputConnection(parent: InputMethodService) : PrivateCommandPerformer 
         if (mNestLevel <= 0) Log.e(TAG, "Batch edit not in progress!") // TODO: exception instead
 
         if (--mNestLevel == 0 && isConnected) {
-            mIC!!.endBatchEdit()
+            mIC?.endBatchEdit()
         }
         if (DEBUG_PREVIOUS_TEXT) checkConsistencyForDebug()
     }
@@ -218,7 +218,7 @@ class RichInputConnection(parent: InputMethodService) : PrivateCommandPerformer 
             return false
         }
         if (isConnected && shouldFinishComposition) {
-            mIC!!.finishComposingText()
+            mIC?.finishComposingText()
         }
         return true
     }
@@ -268,7 +268,7 @@ class RichInputConnection(parent: InputMethodService) : PrivateCommandPerformer 
         mCommittedTextBeforeComposingText.append(mComposingText)
         mComposingText.setLength(0)
         if (isConnected) {
-            mIC!!.finishComposingText()
+            mIC?.finishComposingText()
         }
     }
 
@@ -312,12 +312,12 @@ class RichInputConnection(parent: InputMethodService) : PrivateCommandPerformer 
                     }
                 }
             }
-            mIC!!.commitText(mTempObjectForCommitText, newCursorPosition)
+            mIC?.commitText(mTempObjectForCommitText, newCursorPosition)
         }
     }
 
     fun getSelectedText(flags: Int): CharSequence? {
-        return if (isConnected) mIC!!.getSelectedText(flags) else null
+        return if (isConnected) mIC?.getSelectedText(flags) else null
     }
 
     fun canDeleteCharacters(): Boolean {
@@ -426,7 +426,7 @@ class RichInputConnection(parent: InputMethodService) : PrivateCommandPerformer 
             return null
         }
         val startTime: Long = SystemClock.uptimeMillis()
-        val result: CharSequence? = mIC!!.getTextBeforeCursor(n, flags)
+        val result: CharSequence? = mIC?.getTextBeforeCursor(n, flags)
         detectLaggyConnection(operation, timeout, startTime)
         return result
     }
@@ -447,7 +447,7 @@ class RichInputConnection(parent: InputMethodService) : PrivateCommandPerformer 
             return null
         }
         val startTime: Long = SystemClock.uptimeMillis()
-        val result: CharSequence? = mIC!!.getTextAfterCursor(n, flags)
+        val result: CharSequence? = mIC?.getTextAfterCursor(n, flags)
         detectLaggyConnection(operation, timeout, startTime)
         return result
     }
@@ -489,7 +489,7 @@ class RichInputConnection(parent: InputMethodService) : PrivateCommandPerformer 
             expectedSelectionStart = 0
         }
         if (isConnected) {
-            mIC!!.deleteSurroundingText(beforeLength, 0)
+            mIC?.deleteSurroundingText(beforeLength, 0)
         }
         if (DEBUG_PREVIOUS_TEXT) checkConsistencyForDebug()
     }
@@ -497,7 +497,7 @@ class RichInputConnection(parent: InputMethodService) : PrivateCommandPerformer 
     fun performEditorAction(actionId: Int) {
         mIC = mParent.getCurrentInputConnection()
         if (isConnected) {
-            mIC!!.performEditorAction(actionId)
+            mIC?.performEditorAction(actionId)
         }
     }
 
@@ -552,7 +552,7 @@ class RichInputConnection(parent: InputMethodService) : PrivateCommandPerformer 
             }
         }
         if (isConnected) {
-            mIC!!.sendKeyEvent(keyEvent)
+            mIC?.sendKeyEvent(keyEvent)
         }
     }
 
@@ -582,7 +582,7 @@ class RichInputConnection(parent: InputMethodService) : PrivateCommandPerformer 
             )
         }
         if (isConnected) {
-            mIC!!.setComposingRegion(start, end)
+            mIC?.setComposingRegion(start, end)
         }
     }
 
@@ -596,7 +596,7 @@ class RichInputConnection(parent: InputMethodService) : PrivateCommandPerformer 
         // TODO: support values of newCursorPosition != 1. At this time, this is never called with
         // newCursorPosition != 1.
         if (isConnected) {
-            mIC!!.setComposingText(text, newCursorPosition)
+            mIC?.setComposingText(text, newCursorPosition)
         }
         if (DEBUG_PREVIOUS_TEXT) checkConsistencyForDebug()
     }
@@ -621,7 +621,7 @@ class RichInputConnection(parent: InputMethodService) : PrivateCommandPerformer 
         expectedSelectionStart = start
         expectedSelectionEnd = end
         if (isConnected) {
-            val isIcValid: Boolean = mIC!!.setSelection(start, end)
+            val isIcValid = mIC?.setSelection(start, end) == true
             if (!isIcValid) {
                 return false
             }
@@ -635,7 +635,7 @@ class RichInputConnection(parent: InputMethodService) : PrivateCommandPerformer 
         // This has no effect on the text field and does not change its content. It only makes
         // TextView flash the text for a second based on indices contained in the argument.
         if (isConnected) {
-            mIC!!.commitCorrection(correctionInfo)
+            mIC?.commitCorrection(correctionInfo)
         }
         if (DEBUG_PREVIOUS_TEXT) checkConsistencyForDebug()
     }
@@ -651,7 +651,7 @@ class RichInputConnection(parent: InputMethodService) : PrivateCommandPerformer 
         expectedSelectionEnd = expectedSelectionStart
         mComposingText.setLength(0)
         if (isConnected) {
-            mIC!!.commitCompletion(completionInfo)
+            mIC?.commitCompletion(completionInfo)
         }
         if (DEBUG_PREVIOUS_TEXT) checkConsistencyForDebug()
     }
@@ -950,7 +950,7 @@ class RichInputConnection(parent: InputMethodService) : PrivateCommandPerformer 
             Constants.EDITOR_CONTENTS_CACHE_SIZE, 0
         )
         val selectedText: CharSequence? =
-            if (isConnected) mIC!!.getSelectedText(0 /* flags */) else null
+            if (isConnected) mIC?.getSelectedText(0 /* flags */) else null
         if (null == textBeforeCursor ||
             (!TextUtils.isEmpty(selectedText) && expectedSelectionEnd == expectedSelectionStart)
         ) {
@@ -994,7 +994,7 @@ class RichInputConnection(parent: InputMethodService) : PrivateCommandPerformer 
         if (!isConnected) {
             return false
         }
-        return mIC!!.performPrivateCommand(action, data)
+        return mIC?.performPrivateCommand(action, data) == true
     }
 
     /**
@@ -1022,11 +1022,11 @@ class RichInputConnection(parent: InputMethodService) : PrivateCommandPerformer 
     fun maybeMoveTheCursorAroundAndRestoreToWorkaroundABug() {
         if (Build.VERSION.SDK_INT < VERSION_CODES.JELLY_BEAN) {
             if (expectedSelectionStart > 0) {
-                mIC!!.setSelection(expectedSelectionStart - 1, expectedSelectionStart - 1)
+                mIC?.setSelection(expectedSelectionStart - 1, expectedSelectionStart - 1)
             } else {
-                mIC!!.setSelection(expectedSelectionStart + 1, expectedSelectionStart + 1)
+                mIC?.setSelection(expectedSelectionStart + 1, expectedSelectionStart + 1)
             }
-            mIC!!.setSelection(expectedSelectionStart, expectedSelectionEnd)
+            mIC?.setSelection(expectedSelectionStart, expectedSelectionEnd)
         }
     }
 

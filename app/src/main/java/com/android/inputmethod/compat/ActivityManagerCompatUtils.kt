@@ -39,6 +39,6 @@ object ActivityManagerCompatUtils {
                 }
             }
         }
-        return sBoolean!!
+        return sBoolean == true
     }
 }

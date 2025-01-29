@@ -58,7 +58,7 @@ class AudioAndHapticFeedbackManager private constructor() {
     }
 
     private fun reevaluateIfSoundIsOn(): Boolean {
-        if (mSettingsValues == null || !mSettingsValues!!.mSoundOn || mAudioManager == null) {
+        if (mSettingsValues?.mSoundOn != true || mAudioManager == null) {
             return false
         }
         return mAudioManager?.getRingerMode() == AudioManager.RINGER_MODE_NORMAL
@@ -79,15 +79,16 @@ class AudioAndHapticFeedbackManager private constructor() {
             Constants.CODE_SPACE -> sound = AudioManager.FX_KEYPRESS_SPACEBAR
             else -> sound = AudioManager.FX_KEYPRESS_STANDARD
         }
-        mAudioManager!!.playSoundEffect(sound, mSettingsValues!!.mKeypressSoundVolume)
+        mAudioManager?.playSoundEffect(sound, mSettingsValues?.mKeypressSoundVolume ?: 0f)
     }
 
     fun performHapticFeedback(viewToPerformHapticFeedbackOn: View?) {
         if (mSettingsValues?.mVibrateOn != true) {
             return
         }
-        if (mSettingsValues!!.mKeypressVibrationDuration >= 0) {
-            vibrate(mSettingsValues!!.mKeypressVibrationDuration.toLong())
+        val keyPressVibrationDuration = mSettingsValues?.mKeypressVibrationDuration ?: 0
+        if (keyPressVibrationDuration >= 0) {
+            vibrate(keyPressVibrationDuration.toLong())
             return
         }
         // Go ahead with the system default

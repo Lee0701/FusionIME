@@ -43,32 +43,27 @@ object NotificationCompatUtils {
         CompatUtils.getMethod(Notification.Builder::class.java, "build")
     private val FIELD_VISIBILITY_SECRET: Field? =
         CompatUtils.getField(Notification::class.java, "VISIBILITY_SECRET")
-    private val VISIBILITY_SECRET: Int = if (null == FIELD_VISIBILITY_SECRET)
-        0
-    else
-        (CompatUtils.getFieldValue(
-            null,  /* receiver */null,  /* defaultValue */
-            FIELD_VISIBILITY_SECRET
-        ) as Int?)!!
-    private val FIELD_CATEGORY_RECOMMENDATION: Field? = CompatUtils.getField(
-        Notification::class.java, "CATEGORY_RECOMMENDATION"
-    )
-    private val CATEGORY_RECOMMENDATION: String = if (null == FIELD_CATEGORY_RECOMMENDATION)
-        ""
-    else
-        (CompatUtils.getFieldValue(
-            null,  /* receiver */null,  /* defaultValue */
-            FIELD_CATEGORY_RECOMMENDATION
-        ) as String?)!!
+    private val VISIBILITY_SECRET: Int =
+        if (null == FIELD_VISIBILITY_SECRET) 0
+        else CompatUtils.getFieldValue(
+            null, null, FIELD_VISIBILITY_SECRET
+        ) as Int
+    private val FIELD_CATEGORY_RECOMMENDATION: Field? =
+        CompatUtils.getField(
+            Notification::class.java, "CATEGORY_RECOMMENDATION"
+        )
+    private val CATEGORY_RECOMMENDATION: String =
+        if (null == FIELD_CATEGORY_RECOMMENDATION) ""
+        else CompatUtils.getFieldValue(
+            null, null, FIELD_CATEGORY_RECOMMENDATION
+        ) as String
     private val FIELD_PRIORITY_LOW: Field? =
         CompatUtils.getField(Notification::class.java, "PRIORITY_LOW")
-    private val PRIORITY_LOW: Int = if (null == FIELD_PRIORITY_LOW)
-        0
-    else
-        (CompatUtils.getFieldValue(
-            null,  /* receiver */null,  /* defaultValue */
-            FIELD_PRIORITY_LOW
-        ) as Int?)!!
+    private val PRIORITY_LOW: Int =
+        if (null == FIELD_PRIORITY_LOW) 0
+        else CompatUtils.getFieldValue(
+            null, null, FIELD_PRIORITY_LOW
+        ) as Int
 
     // Sets the accent color
     fun setColor(builder: Notification.Builder?, color: Int) {

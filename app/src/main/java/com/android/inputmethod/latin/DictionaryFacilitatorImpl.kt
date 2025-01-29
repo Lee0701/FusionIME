@@ -95,7 +95,7 @@ class DictionaryFacilitatorImpl : DictionaryFacilitator {
         /**
          * The locale associated with the dictionary group.
          */
-        val mLocale: Locale?
+        val mLocale: Locale? = locale
 
         /**
          * The user account associated with the dictionary group.
@@ -114,7 +114,6 @@ class DictionaryFacilitatorImpl : DictionaryFacilitator {
         val mSubDictMap: ConcurrentHashMap<String, ExpandableBinaryDictionary> = ConcurrentHashMap()
 
         init {
-            mLocale = locale
             mAccount = account
             // The main dictionary can be asynchronously loaded.
             setMainDict(mainDict)
@@ -171,9 +170,7 @@ class DictionaryFacilitatorImpl : DictionaryFacilitator {
             } else {
                 dict = mSubDictMap.remove(dictType)
             }
-            if (dict != null) {
-                dict.close()
-            }
+            dict?.close()
         }
 
         companion object {
@@ -193,23 +190,17 @@ class DictionaryFacilitatorImpl : DictionaryFacilitator {
     }
 
     override val isActive: Boolean
-        get() {
-            return mDictionaryGroup.mLocale != null
-        }
+        get() = mDictionaryGroup.mLocale != null
 
     override val locale: Locale
-        get() {
-            return mDictionaryGroup.mLocale!!
-        }
+        get() = mDictionaryGroup.mLocale!!
 
     override fun usesContacts(): Boolean {
         return mDictionaryGroup.getSubDict(Dictionary.TYPE_CONTACTS) != null
     }
 
     override val account: String?
-        get() {
-            return null
-        }
+        get() = null
 
     override fun resetDictionaries(
         context: Context,
@@ -261,19 +252,19 @@ class DictionaryFacilitatorImpl : DictionaryFacilitator {
 
         val mainDict: Dictionary?
         if (forceReloadMainDictionary || noExistingDictsForThisLocale
-            || !dictionaryGroupForLocale!!.hasDict(Dictionary.TYPE_MAIN, account)
+            || dictionaryGroupForLocale?.hasDict(Dictionary.TYPE_MAIN, account) != true
         ) {
             mainDict = null
         } else {
             mainDict = dictionaryGroupForLocale.getDict(Dictionary.TYPE_MAIN)
-            dictTypesToCleanupForLocale!!.remove(Dictionary.TYPE_MAIN)
+            dictTypesToCleanupForLocale?.remove(Dictionary.TYPE_MAIN)
         }
 
         val subDicts: MutableMap<String, ExpandableBinaryDictionary?> = HashMap()
         for (subDictType: String in subDictTypesToUse) {
             val subDict: ExpandableBinaryDictionary?
             if (noExistingDictsForThisLocale
-                || !dictionaryGroupForLocale!!.hasDict(subDictType, account)
+                || dictionaryGroupForLocale?.hasDict(subDictType, account) != true
             ) {
                 // Create a new dictionary.
                 subDict = getSubDict(
@@ -283,7 +274,7 @@ class DictionaryFacilitatorImpl : DictionaryFacilitator {
             } else {
                 // Reuse the existing dictionary, and don't close it at the end
                 subDict = dictionaryGroupForLocale.getSubDict(subDictType)
-                dictTypesToCleanupForLocale!!.remove(subDictType)
+                dictTypesToCleanupForLocale?.remove(subDictType)
             }
             subDicts.put(subDictType, subDict)
         }
@@ -309,13 +300,13 @@ class DictionaryFacilitatorImpl : DictionaryFacilitator {
                 existingDictionariesToCleanup.get(localeToCleanUp)
             val dictionarySetToCleanup: DictionaryGroup? =
                 findDictionaryGroupWithLocale(oldDictionaryGroup, localeToCleanUp)
-            for (dictType: String in dictTypesToCleanUp!!) {
-                dictionarySetToCleanup!!.closeDict(dictType)
+            for (dictType: String in dictTypesToCleanUp.orEmpty()) {
+                dictionarySetToCleanup?.closeDict(dictType)
             }
         }
 
         if (mValidSpellingWordWriteCache != null) {
-            mValidSpellingWordWriteCache!!.evictAll()
+            mValidSpellingWordWriteCache?.evictAll()
         }
     }
 
@@ -325,13 +316,11 @@ class DictionaryFacilitatorImpl : DictionaryFacilitator {
     ) {
         val latchForWaitingLoadingMainDictionary: CountDownLatch = CountDownLatch(1)
         mLatchForWaitingLoadingMainDictionaries = latchForWaitingLoadingMainDictionary
-        ExecutorUtils.getBackgroundExecutor(ExecutorUtils.KEYBOARD)!!.execute(object : Runnable {
-            override fun run() {
-                doReloadUninitializedMainDictionaries(
-                    context, locale, listener, latchForWaitingLoadingMainDictionary
-                )
-            }
-        })
+        ExecutorUtils.getBackgroundExecutor(ExecutorUtils.KEYBOARD)?.execute {
+            doReloadUninitializedMainDictionaries(
+                context, locale, listener, latchForWaitingLoadingMainDictionary
+            )
+        }
     }
 
     fun doReloadUninitializedMainDictionaries(
@@ -384,7 +373,7 @@ class DictionaryFacilitatorImpl : DictionaryFacilitator {
                     dictType, context, locale, dictFile, "",  /* dictNamePrefix */account
                 )
                 if (additionalDictAttributes.containsKey(dictType)) {
-                    dict!!.clearAndFlushDictionaryWithAdditionalAttributes(
+                    dict?.clearAndFlushDictionaryWithAdditionalAttributes(
                         additionalDictAttributes.get(dictType)
                     )
                 }
@@ -481,9 +470,9 @@ class DictionaryFacilitatorImpl : DictionaryFacilitator {
             return
         }
 
-        val lowerCaseWord: String = originalWord.lowercase(locale!!)
+        val lowerCaseWord: String = originalWord.lowercase(locale)
         val lowerCaseValid: Boolean = isValidSpellingWord(lowerCaseWord)
-        mValidSpellingWordWriteCache!!.put(lowerCaseWord, lowerCaseValid)
+        mValidSpellingWordWriteCache?.put(lowerCaseWord, lowerCaseValid)
 
         val capitalWord: String =
             StringUtils.capitalizeFirstAndDowncaseRest(
@@ -497,7 +486,7 @@ class DictionaryFacilitatorImpl : DictionaryFacilitator {
         } else {
             capitalValid = isValidSpellingWord(capitalWord)
         }
-        mValidSpellingWordWriteCache!!.put(capitalWord, capitalValid)
+        mValidSpellingWordWriteCache?.put(capitalWord, capitalValid)
     }
 
     private fun addWordToUserHistory(
@@ -514,7 +503,9 @@ class DictionaryFacilitatorImpl : DictionaryFacilitator {
         if (maxFreq == 0 && blockPotentiallyOffensive) {
             return
         }
-        val lowerCasedWord: String = word.lowercase(dictionaryGroup.mLocale!!)
+        val lowerCasedWord =
+            if(dictionaryGroup.mLocale != null) word.lowercase(dictionaryGroup.mLocale)
+            else word.lowercase()
         val secondWord: String
         if (wasAutoCapitalized) {
             if (isValidSuggestionWord(word) && !isValidSuggestionWord(lowerCasedWord)) {
@@ -619,7 +610,7 @@ class DictionaryFacilitatorImpl : DictionaryFacilitator {
 
     override fun isValidSpellingWord(word: String): Boolean {
         if (mValidSpellingWordReadCache != null) {
-            val cachedValue: Boolean = mValidSpellingWordReadCache!!.get(word)
+            val cachedValue = mValidSpellingWordReadCache?.get(word)
             if (cachedValue != null) {
                 return cachedValue
             }
@@ -669,10 +660,7 @@ class DictionaryFacilitatorImpl : DictionaryFacilitator {
     }
 
     private fun clearSubDictionary(dictName: String): Boolean {
-        val dictionary: ExpandableBinaryDictionary? = mDictionaryGroup.getSubDict(dictName)
-        if (dictionary == null) {
-            return false
-        }
+        val dictionary = mDictionaryGroup.getSubDict(dictName) ?: return false
         dictionary.clear()
         return true
     }
@@ -696,8 +684,8 @@ class DictionaryFacilitatorImpl : DictionaryFacilitator {
     override fun getDictionaryStats(context: Context?): List<DictionaryStats?> {
         val statsOfEnabledSubDicts: ArrayList<DictionaryStats?> = ArrayList()
         for (dictType: String in DictionaryFacilitator.DYNAMIC_DICTIONARY_TYPES) {
-            val dictionary: ExpandableBinaryDictionary? = mDictionaryGroup.getSubDict(dictType)
-            if (dictionary == null) continue
+            val dictionary: ExpandableBinaryDictionary =
+                mDictionaryGroup.getSubDict(dictType) ?: continue
             statsOfEnabledSubDicts.add(dictionary.dictionaryStats)
         }
         return statsOfEnabledSubDicts

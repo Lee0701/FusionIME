@@ -51,7 +51,7 @@ class KeyboardId(elementId: Int, params: KeyboardLayoutSet.Params) {
         mEditorInfo = params.mEditorInfo
         mClobberSettingsKey = params.mNoSettingsKey
         mLanguageSwitchKeyEnabled = params.mLanguageSwitchKeyEnabled
-        mCustomActionLabel = if ((mEditorInfo!!.actionLabel != null))
+        mCustomActionLabel = if ((mEditorInfo?.actionLabel != null))
             mEditorInfo.actionLabel.toString()
         else
             null
@@ -76,12 +76,14 @@ class KeyboardId(elementId: Int, params: KeyboardLayoutSet.Params) {
     }
 
     fun navigateNext(): Boolean {
-        return (mEditorInfo!!.imeOptions and EditorInfo.IME_FLAG_NAVIGATE_NEXT) != 0
+        val imeOptions = mEditorInfo?.imeOptions ?: 0
+        return (imeOptions and EditorInfo.IME_FLAG_NAVIGATE_NEXT) != 0
                 || imeAction() == EditorInfo.IME_ACTION_NEXT
     }
 
     fun navigatePrevious(): Boolean {
-        return (mEditorInfo!!.imeOptions and EditorInfo.IME_FLAG_NAVIGATE_PREVIOUS) != 0
+        val imeOptions = mEditorInfo?.imeOptions ?: 0
+        return (imeOptions and EditorInfo.IME_FLAG_NAVIGATE_PREVIOUS) != 0
                 || imeAction() == EditorInfo.IME_ACTION_PREVIOUS
     }
 

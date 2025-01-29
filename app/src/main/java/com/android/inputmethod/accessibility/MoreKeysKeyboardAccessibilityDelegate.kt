@@ -62,7 +62,7 @@ class MoreKeysKeyboardAccessibilityDelegate
         val y: Int = event.getY(actionIndex).toInt()
         val pointerId: Int = event.getPointerId(actionIndex)
         val eventTime: Long = event.getEventTime()
-        mKeyboardView!!.onDownEvent(x, y, pointerId, eventTime)
+        mKeyboardView.onDownEvent(x, y, pointerId, eventTime)
     }
 
     override fun onHoverMove(event: MotionEvent) {
@@ -72,7 +72,7 @@ class MoreKeysKeyboardAccessibilityDelegate
         val y: Int = event.getY(actionIndex).toInt()
         val pointerId: Int = event.getPointerId(actionIndex)
         val eventTime: Long = event.getEventTime()
-        mKeyboardView!!.onMoveEvent(x, y, pointerId, eventTime)
+        mKeyboardView.onMoveEvent(x, y, pointerId, eventTime)
     }
 
     override fun onHoverExit(event: MotionEvent) {
@@ -94,8 +94,8 @@ class MoreKeysKeyboardAccessibilityDelegate
         mMoreKeysKeyboardValidBounds.set(
             0,
             0,
-            mKeyboardView!!.getWidth(),
-            mKeyboardView.getHeight()
+            mKeyboardView.width,
+            mKeyboardView.height
         )
         mMoreKeysKeyboardValidBounds.inset(CLOSING_INSET_IN_PIXEL, CLOSING_INSET_IN_PIXEL)
         if (mMoreKeysKeyboardValidBounds.contains(x, y)) {

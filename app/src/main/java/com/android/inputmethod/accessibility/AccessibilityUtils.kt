@@ -61,7 +61,7 @@ class AccessibilityUtils private constructor() {
      * @return `true` if accessibility is enabled.
      */
     fun isAccessibilityEnabled(): Boolean {
-        return ENABLE_ACCESSIBILITY && mAccessibilityManager!!.isEnabled()
+        return ENABLE_ACCESSIBILITY && mAccessibilityManager?.isEnabled == true
     }
 
     /**
@@ -72,7 +72,7 @@ class AccessibilityUtils private constructor() {
      * @return `true` if touch exploration is enabled.
      */
     fun isTouchExplorationEnabled(): Boolean {
-        return isAccessibilityEnabled() && mAccessibilityManager!!.isTouchExplorationEnabled()
+        return isAccessibilityEnabled() && mAccessibilityManager?.isTouchExplorationEnabled == true
     }
 
     /**
@@ -88,14 +88,14 @@ class AccessibilityUtils private constructor() {
         // The user can optionally force speaking passwords.
         if (SettingsSecureCompatUtils.ACCESSIBILITY_SPEAK_PASSWORD != null) {
             val speakPassword: Boolean = Secure.getInt(
-                mContext!!.getContentResolver(),
+                mContext?.contentResolver,
                 SettingsSecureCompatUtils.ACCESSIBILITY_SPEAK_PASSWORD, 0
             ) != 0
             if (speakPassword) return false
         }
 
         // Always speak if the user is listening through headphones.
-        if (mAudioManager!!.isWiredHeadsetOn() || mAudioManager!!.isBluetoothA2dpOn()) {
+        if (mAudioManager?.isWiredHeadsetOn == true || mAudioManager?.isBluetoothA2dpOn() == true) {
             return false
         }
 

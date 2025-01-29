@@ -198,9 +198,7 @@ object BinaryDictionaryFileDumper {
             Log.e(TAG, "Unexpected exception communicating with the dictionary pack", e)
             return emptyList()
         } finally {
-            if (null != cursor) {
-                cursor.close()
-            }
+            cursor?.close()
             client.release()
         }
     }
@@ -234,8 +232,8 @@ object BinaryDictionaryFileDumper {
      * and creating it (and its containing directory) if necessary.
      */
     private fun installWordListToStaging(
-        wordlistId: String?, locale: String?,
-        rawChecksum: String?, providerClient: ContentProviderClient,
+        wordlistId: String, locale: String,
+        rawChecksum: String, providerClient: ContentProviderClient,
         context: Context
     ) {
         val COMPRESSED_CRYPTED_COMPRESSED: Int = 0
@@ -262,7 +260,7 @@ object BinaryDictionaryFileDumper {
             DictionaryInfoUtils.getStagingFileName(wordlistId, locale, context)
         val tempFileName: String
         try {
-            tempFileName = BinaryDictionaryGetter.getTempFileName(wordlistId!!, context)
+            tempFileName = BinaryDictionaryGetter.getTempFileName(wordlistId, context)
         } catch (e: IOException) {
             Log.e(TAG, "Can't open the temporary file", e)
             return
@@ -339,7 +337,7 @@ object BinaryDictionaryFileDumper {
                 }
 
                 // move the output file to the final staging file.
-                val finalFile: File = File(finalFileName)
+                val finalFile = File(finalFileName)
                 if (!FileUtils.renameTo(outputFile, finalFile)) {
                     Log.e(
                         TAG, String.format(
@@ -356,12 +354,12 @@ object BinaryDictionaryFileDumper {
                 if (0 >= providerClient.delete(wordListUriBuilder.build(), null, null)) {
                     Log.e(TAG, "Could not have the dictionary pack delete a word list")
                 }
-                Log.d(TAG, "Successfully copied file for wordlist ID " + wordlistId)
+                Log.d(TAG, "Successfully copied file for wordlist ID $wordlistId")
                 // Success! Close files (through the finally{} clause) and return.
                 return
             } catch (e: Exception) {
                 if (DEBUG) {
-                    Log.e(TAG, "Can't open word list in mode " + mode, e)
+                    Log.e(TAG, "Can't open word list in mode $mode", e)
                 }
                 if (null != outputFile) {
                     // This may or may not fail. The file may not have been created if the
@@ -572,7 +570,7 @@ object BinaryDictionaryFileDumper {
 
         // Read from metadata file in resources to get the baseline dictionary info.
         // This ensures we start with a valid list of available dictionaries.
-        val metadataResourceId: Int = context.getResources().getIdentifier(
+        val metadataResourceId: Int = context.resources.getIdentifier(
             "metadata",
             "raw", DictionaryInfoUtils.RESOURCE_PACKAGE_NAME
         )
@@ -582,7 +580,7 @@ object BinaryDictionaryFileDumper {
         }
         var inputStream: InputStream? = null
         try {
-            inputStream = context.getResources().openRawResource(metadataResourceId)
+            inputStream = context.resources.openRawResource(metadataResourceId)
             UpdateHandler.handleMetadata(context, inputStream, clientId)
         } catch (e: Exception) {
             Log.w(TAG, "Failed to read metadata.json from resources", e)

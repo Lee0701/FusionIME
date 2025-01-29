@@ -37,23 +37,19 @@ class AppWorkaroundsUtils(packageInfo: PackageInfo?) {
     }
 
     fun isBeforeJellyBean(): Boolean {
-        if (null == mPackageInfo || null == mPackageInfo.applicationInfo) {
-            return false
-        }
-        return mPackageInfo.applicationInfo!!.targetSdkVersion < VERSION_CODES.JELLY_BEAN
+        val applicationInfo = mPackageInfo?.applicationInfo ?: return false
+        return applicationInfo.targetSdkVersion < VERSION_CODES.JELLY_BEAN
     }
 
     override fun toString(): String {
-        if (null == mPackageInfo || null == mPackageInfo.applicationInfo) {
-            return ""
-        }
+        val applicationInfo = mPackageInfo?.applicationInfo ?: return ""
         val s: StringBuilder = StringBuilder()
         s.append("Target application : ")
-            .append(mPackageInfo.applicationInfo!!.name)
+            .append(applicationInfo.name)
             .append("\nPackage : ")
-            .append(mPackageInfo.applicationInfo!!.packageName)
+            .append(applicationInfo.packageName)
             .append("\nTarget app sdk version : ")
-            .append(mPackageInfo.applicationInfo!!.targetSdkVersion)
+            .append(applicationInfo.targetSdkVersion)
         return s.toString()
     }
 }
