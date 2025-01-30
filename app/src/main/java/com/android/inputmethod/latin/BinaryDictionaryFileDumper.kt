@@ -34,6 +34,7 @@ import com.android.inputmethod.latin.utils.DictionaryInfoUtils
 import com.android.inputmethod.latin.utils.DictionaryInfoUtils.DictionaryInfo
 import com.android.inputmethod.latin.utils.FileTransforms
 import com.android.inputmethod.latin.utils.MetadataFileUriGetter
+import ee.oyatl.ime.fusion.R
 import java.io.BufferedInputStream
 import java.io.BufferedOutputStream
 import java.io.Closeable

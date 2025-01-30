@@ -27,7 +27,7 @@ import com.android.inputmethod.keyboard.Key
 import com.android.inputmethod.keyboard.KeyDetector
 import com.android.inputmethod.keyboard.Keyboard
 import com.android.inputmethod.keyboard.KeyboardView
-import com.android.inputmethod.latin.R
+import ee.oyatl.ime.fusion.R
 
 /**
  * This is an extended [KeyboardView] class that hosts an emoji page keyboard.

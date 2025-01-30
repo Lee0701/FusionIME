@@ -25,7 +25,7 @@ import com.android.inputmethod.keyboard.Key
 import com.android.inputmethod.keyboard.Keyboard
 import com.android.inputmethod.keyboard.KeyboardView
 import com.android.inputmethod.keyboard.emoji.EmojiPageKeyboardView.OnKeyEventListener
-import com.android.inputmethod.latin.R
+import ee.oyatl.ime.fusion.R
 
 internal class EmojiPalettesAdapter(
     emojiCategory: EmojiCategory,

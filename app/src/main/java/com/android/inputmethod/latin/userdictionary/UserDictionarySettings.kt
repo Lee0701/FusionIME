@@ -38,7 +38,7 @@ import android.widget.ListView
 import android.widget.SectionIndexer
 import android.widget.SimpleCursorAdapter
 import android.widget.TextView
-import com.android.inputmethod.latin.R
+import ee.oyatl.ime.fusion.R
 import java.util.Locale
 
 // Caveat: This class is basically taken from

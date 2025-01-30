@@ -25,7 +25,7 @@ import com.android.inputmethod.annotations.UsedForTesting
 import com.android.inputmethod.dictionarypack.UpdateHandler
 import com.android.inputmethod.latin.AssetFileAddress
 import com.android.inputmethod.latin.BinaryDictionaryGetter
-import com.android.inputmethod.latin.R
+import ee.oyatl.ime.fusion.R
 import com.android.inputmethod.latin.RichInputMethodManager
 import com.android.inputmethod.latin.common.FileUtils
 import com.android.inputmethod.latin.common.LocaleUtils

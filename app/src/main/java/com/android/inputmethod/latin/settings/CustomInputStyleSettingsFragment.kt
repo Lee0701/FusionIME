@@ -34,7 +34,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodSubtype
 import android.widget.Toast
 import androidx.core.view.ViewCompat
-import com.android.inputmethod.latin.R
+import ee.oyatl.ime.fusion.R
 import com.android.inputmethod.latin.RichInputMethodManager
 import com.android.inputmethod.latin.settings.CustomInputStylePreference.KeyboardLayoutSetAdapter
 import com.android.inputmethod.latin.settings.CustomInputStylePreference.SubtypeLocaleAdapter

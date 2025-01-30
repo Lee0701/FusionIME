@@ -40,7 +40,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import com.android.inputmethod.dictionarypack.UpdateHandler.UpdateEventListener
-import com.android.inputmethod.latin.R
+import ee.oyatl.ime.fusion.R
 import com.android.inputmethod.latin.common.LocaleUtils
 import java.util.Locale
 import java.util.TreeMap

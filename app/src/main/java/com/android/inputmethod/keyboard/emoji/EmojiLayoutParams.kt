@@ -20,7 +20,7 @@ import android.content.res.Resources
 import android.view.View
 import android.widget.LinearLayout
 import androidx.viewpager.widget.ViewPager
-import com.android.inputmethod.latin.R
+import ee.oyatl.ime.fusion.R
 import com.android.inputmethod.latin.utils.ResourceUtils
 
 internal class EmojiLayoutParams(context: Context) {

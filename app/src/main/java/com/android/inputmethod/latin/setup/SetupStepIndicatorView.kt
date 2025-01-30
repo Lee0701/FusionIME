@@ -22,7 +22,7 @@ import android.graphics.Path
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.view.ViewCompat
-import com.android.inputmethod.latin.R
+import ee.oyatl.ime.fusion.R
 
 class SetupStepIndicatorView(context: Context?, attrs: AttributeSet?) :
     View(context, attrs) {

@@ -18,7 +18,7 @@ package com.android.inputmethod.keyboard.internal
 import android.content.res.Resources
 import android.util.DisplayMetrics
 import android.util.Log
-import com.android.inputmethod.latin.R
+import ee.oyatl.ime.fusion.R
 import com.android.inputmethod.latin.common.Constants
 import com.android.inputmethod.latin.define.DebugFlags
 import kotlin.math.abs

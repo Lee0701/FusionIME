@@ -21,7 +21,7 @@ import android.os.Build
 import android.os.Build.VERSION_CODES
 import android.util.Log
 import android.view.inputmethod.InputMethodSubtype
-import com.android.inputmethod.latin.R
+import ee.oyatl.ime.fusion.R
 import com.android.inputmethod.latin.common.Constants.Subtype.ExtraValue
 import com.android.inputmethod.latin.common.LocaleUtils
 import com.android.inputmethod.latin.common.StringUtils

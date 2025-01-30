@@ -22,7 +22,7 @@ import android.os.Bundle
 import android.preference.PreferenceScreen
 import android.preference.SwitchPreference
 import android.text.TextUtils
-import com.android.inputmethod.latin.R
+import ee.oyatl.ime.fusion.R
 import com.android.inputmethod.latin.permissions.PermissionsManager
 import com.android.inputmethod.latin.permissions.PermissionsManager.PermissionsResultCallback
 import com.android.inputmethod.latin.permissions.PermissionsUtil

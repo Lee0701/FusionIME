@@ -25,6 +25,7 @@ import android.net.Uri
 import android.util.Log
 import com.android.inputmethod.dictionarypack.DictionaryPackConstants
 import com.android.inputmethod.latin.utils.TargetPackageInfoGetterTask
+import ee.oyatl.ime.fusion.R
 
 /**
  * Receives broadcasts pertaining to dictionary management and takes the appropriate action.

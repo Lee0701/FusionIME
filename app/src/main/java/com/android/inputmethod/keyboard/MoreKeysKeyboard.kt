@@ -23,7 +23,7 @@ import com.android.inputmethod.keyboard.MoreKeysKeyboardView
 import com.android.inputmethod.keyboard.internal.KeyboardBuilder
 import com.android.inputmethod.keyboard.internal.KeyboardParams
 import com.android.inputmethod.keyboard.internal.MoreKeySpec
-import com.android.inputmethod.latin.R
+import ee.oyatl.ime.fusion.R
 import com.android.inputmethod.latin.common.StringUtils
 import com.android.inputmethod.latin.utils.TypefaceUtils
 import kotlin.math.max

@@ -21,6 +21,7 @@ import android.content.res.AssetFileDescriptor
 import android.content.res.Resources
 import android.util.Log
 import com.android.inputmethod.latin.utils.DictionaryInfoUtils
+import ee.oyatl.ime.fusion.R
 import java.io.File
 import java.io.IOException
 import java.util.LinkedList

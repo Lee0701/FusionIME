@@ -17,7 +17,7 @@ package com.android.inputmethod.latin.utils
 
 import android.content.Context
 import android.view.ContextThemeWrapper
-import com.android.inputmethod.latin.R
+import ee.oyatl.ime.fusion.R
 
 object DialogUtils {
     fun getPlatformDialogThemeContext(context: Context?): Context {

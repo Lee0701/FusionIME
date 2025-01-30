@@ -26,7 +26,7 @@ import android.util.Log
 import android.view.inputmethod.EditorInfo
 import com.android.inputmethod.compat.AppWorkaroundsUtils
 import com.android.inputmethod.latin.InputAttributes
-import com.android.inputmethod.latin.R
+import ee.oyatl.ime.fusion.R
 import com.android.inputmethod.latin.RichInputMethodManager
 import com.android.inputmethod.latin.utils.AsyncResultHolder
 import com.android.inputmethod.latin.utils.ResourceUtils

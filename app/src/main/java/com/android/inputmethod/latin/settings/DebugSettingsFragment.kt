@@ -26,7 +26,7 @@ import android.preference.PreferenceGroup
 import android.preference.TwoStatePreference
 import com.android.inputmethod.latin.DictionaryDumpBroadcastReceiver
 import com.android.inputmethod.latin.DictionaryFacilitatorImpl
-import com.android.inputmethod.latin.R
+import ee.oyatl.ime.fusion.R
 import com.android.inputmethod.latin.utils.ApplicationUtils
 import com.android.inputmethod.latin.utils.ResourceUtils
 import java.util.Locale

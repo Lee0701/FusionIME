@@ -37,7 +37,7 @@ import com.android.inputmethod.dictionarypack.ActionBatch.MakeAvailableAction
 import com.android.inputmethod.dictionarypack.ActionBatch.StartDeleteAction
 import com.android.inputmethod.dictionarypack.ActionBatch.StartDownloadAction
 import com.android.inputmethod.dictionarypack.ActionBatch.UpdateDataAction
-import com.android.inputmethod.latin.R
+import ee.oyatl.ime.fusion.R
 import com.android.inputmethod.latin.makedict.FormatSpec
 import com.android.inputmethod.latin.utils.ApplicationUtils
 import com.android.inputmethod.latin.utils.DebugLogUtils

@@ -19,7 +19,7 @@ import android.content.Context
 import android.os.Bundle
 import android.preference.Preference
 import com.android.inputmethod.keyboard.KeyboardTheme
-import com.android.inputmethod.latin.R
+import ee.oyatl.ime.fusion.R
 import com.android.inputmethod.latin.settings.RadioButtonPreference.OnRadioButtonClickedListener
 
 /**

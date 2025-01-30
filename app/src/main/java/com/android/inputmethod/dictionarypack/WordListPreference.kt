@@ -24,7 +24,7 @@ import android.view.ViewGroup
 import android.view.ViewParent
 import android.widget.ListView
 import android.widget.TextView
-import com.android.inputmethod.latin.R
+import ee.oyatl.ime.fusion.R
 import java.util.Locale
 
 /**

@@ -20,7 +20,7 @@ import android.content.res.TypedArray
 import android.graphics.drawable.Drawable
 import android.util.Log
 import android.util.SparseIntArray
-import com.android.inputmethod.latin.R
+import ee.oyatl.ime.fusion.R
 
 class KeyboardIconsSet {
     private val mIcons: Array<Drawable?> = arrayOfNulls(NUM_ICONS)

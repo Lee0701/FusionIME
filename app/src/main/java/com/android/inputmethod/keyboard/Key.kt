@@ -29,7 +29,7 @@ import com.android.inputmethod.keyboard.internal.KeyboardParams
 import com.android.inputmethod.keyboard.internal.KeyboardRow
 import com.android.inputmethod.keyboard.internal.MoreKeySpec
 import com.android.inputmethod.keyboard.internal.MoreKeySpec.LettersOnBaseLayout
-import com.android.inputmethod.latin.R
+import ee.oyatl.ime.fusion.R
 import com.android.inputmethod.latin.common.Constants
 import com.android.inputmethod.latin.common.StringUtils
 import java.util.Locale

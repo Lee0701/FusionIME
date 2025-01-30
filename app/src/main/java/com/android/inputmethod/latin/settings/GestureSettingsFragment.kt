@@ -16,7 +16,7 @@
 package com.android.inputmethod.latin.settings
 
 import android.os.Bundle
-import com.android.inputmethod.latin.R
+import ee.oyatl.ime.fusion.R
 
 /**
  * "Gesture typing preferences" settings sub screen.

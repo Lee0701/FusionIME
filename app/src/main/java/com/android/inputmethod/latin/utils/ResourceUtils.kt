@@ -26,7 +26,7 @@ import android.util.TypedValue
 import android.view.WindowInsets
 import android.view.WindowManager
 import com.android.inputmethod.annotations.UsedForTesting
-import com.android.inputmethod.latin.R
+import ee.oyatl.ime.fusion.R
 import com.android.inputmethod.latin.settings.SettingsValues
 import java.util.regex.PatternSyntaxException
 import kotlin.math.max

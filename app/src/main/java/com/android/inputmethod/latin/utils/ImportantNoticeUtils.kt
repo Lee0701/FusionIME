@@ -23,7 +23,7 @@ import android.provider.Settings.SettingNotFoundException
 import android.text.TextUtils
 import android.util.Log
 import com.android.inputmethod.annotations.UsedForTesting
-import com.android.inputmethod.latin.R
+import ee.oyatl.ime.fusion.R
 import com.android.inputmethod.latin.permissions.PermissionsUtil
 import com.android.inputmethod.latin.settings.SettingsValues
 import java.util.concurrent.TimeUnit

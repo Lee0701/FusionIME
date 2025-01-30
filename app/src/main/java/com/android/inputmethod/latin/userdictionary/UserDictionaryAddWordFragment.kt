@@ -27,7 +27,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
-import com.android.inputmethod.latin.R
+import ee.oyatl.ime.fusion.R
 import com.android.inputmethod.latin.userdictionary.UserDictionaryAddWordContents.LocaleRenderer
 import com.android.inputmethod.latin.userdictionary.UserDictionaryLocalePicker.LocationChangedListener
 import java.util.Locale

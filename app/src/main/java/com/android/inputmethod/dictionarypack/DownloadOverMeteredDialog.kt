@@ -23,7 +23,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import com.android.inputmethod.annotations.ExternallyReferenced
-import com.android.inputmethod.latin.R
+import ee.oyatl.ime.fusion.R
 import com.android.inputmethod.latin.common.LocaleUtils
 
 /**

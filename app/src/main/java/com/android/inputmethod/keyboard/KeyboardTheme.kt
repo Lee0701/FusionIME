@@ -21,7 +21,7 @@ import android.os.Build.VERSION_CODES
 import android.preference.PreferenceManager
 import android.util.Log
 import com.android.inputmethod.compat.BuildCompatUtils
-import com.android.inputmethod.latin.R
+import ee.oyatl.ime.fusion.R
 import java.util.Arrays
 
 class KeyboardTheme private constructor(

@@ -23,6 +23,7 @@ import android.view.KeyEvent
 import com.android.inputmethod.keyboard.KeyboardSwitcher
 import com.android.inputmethod.keyboard.KeyboardSwitcher.KeyboardSwitchState
 import com.android.inputmethod.latin.settings.Settings
+import ee.oyatl.ime.fusion.R
 
 /**
  * A class for detecting Emoji-Alt physical key.

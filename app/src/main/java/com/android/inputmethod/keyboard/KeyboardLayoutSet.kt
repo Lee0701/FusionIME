@@ -32,7 +32,7 @@ import com.android.inputmethod.keyboard.internal.KeyboardBuilder
 import com.android.inputmethod.keyboard.internal.KeyboardParams
 import com.android.inputmethod.keyboard.internal.UniqueKeysCache
 import com.android.inputmethod.latin.InputAttributes
-import com.android.inputmethod.latin.R
+import ee.oyatl.ime.fusion.R
 import com.android.inputmethod.latin.RichInputMethodSubtype
 import com.android.inputmethod.latin.common.Constants.ImeOption
 import com.android.inputmethod.latin.utils.InputTypeUtils

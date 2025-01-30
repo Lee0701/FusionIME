@@ -24,6 +24,7 @@ import com.android.inputmethod.latin.common.Constants
 import com.android.inputmethod.latin.common.Constants.Subtype.ExtraValue
 import com.android.inputmethod.latin.common.LocaleUtils
 import com.android.inputmethod.latin.utils.SubtypeLocaleUtils
+import ee.oyatl.ime.fusion.R
 import java.util.Locale
 
 /**

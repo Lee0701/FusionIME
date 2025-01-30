@@ -25,6 +25,7 @@ import com.android.inputmethod.accessibility.AccessibilityUtils
 import com.android.inputmethod.keyboard.MainKeyboardView
 import com.android.inputmethod.latin.suggestions.MoreSuggestionsView
 import com.android.inputmethod.latin.suggestions.SuggestionStripView
+import ee.oyatl.ime.fusion.R
 import kotlin.math.min
 
 class InputView(context: Context, attrs: AttributeSet?) :

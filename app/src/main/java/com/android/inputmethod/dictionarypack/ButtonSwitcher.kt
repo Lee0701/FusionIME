@@ -23,7 +23,7 @@ import android.view.View
 import android.view.ViewPropertyAnimator
 import android.widget.Button
 import android.widget.FrameLayout
-import com.android.inputmethod.latin.R
+import ee.oyatl.ime.fusion.R
 
 /**
  * A view that handles buttons inside it according to a status.

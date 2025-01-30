@@ -19,7 +19,7 @@ import android.content.Context
 import android.os.Handler
 import android.os.Message
 import com.android.inputmethod.keyboard.Key
-import com.android.inputmethod.latin.R
+import ee.oyatl.ime.fusion.R
 
 // Handling long press timer to show a more keys keyboard.
 internal class AccessibilityLongPressTimer(

@@ -23,7 +23,7 @@ import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
 import android.text.TextUtils
 import android.util.Log
-import com.android.inputmethod.latin.R
+import ee.oyatl.ime.fusion.R
 import com.android.inputmethod.latin.utils.DebugLogUtils
 import java.io.File
 import java.util.LinkedList

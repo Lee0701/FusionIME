@@ -28,7 +28,7 @@ import com.android.inputmethod.accessibility.AccessibilityUtils
 import com.android.inputmethod.accessibility.MoreKeysKeyboardAccessibilityDelegate
 import com.android.inputmethod.keyboard.MoreKeysKeyboard.MoreKeyDivider
 import com.android.inputmethod.keyboard.internal.KeyDrawParams
-import com.android.inputmethod.latin.R
+import ee.oyatl.ime.fusion.R
 import com.android.inputmethod.latin.common.Constants
 import com.android.inputmethod.latin.common.CoordinateUtils
 import kotlin.math.max

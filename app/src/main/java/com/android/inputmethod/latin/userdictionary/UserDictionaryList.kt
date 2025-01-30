@@ -28,7 +28,7 @@ import android.text.TextUtils
 import android.view.inputmethod.InputMethodInfo
 import android.view.inputmethod.InputMethodManager
 import android.view.inputmethod.InputMethodSubtype
-import com.android.inputmethod.latin.R
+import ee.oyatl.ime.fusion.R
 import com.android.inputmethod.latin.common.LocaleUtils
 import java.util.Locale
 import java.util.TreeSet

@@ -41,7 +41,7 @@ import com.android.inputmethod.keyboard.Keyboard
 import com.android.inputmethod.keyboard.MainKeyboardView
 import com.android.inputmethod.keyboard.MoreKeysPanel
 import com.android.inputmethod.latin.AudioAndHapticFeedbackManager
-import com.android.inputmethod.latin.R
+import ee.oyatl.ime.fusion.R
 import com.android.inputmethod.latin.SuggestedWords
 import com.android.inputmethod.latin.SuggestedWords.SuggestedWordInfo
 import com.android.inputmethod.latin.common.Constants

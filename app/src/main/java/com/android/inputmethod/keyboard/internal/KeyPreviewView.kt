@@ -25,7 +25,7 @@ import android.util.TypedValue
 import android.view.Gravity
 import android.widget.TextView
 import com.android.inputmethod.keyboard.Key
-import com.android.inputmethod.latin.R
+import ee.oyatl.ime.fusion.R
 
 /**
  * The pop up key preview view.

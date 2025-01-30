@@ -28,7 +28,7 @@ import com.android.inputmethod.keyboard.Keyboard
 import com.android.inputmethod.keyboard.KeyboardId
 import com.android.inputmethod.keyboard.MainKeyboardView
 import com.android.inputmethod.keyboard.PointerTracker
-import com.android.inputmethod.latin.R
+import ee.oyatl.ime.fusion.R
 import com.android.inputmethod.latin.utils.SubtypeLocaleUtils
 
 /**

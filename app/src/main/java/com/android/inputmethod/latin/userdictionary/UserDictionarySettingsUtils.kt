@@ -17,7 +17,7 @@ package com.android.inputmethod.latin.userdictionary
 
 import android.content.Context
 import android.text.TextUtils
-import com.android.inputmethod.latin.R
+import ee.oyatl.ime.fusion.R
 import com.android.inputmethod.latin.common.LocaleUtils
 import java.util.Locale
 

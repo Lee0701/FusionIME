@@ -44,7 +44,7 @@ import android.widget.TextView
 import com.android.inputmethod.accessibility.AccessibilityUtils
 import com.android.inputmethod.annotations.UsedForTesting
 import com.android.inputmethod.latin.PunctuationSuggestions
-import com.android.inputmethod.latin.R
+import ee.oyatl.ime.fusion.R
 import com.android.inputmethod.latin.SuggestedWords
 import com.android.inputmethod.latin.SuggestedWords.SuggestedWordInfo
 import com.android.inputmethod.latin.settings.Settings

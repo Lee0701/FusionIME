@@ -24,7 +24,7 @@ import android.view.View
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.TextView
-import com.android.inputmethod.latin.R
+import ee.oyatl.ime.fusion.R
 import kotlin.math.max
 import kotlin.math.min
 

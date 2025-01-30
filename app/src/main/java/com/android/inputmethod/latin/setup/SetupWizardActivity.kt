@@ -31,7 +31,7 @@ import android.widget.TextView
 import android.widget.VideoView
 import com.android.inputmethod.compat.TextViewCompatUtils
 import com.android.inputmethod.compat.ViewCompatUtils
-import com.android.inputmethod.latin.R
+import ee.oyatl.ime.fusion.R
 import com.android.inputmethod.latin.settings.SettingsActivity
 import com.android.inputmethod.latin.utils.LeakGuardHandlerWrapper
 import com.android.inputmethod.latin.utils.UncachedInputMethodManagerUtils

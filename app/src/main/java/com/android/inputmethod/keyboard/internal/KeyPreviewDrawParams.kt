@@ -23,7 +23,7 @@ import android.content.res.TypedArray
 import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
-import com.android.inputmethod.latin.R
+import ee.oyatl.ime.fusion.R
 import kotlin.math.min
 
 class KeyPreviewDrawParams(mainKeyboardViewAttr: TypedArray) {

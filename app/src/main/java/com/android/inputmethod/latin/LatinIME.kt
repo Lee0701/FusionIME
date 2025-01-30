@@ -95,6 +95,7 @@ import com.android.inputmethod.latin.utils.StatsUtils
 import com.android.inputmethod.latin.utils.StatsUtilsManager
 import com.android.inputmethod.latin.utils.SubtypeLocaleUtils
 import com.android.inputmethod.latin.utils.ViewLayoutUtils
+import ee.oyatl.ime.fusion.R
 import java.io.FileDescriptor
 import java.io.PrintWriter
 import java.util.Locale

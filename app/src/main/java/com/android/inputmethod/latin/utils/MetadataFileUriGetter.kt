@@ -16,7 +16,7 @@
 package com.android.inputmethod.latin.utils
 
 import android.content.Context
-import com.android.inputmethod.latin.R
+import ee.oyatl.ime.fusion.R
 
 /**
  * Helper class to get the metadata URI and the additional ID.

@@ -21,7 +21,7 @@ import android.os.Build
 import android.os.Build.VERSION_CODES
 import android.os.Bundle
 import com.android.inputmethod.latin.AudioAndHapticFeedbackManager
-import com.android.inputmethod.latin.R
+import ee.oyatl.ime.fusion.R
 import com.android.inputmethod.latin.RichInputMethodManager
 
 /**
