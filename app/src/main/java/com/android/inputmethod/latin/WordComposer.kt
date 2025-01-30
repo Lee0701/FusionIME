@@ -37,7 +37,7 @@ class WordComposer {
         null // Memory so that we don't uselessly recreate the combiner chain
 
     // The list of events that served to compose this string.
-    private val mEvents: ArrayList<Event?>
+    private val mEvents: ArrayList<Event>
     val inputPointers: InputPointers = InputPointers(MAX_WORD_LENGTH)
 
     /**
@@ -418,12 +418,12 @@ class WordComposer {
     // committedWord should contain suggestion spans if applicable.
     fun commitWord(
         type: Int, committedWord: CharSequence,
-        separatorString: String?, ngramContext: NgramContext?
+        separatorString: String, ngramContext: NgramContext?
     ): LastComposedWord {
         // Note: currently, we come here whenever we commit a word. If it's a MANUAL_PICK
         // or a DECIDED_WORD we may cancel the commit later; otherwise, we should deactivate
         // the last composed word to ensure this does not happen.
-        val lastComposedWord: LastComposedWord = LastComposedWord(
+        val lastComposedWord = LastComposedWord(
             mEvents,
             inputPointers, mTypedWordCache.toString(), committedWord, separatorString,
             ngramContext, mCapitalizedMode

@@ -80,7 +80,7 @@ class CombinerChain(initialText: String) {
      * new event. However it may never be null.
      */
     fun processEvent(
-        previousEvents: ArrayList<Event?>,
+        previousEvents: ArrayList<Event>,
         newEvent: Event
     ): Event {
         val modifiablePreviousEvents = ArrayList(previousEvents)

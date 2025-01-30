@@ -25,15 +25,15 @@ import com.android.inputmethod.latin.define.DecoderSpecificConstants
  * committed already. This is used for resuming suggestion, and cancel auto-correction.
  */
 class LastComposedWord(
-    events: ArrayList<Event?>,
+    events: ArrayList<Event>,
     inputPointers: InputPointers?, typedWord: String,
-    committedWord: CharSequence, separatorString: String?,
+    committedWord: CharSequence, separatorString: String,
     ngramContext: NgramContext?, capitalizedMode: Int
 ) {
-    val mEvents: ArrayList<Event?>
+    val mEvents: ArrayList<Event>
     val mTypedWord: String
     val mCommittedWord: CharSequence
-    val mSeparatorString: String?
+    val mSeparatorString: String
     val mNgramContext: NgramContext?
     val mCapitalizedMode: Int
     val mInputPointers: InputPointers =
@@ -90,7 +90,7 @@ class LastComposedWord(
         const val NOT_A_SEPARATOR: String = ""
 
         val NOT_A_COMPOSED_WORD: LastComposedWord = LastComposedWord(
-            ArrayList<Event?>(), null, "", "",
+            ArrayList(), null, "", "",
             NOT_A_SEPARATOR, null, WordComposer.CAPS_MODE_OFF
         )
     }

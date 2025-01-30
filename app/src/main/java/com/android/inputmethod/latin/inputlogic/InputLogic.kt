@@ -205,7 +205,7 @@ class InputLogic(
         val inputLogicHandler = mInputLogicHandler
         mInputLogicHandler = InputLogicHandler.NULL_HANDLER
         inputLogicHandler.destroy()
-        mDictionaryFacilitator!!.closeDictionaries()
+        mDictionaryFacilitator?.closeDictionaries()
     }
 
     /**
@@ -269,7 +269,7 @@ class InputLogic(
         val suggestedWords = mSuggestedWords
         val suggestion = suggestionInfo.word
         // If this is a punctuation picked from the suggestion strip, pass it to onCodeInput
-        if (suggestion!!.length == 1 && suggestedWords.isPunctuationSuggestions) {
+        if (suggestion.length == 1 && suggestedWords.isPunctuationSuggestions) {
             // We still want to log a suggestion click.
             StatsUtils.onPickSuggestionManually(
                 mSuggestedWords, suggestionInfo, mDictionaryFacilitator
@@ -641,13 +641,12 @@ class InputLogic(
             && mWordComposer.isComposingWord
         ) {
             mIsAutoCorrectionIndicatorOn = newAutoCorrectionIndicator
-            val textWithUnderline =
-                getTextWithUnderline(mWordComposer.typedWord)
+            val textWithUnderline = getTextWithUnderline(mWordComposer.typedWord)
             // TODO: when called from an updateSuggestionStrip() call that results from a posted
             // message, this is called outside any batch edit. Potentially, this may result in some
             // janky flickering of the screen, although the display speed makes it unlikely in
             // the practice.
-            setComposingTextInternal(textWithUnderline!!, 1)
+            setComposingTextInternal(textWithUnderline, 1)
         }
     }
 
@@ -903,7 +902,7 @@ class InputLogic(
             if (mWordComposer.isSingleLetter) {
                 mWordComposer.setCapitalizedModeAtStartComposingTime(inputTransaction.mShiftState)
             }
-            setComposingTextInternal(getTextWithUnderline(mWordComposer.typedWord)!!, 1)
+            setComposingTextInternal(getTextWithUnderline(mWordComposer.typedWord), 1)
         } else {
             val swapWeakSpace = tryStripSpaceAndReturnWhetherShouldSwapInstead(
                 event,
@@ -933,7 +932,7 @@ class InputLogic(
         val wasComposingWord = mWordComposer.isComposingWord
         // We avoid sending spaces in languages without spaces if we were composing.
         val shouldAvoidSendingCode =
-            Constants.CODE_SPACE == codePoint && !settingsValues!!.mSpacingAndPunctuations.mCurrentLanguageHasSpaces
+            Constants.CODE_SPACE == codePoint && !settingsValues.mSpacingAndPunctuations.mCurrentLanguageHasSpaces
                     && wasComposingWord
         if (mWordComposer.isCursorFrontOrMiddleOfComposingWord) {
             // If we are in the middle of a recorrection, we need to commit the recorrection
@@ -950,7 +949,7 @@ class InputLogic(
         }
         // isComposingWord() may have changed since we stored wasComposing
         if (mWordComposer.isComposingWord) {
-            if (settingsValues!!.mAutoCorrectionEnabledPerUserSettings) {
+            if (settingsValues.mAutoCorrectionEnabledPerUserSettings) {
                 val separator = if (shouldAvoidSendingCode)
                     LastComposedWord.NOT_A_SEPARATOR
                 else
@@ -978,7 +977,7 @@ class InputLogic(
             // Double quotes behave like they are usually preceded by space iff we are
             // not inside a double quote or after a digit.
             !isInsideDoubleQuoteOrAfterDigit
-        } else if (settingsValues!!.mSpacingAndPunctuations.isClusteringSymbol(codePoint)
+        } else if (settingsValues.mSpacingAndPunctuations.isClusteringSymbol(codePoint)
             && settingsValues.mSpacingAndPunctuations.isClusteringSymbol(
                 mConnection.codePointBeforeCursor
             )
@@ -989,7 +988,7 @@ class InputLogic(
         }
 
         if (needsPrecedingSpace) {
-            insertAutomaticSpaceIfOptionsAndTextAllow(settingsValues!!)
+            insertAutomaticSpaceIfOptionsAndTextAllow(settingsValues)
         }
 
         if (tryPerformDoubleSpacePeriod(event, inputTransaction)) {
@@ -1010,11 +1009,11 @@ class InputLogic(
             }
 
             if (!shouldAvoidSendingCode) {
-                sendKeyCodePoint(settingsValues!!, codePoint)
+                sendKeyCodePoint(settingsValues, codePoint)
             }
         } else {
             if ((SpaceState.PHANTOM == inputTransaction.mSpaceState
-                        && settingsValues!!.isUsuallyFollowedBySpace(codePoint))
+                        && settingsValues.isUsuallyFollowedBySpace(codePoint))
                 || (Constants.CODE_DOUBLE_QUOTE == codePoint
                         && isInsideDoubleQuoteOrAfterDigit)
             ) {
@@ -1032,7 +1031,7 @@ class InputLogic(
                 mSpaceState = SpaceState.PHANTOM
             }
 
-            sendKeyCodePoint(settingsValues!!, codePoint)
+            sendKeyCodePoint(settingsValues, codePoint)
 
             // Set punctuation right away. onUpdateSelection will fire but tests whether it is
             // already displayed or not, so it's okay.
@@ -1099,7 +1098,7 @@ class InputLogic(
                 StatsUtils.onBackspacePressed(1)
             }
             if (mWordComposer.isComposingWord) {
-                setComposingTextInternal(getTextWithUnderline(mWordComposer.typedWord)!!, 1)
+                setComposingTextInternal(getTextWithUnderline(mWordComposer.typedWord), 1)
             } else {
                 mConnection.commitText("", 1)
             }
@@ -1330,7 +1329,7 @@ class InputLogic(
         val timeStampInSeconds = TimeUnit.MILLISECONDS.toSeconds(
             System.currentTimeMillis()
         )
-        mDictionaryFacilitator!!.unlearnFromUserHistory(
+        mDictionaryFacilitator?.unlearnFromUserHistory(
             word, ngramContext, timeStampInSeconds, eventType
         )
     }
@@ -1459,9 +1458,11 @@ class InputLogic(
         if (canBeFollowedByDoubleSpacePeriod(firstCodePoint)) {
             cancelDoubleSpacePeriodCountdown()
             mConnection.deleteTextBeforeCursor(1)
-            val textToInsert = inputTransaction.mSettingsValues.mSpacingAndPunctuations
+            val textToInsert = inputTransaction
+                .mSettingsValues
+                .mSpacingAndPunctuations
                 .mSentenceSeparatorAndSpace
-            mConnection.commitText(textToInsert!!, 1)
+            mConnection.commitText(textToInsert, 1)
             inputTransaction.requireShiftUpdate(InputTransaction.SHIFT_UPDATE_NOW)
             inputTransaction.setRequiresUpdateSuggestions()
             return true
@@ -1533,7 +1534,7 @@ class InputLogic(
         val timeStampInSeconds = TimeUnit.MILLISECONDS.toSeconds(
             System.currentTimeMillis()
         ).toInt()
-        mDictionaryFacilitator!!.addToUserHistory(
+        mDictionaryFacilitator?.addToUserHistory(
             suggestion!!, wasAutoCapitalized,
             ngramContext, timeStampInSeconds.toLong(), settingsValues.mBlockPotentiallyOffensive
         )
@@ -1705,7 +1706,7 @@ class InputLogic(
         val codePoints = StringUtils.toCodePointArray(typedWordString)
         mWordComposer.setComposingWord(
             codePoints,
-            mLatinIME.getCoordinatesForCurrentKeyboard(codePoints)!!
+            mLatinIME.getCoordinatesForCurrentKeyboard(codePoints)
         )
         mWordComposer.setCursorPositionWithinWord(
             typedWordString.codePointCount(0, numberOfCharsInWordBeforeCursor)
@@ -1765,19 +1766,17 @@ class InputLogic(
         inputTransaction: InputTransaction,
         settingsValues: SettingsValues?
     ) {
-        val originallyTypedWord: CharSequence? = mLastComposedWord.mTypedWord
-        val originallyTypedWordString =
-            originallyTypedWord?.toString() ?: ""
+        val originallyTypedWord: CharSequence = mLastComposedWord.mTypedWord
         val committedWord = mLastComposedWord.mCommittedWord
         val committedWordString = committedWord.toString()
-        val cancelLength = committedWord!!.length
+        val cancelLength = committedWord.length
         val separatorString = mLastComposedWord.mSeparatorString
         // If our separator is a space, we won't actually commit it,
         // but set the space state to PHANTOM so that a space will be inserted
         // on the next keypress
         val usePhantomSpace = separatorString == Constants.STRING_SPACE
         // We want java chars, not codepoints for the following.
-        val separatorLength = separatorString!!.length
+        val separatorLength = separatorString.length
         // TODO: should we check our saved separator against the actual contents of the text view?
         val deleteLength = cancelLength + separatorLength
         if (DebugFlags.DEBUG_ENABLED) {
@@ -1856,7 +1855,7 @@ class InputLogic(
             val codePoints = StringUtils.toCodePointArray(stringToCommit)
             mWordComposer.setComposingWord(
                 codePoints,
-                mLatinIME.getCoordinatesForCurrentKeyboard(codePoints)!!
+                mLatinIME.getCoordinatesForCurrentKeyboard(codePoints)
             )
             setComposingTextInternal(textToCommit, 1)
         }
@@ -2075,14 +2074,13 @@ class InputLogic(
      * @return the same text, with the auto-correction underline span if that's appropriate.
      */
     // TODO: Shouldn't this go in some *Utils class instead?
-    private fun getTextWithUnderline(text: String): CharSequence? {
+    private fun getTextWithUnderline(text: String): CharSequence {
         // TODO: Locale should be determined based on context and the text given.
         return if (mIsAutoCorrectionIndicatorOn)
             SuggestionSpanUtils.getTextWithAutoCorrectionIndicatorUnderline(
                 mLatinIME, text, dictionaryFacilitatorLocale
             )
-        else
-            text
+        else text
     }
 
     /**
@@ -2202,10 +2200,10 @@ class InputLogic(
      * @param settingsValues the current values of the settings.
      * @param separatorString the separator that's causing the commit, or NOT_A_SEPARATOR if none.
      */
-    fun commitTyped(settingsValues: SettingsValues, separatorString: String?) {
+    fun commitTyped(settingsValues: SettingsValues, separatorString: String) {
         if (!mWordComposer.isComposingWord) return
         val typedWord = mWordComposer.typedWord
-        if (typedWord.length > 0) {
+        if (typedWord.isNotEmpty()) {
             val isBatchMode = mWordComposer.isBatchMode
             commitChosenWord(
                 settingsValues, typedWord,
@@ -2253,47 +2251,43 @@ class InputLogic(
         }
         val autoCorrectionOrNull = mWordComposer.autoCorrectionOrNull
         val typedWord = mWordComposer.typedWord
-        val stringToCommit = if ((autoCorrectionOrNull != null))
-            autoCorrectionOrNull.word
-        else
-            typedWord
-        if (stringToCommit != null) {
-            if (TextUtils.isEmpty(typedWord)) {
-                throw RuntimeException(
-                    "We have an auto-correction but the typed word "
-                            + "is empty? Impossible! I must commit suicide."
-                )
-            }
-            val isBatchMode = mWordComposer.isBatchMode
-            commitChosenWord(
-                settingsValues, stringToCommit,
-                LastComposedWord.COMMIT_TYPE_DECIDED_WORD, separator
+        val stringToCommit =
+            if ((autoCorrectionOrNull != null)) autoCorrectionOrNull.word
+            else typedWord
+        if (typedWord.isEmpty()) {
+            throw RuntimeException(
+                "We have an auto-correction but the typed word "
+                        + "is empty? Impossible! I must commit suicide."
             )
-            if (typedWord != stringToCommit) {
-                // This will make the correction flash for a short while as a visual clue
-                // to the user that auto-correction happened. It has no other effect; in particular
-                // note that this won't affect the text inside the text field AT ALL: it only makes
-                // the segment of text starting at the supplied index and running for the length
-                // of the auto-correction flash. At this moment, the "typedWord" argument is
-                // ignored by TextView.
-                mConnection.commitCorrection(
-                    CorrectionInfo(
-                        mConnection.expectedSelectionEnd - stringToCommit.length,
-                        typedWord, stringToCommit
-                    )
+        }
+        val isBatchMode = mWordComposer.isBatchMode
+        commitChosenWord(
+            settingsValues, stringToCommit,
+            LastComposedWord.COMMIT_TYPE_DECIDED_WORD, separator
+        )
+        if (typedWord != stringToCommit) {
+            // This will make the correction flash for a short while as a visual clue
+            // to the user that auto-correction happened. It has no other effect; in particular
+            // note that this won't affect the text inside the text field AT ALL: it only makes
+            // the segment of text starting at the supplied index and running for the length
+            // of the auto-correction flash. At this moment, the "typedWord" argument is
+            // ignored by TextView.
+            mConnection.commitCorrection(
+                CorrectionInfo(
+                    mConnection.expectedSelectionEnd - stringToCommit.length,
+                    typedWord, stringToCommit
                 )
-                val prevWordsContext = if ((autoCorrectionOrNull != null))
-                    autoCorrectionOrNull.mPrevWordsContext
-                else
-                    ""
-                StatsUtils.onAutoCorrection(
-                    typedWord, stringToCommit, isBatchMode,
-                    mDictionaryFacilitator, prevWordsContext
-                )
-                StatsUtils.onWordCommitAutoCorrect(stringToCommit, isBatchMode)
-            } else {
-                StatsUtils.onWordCommitUserTyped(stringToCommit, isBatchMode)
-            }
+            )
+            val prevWordsContext =
+                if ((autoCorrectionOrNull != null)) autoCorrectionOrNull.mPrevWordsContext
+                else ""
+            StatsUtils.onAutoCorrection(
+                typedWord, stringToCommit, isBatchMode,
+                mDictionaryFacilitator, prevWordsContext
+            )
+            StatsUtils.onWordCommitAutoCorrect(stringToCommit, isBatchMode)
+        } else {
+            StatsUtils.onWordCommitUserTyped(stringToCommit, isBatchMode)
         }
     }
 
@@ -2306,8 +2300,8 @@ class InputLogic(
      * @param separatorString the separator that's causing the commit, or NOT_A_SEPARATOR if none.
      */
     private fun commitChosenWord(
-        settingsValues: SettingsValues, chosenWord: String?,
-        commitType: Int, separatorString: String?
+        settingsValues: SettingsValues, chosenWord: String,
+        commitType: Int, separatorString: String
     ) {
         var startTimeMillis: Long = 0
         if (DebugFlags.DEBUG_ENABLED) {
@@ -2317,7 +2311,7 @@ class InputLogic(
         val suggestedWords = mSuggestedWords
         // TODO: Locale should be determined based on context and the text given.
         val locale = dictionaryFacilitatorLocale
-        val chosenWordWithSuggestions: CharSequence = chosenWord!!
+        val chosenWordWithSuggestions: CharSequence = chosenWord
         // b/21926256
         //      SuggestionSpanUtils.getTextWithSuggestionSpan(mLatinIME, chosenWord,
         //                suggestedWords, locale);
