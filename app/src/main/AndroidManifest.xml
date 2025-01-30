@@ -210,8 +210,7 @@
         <service android:name="jp.co.omronsoft.openwnn.OpenWnnJAJP"
             android:label="Japanese IME"
             android:exported="true"
-            android:permission="android.permission.BIND_INPUT_METHOD"
-            android:id="@+id/openwnn_japanese">
+            android:permission="android.permission.BIND_INPUT_METHOD">
             <intent-filter>
                 <action android:name="android.view.InputMethod" />
             </intent-filter>

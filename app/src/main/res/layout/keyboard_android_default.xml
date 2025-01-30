@@ -21,7 +21,7 @@
    android:layout_alignParentBottom="true"
    android:layout_width="match_parent"
    android:layout_height="wrap_content"
-   app:background="@drawable/keyboard_background"
+   android:background="@drawable/keyboard_background"
    app:keyBackground="@drawable/btn_keyboard_key"
    app:verticalCorrection="-10dip"
    app:keyPreviewLayout="@layout/keyboard_key_preview"
