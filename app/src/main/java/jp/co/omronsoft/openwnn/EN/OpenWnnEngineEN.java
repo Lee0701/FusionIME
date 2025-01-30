@@ -71,14 +71,14 @@ public class OpenWnnEngineEN implements WnnEngine {
      * 
      * @param writableDictionaryName		Writable dictionary file name(null if not use)
      */
-    public OpenWnnEngineEN(String writableDictionaryName) {
+    public OpenWnnEngineEN(String dicLibPath, String writableDictionaryName) {
         mConvResult = new ArrayList<WnnWord>();
         mCandTable = new HashMap<String, WnnWord>();
         mSearchKey = null;
         mOutputNum = 0;
 
         mDictionary = new OpenWnnDictionaryImpl( 
-        		"/data/data/jp.co.omronsoft.openwnn/lib/libWnnEngDic.so",
+        		dicLibPath,
         		writableDictionaryName);
         if (!mDictionary.isActive()) {
         	mDictionary = new OpenWnnDictionaryImpl(

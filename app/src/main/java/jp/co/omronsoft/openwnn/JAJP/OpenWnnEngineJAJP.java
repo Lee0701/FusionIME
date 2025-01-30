@@ -132,10 +132,10 @@ public class OpenWnnEngineJAJP implements WnnEngine {
      * 
      * @param writableDictionaryName    Writable dictionary file name(null if not use)
      */
-    public OpenWnnEngineJAJP(String writableDictionaryName) {
+    public OpenWnnEngineJAJP(String dicLibPath, String writableDictionaryName) {
         /* load Japanese dictionary library */
         mDictionaryJP = new OpenWnnDictionaryImpl(
-                "/data/data/jp.co.omronsoft.openwnn/lib/libWnnJpnDic.so",
+                dicLibPath,
                 writableDictionaryName );
         if (!mDictionaryJP.isActive()) {
             mDictionaryJP = new OpenWnnDictionaryImpl(

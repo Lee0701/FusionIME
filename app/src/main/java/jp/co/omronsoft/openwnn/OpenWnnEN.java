@@ -18,6 +18,8 @@ package jp.co.omronsoft.openwnn;
 
 import ee.oyatl.ime.fusion.R;
 import jp.co.omronsoft.openwnn.EN.*;
+import jp.co.omronsoft.openwnn.JAJP.OpenWnnEngineJAJP;
+
 import android.content.SharedPreferences;
 import android.content.Context;
 import android.content.res.Configuration;
@@ -37,6 +39,8 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+
+import java.io.File;
 
 /**
  * The OpenWnn English IME class.
@@ -170,9 +174,7 @@ public class OpenWnnEN extends OpenWnn {
         mInputViewManager = new DefaultSoftKeyboardEN();
 
         if (OpenWnn.getCurrentIme() != null) {
-            if (mConverterEN == null) {
-                mConverterEN = new OpenWnnEngineEN("/data/data/jp.co.omronsoft.openwnn/writableEN.dic");
-            }
+            createConverters();
         }
 
         mConverter = mConverterEN;
@@ -288,12 +290,19 @@ public class OpenWnnEN extends OpenWnn {
         super.onCreate();
         mWordSeparators = getResources().getString(R.string.en_word_separators);
 
-        if (mConverterEN == null) {
-            mConverterEN = new OpenWnnEngineEN("/data/data/jp.co.omronsoft.openwnn/writableEN.dic");
-        }
+        createConverters();
 
         if (mSymbolList == null) {
             mSymbolList = new SymbolList(this, SymbolList.LANG_EN);
+        }
+    }
+
+    private void createConverters() {
+        if (mConverterEN == null) {
+            mConverterEN = new OpenWnnEngineEN(
+                    new File(getApplicationInfo().nativeLibraryDir, "libWnnEngDic.so").getAbsolutePath(),
+                    new File(getFilesDir(), "writableEN.dic").getAbsolutePath()
+            );
         }
     }
 

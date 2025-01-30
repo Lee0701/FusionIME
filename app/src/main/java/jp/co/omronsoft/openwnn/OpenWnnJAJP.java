@@ -45,6 +45,7 @@ import android.text.method.MetaKeyKeyListener;
 import jp.co.omronsoft.openwnn.BaseInputView;
 import jp.co.omronsoft.openwnn.OpenWnnControlPanelJAJP;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
@@ -470,12 +471,7 @@ public class OpenWnnJAJP extends OpenWnn {
         mInputViewManager  = new DefaultSoftKeyboardJAJP();
 
         if (OpenWnn.getCurrentIme() != null) {
-            if (mConverter == null || mConverterJAJP == null) {
-                mConverter = mConverterJAJP = new OpenWnnEngineJAJP("/data/data/jp.co.omronsoft.openwnn/writableJAJP.dic");
-            }
-            if (mConverterEN == null) {
-                mConverterEN = new OpenWnnEngineEN("/data/data/jp.co.omronsoft.openwnn/writableEN.dic");
-            }
+            createConverters();
         }
 
         mPreConverter = mPreConverterHiragana = new Romkan();
@@ -504,17 +500,27 @@ public class OpenWnnJAJP extends OpenWnn {
         updateXLargeMode();
         super.onCreate();
 
-        if (mConverter == null || mConverterJAJP == null) {
-            mConverter = mConverterJAJP = new OpenWnnEngineJAJP("/data/data/jp.co.omronsoft.openwnn/writableJAJP.dic");
-        }
-        if (mConverterEN == null) {
-            mConverterEN = new OpenWnnEngineEN("/data/data/jp.co.omronsoft.openwnn/writableEN.dic");
-        }
+        createConverters();
 
         String delimiter = Pattern.quote(getResources().getString(R.string.en_word_separators));
         mEnglishAutoCommitDelimiter = Pattern.compile(".*[" + delimiter + "]$");
         if (mConverterSymbolEngineBack == null) {
             mConverterSymbolEngineBack = new SymbolList(this, SymbolList.LANG_JA);
+        }
+    }
+
+    private void createConverters() {
+        if (mConverter == null || mConverterJAJP == null) {
+            mConverter = mConverterJAJP = new OpenWnnEngineJAJP(
+                    new File(getApplicationInfo().nativeLibraryDir, "libWnnJpnDic.so").getAbsolutePath(),
+                    new File(getFilesDir(), "writableJAJP.dic").getAbsolutePath()
+            );
+        }
+        if (mConverterEN == null) {
+            mConverterEN = new OpenWnnEngineEN(
+                    new File(getApplicationInfo().nativeLibraryDir, "libWnnEngDic.so").getAbsolutePath(),
+                    new File(getFilesDir(), "writableEN.dic").getAbsolutePath()
+            );
         }
     }
 

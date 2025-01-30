@@ -219,10 +219,11 @@
         </service>
 
         <activity android:name="jp.co.omronsoft.openwnn.OpenWnnControlPanelJAJP"
-            android:exported="false"
+            android:exported="true"
             android:label="@string/preference_ime_setting_app">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
