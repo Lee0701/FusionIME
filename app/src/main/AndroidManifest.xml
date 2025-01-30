@@ -238,5 +238,32 @@
         <activity android:name="jp.co.omronsoft.openwnn.EN.UserDictionaryToolsEditEN"
             android:label="@string/user_dictionary_edit_words" />
 
+        <service android:name="com.android.inputmethod.pinyin.PinyinDecoderService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.android.inputmethod.pinyin.Decoder_Service" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+
+        <service android:name="com.android.inputmethod.pinyin.PinyinIME"
+            android:exported="true"
+            android:label="@string/ime_name"
+            android:permission="android.permission.BIND_INPUT_METHOD">
+            <intent-filter>
+                <action android:name="android.view.InputMethod" />
+            </intent-filter>
+            <meta-data android:name="android.view.im" android:resource="@xml/method_zh" />
+        </service>
+
+        <activity android:name="com.android.inputmethod.pinyin.SettingsActivity"
+            android:exported="true"
+            android:label="@string/ime_settings_activity_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
     </application>
 </manifest>

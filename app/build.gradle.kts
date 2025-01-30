@@ -35,6 +35,7 @@ android {
     }
     androidResources {
         noCompress += "dict"
+        noCompress += "dat"
     }
     externalNativeBuild {
         ndkBuild {
