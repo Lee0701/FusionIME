@@ -61,9 +61,9 @@ object AdditionalSubtypeUtils {
             nameId,
             R.drawable.ic_ime_switcher_dark, localeString, Constants.Subtype.KEYBOARD_MODE,
             platformVersionDependentExtraValues,
-            false,  /* isAuxiliary */false,  /* overrideImplicitlyEnabledSubtype */
-            platformVersionIndependentSubtypeId
-        )!!
+            isAuxiliary = false, overridesImplicitlyEnabledSubtype = false,
+            id = platformVersionIndependentSubtypeId
+        )
     }
 
     fun createDummyAdditionalSubtype(
@@ -71,7 +71,7 @@ object AdditionalSubtypeUtils {
     ): InputMethodSubtype {
         return createAdditionalSubtypeInternal(
             localeString, keyboardLayoutSetName,
-            false,  /* isAsciiCapable */false /* isEmojiCapable */
+            isAsciiCapable = false, isEmojiCapable = false
         )
     }
 
@@ -80,7 +80,7 @@ object AdditionalSubtypeUtils {
     ): InputMethodSubtype {
         return createAdditionalSubtypeInternal(
             localeString, keyboardLayoutSetName,
-            true,  /* isAsciiCapable */true /* isEmojiCapable */
+            isAsciiCapable = true, isEmojiCapable = true
         )
     }
 
@@ -92,7 +92,7 @@ object AdditionalSubtypeUtils {
             layoutExtraValue, StringUtils.removeFromCommaSplittableTextIfExists(
                 ExtraValue.IS_ADDITIONAL_SUBTYPE, subtype.extraValue
             )
-        )!!
+        )
         val basePrefSubtype = (localeString + LOCALE_AND_LAYOUT_SEPARATOR
                 + keyboardLayoutSetName)
         return if (extraValue.isEmpty())

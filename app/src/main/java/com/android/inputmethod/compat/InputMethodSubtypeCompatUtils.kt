@@ -65,7 +65,7 @@ object InputMethodSubtypeCompatUtils {
         nameId: Int, iconId: Int, locale: String?,
         mode: String?, extraValue: String?, isAuxiliary: Boolean,
         overridesImplicitlyEnabledSubtype: Boolean, id: Int
-    ): InputMethodSubtype? {
+    ): InputMethodSubtype {
         if (CONSTRUCTOR_INPUT_METHOD_SUBTYPE == null
             || Build.VERSION.SDK_INT < VERSION_CODES.JELLY_BEAN_MR1
         ) {
@@ -78,7 +78,7 @@ object InputMethodSubtypeCompatUtils {
             CONSTRUCTOR_INPUT_METHOD_SUBTYPE,
             nameId, iconId, locale, mode, extraValue, isAuxiliary,
             overridesImplicitlyEnabledSubtype, id
-        ) as InputMethodSubtype?
+        ) as InputMethodSubtype
     }
 
     fun isAsciiCapable(subtype: RichInputMethodSubtype): Boolean {
