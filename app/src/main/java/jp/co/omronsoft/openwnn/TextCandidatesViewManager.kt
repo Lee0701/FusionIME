@@ -245,7 +245,7 @@ class TextCandidatesViewManager
     private var mIsSymbolMode = false
 
     /** Symbol mode  */
-    private var mSymbolMode: Int = OpenWnnJAJP.Companion.ENGINE_MODE_SYMBOL
+    private var mSymbolMode: Int = OpenWnnJAJP.ENGINE_MODE_SYMBOL
 
     /** Text size of candidates  */
     private var mCandNormalTextSize = 0f
@@ -267,7 +267,7 @@ class TextCandidatesViewManager
         override fun handleMessage(msg: Message) {
             when (msg.what) {
                 MSG_MOVE_FOCUS -> moveFocus(msg.arg1, msg.arg2 == 1)
-                MSG_SET_CANDIDATES -> if (mViewType == CandidatesViewManager.Companion.VIEW_TYPE_FULL && mIsSymbolMode) {
+                MSG_SET_CANDIDATES -> if (mViewType == CandidatesViewManager.VIEW_TYPE_FULL && mIsSymbolMode) {
                     displayCandidates(mConverter, false, SET_CANDIDATE_DELAY_LINE_COUNT)
                 }
 
@@ -308,20 +308,20 @@ class TextCandidatesViewManager
             playSoundAndVibration()
             if (v is TextView) {
                 when (v.id) {
-                    R.id.candview_symbol -> if (mSymbolMode != OpenWnnJAJP.Companion.ENGINE_MODE_SYMBOL) {
+                    R.id.candview_symbol -> if (mSymbolMode != OpenWnnJAJP.ENGINE_MODE_SYMBOL) {
                         mWnn!!.onEvent(
                             OpenWnnEvent(
-                                OpenWnnEvent.Companion.CHANGE_MODE,
-                                OpenWnnJAJP.Companion.ENGINE_MODE_SYMBOL
+                                OpenWnnEvent.CHANGE_MODE,
+                                OpenWnnJAJP.ENGINE_MODE_SYMBOL
                             )
                         )
                     }
 
-                    R.id.candview_emoticon -> if (mSymbolMode != OpenWnnJAJP.Companion.ENGINE_MODE_SYMBOL_KAO_MOJI) {
+                    R.id.candview_emoticon -> if (mSymbolMode != OpenWnnJAJP.ENGINE_MODE_SYMBOL_KAO_MOJI) {
                         mWnn!!.onEvent(
                             OpenWnnEvent(
-                                OpenWnnEvent.Companion.CHANGE_MODE,
-                                OpenWnnJAJP.Companion.ENGINE_MODE_SYMBOL
+                                OpenWnnEvent.CHANGE_MODE,
+                                OpenWnnJAJP.ENGINE_MODE_SYMBOL
                             )
                         )
                     }
@@ -415,7 +415,7 @@ class TextCandidatesViewManager
         val r = mWnn!!.resources
         candidateMinimumWidth = r.getDimensionPixelSize(R.dimen.cand_minimum_width)
         candidateMinimumHeight = r.getDimensionPixelSize(R.dimen.cand_minimum_height)
-        if (OpenWnn.Companion.isXLarge()) {
+        if (OpenWnn.isXLarge) {
             mCandidateOneLineMinimumHeight =
                 r.getDimensionPixelSize(R.dimen.candidate_layout_height)
         }
@@ -423,7 +423,7 @@ class TextCandidatesViewManager
             r.getDimensionPixelSize(R.dimen.cand_category_minimum_height)
         mCandidateLeftAlignThreshold = r.getDimensionPixelSize(R.dimen.cand_left_align_threshold)
         mKeyboardHeight = r.getDimensionPixelSize(R.dimen.keyboard_height)
-        if (OpenWnn.Companion.isXLarge()) {
+        if (OpenWnn.isXLarge) {
             mKeyboardHeight += (Math.round(height * KEYBOARD_VERTICAL_GAP)
                     * KEYBOARD_VERTICAL_GAP_COUNT)
         }
@@ -485,14 +485,14 @@ class TextCandidatesViewManager
             playSoundAndVibration()
             if (mIsFullView) {
                 mIsFullView = false
-                mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.Companion.LIST_CANDIDATES_NORMAL))
+                mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.LIST_CANDIDATES_NORMAL))
             } else {
                 mIsFullView = true
-                mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.Companion.LIST_CANDIDATES_FULL))
+                mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.LIST_CANDIDATES_FULL))
             }
         })
 
-        viewType = CandidatesViewManager.Companion.VIEW_TYPE_CLOSE
+        viewType = CandidatesViewManager.VIEW_TYPE_CLOSE
 
         mGestureDetector = GestureDetector(this)
 
@@ -513,8 +513,8 @@ class TextCandidatesViewManager
             mViewLongPressDialog!!.findViewById<View>(R.id.candidate_longpress_dialog_cancel) as Button
         longPressDialogButton.setOnClickListener {
             playSoundAndVibration()
-            mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.Companion.LIST_CANDIDATES_NORMAL))
-            mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.Companion.UPDATE_CANDIDATE))
+            mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.LIST_CANDIDATES_NORMAL))
+            mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.UPDATE_CANDIDATE))
             closeDialog()
         }
 
@@ -583,8 +583,8 @@ class TextCandidatesViewManager
         val params: ViewGroup.LayoutParams
         val line = if ((mPortrait)) mPortraitNumberOfLine else mLandscapeNumberOfLine
 
-        if ((mViewType == CandidatesViewManager.Companion.VIEW_TYPE_FULL)
-            && (type == CandidatesViewManager.Companion.VIEW_TYPE_NORMAL)
+        if ((mViewType == CandidatesViewManager.VIEW_TYPE_FULL)
+            && (type == CandidatesViewManager.VIEW_TYPE_NORMAL)
         ) {
             clearFocusCandidate()
         }
@@ -592,7 +592,7 @@ class TextCandidatesViewManager
         mViewType = type
 
         when (type) {
-            CandidatesViewManager.Companion.VIEW_TYPE_CLOSE -> {
+            CandidatesViewManager.VIEW_TYPE_CLOSE -> {
                 params = LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.FILL_PARENT,
                     candidateMinimumHeight * line
@@ -604,7 +604,7 @@ class TextCandidatesViewManager
                 return false
             }
 
-            CandidatesViewManager.Companion.VIEW_TYPE_NORMAL -> {
+            CandidatesViewManager.VIEW_TYPE_NORMAL -> {
                 params = LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.FILL_PARENT,
                     candidateMinimumHeight * line
@@ -618,7 +618,7 @@ class TextCandidatesViewManager
                 return false
             }
 
-            CandidatesViewManager.Companion.VIEW_TYPE_FULL -> {
+            CandidatesViewManager.VIEW_TYPE_FULL -> {
                 params = LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.FILL_PARENT,
                     candidateViewHeight
@@ -666,7 +666,7 @@ class TextCandidatesViewManager
             if (readMore) {
                 displayCandidates(this.mConverter, false, -1)
             } else {
-                if (type == CandidatesViewManager.Companion.VIEW_TYPE_NORMAL) {
+                if (type == CandidatesViewManager.VIEW_TYPE_NORMAL) {
                     mIsFullView = false
                     if (mDisplayEndOffset > 0) {
                         val maxLine = maxLine
@@ -689,7 +689,7 @@ class TextCandidatesViewManager
 
         if (mIsSymbolSelected) {
             mIsSymbolSelected = false
-            if (mSymbolMode == OpenWnnJAJP.Companion.ENGINE_MODE_SYMBOL_KAO_MOJI) {
+            if (mSymbolMode == OpenWnnJAJP.ENGINE_MODE_SYMBOL_KAO_MOJI) {
                 return
             }
 
@@ -727,7 +727,7 @@ class TextCandidatesViewManager
 
         clearCandidates()
         mConverter = converter
-        mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.Companion.LIST_CANDIDATES_NORMAL))
+        mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.LIST_CANDIDATES_NORMAL))
 
         mViewCandidateTemplate!!.visibility = View.VISIBLE
         mViewCandidateTemplate!!.setBackgroundResource(R.drawable.cand_back)
@@ -736,7 +736,7 @@ class TextCandidatesViewManager
 
         if (mIsSymbolMode) {
             mIsFullView = true
-            mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.Companion.LIST_CANDIDATES_FULL))
+            mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.LIST_CANDIDATES_FULL))
         }
     }
 
@@ -808,7 +808,7 @@ class TextCandidatesViewManager
                     )
                 }
             }
-            if (mSymbolMode != OpenWnnJAJP.Companion.ENGINE_MODE_SYMBOL_KAO_MOJI) {
+            if (mSymbolMode != OpenWnnJAJP.ENGINE_MODE_SYMBOL_KAO_MOJI) {
                 displayLimit = -1
             }
         }
@@ -874,7 +874,7 @@ class TextCandidatesViewManager
             } else {
                 mCanReadMore = false
                 mIsFullView = false
-                setViewLayout(CandidatesViewManager.Companion.VIEW_TYPE_NORMAL)
+                setViewLayout(CandidatesViewManager.VIEW_TYPE_NORMAL)
             }
         }
 
@@ -1205,9 +1205,9 @@ class TextCandidatesViewManager
         mLineY = 0
 
         mIsFullView = false
-        mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.Companion.LIST_CANDIDATES_NORMAL))
+        mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.LIST_CANDIDATES_NORMAL))
         if (mAutoHideMode) {
-            setViewLayout(CandidatesViewManager.Companion.VIEW_TYPE_CLOSE)
+            setViewLayout(CandidatesViewManager.VIEW_TYPE_CLOSE)
         }
 
         if (mAutoHideMode && mViewBody!!.isShown) {
@@ -1243,7 +1243,7 @@ class TextCandidatesViewManager
     fun setNormalMode() {
         setReadMore()
         mIsFullView = false
-        mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.Companion.LIST_CANDIDATES_NORMAL))
+        mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.LIST_CANDIDATES_NORMAL))
     }
 
     /**
@@ -1251,7 +1251,7 @@ class TextCandidatesViewManager
      */
     fun setFullMode() {
         mIsFullView = true
-        mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.Companion.LIST_CANDIDATES_FULL))
+        mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.LIST_CANDIDATES_FULL))
     }
 
     /**
@@ -1259,7 +1259,7 @@ class TextCandidatesViewManager
      */
     fun setSymbolMode(enable: Boolean, mode: Int) {
         if (mIsSymbolMode && !enable) {
-            viewType = CandidatesViewManager.Companion.VIEW_TYPE_CLOSE
+            viewType = CandidatesViewManager.VIEW_TYPE_CLOSE
         }
         mSymbolMode = mode
         mIsSymbolMode = enable
@@ -1320,10 +1320,10 @@ class TextCandidatesViewManager
     private fun selectCandidate(word: WnnWord?) {
         if (!mIsSymbolMode) {
             mIsFullView = false
-            mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.Companion.LIST_CANDIDATES_NORMAL))
+            mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.LIST_CANDIDATES_NORMAL))
         }
         mIsSymbolSelected = mIsSymbolMode
-        mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.Companion.SELECT_CANDIDATE, word))
+        mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.SELECT_CANDIDATE, word))
     }
 
     private fun playSoundAndVibration() {
@@ -1359,13 +1359,13 @@ class TextCandidatesViewManager
      */
     override fun onFling(
         arg0: MotionEvent?,
-        arg1: MotionEvent?,
+        arg1: MotionEvent,
         arg2: Float,
         arg3: Float
     ): Boolean {
         var consumed = false
         if (arg1 != null && arg0 != null && arg1.y < arg0.y) {
-            if ((mViewType == CandidatesViewManager.Companion.VIEW_TYPE_NORMAL) && mCanReadMore) {
+            if ((mViewType == CandidatesViewManager.VIEW_TYPE_NORMAL) && mCanReadMore) {
                 if (mVibrator != null) {
                     try {
                         mVibrator!!.vibrate(5)
@@ -1377,7 +1377,7 @@ class TextCandidatesViewManager
                     }
                 }
                 mIsFullView = true
-                mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.Companion.LIST_CANDIDATES_FULL))
+                mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.LIST_CANDIDATES_FULL))
                 consumed = true
             }
         } else {
@@ -1390,7 +1390,7 @@ class TextCandidatesViewManager
                     }
                 }
                 mIsFullView = false
-                mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.Companion.LIST_CANDIDATES_NORMAL))
+                mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.LIST_CANDIDATES_NORMAL))
                 consumed = true
             }
         }
@@ -1516,7 +1516,7 @@ class TextCandidatesViewManager
          * @return the height of a candidate view.
          */
         get() {
-            if (OpenWnn.Companion.isXLarge()) {
+            if (OpenWnn.isXLarge) {
                 return (mKeyboardHeight + mCandidateOneLineMinimumHeight - mSymbolKeyboardHeight
                         - mSymbolKeyboardTabHeight)
             } else {
@@ -1545,12 +1545,12 @@ class TextCandidatesViewManager
      */
     private fun updateSymbolType() {
         when (mSymbolMode) {
-            OpenWnnJAJP.Companion.ENGINE_MODE_SYMBOL -> {
+            OpenWnnJAJP.ENGINE_MODE_SYMBOL -> {
                 updateTabStatus(mViewTabSymbol!!, true, true)
                 updateTabStatus(mViewTabEmoticon!!, mEnableEmoticon, false)
             }
 
-            OpenWnnJAJP.Companion.ENGINE_MODE_SYMBOL_KAO_MOJI -> {
+            OpenWnnJAJP.ENGINE_MODE_SYMBOL_KAO_MOJI -> {
                 updateTabStatus(mViewTabSymbol!!, true, false)
                 updateTabStatus(mViewTabEmoticon!!, mEnableEmoticon, true)
             }
@@ -1601,9 +1601,9 @@ class TextCandidatesViewManager
             if (mIsSymbolMode) {
                 val mode = mSymbolMode
                 viewDivison = when (mode) {
-                    OpenWnnJAJP.Companion.ENGINE_MODE_SYMBOL -> if ((mPortrait)) FULL_VIEW_SYMBOL_DIV_PORT else FULL_VIEW_SYMBOL_DIV_LAND
+                    OpenWnnJAJP.ENGINE_MODE_SYMBOL -> if ((mPortrait)) FULL_VIEW_SYMBOL_DIV_PORT else FULL_VIEW_SYMBOL_DIV_LAND
 
-                    OpenWnnJAJP.Companion.ENGINE_MODE_SYMBOL_KAO_MOJI -> FULL_VIEW_DIV
+                    OpenWnnJAJP.ENGINE_MODE_SYMBOL_KAO_MOJI -> FULL_VIEW_DIV
 
                     else -> FULL_VIEW_DIV
                 }
@@ -1625,8 +1625,8 @@ class TextCandidatesViewManager
     private fun isFirstListOver(isFullView: Boolean, lineCount: Int, word: WnnWord?): Boolean {
         return if (mIsSymbolMode) {
             when (mSymbolMode) {
-                OpenWnnJAJP.Companion.ENGINE_MODE_SYMBOL_KAO_MOJI -> true
-                OpenWnnJAJP.Companion.ENGINE_MODE_SYMBOL -> true
+                OpenWnnJAJP.ENGINE_MODE_SYMBOL_KAO_MOJI -> true
+                OpenWnnJAJP.ENGINE_MODE_SYMBOL -> true
                 else -> (isFullView || maxLine < lineCount)
             }
         } else {
@@ -1731,7 +1731,7 @@ class TextCandidatesViewManager
         mHasFocusedArray1st = true
         mCurrentFocusIndex = FOCUS_NONE
         mHandler.removeMessages(MSG_MOVE_FOCUS)
-        mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.Companion.FOCUS_CANDIDATE_END))
+        mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.FOCUS_CANDIDATE_END))
     }
 
     /**
@@ -1908,7 +1908,7 @@ class TextCandidatesViewManager
         }
 
         if (isStart) {
-            mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.Companion.FOCUS_CANDIDATE_START))
+            mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.FOCUS_CANDIDATE_START))
         }
     }
 

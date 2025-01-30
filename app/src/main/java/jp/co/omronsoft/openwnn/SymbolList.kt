@@ -242,7 +242,7 @@ class SymbolList(
         return true
     }
 
-    override val userDictionaryWords: Array<WnnWord?>
+    override val userDictionaryWords: Array<WnnWord?>?
         /** @see jp.co.omronsoft.openwnn.WnnEngine.getUserDictionaryWords
          */
         get() = null

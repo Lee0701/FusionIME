@@ -286,8 +286,8 @@ class TextCandidates1LineViewManager @JvmOverloads constructor(
             mViewLongPressDialog!!.findViewById<View>(R.id.candidate_longpress_dialog_cancel) as Button
         longPressDialogButton.setOnClickListener {
             playSoundAndVibration()
-            mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.Companion.LIST_CANDIDATES_NORMAL))
-            mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.Companion.UPDATE_CANDIDATE))
+            mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.LIST_CANDIDATES_NORMAL))
+            mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.UPDATE_CANDIDATE))
             closeDialog()
         }
 
@@ -299,7 +299,7 @@ class TextCandidates1LineViewManager @JvmOverloads constructor(
 
         createNormalCandidateView()
 
-        viewType = CandidatesViewManager.Companion.VIEW_TYPE_CLOSE
+        viewType = CandidatesViewManager.VIEW_TYPE_CLOSE
 
         return mViewBody
     }
@@ -338,7 +338,7 @@ class TextCandidates1LineViewManager @JvmOverloads constructor(
         set(type) {
             mViewType = type
 
-            if (type == CandidatesViewManager.Companion.VIEW_TYPE_NORMAL) {
+            if (type == CandidatesViewManager.VIEW_TYPE_NORMAL) {
                 mViewCandidateList!!.minimumHeight = mCandidateMinimumHeight
             } else {
                 mViewCandidateList!!.minimumHeight = -1
@@ -509,7 +509,7 @@ class TextCandidates1LineViewManager @JvmOverloads constructor(
      * @param word  The selected word
      */
     private fun selectCandidate(word: WnnWord) {
-        mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.Companion.SELECT_CANDIDATE, word))
+        mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.SELECT_CANDIDATE, word))
     }
 
     private fun playSoundAndVibration() {
@@ -605,7 +605,7 @@ class TextCandidates1LineViewManager @JvmOverloads constructor(
 
         mCurrentFocusIndex = FOCUS_NONE
 
-        mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.Companion.FOCUS_CANDIDATE_END))
+        mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.FOCUS_CANDIDATE_END))
     }
 
     /**
@@ -650,7 +650,7 @@ class TextCandidates1LineViewManager @JvmOverloads constructor(
         setViewStatusOfFocusedCandidate()
 
         if (isStart) {
-            mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.Companion.FOCUS_CANDIDATE_START))
+            mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.FOCUS_CANDIDATE_START))
         }
     }
 

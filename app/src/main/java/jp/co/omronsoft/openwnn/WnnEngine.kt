@@ -101,7 +101,7 @@ interface WnnEngine {
      * <br></br>
      * @return          `null` if no word is registered; the array of [WnnWord] if some words is registered.
      */
-    val userDictionaryWords: Array<WnnWord?>
+    val userDictionaryWords: Array<WnnWord?>?
 
     /**
      * Learn a word.

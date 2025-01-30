@@ -83,17 +83,17 @@ class OpenWnnEngineEN(dicLibPath: String?, writableDictionaryName: String?) :
         mDictionary.setDictionary(1, 400, 550)
         mDictionary.setDictionary(2, 400, 550)
         mDictionary.setDictionary(
-            WnnDictionary.Companion.INDEX_USER_DICTIONARY,
+            WnnDictionary.INDEX_USER_DICTIONARY,
             FREQ_USER,
             FREQ_USER
         )
         mDictionary.setDictionary(
-            WnnDictionary.Companion.INDEX_LEARN_DICTIONARY,
+            WnnDictionary.INDEX_LEARN_DICTIONARY,
             FREQ_LEARN,
             FREQ_LEARN
         )
 
-        mDictionary.setApproxPattern(WnnDictionary.Companion.APPROX_PATTERN_EN_QWERTY_NEAR)
+        mDictionary.setApproxPattern(WnnDictionary.APPROX_PATTERN_EN_QWERTY_NEAR)
 
         mDictionary.setInUseState(false)
     }
@@ -193,7 +193,7 @@ class OpenWnnEngineEN(dicLibPath: String?, writableDictionaryName: String?) :
     fun setDictionary(type: Int): Boolean {
         if (type == DICT_FOR_CORRECT_MISTYPE) {
             mDictionary.clearApproxPattern()
-            mDictionary.setApproxPattern(WnnDictionary.Companion.APPROX_PATTERN_EN_QWERTY_NEAR)
+            mDictionary.setApproxPattern(WnnDictionary.APPROX_PATTERN_EN_QWERTY_NEAR)
         } else {
             mDictionary.clearApproxPattern()
         }
@@ -282,13 +282,13 @@ class OpenWnnEngineEN(dicLibPath: String?, writableDictionaryName: String?) :
         if (input.length > 2) {
             dict.setDictionary(2, 400, 550)
         }
-        dict.setDictionary(WnnDictionary.Companion.INDEX_USER_DICTIONARY, FREQ_USER, FREQ_USER)
-        dict.setDictionary(WnnDictionary.Companion.INDEX_LEARN_DICTIONARY, FREQ_LEARN, FREQ_LEARN)
+        dict.setDictionary(WnnDictionary.INDEX_USER_DICTIONARY, FREQ_USER, FREQ_USER)
+        dict.setDictionary(WnnDictionary.INDEX_LEARN_DICTIONARY, FREQ_LEARN, FREQ_LEARN)
 
 
         /* search dictionaries */
         dict.searchWord(
-            WnnDictionary.Companion.SEARCH_PREFIX, WnnDictionary.Companion.ORDER_BY_FREQUENCY,
+            WnnDictionary.SEARCH_PREFIX, WnnDictionary.ORDER_BY_FREQUENCY,
             mSearchKey!!
         )
         return 1
@@ -375,14 +375,14 @@ class OpenWnnEngineEN(dicLibPath: String?, writableDictionaryName: String?) :
         val dict = mDictionary
 
         when (dictionary) {
-            WnnEngine.Companion.DICTIONARY_TYPE_LEARN -> {
+            WnnEngine.DICTIONARY_TYPE_LEARN -> {
                 dict.setInUseState(true)
                 dict.clearLearnDictionary()
                 dict.setInUseState(false)
                 return true
             }
 
-            WnnEngine.Companion.DICTIONARY_TYPE_USER -> {
+            WnnEngine.DICTIONARY_TYPE_USER -> {
                 dict.setInUseState(true)
                 dict.clearUserDictionary()
                 dict.setInUseState(false)

@@ -286,7 +286,7 @@ class OpenWnnDictionaryImpl @JvmOverloads constructor(
         if (flag) {
             if (mDbDic == null) {
                 mDbOpenHelper =
-                    OpenWnnSQLiteOpenHelper(OpenWnn.Companion.getCurrentIme(), mDicFilePath)
+                    OpenWnnSQLiteOpenHelper(OpenWnn.currentIme, mDicFilePath)
                 mDbDic = mDbOpenHelper!!.writableDatabase
             }
         } else {
@@ -314,7 +314,7 @@ class OpenWnnDictionaryImpl @JvmOverloads constructor(
     override fun setDictionary(index: Int, base: Int, high: Int): Int {
         if (this.mWnnWork != 0L) {
             when (index) {
-                WnnDictionary.Companion.INDEX_USER_DICTIONARY -> {
+                WnnDictionary.INDEX_USER_DICTIONARY -> {
                     mFrequencyOffsetOfUserDictionary =
                         if (base < 0 || high < 0 || base > high /* || base < OFFSET_FREQUENCY_OF_USER_DICTIONARY || high >= OFFSET_FREQUENCY_OF_LEARN_DICTIONARY */
                         ) {
@@ -325,7 +325,7 @@ class OpenWnnDictionaryImpl @JvmOverloads constructor(
                     return 0
                 }
 
-                WnnDictionary.Companion.INDEX_LEARN_DICTIONARY -> {
+                WnnDictionary.INDEX_LEARN_DICTIONARY -> {
                     mFrequencyOffsetOfLearnDictionary =
                         if (base < 0 || high < 0 || base > high /* || base < OFFSET_FREQUENCY_OF_LEARN_DICTIONARY */
                         ) {
@@ -364,12 +364,12 @@ class OpenWnnDictionaryImpl @JvmOverloads constructor(
         val querySqlOrderByKey: String?
         var queryArgs: Array<String?>?
 
-        if (operation != WnnDictionary.Companion.SEARCH_LINK) {
+        if (operation != WnnDictionary.SEARCH_LINK) {
             wnnWord = null
         }
 
         when (operation) {
-            WnnDictionary.Companion.SEARCH_EXACT -> {
+            WnnDictionary.SEARCH_EXACT -> {
                 querySqlOrderByFreq = mExactQuerySqlOrderByFreq
                 querySqlOrderByKey = mExactQuerySqlOrderByKey
                 newTypeOfQuery = 0
@@ -378,7 +378,7 @@ class OpenWnnDictionaryImpl @JvmOverloads constructor(
                 queryArgs[0] = keyString
             }
 
-            WnnDictionary.Companion.SEARCH_PREFIX, WnnDictionary.Companion.SEARCH_LINK -> {
+            WnnDictionary.SEARCH_PREFIX, WnnDictionary.SEARCH_LINK -> {
                 /* Select the suitable parameters for the query */
                 if (keyString.length <= FAST_QUERY_LENGTH) {
                     if (wnnWord != null) {
@@ -450,11 +450,11 @@ class OpenWnnDictionaryImpl @JvmOverloads constructor(
 
             try {
                 mDbCursor = when (order) {
-                    WnnDictionary.Companion.ORDER_BY_FREQUENCY -> mDbDic!!.rawQuery(
+                    WnnDictionary.ORDER_BY_FREQUENCY -> mDbDic!!.rawQuery(
                         querySqlOrderByFreq!!, queryArgs
                     ) as SQLiteCursor
 
-                    WnnDictionary.Companion.ORDER_BY_KEY -> mDbDic!!.rawQuery(
+                    WnnDictionary.ORDER_BY_KEY -> mDbDic!!.rawQuery(
                         querySqlOrderByKey!!, queryArgs
                     ) as SQLiteCursor
 
@@ -693,20 +693,20 @@ class OpenWnnDictionaryImpl @JvmOverloads constructor(
 
                     if (numOfWords > 0) {
                         /* Retrieve all words in the user dictionary */
-                        val words =
-                            arrayOfNulls<WnnWord>(numOfWords)
+                        val words = mutableListOf<WnnWord>()
 
                         cursor.moveToFirst()
                         i = 0
                         while (i < numOfWords) {
-                            words[i] = WnnWord()
-                            words[i]!!.stroke = cursor.getString(0)
-                            words[i]!!.candidate = cursor.getString(1)
+                            val word = WnnWord()
+                            word.stroke = cursor.getString(0)
+                            word.candidate = cursor.getString(1)
+                            words += word
                             cursor.moveToNext()
                             i++
                         }
 
-                        return words
+                        return words.toTypedArray()
                     }
                 } catch (e: SQLException) {
                     /* An error occurs */

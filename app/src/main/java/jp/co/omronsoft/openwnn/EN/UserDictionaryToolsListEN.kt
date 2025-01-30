@@ -34,7 +34,7 @@ class UserDictionaryToolsListEN : UserDictionaryToolsList() {
      * Constructor
      */
     init {
-        if (OpenWnnEN.Companion.getInstance() == null) {
+        if (OpenWnnEN.instance == null) {
             OpenWnnEN(this)
         }
         mListViewName = "jp.co.omronsoft.openwnn.EN.UserDictionaryToolsListEN"
@@ -62,14 +62,14 @@ class UserDictionaryToolsListEN : UserDictionaryToolsList() {
      */
     override fun sendEventToIME(ev: OpenWnnEvent): Boolean {
         try {
-            return OpenWnnEN.Companion.getInstance().onEvent(ev)
+            return OpenWnnEN.instance?.onEvent(ev) == true
         } catch (ex: Exception) {
             /* do nothing if an error occurs */
         }
         return false
     }
 
-    override val comparator: Comparator<WnnWord?>
+    override val comparator: Comparator<WnnWord>
         /** @see jp.co.omronsoft.openwnn.UserDictionaryToolsList.getComparator
          */
         get() = ListComparatorEN()

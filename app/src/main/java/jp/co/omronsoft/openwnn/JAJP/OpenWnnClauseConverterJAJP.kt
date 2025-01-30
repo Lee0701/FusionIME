@@ -38,16 +38,16 @@ class OpenWnnClauseConverterJAJP {
         HashMap<String, ArrayList<WnnWord>>()
 
     /** search cache for ancillary words (fuzokugo)  */
-    private val mFzkPatterns: HashMap<String?, ArrayList<WnnWord>?>
+    private val mFzkPatterns: HashMap<String, ArrayList<WnnWord>>
 
     /** connect matrix for generating a clause  */
-    private var mConnectMatrix: Array<ByteArray?>?
+    private var mConnectMatrix: Array<ByteArray?>? = null
 
     /** dictionaries  */
     private var mDictionary: WnnDictionary? = null
 
     /** candidates of conversion  */
-    private val mConvertResult: LinkedList<*>
+    private val mConvertResult: LinkedList<Any?>
 
     /** work area for consecutive clause conversion  */
     private val mSentenceBuffer: Array<WnnSentence?>
@@ -71,8 +71,8 @@ class OpenWnnClauseConverterJAJP {
      * Constructor
      */
     init {
-        mFzkPatterns = HashMap<Any?, Any?>()
-        mConvertResult = LinkedList<Any?>()
+        mFzkPatterns = HashMap()
+        mConvertResult = LinkedList()
 
         mSentenceBuffer = arrayOfNulls(MAX_INPUT_LENGTH)
     }
@@ -99,10 +99,10 @@ class OpenWnnClauseConverterJAJP {
 
 
         /* get part of speech tags */
-        mPosDefault = dict.getPOS(WnnDictionary.Companion.POS_TYPE_MEISI)
-        mPosEndOfClause1 = dict.getPOS(WnnDictionary.Companion.POS_TYPE_V1)
-        mPosEndOfClause2 = dict.getPOS(WnnDictionary.Companion.POS_TYPE_V2)
-        mPosEndOfClause3 = dict.getPOS(WnnDictionary.Companion.POS_TYPE_V3)
+        mPosDefault = dict.getPOS(WnnDictionary.POS_TYPE_MEISI)
+        mPosEndOfClause1 = dict.getPOS(WnnDictionary.POS_TYPE_V1)
+        mPosEndOfClause2 = dict.getPOS(WnnDictionary.POS_TYPE_V2)
+        mPosEndOfClause3 = dict.getPOS(WnnDictionary.POS_TYPE_V3)
     }
 
     /**
@@ -136,7 +136,7 @@ class OpenWnnClauseConverterJAJP {
         mConvertResult.clear()
 
         /* try single clause conversion */
-        if (!singleClauseConvert(mConvertResult, input, mPosEndOfClause2!!, true)) {
+        if (!singleClauseConvert(mConvertResult as LinkedList<WnnClause>, input, mPosEndOfClause2!!, true)) {
             return null
         }
         return mConvertResult.iterator()
@@ -149,7 +149,7 @@ class OpenWnnClauseConverterJAJP {
      * @return            The result of consecutive clause conversion; `null` if fail.
      */
     fun consecutiveClauseConvert(input: String): WnnSentence? {
-        val clauses: LinkedList<*> = LinkedList<Any?>()
+        val clauses: LinkedList<WnnClause> = LinkedList<WnnClause>()
 
         /* clear the cache which is not matched */
         for (i in 0 until input.length) {
@@ -233,7 +233,7 @@ class OpenWnnClauseConverterJAJP {
      * @param input            Input string
      * @return                `true` if success; `false` if fail.
      */
-    private fun consecutiveClauseConvert(resultList: LinkedList<*>, input: String): Boolean {
+    private fun consecutiveClauseConvert(resultList: LinkedList<WnnSentence>, input: String): Boolean {
         val sentence = consecutiveClauseConvert(input)
 
         /* set the result of the consecutive clause conversion on the top of the list */
@@ -254,7 +254,7 @@ class OpenWnnClauseConverterJAJP {
      * @return                `true` if success; `false` if fail.
      */
     private fun singleClauseConvert(
-        clauseList: LinkedList<*>,
+        clauseList: LinkedList<WnnClause>,
         input: String,
         terminal: WnnPOS,
         all: Boolean
@@ -263,7 +263,7 @@ class OpenWnnClauseConverterJAJP {
 
         /* get clauses without ancillary word */
         var stems = getIndependentWords(input, all)
-        if (stems != null && (!stems.isEmpty())) {
+        if (stems != null && (stems.isNotEmpty())) {
             val stemsi: Iterator<WnnWord> = stems.iterator()
             while (stemsi.hasNext()) {
                 val stem = stemsi.next()
@@ -289,8 +289,8 @@ class OpenWnnClauseConverterJAJP {
             stems = getIndependentWords(str, all)
             if (stems == null || stems.isEmpty()) {
                 if (mDictionary!!.searchWord(
-                        WnnDictionary.Companion.SEARCH_PREFIX,
-                        WnnDictionary.Companion.ORDER_BY_FREQUENCY,
+                        WnnDictionary.SEARCH_PREFIX,
+                        WnnDictionary.ORDER_BY_FREQUENCY,
                         str
                     ) <= 0
                 ) {
@@ -437,8 +437,8 @@ class OpenWnnClauseConverterJAJP {
 
             /* search ancillary words */
             dict.searchWord(
-                WnnDictionary.Companion.SEARCH_EXACT,
-                WnnDictionary.Companion.ORDER_BY_FREQUENCY,
+                WnnDictionary.SEARCH_EXACT,
+                WnnDictionary.ORDER_BY_FREQUENCY,
                 key
             )
             var word: WnnWord
@@ -453,8 +453,8 @@ class OpenWnnClauseConverterJAJP {
                     continue
                 }
                 dict.searchWord(
-                    WnnDictionary.Companion.SEARCH_EXACT,
-                    WnnDictionary.Companion.ORDER_BY_FREQUENCY,
+                    WnnDictionary.SEARCH_EXACT,
+                    WnnDictionary.ORDER_BY_FREQUENCY,
                     input.substring(start, end)
                 )
                 while ((dict.nextWord.also { word = it!! }) != null) {
@@ -498,9 +498,9 @@ class OpenWnnClauseConverterJAJP {
             dict.clearApproxPattern()
             dict.setDictionary(4, 0, 10)
             dict.setDictionary(5, 400, 500)
-            dict.setDictionary(WnnDictionary.Companion.INDEX_USER_DICTIONARY, FREQ_USER, FREQ_USER)
+            dict.setDictionary(WnnDictionary.INDEX_USER_DICTIONARY, FREQ_USER, FREQ_USER)
             dict.setDictionary(
-                WnnDictionary.Companion.INDEX_LEARN_DICTIONARY,
+                WnnDictionary.INDEX_LEARN_DICTIONARY,
                 FREQ_LEARN,
                 FREQ_LEARN
             )
@@ -510,8 +510,8 @@ class OpenWnnClauseConverterJAJP {
             if (all) {
                 mAllIndepWordBag[input] = words
                 dict.searchWord(
-                    WnnDictionary.Companion.SEARCH_EXACT,
-                    WnnDictionary.Companion.ORDER_BY_FREQUENCY,
+                    WnnDictionary.SEARCH_EXACT,
+                    WnnDictionary.ORDER_BY_FREQUENCY,
                     input
                 )
                 /* store all words */
@@ -523,8 +523,8 @@ class OpenWnnClauseConverterJAJP {
             } else {
                 mIndepWordBag[input] = words
                 dict.searchWord(
-                    WnnDictionary.Companion.SEARCH_EXACT,
-                    WnnDictionary.Companion.ORDER_BY_FREQUENCY,
+                    WnnDictionary.SEARCH_EXACT,
+                    WnnDictionary.ORDER_BY_FREQUENCY,
                     input
                 )
                 /* store a word which has an unique part of speech tag */
@@ -561,7 +561,7 @@ class OpenWnnClauseConverterJAJP {
      * @param wordList  List to store words
      * @param all       Get all candidates or not
      */
-    private fun addAutoGeneratedCandidates(input: String, wordList: ArrayList<*>, all: Boolean) {
+    private fun addAutoGeneratedCandidates(input: String, wordList: ArrayList<WnnWord>, all: Boolean) {
         wordList.add(WnnWord(input, input, mPosDefault, (CLAUSE_COST - 1) * input.length))
     }
 

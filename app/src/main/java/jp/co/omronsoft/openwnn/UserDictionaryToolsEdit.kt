@@ -316,8 +316,8 @@ abstract class UserDictionaryToolsEdit : Activity, View.OnClickListener {
         wnnWordAdd.candidate = candidate
         /* add word event */
         val event = OpenWnnEvent(
-            OpenWnnEvent.Companion.ADD_WORD,
-            WnnEngine.Companion.DICTIONARY_TYPE_USER,
+            OpenWnnEvent.ADD_WORD,
+            WnnEngine.DICTIONARY_TYPE_USER,
             wnnWordAdd
         )
         /* notify the event to IME */

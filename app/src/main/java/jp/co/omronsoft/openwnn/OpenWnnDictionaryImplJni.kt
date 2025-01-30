@@ -31,7 +31,7 @@ object OpenWnnDictionaryImplJni {
      *
      * @see jp.co.omronsoft.openwnn.OpenWnnDictionaryImplJni.setApproxPattern
      */
-    val APPROX_PATTERN_EN_TOUPPER: Int = WnnDictionary.Companion.APPROX_PATTERN_EN_TOUPPER
+    val APPROX_PATTERN_EN_TOUPPER: Int = WnnDictionary.APPROX_PATTERN_EN_TOUPPER
 
     /**
      * Constant about the approximate pattern (for JNI native library)
@@ -40,7 +40,7 @@ object OpenWnnDictionaryImplJni {
      *
      * @see jp.co.omronsoft.openwnn.OpenWnnDictionaryImplJni.setApproxPattern
      */
-    val APPROX_PATTERN_EN_TOLOWER: Int = WnnDictionary.Companion.APPROX_PATTERN_EN_TOLOWER
+    val APPROX_PATTERN_EN_TOLOWER: Int = WnnDictionary.APPROX_PATTERN_EN_TOLOWER
 
     /**
      * Constant about the approximate pattern (for JNI native library)
@@ -49,7 +49,7 @@ object OpenWnnDictionaryImplJni {
      *
      * @see jp.co.omronsoft.openwnn.OpenWnnDictionaryImplJni.setApproxPattern
      */
-    val APPROX_PATTERN_EN_QWERTY_NEAR: Int = WnnDictionary.Companion.APPROX_PATTERN_EN_QWERTY_NEAR
+    val APPROX_PATTERN_EN_QWERTY_NEAR: Int = WnnDictionary.APPROX_PATTERN_EN_QWERTY_NEAR
 
     /**
      * Constant about the approximate pattern (for JNI native library)
@@ -59,7 +59,7 @@ object OpenWnnDictionaryImplJni {
      * @see jp.co.omronsoft.openwnn.OpenWnnDictionaryImplJni.setApproxPattern
      */
     val APPROX_PATTERN_EN_QWERTY_NEAR_UPPER: Int =
-        WnnDictionary.Companion.APPROX_PATTERN_EN_QWERTY_NEAR_UPPER
+        WnnDictionary.APPROX_PATTERN_EN_QWERTY_NEAR_UPPER
 
     /**
      * Constant about the approximate pattern (for JNI native library)
@@ -69,7 +69,7 @@ object OpenWnnDictionaryImplJni {
      * @see jp.co.omronsoft.openwnn.OpenWnnDictionaryImplJni.setApproxPattern
      */
     val APPROX_PATTERN_JAJP_12KEY_NORMAL: Int =
-        WnnDictionary.Companion.APPROX_PATTERN_JAJP_12KEY_NORMAL
+        WnnDictionary.APPROX_PATTERN_JAJP_12KEY_NORMAL
 
     /**
      * Constant about the search operation (for JNI native library)
@@ -78,7 +78,7 @@ object OpenWnnDictionaryImplJni {
      *
      * @see jp.co.omronsoft.openwnn.OpenWnnDictionaryImplJni.searchWord
      */
-    val SEARCH_EXACT: Int = WnnDictionary.Companion.SEARCH_EXACT
+    val SEARCH_EXACT: Int = WnnDictionary.SEARCH_EXACT
 
     /**
      * Constant about the search operation (for JNI native library)
@@ -87,7 +87,7 @@ object OpenWnnDictionaryImplJni {
      *
      * @see jp.co.omronsoft.openwnn.OpenWnnDictionaryImplJni.searchWord
      */
-    val SEARCH_PREFIX: Int = WnnDictionary.Companion.SEARCH_PREFIX
+    val SEARCH_PREFIX: Int = WnnDictionary.SEARCH_PREFIX
 
     /**
      * Constant about the search operation (for JNI native library)
@@ -96,7 +96,7 @@ object OpenWnnDictionaryImplJni {
      *
      * @see jp.co.omronsoft.openwnn.OpenWnnDictionaryImplJni.searchWord
      */
-    val SEARCH_LINK: Int = WnnDictionary.Companion.SEARCH_LINK
+    val SEARCH_LINK: Int = WnnDictionary.SEARCH_LINK
 
     /**
      * Constant about the sort order (for JNI native library)
@@ -105,7 +105,7 @@ object OpenWnnDictionaryImplJni {
      *
      * @see jp.co.omronsoft.openwnn.OpenWnnDictionaryImplJni.searchWord
      */
-    val ORDER_BY_FREQUENCY: Int = WnnDictionary.Companion.ORDER_BY_FREQUENCY
+    val ORDER_BY_FREQUENCY: Int = WnnDictionary.ORDER_BY_FREQUENCY
 
     /**
      * Constant about the sort order (for JNI native library)
@@ -114,7 +114,7 @@ object OpenWnnDictionaryImplJni {
      *
      * @see jp.co.omronsoft.openwnn.OpenWnnDictionaryImplJni.searchWord
      */
-    val ORDER_BY_KEY: Int = WnnDictionary.Companion.ORDER_BY_KEY
+    val ORDER_BY_KEY: Int = WnnDictionary.ORDER_BY_KEY
 
     /**
      * Type of a part of speech (for JNI native library)
@@ -124,7 +124,7 @@ object OpenWnnDictionaryImplJni {
      *
      * @see jp.co.omronsoft.openwnn.OpenWnnDictionaryImplJni.getRightPartOfSpeechSpecifiedType
      */
-    val POS_TYPE_V1: Int = WnnDictionary.Companion.POS_TYPE_V1
+    val POS_TYPE_V1: Int = WnnDictionary.POS_TYPE_V1
 
     /**
      * Type of a part of speech (for JNI native library)
@@ -134,7 +134,7 @@ object OpenWnnDictionaryImplJni {
      *
      * @see jp.co.omronsoft.openwnn.OpenWnnDictionaryImplJni.getRightPartOfSpeechSpecifiedType
      */
-    val POS_TYPE_V2: Int = WnnDictionary.Companion.POS_TYPE_V2
+    val POS_TYPE_V2: Int = WnnDictionary.POS_TYPE_V2
 
     /**
      * Type of a part of speech (for JNI native library)
@@ -144,7 +144,7 @@ object OpenWnnDictionaryImplJni {
      *
      * @see jp.co.omronsoft.openwnn.OpenWnnDictionaryImplJni.getRightPartOfSpeechSpecifiedType
      */
-    val POS_TYPE_V3: Int = WnnDictionary.Companion.POS_TYPE_V3
+    val POS_TYPE_V3: Int = WnnDictionary.POS_TYPE_V3
 
     /**
      * Type of a part of speech (for JNI native library)
@@ -154,7 +154,7 @@ object OpenWnnDictionaryImplJni {
      *
      * @see jp.co.omronsoft.openwnn.OpenWnnDictionaryImplJni.getRightPartOfSpeechSpecifiedType
      */
-    val POS_TYPE_BUNTOU: Int = WnnDictionary.Companion.POS_TYPE_BUNTOU
+    val POS_TYPE_BUNTOU: Int = WnnDictionary.POS_TYPE_BUNTOU
 
     /**
      * Type of a part of speech (for JNI native library)
@@ -164,7 +164,7 @@ object OpenWnnDictionaryImplJni {
      *
      * @see jp.co.omronsoft.openwnn.OpenWnnDictionaryImplJni.getRightPartOfSpeechSpecifiedType
      */
-    val POS_TYPE_TANKANJI: Int = WnnDictionary.Companion.POS_TYPE_TANKANJI
+    val POS_TYPE_TANKANJI: Int = WnnDictionary.POS_TYPE_TANKANJI
 
     /**
      * Type of a part of speech (for JNI native library)
@@ -174,7 +174,7 @@ object OpenWnnDictionaryImplJni {
      *
      * @see jp.co.omronsoft.openwnn.OpenWnnDictionaryImplJni.getRightPartOfSpeechSpecifiedType
      */
-    val POS_TYPE_SUUJI: Int = WnnDictionary.Companion.POS_TYPE_SUUJI
+    val POS_TYPE_SUUJI: Int = WnnDictionary.POS_TYPE_SUUJI
 
     /**
      * Type of a part of speech (for JNI native library)
@@ -184,7 +184,7 @@ object OpenWnnDictionaryImplJni {
      *
      * @see jp.co.omronsoft.openwnn.OpenWnnDictionaryImplJni.getRightPartOfSpeechSpecifiedType
      */
-    val POS_TYPE_MEISI: Int = WnnDictionary.Companion.POS_TYPE_MEISI
+    val POS_TYPE_MEISI: Int = WnnDictionary.POS_TYPE_MEISI
 
     /**
      * Type of a part of speech (for JNI native library)
@@ -194,7 +194,7 @@ object OpenWnnDictionaryImplJni {
      *
      * @see jp.co.omronsoft.openwnn.OpenWnnDictionaryImplJni.getRightPartOfSpeechSpecifiedType
      */
-    val POS_TYPE_JINMEI: Int = WnnDictionary.Companion.POS_TYPE_JINMEI
+    val POS_TYPE_JINMEI: Int = WnnDictionary.POS_TYPE_JINMEI
 
     /**
      * Type of a part of speech (for JNI native library)
@@ -204,7 +204,7 @@ object OpenWnnDictionaryImplJni {
      *
      * @see jp.co.omronsoft.openwnn.OpenWnnDictionaryImplJni.getRightPartOfSpeechSpecifiedType
      */
-    val POS_TYPE_CHIMEI: Int = WnnDictionary.Companion.POS_TYPE_CHIMEI
+    val POS_TYPE_CHIMEI: Int = WnnDictionary.POS_TYPE_CHIMEI
 
     /**
      * Type of a part of speech (for JNI native library)
@@ -214,7 +214,7 @@ object OpenWnnDictionaryImplJni {
      *
      * @see jp.co.omronsoft.openwnn.OpenWnnDictionaryImplJni.getRightPartOfSpeechSpecifiedType
      */
-    val POS_TYPE_KIGOU: Int = WnnDictionary.Companion.POS_TYPE_KIGOU
+    val POS_TYPE_KIGOU: Int = WnnDictionary.POS_TYPE_KIGOU
 
     /*
      * METHODS

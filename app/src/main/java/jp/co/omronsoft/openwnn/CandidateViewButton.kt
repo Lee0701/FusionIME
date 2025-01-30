@@ -26,7 +26,7 @@ import android.widget.Button
  */
 class CandidateViewButton : Button {
     /** The state of up  */
-    private var mUpState: IntArray
+    private var mUpState: IntArray = intArrayOf()
 
     /** Constructor  */
     constructor(context: Context?) : super(context)

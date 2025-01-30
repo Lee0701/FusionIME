@@ -44,7 +44,7 @@ class RomkanFullKatakana
 
     companion object {
         /** HashMap for Romaji-to-Kana conversion (Japanese mode)  */
-        private val mRomkanTable: HashMap<String?, String?> = object : HashMap<String?, String?>() {
+        private val mRomkanTable: HashMap<String, String> = object : HashMap<String, String>() {
             init {
                 put("la", "\u30a1")
                 put("xa", "\u30a1")
@@ -382,7 +382,7 @@ class RomkanFullKatakana
          * @param table             HashMap for Romaji-to-Kana conversion
          * @return                  `true` if conversion is compleated; `false` if not
          */
-        fun convert(text: ComposingText, table: HashMap<String?, String?>): Boolean {
+        fun convert(text: ComposingText, table: HashMap<String, String>): Boolean {
             val cursor = text.getCursor(1)
 
             if (cursor <= 0) {
@@ -416,7 +416,7 @@ class RomkanFullKatakana
                         out = arrayOfNulls(1)
                         out[0] = StrSegment(match, str[start]!!.from, str[MAX_LENGTH - 1]!!.to)
                         text.replaceStrSegment(
-                            ComposingText.Companion.LAYER1,
+                            ComposingText.LAYER1,
                             out,
                             MAX_LENGTH - start
                         )

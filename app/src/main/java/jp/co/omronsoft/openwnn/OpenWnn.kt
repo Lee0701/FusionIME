@@ -89,7 +89,7 @@ open class OpenWnn
         mTextCandidatesViewManager = TextCandidatesViewManager(-1)
         if (isXLarge) {
             mTextCandidates1LineViewManager =
-                TextCandidates1LineViewManager(OpenWnnEngineJAJP.Companion.LIMIT_OF_CANDIDATES_1LINE)
+                TextCandidates1LineViewManager(OpenWnnEngineJAJP.LIMIT_OF_CANDIDATES_1LINE)
             mCandidatesViewManager = mTextCandidates1LineViewManager
         } else {
             mCandidatesViewManager = mTextCandidatesViewManager
@@ -123,7 +123,7 @@ open class OpenWnn
                 wm.defaultDisplay.width,
                 wm.defaultDisplay.height
             )
-            mCandidatesViewManager.setViewType(CandidatesViewManager.Companion.VIEW_TYPE_NORMAL)
+            mCandidatesViewManager?.viewType = CandidatesViewManager.VIEW_TYPE_NORMAL
             return view!!
         } else {
             return super.onCreateCandidatesView()
@@ -214,7 +214,7 @@ open class OpenWnn
         }
 
         val wnnEvent = OpenWnnEvent(event)
-        wnnEvent.code = OpenWnnEvent.Companion.KEYLONGPRESS
+        wnnEvent.code = OpenWnnEvent.KEYLONGPRESS
         return onEvent(wnnEvent)
     }
 

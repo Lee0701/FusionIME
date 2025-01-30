@@ -52,9 +52,9 @@ class KanaConverter {
      */
     fun setDictionary(dict: WnnDictionary) {
         /* get part of speech tags */
-        mPosDefault = dict.getPOS(WnnDictionary.Companion.POS_TYPE_MEISI)
-        mPosNumber = dict.getPOS(WnnDictionary.Companion.POS_TYPE_SUUJI)
-        mPosSymbol = dict.getPOS(WnnDictionary.Companion.POS_TYPE_KIGOU)
+        mPosDefault = dict.getPOS(WnnDictionary.POS_TYPE_MEISI)
+        mPosNumber = dict.getPOS(WnnDictionary.POS_TYPE_SUUJI)
+        mPosSymbol = dict.getPOS(WnnDictionary.POS_TYPE_KIGOU)
     }
 
     /**
@@ -87,7 +87,7 @@ class KanaConverter {
             list.add(WnnWord(mStringBuff.toString(), inputHiragana, mPosDefault))
         }
 
-        if (keyBoardMode == OpenWnnEngineJAJP.Companion.KEYBOARD_QWERTY) {
+        if (keyBoardMode == OpenWnnEngineJAJP.KEYBOARD_QWERTY) {
             /* Create pseudo candidates for Qwerty keyboard */
             createPseudoCandidateListForQwerty(inputHiragana, inputRomaji)
         } else {
@@ -212,7 +212,7 @@ class KanaConverter {
     companion object {
         /** Conversion rule for half-width numeric  */
         private val mHalfNumericMap: HashMap<String, String> =
-            object : HashMap<String?, String?>() {
+            object : HashMap<String, String>() {
                 init {
                     put("\u3042", "1")
                     put("\u3044", "11")
@@ -276,7 +276,7 @@ class KanaConverter {
 
         /** Conversion rule for full-width numeric  */
         private val mFullNumericMap: HashMap<String, String> =
-            object : HashMap<String?, String?>() {
+            object : HashMap<String, String>() {
                 init {
                     put("\u3042", "\uff11")
                     put("\u3044", "\uff11\uff11")
@@ -340,7 +340,7 @@ class KanaConverter {
 
         /** Conversion rule for half-width Katakana  */
         private val mHalfKatakanaMap: HashMap<String, String> =
-            object : HashMap<String?, String?>() {
+            object : HashMap<String, String>() {
                 init {
                     put("\u3042", "\uff71")
                     put("\u3044", "\uff72")
@@ -434,7 +434,7 @@ class KanaConverter {
 
         /** Conversion rule for full-width Katakana  */
         private val mFullKatakanaMap: HashMap<String, String> =
-            object : HashMap<String?, String?>() {
+            object : HashMap<String, String>() {
                 init {
                     put("\u3042", "\u30a2")
                     put("\u3044", "\u30a4")
@@ -528,7 +528,7 @@ class KanaConverter {
 
         /** Conversion rule for half-width alphabet  */
         private val mHalfAlphabetMap: HashMap<String, String> =
-            object : HashMap<String?, String?>() {
+            object : HashMap<String, String>() {
                 init {
                     put("\u3042", ".")
                     put("\u3044", "@")
@@ -569,7 +569,7 @@ class KanaConverter {
 
         /** Conversion rule for full-width alphabet  */
         private val mFullAlphabetMap: HashMap<String, String> =
-            object : HashMap<String?, String?>() {
+            object : HashMap<String, String>() {
                 init {
                     put("\u3042", "\uff0e")
                     put("\u3044", "\uff20")
@@ -610,7 +610,7 @@ class KanaConverter {
 
         /** Conversion rule for full-width alphabet (QWERTY mode)  */
         private val mFullAlphabetMapQwety: HashMap<String, String> =
-            object : HashMap<String?, String?>() {
+            object : HashMap<String, String>() {
                 init {
                     put("a", "\uff41")
                     put("b", "\uff42")

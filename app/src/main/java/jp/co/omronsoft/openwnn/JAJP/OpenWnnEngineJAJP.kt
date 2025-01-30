@@ -19,6 +19,7 @@ import android.content.SharedPreferences
 import jp.co.omronsoft.openwnn.CandidateFilter
 import jp.co.omronsoft.openwnn.ComposingText
 import jp.co.omronsoft.openwnn.OpenWnnDictionaryImpl
+import jp.co.omronsoft.openwnn.StrSegment
 import jp.co.omronsoft.openwnn.StrSegmentClause
 import jp.co.omronsoft.openwnn.WnnClause
 import jp.co.omronsoft.openwnn.WnnDictionary
@@ -96,7 +97,7 @@ class OpenWnnEngineJAJP(dicLibPath: String?, writableDictionaryName: String?) :
             dicLibPath,
             writableDictionaryName
         )
-        if (!mDictionaryJP.isActive()) {
+        if (!mDictionaryJP.isActive) {
             mDictionaryJP = OpenWnnDictionaryImpl(
                 "/system/lib/libWnnJpnDic.so",
                 writableDictionaryName
@@ -134,7 +135,7 @@ class OpenWnnEngineJAJP(dicLibPath: String?, writableDictionaryName: String?) :
                 dict.setDictionary(3, 100, 244)
 
                 dict.setDictionary(
-                    WnnDictionary.Companion.INDEX_LEARN_DICTIONARY,
+                    WnnDictionary.INDEX_LEARN_DICTIONARY,
                     FREQ_LEARN,
                     FREQ_LEARN
                 )
@@ -147,17 +148,17 @@ class OpenWnnEngineJAJP(dicLibPath: String?, writableDictionaryName: String?) :
                 dict.setDictionary(3, 100, 244)
 
                 dict.setDictionary(
-                    WnnDictionary.Companion.INDEX_USER_DICTIONARY,
+                    WnnDictionary.INDEX_USER_DICTIONARY,
                     FREQ_USER,
                     FREQ_USER
                 )
                 dict.setDictionary(
-                    WnnDictionary.Companion.INDEX_LEARN_DICTIONARY,
+                    WnnDictionary.INDEX_LEARN_DICTIONARY,
                     FREQ_LEARN,
                     FREQ_LEARN
                 )
                 if (mKeyboardType != KEYBOARD_QWERTY) {
-                    dict.setApproxPattern(WnnDictionary.Companion.APPROX_PATTERN_JAJP_12KEY_NORMAL)
+                    dict.setApproxPattern(WnnDictionary.APPROX_PATTERN_JAJP_12KEY_NORMAL)
                 }
             }
         }
@@ -292,7 +293,7 @@ class OpenWnnEngineJAJP(dicLibPath: String?, writableDictionaryName: String?) :
      * @return          Length of the search key
      */
     private fun setSearchKey(text: ComposingText, maxLen: Int): Int {
-        var input = text.toString(ComposingText.Companion.LAYER1)
+        var input = text.toString(ComposingText.LAYER1)
         if (0 <= maxLen && maxLen <= input!!.length) {
             input = input.substring(0, maxLen)
             mExactMatchMode = true
@@ -307,7 +308,7 @@ class OpenWnnEngineJAJP(dicLibPath: String?, writableDictionaryName: String?) :
         }
 
         mInputHiragana = input
-        mInputRomaji = text.toString(ComposingText.Companion.LAYER0)
+        mInputRomaji = text.toString(ComposingText.LAYER0)
 
         return input.length
     }
@@ -374,22 +375,22 @@ class OpenWnnEngineJAJP(dicLibPath: String?, writableDictionaryName: String?) :
         if (len == 0) {
             /* search by previously selected word */
             return mDictionaryJP.searchWord(
-                WnnDictionary.Companion.SEARCH_LINK, WnnDictionary.Companion.ORDER_BY_FREQUENCY,
+                WnnDictionary.SEARCH_LINK, WnnDictionary.ORDER_BY_FREQUENCY,
                 mInputHiragana!!, mPreviousWord
             )
         } else {
             if (mExactMatchMode) {
                 /* exact matching */
                 mDictionaryJP.searchWord(
-                    WnnDictionary.Companion.SEARCH_EXACT,
-                    WnnDictionary.Companion.ORDER_BY_FREQUENCY,
+                    WnnDictionary.SEARCH_EXACT,
+                    WnnDictionary.ORDER_BY_FREQUENCY,
                     mInputHiragana!!
                 )
             } else {
                 /* prefix matching */
                 mDictionaryJP.searchWord(
-                    WnnDictionary.Companion.SEARCH_PREFIX,
-                    WnnDictionary.Companion.ORDER_BY_FREQUENCY,
+                    WnnDictionary.SEARCH_PREFIX,
+                    WnnDictionary.ORDER_BY_FREQUENCY,
                     mInputHiragana!!
                 )
             }
@@ -408,12 +409,12 @@ class OpenWnnEngineJAJP(dicLibPath: String?, writableDictionaryName: String?) :
 
         mDictionaryJP.setInUseState(true)
 
-        val cursor = text.getCursor(ComposingText.Companion.LAYER1)
+        val cursor = text.getCursor(ComposingText.LAYER1)
         var input: String?
         var head: WnnClause? = null
         if (cursor > 0) {
             /* convert previous part from cursor */
-            input = text.toString(ComposingText.Companion.LAYER1, 0, cursor - 1)
+            input = text.toString(ComposingText.LAYER1, 0, cursor - 1)
             val headCandidates = mClauseConverter.convert(input!!)
             if ((headCandidates == null) || (!headCandidates.hasNext())) {
                 return 0
@@ -422,13 +423,13 @@ class OpenWnnEngineJAJP(dicLibPath: String?, writableDictionaryName: String?) :
 
             /* set the rest of input string */
             input = text.toString(
-                ComposingText.Companion.LAYER1,
+                ComposingText.LAYER1,
                 cursor,
-                text.size(ComposingText.Companion.LAYER1) - 1
+                text.size(ComposingText.LAYER1) - 1
             )
         } else {
             /* set whole of input string */
-            input = text.toString(ComposingText.Companion.LAYER1)
+            input = text.toString(ComposingText.LAYER1)
         }
 
         var sentence: WnnSentence? = null
@@ -453,10 +454,10 @@ class OpenWnnEngineJAJP(dicLibPath: String?, writableDictionaryName: String?) :
             pos += len
             idx += 1
         }
-        text.setCursor(ComposingText.Companion.LAYER2, text.size(ComposingText.Companion.LAYER2))
+        text.setCursor(ComposingText.LAYER2, text.size(ComposingText.LAYER2))
         text.replaceStrSegment(
-            ComposingText.Companion.LAYER2, ss,
-            text.getCursor(ComposingText.Companion.LAYER2)
+            ComposingText.LAYER2, ss as Array<StrSegment?>,
+            text.getCursor(ComposingText.LAYER2)
         )
         mConvertSentence = sentence
 
@@ -496,7 +497,7 @@ class OpenWnnEngineJAJP(dicLibPath: String?, writableDictionaryName: String?) :
     override fun learn(word: WnnWord): Boolean {
         var ret = -1
         if (word.partOfSpeech!!.right == 0) {
-            word.partOfSpeech = mDictionaryJP.getPOS(WnnDictionary.Companion.POS_TYPE_MEISI)
+            word.partOfSpeech = mDictionaryJP.getPOS(WnnDictionary.POS_TYPE_MEISI)
         }
 
         val dict = mDictionaryJP
@@ -532,7 +533,7 @@ class OpenWnnEngineJAJP(dicLibPath: String?, writableDictionaryName: String?) :
     override fun addWord(word: WnnWord): Int {
         mDictionaryJP.setInUseState(true)
         if (word.partOfSpeech!!.right == 0) {
-            word.partOfSpeech = mDictionaryJP.getPOS(WnnDictionary.Companion.POS_TYPE_MEISI)
+            word.partOfSpeech = mDictionaryJP.getPOS(WnnDictionary.POS_TYPE_MEISI)
         }
         mDictionaryJP.addWordToUserDictionary(word)
         mDictionaryJP.setInUseState(false)
@@ -578,14 +579,14 @@ class OpenWnnEngineJAJP(dicLibPath: String?, writableDictionaryName: String?) :
      */
     override fun initializeDictionary(dictionary: Int): Boolean {
         when (dictionary) {
-            WnnEngine.Companion.DICTIONARY_TYPE_LEARN -> {
+            WnnEngine.DICTIONARY_TYPE_LEARN -> {
                 mDictionaryJP.setInUseState(true)
                 mDictionaryJP.clearLearnDictionary()
                 mDictionaryJP.setInUseState(false)
                 return true
             }
 
-            WnnEngine.Companion.DICTIONARY_TYPE_USER -> {
+            WnnEngine.DICTIONARY_TYPE_USER -> {
                 mDictionaryJP.setInUseState(true)
                 mDictionaryJP.clearUserDictionary()
                 mDictionaryJP.setInUseState(false)

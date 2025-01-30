@@ -75,17 +75,17 @@ class DefaultSoftKeyboardJAJP : DefaultSoftKeyboard() {
 
     /** Default constructor  */
     init {
-        mCurrentLanguage = DefaultSoftKeyboard.Companion.LANG_JA
-        mCurrentKeyboardType = if (OpenWnn.Companion.isXLarge()) {
-            DefaultSoftKeyboard.Companion.KEYBOARD_QWERTY
+        mCurrentLanguage = LANG_JA
+        keyboardType = if (OpenWnn.isXLarge) {
+            KEYBOARD_QWERTY
         } else {
-            DefaultSoftKeyboard.Companion.KEYBOARD_12KEY
+            KEYBOARD_12KEY
         }
-        mShiftOn = DefaultSoftKeyboard.Companion.KEYBOARD_SHIFT_OFF
-        mCurrentKeyMode = DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_HIRAGANA
+        mShiftOn = KEYBOARD_SHIFT_OFF
+        keyMode = KEYMODE_JA_FULL_HIRAGANA
     }
 
-    /** @see jp.co.omronsoft.openwnn.DefaultSoftKeyboard.createKeyboards
+    /** @see jp.co.omronsoft.openwnn.createKeyboards
      */
     override fun createKeyboards(parent: OpenWnn) {
         /* Keyboard[# of Languages][portrait/landscape][# of keyboard type][shift off/on][max # of key-modes][noinput/input] */
@@ -94,39 +94,39 @@ class DefaultSoftKeyboardJAJP : DefaultSoftKeyboard() {
 
         if (mHardKeyboardHidden) {
             /* Create the suitable keyboard object */
-            if (mDisplayMode == DefaultSoftKeyboard.Companion.PORTRAIT) {
+            if (mDisplayMode == PORTRAIT) {
                 createKeyboardsPortrait(parent)
             } else {
                 createKeyboardsLandscape(parent)
             }
 
-            if (mCurrentKeyboardType == DefaultSoftKeyboard.Companion.KEYBOARD_12KEY) {
+            if (keyboardType == KEYBOARD_12KEY) {
                 mWnn!!.onEvent(
                     OpenWnnEvent(
-                        OpenWnnEvent.Companion.CHANGE_MODE,
-                        OpenWnnJAJP.Companion.ENGINE_MODE_OPT_TYPE_12KEY
+                        OpenWnnEvent.CHANGE_MODE,
+                        OpenWnnJAJP.ENGINE_MODE_OPT_TYPE_12KEY
                     )
                 )
             } else {
                 mWnn!!.onEvent(
                     OpenWnnEvent(
-                        OpenWnnEvent.Companion.CHANGE_MODE,
-                        OpenWnnJAJP.Companion.ENGINE_MODE_OPT_TYPE_QWERTY
+                        OpenWnnEvent.CHANGE_MODE,
+                        OpenWnnJAJP.ENGINE_MODE_OPT_TYPE_QWERTY
                     )
                 )
             }
         } else if (mEnableHardware12Keyboard) {
             mWnn!!.onEvent(
                 OpenWnnEvent(
-                    OpenWnnEvent.Companion.CHANGE_MODE,
-                    OpenWnnJAJP.Companion.ENGINE_MODE_OPT_TYPE_12KEY
+                    OpenWnnEvent.CHANGE_MODE,
+                    OpenWnnJAJP.ENGINE_MODE_OPT_TYPE_12KEY
                 )
             )
         } else {
             mWnn!!.onEvent(
                 OpenWnnEvent(
-                    OpenWnnEvent.Companion.CHANGE_MODE,
-                    OpenWnnJAJP.Companion.ENGINE_MODE_OPT_TYPE_QWERTY
+                    OpenWnnEvent.CHANGE_MODE,
+                    OpenWnnJAJP.ENGINE_MODE_OPT_TYPE_QWERTY
                 )
             )
         }
@@ -138,7 +138,7 @@ class DefaultSoftKeyboardJAJP : DefaultSoftKeyboard() {
      */
     private fun commitText() {
         if (!mNoInput) {
-            mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.Companion.COMMIT_COMPOSING_TEXT))
+            mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.COMMIT_COMPOSING_TEXT))
         }
     }
 
@@ -158,7 +158,7 @@ class DefaultSoftKeyboardJAJP : DefaultSoftKeyboard() {
         if (mCapsLock) {
             mWnn!!.onEvent(
                 OpenWnnEvent(
-                    OpenWnnEvent.Companion.INPUT_SOFT_KEY,
+                    OpenWnnEvent.INPUT_SOFT_KEY,
                     KeyEvent(
                         KeyEvent.ACTION_UP,
                         KeyEvent.KEYCODE_SHIFT_LEFT
@@ -167,20 +167,20 @@ class DefaultSoftKeyboardJAJP : DefaultSoftKeyboard() {
             )
             mCapsLock = false
         }
-        mShiftOn = DefaultSoftKeyboard.Companion.KEYBOARD_SHIFT_OFF
+        mShiftOn = KEYBOARD_SHIFT_OFF
         val kbd = getModeChangeKeyboard(targetMode)
-        mCurrentKeyMode = targetMode
+        this.keyMode = targetMode
         mPrevInputKeyCode = 0
 
         var mode = OpenWnnEvent.Mode.DIRECT
 
         when (targetMode) {
-            DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_HIRAGANA -> {
+            KEYMODE_JA_FULL_HIRAGANA -> {
                 mInputType = INPUT_TYPE_TOGGLE
                 mode = OpenWnnEvent.Mode.DEFAULT
             }
 
-            DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_ALPHABET -> if (USE_ENGLISH_PREDICT) {
+            KEYMODE_JA_HALF_ALPHABET -> if (USE_ENGLISH_PREDICT) {
                 mInputType = INPUT_TYPE_TOGGLE
                 mode = OpenWnnEvent.Mode.NO_LV1_CONV
             } else {
@@ -188,31 +188,31 @@ class DefaultSoftKeyboardJAJP : DefaultSoftKeyboard() {
                 mode = OpenWnnEvent.Mode.DIRECT
             }
 
-            DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_NUMBER -> {
+            KEYMODE_JA_FULL_NUMBER -> {
                 mInputType = INPUT_TYPE_INSTANT
                 mode = OpenWnnEvent.Mode.DIRECT
                 mCurrentInstantTable = INSTANT_CHAR_CODE_FULL_NUMBER
             }
 
-            DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_NUMBER -> {
+            KEYMODE_JA_HALF_NUMBER -> {
                 mInputType = INPUT_TYPE_INSTANT
                 mode = OpenWnnEvent.Mode.DIRECT
                 mCurrentInstantTable = INSTANT_CHAR_CODE_HALF_NUMBER
             }
 
-            DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_KATAKANA -> {
+            KEYMODE_JA_FULL_KATAKANA -> {
                 mInputType = INPUT_TYPE_TOGGLE
-                mode = OpenWnnJAJP.Companion.ENGINE_MODE_FULL_KATAKANA
+                mode = OpenWnnJAJP.ENGINE_MODE_FULL_KATAKANA
             }
 
-            DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_ALPHABET -> {
+            KEYMODE_JA_FULL_ALPHABET -> {
                 mInputType = INPUT_TYPE_TOGGLE
                 mode = OpenWnnEvent.Mode.DIRECT
             }
 
-            DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_KATAKANA -> {
+            KEYMODE_JA_HALF_KATAKANA -> {
                 mInputType = INPUT_TYPE_TOGGLE
-                mode = OpenWnnJAJP.Companion.ENGINE_MODE_HALF_KATAKANA
+                mode = OpenWnnJAJP.ENGINE_MODE_HALF_KATAKANA
             }
 
             else -> {}
@@ -220,19 +220,19 @@ class DefaultSoftKeyboardJAJP : DefaultSoftKeyboard() {
 
         setStatusIcon()
         changeKeyboard(kbd)
-        mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.Companion.CHANGE_MODE, mode))
+        mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.CHANGE_MODE, mode))
     }
 
-    /** @see jp.co.omronsoft.openwnn.DefaultSoftKeyboard.initView
+    /** @see jp.co.omronsoft.openwnn.initView
      */
     override fun initView(parent: OpenWnn, width: Int, height: Int): View? {
         val view = super.initView(parent, width, height)
-        changeKeyboard(mKeyboard[mCurrentLanguage][mDisplayMode][mCurrentKeyboardType][mShiftOn][mCurrentKeyMode][0])
+        changeKeyboard(mKeyboard[mCurrentLanguage][mDisplayMode][keyboardType][mShiftOn][keyMode][0])
 
         return view
     }
 
-    /** @see jp.co.omronsoft.openwnn.DefaultSoftKeyboard.changeKeyboard
+    /** @see jp.co.omronsoft.openwnn.changeKeyboard
      */
     override fun changeKeyboard(keyboard: Keyboard?): Boolean {
         if (keyboard != null) {
@@ -256,38 +256,38 @@ class DefaultSoftKeyboardJAJP : DefaultSoftKeyboard() {
         return super.changeKeyboard(keyboard)
     }
 
-    /** @see jp.co.omronsoft.openwnn.DefaultSoftKeyboard.changeKeyboardType
+    /** @see jp.co.omronsoft.openwnn.changeKeyboardType
      */
     override fun changeKeyboardType(type: Int) {
         commitText()
         val kbd = getTypeChangeKeyboard(type)
         if (kbd != null) {
-            mCurrentKeyboardType = type
+            keyboardType = type
             mPrefEditor!!.putBoolean(
                 "opt_enable_qwerty",
-                type == DefaultSoftKeyboard.Companion.KEYBOARD_QWERTY
+                type == KEYBOARD_QWERTY
             )
             mPrefEditor!!.commit()
             changeKeyboard(kbd)
         }
-        if (type == DefaultSoftKeyboard.Companion.KEYBOARD_12KEY) {
+        if (type == KEYBOARD_12KEY) {
             mWnn!!.onEvent(
                 OpenWnnEvent(
-                    OpenWnnEvent.Companion.CHANGE_MODE,
-                    OpenWnnJAJP.Companion.ENGINE_MODE_OPT_TYPE_12KEY
+                    OpenWnnEvent.CHANGE_MODE,
+                    OpenWnnJAJP.ENGINE_MODE_OPT_TYPE_12KEY
                 )
             )
         } else {
             mWnn!!.onEvent(
                 OpenWnnEvent(
-                    OpenWnnEvent.Companion.CHANGE_MODE,
-                    OpenWnnJAJP.Companion.ENGINE_MODE_OPT_TYPE_QWERTY
+                    OpenWnnEvent.CHANGE_MODE,
+                    OpenWnnJAJP.ENGINE_MODE_OPT_TYPE_QWERTY
                 )
             )
         }
     }
 
-    /** @see jp.co.omronsoft.openwnn.DefaultSoftKeyboard.onKey
+    /** @see jp.co.omronsoft.openwnn.onKey
      */
     override fun onKey(primaryCode: Int, keyCodes: IntArray?) {
         var primaryCode = primaryCode
@@ -296,65 +296,65 @@ class DefaultSoftKeyboardJAJP : DefaultSoftKeyboard() {
         }
 
         when (primaryCode) {
-            DefaultSoftKeyboard.Companion.KEYCODE_JP12_TOGGLE_MODE, DefaultSoftKeyboard.Companion.KEYCODE_QWERTY_TOGGLE_MODE -> if (!mIsInputTypeNull) {
+            KEYCODE_JP12_TOGGLE_MODE, KEYCODE_QWERTY_TOGGLE_MODE -> if (!mIsInputTypeNull) {
                 nextKeyMode()
             }
 
-            DefaultSoftKeyboard.Companion.KEYCODE_QWERTY_BACKSPACE, DefaultSoftKeyboard.Companion.KEYCODE_JP12_BACKSPACE -> mWnn!!.onEvent(
+            KEYCODE_QWERTY_BACKSPACE, KEYCODE_JP12_BACKSPACE -> mWnn!!.onEvent(
                 OpenWnnEvent(
-                    OpenWnnEvent.Companion.INPUT_SOFT_KEY,
+                    OpenWnnEvent.INPUT_SOFT_KEY,
                     KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL)
                 )
             )
 
-            DefaultSoftKeyboard.Companion.KEYCODE_QWERTY_SHIFT -> toggleShiftLock()
-            DefaultSoftKeyboard.Companion.KEYCODE_QWERTY_ALT -> processAltKey()
-            DefaultSoftKeyboard.Companion.KEYCODE_QWERTY_ENTER, DefaultSoftKeyboard.Companion.KEYCODE_JP12_ENTER -> mWnn!!.onEvent(
+            KEYCODE_QWERTY_SHIFT -> toggleShiftLock()
+            KEYCODE_QWERTY_ALT -> processAltKey()
+            KEYCODE_QWERTY_ENTER, KEYCODE_JP12_ENTER -> mWnn!!.onEvent(
                 OpenWnnEvent(
-                    OpenWnnEvent.Companion.INPUT_SOFT_KEY,
+                    OpenWnnEvent.INPUT_SOFT_KEY,
                     KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER)
                 )
             )
 
-            DefaultSoftKeyboard.Companion.KEYCODE_JP12_REVERSE -> if (!mNoInput && !mEnableHardware12Keyboard) {
+            KEYCODE_JP12_REVERSE -> if (!mNoInput && !mEnableHardware12Keyboard) {
                 mWnn!!.onEvent(
                     OpenWnnEvent(
-                        OpenWnnEvent.Companion.TOGGLE_REVERSE_CHAR,
+                        OpenWnnEvent.TOGGLE_REVERSE_CHAR,
                         mCurrentCycleTable
                     )
                 )
             }
 
-            DefaultSoftKeyboard.Companion.KEYCODE_QWERTY_KBD -> changeKeyboardType(
-                DefaultSoftKeyboard.Companion.KEYBOARD_12KEY
+            KEYCODE_QWERTY_KBD -> changeKeyboardType(
+                KEYBOARD_12KEY
             )
 
-            DefaultSoftKeyboard.Companion.KEYCODE_JP12_KBD -> changeKeyboardType(DefaultSoftKeyboard.Companion.KEYBOARD_QWERTY)
-            DefaultSoftKeyboard.Companion.KEYCODE_JP12_EMOJI, DefaultSoftKeyboard.Companion.KEYCODE_QWERTY_EMOJI -> {
+            KEYCODE_JP12_KBD -> changeKeyboardType(KEYBOARD_QWERTY)
+            KEYCODE_JP12_EMOJI, KEYCODE_QWERTY_EMOJI -> {
                 commitText()
                 mWnn!!.onEvent(
                     OpenWnnEvent(
-                        OpenWnnEvent.Companion.CHANGE_MODE,
-                        OpenWnnJAJP.Companion.ENGINE_MODE_SYMBOL
+                        OpenWnnEvent.CHANGE_MODE,
+                        OpenWnnJAJP.ENGINE_MODE_SYMBOL
                     )
                 )
             }
 
-            DefaultSoftKeyboard.Companion.KEYCODE_JP12_1, DefaultSoftKeyboard.Companion.KEYCODE_JP12_2, DefaultSoftKeyboard.Companion.KEYCODE_JP12_3, DefaultSoftKeyboard.Companion.KEYCODE_JP12_4, DefaultSoftKeyboard.Companion.KEYCODE_JP12_5, DefaultSoftKeyboard.Companion.KEYCODE_JP12_6, DefaultSoftKeyboard.Companion.KEYCODE_JP12_7, DefaultSoftKeyboard.Companion.KEYCODE_JP12_8, DefaultSoftKeyboard.Companion.KEYCODE_JP12_9, DefaultSoftKeyboard.Companion.KEYCODE_JP12_0, DefaultSoftKeyboard.Companion.KEYCODE_JP12_SHARP ->             /* Processing to input by ten key */
+            KEYCODE_JP12_1, KEYCODE_JP12_2, KEYCODE_JP12_3, KEYCODE_JP12_4, KEYCODE_JP12_5, KEYCODE_JP12_6, KEYCODE_JP12_7, KEYCODE_JP12_8, KEYCODE_JP12_9, KEYCODE_JP12_0, KEYCODE_JP12_SHARP ->             /* Processing to input by ten key */
                 if (mInputType == INPUT_TYPE_INSTANT) {
                     /* Send a input character directly if instant input type is selected */
                     commitText()
                     mWnn!!.onEvent(
                         OpenWnnEvent(
-                            OpenWnnEvent.Companion.INPUT_CHAR,
+                            OpenWnnEvent.INPUT_CHAR,
                             mCurrentInstantTable!![getTableIndex(primaryCode)]
                         )
                     )
                 } else {
                     if ((mPrevInputKeyCode != primaryCode)) {
-                        mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.Companion.TOUCH_OTHER_KEY))
-                        if ((mCurrentKeyMode == DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_ALPHABET)
-                            && (primaryCode == DefaultSoftKeyboard.Companion.KEYCODE_JP12_SHARP)
+                        mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.TOUCH_OTHER_KEY))
+                        if ((keyMode == KEYMODE_JA_HALF_ALPHABET)
+                            && (primaryCode == KEYCODE_JP12_SHARP)
                         ) {
                             /* Commit text by symbol character (',' '.') when alphabet input mode is selected */
                             commitText()
@@ -369,7 +369,7 @@ class DefaultSoftKeyboardJAJP : DefaultSoftKeyboard() {
                         val index = getTableIndex(primaryCode)
                         mWnn!!.onEvent(
                             OpenWnnEvent(
-                                OpenWnnEvent.Companion.TOGGLE_CHAR,
+                                OpenWnnEvent.TOGGLE_CHAR,
                                 cycleTable[index]
                             )
                         )
@@ -378,11 +378,11 @@ class DefaultSoftKeyboardJAJP : DefaultSoftKeyboard() {
                     mPrevInputKeyCode = primaryCode
                 }
 
-            DefaultSoftKeyboard.Companion.KEYCODE_JP12_ASTER -> if (mInputType == INPUT_TYPE_INSTANT) {
+            KEYCODE_JP12_ASTER -> if (mInputType == INPUT_TYPE_INSTANT) {
                 commitText()
                 mWnn!!.onEvent(
                     OpenWnnEvent(
-                        OpenWnnEvent.Companion.INPUT_CHAR,
+                        OpenWnnEvent.INPUT_CHAR,
                         mCurrentInstantTable!![getTableIndex(primaryCode)]
                     )
                 )
@@ -395,7 +395,7 @@ class DefaultSoftKeyboardJAJP : DefaultSoftKeyboard() {
                     } else {
                         mWnn!!.onEvent(
                             OpenWnnEvent(
-                                OpenWnnEvent.Companion.REPLACE_CHAR,
+                                OpenWnnEvent.REPLACE_CHAR,
                                 replaceTable
                             )
                         )
@@ -405,26 +405,26 @@ class DefaultSoftKeyboardJAJP : DefaultSoftKeyboard() {
             }
 
             KEYCODE_SWITCH_FULL_HIRAGANA ->             /* Change mode to Full width hiragana */
-                changeKeyMode(DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_HIRAGANA)
+                changeKeyMode(KEYMODE_JA_FULL_HIRAGANA)
 
             KEYCODE_SWITCH_FULL_KATAKANA ->             /* Change mode to Full width katakana */
-                changeKeyMode(DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_KATAKANA)
+                changeKeyMode(KEYMODE_JA_FULL_KATAKANA)
 
             KEYCODE_SWITCH_FULL_ALPHABET ->             /* Change mode to Full width alphabet */
-                changeKeyMode(DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_ALPHABET)
+                changeKeyMode(KEYMODE_JA_FULL_ALPHABET)
 
             KEYCODE_SWITCH_FULL_NUMBER ->             /* Change mode to Full width numeric */
-                changeKeyMode(DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_NUMBER)
+                changeKeyMode(KEYMODE_JA_FULL_NUMBER)
 
             KEYCODE_SWITCH_HALF_KATAKANA ->             /* Change mode to Half width katakana */
-                changeKeyMode(DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_KATAKANA)
+                changeKeyMode(KEYMODE_JA_HALF_KATAKANA)
 
             KEYCODE_SWITCH_HALF_ALPHABET ->
                 /* Change mode to Half width alphabet */
-                changeKeyMode(DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_ALPHABET)
+                changeKeyMode(KEYMODE_JA_HALF_ALPHABET)
 
             KEYCODE_SWITCH_HALF_NUMBER ->             /* Change mode to Half width numeric */
-                changeKeyMode(DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_NUMBER)
+                changeKeyMode(KEYMODE_JA_HALF_NUMBER)
 
             KEYCODE_SELECT_CASE -> {
                 val shifted = if ((mShiftOn == 0)) 1 else 0
@@ -435,29 +435,29 @@ class DefaultSoftKeyboardJAJP : DefaultSoftKeyboard() {
                 }
             }
 
-            DefaultSoftKeyboard.Companion.KEYCODE_JP12_SPACE -> if ((mCurrentKeyMode == DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_HIRAGANA) && !mNoInput) {
-                mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.Companion.CONVERT))
+            KEYCODE_JP12_SPACE -> if ((keyMode == KEYMODE_JA_FULL_HIRAGANA) && !mNoInput) {
+                mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.CONVERT))
             } else {
-                mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.Companion.INPUT_CHAR, ' '))
+                mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.INPUT_CHAR, ' '))
             }
 
             KEYCODE_EISU_KANA -> mWnn!!.onEvent(
                 OpenWnnEvent(
-                    OpenWnnEvent.Companion.CHANGE_MODE,
-                    OpenWnnJAJP.Companion.ENGINE_MODE_EISU_KANA
+                    OpenWnnEvent.CHANGE_MODE,
+                    OpenWnnJAJP.ENGINE_MODE_EISU_KANA
                 )
             )
 
-            DefaultSoftKeyboard.Companion.KEYCODE_JP12_CLOSE -> mWnn!!.onEvent(
+            KEYCODE_JP12_CLOSE -> mWnn!!.onEvent(
                 OpenWnnEvent(
-                    OpenWnnEvent.Companion.INPUT_KEY,
+                    OpenWnnEvent.INPUT_KEY,
                     KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_BACK)
                 )
             )
 
-            DefaultSoftKeyboard.Companion.KEYCODE_JP12_LEFT -> mWnn!!.onEvent(
+            KEYCODE_JP12_LEFT -> mWnn!!.onEvent(
                 OpenWnnEvent(
-                    OpenWnnEvent.Companion.INPUT_SOFT_KEY,
+                    OpenWnnEvent.INPUT_SOFT_KEY,
                     KeyEvent(
                         KeyEvent.ACTION_DOWN,
                         KeyEvent.KEYCODE_DPAD_LEFT
@@ -465,9 +465,9 @@ class DefaultSoftKeyboardJAJP : DefaultSoftKeyboard() {
                 )
             )
 
-            DefaultSoftKeyboard.Companion.KEYCODE_JP12_RIGHT -> mWnn!!.onEvent(
+            KEYCODE_JP12_RIGHT -> mWnn!!.onEvent(
                 OpenWnnEvent(
-                    OpenWnnEvent.Companion.INPUT_SOFT_KEY,
+                    OpenWnnEvent.INPUT_SOFT_KEY,
                     KeyEvent(
                         KeyEvent.ACTION_DOWN,
                         KeyEvent.KEYCODE_DPAD_RIGHT
@@ -478,11 +478,11 @@ class DefaultSoftKeyboardJAJP : DefaultSoftKeyboard() {
             KEYCODE_NOP -> {}
             else -> if (primaryCode >= 0) {
                 if (mKeyboardView!!.isShifted) {
-                    primaryCode = primaryCode.uppercaseChar()
+                    primaryCode = primaryCode.toChar().uppercaseChar().code
                 }
                 mWnn!!.onEvent(
                     OpenWnnEvent(
-                        OpenWnnEvent.Companion.INPUT_CHAR,
+                        OpenWnnEvent.INPUT_CHAR,
                         primaryCode.toChar()
                     )
                 )
@@ -490,23 +490,23 @@ class DefaultSoftKeyboardJAJP : DefaultSoftKeyboard() {
         }
 
         /* update shift key's state */
-        if (!mCapsLock && (primaryCode != DefaultSoftKeyboard.Companion.KEYCODE_QWERTY_SHIFT)) {
+        if (!mCapsLock && (primaryCode != KEYCODE_QWERTY_SHIFT)) {
             setShiftByEditorInfo()
         }
     }
 
-    /** @see jp.co.omronsoft.openwnn.DefaultSoftKeyboard.setPreferences
+    /** @see jp.co.omronsoft.openwnn.setPreferences
      */
     override fun setPreferences(pref: SharedPreferences, editor: EditorInfo) {
         mPrefEditor = pref.edit()
-        val isQwerty = if (OpenWnn.Companion.isXLarge()) {
+        val isQwerty = if (OpenWnn.isXLarge) {
             pref.getBoolean("opt_enable_qwerty", true)
         } else {
             pref.getBoolean("opt_enable_qwerty", false)
         }
 
-        if (isQwerty && (mCurrentKeyboardType == DefaultSoftKeyboard.Companion.KEYBOARD_12KEY)) {
-            changeKeyboardType(DefaultSoftKeyboard.Companion.KEYBOARD_QWERTY)
+        if (isQwerty && (keyboardType == KEYBOARD_12KEY)) {
+            changeKeyboardType(KEYBOARD_QWERTY)
         }
 
         super.setPreferences(pref, editor)
@@ -541,25 +541,25 @@ class DefaultSoftKeyboardJAJP : DefaultSoftKeyboard() {
 
         when (inputType and EditorInfo.TYPE_MASK_CLASS) {
             EditorInfo.TYPE_CLASS_NUMBER, EditorInfo.TYPE_CLASS_DATETIME -> mPreferenceKeyMode =
-                DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_NUMBER
+                KEYMODE_JA_HALF_NUMBER
 
             EditorInfo.TYPE_CLASS_PHONE -> mLimitedKeyMode = if (mHardKeyboardHidden) {
-                intArrayOf(DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_PHONE)
+                intArrayOf(KEYMODE_JA_HALF_PHONE)
             } else if (mEnableHardware12Keyboard) {
-                intArrayOf(DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_NUMBER)
+                intArrayOf(KEYMODE_JA_HALF_NUMBER)
             } else {
-                intArrayOf(DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_ALPHABET)
+                intArrayOf(KEYMODE_JA_HALF_ALPHABET)
             }
 
             EditorInfo.TYPE_CLASS_TEXT -> when (inputType and EditorInfo.TYPE_MASK_VARIATION) {
                 EditorInfo.TYPE_TEXT_VARIATION_PASSWORD, EditorInfo.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD -> mLimitedKeyMode =
                     intArrayOf(
-                        DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_ALPHABET,
-                        DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_NUMBER
+                        KEYMODE_JA_HALF_ALPHABET,
+                        KEYMODE_JA_HALF_NUMBER
                     )
 
                 EditorInfo.TYPE_TEXT_VARIATION_EMAIL_ADDRESS, EditorInfo.TYPE_TEXT_VARIATION_URI -> mPreferenceKeyMode =
-                    DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_ALPHABET
+                    KEYMODE_JA_HALF_ALPHABET
 
                 else -> {}
             }
@@ -576,7 +576,7 @@ class DefaultSoftKeyboardJAJP : DefaultSoftKeyboard() {
         setShiftByEditorInfo()
     }
 
-    /** @see jp.co.omronsoft.openwnn.DefaultSoftKeyboard.onUpdateState
+    /** @see jp.co.omronsoft.openwnn.onUpdateState
      */
     override fun onUpdateState(parent: OpenWnn) {
         super.onUpdateState(parent)
@@ -590,7 +590,7 @@ class DefaultSoftKeyboardJAJP : DefaultSoftKeyboard() {
      */
     fun setDefaultKeyboard() {
         val locale = Locale.getDefault()
-        var keymode: Int = DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_HIRAGANA
+        var keymode: Int = KEYMODE_JA_FULL_HIRAGANA
 
         if (mPreferenceKeyMode != INVALID_KEYMODE) {
             keymode = mPreferenceKeyMode
@@ -598,7 +598,7 @@ class DefaultSoftKeyboardJAJP : DefaultSoftKeyboard() {
             keymode = mLimitedKeyMode!![0]
         } else {
             if (locale.language != Locale.JAPANESE.language) {
-                keymode = DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_ALPHABET
+                keymode = KEYMODE_JA_HALF_ALPHABET
             }
         }
         changeKeyMode(keymode)
@@ -614,7 +614,7 @@ class DefaultSoftKeyboardJAJP : DefaultSoftKeyboard() {
         var index: Int
         index = 0
         while (index < JP_MODE_CYCLE_TABLE.size) {
-            if (JP_MODE_CYCLE_TABLE[index] == mCurrentKeyMode) {
+            if (JP_MODE_CYCLE_TABLE[index] == keyMode) {
                 found = true
                 break
             }
@@ -650,126 +650,118 @@ class DefaultSoftKeyboardJAJP : DefaultSoftKeyboard() {
      */
     private fun createKeyboardsPortrait(parent: OpenWnn) {
         var keyList: Array<Array<Keyboard?>>
-        if (OpenWnn.Companion.isXLarge()) {
+        if (OpenWnn.isXLarge) {
             /* qwerty shift_off (portrait) */
             keyList =
-                mKeyboard[DefaultSoftKeyboard.Companion.LANG_JA][DefaultSoftKeyboard.Companion.PORTRAIT][DefaultSoftKeyboard.Companion.KEYBOARD_QWERTY][DefaultSoftKeyboard.Companion.KEYBOARD_SHIFT_OFF]
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_HIRAGANA][0] =
+                mKeyboard[LANG_JA][PORTRAIT][KEYBOARD_QWERTY][KEYBOARD_SHIFT_OFF]
+            keyList[KEYMODE_JA_FULL_HIRAGANA][0] =
                 Keyboard(parent, R.xml.keyboard_qwerty_jp)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_NUMBER][0] =
+            keyList[KEYMODE_JA_FULL_NUMBER][0] =
                 Keyboard(parent, R.xml.keyboard_qwerty_jp_full_symbols)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_ALPHABET][0] =
+            keyList[KEYMODE_JA_HALF_ALPHABET][0] =
                 Keyboard(parent, R.xml.keyboard_qwerty_jp_half_alphabet)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_NUMBER][0] =
+            keyList[KEYMODE_JA_HALF_NUMBER][0] =
                 Keyboard(parent, R.xml.keyboard_qwerty_jp_half_symbols)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_PHONE][0] =
+            keyList[KEYMODE_JA_HALF_PHONE][0] =
                 Keyboard(parent, R.xml.keyboard_12key_phone)
 
             /* qwerty shift_on (portrait) */
             keyList =
-                mKeyboard[DefaultSoftKeyboard.Companion.LANG_JA][DefaultSoftKeyboard.Companion.PORTRAIT][DefaultSoftKeyboard.Companion.KEYBOARD_QWERTY][DefaultSoftKeyboard.Companion.KEYBOARD_SHIFT_ON]
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_HIRAGANA][0] =
+                mKeyboard[LANG_JA][PORTRAIT][KEYBOARD_QWERTY][KEYBOARD_SHIFT_ON]
+            keyList[KEYMODE_JA_FULL_HIRAGANA][0] =
                 Keyboard(parent, R.xml.keyboard_qwerty_jp_shift)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_NUMBER][0] =
+            keyList[KEYMODE_JA_FULL_NUMBER][0] =
                 Keyboard(parent, R.xml.keyboard_qwerty_jp_full_symbols_shift)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_ALPHABET][0] =
+            keyList[KEYMODE_JA_HALF_ALPHABET][0] =
                 Keyboard(parent, R.xml.keyboard_qwerty_jp_half_alphabet_shift)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_NUMBER][0] =
+            keyList[KEYMODE_JA_HALF_NUMBER][0] =
                 Keyboard(parent, R.xml.keyboard_qwerty_jp_half_symbols_shift)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_PHONE][0] =
-                mKeyboard[DefaultSoftKeyboard.Companion.LANG_JA][DefaultSoftKeyboard.Companion.PORTRAIT][DefaultSoftKeyboard.Companion.KEYBOARD_QWERTY][DefaultSoftKeyboard.Companion.KEYBOARD_SHIFT_OFF][DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_PHONE][0]
+            keyList[KEYMODE_JA_HALF_PHONE][0] =
+                mKeyboard[LANG_JA][PORTRAIT][KEYBOARD_QWERTY][KEYBOARD_SHIFT_OFF][KEYMODE_JA_HALF_PHONE][0]
         } else {
             /* qwerty shift_off (portrait) */
             keyList =
-                mKeyboard[DefaultSoftKeyboard.Companion.LANG_JA][DefaultSoftKeyboard.Companion.PORTRAIT][DefaultSoftKeyboard.Companion.KEYBOARD_QWERTY][DefaultSoftKeyboard.Companion.KEYBOARD_SHIFT_OFF]
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_HIRAGANA][0] =
+                mKeyboard[LANG_JA][PORTRAIT][KEYBOARD_QWERTY][KEYBOARD_SHIFT_OFF]
+            keyList[KEYMODE_JA_FULL_HIRAGANA][0] =
                 Keyboard(parent, R.xml.keyboard_qwerty_jp)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_ALPHABET][0] =
+            keyList[KEYMODE_JA_FULL_ALPHABET][0] =
                 Keyboard(parent, R.xml.keyboard_qwerty_jp_full_alphabet)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_NUMBER][0] =
+            keyList[KEYMODE_JA_FULL_NUMBER][0] =
                 Keyboard(parent, R.xml.keyboard_qwerty_jp_full_symbols)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_KATAKANA][0] =
+            keyList[KEYMODE_JA_FULL_KATAKANA][0] =
                 Keyboard(parent, R.xml.keyboard_qwerty_jp_full_katakana)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_ALPHABET][0] =
+            keyList[KEYMODE_JA_HALF_ALPHABET][0] =
                 Keyboard(parent, R.xml.keyboard_qwerty_jp_half_alphabet)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_NUMBER][0] =
+            keyList[KEYMODE_JA_HALF_NUMBER][0] =
                 Keyboard(parent, R.xml.keyboard_qwerty_jp_half_symbols)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_KATAKANA][0] =
+            keyList[KEYMODE_JA_HALF_KATAKANA][0] =
                 Keyboard(parent, R.xml.keyboard_qwerty_jp_half_katakana)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_PHONE][0] =
+            keyList[KEYMODE_JA_HALF_PHONE][0] =
                 Keyboard(parent, R.xml.keyboard_12key_phone)
 
             /* qwerty shift_on (portrait) */
             keyList =
-                mKeyboard[DefaultSoftKeyboard.Companion.LANG_JA][DefaultSoftKeyboard.Companion.PORTRAIT][DefaultSoftKeyboard.Companion.KEYBOARD_QWERTY][DefaultSoftKeyboard.Companion.KEYBOARD_SHIFT_ON]
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_HIRAGANA][0] =
+                mKeyboard[LANG_JA][PORTRAIT][KEYBOARD_QWERTY][KEYBOARD_SHIFT_ON]
+            keyList[KEYMODE_JA_FULL_HIRAGANA][0] =
                 Keyboard(parent, R.xml.keyboard_qwerty_jp_shift)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_ALPHABET][0] =
+            keyList[KEYMODE_JA_FULL_ALPHABET][0] =
                 Keyboard(parent, R.xml.keyboard_qwerty_jp_full_alphabet_shift)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_NUMBER][0] =
+            keyList[KEYMODE_JA_FULL_NUMBER][0] =
                 Keyboard(parent, R.xml.keyboard_qwerty_jp_full_symbols_shift)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_KATAKANA][0] =
+            keyList[KEYMODE_JA_FULL_KATAKANA][0] =
                 Keyboard(parent, R.xml.keyboard_qwerty_jp_full_katakana_shift)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_ALPHABET][0] =
+            keyList[KEYMODE_JA_HALF_ALPHABET][0] =
                 Keyboard(parent, R.xml.keyboard_qwerty_jp_half_alphabet_shift)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_NUMBER][0] =
+            keyList[KEYMODE_JA_HALF_NUMBER][0] =
                 Keyboard(parent, R.xml.keyboard_qwerty_jp_half_symbols_shift)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_KATAKANA][0] =
+            keyList[KEYMODE_JA_HALF_KATAKANA][0] =
                 Keyboard(parent, R.xml.keyboard_qwerty_jp_half_katakana_shift)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_PHONE][0] =
-                mKeyboard[DefaultSoftKeyboard.Companion.LANG_JA][DefaultSoftKeyboard.Companion.PORTRAIT][DefaultSoftKeyboard.Companion.KEYBOARD_QWERTY][DefaultSoftKeyboard.Companion.KEYBOARD_SHIFT_OFF][DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_PHONE][0]
+            keyList[KEYMODE_JA_HALF_PHONE][0] =
+                mKeyboard[LANG_JA][PORTRAIT][KEYBOARD_QWERTY][KEYBOARD_SHIFT_OFF][KEYMODE_JA_HALF_PHONE][0]
 
 
             /* 12-keys shift_off (portrait) */
             keyList =
-                mKeyboard[DefaultSoftKeyboard.Companion.LANG_JA][DefaultSoftKeyboard.Companion.PORTRAIT][DefaultSoftKeyboard.Companion.KEYBOARD_12KEY][DefaultSoftKeyboard.Companion.KEYBOARD_SHIFT_OFF]
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_HIRAGANA][0] =
+                mKeyboard[LANG_JA][PORTRAIT][KEYBOARD_12KEY][KEYBOARD_SHIFT_OFF]
+            keyList[KEYMODE_JA_FULL_HIRAGANA][0] =
                 Keyboard(parent, R.xml.keyboard_12keyjp)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_HIRAGANA][1] =
+            keyList[KEYMODE_JA_FULL_HIRAGANA][1] =
                 Keyboard(parent, R.xml.keyboard_12keyjp_input)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_ALPHABET][0] =
+            keyList[KEYMODE_JA_FULL_ALPHABET][0] =
                 Keyboard(parent, R.xml.keyboard_12key_full_alphabet)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_ALPHABET][1] =
+            keyList[KEYMODE_JA_FULL_ALPHABET][1] =
                 Keyboard(parent, R.xml.keyboard_12key_full_alphabet_input)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_NUMBER][0] =
+            keyList[KEYMODE_JA_FULL_NUMBER][0] =
                 Keyboard(parent, R.xml.keyboard_12key_full_num)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_KATAKANA][0] =
+            keyList[KEYMODE_JA_FULL_KATAKANA][0] =
                 Keyboard(parent, R.xml.keyboard_12key_full_katakana)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_KATAKANA][1] =
+            keyList[KEYMODE_JA_FULL_KATAKANA][1] =
                 Keyboard(parent, R.xml.keyboard_12key_full_katakana_input)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_ALPHABET][0] =
+            keyList[KEYMODE_JA_HALF_ALPHABET][0] =
                 Keyboard(parent, R.xml.keyboard_12key_half_alphabet)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_ALPHABET][1] =
+            keyList[KEYMODE_JA_HALF_ALPHABET][1] =
                 Keyboard(parent, R.xml.keyboard_12key_half_alphabet_input)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_NUMBER][0] =
+            keyList[KEYMODE_JA_HALF_NUMBER][0] =
                 Keyboard(parent, R.xml.keyboard_12key_half_num)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_KATAKANA][0] =
+            keyList[KEYMODE_JA_HALF_KATAKANA][0] =
                 Keyboard(parent, R.xml.keyboard_12key_half_katakana)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_KATAKANA][1] =
+            keyList[KEYMODE_JA_HALF_KATAKANA][1] =
                 Keyboard(parent, R.xml.keyboard_12key_half_katakana_input)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_PHONE][0] =
+            keyList[KEYMODE_JA_HALF_PHONE][0] =
                 Keyboard(parent, R.xml.keyboard_12key_phone)
 
             /* 12-keys shift_on (portrait) */
             keyList =
-                mKeyboard[DefaultSoftKeyboard.Companion.LANG_JA][DefaultSoftKeyboard.Companion.PORTRAIT][DefaultSoftKeyboard.Companion.KEYBOARD_12KEY][DefaultSoftKeyboard.Companion.KEYBOARD_SHIFT_ON]
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_HIRAGANA]
-            = mKeyboard[DefaultSoftKeyboard.Companion.LANG_JA][DefaultSoftKeyboard.Companion.PORTRAIT][DefaultSoftKeyboard.Companion.KEYBOARD_12KEY][DefaultSoftKeyboard.Companion.KEYBOARD_SHIFT_OFF][DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_HIRAGANA]
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_ALPHABET]
-            = mKeyboard[DefaultSoftKeyboard.Companion.LANG_JA][DefaultSoftKeyboard.Companion.PORTRAIT][DefaultSoftKeyboard.Companion.KEYBOARD_12KEY][DefaultSoftKeyboard.Companion.KEYBOARD_SHIFT_OFF][DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_ALPHABET]
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_NUMBER]
-            = mKeyboard[DefaultSoftKeyboard.Companion.LANG_JA][DefaultSoftKeyboard.Companion.PORTRAIT][DefaultSoftKeyboard.Companion.KEYBOARD_12KEY][DefaultSoftKeyboard.Companion.KEYBOARD_SHIFT_OFF][DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_NUMBER]
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_KATAKANA]
-            = mKeyboard[DefaultSoftKeyboard.Companion.LANG_JA][DefaultSoftKeyboard.Companion.PORTRAIT][DefaultSoftKeyboard.Companion.KEYBOARD_12KEY][DefaultSoftKeyboard.Companion.KEYBOARD_SHIFT_OFF][DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_KATAKANA]
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_ALPHABET]
-            = mKeyboard[DefaultSoftKeyboard.Companion.LANG_JA][DefaultSoftKeyboard.Companion.PORTRAIT][DefaultSoftKeyboard.Companion.KEYBOARD_12KEY][DefaultSoftKeyboard.Companion.KEYBOARD_SHIFT_OFF][DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_ALPHABET]
+                mKeyboard[LANG_JA][PORTRAIT][KEYBOARD_12KEY][KEYBOARD_SHIFT_ON]
+            keyList[KEYMODE_JA_FULL_HIRAGANA] = mKeyboard[LANG_JA][PORTRAIT][KEYBOARD_12KEY][KEYBOARD_SHIFT_OFF][KEYMODE_JA_FULL_HIRAGANA]
+            keyList[KEYMODE_JA_FULL_ALPHABET] = mKeyboard[LANG_JA][PORTRAIT][KEYBOARD_12KEY][KEYBOARD_SHIFT_OFF][KEYMODE_JA_FULL_ALPHABET]
+            keyList[KEYMODE_JA_FULL_NUMBER] = mKeyboard[LANG_JA][PORTRAIT][KEYBOARD_12KEY][KEYBOARD_SHIFT_OFF][KEYMODE_JA_FULL_NUMBER]
+            keyList[KEYMODE_JA_FULL_KATAKANA] = mKeyboard[LANG_JA][PORTRAIT][KEYBOARD_12KEY][KEYBOARD_SHIFT_OFF][KEYMODE_JA_FULL_KATAKANA]
+            keyList[KEYMODE_JA_HALF_ALPHABET] = mKeyboard[LANG_JA][PORTRAIT][KEYBOARD_12KEY][KEYBOARD_SHIFT_OFF][KEYMODE_JA_HALF_ALPHABET]
 
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_NUMBER]
-            = mKeyboard[DefaultSoftKeyboard.Companion.LANG_JA][DefaultSoftKeyboard.Companion.PORTRAIT][DefaultSoftKeyboard.Companion.KEYBOARD_12KEY][DefaultSoftKeyboard.Companion.KEYBOARD_SHIFT_OFF][DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_NUMBER]
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_KATAKANA]
-            = mKeyboard[DefaultSoftKeyboard.Companion.LANG_JA][DefaultSoftKeyboard.Companion.PORTRAIT][DefaultSoftKeyboard.Companion.KEYBOARD_12KEY][DefaultSoftKeyboard.Companion.KEYBOARD_SHIFT_OFF][DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_KATAKANA]
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_PHONE]
-            = mKeyboard[DefaultSoftKeyboard.Companion.LANG_JA][DefaultSoftKeyboard.Companion.PORTRAIT][DefaultSoftKeyboard.Companion.KEYBOARD_12KEY][DefaultSoftKeyboard.Companion.KEYBOARD_SHIFT_OFF][DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_PHONE]
+            keyList[KEYMODE_JA_HALF_NUMBER] = mKeyboard[LANG_JA][PORTRAIT][KEYBOARD_12KEY][KEYBOARD_SHIFT_OFF][KEYMODE_JA_HALF_NUMBER]
+            keyList[KEYMODE_JA_HALF_KATAKANA] = mKeyboard[LANG_JA][PORTRAIT][KEYBOARD_12KEY][KEYBOARD_SHIFT_OFF][KEYMODE_JA_HALF_KATAKANA]
+            keyList[KEYMODE_JA_HALF_PHONE] = mKeyboard[LANG_JA][PORTRAIT][KEYBOARD_12KEY][KEYBOARD_SHIFT_OFF][KEYMODE_JA_HALF_PHONE]
         }
     }
 
@@ -780,126 +772,118 @@ class DefaultSoftKeyboardJAJP : DefaultSoftKeyboard() {
      */
     private fun createKeyboardsLandscape(parent: OpenWnn) {
         var keyList: Array<Array<Keyboard?>>
-        if (OpenWnn.Companion.isXLarge()) {
+        if (OpenWnn.isXLarge) {
             /* qwerty shift_off (landscape) */
             keyList =
-                mKeyboard[DefaultSoftKeyboard.Companion.LANG_JA][DefaultSoftKeyboard.Companion.LANDSCAPE][DefaultSoftKeyboard.Companion.KEYBOARD_QWERTY][DefaultSoftKeyboard.Companion.KEYBOARD_SHIFT_OFF]
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_HIRAGANA][0] =
+                mKeyboard[LANG_JA][LANDSCAPE][KEYBOARD_QWERTY][KEYBOARD_SHIFT_OFF]
+            keyList[KEYMODE_JA_FULL_HIRAGANA][0] =
                 Keyboard(parent, R.xml.keyboard_qwerty_jp)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_NUMBER][0] =
+            keyList[KEYMODE_JA_FULL_NUMBER][0] =
                 Keyboard(parent, R.xml.keyboard_qwerty_jp_full_symbols)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_ALPHABET][0] =
+            keyList[KEYMODE_JA_HALF_ALPHABET][0] =
                 Keyboard(parent, R.xml.keyboard_qwerty_jp_half_alphabet)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_NUMBER][0] =
+            keyList[KEYMODE_JA_HALF_NUMBER][0] =
                 Keyboard(parent, R.xml.keyboard_qwerty_jp_half_symbols)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_PHONE][0] =
+            keyList[KEYMODE_JA_HALF_PHONE][0] =
                 Keyboard(parent, R.xml.keyboard_12key_phone)
 
             /* qwerty shift_on (landscape) */
             keyList =
-                mKeyboard[DefaultSoftKeyboard.Companion.LANG_JA][DefaultSoftKeyboard.Companion.LANDSCAPE][DefaultSoftKeyboard.Companion.KEYBOARD_QWERTY][DefaultSoftKeyboard.Companion.KEYBOARD_SHIFT_ON]
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_HIRAGANA][0] =
+                mKeyboard[LANG_JA][LANDSCAPE][KEYBOARD_QWERTY][KEYBOARD_SHIFT_ON]
+            keyList[KEYMODE_JA_FULL_HIRAGANA][0] =
                 Keyboard(parent, R.xml.keyboard_qwerty_jp_shift)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_NUMBER][0] =
+            keyList[KEYMODE_JA_FULL_NUMBER][0] =
                 Keyboard(parent, R.xml.keyboard_qwerty_jp_full_symbols_shift)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_ALPHABET][0] =
+            keyList[KEYMODE_JA_HALF_ALPHABET][0] =
                 Keyboard(parent, R.xml.keyboard_qwerty_jp_half_alphabet_shift)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_NUMBER][0] =
+            keyList[KEYMODE_JA_HALF_NUMBER][0] =
                 Keyboard(parent, R.xml.keyboard_qwerty_jp_half_symbols_shift)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_PHONE][0] =
-                mKeyboard[DefaultSoftKeyboard.Companion.LANG_JA][DefaultSoftKeyboard.Companion.LANDSCAPE][DefaultSoftKeyboard.Companion.KEYBOARD_QWERTY][DefaultSoftKeyboard.Companion.KEYBOARD_SHIFT_OFF][DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_PHONE][0]
+            keyList[KEYMODE_JA_HALF_PHONE][0] =
+                mKeyboard[LANG_JA][LANDSCAPE][KEYBOARD_QWERTY][KEYBOARD_SHIFT_OFF][KEYMODE_JA_HALF_PHONE][0]
         } else {
             /* qwerty shift_off (landscape) */
             keyList =
-                mKeyboard[DefaultSoftKeyboard.Companion.LANG_JA][DefaultSoftKeyboard.Companion.LANDSCAPE][DefaultSoftKeyboard.Companion.KEYBOARD_QWERTY][DefaultSoftKeyboard.Companion.KEYBOARD_SHIFT_OFF]
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_HIRAGANA][0] =
+                mKeyboard[LANG_JA][LANDSCAPE][KEYBOARD_QWERTY][KEYBOARD_SHIFT_OFF]
+            keyList[KEYMODE_JA_FULL_HIRAGANA][0] =
                 Keyboard(parent, R.xml.keyboard_qwerty_jp)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_ALPHABET][0] =
+            keyList[KEYMODE_JA_FULL_ALPHABET][0] =
                 Keyboard(parent, R.xml.keyboard_qwerty_jp_full_alphabet)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_NUMBER][0] =
+            keyList[KEYMODE_JA_FULL_NUMBER][0] =
                 Keyboard(parent, R.xml.keyboard_qwerty_jp_full_symbols)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_KATAKANA][0] =
+            keyList[KEYMODE_JA_FULL_KATAKANA][0] =
                 Keyboard(parent, R.xml.keyboard_qwerty_jp_full_katakana)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_ALPHABET][0] =
+            keyList[KEYMODE_JA_HALF_ALPHABET][0] =
                 Keyboard(parent, R.xml.keyboard_qwerty_jp_half_alphabet)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_NUMBER][0] =
+            keyList[KEYMODE_JA_HALF_NUMBER][0] =
                 Keyboard(parent, R.xml.keyboard_qwerty_jp_half_symbols)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_KATAKANA][0] =
+            keyList[KEYMODE_JA_HALF_KATAKANA][0] =
                 Keyboard(parent, R.xml.keyboard_qwerty_jp_half_katakana)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_PHONE][0] =
+            keyList[KEYMODE_JA_HALF_PHONE][0] =
                 Keyboard(parent, R.xml.keyboard_12key_phone)
 
             /* qwerty shift_on (landscape) */
             keyList =
-                mKeyboard[DefaultSoftKeyboard.Companion.LANG_JA][DefaultSoftKeyboard.Companion.LANDSCAPE][DefaultSoftKeyboard.Companion.KEYBOARD_QWERTY][DefaultSoftKeyboard.Companion.KEYBOARD_SHIFT_ON]
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_HIRAGANA][0] =
+                mKeyboard[LANG_JA][LANDSCAPE][KEYBOARD_QWERTY][KEYBOARD_SHIFT_ON]
+            keyList[KEYMODE_JA_FULL_HIRAGANA][0] =
                 Keyboard(parent, R.xml.keyboard_qwerty_jp_shift)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_ALPHABET][0] =
+            keyList[KEYMODE_JA_FULL_ALPHABET][0] =
                 Keyboard(parent, R.xml.keyboard_qwerty_jp_full_alphabet_shift)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_NUMBER][0] =
+            keyList[KEYMODE_JA_FULL_NUMBER][0] =
                 Keyboard(parent, R.xml.keyboard_qwerty_jp_full_symbols_shift)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_KATAKANA][0] =
+            keyList[KEYMODE_JA_FULL_KATAKANA][0] =
                 Keyboard(parent, R.xml.keyboard_qwerty_jp_full_katakana_shift)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_ALPHABET][0] =
+            keyList[KEYMODE_JA_HALF_ALPHABET][0] =
                 Keyboard(parent, R.xml.keyboard_qwerty_jp_half_alphabet_shift)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_NUMBER][0] =
+            keyList[KEYMODE_JA_HALF_NUMBER][0] =
                 Keyboard(parent, R.xml.keyboard_qwerty_jp_half_symbols_shift)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_KATAKANA][0] =
+            keyList[KEYMODE_JA_HALF_KATAKANA][0] =
                 Keyboard(parent, R.xml.keyboard_qwerty_jp_half_katakana_shift)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_PHONE][0] =
-                mKeyboard[DefaultSoftKeyboard.Companion.LANG_JA][DefaultSoftKeyboard.Companion.LANDSCAPE][DefaultSoftKeyboard.Companion.KEYBOARD_QWERTY][DefaultSoftKeyboard.Companion.KEYBOARD_SHIFT_OFF][DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_PHONE][0]
+            keyList[KEYMODE_JA_HALF_PHONE][0] =
+                mKeyboard[LANG_JA][LANDSCAPE][KEYBOARD_QWERTY][KEYBOARD_SHIFT_OFF][KEYMODE_JA_HALF_PHONE][0]
 
 
             /* 12-keys shift_off (landscape) */
             keyList =
-                mKeyboard[DefaultSoftKeyboard.Companion.LANG_JA][DefaultSoftKeyboard.Companion.LANDSCAPE][DefaultSoftKeyboard.Companion.KEYBOARD_12KEY][DefaultSoftKeyboard.Companion.KEYBOARD_SHIFT_OFF]
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_HIRAGANA][0] =
+                mKeyboard[LANG_JA][LANDSCAPE][KEYBOARD_12KEY][KEYBOARD_SHIFT_OFF]
+            keyList[KEYMODE_JA_FULL_HIRAGANA][0] =
                 Keyboard(parent, R.xml.keyboard_12keyjp)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_HIRAGANA][1] =
+            keyList[KEYMODE_JA_FULL_HIRAGANA][1] =
                 Keyboard(parent, R.xml.keyboard_12keyjp_input)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_ALPHABET][0] =
+            keyList[KEYMODE_JA_FULL_ALPHABET][0] =
                 Keyboard(parent, R.xml.keyboard_12key_full_alphabet)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_ALPHABET][1] =
+            keyList[KEYMODE_JA_FULL_ALPHABET][1] =
                 Keyboard(parent, R.xml.keyboard_12key_full_alphabet_input)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_NUMBER][0] =
+            keyList[KEYMODE_JA_FULL_NUMBER][0] =
                 Keyboard(parent, R.xml.keyboard_12key_full_num)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_KATAKANA][0] =
+            keyList[KEYMODE_JA_FULL_KATAKANA][0] =
                 Keyboard(parent, R.xml.keyboard_12key_full_katakana)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_KATAKANA][1] =
+            keyList[KEYMODE_JA_FULL_KATAKANA][1] =
                 Keyboard(parent, R.xml.keyboard_12key_full_katakana_input)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_ALPHABET][0] =
+            keyList[KEYMODE_JA_HALF_ALPHABET][0] =
                 Keyboard(parent, R.xml.keyboard_12key_half_alphabet)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_ALPHABET][1] =
+            keyList[KEYMODE_JA_HALF_ALPHABET][1] =
                 Keyboard(parent, R.xml.keyboard_12key_half_alphabet_input)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_NUMBER][0] =
+            keyList[KEYMODE_JA_HALF_NUMBER][0] =
                 Keyboard(parent, R.xml.keyboard_12key_half_num)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_KATAKANA][0] =
+            keyList[KEYMODE_JA_HALF_KATAKANA][0] =
                 Keyboard(parent, R.xml.keyboard_12key_half_katakana)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_KATAKANA][1] =
+            keyList[KEYMODE_JA_HALF_KATAKANA][1] =
                 Keyboard(parent, R.xml.keyboard_12key_half_katakana_input)
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_PHONE][0] =
+            keyList[KEYMODE_JA_HALF_PHONE][0] =
                 Keyboard(parent, R.xml.keyboard_12key_phone)
 
             /* 12-keys shift_on (landscape) */
             keyList =
-                mKeyboard[DefaultSoftKeyboard.Companion.LANG_JA][DefaultSoftKeyboard.Companion.LANDSCAPE][DefaultSoftKeyboard.Companion.KEYBOARD_12KEY][DefaultSoftKeyboard.Companion.KEYBOARD_SHIFT_ON]
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_HIRAGANA]
-            = mKeyboard[DefaultSoftKeyboard.Companion.LANG_JA][DefaultSoftKeyboard.Companion.LANDSCAPE][DefaultSoftKeyboard.Companion.KEYBOARD_12KEY][DefaultSoftKeyboard.Companion.KEYBOARD_SHIFT_OFF][DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_HIRAGANA]
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_ALPHABET]
-            = mKeyboard[DefaultSoftKeyboard.Companion.LANG_JA][DefaultSoftKeyboard.Companion.LANDSCAPE][DefaultSoftKeyboard.Companion.KEYBOARD_12KEY][DefaultSoftKeyboard.Companion.KEYBOARD_SHIFT_OFF][DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_ALPHABET]
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_NUMBER]
-            = mKeyboard[DefaultSoftKeyboard.Companion.LANG_JA][DefaultSoftKeyboard.Companion.LANDSCAPE][DefaultSoftKeyboard.Companion.KEYBOARD_12KEY][DefaultSoftKeyboard.Companion.KEYBOARD_SHIFT_OFF][DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_NUMBER]
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_KATAKANA]
-            = mKeyboard[DefaultSoftKeyboard.Companion.LANG_JA][DefaultSoftKeyboard.Companion.LANDSCAPE][DefaultSoftKeyboard.Companion.KEYBOARD_12KEY][DefaultSoftKeyboard.Companion.KEYBOARD_SHIFT_OFF][DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_KATAKANA]
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_ALPHABET]
-            = mKeyboard[DefaultSoftKeyboard.Companion.LANG_JA][DefaultSoftKeyboard.Companion.LANDSCAPE][DefaultSoftKeyboard.Companion.KEYBOARD_12KEY][DefaultSoftKeyboard.Companion.KEYBOARD_SHIFT_OFF][DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_ALPHABET]
+                mKeyboard[LANG_JA][LANDSCAPE][KEYBOARD_12KEY][KEYBOARD_SHIFT_ON]
+            keyList[KEYMODE_JA_FULL_HIRAGANA] = mKeyboard[LANG_JA][LANDSCAPE][KEYBOARD_12KEY][KEYBOARD_SHIFT_OFF][KEYMODE_JA_FULL_HIRAGANA]
+            keyList[KEYMODE_JA_FULL_ALPHABET] = mKeyboard[LANG_JA][LANDSCAPE][KEYBOARD_12KEY][KEYBOARD_SHIFT_OFF][KEYMODE_JA_FULL_ALPHABET]
+            keyList[KEYMODE_JA_FULL_NUMBER] = mKeyboard[LANG_JA][LANDSCAPE][KEYBOARD_12KEY][KEYBOARD_SHIFT_OFF][KEYMODE_JA_FULL_NUMBER]
+            keyList[KEYMODE_JA_FULL_KATAKANA] = mKeyboard[LANG_JA][LANDSCAPE][KEYBOARD_12KEY][KEYBOARD_SHIFT_OFF][KEYMODE_JA_FULL_KATAKANA]
+            keyList[KEYMODE_JA_HALF_ALPHABET] = mKeyboard[LANG_JA][LANDSCAPE][KEYBOARD_12KEY][KEYBOARD_SHIFT_OFF][KEYMODE_JA_HALF_ALPHABET]
 
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_NUMBER]
-            = mKeyboard[DefaultSoftKeyboard.Companion.LANG_JA][DefaultSoftKeyboard.Companion.LANDSCAPE][DefaultSoftKeyboard.Companion.KEYBOARD_12KEY][DefaultSoftKeyboard.Companion.KEYBOARD_SHIFT_OFF][DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_NUMBER]
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_KATAKANA]
-            = mKeyboard[DefaultSoftKeyboard.Companion.LANG_JA][DefaultSoftKeyboard.Companion.LANDSCAPE][DefaultSoftKeyboard.Companion.KEYBOARD_12KEY][DefaultSoftKeyboard.Companion.KEYBOARD_SHIFT_OFF][DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_KATAKANA]
-            keyList[DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_PHONE]
-            = mKeyboard[DefaultSoftKeyboard.Companion.LANG_JA][DefaultSoftKeyboard.Companion.LANDSCAPE][DefaultSoftKeyboard.Companion.KEYBOARD_12KEY][DefaultSoftKeyboard.Companion.KEYBOARD_SHIFT_OFF][DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_PHONE]
+            keyList[KEYMODE_JA_HALF_NUMBER] = mKeyboard[LANG_JA][LANDSCAPE][KEYBOARD_12KEY][KEYBOARD_SHIFT_OFF][KEYMODE_JA_HALF_NUMBER]
+            keyList[KEYMODE_JA_HALF_KATAKANA] = mKeyboard[LANG_JA][LANDSCAPE][KEYBOARD_12KEY][KEYBOARD_SHIFT_OFF][KEYMODE_JA_HALF_KATAKANA]
+            keyList[KEYMODE_JA_HALF_PHONE] = mKeyboard[LANG_JA][LANDSCAPE][KEYBOARD_12KEY][KEYBOARD_SHIFT_OFF][KEYMODE_JA_HALF_PHONE]
         }
     }
 
@@ -911,7 +895,7 @@ class DefaultSoftKeyboardJAJP : DefaultSoftKeyboard() {
      */
     private fun getTableIndex(keyCode: Int): Int {
         val index =
-            if ((keyCode == DefaultSoftKeyboard.Companion.KEYCODE_JP12_1)) 0 else if ((keyCode == DefaultSoftKeyboard.Companion.KEYCODE_JP12_2)) 1 else if ((keyCode == DefaultSoftKeyboard.Companion.KEYCODE_JP12_3)) 2 else if ((keyCode == DefaultSoftKeyboard.Companion.KEYCODE_JP12_4)) 3 else if ((keyCode == DefaultSoftKeyboard.Companion.KEYCODE_JP12_5)) 4 else if ((keyCode == DefaultSoftKeyboard.Companion.KEYCODE_JP12_6)) 5 else if ((keyCode == DefaultSoftKeyboard.Companion.KEYCODE_JP12_7)) 6 else if ((keyCode == DefaultSoftKeyboard.Companion.KEYCODE_JP12_8)) 7 else if ((keyCode == DefaultSoftKeyboard.Companion.KEYCODE_JP12_9)) 8 else if ((keyCode == DefaultSoftKeyboard.Companion.KEYCODE_JP12_0)) 9 else if ((keyCode == DefaultSoftKeyboard.Companion.KEYCODE_JP12_SHARP)) 10 else if ((keyCode == DefaultSoftKeyboard.Companion.KEYCODE_JP12_ASTER)) 11 else 0
+            if ((keyCode == KEYCODE_JP12_1)) 0 else if ((keyCode == KEYCODE_JP12_2)) 1 else if ((keyCode == KEYCODE_JP12_3)) 2 else if ((keyCode == KEYCODE_JP12_4)) 3 else if ((keyCode == KEYCODE_JP12_5)) 4 else if ((keyCode == KEYCODE_JP12_6)) 5 else if ((keyCode == KEYCODE_JP12_7)) 6 else if ((keyCode == KEYCODE_JP12_8)) 7 else if ((keyCode == KEYCODE_JP12_9)) 8 else if ((keyCode == KEYCODE_JP12_0)) 9 else if ((keyCode == KEYCODE_JP12_SHARP)) 10 else if ((keyCode == KEYCODE_JP12_ASTER)) 11 else 0
 
         return index
     }
@@ -924,21 +908,21 @@ class DefaultSoftKeyboardJAJP : DefaultSoftKeyboard() {
          */
         get() {
             var cycleTable: Array<Array<String>>? = null
-            when (mCurrentKeyMode) {
-                DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_HIRAGANA -> cycleTable =
+            when (keyMode) {
+                KEYMODE_JA_FULL_HIRAGANA -> cycleTable =
                     JP_FULL_HIRAGANA_CYCLE_TABLE
 
-                DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_KATAKANA -> cycleTable =
+                KEYMODE_JA_FULL_KATAKANA -> cycleTable =
                     JP_FULL_KATAKANA_CYCLE_TABLE
 
-                DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_ALPHABET -> cycleTable =
+                KEYMODE_JA_FULL_ALPHABET -> cycleTable =
                     JP_FULL_ALPHABET_CYCLE_TABLE
 
-                DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_NUMBER, DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_NUMBER -> {}
-                DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_ALPHABET -> cycleTable =
+                KEYMODE_JA_FULL_NUMBER, KEYMODE_JA_HALF_NUMBER -> {}
+                KEYMODE_JA_HALF_ALPHABET -> cycleTable =
                     JP_HALF_ALPHABET_CYCLE_TABLE
 
-                DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_KATAKANA -> cycleTable =
+                KEYMODE_JA_HALF_KATAKANA -> cycleTable =
                     JP_HALF_KATAKANA_CYCLE_TABLE
 
                 else -> {}
@@ -954,21 +938,21 @@ class DefaultSoftKeyboardJAJP : DefaultSoftKeyboard() {
          */
         get() {
             var hashTable: HashMap<*, *>? = null
-            when (mCurrentKeyMode) {
-                DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_HIRAGANA -> hashTable =
+            when (keyMode) {
+                KEYMODE_JA_FULL_HIRAGANA -> hashTable =
                     JP_FULL_HIRAGANA_REPLACE_TABLE
 
-                DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_KATAKANA -> hashTable =
+                KEYMODE_JA_FULL_KATAKANA -> hashTable =
                     JP_FULL_KATAKANA_REPLACE_TABLE
 
-                DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_ALPHABET -> hashTable =
+                KEYMODE_JA_FULL_ALPHABET -> hashTable =
                     JP_FULL_ALPHABET_REPLACE_TABLE
 
-                DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_NUMBER, DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_NUMBER -> {}
-                DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_ALPHABET -> hashTable =
+                KEYMODE_JA_FULL_NUMBER, KEYMODE_JA_HALF_NUMBER -> {}
+                KEYMODE_JA_HALF_ALPHABET -> hashTable =
                     JP_HALF_ALPHABET_REPLACE_TABLE
 
-                DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_KATAKANA -> hashTable =
+                KEYMODE_JA_HALF_KATAKANA -> hashTable =
                     JP_HALF_KATAKANA_REPLACE_TABLE
 
                 else -> {}
@@ -982,26 +966,26 @@ class DefaultSoftKeyboardJAJP : DefaultSoftKeyboard() {
     private fun setStatusIcon() {
         var icon = 0
 
-        when (mCurrentKeyMode) {
-            DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_HIRAGANA -> icon =
+        when (keyMode) {
+            KEYMODE_JA_FULL_HIRAGANA -> icon =
                 R.drawable.immodeic_hiragana
 
-            DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_KATAKANA -> icon =
+            KEYMODE_JA_FULL_KATAKANA -> icon =
                 R.drawable.immodeic_full_kana
 
-            DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_ALPHABET -> icon =
+            KEYMODE_JA_FULL_ALPHABET -> icon =
                 R.drawable.immodeic_full_alphabet
 
-            DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_NUMBER -> icon =
+            KEYMODE_JA_FULL_NUMBER -> icon =
                 R.drawable.immodeic_full_number
 
-            DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_KATAKANA -> icon =
+            KEYMODE_JA_HALF_KATAKANA -> icon =
                 R.drawable.immodeic_half_kana
 
-            DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_ALPHABET -> icon =
+            KEYMODE_JA_HALF_ALPHABET -> icon =
                 R.drawable.immodeic_half_alphabet
 
-            DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_NUMBER, DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_PHONE -> icon =
+            KEYMODE_JA_HALF_NUMBER, KEYMODE_JA_HALF_PHONE -> icon =
                 R.drawable.immodeic_half_number
 
             else -> {}
@@ -1030,7 +1014,7 @@ class DefaultSoftKeyboardJAJP : DefaultSoftKeyboard() {
      * Set the shift key state from [EditorInfo].
      */
     private fun setShiftByEditorInfo() {
-        if (mEnableAutoCaps && (mCurrentKeyMode == DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_ALPHABET)) {
+        if (mEnableAutoCaps && (keyMode == KEYMODE_JA_HALF_ALPHABET)) {
             val shift = getShiftKeyState(mWnn!!.currentInputEditorInfo)
 
             mShiftOn = shift
@@ -1038,7 +1022,7 @@ class DefaultSoftKeyboardJAJP : DefaultSoftKeyboard() {
         }
     }
 
-    /** @see jp.co.omronsoft.openwnn.DefaultSoftKeyboard.setHardKeyboardHidden
+    /** @see jp.co.omronsoft.openwnn.setHardKeyboardHidden
      */
     override fun setHardKeyboardHidden(hidden: Boolean) {
         if (mWnn != null) {
@@ -1046,15 +1030,15 @@ class DefaultSoftKeyboardJAJP : DefaultSoftKeyboard() {
                 if (mEnableHardware12Keyboard) {
                     mWnn!!.onEvent(
                         OpenWnnEvent(
-                            OpenWnnEvent.Companion.CHANGE_MODE,
-                            OpenWnnJAJP.Companion.ENGINE_MODE_OPT_TYPE_12KEY
+                            OpenWnnEvent.CHANGE_MODE,
+                            OpenWnnJAJP.ENGINE_MODE_OPT_TYPE_12KEY
                         )
                     )
                 } else {
                     mWnn!!.onEvent(
                         OpenWnnEvent(
-                            OpenWnnEvent.Companion.CHANGE_MODE,
-                            OpenWnnJAJP.Companion.ENGINE_MODE_OPT_TYPE_QWERTY
+                            OpenWnnEvent.CHANGE_MODE,
+                            OpenWnnJAJP.ENGINE_MODE_OPT_TYPE_QWERTY
                         )
                     )
                 }
@@ -1063,8 +1047,8 @@ class DefaultSoftKeyboardJAJP : DefaultSoftKeyboard() {
             if (mHardKeyboardHidden != hidden) {
                 if ((mLimitedKeyMode != null)
                     || (!mEnableHardware12Keyboard
-                            && (mCurrentKeyMode != DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_HIRAGANA)
-                            && (mCurrentKeyMode != DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_ALPHABET))
+                            && (keyMode != KEYMODE_JA_FULL_HIRAGANA)
+                            && (keyMode != KEYMODE_JA_HALF_ALPHABET))
                 ) {
                     mLastInputType = EditorInfo.TYPE_NULL
                     if (mWnn!!.isInputViewShown) {
@@ -1076,7 +1060,7 @@ class DefaultSoftKeyboardJAJP : DefaultSoftKeyboard() {
         super.setHardKeyboardHidden(hidden)
     }
 
-    /** @see jp.co.omronsoft.openwnn.DefaultSoftKeyboard.setHardware12Keyboard
+    /** @see jp.co.omronsoft.openwnn.setHardware12Keyboard
      */
     override fun setHardware12Keyboard(type12Key: Boolean) {
         if (mWnn != null) {
@@ -1084,15 +1068,15 @@ class DefaultSoftKeyboardJAJP : DefaultSoftKeyboard() {
                 if (type12Key) {
                     mWnn!!.onEvent(
                         OpenWnnEvent(
-                            OpenWnnEvent.Companion.CHANGE_MODE,
-                            OpenWnnJAJP.Companion.ENGINE_MODE_OPT_TYPE_12KEY
+                            OpenWnnEvent.CHANGE_MODE,
+                            OpenWnnJAJP.ENGINE_MODE_OPT_TYPE_12KEY
                         )
                     )
                 } else {
                     mWnn!!.onEvent(
                         OpenWnnEvent(
-                            OpenWnnEvent.Companion.CHANGE_MODE,
-                            OpenWnnJAJP.Companion.ENGINE_MODE_OPT_TYPE_QWERTY
+                            OpenWnnEvent.CHANGE_MODE,
+                            OpenWnnJAJP.ENGINE_MODE_OPT_TYPE_QWERTY
                         )
                     )
                 }
@@ -1112,15 +1096,15 @@ class DefaultSoftKeyboardJAJP : DefaultSoftKeyboard() {
         val limits = mLimitedKeyMode
 
         if (!mHardKeyboardHidden) { /* for hardware keyboard */
-            if (!mEnableHardware12Keyboard && (targetMode != DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_HIRAGANA)
-                && (targetMode != DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_ALPHABET)
+            if (!mEnableHardware12Keyboard && (targetMode != KEYMODE_JA_FULL_HIRAGANA)
+                && (targetMode != KEYMODE_JA_HALF_ALPHABET)
             ) {
                 val locale = Locale.getDefault()
-                var keymode: Int = DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_ALPHABET
+                var keymode: Int = KEYMODE_JA_HALF_ALPHABET
                 if (locale.language == Locale.JAPANESE.language) {
                     when (targetMode) {
-                        DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_HIRAGANA, DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_KATAKANA, DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_KATAKANA -> keymode =
-                            DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_HIRAGANA
+                        KEYMODE_JA_FULL_HIRAGANA, KEYMODE_JA_FULL_KATAKANA, KEYMODE_JA_HALF_KATAKANA -> keymode =
+                            KEYMODE_JA_FULL_HIRAGANA
 
                         else -> {}
                     }
@@ -1135,7 +1119,7 @@ class DefaultSoftKeyboardJAJP : DefaultSoftKeyboard() {
             var hasAccepted = false
             var hasRequiredChange = true
             val size = limits.size
-            val nowMode = mCurrentKeyMode
+            val nowMode = keyMode
 
             for (i in 0 until size) {
                 if (targetMode == limits[i]) {
@@ -1185,16 +1169,16 @@ class DefaultSoftKeyboardJAJP : DefaultSoftKeyboard() {
         val itemHalfNumber: CharSequence = r.getString(R.string.ti_input_mode_half_number_title_txt)
         val itemTitles: Array<CharSequence>
         val itemValues: IntArray
-        if (OpenWnn.Companion.isXLarge()) {
+        if (OpenWnn.isXLarge) {
             itemTitles = arrayOf(
                 itemFullHirakana, itemHalfAlphabet,
                 itemFullNumber, itemHalfNumber
             )
             itemValues = intArrayOf(
-                DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_HIRAGANA,
-                DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_ALPHABET,
-                DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_NUMBER,
-                DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_NUMBER
+                KEYMODE_JA_FULL_HIRAGANA,
+                KEYMODE_JA_HALF_ALPHABET,
+                KEYMODE_JA_FULL_NUMBER,
+                KEYMODE_JA_HALF_NUMBER
             )
         } else {
             itemTitles = arrayOf(
@@ -1203,20 +1187,20 @@ class DefaultSoftKeyboardJAJP : DefaultSoftKeyboard() {
                 itemHalfNumber
             )
             itemValues = intArrayOf(
-                DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_HIRAGANA,
-                DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_KATAKANA,
-                DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_KATAKANA,
-                DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_ALPHABET,
-                DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_ALPHABET,
-                DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_NUMBER,
-                DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_NUMBER
+                KEYMODE_JA_FULL_HIRAGANA,
+                KEYMODE_JA_FULL_KATAKANA,
+                KEYMODE_JA_HALF_KATAKANA,
+                KEYMODE_JA_FULL_ALPHABET,
+                KEYMODE_JA_HALF_ALPHABET,
+                KEYMODE_JA_FULL_NUMBER,
+                KEYMODE_JA_HALF_NUMBER
             )
         }
 
         builder.setSingleChoiceItems(
             itemTitles, findIndexOfValue(
                 itemValues,
-                mCurrentKeyMode
+                keyMode
             )
         ) { inputModeSwitchDialog, position ->
             when (position) {
@@ -1290,9 +1274,9 @@ class DefaultSoftKeyboardJAJP : DefaultSoftKeyboard() {
 
         /** Input mode toggle cycle table  */
         private val JP_MODE_CYCLE_TABLE = intArrayOf(
-            DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_HIRAGANA,
-            DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_ALPHABET,
-            DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_NUMBER
+            KEYMODE_JA_FULL_HIRAGANA,
+            KEYMODE_JA_HALF_ALPHABET,
+            KEYMODE_JA_HALF_NUMBER
         )
 
         /** Definition for `mInputType` (toggle)  */
@@ -1332,7 +1316,7 @@ class DefaultSoftKeyboardJAJP : DefaultSoftKeyboard() {
 
         /** Replace table for full-width HIRAGANA  */
         private val JP_FULL_HIRAGANA_REPLACE_TABLE: HashMap<String, String> =
-            object : HashMap<String?, String?>() {
+            object : HashMap<String, String>() {
                 init {
                     put("\u3042", "\u3041")
                     put("\u3044", "\u3043")
@@ -1424,7 +1408,7 @@ class DefaultSoftKeyboardJAJP : DefaultSoftKeyboard() {
 
         /** Replace table for full-width KATAKANA  */
         private val JP_FULL_KATAKANA_REPLACE_TABLE: HashMap<String, String> =
-            object : HashMap<String?, String?>() {
+            object : HashMap<String, String>() {
                 init {
                     put("\u30a2", "\u30a1")
                     put("\u30a4", "\u30a3")
@@ -1522,7 +1506,7 @@ class DefaultSoftKeyboardJAJP : DefaultSoftKeyboard() {
 
         /** Replace table for half-width KATAKANA  */
         private val JP_HALF_KATAKANA_REPLACE_TABLE: HashMap<String, String> =
-            object : HashMap<String?, String?>() {
+            object : HashMap<String, String>() {
                 init {
                     put("\uff71", "\uff67")
                     put("\uff72", "\uff68")
@@ -1628,7 +1612,7 @@ class DefaultSoftKeyboardJAJP : DefaultSoftKeyboard() {
 
         /** Replace table for full-width alphabet  */
         private val JP_FULL_ALPHABET_REPLACE_TABLE: HashMap<String, String> =
-            object : HashMap<String?, String?>() {
+            object : HashMap<String, String>() {
                 init {
                     put("\uff21", "\uff41")
                     put("\uff22", "\uff42")
@@ -1702,7 +1686,7 @@ class DefaultSoftKeyboardJAJP : DefaultSoftKeyboard() {
 
         /** Replace table for half-width alphabet  */
         private val JP_HALF_ALPHABET_REPLACE_TABLE: HashMap<String, String> =
-            object : HashMap<String?, String?>() {
+            object : HashMap<String, String>() {
                 init {
                     put("A", "a")
                     put("B", "b")

@@ -38,12 +38,8 @@ class ComposingText {
      * Constructor
      */
     init {
-        mStringLayer = arrayOfNulls<ArrayList<*>>(MAX_LAYER)
+        mStringLayer = Array(MAX_LAYER) { ArrayList() }
         mCursor = IntArray(MAX_LAYER)
-        for (i in 0 until MAX_LAYER) {
-            mStringLayer[i] = ArrayList()
-            mCursor[i] = 0
-        }
     }
 
     /**

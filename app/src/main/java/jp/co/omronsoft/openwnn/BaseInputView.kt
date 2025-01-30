@@ -61,14 +61,14 @@ class BaseInputView : LinearLayout {
         }
 
         mOptionsDialog = builder.create()
-        val window = mOptionsDialog.getWindow()
+        val window = mOptionsDialog?.getWindow()
         val dialogLayoutParams = window!!.attributes
         dialogLayoutParams.token = windowToken
         dialogLayoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_ATTACHED_DIALOG
         window.attributes = dialogLayoutParams
         window.addFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
 
-        mOptionsDialog.show()
+        mOptionsDialog?.show()
     }
 
     /**

@@ -69,7 +69,7 @@ class Romkan
                 if (match.length == 1) {
                     out = arrayOfNulls(1)
                     out[0] = StrSegment(match, str[start]!!.from, str[MAX_LENGTH - 1]!!.to)
-                    text.replaceStrSegment(ComposingText.Companion.LAYER1, out, MAX_LENGTH - start)
+                    text.replaceStrSegment(ComposingText.LAYER1, out, MAX_LENGTH - start)
                 } else {
                     out = arrayOfNulls(2)
                     out[0] = StrSegment(
@@ -97,7 +97,7 @@ class Romkan
 
     companion object {
         /** HashMap for Romaji-to-Kana conversion (Japanese mode)  */
-        private val romkanTable: HashMap<String, String> = object : HashMap<String?, String?>() {
+        private val romkanTable: HashMap<String, String> = object : HashMap<String, String>() {
             init {
                 put("la", "\u3041")
                 put("xa", "\u3041")

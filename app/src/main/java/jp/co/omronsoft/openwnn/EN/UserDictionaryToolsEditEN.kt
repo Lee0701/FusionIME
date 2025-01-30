@@ -56,7 +56,7 @@ class UserDictionaryToolsEditEN : UserDictionaryToolsEdit {
      */
     override fun sendEventToIME(ev: OpenWnnEvent): Boolean {
         try {
-            return OpenWnnEN.Companion.getInstance().onEvent(ev)
+            return OpenWnnEN.instance?.onEvent(ev) == true
         } catch (ex: Exception) {
             /* do nothing if an error occurs */
         }

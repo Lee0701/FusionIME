@@ -60,7 +60,7 @@ class OpenWnnEN() : OpenWnn() {
     private var mConverterEN: OpenWnnEngineEN? = null
 
     /** The symbol list generator  */
-    private var mSymbolList: SymbolList?
+    private var mSymbolList: SymbolList? = null
 
     /** Whether it is displaying symbol list  */
     private var mSymbolMode: Boolean
@@ -135,7 +135,7 @@ class OpenWnnEN() : OpenWnn() {
         mCandidatesViewManager = TextCandidatesViewManager(-1)
         mInputViewManager = DefaultSoftKeyboardEN()
 
-        if (OpenWnn.Companion.getCurrentIme() != null) {
+        if (OpenWnn.currentIme != null) {
             createConverters()
         }
 
@@ -175,7 +175,7 @@ class OpenWnnEN() : OpenWnn() {
             mComposingText!!.clear()
         } else if (mWordSeparators!!.contains(seg.string!!)) {
             /* if the character is a separator, remove an auto-inserted space and commit the composing text. */
-            if (mPreviousEventCode == OpenWnnEvent.Companion.SELECT_CANDIDATE) {
+            if (mPreviousEventCode == OpenWnnEvent.SELECT_CANDIDATE) {
                 mInputConnection!!.deleteSurroundingText(1, 0)
             }
             commitText(1)
@@ -245,7 +245,7 @@ class OpenWnnEN() : OpenWnn() {
         createConverters()
 
         if (mSymbolList == null) {
-            mSymbolList = SymbolList(this, SymbolList.Companion.LANG_EN)
+            mSymbolList = SymbolList(this, SymbolList.LANG_EN)
         }
     }
 
@@ -275,8 +275,8 @@ class OpenWnnEN() : OpenWnn() {
         super.onStartInputView(attribute, restarting)
 
         /* initialize views */
-        mCandidatesViewManager!!.clearCandidates()
-        mCandidatesViewManager.viewType = CandidatesViewManager.Companion.VIEW_TYPE_CLOSE
+        mCandidatesViewManager?.clearCandidates()
+        mCandidatesViewManager?.viewType = CandidatesViewManager.VIEW_TYPE_CLOSE
 
         mHardShift = 0
         mHardAlt = 0
@@ -302,7 +302,7 @@ class OpenWnnEN() : OpenWnn() {
 
         (mInputViewManager as DefaultSoftKeyboard).resetCurrentKeyboard()
 
-        if (OpenWnn.Companion.isXLarge()) {
+        if (OpenWnn.isXLarge) {
             mTextCandidatesViewManager!!.setPreferences(pref)
         }
     }
@@ -311,12 +311,12 @@ class OpenWnnEN() : OpenWnn() {
      */
     override fun hideWindow() {
         ((mInputViewManager as DefaultSoftKeyboard).currentView as BaseInputView).closeDialog()
-        mComposingText!!.clear()
-        mInputViewManager.onUpdateState(this)
+        mComposingText?.clear()
+        mInputViewManager?.onUpdateState(this)
         mHandler.removeMessages(MSG_START_TUTORIAL)
-        mInputViewManager.closing()
+        mInputViewManager?.closing()
         if (mTutorial != null) {
-            mTutorial!!.close()
+            mTutorial?.close()
             mTutorial = null
         }
 
@@ -366,6 +366,7 @@ class OpenWnnEN() : OpenWnn() {
     /** @see jp.co.omronsoft.openwnn.OpenWnn.onEvaluateInputViewShown
      */
     override fun onEvaluateInputViewShown(): Boolean {
+        super.onEvaluateInputViewShown()
         return true
     }
 
@@ -378,25 +379,25 @@ class OpenWnnEN() : OpenWnn() {
     override fun onEvent(ev: OpenWnnEvent): Boolean {
         /* handling events which are valid when InputConnection is not active. */
         when (ev.code) {
-            OpenWnnEvent.Companion.KEYUP -> {
+            OpenWnnEvent.KEYUP -> {
                 onKeyUpEvent(ev.keyEvent!!)
                 return true
             }
 
-            OpenWnnEvent.Companion.INITIALIZE_LEARNING_DICTIONARY -> return mConverterEN!!.initializeDictionary(
-                WnnEngine.Companion.DICTIONARY_TYPE_LEARN
+            OpenWnnEvent.INITIALIZE_LEARNING_DICTIONARY -> return mConverterEN!!.initializeDictionary(
+                WnnEngine.DICTIONARY_TYPE_LEARN
             )
 
-            OpenWnnEvent.Companion.INITIALIZE_USER_DICTIONARY -> return mConverterEN!!.initializeDictionary(
-                WnnEngine.Companion.DICTIONARY_TYPE_USER
+            OpenWnnEvent.INITIALIZE_USER_DICTIONARY -> return mConverterEN!!.initializeDictionary(
+                WnnEngine.DICTIONARY_TYPE_USER
             )
 
-            OpenWnnEvent.Companion.LIST_WORDS_IN_USER_DICTIONARY -> {
-                mUserDictionaryWords = mConverterEN.getUserDictionaryWords()
+            OpenWnnEvent.LIST_WORDS_IN_USER_DICTIONARY -> {
+                mUserDictionaryWords = mConverterEN?.userDictionaryWords
                 return true
             }
 
-            OpenWnnEvent.Companion.GET_WORD -> if (mUserDictionaryWords != null) {
+            OpenWnnEvent.GET_WORD -> if (mUserDictionaryWords != null) {
                 ev.word = mUserDictionaryWords!![0]
                 var i = 0
                 while (i < mUserDictionaryWords!!.size - 1) {
@@ -410,29 +411,29 @@ class OpenWnnEN() : OpenWnn() {
                 return true
             }
 
-            OpenWnnEvent.Companion.ADD_WORD -> {
+            OpenWnnEvent.ADD_WORD -> {
                 mConverterEN!!.addWord(ev.word!!)
                 return true
             }
 
-            OpenWnnEvent.Companion.DELETE_WORD -> {
+            OpenWnnEvent.DELETE_WORD -> {
                 mConverterEN!!.deleteWord(ev.word)
                 return true
             }
 
-            OpenWnnEvent.Companion.CHANGE_MODE -> return false
+            OpenWnnEvent.CHANGE_MODE -> return false
 
-            OpenWnnEvent.Companion.UPDATE_CANDIDATE -> {
-                updateComposingText(ComposingText.Companion.LAYER1)
+            OpenWnnEvent.UPDATE_CANDIDATE -> {
+                updateComposingText(ComposingText.LAYER1)
                 return true
             }
 
-            OpenWnnEvent.Companion.CHANGE_INPUT_VIEW -> {
+            OpenWnnEvent.CHANGE_INPUT_VIEW -> {
                 setInputView(onCreateInputView())
                 return true
             }
 
-            OpenWnnEvent.Companion.CANDIDATE_VIEW_TOUCH -> {
+            OpenWnnEvent.CANDIDATE_VIEW_TOUCH -> {
                 val ret =
                     (mCandidatesViewManager as TextCandidatesViewManager).onTouchSync()
                 return ret
@@ -448,7 +449,7 @@ class OpenWnnEN() : OpenWnn() {
             keyCode = keyEvent.keyCode
         }
         if (mDirectInputMode) {
-            if (ev.code == OpenWnnEvent.Companion.INPUT_SOFT_KEY && mInputConnection != null) {
+            if (ev.code == OpenWnnEvent.INPUT_SOFT_KEY && mInputConnection != null) {
                 mInputConnection!!.sendKeyEvent(keyEvent)
                 mInputConnection!!.sendKeyEvent(
                     KeyEvent(
@@ -460,17 +461,17 @@ class OpenWnnEN() : OpenWnn() {
             return false
         }
 
-        if (ev.code == OpenWnnEvent.Companion.LIST_CANDIDATES_FULL) {
-            mCandidatesViewManager.viewType = CandidatesViewManager.Companion.VIEW_TYPE_FULL
+        if (ev.code == OpenWnnEvent.LIST_CANDIDATES_FULL) {
+            mCandidatesViewManager?.viewType = CandidatesViewManager.VIEW_TYPE_FULL
             return true
-        } else if (ev.code == OpenWnnEvent.Companion.LIST_CANDIDATES_NORMAL) {
-            mCandidatesViewManager.viewType = CandidatesViewManager.Companion.VIEW_TYPE_NORMAL
+        } else if (ev.code == OpenWnnEvent.LIST_CANDIDATES_NORMAL) {
+            mCandidatesViewManager?.viewType = CandidatesViewManager.VIEW_TYPE_NORMAL
             return true
         }
 
         var ret = false
         when (ev.code) {
-            OpenWnnEvent.Companion.INPUT_CHAR -> {
+            OpenWnnEvent.INPUT_CHAR -> {
                 (mCandidatesViewManager as TextCandidatesViewManager).setAutoHide(false)
                 val edit = currentInputEditorInfo
                 if (edit.inputType == EditorInfo.TYPE_CLASS_PHONE) {
@@ -483,7 +484,7 @@ class OpenWnnEN() : OpenWnn() {
                 }
             }
 
-            OpenWnnEvent.Companion.INPUT_KEY -> {
+            OpenWnnEvent.INPUT_KEY -> {
                 keyCode = ev.keyEvent!!.keyCode
                 /* update shift/alt state */
                 when (keyCode) {
@@ -516,7 +517,7 @@ class OpenWnnEN() : OpenWnn() {
                 mPreviousEventCode = ev.code
             }
 
-            OpenWnnEvent.Companion.INPUT_SOFT_KEY -> {
+            OpenWnnEvent.INPUT_SOFT_KEY -> {
                 setSymbolMode(null)
                 updateComposingText(1)
                 ret = processKeyEvent(ev.keyEvent!!)
@@ -533,12 +534,12 @@ class OpenWnnEN() : OpenWnn() {
                 mPreviousEventCode = ev.code
             }
 
-            OpenWnnEvent.Companion.SELECT_CANDIDATE -> {
+            OpenWnnEvent.SELECT_CANDIDATE -> {
                 if (mSymbolMode) {
                     commitText(ev.word!!, false)
                 } else {
                     if (mWordSeparators!!.contains(ev.word!!.candidate!!) &&
-                        mPreviousEventCode == OpenWnnEvent.Companion.SELECT_CANDIDATE
+                        mPreviousEventCode == OpenWnnEvent.SELECT_CANDIDATE
                     ) {
                         mInputConnection!!.deleteSurroundingText(1, 0)
                     }
@@ -549,18 +550,18 @@ class OpenWnnEN() : OpenWnn() {
                 updateComposingText(1)
             }
 
-            OpenWnnEvent.Companion.LIST_SYMBOLS -> {
+            OpenWnnEvent.LIST_SYMBOLS -> {
                 commitText(1)
                 mComposingText!!.clear()
-                setSymbolMode(SymbolList.Companion.SYMBOL_ENGLISH)
+                setSymbolMode(SymbolList.SYMBOL_ENGLISH)
                 updateComposingText(1)
             }
 
             else -> {}
         }
 
-        if (mCandidatesViewManager.viewType == CandidatesViewManager.Companion.VIEW_TYPE_FULL) {
-            mCandidatesViewManager.viewType = CandidatesViewManager.Companion.VIEW_TYPE_NORMAL
+        if (mCandidatesViewManager?.viewType == CandidatesViewManager.VIEW_TYPE_FULL) {
+            mCandidatesViewManager?.viewType = CandidatesViewManager.VIEW_TYPE_NORMAL
         }
 
         return ret
@@ -662,7 +663,7 @@ class OpenWnnEN() : OpenWnn() {
                 /* display the symbol list (G1 specific. same as KEYCODE_SYM) */
                 commitText(1)
                 mComposingText!!.clear()
-                setSymbolMode(SymbolList.Companion.SYMBOL_ENGLISH)
+                setSymbolMode(SymbolList.SYMBOL_ENGLISH)
                 updateComposingText(1)
                 mHardAlt = 0
                 updateMetaKeyStateDisplay()
@@ -674,7 +675,7 @@ class OpenWnnEN() : OpenWnn() {
             /* display the symbol list */
             commitText(1)
             mComposingText!!.clear()
-            setSymbolMode(SymbolList.Companion.SYMBOL_ENGLISH)
+            setSymbolMode(SymbolList.SYMBOL_ENGLISH)
             updateComposingText(1)
             mHardAlt = 0
             updateMetaKeyStateDisplay()
@@ -691,9 +692,9 @@ class OpenWnnEN() : OpenWnn() {
                 }
 
                 KeyEvent.KEYCODE_BACK -> {
-                    if (mCandidatesViewManager.viewType == CandidatesViewManager.Companion.VIEW_TYPE_FULL) {
-                        mCandidatesViewManager.viewType =
-                            CandidatesViewManager.Companion.VIEW_TYPE_NORMAL
+                    if (mCandidatesViewManager?.viewType == CandidatesViewManager.VIEW_TYPE_FULL) {
+                        mCandidatesViewManager?.viewType =
+                            CandidatesViewManager.VIEW_TYPE_NORMAL
                     } else {
                         mComposingText!!.clear()
                         updateComposingText(1)
@@ -727,14 +728,14 @@ class OpenWnnEN() : OpenWnn() {
             }
         } else {
             /* if there is no composing string. */
-            if (mCandidatesViewManager.currentView.isShown) {
+            if (mCandidatesViewManager?.currentView?.isShown == true) {
                 if (key == KeyEvent.KEYCODE_BACK) {
-                    if (mCandidatesViewManager.viewType == CandidatesViewManager.Companion.VIEW_TYPE_FULL) {
-                        mCandidatesViewManager.viewType =
-                            CandidatesViewManager.Companion.VIEW_TYPE_NORMAL
+                    if (mCandidatesViewManager?.viewType == CandidatesViewManager.VIEW_TYPE_FULL) {
+                        mCandidatesViewManager?.viewType =
+                            CandidatesViewManager.VIEW_TYPE_NORMAL
                     } else {
-                        mCandidatesViewManager.viewType =
-                            CandidatesViewManager.Companion.VIEW_TYPE_CLOSE
+                        mCandidatesViewManager?.viewType =
+                            CandidatesViewManager.VIEW_TYPE_CLOSE
                     }
                     return true
                 }
@@ -798,7 +799,7 @@ class OpenWnnEN() : OpenWnn() {
         } else {
             if (mComposingText!!.size(1) != 0) {
                 mHandler.removeMessages(MSG_PREDICTION)
-                if (mCandidatesViewManager.currentView.isShown) {
+                if (mCandidatesViewManager?.currentView?.isShown == true) {
                     mHandler.sendMessageDelayed(
                         mHandler.obtainMessage(MSG_PREDICTION),
                         PREDICTION_DELAY_MS_SHOWING_CANDIDATE.toLong()
@@ -921,25 +922,25 @@ class OpenWnnEN() : OpenWnn() {
     private fun updateMetaKeyStateDisplay() {
         var mode = 0
         mode = if (mHardShift == 0 && mHardAlt == 0) {
-            DefaultSoftKeyboard.Companion.HARD_KEYMODE_SHIFT_OFF_ALT_OFF
+            DefaultSoftKeyboard.HARD_KEYMODE_SHIFT_OFF_ALT_OFF
         } else if (mHardShift == 1 && mHardAlt == 0) {
-            DefaultSoftKeyboard.Companion.HARD_KEYMODE_SHIFT_ON_ALT_OFF
+            DefaultSoftKeyboard.HARD_KEYMODE_SHIFT_ON_ALT_OFF
         } else if (mHardShift == 2 && mHardAlt == 0) {
-            DefaultSoftKeyboard.Companion.HARD_KEYMODE_SHIFT_LOCK_ALT_OFF
+            DefaultSoftKeyboard.HARD_KEYMODE_SHIFT_LOCK_ALT_OFF
         } else if (mHardShift == 0 && mHardAlt == 1) {
-            DefaultSoftKeyboard.Companion.HARD_KEYMODE_SHIFT_OFF_ALT_ON
+            DefaultSoftKeyboard.HARD_KEYMODE_SHIFT_OFF_ALT_ON
         } else if (mHardShift == 0 && mHardAlt == 2) {
-            DefaultSoftKeyboard.Companion.HARD_KEYMODE_SHIFT_OFF_ALT_LOCK
+            DefaultSoftKeyboard.HARD_KEYMODE_SHIFT_OFF_ALT_LOCK
         } else if (mHardShift == 1 && mHardAlt == 1) {
-            DefaultSoftKeyboard.Companion.HARD_KEYMODE_SHIFT_ON_ALT_ON
+            DefaultSoftKeyboard.HARD_KEYMODE_SHIFT_ON_ALT_ON
         } else if (mHardShift == 1 && mHardAlt == 2) {
-            DefaultSoftKeyboard.Companion.HARD_KEYMODE_SHIFT_ON_ALT_LOCK
+            DefaultSoftKeyboard.HARD_KEYMODE_SHIFT_ON_ALT_LOCK
         } else if (mHardShift == 2 && mHardAlt == 1) {
-            DefaultSoftKeyboard.Companion.HARD_KEYMODE_SHIFT_LOCK_ALT_ON
+            DefaultSoftKeyboard.HARD_KEYMODE_SHIFT_LOCK_ALT_ON
         } else if (mHardShift == 2 && mHardAlt == 2) {
-            DefaultSoftKeyboard.Companion.HARD_KEYMODE_SHIFT_LOCK_ALT_LOCK
+            DefaultSoftKeyboard.HARD_KEYMODE_SHIFT_LOCK_ALT_LOCK
         } else {
-            DefaultSoftKeyboard.Companion.HARD_KEYMODE_SHIFT_OFF_ALT_OFF
+            DefaultSoftKeyboard.HARD_KEYMODE_SHIFT_OFF_ALT_OFF
         }
 
         (mInputViewManager as DefaultSoftKeyboard).updateIndicator(mode)
@@ -1018,9 +1019,9 @@ class OpenWnnEN() : OpenWnn() {
 
         /* set engine's mode */
         if (mOptSpellCorrection) {
-            mConverterEN!!.setDictionary(OpenWnnEngineEN.Companion.DICT_FOR_CORRECT_MISTYPE)
+            mConverterEN!!.setDictionary(OpenWnnEngineEN.DICT_FOR_CORRECT_MISTYPE)
         } else {
-            mConverterEN!!.setDictionary(OpenWnnEngineEN.Companion.DICT_DEFAULT)
+            mConverterEN!!.setDictionary(OpenWnnEngineEN.DICT_DEFAULT)
         }
         checkTutorial(info.privateImeOptions)
     }

@@ -56,7 +56,7 @@ class UserDictionaryToolsEditJAJP : UserDictionaryToolsEdit {
      */
     override fun sendEventToIME(ev: OpenWnnEvent): Boolean {
         try {
-            return OpenWnnJAJP.Companion.getInstance().onEvent(ev)
+            return OpenWnnJAJP.instance?.onEvent(ev) == true
         } catch (ex: Exception) {
             /* do nothing if an error occurs */
         }

@@ -38,8 +38,8 @@ class KeyboardListPreferenceJAJP @JvmOverloads constructor(
         super.onDialogClosed(positiveResult)
 
         if (positiveResult) {
-            val wnn: OpenWnnJAJP = OpenWnnJAJP.Companion.getInstance()
-            val code: Int = OpenWnnEvent.Companion.CHANGE_INPUT_VIEW
+            val wnn: OpenWnnJAJP = OpenWnnJAJP.instance!!
+            val code: Int = OpenWnnEvent.CHANGE_INPUT_VIEW
             val ev = OpenWnnEvent(code)
             try {
                 wnn.onEvent(ev)

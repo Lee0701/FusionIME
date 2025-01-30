@@ -140,7 +140,7 @@ class KeyboardView @JvmOverloads constructor(
     private var mPreviewTextSizeLarge = 0
     private var mPreviewOffset = 0
     private var mPreviewHeight = 0
-    private var mOffsetInWindow: IntArray?
+    private var mOffsetInWindow: IntArray? = null
 
     private val mPopupKeyboard: PopupWindow
     private var mMiniKeyboardContainer: View? = null
@@ -150,8 +150,8 @@ class KeyboardView @JvmOverloads constructor(
     private var mMiniKeyboardOffsetX = 0
     private var mMiniKeyboardOffsetY = 0
     private val mMiniKeyboardCache: MutableMap<Keyboard.Key, View?>
-    private var mWindowOffset: IntArray?
-    private var mKeys: Array<Keyboard.Key>?
+    private var mWindowOffset: IntArray? = null
+    private var mKeys: Array<Keyboard.Key>? = null
 
     /**
      * Returns the [OnKeyboardActionListener] object.
@@ -162,7 +162,7 @@ class KeyboardView @JvmOverloads constructor(
      * @param listener  The OnKeyboardActionListener to set.
      */
     /** Listener for [OnKeyboardActionListener].  */
-    protected var onKeyboardActionListener: OnKeyboardActionListener? = null
+    var onKeyboardActionListener: OnKeyboardActionListener? = null
 
     private var mVerticalCorrection = 0
     private var mProximityThreshold = 0
@@ -288,8 +288,8 @@ class KeyboardView @JvmOverloads constructor(
                 val travelX = width / 2
                 val travelY = height / 2
                 mSwipeTracker.computeCurrentVelocity(1000)
-                val endingVelocityX: Float = mSwipeTracker.getXVelocity()
-                val endingVelocityY: Float = mSwipeTracker.getYVelocity()
+                val endingVelocityX: Float = mSwipeTracker.xVelocity
+                val endingVelocityY: Float = mSwipeTracker.yVelocity
                 var sendDownKey = false
                 if (velocityX > mSwipeThreshold && absY < absX && deltaX > travelX) {
                     if (mDisambiguateSwipe && endingVelocityX < velocityX / 4) {
@@ -360,8 +360,7 @@ class KeyboardView @JvmOverloads constructor(
             }
             removeMessages()
             mKeyboard = keyboard
-            val keys =
-                mKeyboard.getKeys()
+            val keys = mKeyboard?.keys!!
             mKeys = keys.toTypedArray<Keyboard.Key>()
             requestLayout()
             mKeyboardChanged = true
@@ -424,7 +423,7 @@ class KeyboardView @JvmOverloads constructor(
         get() = if ((mPopupParent != null) && (mPopupParent !== this)
             && (mPopupParent is KeyboardView)
         ) {
-            (mPopupParent as KeyboardView).isParentPreviewEnabled()
+            (mPopupParent as KeyboardView).isParentPreviewEnabled
         } else {
             isPreviewEnabled
         }
@@ -476,11 +475,11 @@ class KeyboardView @JvmOverloads constructor(
         if (mKeyboard == null) {
             setMeasuredDimension(paddingLeft + paddingRight, paddingTop + paddingBottom)
         } else {
-            var width = mKeyboard.getMinWidth() + paddingLeft + paddingRight
+            var width = mKeyboard!!.minWidth + paddingLeft + paddingRight
             if (MeasureSpec.getSize(widthMeasureSpec) < width + 10) {
                 width = MeasureSpec.getSize(widthMeasureSpec)
             }
-            setMeasuredDimension(width, mKeyboard.getHeight() + paddingTop + paddingBottom)
+            setMeasuredDimension(width, mKeyboard!!.height + paddingTop + paddingBottom)
         }
     }
 
@@ -497,7 +496,7 @@ class KeyboardView @JvmOverloads constructor(
         var dimensionSum = 0
         for (i in 0 until length) {
             val key = keys[i]
-            (dimensionSum += min(
+            dimensionSum += (min(
                 key.width.toDouble(),
                 key.height.toDouble()
             ) + key.gap).toInt()
@@ -579,7 +578,7 @@ class KeyboardView @JvmOverloads constructor(
             keyBackground.draw(canvas)
 
             if (label != null) {
-                if (OpenWnn.Companion.isXLarge()) {
+                if (OpenWnn.isXLarge) {
                     if (label.length > 1 && key.codes!!.size < 2) {
                         paint.textSize = mLabelTextSize.toFloat()
                         paint.setTypeface(Typeface.DEFAULT)
@@ -597,7 +596,7 @@ class KeyboardView @JvmOverloads constructor(
                     }
                 }
                 paint.setShadowLayer(mShadowRadius, 0f, 0f, mShadowColor)
-                if (OpenWnn.Companion.isXLarge()) {
+                if (OpenWnn.isXLarge) {
                     canvas.drawText(
                         label,
                         ((key.width - padding.left + 7 - padding.right) / 2
@@ -618,7 +617,7 @@ class KeyboardView @JvmOverloads constructor(
             } else if (key.icon != null) {
                 var drawableX: Int
                 var drawableY: Int
-                if (OpenWnn.Companion.isXLarge()) {
+                if (OpenWnn.isXLarge) {
                     drawableX = ((key.width - padding.left + 12 - padding.right
                             - key.icon!!.intrinsicWidth)) / 2 + padding.left
                     drawableY = ((key.height - padding.top + 9 - padding.bottom
@@ -720,7 +719,7 @@ class KeyboardView @JvmOverloads constructor(
                 if (mInMultiTap) {
                     if (mTapCount != -1) {
                         onKeyboardActionListener!!.onKey(
-                            Keyboard.Companion.KEYCODE_DELETE,
+                            Keyboard.KEYCODE_DELETE,
                             KEY_DELETE
                         )
                     } else {
@@ -795,7 +794,8 @@ class KeyboardView @JvmOverloads constructor(
         if (keyIndex < 0 || keyIndex >= mKeys!!.size) return
         val key = keys!![keyIndex]
 
-        mPreviewText!!.setBackgroundDrawable(context.resources.getDrawable(R.drawable.keyboard_key_feedback))
+        val mPreviewText = mPreviewText!!
+        mPreviewText.setBackgroundDrawable(context.resources.getDrawable(R.drawable.keyboard_key_feedback))
 
         if (key.icon != null) {
             mPreviewText.setCompoundDrawables(
@@ -956,8 +956,8 @@ class KeyboardView @JvmOverloads constructor(
                 ) as LayoutInflater
                 mMiniKeyboardContainer = inflater.inflate(mPopupLayout, null)
                 mMiniKeyboard =
-                    mMiniKeyboardContainer.findViewById<View>(R.id.keyboardView) as KeyboardView
-                val closeButton = mMiniKeyboardContainer.findViewById<View>(R.id.closeButton)
+                    mMiniKeyboardContainer?.findViewById<View>(R.id.keyboardView) as KeyboardView
+                val closeButton = mMiniKeyboardContainer?.findViewById<View>(R.id.closeButton)
                 closeButton?.setOnClickListener(this)
                 mMiniKeyboard!!.onKeyboardActionListener =
                     object : OnKeyboardActionListener {
@@ -997,7 +997,7 @@ class KeyboardView @JvmOverloads constructor(
                 }
                 mMiniKeyboard!!.keyboard = keyboard
                 mMiniKeyboard!!.setPopupParent(this)
-                mMiniKeyboardContainer.measure(
+                mMiniKeyboardContainer?.measure(
                     MeasureSpec.makeMeasureSpec(width, MeasureSpec.AT_MOST),
                     MeasureSpec.makeMeasureSpec(height, MeasureSpec.AT_MOST)
                 )
@@ -1198,7 +1198,7 @@ class KeyboardView @JvmOverloads constructor(
         }
 
         when (action) {
-            MotionEvent.ACTION_DOWN -> {
+            MotionEvent.ACTION_DOWN -> run {
                 mAbortKey = false
                 mStartX = touchX
                 mStartY = touchY
@@ -1220,7 +1220,7 @@ class KeyboardView @JvmOverloads constructor(
                     repeatKey()
                     if (mAbortKey) {
                         mRepeatKeyIndex = NOT_A_KEY
-                        break
+                        return@run
                     }
                 }
                 if (mCurrentKey != NOT_A_KEY) {
@@ -1505,7 +1505,7 @@ class KeyboardView @JvmOverloads constructor(
 
     companion object {
         private const val NOT_A_KEY = -1
-        private val KEY_DELETE = intArrayOf(Keyboard.Companion.KEYCODE_DELETE)
+        private val KEY_DELETE = intArrayOf(Keyboard.KEYCODE_DELETE)
         private val LONG_PRESSABLE_STATE_SET = intArrayOf(
             android.R.attr.state_long_pressable
         )

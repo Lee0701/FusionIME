@@ -134,7 +134,7 @@ class Keyboard @JvmOverloads constructor(context: Context, xmlLayoutResId: Int, 
 
     private var mCellWidth = 0
     private var mCellHeight = 0
-    private var mGridNeighbors: Array<IntArray?>?
+    private var mGridNeighbors: Array<IntArray?>? = null
     private var mProximityThreshold = 0
 
     /**
@@ -219,7 +219,7 @@ class Keyboard @JvmOverloads constructor(context: Context, xmlLayoutResId: Int, 
          * All the key codes (unicode or custom code) that this key could generate, zero'th
          * being the most important.
          */
-        var codes: IntArray?
+        var codes: IntArray? = null
 
         /** Label to display  */
         var label: CharSequence? = null
@@ -383,7 +383,7 @@ class Keyboard @JvmOverloads constructor(context: Context, xmlLayoutResId: Int, 
             text = a.getText(R.styleable.AospKeyboard_Key_keyOutputText)
 
             if (codes == null && !TextUtils.isEmpty(label)) {
-                codes = intArrayOf(label.get(0).code)
+                codes = intArrayOf(label!![0].code)
             }
             a.recycle()
             a = res.obtainAttributes(Xml.asAttributeSet(parser), R.styleable.WnnKeyboard_Key)
@@ -682,8 +682,8 @@ class Keyboard @JvmOverloads constructor(context: Context, xmlLayoutResId: Int, 
             var y = 0
             while (y < gridHeight) {
                 var count = 0
-                for (i in mKeys.indices) {
-                    val key = mKeys[i]
+                for (i in mKeys!!.indices) {
+                    val key = mKeys!![i]
                     if (key.squaredDistanceFrom(
                             x,
                             y
@@ -773,7 +773,7 @@ class Keyboard @JvmOverloads constructor(context: Context, xmlLayoutResId: Int, 
                         mKeys!!.add(key)
                         if (key.codes!![0] == KEYCODE_SHIFT) {
                             mShiftKey = key
-                            shiftKeyIndex = mKeys.size - 1
+                            shiftKeyIndex = mKeys!!.size - 1
                             mModifierKeys!!.add(key)
                         } else if (key.codes!![0] == KEYCODE_ALT) {
                             mModifierKeys!!.add(key)

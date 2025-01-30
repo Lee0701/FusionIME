@@ -52,7 +52,7 @@ import java.util.regex.Pattern
  */
 class OpenWnnJAJP() : OpenWnn() {
     /** Convert engine's state  */
-    private inner class EngineState {
+    private class EngineState {
         /** Set of dictionaries  */
         var dictionarySet: Int = Companion.INVALID
 
@@ -238,7 +238,7 @@ class OpenWnnJAJP() : OpenWnn() {
     private var mOrientation = Configuration.ORIENTATION_UNDEFINED
 
     /** Current normal dictionary set  */
-    private var mPrevDictionarySet: Int = OpenWnnEngineJAJP.Companion.DIC_LANG_INIT
+    private var mPrevDictionarySet: Int = OpenWnnEngineJAJP.DIC_LANG_INIT
 
     /** Regular expression pattern for English separators  */
     private var mEnglishAutoCommitDelimiter: Pattern? = null
@@ -327,7 +327,7 @@ class OpenWnnJAJP() : OpenWnn() {
         mCandidatesViewManager = TextCandidatesViewManager(-1)
         mInputViewManager = DefaultSoftKeyboardJAJP()
 
-        if (OpenWnn.Companion.getCurrentIme() != null) {
+        if (OpenWnn.currentIme != null) {
             createConverters()
         }
 
@@ -363,7 +363,7 @@ class OpenWnnJAJP() : OpenWnn() {
         val delimiter = Pattern.quote(resources.getString(R.string.en_word_separators))
         mEnglishAutoCommitDelimiter = Pattern.compile(".*[$delimiter]$")
         if (mConverterSymbolEngineBack == null) {
-            mConverterSymbolEngineBack = SymbolList(this, SymbolList.Companion.LANG_JA)
+            mConverterSymbolEngineBack = SymbolList(this, SymbolList.LANG_JA)
         }
     }
 
@@ -405,7 +405,7 @@ class OpenWnnJAJP() : OpenWnn() {
             super.onStartInputView(attribute, restarting)
         } else {
             val state: EngineState = EngineState()
-            state.temporaryMode = EngineState.Companion.TEMPORARY_DICTIONARY_MODE_NONE
+            state.temporaryMode = EngineState.TEMPORARY_DICTIONARY_MODE_NONE
             updateEngineState(state)
 
             mPrevCommitCount = 0
@@ -415,7 +415,7 @@ class OpenWnnJAJP() : OpenWnn() {
 
             super.onStartInputView(attribute, restarting)
 
-            if (OpenWnn.Companion.isXLarge()) {
+            if (OpenWnn.isXLarge) {
                 mTextCandidatesViewManager!!.setPreferences(pref)
             }
 
@@ -432,7 +432,7 @@ class OpenWnnJAJP() : OpenWnn() {
         /* initialize the engine's state */
         fitInputType(pref, attribute)
 
-        if (OpenWnn.Companion.isXLarge()) {
+        if (OpenWnn.isXLarge) {
             mTextCandidates1LineViewManager!!.setAutoHide(true)
         } else {
             (mCandidatesViewManager as TextCandidatesViewManager).setAutoHide(true)
@@ -450,18 +450,18 @@ class OpenWnnJAJP() : OpenWnn() {
 
         val baseInputView =
             ((mInputViewManager as DefaultSoftKeyboard).currentView as BaseInputView)
-        baseInputView?.closeDialog()
-        mComposingText!!.clear()
-        mInputViewManager.onUpdateState(this)
+        baseInputView.closeDialog()
+        mComposingText?.clear()
+        mInputViewManager?.onUpdateState(this)
         clearCommitInfo()
         mHandler.removeMessages(MSG_START_TUTORIAL)
-        mInputViewManager.closing()
+        mInputViewManager?.closing()
         if (mTutorial != null) {
             mTutorial!!.close()
             mTutorial = null
         }
 
-        if (OpenWnn.Companion.isXLarge()) {
+        if (OpenWnn.isXLarge) {
             mTextCandidates1LineViewManager!!.closeDialog()
         } else {
             mTextCandidatesViewManager!!.closeDialog()
@@ -498,12 +498,12 @@ class OpenWnnJAJP() : OpenWnn() {
             return
         }
 
-        if (mEngineState.isSymbolList()) {
+        if (mEngineState.isSymbolList) {
             return
         }
 
         val isNotComposing = ((candidatesStart < 0) && (candidatesEnd < 0))
-        if ((mComposingText!!.size(ComposingText.Companion.LAYER1) != 0)
+        if ((mComposingText!!.size(ComposingText.LAYER1) != 0)
             && !isNotComposing
         ) {
             updateViewStatus(mTargetLayer, false, true)
@@ -520,7 +520,7 @@ class OpenWnnJAJP() : OpenWnn() {
                     }
 
                     if (mInputConnection != null) {
-                        if (isNotComposing && (mComposingText!!.size(ComposingText.Companion.LAYER1) != 0)) {
+                        if (isNotComposing && (mComposingText!!.size(ComposingText.LAYER1) != 0)) {
                             mInputConnection!!.finishComposingText()
                         }
                     }
@@ -573,29 +573,29 @@ class OpenWnnJAJP() : OpenWnn() {
 
         /* handling events which are valid when InputConnection is not active. */
         when (ev.code) {
-            OpenWnnEvent.Companion.KEYUP -> {
+            OpenWnnEvent.KEYUP -> {
                 onKeyUpEvent(ev.keyEvent!!)
                 return true
             }
 
-            OpenWnnEvent.Companion.KEYLONGPRESS -> return onKeyLongPressEvent(ev.keyEvent)
+            OpenWnnEvent.KEYLONGPRESS -> return onKeyLongPressEvent(ev.keyEvent)
 
-            OpenWnnEvent.Companion.INITIALIZE_LEARNING_DICTIONARY -> {
-                mConverterEN!!.initializeDictionary(WnnEngine.Companion.DICTIONARY_TYPE_LEARN)
-                mConverterJAJP!!.initializeDictionary(WnnEngine.Companion.DICTIONARY_TYPE_LEARN)
+            OpenWnnEvent.INITIALIZE_LEARNING_DICTIONARY -> {
+                mConverterEN!!.initializeDictionary(WnnEngine.DICTIONARY_TYPE_LEARN)
+                mConverterJAJP!!.initializeDictionary(WnnEngine.DICTIONARY_TYPE_LEARN)
                 return true
             }
 
-            OpenWnnEvent.Companion.INITIALIZE_USER_DICTIONARY -> return mConverterJAJP!!.initializeDictionary(
-                WnnEngine.Companion.DICTIONARY_TYPE_USER
+            OpenWnnEvent.INITIALIZE_USER_DICTIONARY -> return mConverterJAJP!!.initializeDictionary(
+                WnnEngine.DICTIONARY_TYPE_USER
             )
 
-            OpenWnnEvent.Companion.LIST_WORDS_IN_USER_DICTIONARY -> {
-                mUserDictionaryWords = mConverterJAJP.getUserDictionaryWords()
+            OpenWnnEvent.LIST_WORDS_IN_USER_DICTIONARY -> {
+                mUserDictionaryWords = mConverterJAJP?.userDictionaryWords
                 return true
             }
 
-            OpenWnnEvent.Companion.GET_WORD -> if (mUserDictionaryWords != null) {
+            OpenWnnEvent.GET_WORD -> if (mUserDictionaryWords != null) {
                 ev.word = mUserDictionaryWords!![0]
                 var i = 0
                 while (i < mUserDictionaryWords!!.size - 1) {
@@ -609,17 +609,17 @@ class OpenWnnJAJP() : OpenWnn() {
                 return true
             }
 
-            OpenWnnEvent.Companion.ADD_WORD -> {
+            OpenWnnEvent.ADD_WORD -> {
                 mConverterJAJP!!.addWord(ev.word!!)
                 return true
             }
 
-            OpenWnnEvent.Companion.DELETE_WORD -> {
+            OpenWnnEvent.DELETE_WORD -> {
                 mConverterJAJP!!.deleteWord(ev.word)
                 return true
             }
 
-            OpenWnnEvent.Companion.CHANGE_MODE -> {
+            OpenWnnEvent.CHANGE_MODE -> {
                 changeEngineMode(ev.mode)
                 if (!(ev.mode == ENGINE_MODE_SYMBOL || ev.mode == ENGINE_MODE_EISU_KANA)) {
                     initializeScreen()
@@ -627,11 +627,11 @@ class OpenWnnJAJP() : OpenWnn() {
                 return true
             }
 
-            OpenWnnEvent.Companion.UPDATE_CANDIDATE -> {
-                if (mEngineState.isRenbun()) {
+            OpenWnnEvent.UPDATE_CANDIDATE -> {
+                if (mEngineState.isRenbun) {
                     mComposingText!!.setCursor(
-                        ComposingText.Companion.LAYER1,
-                        mComposingText!!.toString(ComposingText.Companion.LAYER1)!!.length
+                        ComposingText.LAYER1,
+                        mComposingText!!.toString(ComposingText.LAYER1)!!.length
                     )
                     mExactMatchMode = false
                     updateViewStatusForPrediction(true, true)
@@ -641,53 +641,53 @@ class OpenWnnJAJP() : OpenWnn() {
                 return true
             }
 
-            OpenWnnEvent.Companion.CHANGE_INPUT_VIEW -> {
+            OpenWnnEvent.CHANGE_INPUT_VIEW -> {
                 setInputView(onCreateInputView())
                 return true
             }
 
-            OpenWnnEvent.Companion.CANDIDATE_VIEW_TOUCH -> {
+            OpenWnnEvent.CANDIDATE_VIEW_TOUCH -> {
                 val ret =
                     (mCandidatesViewManager as TextCandidatesViewManager).onTouchSync()
                 return ret
             }
 
-            OpenWnnEvent.Companion.TOUCH_OTHER_KEY -> {
+            OpenWnnEvent.TOUCH_OTHER_KEY -> {
                 mStatus = mStatus or STATUS_INPUT_EDIT
                 return true
             }
 
-            OpenWnnEvent.Companion.CANDIDATE_VIEW_SCROLL_UP -> {
+            OpenWnnEvent.CANDIDATE_VIEW_SCROLL_UP -> {
                 if (mCandidatesViewManager is TextCandidatesViewManager) {
                     (mCandidatesViewManager as TextCandidatesViewManager).setScrollUp()
                 }
                 return true
             }
 
-            OpenWnnEvent.Companion.CANDIDATE_VIEW_SCROLL_DOWN -> {
+            OpenWnnEvent.CANDIDATE_VIEW_SCROLL_DOWN -> {
                 if (mCandidatesViewManager is TextCandidatesViewManager) {
                     (mCandidatesViewManager as TextCandidatesViewManager).setScrollDown()
                 }
                 return true
             }
 
-            OpenWnnEvent.Companion.CANDIDATE_VIEW_SCROLL_FULL_UP -> {
+            OpenWnnEvent.CANDIDATE_VIEW_SCROLL_FULL_UP -> {
                 if (mCandidatesViewManager is TextCandidatesViewManager) {
                     (mCandidatesViewManager as TextCandidatesViewManager).setScrollFullUp()
                 }
                 return true
             }
 
-            OpenWnnEvent.Companion.CANDIDATE_VIEW_SCROLL_FULL_DOWN -> {
+            OpenWnnEvent.CANDIDATE_VIEW_SCROLL_FULL_DOWN -> {
                 if (mCandidatesViewManager is TextCandidatesViewManager) {
                     (mCandidatesViewManager as TextCandidatesViewManager).setScrollFullDown()
                 }
                 return true
             }
 
-            OpenWnnEvent.Companion.FOCUS_CANDIDATE_START -> return true
+            OpenWnnEvent.FOCUS_CANDIDATE_START -> return true
 
-            OpenWnnEvent.Companion.FOCUS_CANDIDATE_END -> {
+            OpenWnnEvent.FOCUS_CANDIDATE_END -> {
                 mInputViewManager!!.onUpdateState(this)
                 return true
             }
@@ -704,7 +704,7 @@ class OpenWnnJAJP() : OpenWnn() {
         if (mDirectInputMode) {
             if (mInputConnection != null) {
                 when (ev.code) {
-                    OpenWnnEvent.Companion.INPUT_SOFT_KEY -> if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                    OpenWnnEvent.INPUT_SOFT_KEY -> if (keyCode == KeyEvent.KEYCODE_ENTER) {
                         sendKeyChar('\n')
                     } else {
                         mInputConnection!!.sendKeyEvent(keyEvent)
@@ -716,7 +716,7 @@ class OpenWnnJAJP() : OpenWnn() {
                         )
                     }
 
-                    OpenWnnEvent.Companion.INPUT_CHAR -> sendKeyChar(ev.chars!![0])
+                    OpenWnnEvent.INPUT_CHAR -> sendKeyChar(ev.chars!![0])
                     else -> {}
                 }
             }
@@ -725,7 +725,7 @@ class OpenWnnJAJP() : OpenWnn() {
             return false
         }
 
-        if (mEngineState.isSymbolList()) {
+        if (mEngineState.isSymbolList) {
             if (keyEvent != null && keyEvent.isPrintingKey && isTenKeyCode(keyCode) && !keyEvent.isNumLockOn) {
                 return false
             }
@@ -777,13 +777,13 @@ class OpenWnnJAJP() : OpenWnn() {
                 KeyEvent.KEYCODE_SPACE -> {
                     if (keyEvent != null) {
                         if (keyEvent.isShiftPressed) {
-                            onEvent(OpenWnnEvent(OpenWnnEvent.Companion.CANDIDATE_VIEW_SCROLL_UP))
+                            onEvent(OpenWnnEvent(OpenWnnEvent.CANDIDATE_VIEW_SCROLL_UP))
                         } else if (keyEvent.isAltPressed) {
                             if (keyEvent.repeatCount == 0) {
                                 switchSymbolList()
                             }
                         } else {
-                            onEvent(OpenWnnEvent(OpenWnnEvent.Companion.CANDIDATE_VIEW_SCROLL_DOWN))
+                            onEvent(OpenWnnEvent(OpenWnnEvent.CANDIDATE_VIEW_SCROLL_DOWN))
                         }
                     }
                     return true
@@ -795,12 +795,12 @@ class OpenWnnJAJP() : OpenWnn() {
                 }
 
                 KeyEvent.KEYCODE_PAGE_UP -> {
-                    onEvent(OpenWnnEvent(OpenWnnEvent.Companion.CANDIDATE_VIEW_SCROLL_UP))
+                    onEvent(OpenWnnEvent(OpenWnnEvent.CANDIDATE_VIEW_SCROLL_UP))
                     return true
                 }
 
                 KeyEvent.KEYCODE_PAGE_DOWN -> {
-                    onEvent(OpenWnnEvent(OpenWnnEvent.Companion.CANDIDATE_VIEW_SCROLL_DOWN))
+                    onEvent(OpenWnnEvent(OpenWnnEvent.CANDIDATE_VIEW_SCROLL_DOWN))
                     return true
                 }
 
@@ -816,7 +816,7 @@ class OpenWnnJAJP() : OpenWnn() {
                 else -> {}
             }
 
-            if ((ev.code == OpenWnnEvent.Companion.INPUT_KEY) &&
+            if ((ev.code == OpenWnnEvent.INPUT_KEY) &&
                 (keyCode != KeyEvent.KEYCODE_SEARCH) &&
                 (keyCode != KeyEvent.KEYCODE_ALT_LEFT) &&
                 (keyCode != KeyEvent.KEYCODE_ALT_RIGHT) &&
@@ -824,12 +824,12 @@ class OpenWnnJAJP() : OpenWnn() {
                 (keyCode != KeyEvent.KEYCODE_SHIFT_RIGHT)
             ) {
                 state = EngineState()
-                state.temporaryMode = EngineState.Companion.TEMPORARY_DICTIONARY_MODE_NONE
+                state.temporaryMode = EngineState.TEMPORARY_DICTIONARY_MODE_NONE
                 updateEngineState(state)
             }
         }
 
-        if (!((ev.code == OpenWnnEvent.Companion.COMMIT_COMPOSING_TEXT)
+        if (!((ev.code == OpenWnnEvent.COMMIT_COMPOSING_TEXT)
                     || ((keyEvent != null)
                     && ((keyCode == KeyEvent.KEYCODE_SHIFT_LEFT)
                     || (keyCode == KeyEvent.KEYCODE_SHIFT_RIGHT)
@@ -841,43 +841,43 @@ class OpenWnnJAJP() : OpenWnn() {
         }
 
         /* change back the dictionary if necessary */
-        if (!((ev.code == OpenWnnEvent.Companion.SELECT_CANDIDATE)
-                    || (ev.code == OpenWnnEvent.Companion.LIST_CANDIDATES_NORMAL)
-                    || (ev.code == OpenWnnEvent.Companion.LIST_CANDIDATES_FULL)
+        if (!((ev.code == OpenWnnEvent.SELECT_CANDIDATE)
+                    || (ev.code == OpenWnnEvent.LIST_CANDIDATES_NORMAL)
+                    || (ev.code == OpenWnnEvent.LIST_CANDIDATES_FULL)
                     || ((keyEvent != null)
                     && ((keyCode == KeyEvent.KEYCODE_SHIFT_LEFT)
                     || (keyCode == KeyEvent.KEYCODE_SHIFT_RIGHT)
                     || (keyCode == KeyEvent.KEYCODE_ALT_LEFT)
                     || (keyCode == KeyEvent.KEYCODE_ALT_RIGHT)
-                    || (keyCode == KeyEvent.KEYCODE_BACK && mCandidatesViewManager.viewType == CandidatesViewManager.Companion.VIEW_TYPE_FULL)
+                    || (keyCode == KeyEvent.KEYCODE_BACK && mCandidatesViewManager?.viewType == CandidatesViewManager.VIEW_TYPE_FULL)
                     || (keyEvent.isAltPressed && (keyCode == KeyEvent.KEYCODE_SPACE)))))
         ) {
             state = EngineState()
-            state.temporaryMode = EngineState.Companion.TEMPORARY_DICTIONARY_MODE_NONE
+            state.temporaryMode = EngineState.TEMPORARY_DICTIONARY_MODE_NONE
             updateEngineState(state)
         }
 
-        if ((ev.code == OpenWnnEvent.Companion.INPUT_KEY) && processHardware12Keyboard(keyEvent)) {
+        if ((ev.code == OpenWnnEvent.INPUT_KEY) && processHardware12Keyboard(keyEvent)) {
             return true
         }
 
-        if (ev.code == OpenWnnEvent.Companion.LIST_CANDIDATES_FULL) {
+        if (ev.code == OpenWnnEvent.LIST_CANDIDATES_FULL) {
             mStatus = mStatus or STATUS_CANDIDATE_FULL
-            mCandidatesViewManager.viewType = CandidatesViewManager.Companion.VIEW_TYPE_FULL
-            if (!mEngineState.isSymbolList()) {
+            mCandidatesViewManager?.viewType = CandidatesViewManager.VIEW_TYPE_FULL
+            if (!mEngineState.isSymbolList) {
                 mInputViewManager!!.hideInputView()
             }
             return true
-        } else if (ev.code == OpenWnnEvent.Companion.LIST_CANDIDATES_NORMAL) {
+        } else if (ev.code == OpenWnnEvent.LIST_CANDIDATES_NORMAL) {
             mStatus = mStatus and STATUS_CANDIDATE_FULL.inv()
-            mCandidatesViewManager.viewType = CandidatesViewManager.Companion.VIEW_TYPE_NORMAL
+            mCandidatesViewManager?.viewType = CandidatesViewManager.VIEW_TYPE_NORMAL
             mInputViewManager!!.showInputView()
             return true
         }
 
         var ret = false
         when (ev.code) {
-            OpenWnnEvent.Companion.INPUT_CHAR -> {
+            OpenWnnEvent.INPUT_CHAR -> {
                 if ((mPreConverter == null) && !isEnableL2Converter) {
                     /* direct input (= full-width alphabet/number input) */
                     commitText(false)
@@ -891,38 +891,40 @@ class OpenWnnJAJP() : OpenWnn() {
                 ret = true
             }
 
-            OpenWnnEvent.Companion.TOGGLE_CHAR -> {
+            OpenWnnEvent.TOGGLE_CHAR -> {
                 processSoftKeyboardToggleChar(ev.toggleTable)
                 ret = true
             }
 
-            OpenWnnEvent.Companion.TOGGLE_REVERSE_CHAR -> if (((mStatus and STATUS_CANDIDATE_FULL.inv()) == STATUS_INPUT)
-                && !(mEngineState.isConvertState()) && (ev.toggleTable != null)
-            ) {
-                val cursor = mComposingText!!.getCursor(ComposingText.Companion.LAYER1)
-                if (cursor > 0) {
-                    val prevChar = mComposingText!!.getStrSegment(
-                        ComposingText.Companion.LAYER1,
-                        cursor - 1
-                    )!!.string
-                    val c = searchToggleCharacter(prevChar!!, ev.toggleTable!!, true)
-                    if (c != null) {
-                        mComposingText!!.delete(ComposingText.Companion.LAYER1, false)
-                        appendStrSegment(StrSegment(c))
-                        updateViewStatusForPrediction(true, true)
-                        ret = true
-                        break
+            OpenWnnEvent.TOGGLE_REVERSE_CHAR -> run {
+                if (((mStatus and STATUS_CANDIDATE_FULL.inv()) == STATUS_INPUT)
+                    && !(mEngineState.isConvertState) && (ev.toggleTable != null)
+                ) {
+                    val cursor = mComposingText!!.getCursor(ComposingText.LAYER1)
+                    if (cursor > 0) {
+                        val prevChar = mComposingText!!.getStrSegment(
+                            ComposingText.LAYER1,
+                            cursor - 1
+                        )!!.string
+                        val c = searchToggleCharacter(prevChar!!, ev.toggleTable!!, true)
+                        if (c != null) {
+                            mComposingText!!.delete(ComposingText.LAYER1, false)
+                            appendStrSegment(StrSegment(c))
+                            updateViewStatusForPrediction(true, true)
+                            ret = true
+                            return@run
+                        }
                     }
                 }
             }
 
-            OpenWnnEvent.Companion.REPLACE_CHAR -> {
-                val cursor = mComposingText!!.getCursor(ComposingText.Companion.LAYER1)
+            OpenWnnEvent.REPLACE_CHAR -> run {
+                val cursor = mComposingText!!.getCursor(ComposingText.LAYER1)
                 if ((cursor > 0)
-                    && !(mEngineState.isConvertState())
+                    && !(mEngineState.isConvertState)
                 ) {
                     val search = mComposingText!!.getStrSegment(
-                        ComposingText.Companion.LAYER1,
+                        ComposingText.LAYER1,
                         cursor - 1
                     )!!.string
                     val c = ev.replaceTable!![search] as String?
@@ -932,12 +934,12 @@ class OpenWnnJAJP() : OpenWnn() {
                         updateViewStatusForPrediction(true, true)
                         ret = true
                         mStatus = STATUS_INPUT_EDIT
-                        break
+                        return@run
                     }
                 }
             }
 
-            OpenWnnEvent.Companion.INPUT_KEY -> {
+            OpenWnnEvent.INPUT_KEY -> {
                 /* update shift/alt state */
                 when (keyCode) {
                     KeyEvent.KEYCODE_DPAD_DOWN, KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.KEYCODE_DPAD_RIGHT, KeyEvent.KEYCODE_DPAD_UP -> if (mTutorial != null) {
@@ -971,7 +973,7 @@ class OpenWnnJAJP() : OpenWnn() {
                 ret = processKeyEvent(keyEvent!!)
             }
 
-            OpenWnnEvent.Companion.INPUT_SOFT_KEY -> {
+            OpenWnnEvent.INPUT_SOFT_KEY -> {
                 ret = processKeyEvent(keyEvent!!)
                 if (!ret) {
                     val code = keyEvent.keyCode
@@ -985,38 +987,38 @@ class OpenWnnJAJP() : OpenWnn() {
                 }
             }
 
-            OpenWnnEvent.Companion.SELECT_CANDIDATE -> {
+            OpenWnnEvent.SELECT_CANDIDATE -> {
                 initCommitInfoForWatchCursor()
                 if (isEnglishPrediction) {
                     mComposingText!!.clear()
                 }
                 mStatus = commitText(ev.word!!)
-                if (isEnglishPrediction && !mEngineState.isSymbolList() && mEnableAutoInsertSpace) {
+                if (isEnglishPrediction && !mEngineState.isSymbolList && mEnableAutoInsertSpace) {
                     commitSpaceJustOne()
                 }
                 checkCommitInfo()
 
-                if (mEngineState.isSymbolList()) {
+                if (mEngineState.isSymbolList) {
                     mEnableAutoDeleteSpace = false
                 }
             }
 
-            OpenWnnEvent.Companion.CONVERT -> {
-                if (mEngineState.isRenbun()) {
+            OpenWnnEvent.CONVERT -> run {
+                if (mEngineState.isRenbun) {
                     if (mCandidatesViewManager is TextCandidatesViewManager) {
-                        if (!mCandidatesViewManager.isFocusCandidate) {
+                        if (mCandidatesViewManager?.isFocusCandidate != true) {
                             processDownKeyEvent()
                         }
                         processRightKeyEvent()
                     } else {
                         mCandidatesViewManager!!.processMoveKeyEvent(KeyEvent.KEYCODE_DPAD_RIGHT)
                     }
-                    break
+                    return@run
                 }
-                startConvert(EngineState.Companion.CONVERT_TYPE_RENBUN)
+                startConvert(EngineState.CONVERT_TYPE_RENBUN)
             }
 
-            OpenWnnEvent.Companion.COMMIT_COMPOSING_TEXT -> commitAllText()
+            OpenWnnEvent.COMMIT_COMPOSING_TEXT -> commitAllText()
         }
 
         return ret
@@ -1032,6 +1034,7 @@ class OpenWnnJAJP() : OpenWnn() {
     /** @see jp.co.omronsoft.openwnn.OpenWnn.onEvaluateInputViewShown
      */
     override fun onEvaluateInputViewShown(): Boolean {
+        super.onEvaluateInputViewShown()
         return true
     }
 
@@ -1064,7 +1067,7 @@ class OpenWnnJAJP() : OpenWnn() {
             }
             if (ev.isCtrlPressed) {
                 if (key == KeyEvent.KEYCODE_A || key == KeyEvent.KEYCODE_F || key == KeyEvent.KEYCODE_C || key == KeyEvent.KEYCODE_V || key == KeyEvent.KEYCODE_X || key == KeyEvent.KEYCODE_Z) {
-                    return if (mComposingText!!.size(ComposingText.Companion.LAYER1) < 1) {
+                    return if (mComposingText!!.size(ComposingText.LAYER1) < 1) {
                         false
                     } else {
                         true
@@ -1177,24 +1180,24 @@ class OpenWnnJAJP() : OpenWnn() {
         }
 
         /* Functional key */
-        if (mComposingText!!.size(ComposingText.Companion.LAYER1) > 0) {
+        if (mComposingText!!.size(ComposingText.LAYER1) > 0) {
             when (key) {
                 KeyEvent.KEYCODE_DEL -> {
                     mStatus = STATUS_INPUT_EDIT
-                    if (mEngineState.isConvertState()) {
+                    if (mEngineState.isConvertState) {
                         mComposingText!!.setCursor(
-                            ComposingText.Companion.LAYER1,
-                            mComposingText!!.toString(ComposingText.Companion.LAYER1)!!.length
+                            ComposingText.LAYER1,
+                            mComposingText!!.toString(ComposingText.LAYER1)!!.length
                         )
                         mExactMatchMode = false
                     } else {
-                        if ((mComposingText!!.size(ComposingText.Companion.LAYER1) == 1)
-                            && mComposingText!!.getCursor(ComposingText.Companion.LAYER1) != 0
+                        if ((mComposingText!!.size(ComposingText.LAYER1) == 1)
+                            && mComposingText!!.getCursor(ComposingText.LAYER1) != 0
                         ) {
                             initializeScreen()
                             return true
                         } else {
-                            mComposingText!!.delete(ComposingText.Companion.LAYER1, false)
+                            mComposingText!!.delete(ComposingText.LAYER1, false)
                         }
                     }
                     updateViewStatusForPrediction(true, true)
@@ -1202,13 +1205,13 @@ class OpenWnnJAJP() : OpenWnn() {
                 }
 
                 KeyEvent.KEYCODE_BACK -> {
-                    if (mCandidatesViewManager.viewType == CandidatesViewManager.Companion.VIEW_TYPE_FULL) {
+                    if (mCandidatesViewManager?.viewType == CandidatesViewManager.VIEW_TYPE_FULL) {
                         mStatus = mStatus and STATUS_CANDIDATE_FULL.inv()
-                        mCandidatesViewManager.viewType =
-                            CandidatesViewManager.Companion.VIEW_TYPE_NORMAL
+                        mCandidatesViewManager?.viewType =
+                            CandidatesViewManager.VIEW_TYPE_NORMAL
                         mInputViewManager!!.showInputView()
                     } else {
-                        if (!mEngineState.isConvertState()) {
+                        if (!mEngineState.isConvertState) {
                             initializeScreen()
                             if (mConverter != null) {
                                 mConverter!!.init()
@@ -1218,8 +1221,8 @@ class OpenWnnJAJP() : OpenWnn() {
                             mStatus = STATUS_INPUT_EDIT
                             mExactMatchMode = false
                             mComposingText!!.setCursor(
-                                ComposingText.Companion.LAYER1,
-                                mComposingText!!.toString(ComposingText.Companion.LAYER1)!!.length
+                                ComposingText.LAYER1,
+                                mComposingText!!.toString(ComposingText.LAYER1)!!.length
                             )
                             updateViewStatusForPrediction(true, true)
                         }
@@ -1237,7 +1240,7 @@ class OpenWnnJAJP() : OpenWnn() {
 
                 KeyEvent.KEYCODE_DPAD_RIGHT -> {
                     if (!isEnableL2Converter) {
-                        if (mEngineState.keyboard == EngineState.Companion.KEYBOARD_12KEY) {
+                        if (mEngineState.keyboard == EngineState.KEYBOARD_12KEY) {
                             commitText(false)
                         }
                     } else {
@@ -1252,7 +1255,7 @@ class OpenWnnJAJP() : OpenWnn() {
                 }
 
                 KeyEvent.KEYCODE_DPAD_UP -> {
-                    if (OpenWnn.Companion.isXLarge()) {
+                    if (OpenWnn.isXLarge) {
                         updateViewStatusForPrediction(true, true)
                     } else {
                         if (mCandidatesViewManager!!.isFocusCandidate) {
@@ -1268,7 +1271,7 @@ class OpenWnnJAJP() : OpenWnn() {
                         return true
                     }
                     if (!isEnglishPrediction) {
-                        val cursor = mComposingText!!.getCursor(ComposingText.Companion.LAYER1)
+                        val cursor = mComposingText!!.getCursor(ComposingText.LAYER1)
                         if (cursor < 1) {
                             return true
                         }
@@ -1294,7 +1297,7 @@ class OpenWnnJAJP() : OpenWnn() {
             }
         } else {
             /* if there is no composing string. */
-            if (mCandidatesViewManager.currentView.isShown) {
+            if (mCandidatesViewManager?.currentView?.isShown == true) {
                 /* displaying relational prediction candidates */
                 when (key) {
                     KeyEvent.KEYCODE_DPAD_LEFT -> {
@@ -1376,21 +1379,21 @@ class OpenWnnJAJP() : OpenWnn() {
             updateMetaKeyStateDisplay()
 
             val pref = PreferenceManager.getDefaultSharedPreferences(this)
-            if (mEngineState.isEnglish()) {
+            if (mEngineState.isEnglish) {
                 /* English mode to Japanese mode */
-                (mInputViewManager as DefaultSoftKeyboardJAJP).changeKeyMode(DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_HIRAGANA)
+                (mInputViewManager as DefaultSoftKeyboardJAJP).changeKeyMode(DefaultSoftKeyboard.KEYMODE_JA_FULL_HIRAGANA)
                 mConverter = mConverterJAJP
 
                 mEnableLearning = pref.getBoolean("opt_enable_learning_ja", true)
                 mEnablePrediction = pref.getBoolean("opt_prediction_ja", true)
             } else {
                 /* Japanese mode to English mode */
-                (mInputViewManager as DefaultSoftKeyboardJAJP).changeKeyMode(DefaultSoftKeyboard.Companion.KEYMODE_JA_HALF_ALPHABET)
+                (mInputViewManager as DefaultSoftKeyboardJAJP).changeKeyMode(DefaultSoftKeyboard.KEYMODE_JA_HALF_ALPHABET)
                 mConverter = mConverterEN
 
                 mEnableLearning = pref.getBoolean("opt_enable_learning_en", true)
                 mEnablePrediction = pref.getBoolean("opt_prediction_en", false)
-                mEnableSpellCorrection = if (OpenWnn.Companion.isXLarge()) {
+                mEnableSpellCorrection = if (OpenWnn.isXLarge) {
                     pref.getBoolean("opt_spell_correction_en", false)
                 } else {
                     pref.getBoolean("opt_spell_correction_en", true)
@@ -1399,7 +1402,7 @@ class OpenWnnJAJP() : OpenWnn() {
             mCandidatesViewManager!!.clearCandidates()
         } else if (ev.isAltPressed) {
             /* display the symbol list (G1 specific. same as KEYCODE_SYM) */
-            if (!mEngineState.isSymbolList()) {
+            if (!mEngineState.isSymbolList) {
                 commitAllText()
             }
             changeEngineMode(ENGINE_MODE_SYMBOL)
@@ -1418,9 +1421,9 @@ class OpenWnnJAJP() : OpenWnn() {
                 checkCommitInfo()
             }
             mEnableAutoDeleteSpace = false
-        } else if (mEngineState.isRenbun()) {
+        } else if (mEngineState.isRenbun) {
             if (mCandidatesViewManager is TextCandidatesViewManager) {
-                if (!mCandidatesViewManager.isFocusCandidate) {
+                if (mCandidatesViewManager?.isFocusCandidate != true) {
                     processDownKeyEvent()
                 }
                 processRightKeyEvent()
@@ -1434,7 +1437,7 @@ class OpenWnnJAJP() : OpenWnn() {
                 mCandidatesViewManager!!.clearCandidates()
                 breakSequence()
             } else {
-                startConvert(EngineState.Companion.CONVERT_TYPE_RENBUN)
+                startConvert(EngineState.CONVERT_TYPE_RENBUN)
             }
         }
     }
@@ -1474,13 +1477,13 @@ class OpenWnnJAJP() : OpenWnn() {
             }
 
             if (completed) {
-                if (!mEngineState.isEnglish()) {
+                if (!mEngineState.isEnglish) {
                     commitTextWithoutLastAlphabet()
                 } else {
                     commitText(false)
                 }
             } else {
-                updateViewStatus(ComposingText.Companion.LAYER1, false, true)
+                updateViewStatus(ComposingText.LAYER1, false, true)
             }
         }
     }
@@ -1488,8 +1491,8 @@ class OpenWnnJAJP() : OpenWnn() {
     /** Thread for updating the candidates view  */
     private fun updatePrediction() {
         var candidates = 0
-        val cursor = mComposingText!!.getCursor(ComposingText.Companion.LAYER1)
-        if (isEnableL2Converter || mEngineState.isSymbolList()) {
+        val cursor = mComposingText!!.getCursor(ComposingText.LAYER1)
+        if (isEnableL2Converter || mEngineState.isSymbolList) {
             candidates = if (mExactMatchMode) {
                 /* exact matching */
                 mConverter!!.predict(mComposingText, 0, cursor)
@@ -1501,8 +1504,8 @@ class OpenWnnJAJP() : OpenWnn() {
 
         /* update the candidates view */
         if (candidates > 0) {
-            mHasContinuedPrediction = ((mComposingText!!.size(ComposingText.Companion.LAYER1) == 0)
-                    && !mEngineState.isSymbolList())
+            mHasContinuedPrediction = ((mComposingText!!.size(ComposingText.LAYER1) == 0)
+                    && !mEngineState.isSymbolList)
             mCandidatesViewManager!!.displayCandidates(mConverter)
         } else {
             mCandidatesViewManager!!.clearCandidates()
@@ -1518,19 +1521,19 @@ class OpenWnnJAJP() : OpenWnn() {
             return
         }
 
-        if (mEngineState.isConvertState()) {
-            if (mEngineState.isEisuKana()) {
+        if (mEngineState.isConvertState) {
+            if (mEngineState.isEisuKana) {
                 mExactMatchMode = true
             }
 
-            if (1 < mComposingText!!.getCursor(ComposingText.Companion.LAYER1)) {
-                mComposingText!!.moveCursor(ComposingText.Companion.LAYER1, -1)
+            if (1 < mComposingText!!.getCursor(ComposingText.LAYER1)) {
+                mComposingText!!.moveCursor(ComposingText.LAYER1, -1)
             }
         } else if (mExactMatchMode) {
-            mComposingText!!.moveCursor(ComposingText.Companion.LAYER1, -1)
+            mComposingText!!.moveCursor(ComposingText.LAYER1, -1)
         } else {
             if (isEnglishPrediction) {
-                mComposingText!!.moveCursor(ComposingText.Companion.LAYER1, -1)
+                mComposingText!!.moveCursor(ComposingText.LAYER1, -1)
             } else {
                 mExactMatchMode = true
             }
@@ -1552,25 +1555,25 @@ class OpenWnnJAJP() : OpenWnn() {
 
         var layer = mTargetLayer
         val composingText = mComposingText!!
-        if (mExactMatchMode || (mEngineState.isConvertState())) {
-            val textSize = composingText.size(ComposingText.Companion.LAYER1)
-            if (composingText.getCursor(ComposingText.Companion.LAYER1) == textSize) {
+        if (mExactMatchMode || (mEngineState.isConvertState)) {
+            val textSize = composingText.size(ComposingText.LAYER1)
+            if (composingText.getCursor(ComposingText.LAYER1) == textSize) {
                 mExactMatchMode = false
-                layer = ComposingText.Companion.LAYER1 /* convert -> prediction */
+                layer = ComposingText.LAYER1 /* convert -> prediction */
                 val state: EngineState = EngineState()
-                state.convertType = EngineState.Companion.CONVERT_TYPE_NONE
+                state.convertType = EngineState.CONVERT_TYPE_NONE
                 updateEngineState(state)
             } else {
-                if (mEngineState.isEisuKana()) {
+                if (mEngineState.isEisuKana) {
                     mExactMatchMode = true
                 }
-                composingText.moveCursor(ComposingText.Companion.LAYER1, 1)
+                composingText.moveCursor(ComposingText.LAYER1, 1)
             }
         } else {
-            if (composingText.getCursor(ComposingText.Companion.LAYER1)
-                < composingText.size(ComposingText.Companion.LAYER1)
+            if (composingText.getCursor(ComposingText.LAYER1)
+                < composingText.size(ComposingText.LAYER1)
             ) {
-                composingText.moveCursor(ComposingText.Companion.LAYER1, 1)
+                composingText.moveCursor(ComposingText.LAYER1, 1)
             }
         }
 
@@ -1613,9 +1616,9 @@ class OpenWnnJAJP() : OpenWnn() {
             KeyEvent.KEYCODE_CALL, KeyEvent.KEYCODE_VOLUME_DOWN, KeyEvent.KEYCODE_VOLUME_UP -> return false
 
             KeyEvent.KEYCODE_DPAD_CENTER -> ret = true
-            KeyEvent.KEYCODE_BACK -> if (mCandidatesViewManager.viewType == CandidatesViewManager.Companion.VIEW_TYPE_FULL) {
+            KeyEvent.KEYCODE_BACK -> if (mCandidatesViewManager?.viewType == CandidatesViewManager.VIEW_TYPE_FULL) {
                 mStatus = mStatus and STATUS_CANDIDATE_FULL.inv()
-                mCandidatesViewManager.viewType = CandidatesViewManager.Companion.VIEW_TYPE_NORMAL
+                mCandidatesViewManager?.viewType = CandidatesViewManager.VIEW_TYPE_NORMAL
                 mInputViewManager!!.showInputView()
                 return true
             } else {
@@ -1641,10 +1644,10 @@ class OpenWnnJAJP() : OpenWnn() {
      */
     private fun updateViewStatusForPrediction(updateCandidates: Boolean, updateEmptyText: Boolean) {
         val state: EngineState = EngineState()
-        state.convertType = EngineState.Companion.CONVERT_TYPE_NONE
+        state.convertType = EngineState.CONVERT_TYPE_NONE
         updateEngineState(state)
 
-        updateViewStatus(ComposingText.Companion.LAYER1, updateCandidates, updateEmptyText)
+        updateViewStatus(ComposingText.LAYER1, updateCandidates, updateEmptyText)
     }
 
     /**
@@ -1673,22 +1676,22 @@ class OpenWnnJAJP() : OpenWnn() {
             if (cursor != 0) {
                 var highlightEnd = 0
 
-                if ((mExactMatchMode && (!mEngineState.isEisuKana()))
+                if ((mExactMatchMode && (!mEngineState.isEisuKana))
                     || (FIX_CURSOR_TEXT_END && isEnglishPrediction
-                            && (cursor < mComposingText!!.size(ComposingText.Companion.LAYER1)))
+                            && (cursor < mComposingText!!.size(ComposingText.LAYER1)))
                 ) {
                     mDisplayText.setSpan(
                         SPAN_EXACT_BGCOLOR_HL, 0, cursor,
                         Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
                     )
                     highlightEnd = cursor
-                } else if (FIX_CURSOR_TEXT_END && mEngineState.isEisuKana()) {
+                } else if (FIX_CURSOR_TEXT_END && mEngineState.isEisuKana) {
                     mDisplayText.setSpan(
                         SPAN_EISUKANA_BGCOLOR_HL, 0, cursor,
                         Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
                     )
                     highlightEnd = cursor
-                } else if (layer == ComposingText.Companion.LAYER2) {
+                } else if (layer == ComposingText.LAYER2) {
                     highlightEnd = mComposingText!!.toString(layer, 0, 0)!!.length
 
                     /* highlights the first segment */
@@ -1737,13 +1740,13 @@ class OpenWnnJAJP() : OpenWnn() {
      */
     private fun updateCandidateView() {
         when (mTargetLayer) {
-            ComposingText.Companion.LAYER0, ComposingText.Companion.LAYER1 -> if (mEnablePrediction || mEngineState.isSymbolList() || mEngineState.isEisuKana()) {
+            ComposingText.LAYER0, ComposingText.LAYER1 -> if (mEnablePrediction || mEngineState.isSymbolList || mEngineState.isEisuKana) {
                 /* update the candidates view */
-                if ((mComposingText!!.size(ComposingText.Companion.LAYER1) != 0)
-                    && !mEngineState.isConvertState()
+                if ((mComposingText!!.size(ComposingText.LAYER1) != 0)
+                    && !mEngineState.isConvertState
                 ) {
                     mHandler.removeMessages(MSG_PREDICTION)
-                    if (mCandidatesViewManager.currentView.isShown) {
+                    if (mCandidatesViewManager?.currentView?.isShown == true) {
                         mHandler.sendMessageDelayed(
                             mHandler.obtainMessage(MSG_PREDICTION),
                             PREDICTION_DELAY_MS_SHOWING_CANDIDATE.toLong()
@@ -1763,7 +1766,7 @@ class OpenWnnJAJP() : OpenWnn() {
                 mCandidatesViewManager!!.clearCandidates()
             }
 
-            ComposingText.Companion.LAYER2 -> {
+            ComposingText.LAYER2 -> {
                 if (mCommitCount == 0) {
                     mHandler.removeMessages(MSG_PREDICTION)
                     mConverter!!.convert(mComposingText)
@@ -1772,12 +1775,12 @@ class OpenWnnJAJP() : OpenWnn() {
                 val candidates = mConverter!!.makeCandidateListOf(mCommitCount)
 
                 if (candidates != 0) {
-                    mComposingText!!.setCursor(ComposingText.Companion.LAYER2, 1)
+                    mComposingText!!.setCursor(ComposingText.LAYER2, 1)
                     mCandidatesViewManager!!.displayCandidates(mConverter)
                 } else {
                     mComposingText!!.setCursor(
-                        ComposingText.Companion.LAYER1,
-                        mComposingText!!.toString(ComposingText.Companion.LAYER1)!!.length
+                        ComposingText.LAYER1,
+                        mComposingText!!.toString(ComposingText.LAYER1)!!.length
                     )
                     mCandidatesViewManager!!.clearCandidates()
                 }
@@ -1796,8 +1799,8 @@ class OpenWnnJAJP() : OpenWnn() {
     private fun commitText(learn: Boolean): Int {
         if (isEnglishPrediction) {
             mComposingText!!.setCursor(
-                ComposingText.Companion.LAYER1,
-                mComposingText!!.size(ComposingText.Companion.LAYER1)
+                ComposingText.LAYER1,
+                mComposingText!!.size(ComposingText.LAYER1)
             )
         }
 
@@ -1810,12 +1813,12 @@ class OpenWnnJAJP() : OpenWnn() {
 
         if (mConverter != null) {
             if (learn) {
-                if (mEngineState.isRenbun()) {
+                if (mEngineState.isRenbun) {
                     learnWord(0) /* select the top of the clauses */
                 } else {
-                    if (mComposingText!!.size(ComposingText.Companion.LAYER1) != 0) {
+                    if (mComposingText!!.size(ComposingText.LAYER1) != 0) {
                         val stroke = mComposingText!!.toString(
-                            ComposingText.Companion.LAYER1,
+                            ComposingText.LAYER1,
                             0,
                             mComposingText!!.getCursor(layer) - 1
                         )
@@ -1839,9 +1842,9 @@ class OpenWnnJAJP() : OpenWnn() {
         val tmp = mComposingText!!.getStrSegment(layer, -1)!!.string
 
         if (isAlphabetLast(tmp!!)) {
-            mComposingText!!.moveCursor(ComposingText.Companion.LAYER1, -1)
+            mComposingText!!.moveCursor(ComposingText.LAYER1, -1)
             commitText(false)
-            mComposingText!!.moveCursor(ComposingText.Companion.LAYER1, 1)
+            mComposingText!!.moveCursor(ComposingText.LAYER1, 1)
         } else {
             commitText(false)
         }
@@ -1852,12 +1855,12 @@ class OpenWnnJAJP() : OpenWnn() {
      */
     private fun commitAllText() {
         initCommitInfoForWatchCursor()
-        if (mEngineState.isConvertState()) {
+        if (mEngineState.isConvertState) {
             commitConvertingText()
         } else {
             mComposingText!!.setCursor(
-                ComposingText.Companion.LAYER1,
-                mComposingText!!.size(ComposingText.Companion.LAYER1)
+                ComposingText.LAYER1,
+                mComposingText!!.size(ComposingText.LAYER1)
             )
             mStatus = commitText(true)
         }
@@ -1911,23 +1914,23 @@ class OpenWnnJAJP() : OpenWnn() {
         mExactMatchMode = false
         mCommitCount++
 
-        if ((layer == ComposingText.Companion.LAYER2) && (mComposingText!!.size(layer) == 0)) {
+        if ((layer == ComposingText.LAYER2) && (mComposingText!!.size(layer) == 0)) {
             layer = 1 /* for connected prediction */
         }
 
         val committed = autoCommitEnglish()
         mEnableAutoDeleteSpace = true
 
-        if (layer == ComposingText.Companion.LAYER2) {
+        if (layer == ComposingText.LAYER2) {
             val state: EngineState = EngineState()
-            state.convertType = EngineState.Companion.CONVERT_TYPE_RENBUN
+            state.convertType = EngineState.CONVERT_TYPE_RENBUN
             updateEngineState(state)
             updateViewStatus(layer, !committed, false)
         } else {
             updateViewStatusForPrediction(!committed, false)
         }
 
-        return if (mComposingText!!.size(ComposingText.Companion.LAYER0) == 0) {
+        return if (mComposingText!!.size(ComposingText.LAYER0) == 0) {
             STATUS_INIT
         } else {
             STATUS_INPUT_EDIT
@@ -1940,7 +1943,7 @@ class OpenWnnJAJP() : OpenWnn() {
          *
          * @return  `true` if it is English prediction mode; otherwise, `false`.
          */
-        get() = (mEngineState.isEnglish() && isEnableL2Converter)
+        get() = (mEngineState.isEnglish && isEnableL2Converter)
 
     /**
      * Change the conversion engine and the letter converter(Romaji-to-Kana converter).
@@ -1955,33 +1958,33 @@ class OpenWnnJAJP() : OpenWnn() {
 
         when (mode) {
             ENGINE_MODE_OPT_TYPE_QWERTY -> {
-                state.keyboard = EngineState.Companion.KEYBOARD_QWERTY
+                state.keyboard = EngineState.KEYBOARD_QWERTY
                 updateEngineState(state)
                 clearCommitInfo()
                 return
             }
 
             ENGINE_MODE_OPT_TYPE_12KEY -> {
-                state.keyboard = EngineState.Companion.KEYBOARD_12KEY
+                state.keyboard = EngineState.KEYBOARD_12KEY
                 updateEngineState(state)
                 clearCommitInfo()
                 return
             }
 
             ENGINE_MODE_EISU_KANA -> {
-                if (mEngineState.isEisuKana()) {
-                    state.temporaryMode = EngineState.Companion.TEMPORARY_DICTIONARY_MODE_NONE
+                if (mEngineState.isEisuKana) {
+                    state.temporaryMode = EngineState.TEMPORARY_DICTIONARY_MODE_NONE
                     updateEngineState(state)
                     updateViewStatusForPrediction(true, true) /* prediction only */
                 } else {
-                    startConvert(EngineState.Companion.CONVERT_TYPE_EISU_KANA)
+                    startConvert(EngineState.CONVERT_TYPE_EISU_KANA)
                 }
                 return
             }
 
             ENGINE_MODE_SYMBOL -> {
                 if (mEnableSymbolList && !mDirectInputMode) {
-                    state.temporaryMode = EngineState.Companion.TEMPORARY_DICTIONARY_MODE_SYMBOL
+                    state.temporaryMode = EngineState.TEMPORARY_DICTIONARY_MODE_SYMBOL
                     updateEngineState(state)
                     updateViewStatusForPrediction(true, true)
                 }
@@ -1997,7 +2000,7 @@ class OpenWnnJAJP() : OpenWnn() {
         }
 
         state = EngineState()
-        state.temporaryMode = EngineState.Companion.TEMPORARY_DICTIONARY_MODE_NONE
+        state.temporaryMode = EngineState.TEMPORARY_DICTIONARY_MODE_NONE
         updateEngineState(state)
 
         val pref = PreferenceManager.getDefaultSharedPreferences(this)
@@ -2011,14 +2014,14 @@ class OpenWnnJAJP() : OpenWnn() {
 
             OpenWnnEvent.Mode.NO_LV1_CONV -> {
                 /* no Romaji-to-Kana conversion (=English prediction mode) */
-                state.dictionarySet = EngineState.Companion.DICTIONARYSET_EN
+                state.dictionarySet = EngineState.DICTIONARYSET_EN
                 updateEngineState(state)
                 mConverter = mConverterEN
                 mPreConverter = null
 
                 mEnableLearning = pref.getBoolean("opt_enable_learning_en", true)
                 mEnablePrediction = pref.getBoolean("opt_prediction_en", false)
-                mEnableSpellCorrection = if (OpenWnn.Companion.isXLarge()) {
+                mEnableSpellCorrection = if (OpenWnn.isXLarge) {
                     pref.getBoolean("opt_spell_correction_en", false)
                 } else {
                     pref.getBoolean("opt_spell_correction_en", true)
@@ -2042,7 +2045,7 @@ class OpenWnnJAJP() : OpenWnn() {
 
             else -> {
                 /* HIRAGANA input mode */
-                state.dictionarySet = EngineState.Companion.DICTIONARYSET_JP
+                state.dictionarySet = EngineState.DICTIONARYSET_JP
                 updateEngineState(state)
                 mConverter = mConverterJAJP
                 mPreConverter = mPreConverterHiragana
@@ -2065,40 +2068,40 @@ class OpenWnnJAJP() : OpenWnn() {
         val myState = mEngineState
 
         /* language */
-        if ((state.dictionarySet != EngineState.Companion.INVALID)
+        if ((state.dictionarySet != EngineState.INVALID)
             && (myState.dictionarySet != state.dictionarySet)
         ) {
             when (state.dictionarySet) {
-                EngineState.Companion.DICTIONARYSET_EN -> setDictionary(OpenWnnEngineJAJP.Companion.DIC_LANG_EN)
-                EngineState.Companion.DICTIONARYSET_JP -> setDictionary(OpenWnnEngineJAJP.Companion.DIC_LANG_JP)
-                else -> setDictionary(OpenWnnEngineJAJP.Companion.DIC_LANG_JP)
+                EngineState.DICTIONARYSET_EN -> setDictionary(OpenWnnEngineJAJP.DIC_LANG_EN)
+                EngineState.DICTIONARYSET_JP -> setDictionary(OpenWnnEngineJAJP.DIC_LANG_JP)
+                else -> setDictionary(OpenWnnEngineJAJP.DIC_LANG_JP)
             }
             myState.dictionarySet = state.dictionarySet
             breakSequence()
 
             /* update keyboard setting */
-            if (state.keyboard == EngineState.Companion.INVALID) {
+            if (state.keyboard == EngineState.INVALID) {
                 state.keyboard = myState.keyboard
             }
         }
 
         /* type of conversion */
-        if ((state.convertType != EngineState.Companion.INVALID)
+        if ((state.convertType != EngineState.INVALID)
             && (myState.convertType != state.convertType)
         ) {
             when (state.convertType) {
-                EngineState.Companion.CONVERT_TYPE_NONE -> setDictionary(mPrevDictionarySet)
-                EngineState.Companion.CONVERT_TYPE_EISU_KANA -> setDictionary(OpenWnnEngineJAJP.Companion.DIC_LANG_JP_EISUKANA)
-                EngineState.Companion.CONVERT_TYPE_RENBUN -> setDictionary(OpenWnnEngineJAJP.Companion.DIC_LANG_JP)
-                else -> setDictionary(OpenWnnEngineJAJP.Companion.DIC_LANG_JP)
+                EngineState.CONVERT_TYPE_NONE -> setDictionary(mPrevDictionarySet)
+                EngineState.CONVERT_TYPE_EISU_KANA -> setDictionary(OpenWnnEngineJAJP.DIC_LANG_JP_EISUKANA)
+                EngineState.CONVERT_TYPE_RENBUN -> setDictionary(OpenWnnEngineJAJP.DIC_LANG_JP)
+                else -> setDictionary(OpenWnnEngineJAJP.DIC_LANG_JP)
             }
             myState.convertType = state.convertType
         }
 
         /* temporary dictionary */
-        if (state.temporaryMode != EngineState.Companion.INVALID) {
+        if (state.temporaryMode != EngineState.INVALID) {
             when (state.temporaryMode) {
-                EngineState.Companion.TEMPORARY_DICTIONARY_MODE_NONE -> if (myState.temporaryMode != EngineState.Companion.TEMPORARY_DICTIONARY_MODE_NONE) {
+                EngineState.TEMPORARY_DICTIONARY_MODE_NONE -> if (myState.temporaryMode != EngineState.TEMPORARY_DICTIONARY_MODE_NONE) {
                     setDictionary(mPrevDictionarySet)
                     mCurrentSymbol = -1
                     mPreConverter = mPreConverterBack
@@ -2107,40 +2110,40 @@ class OpenWnnJAJP() : OpenWnn() {
                         mDisableAutoCommitEnglishMask and AUTO_COMMIT_ENGLISH_SYMBOL.inv()
                     (mInputViewManager as DefaultSoftKeyboard).setNormalKeyboard()
                     mTextCandidatesViewManager!!.setSymbolMode(false, ENGINE_MODE_SYMBOL_NONE)
-                    if (OpenWnn.Companion.isXLarge()) {
+                    if (OpenWnn.isXLarge) {
                         mCandidatesViewManager = mTextCandidates1LineViewManager
-                        val view = mTextCandidates1LineViewManager.currentView
+                        val view = mTextCandidates1LineViewManager?.currentView
                         if (view != null) {
                             setCandidatesView(view)
                         }
                     }
                 }
 
-                EngineState.Companion.TEMPORARY_DICTIONARY_MODE_SYMBOL -> {
+                EngineState.TEMPORARY_DICTIONARY_MODE_SYMBOL -> {
                     if (++mCurrentSymbol >= SYMBOL_LISTS.size) {
                         mCurrentSymbol = 0
                     }
                     if (mEnableSymbolListNonHalf) {
                         mConverterSymbolEngineBack!!.setDictionary(SYMBOL_LISTS[mCurrentSymbol])
                     } else {
-                        mConverterSymbolEngineBack!!.setDictionary(SymbolList.Companion.SYMBOL_ENGLISH)
+                        mConverterSymbolEngineBack!!.setDictionary(SymbolList.SYMBOL_ENGLISH)
                     }
                     mConverter = mConverterSymbolEngineBack
                     mDisableAutoCommitEnglishMask =
                         mDisableAutoCommitEnglishMask or AUTO_COMMIT_ENGLISH_SYMBOL
                     var engineModeSymbol = 0
 
-                    if (SYMBOL_LISTS[mCurrentSymbol] === SymbolList.Companion.SYMBOL_JAPANESE) {
+                    if (SYMBOL_LISTS[mCurrentSymbol] === SymbolList.SYMBOL_JAPANESE) {
                         engineModeSymbol = ENGINE_MODE_SYMBOL
-                    } else if (SYMBOL_LISTS[mCurrentSymbol] === SymbolList.Companion.SYMBOL_JAPANESE_FACE) {
+                    } else if (SYMBOL_LISTS[mCurrentSymbol] === SymbolList.SYMBOL_JAPANESE_FACE) {
                         engineModeSymbol = ENGINE_MODE_SYMBOL_KAO_MOJI
                     } else {
                     }
 
                     mTextCandidatesViewManager!!.setSymbolMode(true, engineModeSymbol)
-                    if (OpenWnn.Companion.isXLarge()) {
+                    if (OpenWnn.isXLarge) {
                         mCandidatesViewManager = mTextCandidatesViewManager
-                        val view = mTextCandidatesViewManager.currentView
+                        val view = mTextCandidatesViewManager?.currentView
                         if (view != null) {
                             setCandidatesView(view)
                         }
@@ -2155,7 +2158,7 @@ class OpenWnnJAJP() : OpenWnn() {
         }
 
         /* preference dictionary */
-        if ((state.preferenceDictionary != EngineState.Companion.INVALID)
+        if ((state.preferenceDictionary != EngineState.INVALID)
             && (myState.preferenceDictionary != state.preferenceDictionary)
         ) {
             myState.preferenceDictionary = state.preferenceDictionary
@@ -2163,28 +2166,28 @@ class OpenWnnJAJP() : OpenWnn() {
         }
 
         /* keyboard type */
-        if (state.keyboard != EngineState.Companion.INVALID) {
+        if (state.keyboard != EngineState.INVALID) {
             when (state.keyboard) {
-                EngineState.Companion.KEYBOARD_12KEY -> {
-                    mConverterJAJP!!.setKeyboardType(OpenWnnEngineJAJP.Companion.KEYBOARD_KEYPAD12)
-                    mConverterEN!!.setDictionary(OpenWnnEngineEN.Companion.DICT_DEFAULT)
+                EngineState.KEYBOARD_12KEY -> {
+                    mConverterJAJP!!.setKeyboardType(OpenWnnEngineJAJP.KEYBOARD_KEYPAD12)
+                    mConverterEN!!.setDictionary(OpenWnnEngineEN.DICT_DEFAULT)
                 }
 
-                EngineState.Companion.KEYBOARD_QWERTY -> {
-                    mConverterJAJP!!.setKeyboardType(OpenWnnEngineJAJP.Companion.KEYBOARD_QWERTY)
+                EngineState.KEYBOARD_QWERTY -> {
+                    mConverterJAJP!!.setKeyboardType(OpenWnnEngineJAJP.KEYBOARD_QWERTY)
                     if (mEnableSpellCorrection) {
-                        mConverterEN!!.setDictionary(OpenWnnEngineEN.Companion.DICT_FOR_CORRECT_MISTYPE)
+                        mConverterEN!!.setDictionary(OpenWnnEngineEN.DICT_FOR_CORRECT_MISTYPE)
                     } else {
-                        mConverterEN!!.setDictionary(OpenWnnEngineEN.Companion.DICT_DEFAULT)
+                        mConverterEN!!.setDictionary(OpenWnnEngineEN.DICT_DEFAULT)
                     }
                 }
 
                 else -> {
-                    mConverterJAJP!!.setKeyboardType(OpenWnnEngineJAJP.Companion.KEYBOARD_QWERTY)
+                    mConverterJAJP!!.setKeyboardType(OpenWnnEngineJAJP.KEYBOARD_QWERTY)
                     if (mEnableSpellCorrection) {
-                        mConverterEN!!.setDictionary(OpenWnnEngineEN.Companion.DICT_FOR_CORRECT_MISTYPE)
+                        mConverterEN!!.setDictionary(OpenWnnEngineEN.DICT_FOR_CORRECT_MISTYPE)
                     } else {
-                        mConverterEN!!.setDictionary(OpenWnnEngineEN.Companion.DICT_DEFAULT)
+                        mConverterEN!!.setDictionary(OpenWnnEngineEN.DICT_DEFAULT)
                     }
                 }
             }
@@ -2200,19 +2203,19 @@ class OpenWnnJAJP() : OpenWnn() {
     private fun setDictionary(mode: Int) {
         var target = mode
         when (target) {
-            OpenWnnEngineJAJP.Companion.DIC_LANG_JP -> when (mEngineState.preferenceDictionary) {
-                EngineState.Companion.PREFERENCE_DICTIONARY_PERSON_NAME -> target =
-                    OpenWnnEngineJAJP.Companion.DIC_LANG_JP_PERSON_NAME
+            OpenWnnEngineJAJP.DIC_LANG_JP -> when (mEngineState.preferenceDictionary) {
+                EngineState.PREFERENCE_DICTIONARY_PERSON_NAME -> target =
+                    OpenWnnEngineJAJP.DIC_LANG_JP_PERSON_NAME
 
-                EngineState.Companion.PREFERENCE_DICTIONARY_POSTAL_ADDRESS -> target =
-                    OpenWnnEngineJAJP.Companion.DIC_LANG_JP_POSTAL_ADDRESS
+                EngineState.PREFERENCE_DICTIONARY_POSTAL_ADDRESS -> target =
+                    OpenWnnEngineJAJP.DIC_LANG_JP_POSTAL_ADDRESS
 
                 else -> {}
             }
 
-            OpenWnnEngineJAJP.Companion.DIC_LANG_EN -> when (mEngineState.preferenceDictionary) {
-                EngineState.Companion.PREFERENCE_DICTIONARY_EMAIL_ADDRESS_URI -> target =
-                    OpenWnnEngineJAJP.Companion.DIC_LANG_EN_EMAIL_ADDRESS
+            OpenWnnEngineJAJP.DIC_LANG_EN -> when (mEngineState.preferenceDictionary) {
+                EngineState.PREFERENCE_DICTIONARY_EMAIL_ADDRESS_URI -> target =
+                    OpenWnnEngineJAJP.DIC_LANG_EN_EMAIL_ADDRESS
 
                 else -> {}
             }
@@ -2221,7 +2224,7 @@ class OpenWnnJAJP() : OpenWnn() {
         }
 
         when (mode) {
-            OpenWnnEngineJAJP.Companion.DIC_LANG_JP, OpenWnnEngineJAJP.Companion.DIC_LANG_EN -> mPrevDictionarySet =
+            OpenWnnEngineJAJP.DIC_LANG_JP, OpenWnnEngineJAJP.DIC_LANG_EN -> mPrevDictionarySet =
                 mode
 
             else -> {}
@@ -2235,7 +2238,7 @@ class OpenWnnJAJP() : OpenWnn() {
      *
      * @param table  Table of toggle characters
      */
-    private fun processSoftKeyboardToggleChar(table: Array<String?>?) {
+    private fun processSoftKeyboardToggleChar(table: Array<String>?) {
         if (table == null) {
             return
         }
@@ -2244,15 +2247,15 @@ class OpenWnnJAJP() : OpenWnn() {
 
         var toggled = false
         if ((mStatus and STATUS_CANDIDATE_FULL.inv()) == STATUS_INPUT) {
-            val cursor = mComposingText!!.getCursor(ComposingText.Companion.LAYER1)
+            val cursor = mComposingText!!.getCursor(ComposingText.LAYER1)
             if (cursor > 0) {
                 val prevChar = mComposingText!!.getStrSegment(
-                    ComposingText.Companion.LAYER1,
+                    ComposingText.LAYER1,
                     cursor - 1
                 )!!.string
                 val c = searchToggleCharacter(prevChar!!, table, false)
                 if (c != null) {
-                    mComposingText!!.delete(ComposingText.Companion.LAYER1, false)
+                    mComposingText!!.delete(ComposingText.LAYER1, false)
                     appendStrSegment(StrSegment(c))
                     toggled = true
                 }
@@ -2293,7 +2296,7 @@ class OpenWnnJAJP() : OpenWnn() {
         val text = mComposingText!!
         appendStrSegment(StrSegment(chars))
 
-        if (!isAlphabetLast(text.toString(ComposingText.Companion.LAYER1)!!)) {
+        if (!isAlphabetLast(text.toString(ComposingText.LAYER1)!!)) {
             /* commit if the input character is not alphabet */
             commitText(false)
         } else {
@@ -2329,9 +2332,9 @@ class OpenWnnJAJP() : OpenWnn() {
                     commitSpaceJustOne()
                     checkCommitInfo()
                 } else {
-                    if (mEngineState.isRenbun()) {
+                    if (mEngineState.isRenbun) {
                         if (mCandidatesViewManager is TextCandidatesViewManager) {
-                            if (!mCandidatesViewManager.isFocusCandidate) {
+                            if (mCandidatesViewManager?.isFocusCandidate != true) {
                                 processDownKeyEvent()
                             }
                             processRightKeyEvent()
@@ -2339,7 +2342,7 @@ class OpenWnnJAJP() : OpenWnn() {
                             mCandidatesViewManager!!.processMoveKeyEvent(KeyEvent.KEYCODE_DPAD_RIGHT)
                         }
                     } else {
-                        startConvert(EngineState.Companion.CONVERT_TYPE_RENBUN)
+                        startConvert(EngineState.CONVERT_TYPE_RENBUN)
                     }
                 }
             }
@@ -2350,7 +2353,7 @@ class OpenWnnJAJP() : OpenWnn() {
             /* Auto-commit a word if it is English and Qwerty mode */
             var commit = false
             if (isEnglishPrediction
-                && (mEngineState.keyboard == EngineState.Companion.KEYBOARD_QWERTY)
+                && (mEngineState.keyboard == EngineState.KEYBOARD_QWERTY)
             ) {
                 val m = mEnglishAutoCommitDelimiter!!.matcher(String(chars))
                 if (m.matches()) {
@@ -2387,33 +2390,33 @@ class OpenWnnJAJP() : OpenWnn() {
         if (mEngineState.convertType != convertType) {
             /* adjust the cursor position */
             if (!mExactMatchMode) {
-                if (convertType == EngineState.Companion.CONVERT_TYPE_RENBUN) {
+                if (convertType == EngineState.CONVERT_TYPE_RENBUN) {
                     /* not specify */
-                    mComposingText!!.setCursor(ComposingText.Companion.LAYER1, 0)
+                    mComposingText!!.setCursor(ComposingText.LAYER1, 0)
                 } else {
-                    if (mEngineState.isRenbun()) {
+                    if (mEngineState.isRenbun) {
                         /* EISU-KANA conversion specifying the position of the segment if previous mode is conversion mode */
                         mExactMatchMode = true
                     } else {
                         /* specify all range */
                         mComposingText!!.setCursor(
-                            ComposingText.Companion.LAYER1,
-                            mComposingText!!.size(ComposingText.Companion.LAYER1)
+                            ComposingText.LAYER1,
+                            mComposingText!!.size(ComposingText.LAYER1)
                         )
                     }
                 }
             }
 
-            if (convertType == EngineState.Companion.CONVERT_TYPE_RENBUN) {
+            if (convertType == EngineState.CONVERT_TYPE_RENBUN) {
                 /* clears variables for the prediction */
                 mExactMatchMode = false
             }
             /* clears variables for the convert */
             mCommitCount = 0
-            val layer: Int = if (convertType == EngineState.Companion.CONVERT_TYPE_EISU_KANA) {
-                ComposingText.Companion.LAYER1
+            val layer: Int = if (convertType == EngineState.CONVERT_TYPE_EISU_KANA) {
+                ComposingText.LAYER1
             } else {
-                ComposingText.Companion.LAYER2
+                ComposingText.LAYER2
             }
 
             val state: EngineState = EngineState()
@@ -2476,25 +2479,25 @@ class OpenWnnJAJP() : OpenWnn() {
     private fun updateMetaKeyStateDisplay() {
         var mode = 0
         mode = if (mHardShift == 0 && mHardAlt == 0) {
-            DefaultSoftKeyboard.Companion.HARD_KEYMODE_SHIFT_OFF_ALT_OFF
+            DefaultSoftKeyboard.HARD_KEYMODE_SHIFT_OFF_ALT_OFF
         } else if (mHardShift == 1 && mHardAlt == 0) {
-            DefaultSoftKeyboard.Companion.HARD_KEYMODE_SHIFT_ON_ALT_OFF
+            DefaultSoftKeyboard.HARD_KEYMODE_SHIFT_ON_ALT_OFF
         } else if (mHardShift == 2 && mHardAlt == 0) {
-            DefaultSoftKeyboard.Companion.HARD_KEYMODE_SHIFT_LOCK_ALT_OFF
+            DefaultSoftKeyboard.HARD_KEYMODE_SHIFT_LOCK_ALT_OFF
         } else if (mHardShift == 0 && mHardAlt == 1) {
-            DefaultSoftKeyboard.Companion.HARD_KEYMODE_SHIFT_OFF_ALT_ON
+            DefaultSoftKeyboard.HARD_KEYMODE_SHIFT_OFF_ALT_ON
         } else if (mHardShift == 0 && mHardAlt == 2) {
-            DefaultSoftKeyboard.Companion.HARD_KEYMODE_SHIFT_OFF_ALT_LOCK
+            DefaultSoftKeyboard.HARD_KEYMODE_SHIFT_OFF_ALT_LOCK
         } else if (mHardShift == 1 && mHardAlt == 1) {
-            DefaultSoftKeyboard.Companion.HARD_KEYMODE_SHIFT_ON_ALT_ON
+            DefaultSoftKeyboard.HARD_KEYMODE_SHIFT_ON_ALT_ON
         } else if (mHardShift == 1 && mHardAlt == 2) {
-            DefaultSoftKeyboard.Companion.HARD_KEYMODE_SHIFT_ON_ALT_LOCK
+            DefaultSoftKeyboard.HARD_KEYMODE_SHIFT_ON_ALT_LOCK
         } else if (mHardShift == 2 && mHardAlt == 1) {
-            DefaultSoftKeyboard.Companion.HARD_KEYMODE_SHIFT_LOCK_ALT_ON
+            DefaultSoftKeyboard.HARD_KEYMODE_SHIFT_LOCK_ALT_ON
         } else if (mHardShift == 2 && mHardAlt == 2) {
-            DefaultSoftKeyboard.Companion.HARD_KEYMODE_SHIFT_LOCK_ALT_LOCK
+            DefaultSoftKeyboard.HARD_KEYMODE_SHIFT_LOCK_ALT_LOCK
         } else {
-            DefaultSoftKeyboard.Companion.HARD_KEYMODE_SHIFT_OFF_ALT_OFF
+            DefaultSoftKeyboard.HARD_KEYMODE_SHIFT_OFF_ALT_OFF
         }
         (mInputViewManager as DefaultSoftKeyboard).updateIndicator(mode)
     }
@@ -2518,13 +2521,13 @@ class OpenWnnJAJP() : OpenWnn() {
     private fun learnWord(index: Int) {
         val composingText = mComposingText!!
 
-        if (mEnableLearning && composingText.size(ComposingText.Companion.LAYER2) > index) {
-            val seg = composingText.getStrSegment(ComposingText.Companion.LAYER2, index)
+        if (mEnableLearning && composingText.size(ComposingText.LAYER2) > index) {
+            val seg = composingText.getStrSegment(ComposingText.LAYER2, index)
             if (seg is StrSegmentClause) {
                 mConverter!!.learn(seg.clause)
             } else {
                 val stroke =
-                    composingText.toString(ComposingText.Companion.LAYER1, seg!!.from, seg.to)
+                    composingText.toString(ComposingText.LAYER1, seg!!.from, seg.to)
                 mConverter!!.learn(WnnWord(seg.string, stroke))
             }
         }
@@ -2545,7 +2548,7 @@ class OpenWnnJAJP() : OpenWnn() {
         if (mConverter === mConverterEN) {
             mEnableLearning = preference.getBoolean("opt_enable_learning_en", true)
             mEnablePrediction = preference.getBoolean("opt_prediction_en", false)
-            mEnableSpellCorrection = if (OpenWnn.Companion.isXLarge()) {
+            mEnableSpellCorrection = if (OpenWnn.isXLarge) {
                 preference.getBoolean("opt_spell_correction_en", false)
             } else {
                 preference.getBoolean("opt_spell_correction_en", true)
@@ -2556,7 +2559,7 @@ class OpenWnnJAJP() : OpenWnn() {
         }
         mDisableAutoCommitEnglishMask =
             mDisableAutoCommitEnglishMask and AUTO_COMMIT_ENGLISH_OFF.inv()
-        var preferenceDictionary = EngineState.Companion.PREFERENCE_DICTIONARY_NONE
+        var preferenceDictionary = EngineState.PREFERENCE_DICTIONARY_NONE
         mEnableConverter = true
         mEnableSymbolList = true
         mEnableSymbolListNonHalf = true
@@ -2575,13 +2578,13 @@ class OpenWnnJAJP() : OpenWnn() {
 
             EditorInfo.TYPE_CLASS_TEXT -> when (info.inputType and EditorInfo.TYPE_MASK_VARIATION) {
                 EditorInfo.TYPE_TEXT_VARIATION_PERSON_NAME -> preferenceDictionary =
-                    EngineState.Companion.PREFERENCE_DICTIONARY_PERSON_NAME
+                    EngineState.PREFERENCE_DICTIONARY_PERSON_NAME
 
                 EditorInfo.TYPE_TEXT_VARIATION_PASSWORD, EditorInfo.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD -> {
                     mEnableLearning = false
                     mEnableConverter = false
                     mEnableSymbolListNonHalf = false
-                    mFilter.filter = CandidateFilter.Companion.FILTER_NON_ASCII
+                    mFilter.filter = CandidateFilter.FILTER_NON_ASCII
                     mDisableAutoCommitEnglishMask =
                         mDisableAutoCommitEnglishMask or AUTO_COMMIT_ENGLISH_OFF
                     mTextCandidatesViewManager!!.setEnableEmoticon(false)
@@ -2592,7 +2595,7 @@ class OpenWnnJAJP() : OpenWnn() {
                     mDisableAutoCommitEnglishMask =
                         mDisableAutoCommitEnglishMask or AUTO_COMMIT_ENGLISH_OFF
                     preferenceDictionary =
-                        EngineState.Companion.PREFERENCE_DICTIONARY_EMAIL_ADDRESS_URI
+                        EngineState.PREFERENCE_DICTIONARY_EMAIL_ADDRESS_URI
                 }
 
                 EditorInfo.TYPE_TEXT_VARIATION_URI -> {
@@ -2600,11 +2603,11 @@ class OpenWnnJAJP() : OpenWnn() {
                     mDisableAutoCommitEnglishMask =
                         mDisableAutoCommitEnglishMask or AUTO_COMMIT_ENGLISH_OFF
                     preferenceDictionary =
-                        EngineState.Companion.PREFERENCE_DICTIONARY_EMAIL_ADDRESS_URI
+                        EngineState.PREFERENCE_DICTIONARY_EMAIL_ADDRESS_URI
                 }
 
                 EditorInfo.TYPE_TEXT_VARIATION_POSTAL_ADDRESS -> preferenceDictionary =
-                    EngineState.Companion.PREFERENCE_DICTIONARY_POSTAL_ADDRESS
+                    EngineState.PREFERENCE_DICTIONARY_POSTAL_ADDRESS
 
                 EditorInfo.TYPE_TEXT_VARIATION_PHONETIC -> {
                     mEnableLearning = false
@@ -2628,12 +2631,12 @@ class OpenWnnJAJP() : OpenWnn() {
 
         val state: EngineState = EngineState()
         state.preferenceDictionary = preferenceDictionary
-        state.convertType = EngineState.Companion.CONVERT_TYPE_NONE
+        state.convertType = EngineState.CONVERT_TYPE_NONE
         state.keyboard = mEngineState.keyboard
         updateEngineState(state)
         updateMetaKeyStateDisplay()
 
-        if (!OpenWnn.Companion.isXLarge()) {
+        if (!OpenWnn.isXLarge) {
             checkTutorial(info.privateImeOptions)
         }
     }
@@ -2649,12 +2652,12 @@ class OpenWnnJAJP() : OpenWnn() {
     private fun appendStrSegment(str: StrSegment) {
         val composingText = mComposingText!!
 
-        if (composingText.size(ComposingText.Companion.LAYER1) >= LIMIT_INPUT_NUMBER) {
+        if (composingText.size(ComposingText.LAYER1) >= LIMIT_INPUT_NUMBER) {
             return  /* do nothing */
         }
         composingText.insertStrSegment(
-            ComposingText.Companion.LAYER0,
-            ComposingText.Companion.LAYER1,
+            ComposingText.LAYER0,
+            ComposingText.LAYER1,
             str
         )
         return
@@ -2664,13 +2667,13 @@ class OpenWnnJAJP() : OpenWnn() {
      * Commit the consecutive clause conversion.
      */
     private fun commitConvertingText() {
-        if (mEngineState.isConvertState()) {
-            val size = mComposingText!!.size(ComposingText.Companion.LAYER2)
+        if (mEngineState.isConvertState) {
+            val size = mComposingText!!.size(ComposingText.LAYER2)
             for (i in 0 until size) {
                 learnWord(i)
             }
 
-            val text = mComposingText!!.toString(ComposingText.Companion.LAYER2)
+            val text = mComposingText!!.toString(ComposingText.LAYER2)
             mInputConnection!!.commitText(text, (if (FIX_CURSOR_TEXT_END) 1 else text!!.length))
             mPrevCommitText!!.append(text)
             mPrevCommitCount++
@@ -2682,21 +2685,21 @@ class OpenWnnJAJP() : OpenWnn() {
      * Initialize the screen displayed by IME
      */
     private fun initializeScreen() {
-        if (mComposingText!!.size(ComposingText.Companion.LAYER0) != 0) {
+        if (mComposingText!!.size(ComposingText.LAYER0) != 0) {
             mInputConnection!!.setComposingText("", 0)
         }
         mComposingText!!.clear()
         mExactMatchMode = false
         mStatus = STATUS_INIT
         mHandler.removeMessages(MSG_PREDICTION)
-        val candidateView = mCandidatesViewManager.currentView
+        val candidateView = mCandidatesViewManager?.currentView
         if ((candidateView != null) && candidateView.isShown) {
             mCandidatesViewManager!!.clearCandidates()
         }
         mInputViewManager!!.onUpdateState(this)
 
         val state: EngineState = EngineState()
-        state.temporaryMode = EngineState.Companion.TEMPORARY_DICTIONARY_MODE_NONE
+        state.temporaryMode = EngineState.TEMPORARY_DICTIONARY_MODE_NONE
         updateEngineState(state)
     }
 
@@ -2731,7 +2734,7 @@ class OpenWnnJAJP() : OpenWnn() {
                 return false
             }
 
-            if (mEngineState.isEnglish() && !mEnablePrediction) {
+            if (mEngineState.isEnglish && !mEnablePrediction) {
                 return false
             }
 
@@ -2766,16 +2769,16 @@ class OpenWnnJAJP() : OpenWnn() {
                 && ((ev.flags and KeyEvent.FLAG_CANCELED_LONG_PRESS) == 0)
             ) {
                 when (key) {
-                    KeyEvent.KEYCODE_SOFT_LEFT -> if (mEngineState.isSymbolList()) {
+                    KeyEvent.KEYCODE_SOFT_LEFT -> if (mEngineState.isSymbolList) {
                         switchSymbolList()
-                    } else if ((mComposingText!!.size(0) != 0) && !mEngineState.isRenbun()
+                    } else if ((mComposingText!!.size(0) != 0) && !mEngineState.isRenbun
                         && ((mInputViewManager as DefaultSoftKeyboardJAJP).keyMode
-                                == DefaultSoftKeyboard.Companion.KEYMODE_JA_FULL_HIRAGANA)
+                                == DefaultSoftKeyboard.KEYMODE_JA_FULL_HIRAGANA)
                     ) {
-                        startConvert(EngineState.Companion.CONVERT_TYPE_RENBUN)
+                        startConvert(EngineState.CONVERT_TYPE_RENBUN)
                     } else {
                         (mInputViewManager as DefaultSoftKeyboard).onKey(
-                            DefaultSoftKeyboard.Companion.KEYCODE_JP12_EMOJI, null
+                            DefaultSoftKeyboard.KEYCODE_JP12_EMOJI, null
                         )
                     }
 
@@ -2783,9 +2786,9 @@ class OpenWnnJAJP() : OpenWnn() {
                     KeyEvent.KEYCODE_DEL -> {
                         var newKeyCode = KeyEvent.KEYCODE_FORWARD_DEL
                         val composingTextSize =
-                            mComposingText!!.size(ComposingText.Companion.LAYER1)
+                            mComposingText!!.size(ComposingText.LAYER1)
                         if (composingTextSize > 0) {
-                            if (mComposingText!!.getCursor(ComposingText.Companion.LAYER1) > (composingTextSize - 1)) {
+                            if (mComposingText!!.getCursor(ComposingText.LAYER1) > (composingTextSize - 1)) {
                                 newKeyCode = KeyEvent.KEYCODE_DEL
                             }
                             val keyEvent = KeyEvent(ev.action, newKeyCode)
@@ -2847,7 +2850,7 @@ class OpenWnnJAJP() : OpenWnn() {
         }
 
         mCommitStartCursor = mComposingStartCursor
-        mPrevCommitText!!.delete(0, mPrevCommitText.length)
+        mPrevCommitText!!.delete(0, mPrevCommitText!!.length)
     }
 
     /**
@@ -2905,8 +2908,8 @@ class OpenWnnJAJP() : OpenWnn() {
     private fun startTutorial() {
         val manager = mInputViewManager as DefaultSoftKeyboardJAJP
         manager.setDefaultKeyboard()
-        if (mEngineState.keyboard == EngineState.Companion.KEYBOARD_QWERTY) {
-            manager.changeKeyboardType(DefaultSoftKeyboard.Companion.KEYBOARD_12KEY)
+        if (mEngineState.keyboard == EngineState.KEYBOARD_QWERTY) {
+            manager.changeKeyboardType(DefaultSoftKeyboard.KEYBOARD_12KEY)
         }
 
         val inputManager = (mInputViewManager as DefaultSoftKeyboardJAJP)
@@ -2953,7 +2956,7 @@ class OpenWnnJAJP() : OpenWnn() {
      * @param  mode   Engine mode
      */
     private fun changeSymbolEngineState(state: EngineState, mode: Int) {
-        state.temporaryMode = EngineState.Companion.TEMPORARY_DICTIONARY_MODE_SYMBOL
+        state.temporaryMode = EngineState.TEMPORARY_DICTIONARY_MODE_SYMBOL
         updateEngineState(state)
     }
 
@@ -3123,21 +3126,21 @@ class OpenWnnJAJP() : OpenWnn() {
 
         /** H/W 12Keyboard keycode replace table  */
         private val HW12KEYBOARD_KEYCODE_REPLACE_TABLE
-                : HashMap<Int, Int> = object : HashMap<Int?, Int?>() {
+                : HashMap<Int, Int> = object : HashMap<Int, Int>() {
             init {
-                put(KeyEvent.KEYCODE_0, DefaultSoftKeyboard.Companion.KEYCODE_JP12_0)
-                put(KeyEvent.KEYCODE_1, DefaultSoftKeyboard.Companion.KEYCODE_JP12_1)
-                put(KeyEvent.KEYCODE_2, DefaultSoftKeyboard.Companion.KEYCODE_JP12_2)
-                put(KeyEvent.KEYCODE_3, DefaultSoftKeyboard.Companion.KEYCODE_JP12_3)
-                put(KeyEvent.KEYCODE_4, DefaultSoftKeyboard.Companion.KEYCODE_JP12_4)
-                put(KeyEvent.KEYCODE_5, DefaultSoftKeyboard.Companion.KEYCODE_JP12_5)
-                put(KeyEvent.KEYCODE_6, DefaultSoftKeyboard.Companion.KEYCODE_JP12_6)
-                put(KeyEvent.KEYCODE_7, DefaultSoftKeyboard.Companion.KEYCODE_JP12_7)
-                put(KeyEvent.KEYCODE_8, DefaultSoftKeyboard.Companion.KEYCODE_JP12_8)
-                put(KeyEvent.KEYCODE_9, DefaultSoftKeyboard.Companion.KEYCODE_JP12_9)
-                put(KeyEvent.KEYCODE_POUND, DefaultSoftKeyboard.Companion.KEYCODE_JP12_SHARP)
-                put(KeyEvent.KEYCODE_STAR, DefaultSoftKeyboard.Companion.KEYCODE_JP12_ASTER)
-                put(KeyEvent.KEYCODE_CALL, DefaultSoftKeyboard.Companion.KEYCODE_JP12_REVERSE)
+                put(KeyEvent.KEYCODE_0, DefaultSoftKeyboard.KEYCODE_JP12_0)
+                put(KeyEvent.KEYCODE_1, DefaultSoftKeyboard.KEYCODE_JP12_1)
+                put(KeyEvent.KEYCODE_2, DefaultSoftKeyboard.KEYCODE_JP12_2)
+                put(KeyEvent.KEYCODE_3, DefaultSoftKeyboard.KEYCODE_JP12_3)
+                put(KeyEvent.KEYCODE_4, DefaultSoftKeyboard.KEYCODE_JP12_4)
+                put(KeyEvent.KEYCODE_5, DefaultSoftKeyboard.KEYCODE_JP12_5)
+                put(KeyEvent.KEYCODE_6, DefaultSoftKeyboard.KEYCODE_JP12_6)
+                put(KeyEvent.KEYCODE_7, DefaultSoftKeyboard.KEYCODE_JP12_7)
+                put(KeyEvent.KEYCODE_8, DefaultSoftKeyboard.KEYCODE_JP12_8)
+                put(KeyEvent.KEYCODE_9, DefaultSoftKeyboard.KEYCODE_JP12_9)
+                put(KeyEvent.KEYCODE_POUND, DefaultSoftKeyboard.KEYCODE_JP12_SHARP)
+                put(KeyEvent.KEYCODE_STAR, DefaultSoftKeyboard.KEYCODE_JP12_ASTER)
+                put(KeyEvent.KEYCODE_CALL, DefaultSoftKeyboard.KEYCODE_JP12_REVERSE)
             }
         }
 
@@ -3155,7 +3158,7 @@ class OpenWnnJAJP() : OpenWnn() {
 
         /** Symbol lists to display when the symbol key is pressed  */
         private val SYMBOL_LISTS = arrayOf<String>(
-            SymbolList.Companion.SYMBOL_JAPANESE, SymbolList.Companion.SYMBOL_JAPANESE_FACE
+            SymbolList.SYMBOL_JAPANESE, SymbolList.SYMBOL_JAPANESE_FACE
         )
 
         /** Shift lock toggle definition  */

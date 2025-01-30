@@ -57,8 +57,8 @@ class ClearUserDictionaryDialogPreferenceJAJP @JvmOverloads constructor(
     override fun onDialogClosed(positiveResult: Boolean) {
         if (positiveResult) {
             /* clear the user dictionary */
-            val ev = OpenWnnEvent(OpenWnnEvent.Companion.INITIALIZE_USER_DICTIONARY, WnnWord())
-            OpenWnnJAJP.Companion.getInstance().onEvent(ev)
+            val ev = OpenWnnEvent(OpenWnnEvent.INITIALIZE_USER_DICTIONARY, WnnWord())
+            OpenWnnJAJP.instance?.onEvent(ev)
 
             /* show the message */
             Toast.makeText(

@@ -32,7 +32,7 @@ class RomkanHalfKatakana
     /** @see LetterConverter.convert
      */
     override fun convert(text: ComposingText): Boolean {
-        return RomkanFullKatakana.Companion.convert(text, mRomkanTable)
+        return RomkanFullKatakana.convert(text, mRomkanTable)
     }
 
     /** @see LetterConverter.setPreferences
@@ -41,7 +41,7 @@ class RomkanHalfKatakana
 
     companion object {
         /** HashMap for Romaji-to-Kana conversion (Japanese mode)  */
-        private val mRomkanTable: HashMap<String?, String?> = object : HashMap<String?, String?>() {
+        private val mRomkanTable: HashMap<String, String> = object : HashMap<String, String>() {
             init {
                 put("la", "\uff67")
                 put("xa", "\uff67")

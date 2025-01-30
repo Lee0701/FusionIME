@@ -133,10 +133,10 @@ abstract class UserDictionaryToolsList : Activity(), View.OnClickListener,
     private var mSelectedViewID = -1
 
     /** List of the words in the user dictionary  */
-    private var mWordList: ArrayList<WnnWord?>? = null
+    private var mWordList: ArrayList<WnnWord>? = null
 
     /** Work area for sorting the word list  */
-    private var mSortData: Array<WnnWord?>
+    private var mSortData: Array<WnnWord?> = emptyArray()
 
     /** Whether the view is initialized  */
     private var mInit = false
@@ -156,7 +156,7 @@ abstract class UserDictionaryToolsList : Activity(), View.OnClickListener,
     protected abstract fun sendEventToIME(ev: OpenWnnEvent): Boolean
 
     /** Get the comparator for sorting the list  */
-    protected abstract val comparator: Comparator<WnnWord?>
+    protected abstract val comparator: Comparator<WnnWord>
 
     /** Show Dialog Num  */
     private var mDialogShow = -1
@@ -417,7 +417,7 @@ abstract class UserDictionaryToolsList : Activity(), View.OnClickListener,
                     return
                 }
 
-                mWordList = this.words
+                mWordList = this@UserDictionaryToolsList.words
                 val size = mWordList!!.size
                 if (size <= mWordCount) {
                     val newPos = (mWordCount - MAX_LIST_WORD_COUNT)
@@ -445,7 +445,7 @@ abstract class UserDictionaryToolsList : Activity(), View.OnClickListener,
         DialogInterface.OnClickListener { dialog, button ->
             mDialogShow = -1
             /* clear the user dictionary */
-            val ev = OpenWnnEvent(OpenWnnEvent.Companion.INITIALIZE_USER_DICTIONARY, WnnWord())
+            val ev = OpenWnnEvent(OpenWnnEvent.INITIALIZE_USER_DICTIONARY, WnnWord())
 
             sendEventToIME(ev)
             /* show the message */
@@ -506,14 +506,14 @@ abstract class UserDictionaryToolsList : Activity(), View.OnClickListener,
             (v as TextView).setTextColor(Color.BLACK)
             v.setBackgroundColor(FOCUS_BACKGROUND_COLOR)
             (sFocusingPairView as TextView).setTextColor(Color.BLACK)
-            sFocusingPairView.setBackgroundColor(FOCUS_BACKGROUND_COLOR)
+            sFocusingPairView?.setBackgroundColor(FOCUS_BACKGROUND_COLOR)
             mSelectedWords = true
         } else {
             mSelectedWords = false
             (v as TextView).setTextColor(Color.LTGRAY)
             v.setBackgroundColor(UNFOCUS_BACKGROUND_COLOR)
             (sFocusingPairView as TextView).setTextColor(Color.LTGRAY)
-            sFocusingPairView.setBackgroundColor(UNFOCUS_BACKGROUND_COLOR)
+            sFocusingPairView?.setBackgroundColor(UNFOCUS_BACKGROUND_COLOR)
         }
         if (mInitializedMenu) {
             onCreateOptionsMenu(mMenu!!)
@@ -562,8 +562,8 @@ abstract class UserDictionaryToolsList : Activity(), View.OnClickListener,
      */
     fun deleteWord(searchword: WnnWord): Boolean {
         var event = OpenWnnEvent(
-            OpenWnnEvent.Companion.LIST_WORDS_IN_USER_DICTIONARY,
-            WnnEngine.Companion.DICTIONARY_TYPE_USER,
+            OpenWnnEvent.LIST_WORDS_IN_USER_DICTIONARY,
+            WnnEngine.DICTIONARY_TYPE_USER,
             searchword
         )
 
@@ -572,7 +572,7 @@ abstract class UserDictionaryToolsList : Activity(), View.OnClickListener,
         for (i in 0 until MAX_WORD_COUNT) {
             var getword: WnnWord? = WnnWord()
             event = OpenWnnEvent(
-                OpenWnnEvent.Companion.GET_WORD,
+                OpenWnnEvent.GET_WORD,
                 getword
             )
             sendEventToIME(event)
@@ -587,7 +587,7 @@ abstract class UserDictionaryToolsList : Activity(), View.OnClickListener,
                 delword.candidate = searchword.candidate
                 delword.id = i
                 event = OpenWnnEvent(
-                    OpenWnnEvent.Companion.DELETE_WORD,
+                    OpenWnnEvent.DELETE_WORD,
                     delword
                 )
                 deleted = sendEventToIME(event)
@@ -620,7 +620,7 @@ abstract class UserDictionaryToolsList : Activity(), View.OnClickListener,
         finish()
     }
 
-    private val words: ArrayList<WnnWord?>
+    private val words: ArrayList<WnnWord>
         /**
          * Get the list of words in the user dictionary.
          * @return The list of words
@@ -628,19 +628,19 @@ abstract class UserDictionaryToolsList : Activity(), View.OnClickListener,
         get() {
             val word = WnnWord()
             var event = OpenWnnEvent(
-                OpenWnnEvent.Companion.LIST_WORDS_IN_USER_DICTIONARY,
-                WnnEngine.Companion.DICTIONARY_TYPE_USER,
+                OpenWnnEvent.LIST_WORDS_IN_USER_DICTIONARY,
+                WnnEngine.DICTIONARY_TYPE_USER,
                 word
             )
             sendEventToIME(event)
 
-            val list = ArrayList<WnnWord?>()
+            val list = ArrayList<WnnWord>()
             for (i in 0 until MAX_WORD_COUNT) {
-                event = OpenWnnEvent(OpenWnnEvent.Companion.GET_WORD, word)
+                event = OpenWnnEvent(OpenWnnEvent.GET_WORD, word)
                 if (!sendEventToIME(event)) {
                     break
                 }
-                list.add(event.word)
+                list.add(event.word!!)
             }
 
             compareTo(list)
@@ -652,10 +652,8 @@ abstract class UserDictionaryToolsList : Activity(), View.OnClickListener,
      * Sort the list of words
      * @param array The array list of the words
      */
-    protected fun compareTo(array: ArrayList<WnnWord?>) {
-        mSortData = arrayOfNulls(array.size)
-        array.toArray(mSortData)
-        Arrays.sort(mSortData, comparator)
+    protected fun compareTo(array: ArrayList<WnnWord>) {
+        mSortData = array.sortedWith(comparator).toTypedArray()
     }
 
 

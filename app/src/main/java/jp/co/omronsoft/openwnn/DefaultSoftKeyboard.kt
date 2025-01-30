@@ -65,7 +65,7 @@ open class DefaultSoftKeyboard
      * <br></br>
      * Keyboard[language][portrait/landscape][keyboard type][shift off/on][key-mode]
      */
-    protected var mKeyboard: Array<Array<Array<Array<Array<Array<Keyboard?>>>>>>
+    protected var mKeyboard: Array<Array<Array<Array<Array<Array<Keyboard?>>>>>> = emptyArray()
 
     /* languages */
     /** Current language  */
@@ -121,7 +121,7 @@ open class DefaultSoftKeyboard
     protected var mSound: MediaPlayer? = null
 
     /** Key toggle cycle table currently using  */
-    protected var mCurrentCycleTable: Array<String>
+    protected var mCurrentCycleTable: Array<String> = arrayOf()
 
     /** Event listener for symbol keyboard  */
     private val mSymbolOnKeyboardAction: KeyboardView.OnKeyboardActionListener =
@@ -130,13 +130,13 @@ open class DefaultSoftKeyboard
                 when (primaryCode) {
                     KEYCODE_4KEY_MODE -> mWnn!!.onEvent(
                         OpenWnnEvent(
-                            OpenWnnEvent.Companion.INPUT_KEY,
+                            OpenWnnEvent.INPUT_KEY,
                             KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_BACK)
                         )
                     )
 
-                    KEYCODE_4KEY_UP -> mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.Companion.CANDIDATE_VIEW_SCROLL_UP))
-                    KEYCODE_4KEY_DOWN -> mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.Companion.CANDIDATE_VIEW_SCROLL_DOWN))
+                    KEYCODE_4KEY_UP -> mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.CANDIDATE_VIEW_SCROLL_UP))
+                    KEYCODE_4KEY_DOWN -> mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.CANDIDATE_VIEW_SCROLL_DOWN))
                     KEYCODE_4KEY_CLEAR -> {
                         val connection = mWnn!!.currentInputConnection
                         connection?.sendKeyEvent(
@@ -165,12 +165,12 @@ open class DefaultSoftKeyboard
             override fun onLongPress(key: Keyboard.Key): Boolean {
                 when (key.codes!![0]) {
                     KEYCODE_4KEY_UP -> {
-                        mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.Companion.CANDIDATE_VIEW_SCROLL_FULL_UP))
+                        mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.CANDIDATE_VIEW_SCROLL_FULL_UP))
                         return true
                     }
 
                     KEYCODE_4KEY_DOWN -> {
-                        mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.Companion.CANDIDATE_VIEW_SCROLL_FULL_DOWN))
+                        mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.CANDIDATE_VIEW_SCROLL_FULL_DOWN))
                         return true
                     }
 
@@ -292,7 +292,7 @@ open class DefaultSoftKeyboard
 
         mWnn!!.onEvent(
             OpenWnnEvent(
-                OpenWnnEvent.Companion.CHANGE_MODE,
+                OpenWnnEvent.CHANGE_MODE,
                 OpenWnnEvent.Mode.DEFAULT
             )
         )
@@ -365,9 +365,9 @@ open class DefaultSoftKeyboard
      * Change the keyboard type.
      *
      * @param type  Type of the keyboard
-     * @see jp.co.omronsoft.openwnn.DefaultSoftKeyboard.KEYBOARD_QWERTY
+     * @see jp.co.omronsoft.openwnn.KEYBOARD_QWERTY
      *
-     * @see jp.co.omronsoft.openwnn.DefaultSoftKeyboard.KEYBOARD_12KEY
+     * @see jp.co.omronsoft.openwnn.KEYBOARD_12KEY
      */
     open fun changeKeyboardType(type: Int) {
         /* ignore invalid parameter */
@@ -386,7 +386,7 @@ open class DefaultSoftKeyboard
         /* notice that the keyboard is changed */
         mWnn!!.onEvent(
             OpenWnnEvent(
-                OpenWnnEvent.Companion.CHANGE_MODE,
+                OpenWnnEvent.CHANGE_MODE,
                 OpenWnnEvent.Mode.DEFAULT
             )
         )
@@ -403,7 +403,7 @@ open class DefaultSoftKeyboard
             return false
         }
         if (mCurrentKeyboard !== keyboard) {
-            mKeyboardView.setKeyboard(keyboard)
+            mKeyboardView?.keyboard = keyboard
             mKeyboardView!!.setShifted(if ((mShiftOn == 0)) false else true)
             mCurrentKeyboard = keyboard
             return true
@@ -441,7 +441,7 @@ open class DefaultSoftKeyboard
         val id = parent.resources.getIdentifier(skin, "layout", "ee.oyatl.ime.fusion")
 
         mKeyboardView = mWnn!!.layoutInflater.inflate(id, null) as KeyboardView
-        mKeyboardView.setOnKeyboardActionListener(this)
+        mKeyboardView?.onKeyboardActionListener = this
         mCurrentKeyboard = null
 
         mMainView =
@@ -602,11 +602,11 @@ open class DefaultSoftKeyboard
         }
 
         /* pop-up preview */
-        if (OpenWnn.Companion.isXLarge()) {
-            mKeyboardView.setPreviewEnabled(false)
+        if (OpenWnn.isXLarge) {
+            mKeyboardView?.isPreviewEnabled = false
         } else {
-            mKeyboardView.setPreviewEnabled(pref.getBoolean("popup_preview", true))
-            mKeyboardView!!.clearWindowInfo()
+            mKeyboardView?.isPreviewEnabled = pref.getBoolean("popup_preview", true)
+            mKeyboardView?.clearWindowInfo()
         }
     }
 
@@ -737,8 +737,8 @@ open class DefaultSoftKeyboard
         if (mCurrentKeyboard == null) {
             return
         }
-        mKeyboardView.setKeyboard(mCurrentKeyboard)
-        mKeyboardView.setOnKeyboardActionListener(this)
+        mKeyboardView?.keyboard = mCurrentKeyboard
+        mKeyboardView?.onKeyboardActionListener = this
         mIsSymbolKeyboard = false
     }
 
@@ -746,8 +746,8 @@ open class DefaultSoftKeyboard
      * Set the symbol keyboard.
      */
     fun setSymbolKeyboard() {
-        mKeyboardView.setKeyboard(mSymbolKeyboard)
-        mKeyboardView.setOnKeyboardActionListener(mSymbolOnKeyboardAction)
+        mKeyboardView?.keyboard = mSymbolKeyboard
+        mKeyboardView?.onKeyboardActionListener = mSymbolOnKeyboardAction
         mIsSymbolKeyboard = true
     }
 
@@ -868,7 +868,7 @@ open class DefaultSoftKeyboard
         const val KEYCODE_QWERTY_ENTER: Int = -101
 
         /** Qwerty keyboard [SHIFT]  */
-        val KEYCODE_QWERTY_SHIFT: Int = Keyboard.Companion.KEYCODE_SHIFT
+        val KEYCODE_QWERTY_SHIFT: Int = Keyboard.KEYCODE_SHIFT
 
         /** Qwerty keyboard [ALT]  */
         const val KEYCODE_QWERTY_ALT: Int = -103

@@ -59,14 +59,14 @@ class UserDictionaryToolsListJAJP : UserDictionaryToolsList() {
      */
     override fun sendEventToIME(ev: OpenWnnEvent): Boolean {
         try {
-            return OpenWnnJAJP.Companion.getInstance().onEvent(ev)
+            return OpenWnnJAJP.instance?.onEvent(ev) == true
         } catch (ex: Exception) {
             /* do nothing if an error occurs */
         }
         return false
     }
 
-    override val comparator: Comparator<WnnWord?>
+    override val comparator: Comparator<WnnWord>
         /** @see jp.co.omronsoft.openwnn.UserDictionaryToolsList.getComparator
          */
         get() = ListComparatorJAJP()

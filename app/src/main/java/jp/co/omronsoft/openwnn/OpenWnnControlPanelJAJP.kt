@@ -29,7 +29,7 @@ class OpenWnnControlPanelJAJP : PreferenceActivity() {
      */
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (OpenWnnJAJP.Companion.getInstance() == null) {
+        if (OpenWnnJAJP.instance == null) {
             OpenWnnJAJP(this)
         }
 
