@@ -135,12 +135,9 @@ internal class EmojiPageKeyboardView @JvmOverloads constructor(
     }
 
     fun releaseCurrentKey(withKeyRegistering: Boolean) {
-        mHandler.removeCallbacks(mPendingKeyDown!!)
+        mPendingKeyDown?.let { mHandler.removeCallbacks(it) }
         mPendingKeyDown = null
-        val currentKey: Key? = mCurrentKey
-        if (currentKey == null) {
-            return
-        }
+        val currentKey: Key = mCurrentKey ?: return
         callListenerOnReleaseKey(currentKey, withKeyRegistering)
         mCurrentKey = null
     }
