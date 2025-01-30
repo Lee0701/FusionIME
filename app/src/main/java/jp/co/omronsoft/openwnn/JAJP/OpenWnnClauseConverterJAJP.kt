@@ -442,7 +442,8 @@ class OpenWnnClauseConverterJAJP {
                 key
             )
             var word: WnnWord
-            while ((dict.nextWord.also { word = it!! }) != null) {
+            while (true) {
+                word = dict.nextWord ?: break
                 fzks.add(word)
             }
 
@@ -457,7 +458,8 @@ class OpenWnnClauseConverterJAJP {
                     WnnDictionary.ORDER_BY_FREQUENCY,
                     input.substring(start, end)
                 )
-                while ((dict.nextWord.also { word = it!! }) != null) {
+                while (true) {
+                    word = dict.nextWord ?: break
                     val followFzksi: Iterator<WnnWord> = followFzks.iterator()
                     while (followFzksi.hasNext()) {
                         val follow = followFzksi.next()
@@ -515,7 +517,8 @@ class OpenWnnClauseConverterJAJP {
                     input
                 )
                 /* store all words */
-                while ((dict.nextWord.also { word = it!! }) != null) {
+                while (true) {
+                    word = dict.nextWord ?: break
                     if (input == word.stroke) {
                         words.add(word)
                     }
@@ -528,7 +531,8 @@ class OpenWnnClauseConverterJAJP {
                     input
                 )
                 /* store a word which has an unique part of speech tag */
-                while ((dict.nextWord.also { word = it!! }) != null) {
+                while (true) {
+                    word = dict.nextWord ?: break
                     if (input == word.stroke) {
                         val list: Iterator<WnnWord> = words.iterator()
                         var found = false

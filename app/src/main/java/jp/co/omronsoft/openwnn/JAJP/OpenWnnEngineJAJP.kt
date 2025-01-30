@@ -184,10 +184,12 @@ class OpenWnnEngineJAJP(dicLibPath: String?, writableDictionaryName: String?) :
                 if (mConvResult.size < PREDICT_LIMIT) {
                     /* get prefix matching words from the dictionaries */
                     while (index >= mConvResult.size) {
-                        if ((mDictionaryJP.nextWord.also { word = it!! }) == null) {
+                        val w = mDictionaryJP.nextWord
+                        if (w == null) {
                             mGetCandidateFrom = 1
                             break
                         }
+                        word = w
                         if (!mExactMatchMode || mInputHiragana == word.stroke) {
                             addCandidate(word)
                             if (mConvResult.size >= PREDICT_LIMIT) {

@@ -900,7 +900,7 @@ class TextCandidatesViewManager
         if (mIsSymbolMode && (word.candidate!!.length < 3)) {
             isEmojiSymbol = true
         }
-        var textView: TextView
+        var textView: TextView?
 
         val is2nd = isFirstListOver(mIsFullView, mLineCount, word)
         if (is2nd) {
@@ -950,7 +950,7 @@ class TextCandidatesViewManager
 
             val params = buildLayoutParams(mViewCandidateList2nd, width, height)
 
-            textView = layout!!.getChildAt(mFullViewWordCount) as TextView
+            textView = layout?.getChildAt(mFullViewWordCount) as? TextView
             if (textView == null) {
                 textView = createCandidateView()
                 textView.layoutParams = params
