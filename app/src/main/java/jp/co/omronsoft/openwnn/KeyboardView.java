@@ -47,7 +47,6 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import ee.oyatl.ime.fusion.R;
-import jp.co.omronsoft.openwnn.Keyboard;
 import jp.co.omronsoft.openwnn.Keyboard.Key;
 
 import java.util.Arrays;
@@ -280,9 +279,9 @@ public class KeyboardView extends View implements View.OnClickListener {
     public KeyboardView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
-//        TypedArray a =
-//            context.obtainStyledAttributes(
-//                attrs, android.R.styleable.KeyboardView, defStyle, R.style.WnnKeyboardView);
+        TypedArray a =
+            context.obtainStyledAttributes(
+                attrs, R.styleable.AospKeyboardView, defStyle, R.style.WnnKeyboardView);
 
         LayoutInflater inflate =
                 (LayoutInflater) context
@@ -291,57 +290,57 @@ public class KeyboardView extends View implements View.OnClickListener {
         int previewLayout = 0;
         int keyTextSize = 0;
 
-//        int n = a.getIndexCount();
-//
-//        for (int i = 0; i < n; i++) {
-//            int attr = a.getIndex(i);
-//
-//            switch (attr) {
-//            case android.R.styleable.KeyboardView_keyBackground:
-//                mKeyBackground = a.getDrawable(attr);
-//                break;
-//            case android.R.styleable.KeyboardView_verticalCorrection:
-//                mVerticalCorrection = a.getDimensionPixelOffset(attr, 0);
-//                break;
-//            case android.R.styleable.KeyboardView_keyPreviewLayout:
-//                previewLayout = a.getResourceId(attr, 0);
-//                break;
-//            case android.R.styleable.KeyboardView_keyPreviewOffset:
-//                mPreviewOffset = a.getDimensionPixelOffset(attr, 0);
-//                break;
-//            case android.R.styleable.KeyboardView_keyPreviewHeight:
-//                mPreviewHeight = a.getDimensionPixelSize(attr, 80);
-//                break;
-//            case android.R.styleable.KeyboardView_keyTextSize:
-//                mKeyTextSize = a.getDimensionPixelSize(attr, 18);
-//                break;
-//            case android.R.styleable.KeyboardView_keyTextColor:
-//                mKeyTextColor = a.getColor(attr, 0xFF000000);
-//                break;
-//            case android.R.styleable.KeyboardView_labelTextSize:
-//                mLabelTextSize = a.getDimensionPixelSize(attr, 14);
-//                break;
-//            case android.R.styleable.KeyboardView_popupLayout:
-//                mPopupLayout = a.getResourceId(attr, 0);
-//                break;
-//            case android.R.styleable.KeyboardView_shadowColor:
-//                mShadowColor = a.getColor(attr, 0);
-//                break;
-//            case android.R.styleable.KeyboardView_shadowRadius:
-//                mShadowRadius = a.getFloat(attr, 0f);
-//                break;
-//            }
-//        }
-//
-//        a.recycle();
-//        a = context.obtainStyledAttributes(attrs, R.styleable.WnnKeyboardView, 0, 0);
-//        mKeyBackground2nd = a.getDrawable(R.styleable.WnnKeyboardView_keyBackground2nd);
-//        mKeyTextColor2nd = a.getColor(R.styleable.WnnKeyboardView_keyTextColor2nd, 0xFF000000);
-//
-//        a.recycle();
-//        a = context.obtainStyledAttributes(
-//                android.R.styleable.Theme);
-//        mBackgroundDimAmount = a.getFloat(android.R.styleable.Theme_backgroundDimAmount, 0.5f);
+        int n = a.getIndexCount();
+
+        for (int i = 0; i < n; i++) {
+            int attr = a.getIndex(i);
+
+            switch (attr) {
+            case R.styleable.AospKeyboardView_keyBackground:
+                mKeyBackground = a.getDrawable(attr);
+                break;
+            case R.styleable.AospKeyboardView_verticalCorrection:
+                mVerticalCorrection = a.getDimensionPixelOffset(attr, 0);
+                break;
+            case R.styleable.AospKeyboardView_keyPreviewLayout:
+                previewLayout = a.getResourceId(attr, 0);
+                break;
+            case R.styleable.AospKeyboardView_keyPreviewOffset:
+                mPreviewOffset = a.getDimensionPixelOffset(attr, 0);
+                break;
+            case R.styleable.AospKeyboardView_keyPreviewHeight:
+                mPreviewHeight = a.getDimensionPixelSize(attr, 80);
+                break;
+            case R.styleable.AospKeyboardView_keyTextSize:
+                mKeyTextSize = a.getDimensionPixelSize(attr, 18);
+                break;
+            case R.styleable.AospKeyboardView_keyTextColor:
+                mKeyTextColor = a.getColor(attr, 0xFF000000);
+                break;
+            case R.styleable.AospKeyboardView_labelTextSize:
+                mLabelTextSize = a.getDimensionPixelSize(attr, 14);
+                break;
+            case R.styleable.AospKeyboardView_popupLayout:
+                mPopupLayout = a.getResourceId(attr, 0);
+                break;
+            case R.styleable.AospKeyboardView_shadowColor:
+                mShadowColor = a.getColor(attr, 0);
+                break;
+            case R.styleable.AospKeyboardView_shadowRadius:
+                mShadowRadius = a.getFloat(attr, 0f);
+                break;
+            }
+        }
+
+        a.recycle();
+        a = context.obtainStyledAttributes(attrs, R.styleable.WnnKeyboardView, 0, 0);
+        mKeyBackground2nd = a.getDrawable(R.styleable.WnnKeyboardView_keyBackground2nd);
+        mKeyTextColor2nd = a.getColor(R.styleable.WnnKeyboardView_keyTextColor2nd, 0xFF000000);
+
+        a.recycle();
+        a = context.obtainStyledAttributes(
+                R.styleable.Theme);
+        mBackgroundDimAmount = a.getFloat(R.styleable.Theme_backgroundDimAmount, 0.5f);
 
         mPreviewPopup = new PopupWindow(context);
         if (previewLayout != 0) {
@@ -685,7 +684,7 @@ public class KeyboardView extends View implements View.OnClickListener {
             mKeyboardChanged = false;
         }
         final Canvas canvas = mCanvas;
-        canvas.clipRect(mDirtyRect, Op.REPLACE);
+        canvas.clipRect(mDirtyRect, Op.INTERSECT);
 
         if (mKeyboard == null) return;
  

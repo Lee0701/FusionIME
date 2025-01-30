@@ -75,7 +75,7 @@
 		      android:summary="@string/preference_user_dictionary_edit_words_summary_ja"
 		      android:persistent="false">
 	<intent android:action="android.intent.action.MAIN"
-	    android:targetPackage="jp.co.omronsoft.openwnn"
+	    android:targetPackage="ee.oyatl.ime.fusion"
 	    android:targetClass="jp.co.omronsoft.openwnn.JAJP.UserDictionaryToolsListJAJP" />
     </PreferenceScreen>
     
@@ -84,7 +84,7 @@
 		      android:summary="@string/preference_user_dictionary_edit_words_summary_en"
 		      android:persistent="false">
 	<intent android:action="android.intent.action.MAIN"
-	    android:targetPackage="jp.co.omronsoft.openwnn"
+	    android:targetPackage="ee.oyatl.ime.fusion"
 	    android:targetClass="jp.co.omronsoft.openwnn.EN.UserDictionaryToolsListEN" />
     </PreferenceScreen>
 

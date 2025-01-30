@@ -14,48 +14,47 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<Keyboard xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:keyWidth="20%p"
-    android:horizontalGap="0dip"
-    android:verticalGap="0dip"
-    android:keyHeight="@dimen/key_height"
+<Keyboard xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:keyWidth="20%p"
+    app:horizontalGap="0dip"
+    app:verticalGap="0dip"
+    app:keyHeight="@dimen/key_height"
     >
   
     <Row>
-        <Key android:codes="-219" android:keyIcon="@drawable/key_12key_reverse" android:iconPreview="@drawable/key_12key_reverse_b"
-             android:keyEdgeFlags="left" android:keyWidth="18%" app:isSecondKey="true"/>
-        <Key android:codes="-201" android:keyIcon="@drawable/key_12key_alpha1" android:iconPreview="@drawable/key_12key_alpha1_b" android:horizontalGap="2%"/>
-        <Key android:codes="-202" android:keyIcon="@drawable/key_12key_alpha2" android:iconPreview="@drawable/key_12key_alpha2_b"/>
-        <Key android:codes="-203" android:keyIcon="@drawable/key_12key_alpha3" android:iconPreview="@drawable/key_12key_alpha3_b"/>
-        <Key android:codes="-214" android:keyIcon="@drawable/key_del" android:iconPreview="@drawable/key_del_b"
-             android:isRepeatable="true" android:keyEdgeFlags="right" android:horizontalGap="2%" android:keyWidth="18%" app:isSecondKey="true"/>
+        <Key app:codes="-219" app:keyIcon="@drawable/key_12key_reverse" app:iconPreview="@drawable/key_12key_reverse_b"
+             app:keyEdgeFlags="left" app:keyWidth="18%" app:isSecondKey="true"/>
+        <Key app:codes="-201" app:keyIcon="@drawable/key_12key_alpha1" app:iconPreview="@drawable/key_12key_alpha1_b" app:horizontalGap="2%"/>
+        <Key app:codes="-202" app:keyIcon="@drawable/key_12key_alpha2" app:iconPreview="@drawable/key_12key_alpha2_b"/>
+        <Key app:codes="-203" app:keyIcon="@drawable/key_12key_alpha3" app:iconPreview="@drawable/key_12key_alpha3_b"/>
+        <Key app:codes="-214" app:keyIcon="@drawable/key_del" app:iconPreview="@drawable/key_del_b"
+             app:isRepeatable="true" app:keyEdgeFlags="right" app:horizontalGap="2%" app:keyWidth="18%" app:isSecondKey="true"/>
     </Row>
     
     <Row>
-        <Key android:codes="-218" android:keyIcon="@drawable/key_12key_left" android:iconPreview="@drawable/key_12key_left_b" android:isRepeatable="true" android:keyEdgeFlags="left" android:keyWidth="18%" app:isSecondKey="true"/>
-        <Key android:codes="-204" android:keyIcon="@drawable/key_12key_alpha4" android:iconPreview="@drawable/key_12key_alpha4_b" android:horizontalGap="2%"/>
-        <Key android:codes="-205" android:keyIcon="@drawable/key_12key_alpha5" android:iconPreview="@drawable/key_12key_alpha5_b"/>
-        <Key android:codes="-206" android:keyIcon="@drawable/key_12key_alpha6" android:iconPreview="@drawable/key_12key_alpha6_b"/>
-        <Key android:codes="-217" android:keyIcon="@drawable/key_12key_right" android:iconPreview="@drawable/key_12key_right_b" android:isRepeatable="true" android:keyEdgeFlags="right" android:horizontalGap="2%" android:keyWidth="18%" app:isSecondKey="true"/>
+        <Key app:codes="-218" app:keyIcon="@drawable/key_12key_left" app:iconPreview="@drawable/key_12key_left_b" app:isRepeatable="true" app:keyEdgeFlags="left" app:keyWidth="18%" app:isSecondKey="true"/>
+        <Key app:codes="-204" app:keyIcon="@drawable/key_12key_alpha4" app:iconPreview="@drawable/key_12key_alpha4_b" app:horizontalGap="2%"/>
+        <Key app:codes="-205" app:keyIcon="@drawable/key_12key_alpha5" app:iconPreview="@drawable/key_12key_alpha5_b"/>
+        <Key app:codes="-206" app:keyIcon="@drawable/key_12key_alpha6" app:iconPreview="@drawable/key_12key_alpha6_b"/>
+        <Key app:codes="-217" app:keyIcon="@drawable/key_12key_right" app:iconPreview="@drawable/key_12key_right_b" app:isRepeatable="true" app:keyEdgeFlags="right" app:horizontalGap="2%" app:keyWidth="18%" app:isSecondKey="true"/>
     </Row>
     
     <Row>
-        <Key android:codes="-222"  android:keyIcon="@drawable/key_12key_pict_sym" android:iconPreview="@drawable/key_pict_sym_b"
-	     android:keyEdgeFlags="left" android:keyWidth="18%" app:isSecondKey="true"/>
-        <Key android:codes="-207" android:keyIcon="@drawable/key_12key_alpha7" android:iconPreview="@drawable/key_12key_alpha7_b" android:horizontalGap="2%"/>
-        <Key android:codes="-208" android:keyIcon="@drawable/key_12key_alpha8" android:iconPreview="@drawable/key_12key_alpha8_b"/>
-        <Key android:codes="-209" android:keyIcon="@drawable/key_12key_alpha9" android:iconPreview="@drawable/key_12key_alpha9_b"/>
-        <Key android:codes="-215" android:keyIcon="@drawable/key_12key_space" android:iconPreview="@drawable/key_12key_space_b" android:isRepeatable="true" android:keyEdgeFlags="right"  android:horizontalGap="2%" android:keyWidth="18%" app:isSecondKey="true"/>
+        <Key app:codes="-222"  app:keyIcon="@drawable/key_12key_pict_sym" app:iconPreview="@drawable/key_pict_sym_b"
+	     app:keyEdgeFlags="left" app:keyWidth="18%" app:isSecondKey="true"/>
+        <Key app:codes="-207" app:keyIcon="@drawable/key_12key_alpha7" app:iconPreview="@drawable/key_12key_alpha7_b" app:horizontalGap="2%"/>
+        <Key app:codes="-208" app:keyIcon="@drawable/key_12key_alpha8" app:iconPreview="@drawable/key_12key_alpha8_b"/>
+        <Key app:codes="-209" app:keyIcon="@drawable/key_12key_alpha9" app:iconPreview="@drawable/key_12key_alpha9_b"/>
+        <Key app:codes="-215" app:keyIcon="@drawable/key_12key_space" app:iconPreview="@drawable/key_12key_space_b" app:isRepeatable="true" app:keyEdgeFlags="right"  app:horizontalGap="2%" app:keyWidth="18%" app:isSecondKey="true"/>
     </Row>
     
-    <Row android:rowEdgeFlags="bottom">
-        <Key android:codes="-230" android:keyIcon="@drawable/key_mode_half_alpha" android:iconPreview="@drawable/key_mode_change_b"
-	     android:popupKeyboard="@xml/keyboard_switch_key_jp" android:keyEdgeFlags="left" android:keyWidth="18%" app:isSecondKey="true"/>
-        <Key android:codes="-213" android:keyIcon="@drawable/key_12key_caps" android:iconPreview="@drawable/key_12key_caps_b" android:horizontalGap="2%"/>
-        <Key android:codes="-210" android:keyIcon="@drawable/key_12key_alpha0" android:iconPreview="@drawable/key_12key_alpha0_b"/>
-        <Key android:codes="-211" android:keyIcon="@drawable/key_12key_period_comma" android:iconPreview="@drawable/key_12key_period_comma_b" />
-        <Key android:codes="-216" android:keyIcon="@drawable/key_enter" android:iconPreview="@drawable/key_enter_b"
-             android:keyEdgeFlags="right" android:horizontalGap="2%" android:keyWidth="18%" app:isSecondKey="true"/>
+    <Row app:rowEdgeFlags="bottom">
+        <Key app:codes="-230" app:keyIcon="@drawable/key_mode_half_alpha" app:iconPreview="@drawable/key_mode_change_b"
+	     app:popupKeyboard="@xml/keyboard_switch_key_jp" app:keyEdgeFlags="left" app:keyWidth="18%" app:isSecondKey="true"/>
+        <Key app:codes="-213" app:keyIcon="@drawable/key_12key_caps" app:iconPreview="@drawable/key_12key_caps_b" app:horizontalGap="2%"/>
+        <Key app:codes="-210" app:keyIcon="@drawable/key_12key_alpha0" app:iconPreview="@drawable/key_12key_alpha0_b"/>
+        <Key app:codes="-211" app:keyIcon="@drawable/key_12key_period_comma" app:iconPreview="@drawable/key_12key_period_comma_b" />
+        <Key app:codes="-216" app:keyIcon="@drawable/key_enter" app:iconPreview="@drawable/key_enter_b"
+             app:keyEdgeFlags="right" app:horizontalGap="2%" app:keyWidth="18%" app:isSecondKey="true"/>
     </Row>
 </Keyboard>

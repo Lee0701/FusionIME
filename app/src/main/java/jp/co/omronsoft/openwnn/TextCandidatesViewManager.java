@@ -319,20 +319,19 @@ public class TextCandidatesViewManager extends CandidatesViewManager implements 
             if (v instanceof TextView) {
                 TextView text = (TextView)v;
                 switch (text.getId()) {
-                    // TODO
-//                case R.id.candview_symbol:
-//                    if (mSymbolMode != OpenWnnJAJP.ENGINE_MODE_SYMBOL) {
-//                        mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.CHANGE_MODE,
-//                                                      OpenWnnJAJP.ENGINE_MODE_SYMBOL));
-//                    }
-//                    break;
-//
-//                case R.id.candview_emoticon:
-//                    if (mSymbolMode != OpenWnnJAJP.ENGINE_MODE_SYMBOL_KAO_MOJI) {
-//                        mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.CHANGE_MODE,
-//                                OpenWnnJAJP.ENGINE_MODE_SYMBOL));
-//                    }
-//                    break;
+                case R.id.candview_symbol:
+                    if (mSymbolMode != OpenWnnJAJP.ENGINE_MODE_SYMBOL) {
+                        mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.CHANGE_MODE,
+                                                      OpenWnnJAJP.ENGINE_MODE_SYMBOL));
+                    }
+                    break;
+
+                case R.id.candview_emoticon:
+                    if (mSymbolMode != OpenWnnJAJP.ENGINE_MODE_SYMBOL_KAO_MOJI) {
+                        mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.CHANGE_MODE,
+                                OpenWnnJAJP.ENGINE_MODE_SYMBOL));
+                    }
+                    break;
 
                 default:
                     break;

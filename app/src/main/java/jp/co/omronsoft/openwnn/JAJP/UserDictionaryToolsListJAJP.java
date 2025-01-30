@@ -35,7 +35,7 @@ public class UserDictionaryToolsListJAJP extends UserDictionaryToolsList {
     public UserDictionaryToolsListJAJP() {
         mListViewName = "jp.co.omronsoft.openwnn.JAJP.UserDictionaryToolsListJAJP";
         mEditViewName = "jp.co.omronsoft.openwnn.JAJP.UserDictionaryToolsEditJAJP";
-        mPackageName  = "jp.co.omronsoft.openwnn";
+        mPackageName  = "ee.oyatl.ime.fusion";
     }
 
     /** @see jp.co.omronsoft.iwnnime.ml.UserDictionaryToolsList#onCreate */

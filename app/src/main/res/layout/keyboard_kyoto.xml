@@ -16,10 +16,11 @@
 -->
 <android.inputmethodservice.KeyboardView
    xmlns:android="http://schemas.android.com/apk/res/android"
+   xmlns:app="http://schemas.android.com/apk/res-auto"
    android:id="@+id/keyboard"
    android:layout_alignParentBottom="true"
    android:layout_width="match_parent"
    android:layout_height="wrap_content"
-   android:keyBackground="@drawable/keybg_kyoto_def"
+   app:keyBackground="@drawable/keybg_kyoto_def"
    android:background="@drawable/keybg_kyoto_bg"
 />

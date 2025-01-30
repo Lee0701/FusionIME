@@ -49,7 +49,7 @@ public class UserDictionaryToolsEditJAJP extends UserDictionaryToolsEdit {
      */
     public void initialize() {
         mListViewName = "jp.co.omronsoft.openwnn.JAJP.UserDictionaryToolsListJAJP";
-        mPackageName  = "jp.co.omronsoft.openwnn";
+        mPackageName  = "ee.oyatl.ime.fusion";
     }
 
     /** @see jp.co.omronsoft.openwnn.UserDictionaryToolsEdit#sendEventToIME */

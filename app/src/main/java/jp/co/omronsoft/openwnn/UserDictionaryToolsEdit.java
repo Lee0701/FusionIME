@@ -222,15 +222,15 @@ public abstract class UserDictionaryToolsEdit extends Activity implements View.O
         mCancelButton.setEnabled(false);
 
         switch (v.getId()) {
-//            case R.id.addButton:
-//                /* save the word */
-//                doSaveAction();
-//                break;
-//
-//            case R.id.cancelButton:
-//                /* cancel the edit */
-//                doRevertAction();
-//                break;
+            case R.id.addButton:
+                /* save the word */
+                doSaveAction();
+                break;
+
+            case R.id.cancelButton:
+                /* cancel the edit */
+                doRevertAction();
+                break;
 
             default:
                 Log.e("OpenWnn", "onClick: Get Invalid ButtonID. ID=" + v.getId());

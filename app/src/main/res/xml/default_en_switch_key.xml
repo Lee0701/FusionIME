@@ -14,15 +14,15 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<Keyboard xmlns:android="http://schemas.android.com/apk/res/android"
-	  android:keyWidth="15%p"
-	  android:horizontalGap="0dip"
-	  android:verticalGap="0dip"
-	  android:keyHeight="50dip" >
+<Keyboard xmlns:app="http://schemas.android.com/apk/res-auto"
+	  app:keyWidth="15%p"
+	  app:horizontalGap="0dip"
+	  app:verticalGap="0dip"
+	  app:keyHeight="50dip" >
   <Row>
-    <Key android:codes="-113" android:keyLabel="@string/key_12key_switch_half_alphabet"
-	 android:keyEdgeFlags="left"/>
-    <Key android:codes="-112" android:keyLabel="@string/key_12key_switch_half_number"
-	 android:keyEdgeFlags="right"/>
+    <Key app:codes="-113" app:keyLabel="@string/key_12key_switch_half_alphabet"
+	 app:keyEdgeFlags="left"/>
+    <Key app:codes="-112" app:keyLabel="@string/key_12key_switch_half_number"
+	 app:keyEdgeFlags="right"/>
   </Row>
 </Keyboard>

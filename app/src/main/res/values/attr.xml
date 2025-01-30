@@ -16,6 +16,12 @@
 -->
 
 <resources>
+
+    <declare-styleable name="Theme">
+        <!-- Default background dim amount when a menu, dialog, or something similar pops up. -->
+        <attr name="backgroundDimAmount" format="float" />
+    </declare-styleable>
+
     <declare-styleable name="WnnKeyboardView">
         <!-- 2nd Image for the key. This image needs to be a StateListDrawable, with the following
              possible states: normal, pressed, checkable, checkable+pressed, checkable+checked,

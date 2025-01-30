@@ -14,72 +14,72 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<Keyboard xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:app="http://schemas.android.com/apk/res-auto"
-      android:keyWidth="9%p"
-      android:horizontalGap="0.93%p"
-      android:verticalGap="8dip"
-      android:keyHeight="@dimen/key_height_qwerty"
+<Keyboard xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:wnn="http://schemas.android.com/apk/res/jp.co.omronsoft.openwnn"
+      app:keyWidth="9%p"
+      app:horizontalGap="0.93%p"
+      app:verticalGap="8dip"
+      app:keyHeight="@dimen/key_height_qwerty"
 	  >
   
   <Row>
-    <Key android:codes="65329" android:keyLabel="Q" android:keyEdgeFlags="left" android:horizontalGap="1.2%p"/>
-    <Key android:codes="65335" android:keyLabel="W"/>
-    <Key android:codes="65317" android:keyLabel="E"/>
-    <Key android:codes="65330" android:keyLabel="R"/>
-    <Key android:codes="65332" android:keyLabel="T"/>
-    <Key android:codes="65337" android:keyLabel="Y"/>
-    <Key android:codes="65333" android:keyLabel="U"/>
-    <Key android:codes="65321" android:keyLabel="I"/>
-    <Key android:codes="65327" android:keyLabel="O"/>
-    <Key android:codes="65328" android:keyLabel="P" android:keyEdgeFlags="right"/>
+    <Key app:codes="65329" app:keyLabel="Q" app:keyEdgeFlags="left" app:horizontalGap="1.2%p"/>
+    <Key app:codes="65335" app:keyLabel="W"/>
+    <Key app:codes="65317" app:keyLabel="E"/>
+    <Key app:codes="65330" app:keyLabel="R"/>
+    <Key app:codes="65332" app:keyLabel="T"/>
+    <Key app:codes="65337" app:keyLabel="Y"/>
+    <Key app:codes="65333" app:keyLabel="U"/>
+    <Key app:codes="65321" app:keyLabel="I"/>
+    <Key app:codes="65327" app:keyLabel="O"/>
+    <Key app:codes="65328" app:keyLabel="P" app:keyEdgeFlags="right"/>
   </Row>
   
   <Row>
-    <Key android:codes="65313" android:keyLabel="A" android:keyEdgeFlags="left" android:horizontalGap="1.2%p"/>
-    <Key android:codes="65331" android:keyLabel="S"/>
-    <Key android:codes="65316" android:keyLabel="D"/>
-    <Key android:codes="65318" android:keyLabel="F"/>
-    <Key android:codes="65319" android:keyLabel="G"/>
-    <Key android:codes="65320" android:keyLabel="H"/>
-    <Key android:codes="65322" android:keyLabel="J"/>
-    <Key android:codes="65323" android:keyLabel="K"/>
-    <Key android:codes="65324" android:keyLabel="L"/>
-    <Key android:codes="65295" android:keyLabel="@string/key_qwerty_full_slash"
-         android:keyEdgeFlags="right"/>
+    <Key app:codes="65313" app:keyLabel="A" app:keyEdgeFlags="left" app:horizontalGap="1.2%p"/>
+    <Key app:codes="65331" app:keyLabel="S"/>
+    <Key app:codes="65316" app:keyLabel="D"/>
+    <Key app:codes="65318" app:keyLabel="F"/>
+    <Key app:codes="65319" app:keyLabel="G"/>
+    <Key app:codes="65320" app:keyLabel="H"/>
+    <Key app:codes="65322" app:keyLabel="J"/>
+    <Key app:codes="65323" app:keyLabel="K"/>
+    <Key app:codes="65324" app:keyLabel="L"/>
+    <Key app:codes="65295" app:keyLabel="@string/key_qwerty_full_slash"
+         app:keyEdgeFlags="right"/>
   </Row>
   
-  <Row android:horizontalGap="0.82%p">
-    <Key android:codes="-1" android:keyIcon="@drawable/key_qwerty_shift"
-         android:iconPreview="@drawable/key_qwerty_shift_b" android:keyWidth="14%p" android:horizontalGap="1.2%p"
-         android:isModifier="true" android:isSticky="false" android:keyEdgeFlags="left" app:isSecondKey="true"/>
-    <Key android:codes="65338" android:keyLabel="Z"/>
-    <Key android:codes="65336" android:keyLabel="X"/>
-    <Key android:codes="65315" android:keyLabel="C"/>
-    <Key android:codes="65334" android:keyLabel="V"/>
-    <Key android:codes="65314" android:keyLabel="B"/>
-    <Key android:codes="65326" android:keyLabel="N"/>
-    <Key android:codes="65325" android:keyLabel="M"/>
-    <Key android:codes="-100" android:keyIcon="@drawable/key_del" android:iconPreview="@drawable/key_del_b"
-         android:keyWidth="13.9%p"
-         android:keyEdgeFlags="right" android:isRepeatable="true" app:isSecondKey="true"/>
+  <Row app:horizontalGap="0.82%p">
+    <Key app:codes="-1" app:keyIcon="@drawable/key_qwerty_shift"
+         app:iconPreview="@drawable/key_qwerty_shift_b" app:keyWidth="14%p" app:horizontalGap="1.2%p"
+         app:isModifier="true" app:isSticky="false" app:keyEdgeFlags="left" app:isSecondKey="true"/>
+    <Key app:codes="65338" app:keyLabel="Z"/>
+    <Key app:codes="65336" app:keyLabel="X"/>
+    <Key app:codes="65315" app:keyLabel="C"/>
+    <Key app:codes="65334" app:keyLabel="V"/>
+    <Key app:codes="65314" app:keyLabel="B"/>
+    <Key app:codes="65326" app:keyLabel="N"/>
+    <Key app:codes="65325" app:keyLabel="M"/>
+    <Key app:codes="-100" app:keyIcon="@drawable/key_del" app:iconPreview="@drawable/key_del_b"
+         app:keyWidth="13.9%p"
+         app:keyEdgeFlags="right" app:isRepeatable="true" app:isSecondKey="true"/>
   </Row>
   
-  <Row android:rowEdgeFlags="bottom" android:horizontalGap="0.28%p">
-    <Key android:codes="-230" android:keyIcon="@drawable/key_mode_full_alpha" android:iconPreview="@drawable/key_mode_change_b"
-	 android:popupKeyboard="@xml/keyboard_switch_key_qwerty_jp" android:horizontalGap="1.2%p"
-         android:keyWidth="15%p" android:keyEdgeFlags="left" app:isSecondKey="true"/>
-    <Key android:codes="-106" android:keyIcon="@drawable/key_qwerty_pict_sym" android:iconPreview="@drawable/key_pict_sym_b"
-         android:keyWidth="15%p" app:isSecondKey="true"/>
-    <Key android:codes="65281" android:keyLabel="@string/key_qwerty_full_exclamation_mark"/>
-    <Key android:codes="12288"  android:keyIcon="@drawable/key_qwerty_space" android:iconPreview="@drawable/key_qwerty_space_b" 
-         android:keyWidth="15.1%p" android:isRepeatable="true"/>
-    <Key android:codes="65311" android:keyLabel="@string/key_qwerty_full_question"/>
-    <Key android:codes="-218" android:keyIcon="@drawable/key_qwerty_left" android:iconPreview="@drawable/key_qwerty_left_b"
-         android:isRepeatable="true" app:isSecondKey="true"/>
-    <Key android:codes="-217" android:keyIcon="@drawable/key_qwerty_right" android:iconPreview="@drawable/key_qwerty_right_b"
-         android:isRepeatable="true" app:isSecondKey="true"/>
-    <Key android:codes="-101" android:keyIcon="@drawable/key_enter" android:iconPreview="@drawable/key_enter_b" 
-         android:keyWidth="15%p" android:keyEdgeFlags="right" app:isSecondKey="true"/>
+  <Row app:rowEdgeFlags="bottom" app:horizontalGap="0.28%p">
+    <Key app:codes="-230" app:keyIcon="@drawable/key_mode_full_alpha" app:iconPreview="@drawable/key_mode_change_b"
+	 app:popupKeyboard="@xml/keyboard_switch_key_qwerty_jp" app:horizontalGap="1.2%p"
+         app:keyWidth="15%p" app:keyEdgeFlags="left" app:isSecondKey="true"/>
+    <Key app:codes="-106" app:keyIcon="@drawable/key_qwerty_pict_sym" app:iconPreview="@drawable/key_pict_sym_b"
+         app:keyWidth="15%p" app:isSecondKey="true"/>
+    <Key app:codes="65281" app:keyLabel="@string/key_qwerty_full_exclamation_mark"/>
+    <Key app:codes="12288"  app:keyIcon="@drawable/key_qwerty_space" app:iconPreview="@drawable/key_qwerty_space_b" 
+         app:keyWidth="15.1%p" app:isRepeatable="true"/>
+    <Key app:codes="65311" app:keyLabel="@string/key_qwerty_full_question"/>
+    <Key app:codes="-218" app:keyIcon="@drawable/key_qwerty_left" app:iconPreview="@drawable/key_qwerty_left_b"
+         app:isRepeatable="true" app:isSecondKey="true"/>
+    <Key app:codes="-217" app:keyIcon="@drawable/key_qwerty_right" app:iconPreview="@drawable/key_qwerty_right_b"
+         app:isRepeatable="true" app:isSecondKey="true"/>
+    <Key app:codes="-101" app:keyIcon="@drawable/key_enter" app:iconPreview="@drawable/key_enter_b" 
+         app:keyWidth="15%p" app:keyEdgeFlags="right" app:isSecondKey="true"/>
   </Row>
 </Keyboard>

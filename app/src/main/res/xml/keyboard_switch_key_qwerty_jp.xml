@@ -14,26 +14,26 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<Keyboard xmlns:android="http://schemas.android.com/apk/res/android"
-	  android:keyWidth="15%p"
-	  android:horizontalGap="0dip"
-	  android:verticalGap="0dip"
-	  android:keyHeight="50dip"
+<Keyboard xmlns:app="http://schemas.android.com/apk/res-auto"
+	  app:keyWidth="15%p"
+	  app:horizontalGap="0dip"
+	  app:verticalGap="0dip"
+	  app:keyHeight="50dip"
 	  >
   <Row>
-    <Key android:codes="-301" android:keyLabel="@string/key_12key_switch_full_hiragana"
-	 android:keyEdgeFlags="left"/>
-    <Key android:codes="-302" android:keyLabel="@string/key_12key_switch_full_katakana"/>
-    <Key android:codes="-303" android:keyLabel="@string/key_12key_switch_full_alphabet"/>
-    <Key android:codes="-304" android:keyLabel="@string/key_12key_switch_full_number"
-	 android:keyEdgeFlags="right"/>
+    <Key app:codes="-301" app:keyLabel="@string/key_12key_switch_full_hiragana"
+	 app:keyEdgeFlags="left"/>
+    <Key app:codes="-302" app:keyLabel="@string/key_12key_switch_full_katakana"/>
+    <Key app:codes="-303" app:keyLabel="@string/key_12key_switch_full_alphabet"/>
+    <Key app:codes="-304" app:keyLabel="@string/key_12key_switch_full_number"
+	 app:keyEdgeFlags="right"/>
   </Row>
   <Row>
-    <Key android:codes="-104" android:keyIcon="@drawable/key_mode_panel_kbd_12key" android:iconPreview="@drawable/key_mode_panel_kbd_12key_b"
-	 android:keyEdgeFlags="left"/>
-    <Key android:codes="-306" android:keyLabel="@string/key_12key_switch_half_katakana"/>
-    <Key android:codes="-307" android:keyLabel="@string/key_12key_switch_half_alphabet"/>
-    <Key android:codes="-308" android:keyLabel="@string/key_12key_switch_half_number"
-	 android:keyEdgeFlags="right"/>
+    <Key app:codes="-104" app:keyIcon="@drawable/key_mode_panel_kbd_12key" app:iconPreview="@drawable/key_mode_panel_kbd_12key_b"
+	 app:keyEdgeFlags="left"/>
+    <Key app:codes="-306" app:keyLabel="@string/key_12key_switch_half_katakana"/>
+    <Key app:codes="-307" app:keyLabel="@string/key_12key_switch_half_alphabet"/>
+    <Key app:codes="-308" app:keyLabel="@string/key_12key_switch_half_number"
+	 app:keyEdgeFlags="right"/>
   </Row>
 </Keyboard>

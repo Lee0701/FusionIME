@@ -611,7 +611,7 @@ public class DefaultSoftKeyboard implements InputViewManager, KeyboardView.OnKey
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(parent);
         String skin = pref.getString("keyboard_skin",
                                      mWnn.getResources().getString(R.string.keyboard_skin_id_default));
-        int id = parent.getResources().getIdentifier(skin, "layout", "jp.co.omronsoft.openwnn");
+        int id = parent.getResources().getIdentifier(skin, "layout", "ee.oyatl.ime.fusion");
 
         mKeyboardView = (KeyboardView) mWnn.getLayoutInflater().inflate(id, null);
         mKeyboardView.setOnKeyboardActionListener(this);

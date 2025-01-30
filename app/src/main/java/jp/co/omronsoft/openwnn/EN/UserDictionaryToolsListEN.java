@@ -38,7 +38,7 @@ public class UserDictionaryToolsListEN extends UserDictionaryToolsList {
         }
         mListViewName = "jp.co.omronsoft.openwnn.EN.UserDictionaryToolsListEN";
         mEditViewName = "jp.co.omronsoft.openwnn.EN.UserDictionaryToolsEditEN";
-        mPackageName  = "jp.co.omronsoft.openwnn";
+        mPackageName  = "ee.oyatl.ime.fusion";
     }
 
     /** @see jp.co.omronsoft.iwnnime.ml.UserDictionaryToolsList#onCreate */
