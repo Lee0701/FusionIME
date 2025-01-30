@@ -118,7 +118,7 @@ class DictionaryDownloadProgressBar : ProgressBar {
                     } finally {
                         cursor.close()
                     }
-                    sleep(Companion.REPORT_PERIOD.toLong())
+                    sleep(REPORT_PERIOD.toLong())
                 }
             } catch (e: InterruptedException) {
                 // Do nothing and terminate normally.

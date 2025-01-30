@@ -54,19 +54,19 @@ class OpenWnnJAJP() : OpenWnn() {
     /** Convert engine's state  */
     private class EngineState {
         /** Set of dictionaries  */
-        var dictionarySet: Int = Companion.INVALID
+        var dictionarySet: Int = INVALID
 
         /** Type of conversion  */
-        var convertType: Int = Companion.INVALID
+        var convertType: Int = INVALID
 
         /** Temporary mode  */
-        var temporaryMode: Int = Companion.INVALID
+        var temporaryMode: Int = INVALID
 
         /** Preference dictionary setting  */
-        var preferenceDictionary: Int = Companion.INVALID
+        var preferenceDictionary: Int = INVALID
 
         /** keyboard  */
-        var keyboard: Int = Companion.INVALID
+        var keyboard: Int = INVALID
 
         val isRenbun: Boolean
             /**
@@ -74,7 +74,7 @@ class OpenWnnJAJP() : OpenWnn() {
              *
              * @return `true` if current type of conversion is consecutive clause conversion.
              */
-            get() = convertType == Companion.CONVERT_TYPE_RENBUN
+            get() = convertType == CONVERT_TYPE_RENBUN
 
         val isEisuKana: Boolean
             /**
@@ -82,7 +82,7 @@ class OpenWnnJAJP() : OpenWnn() {
              *
              * @return `true` if current type of conversion is EISU-KANA conversion.
              */
-            get() = convertType == Companion.CONVERT_TYPE_EISU_KANA
+            get() = convertType == CONVERT_TYPE_EISU_KANA
 
         val isConvertState: Boolean
             /**
@@ -90,7 +90,7 @@ class OpenWnnJAJP() : OpenWnn() {
              *
              * @return `true` if no conversion is executed currently.
              */
-            get() = convertType != Companion.CONVERT_TYPE_NONE
+            get() = convertType != CONVERT_TYPE_NONE
 
         val isSymbolList: Boolean
             /**
@@ -98,7 +98,7 @@ class OpenWnnJAJP() : OpenWnn() {
              *
              * @return `true` if the mode is "symbol list".
              */
-            get() = temporaryMode == Companion.TEMPORARY_DICTIONARY_MODE_SYMBOL
+            get() = temporaryMode == TEMPORARY_DICTIONARY_MODE_SYMBOL
 
         val isEnglish: Boolean
             /**
@@ -106,7 +106,7 @@ class OpenWnnJAJP() : OpenWnn() {
              *
              * @return `true` if the current language is English.
              */
-            get() = dictionarySet == Companion.DICTIONARYSET_EN
+            get() = dictionarySet == DICTIONARYSET_EN
 
         companion object {
             /** Definition for `EngineState.*` (invalid)  */

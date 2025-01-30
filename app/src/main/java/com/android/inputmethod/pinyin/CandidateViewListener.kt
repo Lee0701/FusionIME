@@ -13,21 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package com.android.inputmethod.pinyin;
+package com.android.inputmethod.pinyin
 
 /**
  * Interface to notify the input method when the user clicks a candidate or
  * makes a direction-gesture on candidate view.
  */
-public interface CandidateViewListener {
-    public void onClickChoice(int choiceId);
+interface CandidateViewListener {
+    fun onClickChoice(choiceId: Int)
 
-    public void onToLeftGesture();
+    fun onToLeftGesture()
 
-    public void onToRightGesture();
+    fun onToRightGesture()
 
-    public void onToTopGesture();
+    fun onToTopGesture()
 
-    public void onToBottomGesture();
+    fun onToBottomGesture()
 }

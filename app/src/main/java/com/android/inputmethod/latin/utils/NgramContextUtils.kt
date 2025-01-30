@@ -52,15 +52,15 @@ object NgramContextUtils {
         prev: CharSequence?,
         spacingAndPunctuations: SpacingAndPunctuations, n: Int
     ): NgramContext {
-        if (prev == null) return NgramContext.Companion.EMPTY_PREV_WORDS_INFO
+        if (prev == null) return NgramContext.EMPTY_PREV_WORDS_INFO
         val lines = NEWLINE_REGEX.split(prev)
         if (lines.size == 0) {
-            return NgramContext(WordInfo.Companion.BEGINNING_OF_SENTENCE_WORD_INFO)
+            return NgramContext(WordInfo.BEGINNING_OF_SENTENCE_WORD_INFO)
         }
         val w = SPACE_REGEX.split(lines[lines.size - 1])
         val prevWordsInfo =
             arrayOfNulls<WordInfo>(DecoderSpecificConstants.MAX_PREV_WORD_COUNT_FOR_N_GRAM)
-        Arrays.fill(prevWordsInfo, WordInfo.Companion.EMPTY_WORD_INFO)
+        Arrays.fill(prevWordsInfo, WordInfo.EMPTY_WORD_INFO)
         for (i in prevWordsInfo.indices) {
             val focusedWordIndex = w.size - n - i
             // Referring to the word after the focused word.
@@ -77,7 +77,7 @@ object NgramContextUtils {
             }
             // If we can't find (n + i) words, the context is beginning-of-sentence.
             if (focusedWordIndex < 0) {
-                prevWordsInfo[i] = WordInfo.Companion.BEGINNING_OF_SENTENCE_WORD_INFO
+                prevWordsInfo[i] = WordInfo.BEGINNING_OF_SENTENCE_WORD_INFO
                 break
             }
 
@@ -85,13 +85,13 @@ object NgramContextUtils {
             // If the word is empty, the context is beginning-of-sentence.
             val length = focusedWord.length
             if (length <= 0) {
-                prevWordsInfo[i] = WordInfo.Companion.BEGINNING_OF_SENTENCE_WORD_INFO
+                prevWordsInfo[i] = WordInfo.BEGINNING_OF_SENTENCE_WORD_INFO
                 break
             }
             // If the word ends in a sentence terminator, the context is beginning-of-sentence.
             val lastChar = focusedWord[length - 1]
             if (spacingAndPunctuations.isSentenceTerminator(lastChar.code)) {
-                prevWordsInfo[i] = WordInfo.Companion.BEGINNING_OF_SENTENCE_WORD_INFO
+                prevWordsInfo[i] = WordInfo.BEGINNING_OF_SENTENCE_WORD_INFO
                 break
             }
             // If ends in a word separator or connector, the context is unclear.

@@ -82,7 +82,7 @@ class DictionaryProvider : ContentProvider() {
         }
 
         override fun getColumnNames(): Array<String> {
-            return Companion.columnNames
+            return columnNames
         }
 
         override fun getCount(): Int {
