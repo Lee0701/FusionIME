@@ -189,7 +189,6 @@ class OpenWnnClauseConverterJAJP {
 
                 val key = input.substring(start, end)
                 clauses.clear()
-                var bestClause: WnnClause? = null
                 if (end == input.length) {
                     /* get the clause which can be the end of the sentence */
                     singleClauseConvert(clauses, key, mPosEndOfClause1!!, false)
@@ -197,17 +196,15 @@ class OpenWnnClauseConverterJAJP {
                     /* get the clause which is not the end of the sentence */
                     singleClauseConvert(clauses, key, mPosEndOfClause3!!, false)
                 }
-                bestClause = if (clauses.isEmpty()) {
-                    defaultClause(key)
-                } else {
-                    clauses[0] as WnnClause
-                }
+                val bestClause =
+                    if (clauses.isEmpty()) defaultClause(key)
+                    else clauses[0]
 
                 /* make a sub-sentence */
-                var ws = if (start == 0) {
-                    WnnSentence(key, bestClause!!)
+                val ws = if (start == 0) {
+                    WnnSentence(key, bestClause)
                 } else {
-                    WnnSentence(sentence[start - 1]!!, bestClause!!)
+                    WnnSentence(sentence[start - 1]!!, bestClause)
                 }
                 ws.frequency += CLAUSE_COST
 
@@ -287,7 +284,7 @@ class OpenWnnClauseConverterJAJP {
             /* get candidates of stem in a clause */
             str = input.substring(0, split)
             stems = getIndependentWords(str, all)
-            if (stems == null || stems.isEmpty()) {
+            if (stems.isNullOrEmpty()) {
                 if (mDictionary!!.searchWord(
                         WnnDictionary.SEARCH_PREFIX,
                         WnnDictionary.ORDER_BY_FREQUENCY,
@@ -396,7 +393,7 @@ class OpenWnnClauseConverterJAJP {
             if (mConnectMatrix!![left]!![right].toInt() != 0) {
                 return true
             }
-        } catch (ex: Exception) {
+        } catch (_: Exception) {
         }
         return false
     }
@@ -408,7 +405,7 @@ class OpenWnnClauseConverterJAJP {
      * @return            List of ancillary words
      */
     private fun getAncillaryPattern(input: String): ArrayList<WnnWord>? {
-        if (input.length == 0) {
+        if (input.isEmpty()) {
             return null
         }
 
@@ -419,8 +416,8 @@ class OpenWnnClauseConverterJAJP {
         }
 
         /* set dictionaries */
-        val dict = mDictionary
-        dict!!.clearDictionary()
+        val dict = mDictionary ?: return fzks
+        dict.clearDictionary()
         dict.clearApproxPattern()
         dict.setDictionary(6, 400, 500)
 
@@ -487,7 +484,7 @@ class OpenWnnClauseConverterJAJP {
      * @return            List of words; `null` if `input.length() == 0`.
      */
     private fun getIndependentWords(input: String, all: Boolean): ArrayList<WnnWord>? {
-        if (input.length == 0) {
+        if (input.isEmpty()) {
             return null
         }
 
@@ -495,8 +492,8 @@ class OpenWnnClauseConverterJAJP {
 
         if (words == null) {
             /* set dictionaries */
-            val dict = mDictionary
-            dict!!.clearDictionary()
+            val dict = mDictionary ?: return words
+            dict.clearDictionary()
             dict.clearApproxPattern()
             dict.setDictionary(4, 0, 10)
             dict.setDictionary(5, 400, 500)

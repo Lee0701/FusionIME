@@ -492,7 +492,7 @@ class TextCandidatesViewManager
             }
         })
 
-        viewType = CandidatesViewManager.VIEW_TYPE_CLOSE
+        viewType = VIEW_TYPE_CLOSE
 
         mGestureDetector = GestureDetector(this)
 
@@ -592,7 +592,7 @@ class TextCandidatesViewManager
         mViewType = type
 
         when (type) {
-            CandidatesViewManager.VIEW_TYPE_CLOSE -> {
+            VIEW_TYPE_CLOSE -> {
                 params = LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.FILL_PARENT,
                     candidateMinimumHeight * line
@@ -955,9 +955,9 @@ class TextCandidatesViewManager
                 textView = createCandidateView()
                 textView.layoutParams = params
 
-                mViewCandidateList2nd!!.addView(textView)
+                mViewCandidateList2nd?.addView(textView)
             } else {
-                mViewCandidateList2nd!!.updateViewLayout(textView, params)
+                mViewCandidateList2nd?.updateViewLayout(textView, params)
             }
 
             mFullViewOccupyCount += occupyCount
@@ -994,12 +994,12 @@ class TextCandidatesViewManager
                 mLineLength = nextEnd
             }
 
-            val lineView = mViewCandidateList1st!!.getChildAt(mLineCount - 1) as LinearLayout
+            val lineView = mViewCandidateList1st?.getChildAt(mLineCount - 1) as LinearLayout
             textView = lineView.getChildAt(mNormalViewWordCountOfLine) as TextView
 
             if (isCategory) {
                 if (mLineCount == 1) {
-                    mViewCandidateTemplate!!.setBackgroundDrawable(null)
+//                    mViewCandidateTemplate?.background = null
                 }
                 mLineLength += mCandidateLeftAlignThreshold
             } else {
@@ -1024,7 +1024,7 @@ class TextCandidatesViewManager
             textView.text = "      " + word.candidate
 
             textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mCandCategoryTextSize)
-            textView.setBackgroundDrawable(null)
+//            textView.background = null
             textView.gravity = Gravity.CENTER_VERTICAL
             textView.minHeight = mCandidateCategoryMinimumHeight
             textView.height = mCandidateCategoryMinimumHeight
@@ -1115,7 +1115,7 @@ class TextCandidatesViewManager
      * @return the view
      */
     private fun createCandidateView(): TextView {
-        val text: TextView = CandidateTextView(mViewBodyScroll!!.context)
+        val text: TextView = CandidateTextView(mViewBodyScroll?.context)
         text.setTextSize(TypedValue.COMPLEX_UNIT_PX, mCandNormalTextSize)
         text.setBackgroundResource(R.drawable.cand_back)
         text.compoundDrawablePadding = 0
@@ -1138,28 +1138,28 @@ class TextCandidatesViewManager
      */
     private fun setReadMore() {
         if (mIsSymbolMode) {
-            mReadMoreButton!!.visibility = View.GONE
-            mViewCandidateTemplate!!.visibility = View.GONE
+            mReadMoreButton?.visibility = View.GONE
+            mViewCandidateTemplate?.visibility = View.GONE
             return
         }
 
         var resid = 0
 
         if (mIsFullView) {
-            mReadMoreButton!!.visibility = View.VISIBLE
+            mReadMoreButton?.visibility = View.VISIBLE
             resid = R.drawable.cand_up
         } else {
             if (mCanReadMore) {
-                mReadMoreButton!!.visibility = View.VISIBLE
+                mReadMoreButton?.visibility = View.VISIBLE
                 resid = R.drawable.cand_down
             } else {
-                mReadMoreButton!!.visibility = View.GONE
-                mViewCandidateTemplate!!.visibility = View.GONE
+                mReadMoreButton?.visibility = View.GONE
+                mViewCandidateTemplate?.visibility = View.GONE
             }
         }
 
         if (resid != 0) {
-            mReadMoreButton!!.setImageResource(resid)
+            mReadMoreButton?.setImageResource(resid)
         }
     }
 
@@ -1168,7 +1168,7 @@ class TextCandidatesViewManager
      */
     private fun clearNormalViewCandidate() {
         val candidateList = mViewCandidateList1st
-        val lineNum = candidateList!!.childCount
+        val lineNum = candidateList?.childCount ?: return
         for (i in 0 until lineNum) {
             val lineView = candidateList.getChildAt(i) as LinearLayout
             val size = lineView.childCount
@@ -1186,8 +1186,8 @@ class TextCandidatesViewManager
         clearFocusCandidate()
         clearNormalViewCandidate()
 
-        val layout: ViewGroup? = mViewCandidateList2nd
-        val size = layout!!.childCount
+        val layout = mViewCandidateList2nd
+        val size = layout?.childCount ?: return
         for (i in 0 until size) {
             val v = layout.getChildAt(i)
             v.visibility = View.GONE
@@ -1205,13 +1205,13 @@ class TextCandidatesViewManager
         mLineY = 0
 
         mIsFullView = false
-        mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.LIST_CANDIDATES_NORMAL))
+        mWnn?.onEvent(OpenWnnEvent(OpenWnnEvent.LIST_CANDIDATES_NORMAL))
         if (mAutoHideMode) {
-            setViewLayout(CandidatesViewManager.VIEW_TYPE_CLOSE)
+            setViewLayout(VIEW_TYPE_CLOSE)
         }
 
-        if (mAutoHideMode && mViewBody!!.isShown) {
-            mWnn!!.setCandidatesViewShown(false)
+        if (mAutoHideMode && mViewBody?.isShown == true) {
+            mWnn?.setCandidatesViewShown(false)
         }
         mCanReadMore = false
         setReadMore()
@@ -1222,12 +1222,12 @@ class TextCandidatesViewManager
     override fun setPreferences(pref: SharedPreferences) {
         try {
             mVibrator = if (pref.getBoolean("key_vibration", false)) {
-                mWnn!!.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+                mWnn?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
             } else {
                 null
             }
             mSound = if (pref.getBoolean("key_sound", false)) {
-                mWnn!!.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+                mWnn?.getSystemService(Context.AUDIO_SERVICE) as AudioManager
             } else {
                 null
             }
@@ -1243,7 +1243,7 @@ class TextCandidatesViewManager
     fun setNormalMode() {
         setReadMore()
         mIsFullView = false
-        mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.LIST_CANDIDATES_NORMAL))
+        mWnn?.onEvent(OpenWnnEvent(OpenWnnEvent.LIST_CANDIDATES_NORMAL))
     }
 
     /**
@@ -1251,7 +1251,7 @@ class TextCandidatesViewManager
      */
     fun setFullMode() {
         mIsFullView = true
-        mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.LIST_CANDIDATES_FULL))
+        mWnn?.onEvent(OpenWnnEvent(OpenWnnEvent.LIST_CANDIDATES_FULL))
     }
 
     /**
@@ -1259,7 +1259,7 @@ class TextCandidatesViewManager
      */
     fun setSymbolMode(enable: Boolean, mode: Int) {
         if (mIsSymbolMode && !enable) {
-            viewType = CandidatesViewManager.VIEW_TYPE_CLOSE
+            viewType = VIEW_TYPE_CLOSE
         }
         mSymbolMode = mode
         mIsSymbolMode = enable
@@ -1269,8 +1269,8 @@ class TextCandidatesViewManager
      * Set scroll up.
      */
     fun setScrollUp() {
-        if (!mViewBodyScroll!!.pageScroll(ScrollView.FOCUS_UP)) {
-            mViewBodyScroll!!.scrollTo(0, mViewBodyScroll!!.getChildAt(0).height)
+        if (mViewBodyScroll?.pageScroll(ScrollView.FOCUS_UP) != true) {
+            mViewBodyScroll?.scrollTo(0, mViewBodyScroll?.getChildAt(0)?.height ?: 0)
         }
     }
 
@@ -1278,8 +1278,8 @@ class TextCandidatesViewManager
      * Set scroll down.
      */
     fun setScrollDown() {
-        if (!mViewBodyScroll!!.pageScroll(ScrollView.FOCUS_DOWN)) {
-            mViewBodyScroll!!.scrollTo(0, 0)
+        if (mViewBodyScroll?.pageScroll(ScrollView.FOCUS_DOWN) != true) {
+            mViewBodyScroll?.scrollTo(0, 0)
         }
     }
 
@@ -1287,8 +1287,8 @@ class TextCandidatesViewManager
      * Set scroll full up.
      */
     fun setScrollFullUp() {
-        if (!mViewBodyScroll!!.fullScroll(ScrollView.FOCUS_UP)) {
-            mViewBodyScroll!!.scrollTo(0, mViewBodyScroll!!.getChildAt(0).height)
+        if (mViewBodyScroll?.fullScroll(ScrollView.FOCUS_UP) != true) {
+            mViewBodyScroll?.scrollTo(0, mViewBodyScroll?.getChildAt(0)?.height ?: 0)
         }
     }
 
@@ -1296,8 +1296,8 @@ class TextCandidatesViewManager
      * Set scroll full down.
      */
     fun setScrollFullDown() {
-        if (!mViewBodyScroll!!.fullScroll(ScrollView.FOCUS_DOWN)) {
-            mViewBodyScroll!!.scrollTo(0, 0)
+        if (mViewBodyScroll?.fullScroll(ScrollView.FOCUS_DOWN) != true) {
+            mViewBodyScroll?.scrollTo(0, 0)
         }
     }
 
@@ -1307,7 +1307,7 @@ class TextCandidatesViewManager
      * @return      `true` if event is processed; `false` if otherwise
      */
     fun onTouchSync(): Boolean {
-        return mGestureDetector!!.onTouchEvent(mMotionEvent!!)
+        return mGestureDetector?.onTouchEvent(mMotionEvent!!) == true
     }
 
     /**
@@ -1320,16 +1320,16 @@ class TextCandidatesViewManager
     private fun selectCandidate(word: WnnWord?) {
         if (!mIsSymbolMode) {
             mIsFullView = false
-            mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.LIST_CANDIDATES_NORMAL))
+            mWnn?.onEvent(OpenWnnEvent(OpenWnnEvent.LIST_CANDIDATES_NORMAL))
         }
         mIsSymbolSelected = mIsSymbolMode
-        mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.SELECT_CANDIDATE, word))
+        mWnn?.onEvent(OpenWnnEvent(OpenWnnEvent.SELECT_CANDIDATE, word))
     }
 
     private fun playSoundAndVibration() {
         if (mVibrator != null) {
             try {
-                mVibrator!!.vibrate(5)
+                mVibrator?.vibrate(5)
             } catch (ex: Exception) {
                 Log.e(
                     "OpenWnn",
@@ -1339,7 +1339,7 @@ class TextCandidatesViewManager
         }
         if (mSound != null) {
             try {
-                mSound!!.playSoundEffect(AudioManager.FX_KEYPRESS_STANDARD, -1f)
+                mSound?.playSoundEffect(AudioManager.FX_KEYPRESS_STANDARD, -1f)
             } catch (ex: Exception) {
                 Log.e(
                     "OpenWnn",
@@ -1368,7 +1368,7 @@ class TextCandidatesViewManager
             if ((mViewType == CandidatesViewManager.VIEW_TYPE_NORMAL) && mCanReadMore) {
                 if (mVibrator != null) {
                     try {
-                        mVibrator!!.vibrate(5)
+                        mVibrator?.vibrate(5)
                     } catch (ex: Exception) {
                         Log.e(
                             "iwnn",
@@ -1377,20 +1377,20 @@ class TextCandidatesViewManager
                     }
                 }
                 mIsFullView = true
-                mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.LIST_CANDIDATES_FULL))
+                mWnn?.onEvent(OpenWnnEvent(OpenWnnEvent.LIST_CANDIDATES_FULL))
                 consumed = true
             }
         } else {
-            if (mViewBodyScroll!!.scrollY == 0) {
+            if (mViewBodyScroll?.scrollY == 0) {
                 if (mVibrator != null) {
                     try {
-                        mVibrator!!.vibrate(5)
+                        mVibrator?.vibrate(5)
                     } catch (ex: Exception) {
                         Log.e("iwnn", "TextCandidatesViewManager::onFling Sound $ex")
                     }
                 }
                 mIsFullView = false
-                mWnn!!.onEvent(OpenWnnEvent(OpenWnnEvent.LIST_CANDIDATES_NORMAL))
+                mWnn?.onEvent(OpenWnnEvent(OpenWnnEvent.LIST_CANDIDATES_NORMAL))
                 consumed = true
             }
         }
@@ -1472,7 +1472,7 @@ class TextCandidatesViewManager
         var weight = 0f
         if (mLineLength < mCandidateLeftAlignThreshold) {
             if (mLineCount == 1) {
-                mViewCandidateTemplate!!.visibility = View.GONE
+                mViewCandidateTemplate?.visibility = View.GONE
             }
         } else {
             weight = 1.0f
@@ -1692,7 +1692,7 @@ class TextCandidatesViewManager
     fun setViewStatusOfFocusedCandidate() {
         val view = mFocusedView
         if (view != null) {
-            view.setBackgroundDrawable(mFocusedViewBackground)
+            view.background = mFocusedViewBackground
             view.setPadding(0, 0, 0, 0)
         }
 
@@ -1722,7 +1722,7 @@ class TextCandidatesViewManager
     fun clearFocusCandidate() {
         val view = mFocusedView
         if (view != null) {
-            view.setBackgroundDrawable(mFocusedViewBackground)
+            view.background = mFocusedViewBackground
             view.setPadding(0, 0, 0, 0)
             mFocusedView = null
         }
