@@ -27,7 +27,6 @@ import android.util.Log
 import android.view.KeyEvent
 import android.view.inputmethod.CompletionInfo
 import android.view.inputmethod.CorrectionInfo
-import android.view.inputmethod.ExtractedText
 import android.view.inputmethod.ExtractedTextRequest
 import android.view.inputmethod.InputConnection
 import com.android.inputmethod.compat.InputConnectionCompatUtils
@@ -91,7 +90,7 @@ class RichInputConnection(parent: InputMethodService) : PrivateCommandPerformer 
      */
     private val mTempObjectForCommitText: SpannableStringBuilder = SpannableStringBuilder()
 
-    private val mParent: InputMethodService
+    private val mParent: InputMethodService = parent
     private var mIC: InputConnection?
     private var mNestLevel: Int
 
@@ -101,15 +100,12 @@ class RichInputConnection(parent: InputMethodService) : PrivateCommandPerformer 
     private var mLastSlowInputConnectionTime: Long = -SLOW_INPUTCONNECTION_PERSIST_MS
 
     init {
-        mParent = parent
         mIC = null
         mNestLevel = 0
     }
 
     val isConnected: Boolean
-        get() {
-            return mIC != null
-        }
+        get() = mIC != null
 
     /**
      * Returns whether or not the underlying InputConnection is slow. When true, we want to avoid
@@ -125,12 +121,12 @@ class RichInputConnection(parent: InputMethodService) : PrivateCommandPerformer 
     }
 
     private fun checkConsistencyForDebug() {
-        val r: ExtractedTextRequest = ExtractedTextRequest()
-        r.hintMaxChars = 0
-        r.hintMaxLines = 0
-        r.token = 1
-        r.flags = 0
-        val et = mIC?.getExtractedText(r, 0)
+        val req = ExtractedTextRequest()
+        req.hintMaxChars = 0
+        req.hintMaxLines = 0
+        req.token = 1
+        req.flags = 0
+        val et = mIC?.getExtractedText(req, 0)
         val beforeCursor: CharSequence? = getTextBeforeCursor(
             Constants.EDITOR_CONTENTS_CACHE_SIZE,
             0
@@ -562,13 +558,13 @@ class RichInputConnection(parent: InputMethodService) : PrivateCommandPerformer 
         val textBeforeCursor: CharSequence? =
             getTextBeforeCursor(Constants.EDITOR_CONTENTS_CACHE_SIZE + (end - start), 0)
         mCommittedTextBeforeComposingText.setLength(0)
-        if (!TextUtils.isEmpty(textBeforeCursor)) {
+        if (textBeforeCursor?.isNotEmpty() == true) {
             // The cursor is not necessarily at the end of the composing text, but we have its
             // position in mExpectedSelStart and mExpectedSelEnd. In this case we want the start
             // of the text, so we should use mExpectedSelStart. In other words, the composing
             // text starts (mExpectedSelStart - start) characters before the end of textBeforeCursor
             val indexOfStartOfComposingText: Int = max(
-                (textBeforeCursor!!.length - (expectedSelectionStart - start)).toDouble(),
+                (textBeforeCursor.length - (expectedSelectionStart - start)).toDouble(),
                 0.0
             ).toInt()
             mComposingText.append(
@@ -848,11 +844,11 @@ class RichInputConnection(parent: InputMethodService) : PrivateCommandPerformer 
         if (DEBUG_BATCH_NESTING) checkBatchEdit()
         // Here we test whether we indeed have a space and something else before us. This should not
         // be needed, but it's there just in case something went wrong.
-        val textBeforeCursor: CharSequence? = getTextBeforeCursor(2, 0)
+        val textBeforeCursor = getTextBeforeCursor(2, 0)
         // NOTE: This does not work with surrogate pairs. Hopefully when the keyboard is able to
         // enter surrogate pairs this code will have been removed.
-        if (TextUtils.isEmpty(textBeforeCursor)
-            || (Constants.CODE_SPACE != textBeforeCursor!!.get(1).code)
+        if (textBeforeCursor?.isEmpty() != false
+            || (Constants.CODE_SPACE != textBeforeCursor[1].code)
         ) {
             // We may only come here if the application is changing the text while we are typing.
             // This is quite a broken case, but not logically impossible, so we shouldn't crash,
@@ -864,7 +860,7 @@ class RichInputConnection(parent: InputMethodService) : PrivateCommandPerformer 
             return false
         }
         deleteTextBeforeCursor(2)
-        val text: String = " " + textBeforeCursor!!.subSequence(0, 1)
+        val text: String = " " + textBeforeCursor.subSequence(0, 1)
         commitText(text, 1)
         return true
     }

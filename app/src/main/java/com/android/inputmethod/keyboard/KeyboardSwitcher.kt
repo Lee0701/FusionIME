@@ -85,7 +85,7 @@ class KeyboardSwitcher private constructor() : SwitchActions {
         context: Context,
         keyboardTheme: KeyboardTheme
     ): Boolean {
-        if (mThemeContext == null || keyboardTheme != mKeyboardTheme || mThemeContext!!.getResources() != context.getResources()) {
+        if (mThemeContext == null || keyboardTheme != mKeyboardTheme || mThemeContext?.resources != context.resources) {
             mKeyboardTheme = keyboardTheme
             mThemeContext = ContextThemeWrapper(context, keyboardTheme.mStyleId)
             KeyboardLayoutSet.onKeyboardThemeChanged()
@@ -107,7 +107,7 @@ class KeyboardSwitcher private constructor() : SwitchActions {
         )
         val keyboardHeight: Int = ResourceUtils.getKeyboardHeight(res, settingsValues)
         builder.setKeyboardGeometry(keyboardWidth, keyboardHeight)
-        builder.setSubtype(mRichImm!!.currentSubtype!!)
+        builder.setSubtype(mRichImm!!.currentSubtype)
         builder.setVoiceInputKeyEnabled(settingsValues.mShowsVoiceInputKey)
         builder.setLanguageSwitchKeyEnabled(mLatinIME!!.shouldShowLanguageSwitchKey())
         builder.setSplitLayoutEnabledByUser(
@@ -117,7 +117,7 @@ class KeyboardSwitcher private constructor() : SwitchActions {
         mKeyboardLayoutSet = builder.build()
         try {
             mState!!.onLoadKeyboard(currentAutoCapsState, currentRecapitalizeState)
-            mKeyboardTextsSet.setLocale(mRichImm!!.currentSubtypeLocale!!, mThemeContext!!)
+            mKeyboardTextsSet.setLocale(mRichImm!!.currentSubtypeLocale, mThemeContext!!)
         } catch (e: KeyboardLayoutSetException) {
             Log.w(TAG, "loading keyboard failed: " + e.mKeyboardId, e.cause)
         }

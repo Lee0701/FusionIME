@@ -32,13 +32,13 @@ import java.util.Collections
  * A place to store the currently composing word with information such as adjacent key codes as well
  */
 class WordComposer {
-    private var mCombinerChain: CombinerChain
-    private var mCombiningSpec: String? =
+    private var combinerChain: CombinerChain
+    private var combiningSpec: String? =
         null // Memory so that we don't uselessly recreate the combiner chain
 
     // The list of events that served to compose this string.
-    private val mEvents: ArrayList<Event>
-    val inputPointers: InputPointers = InputPointers(MAX_WORD_LENGTH)
+    private val events: ArrayList<Event>
+    private val inputPointers: InputPointers = InputPointers(MAX_WORD_LENGTH)
 
     /**
      * @return the auto-correction for this word, or null if none.
@@ -63,17 +63,17 @@ class WordComposer {
     var rejectedBatchModeSuggestion: String?
 
     // Cache these values for performance
-    private var mTypedWordCache: CharSequence? = null
-    private var mCapsCount: Int = 0
-    private var mDigitsCount: Int = 0
-    private var mCapitalizedMode: Int = 0
+    private var typedWordCache: CharSequence? = null
+    private var capsCount: Int = 0
+    private var digitsCount: Int = 0
+    private var capitalizedMode: Int = 0
 
     // This is the number of code points entered so far. This is not limited to MAX_WORD_LENGTH.
     // In general, this contains the size of mPrimaryKeyCodes, except when this is greater than
     // MAX_WORD_LENGTH in which case mPrimaryKeyCodes only contain the first MAX_WORD_LENGTH
     // code points.
-    private var mCodePointSize: Int = 0
-    private var mCursorPositionWithinWord: Int
+    private var codePointSize: Int = 0
+    private var cursorPositionWithinWord: Int
 
     /**
      * Whether the composing word has the only first char capitalized.
@@ -81,19 +81,19 @@ class WordComposer {
     private var mIsOnlyFirstCharCapitalized: Boolean = false
 
     init {
-        mCombinerChain = CombinerChain("")
-        mEvents = ArrayList()
+        combinerChain = CombinerChain("")
+        events = ArrayList()
         autoCorrectionOrNull = null
         isResumed = false
         isBatchMode = false
-        mCursorPositionWithinWord = 0
+        cursorPositionWithinWord = 0
         rejectedBatchModeSuggestion = null
         refreshTypedWordCache()
     }
 
     val composedDataSnapshot: ComposedData
         get() {
-            return ComposedData(inputPointers, isBatchMode, mTypedWordCache.toString())
+            return ComposedData(inputPointers, isBatchMode, typedWordCache.toString())
         }
 
     /**
@@ -102,11 +102,11 @@ class WordComposer {
      */
     fun restartCombining(combiningSpec: String?) {
         val nonNullCombiningSpec: String = combiningSpec ?: ""
-        if (nonNullCombiningSpec != mCombiningSpec) {
-            mCombinerChain = CombinerChain(
-                mCombinerChain.composingWordWithCombiningFeedback.toString()
+        if (nonNullCombiningSpec != this.combiningSpec) {
+            combinerChain = CombinerChain(
+                combinerChain.composingWordWithCombiningFeedback.toString()
             )
-            mCombiningSpec = nonNullCombiningSpec
+            this.combiningSpec = nonNullCombiningSpec
         }
     }
 
@@ -114,22 +114,23 @@ class WordComposer {
      * Clear out the keys registered so far.
      */
     fun reset() {
-        mCombinerChain.reset()
-        mEvents.clear()
+        combinerChain.reset()
+        events.clear()
         autoCorrectionOrNull = null
-        mCapsCount = 0
-        mDigitsCount = 0
+        capsCount = 0
+        digitsCount = 0
         mIsOnlyFirstCharCapitalized = false
         isResumed = false
         isBatchMode = false
-        mCursorPositionWithinWord = 0
+        cursorPositionWithinWord = 0
         rejectedBatchModeSuggestion = null
         refreshTypedWordCache()
     }
 
     private fun refreshTypedWordCache() {
-        mTypedWordCache = mCombinerChain.composingWordWithCombiningFeedback
-        mCodePointSize = Character.codePointCount(mTypedWordCache, 0, mTypedWordCache!!.length)
+        val typedWordCache = combinerChain.composingWordWithCombiningFeedback
+        this.typedWordCache = typedWordCache
+        codePointSize = Character.codePointCount(typedWordCache, 0, typedWordCache.length)
     }
 
     /**
@@ -137,7 +138,7 @@ class WordComposer {
      * @return the number of keystrokes
      */
     fun size(): Int {
-        return mCodePointSize
+        return codePointSize
     }
 
     val isSingleLetter: Boolean
@@ -156,11 +157,11 @@ class WordComposer {
      * @return the processed event. Never null, but may be marked as consumed.
      */
     fun processEvent(event: Event): Event {
-        val processedEvent: Event = mCombinerChain.processEvent(mEvents, event)
+        val processedEvent: Event = combinerChain.processEvent(events, event)
         // The retained state of the combiner chain may have changed while processing the event,
         // so we need to update our cache.
         refreshTypedWordCache()
-        mEvents.add(event)
+        events.add(event)
         return processedEvent
     }
 
@@ -173,15 +174,15 @@ class WordComposer {
      * @param event the event to apply. Must not be null.
      */
     fun applyProcessedEvent(event: Event) {
-        mCombinerChain.applyProcessedEvent(event)
+        combinerChain.applyProcessedEvent(event)
         val primaryCode: Int = event.mCodePoint
         val keyX: Int = event.mX
         val keyY: Int = event.mY
         val newIndex: Int = size()
         refreshTypedWordCache()
-        mCursorPositionWithinWord = mCodePointSize
+        cursorPositionWithinWord = codePointSize
         // We may have deleted the last one.
-        if (0 == mCodePointSize) {
+        if (0 == codePointSize) {
             mIsOnlyFirstCharCapitalized = false
         }
         if (Constants.CODE_DELETE != event.mKeyCode) {
@@ -200,26 +201,26 @@ class WordComposer {
                 mIsOnlyFirstCharCapitalized = mIsOnlyFirstCharCapitalized
                         && !Character.isUpperCase(primaryCode)
             }
-            if (Character.isUpperCase(primaryCode)) mCapsCount++
-            if (Character.isDigit(primaryCode)) mDigitsCount++
+            if (Character.isUpperCase(primaryCode)) capsCount++
+            if (Character.isDigit(primaryCode)) digitsCount++
         }
         autoCorrectionOrNull = null
     }
 
     fun setCursorPositionWithinWord(posWithinWord: Int) {
-        mCursorPositionWithinWord = posWithinWord
+        cursorPositionWithinWord = posWithinWord
         // TODO: compute where that puts us inside the events
     }
 
     val isCursorFrontOrMiddleOfComposingWord: Boolean
         get() {
-            if (DBG && mCursorPositionWithinWord > mCodePointSize) {
+            if (DBG && cursorPositionWithinWord > codePointSize) {
                 throw RuntimeException(
-                    ("Wrong cursor position : " + mCursorPositionWithinWord
-                            + "in a word of size " + mCodePointSize)
+                    ("Wrong cursor position : " + cursorPositionWithinWord
+                            + "in a word of size " + codePointSize)
                 )
             }
-            return mCursorPositionWithinWord != mCodePointSize
+            return cursorPositionWithinWord != codePointSize
         }
 
     /**
@@ -233,9 +234,9 @@ class WordComposer {
      */
     fun moveCursorByAndReturnIfInsideComposingWord(expectedMoveAmount: Int): Boolean {
         var actualMoveAmount: Int = 0
-        var cursorPos: Int = mCursorPositionWithinWord
+        var cursorPos: Int = cursorPositionWithinWord
         // TODO: Don't make that copy. We can do this directly from mTypedWordCache.
-        val codePoints: IntArray = StringUtils.toCodePointArray(mTypedWordCache!!)
+        val codePoints: IntArray = StringUtils.toCodePointArray(typedWordCache ?: "")
         if (expectedMoveAmount >= 0) {
             // Moving the cursor forward for the expected amount or until the end of the word has
             // been reached, whichever comes first.
@@ -256,10 +257,10 @@ class WordComposer {
         if (actualMoveAmount != expectedMoveAmount) {
             return false
         }
-        mCursorPositionWithinWord = cursorPos
-        mCombinerChain.applyProcessedEvent(
-            mCombinerChain.processEvent(
-                mEvents, Event.createCursorMovedEvent(cursorPos)
+        cursorPositionWithinWord = cursorPos
+        combinerChain.applyProcessedEvent(
+            combinerChain.processEvent(
+                events, Event.createCursorMovedEvent(cursorPos)
             )
         )
         return true
@@ -315,7 +316,7 @@ class WordComposer {
          * @return the word that was typed so far. Never returns null.
          */
         get() {
-            return mTypedWordCache.toString()
+            return typedWordCache.toString()
         }
 
     val isOrWillBeOnlyFirstCharCapitalized: Boolean
@@ -333,7 +334,7 @@ class WordComposer {
             return if (isComposingWord)
                 mIsOnlyFirstCharCapitalized
             else
-                (CAPS_MODE_OFF != mCapitalizedMode)
+                (CAPS_MODE_OFF != capitalizedMode)
         }
 
     val isAllUpperCase: Boolean
@@ -343,15 +344,15 @@ class WordComposer {
          */
         get() {
             if (size() <= 1) {
-                return mCapitalizedMode == CAPS_MODE_AUTO_SHIFT_LOCKED
-                        || mCapitalizedMode == CAPS_MODE_MANUAL_SHIFT_LOCKED
+                return capitalizedMode == CAPS_MODE_AUTO_SHIFT_LOCKED
+                        || capitalizedMode == CAPS_MODE_MANUAL_SHIFT_LOCKED
             }
-            return mCapsCount == size()
+            return capsCount == size()
         }
 
     fun wasShiftedNoLock(): Boolean {
-        return mCapitalizedMode == CAPS_MODE_AUTO_SHIFTED
-                || mCapitalizedMode == CAPS_MODE_MANUAL_SHIFTED
+        return capitalizedMode == CAPS_MODE_AUTO_SHIFTED
+                || capitalizedMode == CAPS_MODE_MANUAL_SHIFTED
     }
 
     val isMostlyCaps: Boolean
@@ -359,14 +360,14 @@ class WordComposer {
          * Returns true if more than one character is upper case, otherwise returns false.
          */
         get() {
-            return mCapsCount > 1
+            return capsCount > 1
         }
 
     /**
      * Returns true if we have digits in the composing word.
      */
     fun hasDigits(): Boolean {
-        return mDigitsCount > 0
+        return digitsCount > 0
     }
 
     /**
@@ -381,7 +382,7 @@ class WordComposer {
      * @param mode the mode at the time of start
      */
     fun setCapitalizedModeAtStartComposingTime(mode: Int) {
-        mCapitalizedMode = mode
+        capitalizedMode = mode
     }
 
     /**
@@ -394,7 +395,7 @@ class WordComposer {
      */
     fun adviseCapitalizedModeBeforeFetchingSuggestions(mode: Int) {
         if (!isComposingWord) {
-            mCapitalizedMode = mode
+            capitalizedMode = mode
         }
     }
 
@@ -403,8 +404,8 @@ class WordComposer {
      * @return whether the word was automatically capitalized
      */
     fun wasAutoCapitalized(): Boolean {
-        return mCapitalizedMode == CAPS_MODE_AUTO_SHIFT_LOCKED
-                || mCapitalizedMode == CAPS_MODE_AUTO_SHIFTED
+        return capitalizedMode == CAPS_MODE_AUTO_SHIFT_LOCKED
+                || capitalizedMode == CAPS_MODE_AUTO_SHIFTED
     }
 
     /**
@@ -424,9 +425,9 @@ class WordComposer {
         // or a DECIDED_WORD we may cancel the commit later; otherwise, we should deactivate
         // the last composed word to ensure this does not happen.
         val lastComposedWord = LastComposedWord(
-            mEvents,
-            inputPointers, mTypedWordCache.toString(), committedWord, separatorString,
-            ngramContext, mCapitalizedMode
+            events,
+            inputPointers, typedWordCache.toString(), committedWord, separatorString,
+            ngramContext, capitalizedMode
         )
         inputPointers.reset()
         if (type != LastComposedWord.COMMIT_TYPE_DECIDED_WORD
@@ -434,31 +435,31 @@ class WordComposer {
         ) {
             lastComposedWord.deactivate()
         }
-        mCapsCount = 0
-        mDigitsCount = 0
+        capsCount = 0
+        digitsCount = 0
         isBatchMode = false
-        mCombinerChain.reset()
-        mEvents.clear()
-        mCodePointSize = 0
+        combinerChain.reset()
+        events.clear()
+        codePointSize = 0
         mIsOnlyFirstCharCapitalized = false
-        mCapitalizedMode = CAPS_MODE_OFF
+        capitalizedMode = CAPS_MODE_OFF
         refreshTypedWordCache()
         autoCorrectionOrNull = null
-        mCursorPositionWithinWord = 0
+        cursorPositionWithinWord = 0
         isResumed = false
         rejectedBatchModeSuggestion = null
         return lastComposedWord
     }
 
     fun resumeSuggestionOnLastComposedWord(lastComposedWord: LastComposedWord) {
-        mEvents.clear()
-        Collections.copy(mEvents, lastComposedWord.mEvents)
+        events.clear()
+        Collections.copy(events, lastComposedWord.mEvents)
         inputPointers.set(lastComposedWord.mInputPointers)
-        mCombinerChain.reset()
+        combinerChain.reset()
         refreshTypedWordCache()
-        mCapitalizedMode = lastComposedWord.mCapitalizedMode
+        capitalizedMode = lastComposedWord.mCapitalizedMode
         autoCorrectionOrNull = null // This will be filled by the next call to updateSuggestion.
-        mCursorPositionWithinWord = mCodePointSize
+        cursorPositionWithinWord = codePointSize
         rejectedBatchModeSuggestion = null
         isResumed = true
     }
@@ -470,7 +471,7 @@ class WordComposer {
 
     @UsedForTesting
     fun setTypedWordCacheForTests(typedWordCacheForTests: String?) {
-        mTypedWordCache = typedWordCacheForTests
+        typedWordCache = typedWordCacheForTests
     }
 
     companion object {
