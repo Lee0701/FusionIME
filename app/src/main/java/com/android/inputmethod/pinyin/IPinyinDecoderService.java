@@ -56,17 +56,6 @@ interface IPinyinDecoderService {
     int imSyncGetCapacity();
 
     class Stub extends Binder implements IPinyinDecoderService {
-
-        private final IBinder service;
-
-        public Stub(IBinder service) {
-            this.service = service;
-        }
-
-        public Stub() {
-            this(null);
-        }
-
         @Override
         public int getInt() {
             return 0;
@@ -213,7 +202,7 @@ interface IPinyinDecoderService {
         }
 
         public static IPinyinDecoderService asInterface(IBinder service) {
-            return new Stub(service);
+            return (IPinyinDecoderService) service;
         }
     }
 }
