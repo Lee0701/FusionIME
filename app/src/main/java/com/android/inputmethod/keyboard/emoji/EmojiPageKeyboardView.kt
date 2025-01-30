@@ -53,12 +53,12 @@ internal class EmojiPageKeyboardView @JvmOverloads constructor(
         get() = super.keyboard
         set(value) {
             super.keyboard = value
-            mKeyDetector.setKeyboard(value!!, 0f,  /* correctionX */0f /* correctionY */)
+            mKeyDetector.setKeyboard(value ?: return, 0f, 0f)
             if (AccessibilityUtils.instance.isAccessibilityEnabled()) {
                 if (mAccessibilityDelegate == null) {
                     mAccessibilityDelegate = KeyboardAccessibilityDelegate(this, mKeyDetector)
                 }
-                mAccessibilityDelegate!!.setKeyboard(keyboard)
+                mAccessibilityDelegate?.setKeyboard(keyboard)
             } else {
                 mAccessibilityDelegate = null
             }
@@ -150,8 +150,9 @@ internal class EmojiPageKeyboardView @JvmOverloads constructor(
             return false
         }
         // Do not trigger key-down effect right now in case this is actually a fling action.
-        mPendingKeyDown = Runnable { callListenerOnPressKey(key) }
-        mHandler.postDelayed(mPendingKeyDown!!, KEY_PRESS_DELAY_TIME)
+        val pendingKeyDown = Runnable { callListenerOnPressKey(key) }
+        mHandler.postDelayed(pendingKeyDown, KEY_PRESS_DELAY_TIME)
+        mPendingKeyDown = pendingKeyDown
         return false
     }
 

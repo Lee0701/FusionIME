@@ -47,9 +47,6 @@ open class KeyDetector @JvmOverloads constructor(
         keyboard: Keyboard, correctionX: Float,
         correctionY: Float
     ) {
-        if (keyboard == null) {
-            throw NullPointerException()
-        }
         mCorrectionX = correctionX.toInt()
         mCorrectionY = correctionY.toInt()
         mKeyboard = keyboard
