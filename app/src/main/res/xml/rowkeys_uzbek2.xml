@@ -18,12 +18,12 @@
 */
 -->
 
-<merge xmlns:latin="http://schemas.android.com/apk/res/com.android.inputmethod.latin" >
-    <include latin:keyboardLayout="@xml/rowkeys_qwerty2" />
+<merge xmlns:app="http://schemas.android.com/apk/res-auto" >
+    <include app:keyboardLayout="@xml/rowkeys_qwerty2" />
     <!-- U+0067/U+02BB: "gʻ" LATIN SMALL LETTER G/MODIFIER LETTER TURNED COMMA -->
     <Key
-        latin:keySpec="g&#x02BB;"
-        latin:keyLabelFlags="followKeyLetterRatio" />
+        app:keySpec="g&#x02BB;"
+        app:keyLabelFlags="followKeyLetterRatio" />
     <!-- U+02BC: "ʼ" MODIFIER LETTER APOSTROPHE -->
-    <Key latin:keySpec="&#x02BC;" />
+    <Key app:keySpec="&#x02BC;" />
 </merge>

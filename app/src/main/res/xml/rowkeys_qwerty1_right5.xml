@@ -19,30 +19,30 @@
 -->
 
 <merge
-    xmlns:latin="http://schemas.android.com/apk/res/com.android.inputmethod.latin"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
 >
     <Key
-        latin:keySpec="!text/keyspec_y"
-        latin:keyHintLabel="6"
-        latin:additionalMoreKeys="6"
-        latin:moreKeys="!text/morekeys_y" />
+        app:keySpec="!text/keyspec_y"
+        app:keyHintLabel="6"
+        app:additionalMoreKeys="6"
+        app:moreKeys="!text/morekeys_y" />
     <Key
-        latin:keySpec="u"
-        latin:keyHintLabel="7"
-        latin:additionalMoreKeys="7"
-        latin:moreKeys="!text/morekeys_u" />
+        app:keySpec="u"
+        app:keyHintLabel="7"
+        app:additionalMoreKeys="7"
+        app:moreKeys="!text/morekeys_u" />
     <Key
-        latin:keySpec="i"
-        latin:keyHintLabel="8"
-        latin:additionalMoreKeys="8"
-        latin:moreKeys="!text/morekeys_i" />
+        app:keySpec="i"
+        app:keyHintLabel="8"
+        app:additionalMoreKeys="8"
+        app:moreKeys="!text/morekeys_i" />
     <Key
-        latin:keySpec="o"
-        latin:keyHintLabel="9"
-        latin:additionalMoreKeys="9"
-        latin:moreKeys="!text/morekeys_o" />
+        app:keySpec="o"
+        app:keyHintLabel="9"
+        app:additionalMoreKeys="9"
+        app:moreKeys="!text/morekeys_o" />
     <Key
-        latin:keySpec="p"
-        latin:keyHintLabel="0"
-        latin:additionalMoreKeys="0" />
+        app:keySpec="p"
+        app:keyHintLabel="0"
+        app:additionalMoreKeys="0" />
 </merge>

@@ -19,35 +19,35 @@
 -->
 
 <merge
-    xmlns:latin="http://schemas.android.com/apk/res/com.android.inputmethod.latin"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
 >
     <Key
-        latin:keySpec="w"
-        latin:moreKeys="!text/morekeys_w" />
+        app:keySpec="w"
+        app:moreKeys="!text/morekeys_w" />
     <Key
-        latin:keySpec="x" />
+        app:keySpec="x" />
     <Key
-        latin:keySpec="c"
-        latin:moreKeys="!text/morekeys_c" />
+        app:keySpec="c"
+        app:moreKeys="!text/morekeys_c" />
     <Key
-        latin:keySpec="v"
-        latin:moreKeys="!text/morekeys_v" />
+        app:keySpec="v"
+        app:moreKeys="!text/morekeys_v" />
     <Key
-        latin:keySpec="b" />
+        app:keySpec="b" />
     <Key
-        latin:keySpec="n"
-        latin:moreKeys="!text/morekeys_n" />
+        app:keySpec="n"
+        app:moreKeys="!text/morekeys_n" />
     <switch>
         <case
-            latin:keyboardLayoutSetElement="alphabetManualShifted|alphabetShiftLockShifted"
+            app:keyboardLayoutSetElement="alphabetManualShifted|alphabetShiftLockShifted"
         >
             <Key
-                latin:keySpec="\?" />
+                app:keySpec="\?" />
         </case>
         <default>
             <Key
-                latin:keySpec="\'"
-                latin:moreKeys="!text/morekeys_single_quote" />
+                app:keySpec="\'"
+                app:moreKeys="!text/morekeys_single_quote" />
         </default>
     </switch>
 </merge>

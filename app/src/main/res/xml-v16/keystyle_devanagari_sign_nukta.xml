@@ -22,29 +22,29 @@
      API version 16 can't automatically render dotted circle for incomplete combining letter
      of some scripts. The files named res/xml/key_*.xml have this U+25CC hack, although the
      counterpart files named res/xml-v16/key_*.xml don't have this hack. -->
-<merge xmlns:latin="http://schemas.android.com/apk/res/com.android.inputmethod.latin">
+<merge xmlns:app="http://schemas.android.com/apk/res-auto">
     <switch>
-        <case latin:keyboardLayoutSet="hindi">
+        <case app:keyboardLayoutSet="hindi">
             <!-- U+097D: "ॽ" DEVANAGARI LETTER GLOTTAL STOP
                  U+0970: "॰" DEVANAGARI ABBREVIATION SIGN
                  U+093D: "ऽ" DEVANAGARI SIGN AVAGRAHA -->
             <key-style
-                latin:styleName="moreKeysDevanagariSignNukta"
-                latin:moreKeys="&#x097D;,&#x0970;,&#x093D;" />
+                app:styleName="moreKeysDevanagariSignNukta"
+                app:moreKeys="&#x097D;,&#x0970;,&#x093D;" />
         </case>
-        <case latin:keyboardLayoutSet="nepali_romanized">
+        <case app:keyboardLayoutSet="nepali_romanized">
             <!-- U+093C: "़" DEVANAGARI SIGN NUKTA -->
             <key-style
-                latin:styleName="moreKeysDevanagariSignNukta"
-                latin:moreKeys="&#x093C;" />
+                app:styleName="moreKeysDevanagariSignNukta"
+                app:moreKeys="&#x093C;" />
         </case>
         <default>
-            <key-style latin:styleName="moreKeysDevanagariSignNukta" />
+            <key-style app:styleName="moreKeysDevanagariSignNukta" />
         </default>
     </switch>
     <!-- U+093C: "़" DEVANAGARI SIGN NUKTA -->
     <key-style
-        latin:styleName="baseKeyDevanagariSignNukta"
-        latin:parentStyle="moreKeysDevanagariSignNukta"
-        latin:keySpec="&#x093C;" />
+        app:styleName="baseKeyDevanagariSignNukta"
+        app:parentStyle="moreKeysDevanagariSignNukta"
+        app:keySpec="&#x093C;" />
 </merge>

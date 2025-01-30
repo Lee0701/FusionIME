@@ -19,46 +19,46 @@
 -->
 
 <merge
-    xmlns:latin="http://schemas.android.com/apk/res/com.android.inputmethod.latin"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
 >
     <switch>
         <case
-            latin:keyboardLayoutSetElement="alphabetManualShifted|alphabetShiftLockShifted"
+            app:keyboardLayoutSetElement="alphabetManualShifted|alphabetShiftLockShifted"
         >
             <Key
-                latin:keySpec=":"
-                latin:keyHintLabel="1"
-                latin:moreKeys=";,&#x00B7;"
-                latin:additionalMoreKeys="1" />
+                app:keySpec=":"
+                app:keyHintLabel="1"
+                app:moreKeys=";,&#x00B7;"
+                app:additionalMoreKeys="1" />
         </case>
         <default>
             <Key
-                latin:keySpec=";"
-                latin:keyHintLabel="1"
-                latin:moreKeys=":,&#x00B7;"
-                latin:additionalMoreKeys="1" />
+                app:keySpec=";"
+                app:keyHintLabel="1"
+                app:moreKeys=":,&#x00B7;"
+                app:additionalMoreKeys="1" />
         </default>
     </switch>
     <!-- TODO: Should find a way to compound Greek dialytika tonos and other Greek letters. -->
     <!--
     <switch>
         <case
-            latin:keyboardLayoutSetElement="alphabetManualShifted|alphabetShiftLockShifted"
+            app:keyboardLayoutSetElement="alphabetManualShifted|alphabetShiftLockShifted"
         >
             U+0385: "΅" GREEK DIALYTIKA TONOS
             <Key
-                latin:keySpec="&#x0385;"
-                latin:keyHintLabel="2"
-                latin:additionalMoreKeys="2" />
+                app:keySpec="&#x0385;"
+                app:keyHintLabel="2"
+                app:additionalMoreKeys="2" />
         </case>
         <default>
         -->
             <!-- U+03C2: "ς" GREEK SMALL LETTER FINAL SIGMA -->
             <Key
-                latin:keySpec="&#x03C2;"
-                latin:keyLabelFlags="preserveCase"
-                latin:keyHintLabel="2"
-                latin:additionalMoreKeys="2" />
+                app:keySpec="&#x03C2;"
+                app:keyLabelFlags="preserveCase"
+                app:keyHintLabel="2"
+                app:additionalMoreKeys="2" />
     <!--
         </default>
     </switch>
@@ -73,22 +73,22 @@
          U+1F12: "ἒ" GREEK SMALL LETTER EPSILON WITH PSILI AND VARIA
          U+1F13: "ἓ" GREEK SMALL LETTER EPSILON WITH DASIA AND VARIA -->
     <Key
-        latin:keySpec="&#x03B5;"
-        latin:keyHintLabel="3"
-        latin:additionalMoreKeys="3"
-        latin:moreKeys="&#x03AD;,%,&#x1F72;,&#x1F10;,&#x1F11;,&#x1F14;,&#x1F15;,&#x1F12;,&#x1F13;" />
+        app:keySpec="&#x03B5;"
+        app:keyHintLabel="3"
+        app:additionalMoreKeys="3"
+        app:moreKeys="&#x03AD;,%,&#x1F72;,&#x1F10;,&#x1F11;,&#x1F14;,&#x1F15;,&#x1F12;,&#x1F13;" />
     <!-- U+03C1: "ρ" GREEK SMALL LETTER RHO
          U+1FE5: "ῥ" GREEK SMALL LETTER RHO WITH DASIA -->
     <Key
-        latin:keySpec="&#x03C1;"
-        latin:keyHintLabel="4"
-        latin:additionalMoreKeys="4"
-        latin:moreKeys="%,&#x1FE5;" />
+        app:keySpec="&#x03C1;"
+        app:keyHintLabel="4"
+        app:additionalMoreKeys="4"
+        app:moreKeys="%,&#x1FE5;" />
     <!-- U+03C4: "τ" GREEK SMALL LETTER TAU -->
     <Key
-        latin:keySpec="&#x03C4;"
-        latin:keyHintLabel="5"
-        latin:additionalMoreKeys="5" />
+        app:keySpec="&#x03C4;"
+        app:keyHintLabel="5"
+        app:additionalMoreKeys="5" />
     <!-- U+03C5: "υ" GREEK SMALL LETTER UPSILON
          U+03CD: "ύ" GREEK SMALL LETTER UPSILON WITH TONOS
          U+03CB: "ϋ" GREEK SMALL LETTER UPSILON WITH DIALYTIKA
@@ -106,15 +106,15 @@
          U+1FE2: "ῢ" GREEK SMALL LETTER UPSILON WITH DIALYTIKA AND VARIA
          U+1FE7: "ῧ" GREEK SMALL LETTER UPSILON WITH DIALYTIKA AND PERISPOMENI -->
     <Key
-        latin:keySpec="&#x03C5;"
-        latin:keyHintLabel="6"
-        latin:additionalMoreKeys="6"
-        latin:moreKeys="&#x03CD;,%,&#x03CB;,&#x03B0;,&#x1F7A;,&#x1FE6;,&#x1F50;,&#x1F51;,&#x1F54;,&#x1F55;,&#x1F52;,&#x1F53;,&#x1F56;,&#x1F57;,&#x1FE2;,&#x1FE7;" />
+        app:keySpec="&#x03C5;"
+        app:keyHintLabel="6"
+        app:additionalMoreKeys="6"
+        app:moreKeys="&#x03CD;,%,&#x03CB;,&#x03B0;,&#x1F7A;,&#x1FE6;,&#x1F50;,&#x1F51;,&#x1F54;,&#x1F55;,&#x1F52;,&#x1F53;,&#x1F56;,&#x1F57;,&#x1FE2;,&#x1FE7;" />
     <!-- U+03B8: "θ" GREEK SMALL LETTER THETA -->
     <Key
-        latin:keySpec="&#x03B8;"
-        latin:keyHintLabel="7"
-        latin:additionalMoreKeys="7" />
+        app:keySpec="&#x03B8;"
+        app:keyHintLabel="7"
+        app:additionalMoreKeys="7" />
     <!-- U+03B9: "ι" GREEK SMALL LETTER IOTA
          U+03AF: "ί" GREEK SMALL LETTER IOTA WITH TONOS
          U+03CA: "ϊ" GREEK SMALL LETTER IOTA WITH DIALYTIKA
@@ -132,10 +132,10 @@
          U+1FD2: "ῒ" GREEK SMALL LETTER IOTA WITH DIALYTIKA AND VARIA
          U+1FD7: "ῗ" GREEK SMALL LETTER IOTA WITH DIALYTIKA AND PERISPOMENI -->
     <Key
-        latin:keySpec="&#x03B9;"
-        latin:keyHintLabel="8"
-        latin:additionalMoreKeys="8"
-        latin:moreKeys="&#x03AF;,%,&#x03CA;,&#x0390;,&#x1F76;,&#x1FD6;,&#x1F30;,&#x1F31;,&#x1F34;,&#x1F35;,&#x1F32;,&#x1F33;,&#x1F36;,&#x1F37;,&#x1FD2;,&#x1FD7;" />
+        app:keySpec="&#x03B9;"
+        app:keyHintLabel="8"
+        app:additionalMoreKeys="8"
+        app:moreKeys="&#x03AF;,%,&#x03CA;,&#x0390;,&#x1F76;,&#x1FD6;,&#x1F30;,&#x1F31;,&#x1F34;,&#x1F35;,&#x1F32;,&#x1F33;,&#x1F36;,&#x1F37;,&#x1FD2;,&#x1FD7;" />
     <!-- U+03BF: "ο" GREEK SMALL LETTER OMICRON
          U+03CC: "ό" GREEK SMALL LETTER OMICRON WITH TONOS
          U+1F78: "ὸ" GREEK SMALL LETTER OMICRON WITH VARIA
@@ -146,13 +146,13 @@
          U+1F42: "ὂ" GREEK SMALL LETTER OMICRON WITH PSILI AND VARIA
          U+1F43: "ὃ" GREEK SMALL LETTER OMICRON WITH DASIA AND VARIA -->
     <Key
-        latin:keySpec="&#x03BF;"
-        latin:keyHintLabel="9"
-        latin:additionalMoreKeys="9"
-        latin:moreKeys="&#x03CC;,%,&#x1F78;,&#x1F40;,&#x1F41;,&#x1F44;,&#x1F45;,&#x1F42;,&#x1F43;" />
+        app:keySpec="&#x03BF;"
+        app:keyHintLabel="9"
+        app:additionalMoreKeys="9"
+        app:moreKeys="&#x03CC;,%,&#x1F78;,&#x1F40;,&#x1F41;,&#x1F44;,&#x1F45;,&#x1F42;,&#x1F43;" />
     <!-- U+03C0: "π" GREEK SMALL LETTER PI -->
     <Key
-        latin:keySpec="&#x03C0;"
-        latin:keyHintLabel="0"
-        latin:additionalMoreKeys="0" />
+        app:keySpec="&#x03C0;"
+        app:keyHintLabel="0"
+        app:additionalMoreKeys="0" />
 </merge>

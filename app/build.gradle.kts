@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.android.inputmethod.latin"
+    namespace = "ee.oyatl.ime.fusion"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.android.inputmethod.latin"
+        applicationId = "ee.oyatl.ime.fusion"
         minSdk = 21
         targetSdk = 35
         versionCode = 1

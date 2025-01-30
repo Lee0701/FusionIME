@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ Copyright (C) 2008-2012  OMRON SOFTWARE Co., Ltd.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<Keyboard xmlns:app="http://schemas.android.com/apk/res-auto"
+	  app:keyWidth="15%p"
+	  app:horizontalGap="0dip"
+	  app:verticalGap="0dip"
+	  app:keyHeight="50dip"
+	  >
+  <Row>
+    <Key app:codes="-301" app:keyLabel="@string/key_12key_switch_full_hiragana"
+	 app:keyEdgeFlags="left"/>
+    <Key app:codes="-302" app:keyLabel="@string/key_12key_switch_full_katakana"/>
+    <Key app:codes="-303" app:keyLabel="@string/key_12key_switch_full_alphabet"/>
+    <Key app:codes="-304" app:keyLabel="@string/key_12key_switch_full_number"
+	 app:keyEdgeFlags="right"/>
+  </Row>
+  <Row>
+    <Key app:codes="-104" app:keyIcon="@drawable/key_mode_panel_kbd_12key" app:iconPreview="@drawable/key_mode_panel_kbd_12key_b"
+	 app:keyEdgeFlags="left"/>
+    <Key app:codes="-306" app:keyLabel="@string/key_12key_switch_half_katakana"/>
+    <Key app:codes="-307" app:keyLabel="@string/key_12key_switch_half_alphabet"/>
+    <Key app:codes="-308" app:keyLabel="@string/key_12key_switch_half_number"
+	 app:keyEdgeFlags="right"/>
+  </Row>
+</Keyboard>

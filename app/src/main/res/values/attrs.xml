@@ -19,13 +19,25 @@
 -->
 
 <resources>
+    <attr name="keyboardViewStyle" format="reference" />
+    <attr name="keyBackground" format="reference" />
+    <attr name="keyTextColor" format="color" />
+    <attr name="keyPreviewOffset" format="dimension" />
+    <attr name="keyPreviewHeight" format="dimension" />
+    <attr name="verticalCorrection" format="dimension" />
+    <attr name="keyWidth" format="dimension|fraction|enum">
+        <enum name="fillRight" value="-1" />
+    </attr>
+    <attr name="horizontalGap" format="dimension|fraction" />
+    <attr name="verticalGap" format="dimension|fraction" />
+
     <declare-styleable name="KeyboardTheme">
         <!-- InputView style -->
         <attr name="inputViewStyle" format="reference" />
         <!-- Keyboard style -->
         <attr name="keyboardStyle" format="reference" />
         <!-- KeyboardView style -->
-        <attr name="keyboardViewStyle" format="reference" />
+        <attr name="keyboardViewStyle" />
         <!-- MainKeyboardView style -->
         <attr name="mainKeyboardViewStyle" format="reference" />
         <!-- EmojiPalettesView style -->
@@ -47,7 +59,7 @@
             {@link android.graphics.drawable.StateListDrawable}, with the following possible states:
              normal, pressed, checkable, checkable+pressed, checkable+checked,
              checkable+checked+pressed. -->
-        <attr name="keyBackground" format="reference" />
+        <attr name="keyBackground" />
         <!-- Background image for the functional key. This image needs to be a
              {@link android.graphics.drawable.StateListDrawable}, with the following possible
              states: normal, pressed. -->
@@ -74,7 +86,7 @@
         <attr name="state_has_morekeys" format="boolean" />
 
         <!-- Amount to offset the touch Y coordinate by, for bias correction. -->
-        <attr name="verticalCorrection" format="dimension" />
+        <attr name="verticalCorrection" />
     </declare-styleable>
 
     <declare-styleable name="MainKeyboardView">
@@ -114,9 +126,9 @@
         <!-- Background resource for key press feedback.-->
         <attr name="keyPreviewBackground" format="reference" />
         <!-- Vertical offset of the key press feedback from the key. -->
-        <attr name="keyPreviewOffset" format="dimension" />
+        <attr name="keyPreviewOffset" />
         <!-- Height of the key press feedback popup. -->
-        <attr name="keyPreviewHeight" format="dimension" />
+        <attr name="keyPreviewHeight" />
         <!-- TODO: consolidate key preview linger timeout with the key preview animation parameters. -->
         <!-- Delay after key releasing and key press feedback dismissing in millisecond -->
         <attr name="keyPreviewLingerTimeout" format="integer" />
@@ -250,9 +262,9 @@
              keyboard height. -->
         <attr name="rowHeight" format="dimension|fraction" />
         <!-- Default horizontal gap between keys, in the proportion of keyboard width. -->
-        <attr name="horizontalGap" format="fraction" />
+        <attr name="horizontalGap" />
         <!-- Default vertical gap between rows of keys, in the proportion of keyboard height. -->
-        <attr name="verticalGap" format="fraction" />
+        <attr name="verticalGap" />
         <!-- More keys keyboard layout template -->
         <attr name="moreKeysTemplate" format="reference" />
         <!-- Icon set for key top and key preview. These should be aligned with
@@ -377,9 +389,7 @@
              area up to the right edge of the keyboard. -->
         <!-- This should be aligned with
              {@link com.android.inputmethod.keyboard.internal.KeyboardRow#KEYWIDTH_FILL_RIGHT}. -->
-        <attr name="keyWidth" format="fraction|enum">
-            <enum name="fillRight" value="-1" />
-        </attr>
+        <attr name="keyWidth" />
         <!-- The X-coordinate of upper right corner of this key including horizontal gap, in the
              proportion of keyboard width.
              If the value is negative, the origin is the right edge of the keyboard. -->
@@ -417,7 +427,7 @@
              {@link com.android.inputmethod.latin.utils.TypefaceUtils#KEY_LABEL_REFERENCE_CHAR}. -->
         <attr name="keyHintLabelOffCenterRatio" format="fraction" />
         <!-- Color to use for the label in a key. -->
-        <attr name="keyTextColor" format="color" />
+        <attr name="keyTextColor" />
         <attr name="keyTextShadowColor" format="color" />
         <!-- Color to use for the label in a key when in inactivated state. -->
         <attr name="keyTextInactivatedColor" format="color" />

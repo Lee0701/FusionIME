@@ -19,20 +19,20 @@
 -->
 
 <merge
-    xmlns:latin="http://schemas.android.com/apk/res/com.android.inputmethod.latin"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
 >
     <!-- U+03B6: "ζ" GREEK SMALL LETTER ZETA -->
     <Key
-        latin:keySpec="&#x03B6;" />
+        app:keySpec="&#x03B6;" />
     <!-- U+03C7: "χ" GREEK SMALL LETTER CHI -->
     <Key
-        latin:keySpec="&#x03C7;" />
+        app:keySpec="&#x03C7;" />
     <!-- U+03C8: "ψ" GREEK SMALL LETTER PSI -->
     <Key
-        latin:keySpec="&#x03C8;" />
+        app:keySpec="&#x03C8;" />
     <switch>
         <case
-            latin:keyboardLayoutSetElement="alphabetManualShifted|alphabetShiftLockShifted"
+            app:keyboardLayoutSetElement="alphabetManualShifted|alphabetShiftLockShifted"
         >
             <!-- U+03A9: "Ω" GREEK CAPITAL LETTER OMEGA
                  U+038F: "Ώ" GREEK CAPITAL LETTER OMEGA WITH TONOS
@@ -46,8 +46,8 @@
                  U+1F6E: "Ὦ" GREEK CAPITAL LETTER OMEGA WITH PSILI AND PERISPOMENI
                  U+1F6F: "Ὧ" GREEK CAPITAL LETTER OMEGA WITH DASIA AND PERISPOMENI -->
             <Key
-                latin:keySpec="&#x03C9;"
-                latin:moreKeys="&#x038F;,&#x1FFA;,&#x1F68;,&#x1F69;,&#x1F6C;,&#x1F6D;,&#x1F6A;,&#x1F6B;,&#x1F6E;,&#x1F6F;" />
+                app:keySpec="&#x03C9;"
+                app:moreKeys="&#x038F;,&#x1FFA;,&#x1F68;,&#x1F69;,&#x1F6C;,&#x1F6D;,&#x1F6A;,&#x1F6B;,&#x1F6E;,&#x1F6F;" />
         </case>
         <default>
             <!-- U+03C9: "ω" GREEK SMALL LETTER OMEGA
@@ -75,17 +75,17 @@
                  U+1FA6: "ᾦ" GREEK SMALL LETTER OMEGA WITH PSILI AND PERISPOMENI AND YPOGEGRAMMENI
                  U+1FA7: "ᾧ" GREEK SMALL LETTER OMEGA WITH DASIA AND PERISPOMENI AND YPOGEGRAMMENI -->
             <Key
-                latin:keySpec="&#x03C9;"
-                latin:moreKeys="&#x03CE;,&#x1F7C;,&#x1FF6;,&#x1F60;,&#x1F61;,&#x1F64;,&#x1F65;,&#x1F62;,&#x1F63;,&#x1F66;,&#x1F67;,&#x1FF3;,&#x1FF4;,&#x1FF2;,&#x1FF7;,&#x1FA0;,&#x1FA1;,&#x1FA4;,&#x1FA5;,&#x1FA2;,&#x1FA3;,&#x1FA6;,&#x1FA7;" />
+                app:keySpec="&#x03C9;"
+                app:moreKeys="&#x03CE;,&#x1F7C;,&#x1FF6;,&#x1F60;,&#x1F61;,&#x1F64;,&#x1F65;,&#x1F62;,&#x1F63;,&#x1F66;,&#x1F67;,&#x1FF3;,&#x1FF4;,&#x1FF2;,&#x1FF7;,&#x1FA0;,&#x1FA1;,&#x1FA4;,&#x1FA5;,&#x1FA2;,&#x1FA3;,&#x1FA6;,&#x1FA7;" />
         </default>
     </switch>
     <!-- U+03B2: "β" GREEK SMALL LETTER BETA -->
     <Key
-        latin:keySpec="&#x03B2;" />
+        app:keySpec="&#x03B2;" />
     <!-- U+03BD: "ν" GREEK SMALL LETTER NU -->
     <Key
-        latin:keySpec="&#x03BD;" />
+        app:keySpec="&#x03BD;" />
     <!-- U+03BC: "μ" GREEK SMALL LETTER MU -->
     <Key
-        latin:keySpec="&#x03BC;" />
+        app:keySpec="&#x03BC;" />
 </merge>

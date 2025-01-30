@@ -18,23 +18,23 @@
 */
 -->
 
-<merge xmlns:latin="http://schemas.android.com/apk/res/com.android.inputmethod.latin">
+<merge xmlns:app="http://schemas.android.com/apk/res-auto">
     <!-- U+0561: "ա" ARMENIAN SMALL LETTER AYB -->
-    <Key latin:keySpec="&#x0561;" />
+    <Key app:keySpec="&#x0561;" />
     <!-- U+057D: "ս" ARMENIAN SMALL LETTER SEH -->
-    <Key latin:keySpec="&#x057D;" />
+    <Key app:keySpec="&#x057D;" />
     <!-- U+0564: "դ" ARMENIAN SMALL LETTER DA -->
-    <Key latin:keySpec="&#x0564;" />
+    <Key app:keySpec="&#x0564;" />
     <!-- U+0586: "ֆ" ARMENIAN SMALL LETTER FEH -->
-    <Key latin:keySpec="&#x0586;" />
+    <Key app:keySpec="&#x0586;" />
     <!-- U+0563: "գ" ARMENIAN SMALL LETTER GIM -->
-    <Key latin:keySpec="&#x0563;" />
+    <Key app:keySpec="&#x0563;" />
     <!-- U+0570: "հ" ARMENIAN SMALL LETTER HO -->
-    <Key latin:keySpec="&#x0570;" />
+    <Key app:keySpec="&#x0570;" />
     <!-- U+0575: "յ" ARMENIAN SMALL LETTER YI -->
-    <Key latin:keySpec="&#x0575;" />
+    <Key app:keySpec="&#x0575;" />
     <!-- U+056F: "կ" ARMENIAN SMALL LETTER KEN -->
-    <Key latin:keySpec="&#x056F;" />
+    <Key app:keySpec="&#x056F;" />
     <!-- U+056C: "լ" ARMENIAN SMALL LETTER LIWN -->
-    <Key latin:keySpec="&#x056C;" />
+    <Key app:keySpec="&#x056C;" />
 </merge>

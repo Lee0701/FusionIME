@@ -18,31 +18,31 @@
 */
 -->
 
-<merge xmlns:latin="http://schemas.android.com/apk/res/com.android.inputmethod.latin">
-    <include latin:keyboardLayout="@xml/key_styles_common" />
+<merge xmlns:app="http://schemas.android.com/apk/res-auto">
+    <include app:keyboardLayout="@xml/key_styles_common" />
     <Row
-        latin:keyWidth="9.091%p"
-        latin:keyLabelFlags="fontNormal|autoXScale"
+        app:keyWidth="9.091%p"
+        app:keyLabelFlags="fontNormal|autoXScale"
     >
-        <include latin:keyboardLayout="@xml/rowkeys_sinhala1" />
+        <include app:keyboardLayout="@xml/rowkeys_sinhala1" />
     </Row>
     <Row
-        latin:keyWidth="9.091%p"
-        latin:keyLabelFlags="fontNormal|autoXScale"
+        app:keyWidth="9.091%p"
+        app:keyLabelFlags="fontNormal|autoXScale"
     >
-        <include latin:keyboardLayout="@xml/rowkeys_sinhala2" />
+        <include app:keyboardLayout="@xml/rowkeys_sinhala2" />
     </Row>
     <Row
-        latin:keyWidth="8.711%p"
-        latin:keyLabelFlags="fontNormal|autoXScale"
+        app:keyWidth="8.711%p"
+        app:keyLabelFlags="fontNormal|autoXScale"
     >
         <Key
-            latin:keyStyle="shiftKeyStyle"
-            latin:keyWidth="10.8%p" />
-        <include latin:keyboardLayout="@xml/rowkeys_sinhala3" />
+            app:keyStyle="shiftKeyStyle"
+            app:keyWidth="10.8%p" />
+        <include app:keyboardLayout="@xml/rowkeys_sinhala3" />
         <Key
-            latin:keyStyle="deleteKeyStyle"
-            latin:keyWidth="fillRight" />
+            app:keyStyle="deleteKeyStyle"
+            app:keyWidth="fillRight" />
     </Row>
-    <include latin:keyboardLayout="@xml/row_qwerty4" />
+    <include app:keyboardLayout="@xml/row_qwerty4" />
 </merge>

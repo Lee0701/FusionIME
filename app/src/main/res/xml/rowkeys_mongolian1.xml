@@ -19,65 +19,65 @@
 -->
 
 <merge
-    xmlns:latin="http://schemas.android.com/apk/res/com.android.inputmethod.latin"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
 >
     <!-- U+0444: "ф" CYRILLIC SMALL LETTER EF -->
     <Key
-        latin:keySpec="&#x0444;"
-        latin:keyHintLabel="1"
-        latin:additionalMoreKeys="1" />
+        app:keySpec="&#x0444;"
+        app:keyHintLabel="1"
+        app:additionalMoreKeys="1" />
     <!-- U+0446: "ц" CYRILLIC SMALL LETTER TSE -->
     <Key
-        latin:keySpec="&#x0446;"
-        latin:keyHintLabel="2"
-        latin:additionalMoreKeys="2" />
+        app:keySpec="&#x0446;"
+        app:keyHintLabel="2"
+        app:additionalMoreKeys="2" />
     <!-- U+0443: "у" CYRILLIC SMALL LETTER U -->
     <Key
-        latin:keySpec="&#x0443;"
-        latin:keyHintLabel="3"
-        latin:additionalMoreKeys="3"
-        latin:moreKeys="!text/morekeys_cyrillic_u" />
+        app:keySpec="&#x0443;"
+        app:keyHintLabel="3"
+        app:additionalMoreKeys="3"
+        app:moreKeys="!text/morekeys_cyrillic_u" />
     <!-- U+0436: "ж" CYRILLIC SMALL LETTER ZHE -->
     <Key
-        latin:keySpec="&#x0436;"
-        latin:keyHintLabel="4"
-        latin:additionalMoreKeys="4" />
+        app:keySpec="&#x0436;"
+        app:keyHintLabel="4"
+        app:additionalMoreKeys="4" />
     <!-- U+044D: "э" CYRILLIC SMALL LETTER E -->
     <Key
-        latin:keySpec="&#x044D;"
-        latin:keyHintLabel="5"
-        latin:additionalMoreKeys="5"
-        latin:moreKeys="!text/morekeys_cyrillic_ie" />
+        app:keySpec="&#x044D;"
+        app:keyHintLabel="5"
+        app:additionalMoreKeys="5"
+        app:moreKeys="!text/morekeys_cyrillic_ie" />
     <!-- U+043D: "н" CYRILLIC SMALL LETTER EN -->
     <Key
-        latin:keySpec="&#x043D;"
-        latin:keyHintLabel="6"
-        latin:additionalMoreKeys="6"
-        latin:moreKeys="!text/morekeys_cyrillic_en" />
+        app:keySpec="&#x043D;"
+        app:keyHintLabel="6"
+        app:additionalMoreKeys="6"
+        app:moreKeys="!text/morekeys_cyrillic_en" />
     <!-- U+0433: "г" CYRILLIC SMALL LETTER GHE -->
     <Key
-        latin:keySpec="&#x0433;"
-        latin:keyHintLabel="7"
-        latin:additionalMoreKeys="7"
-        latin:moreKeys="!text/morekeys_cyrillic_ghe" />
+        app:keySpec="&#x0433;"
+        app:keyHintLabel="7"
+        app:additionalMoreKeys="7"
+        app:moreKeys="!text/morekeys_cyrillic_ghe" />
     <!-- U+0448: "ш" CYRILLIC SMALL LETTER SHA
          U+0449: "щ" CYRILLIC SMALL LETTER SHCHA -->
     <Key
-        latin:keySpec="&#x0448;"
-        latin:keyHintLabel="8"
-        latin:additionalMoreKeys="8"
-        latin:moreKeys="&#x0449;" />
+        app:keySpec="&#x0448;"
+        app:keyHintLabel="8"
+        app:additionalMoreKeys="8"
+        app:moreKeys="&#x0449;" />
     <!-- U+04AF: "ү" CYRILLIC SMALL LETTER STRAIGHT U -->
     <Key
-        latin:keySpec="&#x04AF;"
-        latin:keyHintLabel="9"
-        latin:additionalMoreKeys="9" />
+        app:keySpec="&#x04AF;"
+        app:keyHintLabel="9"
+        app:additionalMoreKeys="9" />
     <!-- U+0437: "з" CYRILLIC SMALL LETTER ZE -->
     <Key
-        latin:keySpec="&#x0437;"
-        latin:keyHintLabel="0"
-        latin:additionalMoreKeys="0" />
+        app:keySpec="&#x0437;"
+        app:keyHintLabel="0"
+        app:additionalMoreKeys="0" />
     <!-- U+043A: "к" CYRILLIC SMALL LETTER KA -->
     <Key
-        latin:keySpec="&#x043A;" />
+        app:keySpec="&#x043A;" />
 </merge>

@@ -19,41 +19,41 @@
 -->
 
 <merge
-    xmlns:latin="http://schemas.android.com/apk/res/com.android.inputmethod.latin"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
 >
     <include
-        latin:keyboardLayout="@xml/keys_dvorak_123" />
+        app:keyboardLayout="@xml/keys_dvorak_123" />
     <Key
-        latin:keySpec="p"
-        latin:keyHintLabel="4"
-        latin:additionalMoreKeys="4" />
+        app:keySpec="p"
+        app:keyHintLabel="4"
+        app:additionalMoreKeys="4" />
     <Key
-        latin:keySpec="y"
-        latin:keyHintLabel="5"
-        latin:additionalMoreKeys="5"
-        latin:moreKeys="!text/morekeys_y" />
+        app:keySpec="y"
+        app:keyHintLabel="5"
+        app:additionalMoreKeys="5"
+        app:moreKeys="!text/morekeys_y" />
     <Key
-        latin:keySpec="f"
-        latin:keyHintLabel="6"
-        latin:additionalMoreKeys="6" />
+        app:keySpec="f"
+        app:keyHintLabel="6"
+        app:additionalMoreKeys="6" />
     <Key
-        latin:keySpec="g"
-        latin:keyHintLabel="7"
-        latin:additionalMoreKeys="7"
-        latin:moreKeys="!text/morekeys_g" />
+        app:keySpec="g"
+        app:keyHintLabel="7"
+        app:additionalMoreKeys="7"
+        app:moreKeys="!text/morekeys_g" />
     <Key
-        latin:keySpec="c"
-        latin:keyHintLabel="8"
-        latin:additionalMoreKeys="8"
-        latin:moreKeys="!text/morekeys_c" />
+        app:keySpec="c"
+        app:keyHintLabel="8"
+        app:additionalMoreKeys="8"
+        app:moreKeys="!text/morekeys_c" />
     <Key
-        latin:keySpec="r"
-        latin:keyHintLabel="9"
-        latin:additionalMoreKeys="9"
-        latin:moreKeys="!text/morekeys_r" />
+        app:keySpec="r"
+        app:keyHintLabel="9"
+        app:additionalMoreKeys="9"
+        app:moreKeys="!text/morekeys_r" />
     <Key
-        latin:keySpec="l"
-        latin:keyHintLabel="0"
-        latin:additionalMoreKeys="0"
-        latin:moreKeys="!text/morekeys_l" />
+        app:keySpec="l"
+        app:keyHintLabel="0"
+        app:additionalMoreKeys="0"
+        app:moreKeys="!text/morekeys_l" />
 </merge>

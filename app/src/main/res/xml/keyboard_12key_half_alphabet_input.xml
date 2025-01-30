@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ Copyright (C) 2008-2012  OMRON SOFTWARE Co., Ltd.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<Keyboard xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:keyWidth="20%p"
+    app:horizontalGap="0dip"
+    app:verticalGap="0dip"
+    app:keyHeight="@dimen/key_height"
+    >
+  
+    <Row>
+        <Key app:codes="-219" app:keyIcon="@drawable/key_12key_reverse" app:iconPreview="@drawable/key_12key_reverse_b"
+             app:keyEdgeFlags="left" app:keyWidth="18%" app:isSecondKey="true"/>
+        <Key app:codes="-201" app:keyIcon="@drawable/key_12key_alpha1" app:iconPreview="@drawable/key_12key_alpha1_b" app:horizontalGap="2%"/>
+        <Key app:codes="-202" app:keyIcon="@drawable/key_12key_alpha2" app:iconPreview="@drawable/key_12key_alpha2_b"/>
+        <Key app:codes="-203" app:keyIcon="@drawable/key_12key_alpha3" app:iconPreview="@drawable/key_12key_alpha3_b"/>
+        <Key app:codes="-214" app:keyIcon="@drawable/key_del" app:iconPreview="@drawable/key_del_b"
+             app:isRepeatable="true" app:keyEdgeFlags="right" app:horizontalGap="2%" app:keyWidth="18%" app:isSecondKey="true"/>
+    </Row>
+    
+    <Row>
+        <Key app:codes="-218" app:keyIcon="@drawable/key_12key_left" app:iconPreview="@drawable/key_12key_left_b" app:isRepeatable="true" app:keyEdgeFlags="left" app:keyWidth="18%" app:isSecondKey="true"/>
+        <Key app:codes="-204" app:keyIcon="@drawable/key_12key_alpha4" app:iconPreview="@drawable/key_12key_alpha4_b" app:horizontalGap="2%"/>
+        <Key app:codes="-205" app:keyIcon="@drawable/key_12key_alpha5" app:iconPreview="@drawable/key_12key_alpha5_b"/>
+        <Key app:codes="-206" app:keyIcon="@drawable/key_12key_alpha6" app:iconPreview="@drawable/key_12key_alpha6_b"/>
+        <Key app:codes="-217" app:keyIcon="@drawable/key_12key_right" app:iconPreview="@drawable/key_12key_right_b" app:isRepeatable="true" app:keyEdgeFlags="right" app:horizontalGap="2%" app:keyWidth="18%" app:isSecondKey="true"/>
+    </Row>
+    
+    <Row>
+        <Key app:codes="-222"  app:keyIcon="@drawable/key_12key_pict_sym" app:iconPreview="@drawable/key_pict_sym_b"
+	     app:keyEdgeFlags="left" app:keyWidth="18%" app:isSecondKey="true"/>
+        <Key app:codes="-207" app:keyIcon="@drawable/key_12key_alpha7" app:iconPreview="@drawable/key_12key_alpha7_b" app:horizontalGap="2%"/>
+        <Key app:codes="-208" app:keyIcon="@drawable/key_12key_alpha8" app:iconPreview="@drawable/key_12key_alpha8_b"/>
+        <Key app:codes="-209" app:keyIcon="@drawable/key_12key_alpha9" app:iconPreview="@drawable/key_12key_alpha9_b"/>
+        <Key app:codes="-215" app:keyIcon="@drawable/key_12key_space" app:iconPreview="@drawable/key_12key_space_b" app:isRepeatable="true" app:keyEdgeFlags="right"  app:horizontalGap="2%" app:keyWidth="18%" app:isSecondKey="true"/>
+    </Row>
+    
+    <Row app:rowEdgeFlags="bottom">
+        <Key app:codes="-230" app:keyIcon="@drawable/key_mode_half_alpha" app:iconPreview="@drawable/key_mode_change_b"
+	     app:popupKeyboard="@xml/keyboard_switch_key_jp" app:keyEdgeFlags="left" app:keyWidth="18%" app:isSecondKey="true"/>
+        <Key app:codes="-213" app:keyIcon="@drawable/key_12key_caps" app:iconPreview="@drawable/key_12key_caps_b" app:horizontalGap="2%"/>
+        <Key app:codes="-210" app:keyIcon="@drawable/key_12key_alpha0" app:iconPreview="@drawable/key_12key_alpha0_b"/>
+        <Key app:codes="-211" app:keyIcon="@drawable/key_12key_period_comma" app:iconPreview="@drawable/key_12key_period_comma_b" />
+        <Key app:codes="-216" app:keyIcon="@drawable/key_enter" app:iconPreview="@drawable/key_enter_b"
+             app:keyEdgeFlags="right" app:horizontalGap="2%" app:keyWidth="18%" app:isSecondKey="true"/>
+    </Row>
+</Keyboard>

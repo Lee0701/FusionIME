@@ -16,20 +16,20 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION"/>
-    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
-    <uses-permission android:name="android.permission.READ_CONTACTS"/>
-    <uses-permission android:name="android.permission.READ_PROFILE"/>
-    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS"/>
-    <uses-permission android:name="android.permission.READ_SYNC_STATS"/>
-    <uses-permission android:name="android.permission.READ_USER_DICTIONARY"/>
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <uses-permission android:name="android.permission.USE_CREDENTIALS"/>
-    <uses-permission android:name="android.permission.VIBRATE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS"/>
-    <uses-permission android:name="android.permission.WRITE_USER_DICTIONARY"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.READ_SYNC_STATS" />
+    <uses-permission android:name="android.permission.READ_USER_DICTIONARY" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_USER_DICTIONARY" />
 
     <!-- A signature-protected permission to ask AOSP Keyboard to close the software keyboard.
                  To use this, add the following line into calling application's AndroidManifest.xml
@@ -46,7 +46,7 @@
                       }
          </pre> -->
     <permission android:name="com.android.inputmethod.latin.HIDE_SOFT_INPUT"
-         android:protectionLevel="signature"/>
+        android:protectionLevel="signature" />
 
     <!-- To query enabled input methods. -->
     <queries>
@@ -56,154 +56,187 @@
     </queries>
 
     <application android:label="@string/english_ime_name"
-         android:icon="@drawable/ic_launcher_keyboard"
-         android:supportsRtl="true"
-         android:allowBackup="true"
-         android:defaultToDeviceProtectedStorage="true"
-         android:directBootAware="true">
+        android:icon="@drawable/ic_launcher_keyboard"
+        android:supportsRtl="true"
+        android:allowBackup="true"
+        android:defaultToDeviceProtectedStorage="true"
+        android:directBootAware="true">
 
         <!-- Services -->
-        <service android:name="LatinIME"
-             android:label="@string/english_ime_name"
-             android:permission="android.permission.BIND_INPUT_METHOD"
-             android:exported="true"
-             android:visibleToInstantApps="true">
+        <service android:name="com.android.inputmethod.latin.LatinIME"
+            android:label="@string/english_ime_name"
+            android:permission="android.permission.BIND_INPUT_METHOD"
+            android:exported="true"
+            android:visibleToInstantApps="true">
             <intent-filter>
-                <action android:name="android.view.InputMethod"/>
+                <action android:name="android.view.InputMethod" />
             </intent-filter>
             <meta-data android:name="android.view.im"
-                 android:resource="@xml/method"/>
+                android:resource="@xml/method" />
         </service>
 
-        <service android:name=".spellcheck.AndroidSpellCheckerService"
-             android:label="@string/spell_checker_service_name"
-             android:permission="android.permission.BIND_TEXT_SERVICE"
-             android:exported="true">
+        <service android:name="com.android.inputmethod.latin.spellcheck.AndroidSpellCheckerService"
+            android:label="@string/spell_checker_service_name"
+            android:permission="android.permission.BIND_TEXT_SERVICE"
+            android:exported="true">
             <intent-filter>
-                <action android:name="android.service.textservice.SpellCheckerService"/>
+                <action android:name="android.service.textservice.SpellCheckerService" />
             </intent-filter>
             <meta-data android:name="android.view.textservice.scs"
-                 android:resource="@xml/spellchecker"/>
+                android:resource="@xml/spellchecker" />
         </service>
 
         <service android:name="com.android.inputmethod.dictionarypack.DictionaryService"
-             android:label="@string/dictionary_service_name">
+            android:label="@string/dictionary_service_name">
         </service>
 
         <!-- Activities -->
-        <activity android:name=".setup.SetupActivity"
-             android:theme="@style/platformActivityTheme"
-             android:label="@string/english_ime_name"
-             android:icon="@drawable/ic_launcher_keyboard"
-             android:launchMode="singleTask"
-             android:noHistory="true"
-             android:exported="true">
+        <activity android:name="com.android.inputmethod.latin.setup.SetupActivity"
+            android:theme="@style/platformActivityTheme"
+            android:label="@string/english_ime_name"
+            android:icon="@drawable/ic_launcher_keyboard"
+            android:launchMode="singleTask"
+            android:noHistory="true"
+            android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".permissions.PermissionsActivity"
-             android:theme="@android:style/Theme.Translucent.NoTitleBar"
-             android:exported="false"
-             android:taskAffinity="">
+        <activity android:name="com.android.inputmethod.latin.permissions.PermissionsActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:exported="false"
+            android:taskAffinity="">
         </activity>
 
-        <activity android:name=".setup.SetupWizardActivity"
-             android:theme="@style/platformActivityTheme"
-             android:label="@string/english_ime_name"
-             android:clearTaskOnLaunch="true"
-             android:exported="true">
+        <activity android:name="com.android.inputmethod.latin.setup.SetupWizardActivity"
+            android:theme="@style/platformActivityTheme"
+            android:label="@string/english_ime_name"
+            android:clearTaskOnLaunch="true"
+            android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".settings.SettingsActivity"
-             android:theme="@style/platformSettingsTheme"
-             android:label="@string/english_ime_settings"
-             android:exported="true">
+        <activity android:name="com.android.inputmethod.latin.settings.SettingsActivity"
+            android:theme="@style/platformSettingsTheme"
+            android:label="@string/english_ime_settings"
+            android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".spellcheck.SpellCheckerSettingsActivity"
-             android:theme="@style/platformSettingsTheme"
-             android:label="@string/android_spell_checker_settings"
-             android:exported="true">
+        <activity
+            android:name="com.android.inputmethod.latin.spellcheck.SpellCheckerSettingsActivity"
+            android:theme="@style/platformSettingsTheme"
+            android:label="@string/android_spell_checker_settings"
+            android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
 
         <activity android:name="com.android.inputmethod.dictionarypack.DictionarySettingsActivity"
-             android:theme="@style/platformSettingsTheme"
-             android:label="@string/dictionary_settings_title"
-             android:uiOptions="splitActionBarWhenNarrow"
-             android:exported="true">
+            android:theme="@style/platformSettingsTheme"
+            android:label="@string/dictionary_settings_title"
+            android:uiOptions="splitActionBarWhenNarrow"
+            android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
 
         <activity android:name="com.android.inputmethod.dictionarypack.DownloadOverMeteredDialog"
-             android:theme="@style/platformActivityTheme"
-             android:label="@string/dictionary_install_over_metered_network_prompt"
-             android:exported="false">
+            android:theme="@style/platformActivityTheme"
+            android:label="@string/dictionary_install_over_metered_network_prompt"
+            android:exported="false">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
 
         <!-- Unexported activity used for tests. -->
-        <activity android:name=".settings.TestFragmentActivity"
-             android:exported="false"/>
+        <activity android:name="com.android.inputmethod.latin.settings.TestFragmentActivity"
+            android:exported="false" />
 
         <!-- Broadcast receivers -->
-        <receiver android:name="SystemBroadcastReceiver"
-             android:exported="true">
+        <receiver android:name="com.android.inputmethod.latin.SystemBroadcastReceiver"
+            android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-                <action android:name="android.intent.action.USER_INITIALIZE"/>
-                <action android:name="android.intent.action.LOCALE_CHANGED"/>
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.USER_INITIALIZE" />
+                <action android:name="android.intent.action.LOCALE_CHANGED" />
             </intent-filter>
         </receiver>
 
-        <receiver android:name="DictionaryPackInstallBroadcastReceiver"
-             android:exported="false">
+        <receiver
+            android:name="com.android.inputmethod.latin.DictionaryPackInstallBroadcastReceiver"
+            android:exported="false">
             <intent-filter>
-                <action android:name="com.android.inputmethod.dictionarypack.aosp.UNKNOWN_CLIENT"/>
+                <action android:name="ee.oyatl.ime.dictionarypack.aosp.UNKNOWN_CLIENT" />
             </intent-filter>
         </receiver>
 
         <receiver android:name="com.android.inputmethod.dictionarypack.EventHandler"
-             android:exported="true">
+            android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.DOWNLOAD_COMPLETE"/>
-                <action android:name="android.intent.action.DATE_CHANGED"/>
-                <action android:name="com.android.inputmethod.dictionarypack.aosp.UPDATE_NOW"/>
-                <action android:name="com.android.inputmethod.dictionarypack.aosp.INIT_AND_UPDATE_NOW"/>
+                <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
+                <action android:name="android.intent.action.DATE_CHANGED" />
+                <action android:name="ee.oyatl.ime.dictionarypack.aosp.UPDATE_NOW" />
+                <action android:name="ee.oyatl.ime.dictionarypack.aosp.INIT_AND_UPDATE_NOW" />
             </intent-filter>
         </receiver>
 
         <!-- Broadcast receiver for AccountManager#LOGIN_ACCOUNTS_CHANGED_ACTION. -->
-        <receiver android:name=".accounts.AccountsChangedReceiver"
-             android:exported="true">
+        <receiver android:name="com.android.inputmethod.latin.accounts.AccountsChangedReceiver"
+            android:exported="true">
             <intent-filter>
-                <action android:name="android.accounts.LOGIN_ACCOUNTS_CHANGED"/>
+                <action android:name="android.accounts.LOGIN_ACCOUNTS_CHANGED" />
             </intent-filter>
         </receiver>
 
         <!-- Content providers -->
         <provider android:name="com.android.inputmethod.dictionarypack.DictionaryProvider"
-             android:grantUriPermissions="true"
-             android:exported="false"
-             android:authorities="@string/authority"
-             android:multiprocess="false"
-             android:label="@string/dictionary_provider_name">
+            android:grantUriPermissions="true"
+            android:exported="false"
+            android:authorities="@string/authority"
+            android:multiprocess="false"
+            android:label="@string/dictionary_provider_name">
         </provider>
+
+
+        <service android:name="jp.co.omronsoft.openwnn.OpenWnnJAJP"
+            android:label="Japanese IME"
+            android:exported="true"
+            android:permission="android.permission.BIND_INPUT_METHOD">
+            <intent-filter>
+                <action android:name="android.view.InputMethod" />
+            </intent-filter>
+            <meta-data android:name="android.view.im" android:resource="@xml/method_ja" />
+        </service>
+
+        <activity android:name="jp.co.omronsoft.openwnn.OpenWnnControlPanelJAJP"
+            android:exported="true"
+            android:label="@string/preference_ime_setting_app">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name="jp.co.omronsoft.openwnn.JAJP.UserDictionaryToolsListJAJP" />
+
+        <activity android:name="jp.co.omronsoft.openwnn.JAJP.UserDictionaryToolsEditJAJP"
+            android:label="@string/user_dictionary_edit_words" />
+
+        <activity android:name="jp.co.omronsoft.openwnn.EN.UserDictionaryToolsListEN" />
+
+        <activity android:name="jp.co.omronsoft.openwnn.EN.UserDictionaryToolsEditEN"
+            android:label="@string/user_dictionary_edit_words" />
+
     </application>
 </manifest>

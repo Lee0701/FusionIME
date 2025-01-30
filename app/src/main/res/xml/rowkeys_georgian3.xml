@@ -19,57 +19,57 @@
 -->
 
 <merge
-    xmlns:latin="http://schemas.android.com/apk/res/com.android.inputmethod.latin"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
 >
     <switch>
         <case
-            latin:keyboardLayoutSetElement="alphabetManualShifted|alphabetShiftLocked|alphabetShiftLockShifted"
+            app:keyboardLayoutSetElement="alphabetManualShifted|alphabetShiftLocked|alphabetShiftLockShifted"
         >
             <!-- U+10EB: "ძ" GEORGIAN LETTER JIL -->
             <Key
-                latin:keySpec="&#x10EB;" />
+                app:keySpec="&#x10EB;" />
             <Key
-                latin:keySpec="X" />
+                app:keySpec="X" />
             <!-- U+10E9: "ჩ" GEORGIAN LETTER CHIN -->
             <Key
-                latin:keySpec="&#x10E9;" />
+                app:keySpec="&#x10E9;" />
             <Key
-                latin:keySpec="V" />
+                app:keySpec="V" />
             <Key
-                latin:keySpec="B" />
+                app:keySpec="B" />
             <Key
-                latin:keySpec="N" />
+                app:keySpec="N" />
             <Key
-                latin:keySpec="M" />
+                app:keySpec="M" />
         </case>
         <default>
             <!-- U+10D6: "ზ" GEORGIAN LETTER ZEN -->
             <Key
-                latin:keySpec="&#x10D6;" />
+                app:keySpec="&#x10D6;" />
             <!-- U+10EE: "ხ" GEORGIAN LETTER XAN
                  U+10F4: "ჴ" GEORGIAN LETTER HAR -->
             <Key
-                latin:keySpec="&#x10EE;"
-                latin:moreKeys="&#x10F4;" />
+                app:keySpec="&#x10EE;"
+                app:moreKeys="&#x10F4;" />
             <!-- U+10EA: "ც" GEORGIAN LETTER CAN -->
             <Key
-                latin:keySpec="&#x10EA;" />
+                app:keySpec="&#x10EA;" />
             <!-- U+10D5: "ვ" GEORGIAN LETTER VIN
                  U+10F3: "ჳ" GEORGIAN LETTER WE -->
             <Key
-                latin:keySpec="&#x10D5;"
-                latin:moreKeys="&#x10F3;" />
+                app:keySpec="&#x10D5;"
+                app:moreKeys="&#x10F3;" />
             <!-- U+10D1: "ბ" GEORGIAN LETTER BAN -->
             <Key
-                latin:keySpec="&#x10D1;" />
+                app:keySpec="&#x10D1;" />
             <!-- U+10DC: "ნ" GEORGIAN LETTER NAR
                  U+10FC: "ჼ" MODIFIER LETTER GEORGIAN NAR -->
             <Key
-                latin:keySpec="&#x10DC;"
-                latin:moreKeys="&#x10FC;" />
+                app:keySpec="&#x10DC;"
+                app:moreKeys="&#x10FC;" />
             <!-- U+10DB: "მ" GEORGIAN LETTER MAN -->
             <Key
-                latin:keySpec="&#x10DB;" />
+                app:keySpec="&#x10DB;" />
         </default>
     </switch>
 </merge>

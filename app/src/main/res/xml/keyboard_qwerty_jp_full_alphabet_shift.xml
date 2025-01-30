@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ Copyright (C) 2008-2012  OMRON SOFTWARE Co., Ltd.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<Keyboard xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:wnn="http://schemas.android.com/apk/res/jp.co.omronsoft.openwnn"
+      app:keyWidth="9%p"
+      app:horizontalGap="0.93%p"
+      app:verticalGap="8dip"
+      app:keyHeight="@dimen/key_height_qwerty"
+	  >
+  
+  <Row>
+    <Key app:codes="65329" app:keyLabel="Q" app:keyEdgeFlags="left" app:horizontalGap="1.2%p"/>
+    <Key app:codes="65335" app:keyLabel="W"/>
+    <Key app:codes="65317" app:keyLabel="E"/>
+    <Key app:codes="65330" app:keyLabel="R"/>
+    <Key app:codes="65332" app:keyLabel="T"/>
+    <Key app:codes="65337" app:keyLabel="Y"/>
+    <Key app:codes="65333" app:keyLabel="U"/>
+    <Key app:codes="65321" app:keyLabel="I"/>
+    <Key app:codes="65327" app:keyLabel="O"/>
+    <Key app:codes="65328" app:keyLabel="P" app:keyEdgeFlags="right"/>
+  </Row>
+  
+  <Row>
+    <Key app:codes="65313" app:keyLabel="A" app:keyEdgeFlags="left" app:horizontalGap="1.2%p"/>
+    <Key app:codes="65331" app:keyLabel="S"/>
+    <Key app:codes="65316" app:keyLabel="D"/>
+    <Key app:codes="65318" app:keyLabel="F"/>
+    <Key app:codes="65319" app:keyLabel="G"/>
+    <Key app:codes="65320" app:keyLabel="H"/>
+    <Key app:codes="65322" app:keyLabel="J"/>
+    <Key app:codes="65323" app:keyLabel="K"/>
+    <Key app:codes="65324" app:keyLabel="L"/>
+    <Key app:codes="65295" app:keyLabel="@string/key_qwerty_full_slash"
+         app:keyEdgeFlags="right"/>
+  </Row>
+  
+  <Row app:horizontalGap="0.82%p">
+    <Key app:codes="-1" app:keyIcon="@drawable/key_qwerty_shift"
+         app:iconPreview="@drawable/key_qwerty_shift_b" app:keyWidth="14%p" app:horizontalGap="1.2%p"
+         app:isModifier="true" app:isSticky="false" app:keyEdgeFlags="left" app:isSecondKey="true"/>
+    <Key app:codes="65338" app:keyLabel="Z"/>
+    <Key app:codes="65336" app:keyLabel="X"/>
+    <Key app:codes="65315" app:keyLabel="C"/>
+    <Key app:codes="65334" app:keyLabel="V"/>
+    <Key app:codes="65314" app:keyLabel="B"/>
+    <Key app:codes="65326" app:keyLabel="N"/>
+    <Key app:codes="65325" app:keyLabel="M"/>
+    <Key app:codes="-100" app:keyIcon="@drawable/key_del" app:iconPreview="@drawable/key_del_b"
+         app:keyWidth="13.9%p"
+         app:keyEdgeFlags="right" app:isRepeatable="true" app:isSecondKey="true"/>
+  </Row>
+  
+  <Row app:rowEdgeFlags="bottom" app:horizontalGap="0.28%p">
+    <Key app:codes="-230" app:keyIcon="@drawable/key_mode_full_alpha" app:iconPreview="@drawable/key_mode_change_b"
+	 app:popupKeyboard="@xml/keyboard_switch_key_qwerty_jp" app:horizontalGap="1.2%p"
+         app:keyWidth="15%p" app:keyEdgeFlags="left" app:isSecondKey="true"/>
+    <Key app:codes="-106" app:keyIcon="@drawable/key_qwerty_pict_sym" app:iconPreview="@drawable/key_pict_sym_b"
+         app:keyWidth="15%p" app:isSecondKey="true"/>
+    <Key app:codes="65281" app:keyLabel="@string/key_qwerty_full_exclamation_mark"/>
+    <Key app:codes="12288"  app:keyIcon="@drawable/key_qwerty_space" app:iconPreview="@drawable/key_qwerty_space_b" 
+         app:keyWidth="15.1%p" app:isRepeatable="true"/>
+    <Key app:codes="65311" app:keyLabel="@string/key_qwerty_full_question"/>
+    <Key app:codes="-218" app:keyIcon="@drawable/key_qwerty_left" app:iconPreview="@drawable/key_qwerty_left_b"
+         app:isRepeatable="true" app:isSecondKey="true"/>
+    <Key app:codes="-217" app:keyIcon="@drawable/key_qwerty_right" app:iconPreview="@drawable/key_qwerty_right_b"
+         app:isRepeatable="true" app:isSecondKey="true"/>
+    <Key app:codes="-101" app:keyIcon="@drawable/key_enter" app:iconPreview="@drawable/key_enter_b" 
+         app:keyWidth="15%p" app:keyEdgeFlags="right" app:isSecondKey="true"/>
+  </Row>
+</Keyboard>

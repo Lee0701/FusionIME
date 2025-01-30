@@ -19,8 +19,8 @@
 -->
 
 <Keyboard
-    xmlns:latin="http://schemas.android.com/apk/res/com.android.inputmethod.latin"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
 >
     <include
-        latin:keyboardLayout="@xml/rows_bulgarian_bds" />
+        app:keyboardLayout="@xml/rows_bulgarian_bds" />
 </Keyboard>

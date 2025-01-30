@@ -19,41 +19,41 @@
 -->
 
 <merge
-    xmlns:latin="http://schemas.android.com/apk/res/com.android.inputmethod.latin"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
 >
     <!-- U+0444: "ф" CYRILLIC SMALL LETTER EF -->
     <Key
-        latin:keySpec="&#x0444;" />
+        app:keySpec="&#x0444;" />
     <Key
-        latin:keySpec="!text/keyspec_east_slavic_row2_2"
-        latin:moreKeys="!text/morekeys_east_slavic_row2_2" />
+        app:keySpec="!text/keyspec_east_slavic_row2_2"
+        app:moreKeys="!text/morekeys_east_slavic_row2_2" />
     <!-- U+0432: "в" CYRILLIC SMALL LETTER VE -->
     <Key
-        latin:keySpec="&#x0432;" />
+        app:keySpec="&#x0432;" />
     <!-- U+0430: "а" CYRILLIC SMALL LETTER A -->
     <Key
-        latin:keySpec="&#x0430;"
-        latin:moreKeys="!text/morekeys_cyrillic_a" />
+        app:keySpec="&#x0430;"
+        app:moreKeys="!text/morekeys_cyrillic_a" />
     <!-- U+043F: "п" CYRILLIC SMALL LETTER PE -->
     <Key
-        latin:keySpec="&#x043F;" />
+        app:keySpec="&#x043F;" />
     <!-- U+0440: "р" CYRILLIC SMALL LETTER ER -->
     <Key
-        latin:keySpec="&#x0440;" />
+        app:keySpec="&#x0440;" />
     <!-- U+043E: "о" CYRILLIC SMALL LETTER O -->
     <Key
-        latin:keySpec="&#x043E;"
-        latin:moreKeys="!text/morekeys_cyrillic_o" />
+        app:keySpec="&#x043E;"
+        app:moreKeys="!text/morekeys_cyrillic_o" />
     <!-- U+043B: "л" CYRILLIC SMALL LETTER EL -->
     <Key
-        latin:keySpec="&#x043B;" />
+        app:keySpec="&#x043B;" />
     <!-- U+0434: "д" CYRILLIC SMALL LETTER DE -->
     <Key
-        latin:keySpec="&#x0434;" />
+        app:keySpec="&#x0434;" />
     <!-- U+0436: "ж" CYRILLIC SMALL LETTER ZHE -->
     <Key
-        latin:keySpec="&#x0436;" />
+        app:keySpec="&#x0436;" />
     <Key
-        latin:keySpec="!text/keyspec_east_slavic_row2_11"
-        latin:moreKeys="!text/morekeys_east_slavic_row2_11" />
+        app:keySpec="!text/keyspec_east_slavic_row2_11"
+        app:moreKeys="!text/morekeys_east_slavic_row2_11" />
 </merge>
