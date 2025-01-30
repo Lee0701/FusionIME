@@ -249,7 +249,7 @@
             <intent-filter>
                 <action android:name="android.view.InputMethod" />
             </intent-filter>
-            <meta-data android:name="android.view.im" android:resource="@xml/method" />
+            <meta-data android:name="android.view.im" android:resource="@xml/method_zh" />
         </service>
 
         <activity android:name="com.android.inputmethod.pinyin.SettingsActivity"
@@ -257,6 +257,7 @@
             android:label="@string/ime_settings_activity_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
