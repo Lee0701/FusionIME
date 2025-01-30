@@ -243,6 +243,7 @@
         </service>
 
         <service android:name="com.android.inputmethod.pinyin.PinyinIME"
+            android:exported="true"
             android:label="@string/ime_name"
             android:permission="android.permission.BIND_INPUT_METHOD">
             <intent-filter>
@@ -252,6 +253,7 @@
         </service>
 
         <activity android:name="com.android.inputmethod.pinyin.SettingsActivity"
+            android:exported="true"
             android:label="@string/ime_settings_activity_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

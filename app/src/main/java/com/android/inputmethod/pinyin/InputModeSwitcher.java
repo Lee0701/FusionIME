@@ -21,6 +21,8 @@ import com.android.inputmethod.pinyin.SoftKeyboard.KeyRow;
 import android.content.res.Resources;
 import android.view.inputmethod.EditorInfo;
 
+import ee.oyatl.ime.fusion.R;
+
 /**
  * Switcher used to switching input mode between Chinese, English, symbol,etc.
  */

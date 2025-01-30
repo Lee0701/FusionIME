@@ -34,6 +34,8 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
+import ee.oyatl.ime.fusion.R;
+
 /**
  * View to show candidate list. There two candidate view instances which are
  * used to show animation when user navigates between pages.
@@ -361,8 +363,8 @@ public class CandidateView extends View {
     }
 
     private void onSizeChanged() {
-        mContentWidth = getMeasuredWidth() - mPaddingLeft - mPaddingRight;
-        mContentHeight = (int) ((getMeasuredHeight() - mPaddingTop - mPaddingBottom) * 0.95f);
+        mContentWidth = getMeasuredWidth() - getPaddingLeft() - getPaddingRight();
+        mContentHeight = (int) ((getMeasuredHeight() - getPaddingTop() - getPaddingBottom()) * 0.95f);
         /**
          * How to decide the font size if the height for display is given?
          * Now it is implemented in a stupid way.
@@ -409,8 +411,8 @@ public class CandidateView extends View {
     private boolean calculatePage(int pageNo) {
         if (pageNo == mPageNoCalculated) return true;
 
-        mContentWidth = getMeasuredWidth() - mPaddingLeft - mPaddingRight;
-        mContentHeight = (int) ((getMeasuredHeight() - mPaddingTop - mPaddingBottom) * 0.95f);
+        mContentWidth = getMeasuredWidth() - getPaddingLeft() - getPaddingRight();
+        mContentHeight = (int) ((getMeasuredHeight() - getPaddingTop() - getPaddingBottom()) * 0.95f);
 
         if (mContentWidth <= 0 || mContentHeight <= 0) return false;
 
@@ -497,7 +499,7 @@ public class CandidateView extends View {
 
         mCandRects.removeAllElements();
 
-        float xPos = mPaddingLeft;
+        float xPos = getPaddingLeft();
         int yPos = (getMeasuredHeight() -
                 (mFmiCandidates.bottom - mFmiCandidates.top)) / 2
                 - mFmiCandidates.top;
@@ -521,8 +523,8 @@ public class CandidateView extends View {
             float itemTotalWidth = candidateWidth + 2 * candMargin;
 
             if (mActiveCandInPage == i && mEnableActiveHighlight) {
-                mActiveCellRect.set(xPos, mPaddingTop + 1, xPos
-                        + itemTotalWidth, getHeight() - mPaddingBottom - 1);
+                mActiveCellRect.set(xPos, getPaddingTop() + 1, xPos
+                        + itemTotalWidth, getHeight() - getPaddingBottom() - 1);
                 mActiveCellDrawable.setBounds((int) mActiveCellRect.left,
                         (int) mActiveCellRect.top, (int) mActiveCellRect.right,
                         (int) mActiveCellRect.bottom);
@@ -582,9 +584,9 @@ public class CandidateView extends View {
     }
 
     private float drawVerticalSeparator(Canvas canvas, float xPos) {
-        mSeparatorDrawable.setBounds((int) xPos, mPaddingTop, (int) xPos
+        mSeparatorDrawable.setBounds((int) xPos, getPaddingTop(), (int) xPos
                 + mSeparatorDrawable.getIntrinsicWidth(), getMeasuredHeight()
-                - mPaddingBottom);
+                - getPaddingBottom());
         mSeparatorDrawable.draw(canvas);
         return mSeparatorDrawable.getIntrinsicWidth();
     }

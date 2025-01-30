@@ -31,6 +31,8 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
 
+import ee.oyatl.ime.fusion.R;
+
 /**
  * This class is used to separate the input method kernel in an individual
  * service so that both IME and IME-syncer can use it.

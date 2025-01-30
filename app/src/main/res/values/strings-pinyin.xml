@@ -58,4 +58,5 @@
     <string name="setting_others">其它设置</string>
     <string name="setting_others_summary">词典同步等</string>
 
+    <string name="inputMethod">"输入法"</string>
 </resources>

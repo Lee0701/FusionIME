@@ -51,6 +51,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+import ee.oyatl.ime.fusion.R;
+
 /**
  * Main class of the Pinyin input method.
  */
@@ -1206,7 +1208,7 @@ public class PinyinIME extends InputMethodService {
         builder.setIcon(R.drawable.app_icon);
         builder.setNegativeButton(android.R.string.cancel, null);
         CharSequence itemSettings = getString(R.string.ime_settings_activity_name);
-        CharSequence itemInputMethod = getString(com.android.internal.R.string.inputMethod);
+        CharSequence itemInputMethod = getString(R.string.inputMethod);
         builder.setItems(new CharSequence[] {itemSettings, itemInputMethod},
                 new DialogInterface.OnClickListener() {
 
@@ -1217,7 +1219,7 @@ public class PinyinIME extends InputMethodService {
                             launchSettings();
                             break;
                         case 1:
-                            InputMethodManager.getInstance()
+                            ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE))
                                     .showInputMethodPicker();
                             break;
                         }
@@ -1656,10 +1658,7 @@ public class PinyinIME extends InputMethodService {
                 mSurface.delete(0, mSurface.length());
                 mSurfaceDecodedLen = 0;
                 mCursorPos = 0;
-                try {
-                    mIPinyinDecoderService.imResetSearch();
-                } catch (RemoteException e) {
-                }
+                mIPinyinDecoderService.imResetSearch();
             }
             mSurface.insert(mCursorPos, ch);
             mCursorPos++;
@@ -1774,36 +1773,33 @@ public class PinyinIME extends InputMethodService {
             if (mImeState != ImeState.STATE_PREDICT) {
                 resetCandidates();
                 int totalChoicesNum = 0;
-                try {
-                    if (candId < 0) {
-                        if (length() == 0) {
-                            totalChoicesNum = 0;
-                        } else {
-                            if (mPyBuf == null)
-                                mPyBuf = new byte[PY_STRING_MAX];
-                            for (int i = 0; i < length(); i++)
-                                mPyBuf[i] = (byte) charAt(i);
-                            mPyBuf[length()] = 0;
-
-                            if (mPosDelSpl < 0) {
-                                totalChoicesNum = mIPinyinDecoderService
-                                        .imSearch(mPyBuf, length());
-                            } else {
-                                boolean clear_fixed_this_step = true;
-                                if (ImeState.STATE_COMPOSING == mImeState) {
-                                    clear_fixed_this_step = false;
-                                }
-                                totalChoicesNum = mIPinyinDecoderService
-                                        .imDelSearch(mPosDelSpl, mIsPosInSpl,
-                                                clear_fixed_this_step);
-                                mPosDelSpl = -1;
-                            }
-                        }
+                if (candId < 0) {
+                    if (length() == 0) {
+                        totalChoicesNum = 0;
                     } else {
-                        totalChoicesNum = mIPinyinDecoderService
-                                .imChoose(candId);
+                        if (mPyBuf == null)
+                            mPyBuf = new byte[PY_STRING_MAX];
+                        for (int i = 0; i < length(); i++)
+                            mPyBuf[i] = (byte) charAt(i);
+                        mPyBuf[length()] = 0;
+
+                        if (mPosDelSpl < 0) {
+                            totalChoicesNum = mIPinyinDecoderService
+                                    .imSearch(mPyBuf, length());
+                        } else {
+                            boolean clear_fixed_this_step = true;
+                            if (ImeState.STATE_COMPOSING == mImeState) {
+                                clear_fixed_this_step = false;
+                            }
+                            totalChoicesNum = mIPinyinDecoderService
+                                    .imDelSearch(mPosDelSpl, mIsPosInSpl,
+                                            clear_fixed_this_step);
+                            mPosDelSpl = -1;
+                        }
                     }
-                } catch (RemoteException e) {
+                } else {
+                    totalChoicesNum = mIPinyinDecoderService
+                            .imChoose(candId);
                 }
                 updateDecInfoForSearch(totalChoicesNum);
             }
@@ -1866,8 +1862,6 @@ public class PinyinIME extends InputMethodService {
                 } else {
                     mFinishSelection = false;
                 }
-            } catch (RemoteException e) {
-                Log.w(TAG, "PinyinDecoderService died", e);
             } catch (Exception e) {
                 mTotalChoicesNum = 0;
                 mComposingStr = "";
@@ -1916,32 +1910,28 @@ public class PinyinIME extends InputMethodService {
             if (fetchSize > MAX_PAGE_SIZE_DISPLAY) {
                 fetchSize = MAX_PAGE_SIZE_DISPLAY;
             }
-            try {
-                List<String> newList = null;
-                if (ImeState.STATE_INPUT == mImeState ||
-                        ImeState.STATE_IDLE == mImeState ||
-                        ImeState.STATE_COMPOSING == mImeState){
-                    newList = mIPinyinDecoderService.imGetChoiceList(
-                            fetchStart, fetchSize, mFixedLen);
-                } else if (ImeState.STATE_PREDICT == mImeState) {
-                    newList = mIPinyinDecoderService.imGetPredictList(
-                            fetchStart, fetchSize);
-                } else if (ImeState.STATE_APP_COMPLETION == mImeState) {
-                    newList = new ArrayList<String>();
-                    if (null != mAppCompletions) {
-                        for (int pos = fetchStart; pos < fetchSize; pos++) {
-                            CompletionInfo ci = mAppCompletions[pos];
-                            if (null != ci) {
-                                CharSequence s = ci.getText();
-                                if (null != s) newList.add(s.toString());
-                            }
+            List<String> newList = null;
+            if (ImeState.STATE_INPUT == mImeState ||
+                    ImeState.STATE_IDLE == mImeState ||
+                    ImeState.STATE_COMPOSING == mImeState){
+                newList = mIPinyinDecoderService.imGetChoiceList(
+                        fetchStart, fetchSize, mFixedLen);
+            } else if (ImeState.STATE_PREDICT == mImeState) {
+                newList = mIPinyinDecoderService.imGetPredictList(
+                        fetchStart, fetchSize);
+            } else if (ImeState.STATE_APP_COMPLETION == mImeState) {
+                newList = new ArrayList<String>();
+                if (null != mAppCompletions) {
+                    for (int pos = fetchStart; pos < fetchSize; pos++) {
+                        CompletionInfo ci = mAppCompletions[pos];
+                        if (null != ci) {
+                            CharSequence s = ci.getText();
+                            if (null != s) newList.add(s.toString());
                         }
                     }
                 }
-                mCandidatesList.addAll(newList);
-            } catch (RemoteException e) {
-                Log.w(TAG, "PinyinDecoderService died", e);
             }
+            mCandidatesList.addAll(newList);
         }
 
         public boolean pageReady(int pageNo) {
@@ -1997,12 +1987,8 @@ public class PinyinIME extends InputMethodService {
                 String preEdit = history.toString();
                 int predictNum = 0;
                 if (null != preEdit) {
-                    try {
-                        mTotalChoicesNum = mIPinyinDecoderService
-                                .imGetPredictsNum(preEdit);
-                    } catch (RemoteException e) {
-                        return;
-                    }
+                    mTotalChoicesNum = mIPinyinDecoderService
+                            .imGetPredictsNum(preEdit);
                 }
             }
 
