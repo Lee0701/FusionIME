@@ -42,10 +42,6 @@ class RichInputMethodSubtype(subtype: InputMethodSubtype) {
 
     val locale: Locale = sLocaleMap[originalLocale] ?: originalLocale
 
-    private val languageTag =
-        if(Build.VERSION.SDK_INT >= VERSION_CODES.N) rawSubtype.languageTag
-        else rawSubtype.locale
-
     // Extra values are determined by the primary subtype. This is probably right, but
     // we may have to revisit this later.
     fun getExtraValueOf(key: String): String {
@@ -67,14 +63,14 @@ class RichInputMethodSubtype(subtype: InputMethodSubtype) {
         // InputMethodSubtype's display name for spacebar text in its locale.
         get() {
             if (isNoLanguage) return SubtypeLocaleUtils.getKeyboardLayoutSetDisplayName(rawSubtype)
-            return SubtypeLocaleUtils.getSubtypeLocaleDisplayName(languageTag)
+            return SubtypeLocaleUtils.getSubtypeLocaleDisplayName(rawSubtype.locale)
         }
 
     val middleDisplayName: String
         // Get the RichInputMethodSubtype's middle display name in its locale.
         get() {
             if (isNoLanguage) return SubtypeLocaleUtils.getKeyboardLayoutSetDisplayName(rawSubtype)
-            return SubtypeLocaleUtils.getSubtypeLanguageDisplayName(languageTag)
+            return SubtypeLocaleUtils.getSubtypeLanguageDisplayName(rawSubtype.locale)
         }
 
     override fun equals(other: Any?): Boolean {
