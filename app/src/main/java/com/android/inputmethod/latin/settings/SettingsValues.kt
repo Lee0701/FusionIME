@@ -158,7 +158,7 @@ class SettingsValues(
             if (!mShowsLanguageSwitchKey) {
                 return false
             }
-            val imm: RichInputMethodManager = RichInputMethodManager.instance
+            val imm: RichInputMethodManager = RichInputMethodManager
             if (mIncludesOtherImesInLanguageSwitchList) {
                 return imm.hasMultipleEnabledIMEsOrSubtypes(false /* include aux subtypes */)
             }

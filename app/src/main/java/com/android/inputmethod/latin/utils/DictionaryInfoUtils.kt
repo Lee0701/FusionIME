@@ -549,7 +549,7 @@ object DictionaryInfoUtils {
         // overwrite the real records.
         RichInputMethodManager.init(context)
         val enabledSubtypes: List<InputMethodSubtype> =
-            RichInputMethodManager.instance.getMyEnabledInputMethodSubtypeList(true)
+            RichInputMethodManager.getMyEnabledInputMethodSubtypeList(true)
         for (subtype in enabledSubtypes) {
             val locale = LocaleUtils.constructLocaleFromString(subtype.locale)
             val dictionaryInfo = createDictionaryInfoFromLocale(locale)

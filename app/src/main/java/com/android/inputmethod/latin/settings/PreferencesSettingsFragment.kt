@@ -68,7 +68,7 @@ class PreferencesSettingsFragment : SubScreenFragment() {
         super.onResume()
         val voiceInputKeyOption = findPreference(Settings.PREF_VOICE_INPUT_KEY)
         if (voiceInputKeyOption != null) {
-            RichInputMethodManager.instance.refreshSubtypeCaches()
+            RichInputMethodManager.refreshSubtypeCaches()
             voiceInputKeyOption.isEnabled = VOICE_IME_ENABLED
             voiceInputKeyOption.summary =
                 if (VOICE_IME_ENABLED)

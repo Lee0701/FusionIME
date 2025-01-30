@@ -238,7 +238,7 @@ class CustomInputStylePreference(
             setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
             val items = TreeSet<SubtypeLocaleItem>()
-            val imi: InputMethodInfo = RichInputMethodManager.instance
+            val imi: InputMethodInfo = RichInputMethodManager
                 .inputMethodInfoOfThisIme
             val count = imi.subtypeCount
             for (i in 0 until count) {

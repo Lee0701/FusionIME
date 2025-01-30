@@ -68,7 +68,7 @@ class SystemBroadcastReceiver : BroadcastReceiver() {
             // Need to restore additional subtypes because system always clears additional
             // subtypes when the package is replaced.
             RichInputMethodManager.init(context)
-            val richImm: RichInputMethodManager = RichInputMethodManager.instance
+            val richImm: RichInputMethodManager = RichInputMethodManager
             val additionalSubtypes: Array<InputMethodSubtype> = richImm.additionalSubtypes
             richImm.setAdditionalInputMethodSubtypes(additionalSubtypes)
             toggleAppIcon(context)

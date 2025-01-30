@@ -592,7 +592,7 @@ class LatinIME : InputMethodService(), KeyboardActionListener, SuggestionStripVi
         Settings.init(this)
         DebugFlags.init(PreferenceManager.getDefaultSharedPreferences(this))
         RichInputMethodManager.init(this)
-        mRichImm = RichInputMethodManager.instance
+        mRichImm = RichInputMethodManager
         AudioAndHapticFeedbackManager.init(this)
         AccessibilityUtils.init(this)
         mStatsUtilsManager?.onCreate(this,  /* context */mDictionaryFacilitator)

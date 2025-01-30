@@ -162,7 +162,7 @@ class RichInputMethodSubtype(subtype: InputMethodSubtype) {
                 var noLanguageSubtype = sNoLanguageSubtype
                 if (noLanguageSubtype == null) {
                     val rawNoLanguageSubtype: InputMethodSubtype? =
-                        RichInputMethodManager.instance
+                        RichInputMethodManager
                             .findSubtypeByLocaleAndKeyboardLayoutSet(
                                 SubtypeLocaleUtils.NO_LANGUAGE, SubtypeLocaleUtils.QWERTY
                             )
@@ -191,7 +191,7 @@ class RichInputMethodSubtype(subtype: InputMethodSubtype) {
                     sEmojiSubtype
                 if (emojiSubtype == null) {
                     val rawEmojiSubtype: InputMethodSubtype? =
-                        RichInputMethodManager.instance
+                        RichInputMethodManager
                             .findSubtypeByLocaleAndKeyboardLayoutSet(
                                 SubtypeLocaleUtils.NO_LANGUAGE, SubtypeLocaleUtils.EMOJI
                             )

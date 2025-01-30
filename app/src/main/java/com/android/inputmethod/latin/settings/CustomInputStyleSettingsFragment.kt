@@ -60,7 +60,7 @@ class CustomInputStyleSettingsFragment : PreferenceFragment(), CustomInputStyleP
 
         mPrefs = preferenceManager.sharedPreferences
         RichInputMethodManager.init(activity)
-        mRichImm = RichInputMethodManager.instance
+        mRichImm = RichInputMethodManager
         addPreferencesFromResource(R.xml.additional_subtype_settings)
         setHasOptionsMenu(true)
     }

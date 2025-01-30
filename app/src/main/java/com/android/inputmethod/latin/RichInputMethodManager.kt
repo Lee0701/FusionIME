@@ -15,6 +15,7 @@
  */
 package com.android.inputmethod.latin
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.inputmethodservice.InputMethodService
@@ -41,60 +42,50 @@ import java.util.Locale
  * Enrichment class for InputMethodManager to simplify interaction and add functionality.
  */
 // non final for easy mocking.
-class RichInputMethodManager private constructor() {
-    private var mContext: Context? = null
-    private var mImmWrapper: InputMethodManagerCompatWrapper? = null
-    private var mInputMethodInfoCache: InputMethodInfoCache? = null
-    private var mCurrentRichInputMethodSubtype: RichInputMethodSubtype? = null
-    private var mShortcutInputMethodInfo: InputMethodInfo? = null
-    private var mShortcutSubtype: InputMethodSubtype? = null
+@SuppressLint("StaticFieldLeak")
+object RichInputMethodManager {
+    private lateinit var context: Context
+    private lateinit var immWrapper: InputMethodManagerCompatWrapper
+    private lateinit var inputMethodInfoCache: InputMethodInfoCache
+    private lateinit var currentRichInputMethodSubtype: RichInputMethodSubtype
+    private var shortcutInputMethodInfo: InputMethodInfo? = null
+    private var shortcutSubtype: InputMethodSubtype? = null
 
-    private val isInitialized: Boolean
-        get() {
-            return mImmWrapper != null
-        }
+    private var isInitialized = false
 
-    private fun checkInitialized() {
-        if (!isInitialized) {
-            throw RuntimeException("$TAG is used before initialization")
-        }
-    }
+    val inputMethodManager: InputMethodManager get() = immWrapper.mImm
 
     private fun initInternal(context: Context) {
         if (isInitialized) {
             return
         }
-        mImmWrapper = InputMethodManagerCompatWrapper(context)
-        mContext = context
-        mInputMethodInfoCache = InputMethodInfoCache(
-            mImmWrapper!!.mImm, context.getPackageName()
+        immWrapper = InputMethodManagerCompatWrapper(context)
+        this.context = context
+        inputMethodInfoCache = InputMethodInfoCache(
+            immWrapper.mImm, context.packageName
         )
 
         // Initialize additional subtypes.
         SubtypeLocaleUtils.init(context)
         val additionalSubtypes: Array<InputMethodSubtype> = additionalSubtypes
-        mImmWrapper!!.mImm.setAdditionalInputMethodSubtypes(
+        immWrapper.mImm.setAdditionalInputMethodSubtypes(
             inputMethodIdOfThisIme, additionalSubtypes
         )
 
         // Initialize the current input method subtype and the shortcut IME.
         refreshSubtypeCaches()
+
+        isInitialized = true
     }
 
     val additionalSubtypes: Array<InputMethodSubtype>
         get() {
-            val prefs: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext)
+            val prefs: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
             val prefAdditionalSubtypes: String =
                 Settings.readPrefAdditionalSubtypes(
-                    prefs, mContext!!.resources
+                    prefs, context.resources
                 )
             return AdditionalSubtypeUtils.createAdditionalSubtypesArray(prefAdditionalSubtypes)
-        }
-
-    val inputMethodManager: InputMethodManager
-        get() {
-            checkInitialized()
-            return mImmWrapper!!.mImm
         }
 
     fun getMyEnabledInputMethodSubtypeList(
@@ -106,7 +97,7 @@ class RichInputMethodManager private constructor() {
     }
 
     fun switchToNextInputMethod(token: IBinder, onlyCurrentIme: Boolean): Boolean {
-        if (mImmWrapper!!.switchToNextInputMethod(token, onlyCurrentIme)) {
+        if (immWrapper.switchToNextInputMethod(token, onlyCurrentIme)) {
             return true
         }
         // Was not able to call {@link InputMethodManager#switchToNextInputMethodIBinder,boolean)}
@@ -121,7 +112,7 @@ class RichInputMethodManager private constructor() {
         token: IBinder,
         onlyCurrentIme: Boolean
     ): Boolean {
-        val imm = mImmWrapper!!.mImm
+        val imm = immWrapper.mImm
         val currentSubtype: InputMethodSubtype? = imm.currentInputMethodSubtype
         val enabledSubtypes: List<InputMethodSubtype> = getMyEnabledInputMethodSubtypeList(
             true /* allowsImplicitlySelectedSubtypes */
@@ -146,7 +137,7 @@ class RichInputMethodManager private constructor() {
     }
 
     private fun switchToNextInputMethodAndSubtype(token: IBinder): Boolean {
-        val imm = mImmWrapper!!.mImm
+        val imm = immWrapper.mImm
         val enabledImis: List<InputMethodInfo> = imm.enabledInputMethodList
         val currentIndex: Int = getImiIndexInList(
             inputMethodInfoOfThisIme, enabledImis
@@ -173,8 +164,8 @@ class RichInputMethodManager private constructor() {
         return true
     }
 
-    private class InputMethodInfoCache(imm: InputMethodManager?, imePackageName: String) {
-        private val mImm: InputMethodManager? = imm
+    private class InputMethodInfoCache(imm: InputMethodManager, imePackageName: String) {
+        private val mImm: InputMethodManager = imm
         private val mImePackageName: String = imePackageName
 
         private var mCachedThisImeInfo: InputMethodInfo? = null
@@ -188,13 +179,13 @@ class RichInputMethodManager private constructor() {
         val inputMethodOfThisIme: InputMethodInfo
             get() {
                 mCachedThisImeInfo?.let { return it }
-                for (imi: InputMethodInfo in mImm!!.getInputMethodList()) {
+                for (imi: InputMethodInfo in mImm.getInputMethodList()) {
                     if (imi.packageName == mImePackageName) {
                         mCachedThisImeInfo = imi
                         return imi
                     }
                 }
-                throw RuntimeException("Input method id for " + mImePackageName + " not found.")
+                throw RuntimeException("Input method id for $mImePackageName not found.")
             }
 
         @Synchronized
@@ -210,7 +201,7 @@ class RichInputMethodManager private constructor() {
             if (cachedList != null) {
                 return cachedList
             }
-            val result: List<InputMethodSubtype> = mImm!!.getEnabledInputMethodSubtypeList(
+            val result: List<InputMethodSubtype> = mImm.getEnabledInputMethodSubtypeList(
                 imi, allowsImplicitlySelectedSubtypes
             )
             cache.put(imi, result)
@@ -227,7 +218,7 @@ class RichInputMethodManager private constructor() {
 
     val inputMethodInfoOfThisIme: InputMethodInfo
         get() {
-            return mInputMethodInfoCache?.inputMethodOfThisIme!!
+            return inputMethodInfoCache.inputMethodOfThisIme
         }
 
     val inputMethodIdOfThisIme: String
@@ -260,24 +251,24 @@ class RichInputMethodManager private constructor() {
         updateCurrentSubtype(newSubtype)
         updateShortcutIme()
         if (DEBUG) {
-            Log.w(TAG, "onSubtypeChanged: " + mCurrentRichInputMethodSubtype?.nameForLogging)
+            Log.w(TAG, "onSubtypeChanged: " + currentRichInputMethodSubtype.nameForLogging)
         }
     }
 
-    val currentSubtypeLocale: Locale?
-        get() = sForcedSubtypeForTesting?.locale ?: currentSubtype?.locale
+    val currentSubtypeLocale: Locale
+        get() = sForcedSubtypeForTesting?.locale ?: currentSubtype.locale
 
-    val currentSubtype: RichInputMethodSubtype?
-        get() = sForcedSubtypeForTesting ?: mCurrentRichInputMethodSubtype
+    val currentSubtype: RichInputMethodSubtype
+        get() = sForcedSubtypeForTesting ?: currentRichInputMethodSubtype
 
 
     val combiningRulesExtraValueOfCurrentSubtype: String
         get() {
-            return SubtypeLocaleUtils.getCombiningRulesExtraValue(currentSubtype?.rawSubtype!!)
+            return SubtypeLocaleUtils.getCombiningRulesExtraValue(currentSubtype.rawSubtype)
         }
 
     fun hasMultipleEnabledIMEsOrSubtypes(shouldIncludeAuxiliarySubtypes: Boolean): Boolean {
-        val enabledImis: List<InputMethodInfo> = mImmWrapper!!.mImm.getEnabledInputMethodList()
+        val enabledImis: List<InputMethodInfo> = immWrapper.mImm.getEnabledInputMethodList()
         return hasMultipleEnabledSubtypes(shouldIncludeAuxiliarySubtypes, enabledImis)
     }
 
@@ -400,13 +391,13 @@ class RichInputMethodManager private constructor() {
     }
 
     fun setInputMethodAndSubtype(token: IBinder, subtype: InputMethodSubtype?) {
-        mImmWrapper?.mImm?.setInputMethodAndSubtype(
+        immWrapper.mImm.setInputMethodAndSubtype(
             token, inputMethodIdOfThisIme, subtype
         )
     }
 
     fun setAdditionalInputMethodSubtypes(subtypes: Array<InputMethodSubtype>) {
-        mImmWrapper?.mImm?.setAdditionalInputMethodSubtypes(
+        immWrapper.mImm.setAdditionalInputMethodSubtypes(
             inputMethodIdOfThisIme, subtypes
         )
         // Clear the cache so that we go read the {@link InputMethodInfo} of this IME and list of
@@ -418,14 +409,14 @@ class RichInputMethodManager private constructor() {
         imi: InputMethodInfo,
         allowsImplicitlySelectedSubtypes: Boolean
     ): List<InputMethodSubtype> {
-        return mInputMethodInfoCache?.getEnabledInputMethodSubtypeList(
+        return inputMethodInfoCache.getEnabledInputMethodSubtypeList(
             imi, allowsImplicitlySelectedSubtypes
         ).orEmpty()
     }
 
     fun refreshSubtypeCaches() {
-        mInputMethodInfoCache!!.clear()
-        updateCurrentSubtype(mImmWrapper?.mImm?.currentInputMethodSubtype)
+        inputMethodInfoCache.clear()
+        updateCurrentSubtype(immWrapper.mImm.currentInputMethodSubtype)
         updateShortcutIme()
     }
 
@@ -439,15 +430,15 @@ class RichInputMethodManager private constructor() {
         if (Build.VERSION.SDK_INT <= VERSION_CODES.KITKAT) {
             return defaultValue
         }
-        return mImmWrapper?.shouldOfferSwitchingToNextInputMethod(binder) == true
+        return immWrapper.shouldOfferSwitchingToNextInputMethod(binder)
     }
 
     val isSystemLocaleSameAsLocaleOfAllEnabledSubtypesOfEnabledImes: Boolean
         get() {
-            val systemLocale: Locale = mContext!!.resources.configuration.locale
+            val systemLocale: Locale = context.resources.configuration.locale
             val enabledSubtypesOfEnabledImes: MutableSet<InputMethodSubtype> =
                 HashSet()
-            val inputMethodManager = inputMethodManager
+            val inputMethodManager = immWrapper.mImm
             val enabledInputMethodInfoList: List<InputMethodInfo> =
                 inputMethodManager.enabledInputMethodList
             for (info: InputMethodInfo? in enabledInputMethodInfoList) {
@@ -472,25 +463,28 @@ class RichInputMethodManager private constructor() {
         }
 
     private fun updateCurrentSubtype(subtype: InputMethodSubtype?) {
-        mCurrentRichInputMethodSubtype =
+        currentRichInputMethodSubtype =
             RichInputMethodSubtype.getRichInputMethodSubtype(subtype)
     }
 
     private fun updateShortcutIme() {
+        val shortcutSubtype = shortcutSubtype
+        val shortcutInputMethodInfo = this.shortcutInputMethodInfo
+
         if (DEBUG) {
-            val id = if (mShortcutInputMethodInfo == null) "<null>" else mShortcutInputMethodInfo?.id
-            val locale = if (mShortcutSubtype == null) "<null>" else (mShortcutSubtype!!.locale + ", " + mShortcutSubtype!!.mode)
+            val id = if (shortcutInputMethodInfo == null) "<null>" else shortcutInputMethodInfo.id
+            val locale = if (shortcutSubtype == null) "<null>" else (shortcutSubtype.locale + ", " + shortcutSubtype.mode)
             Log.d(
                 TAG, "Update shortcut IME from : $id, $locale"
             )
         }
-        val richSubtype = mCurrentRichInputMethodSubtype
+        val richSubtype = currentRichInputMethodSubtype
         val implicitlyEnabledSubtype = checkIfSubtypeBelongsToThisImeAndImplicitlyEnabled(
-            richSubtype?.rawSubtype
+            richSubtype.rawSubtype
         )
-        val systemLocale: Locale = mContext!!.resources.configuration.locale
+        val systemLocale: Locale = context.resources.configuration.locale
         LanguageOnSpacebarUtils.onSubtypeChanged(
-            richSubtype!!, implicitlyEnabledSubtype, systemLocale
+            richSubtype, implicitlyEnabledSubtype, systemLocale
         )
         LanguageOnSpacebarUtils.setEnabledSubtypes(
             getMyEnabledInputMethodSubtypeList(
@@ -500,50 +494,47 @@ class RichInputMethodManager private constructor() {
 
         // TODO: Update an icon for shortcut IME
         val shortcuts: Map<InputMethodInfo, List<InputMethodSubtype>> =
-            inputMethodManager.getShortcutInputMethodsAndSubtypes()
-        mShortcutInputMethodInfo = null
-        mShortcutSubtype = null
+            immWrapper.mImm.getShortcutInputMethodsAndSubtypes()
+        this.shortcutInputMethodInfo = null
+        this.shortcutSubtype = null
         for (imi: InputMethodInfo in shortcuts.keys) {
             val subtypes: List<InputMethodSubtype>? = shortcuts[imi]
             // TODO: Returns the first found IMI for now. Should handle all shortcuts as
             // appropriate.
-            mShortcutInputMethodInfo = imi
+            this.shortcutInputMethodInfo = imi
             // TODO: Pick up the first found subtype for now. Should handle all subtypes
             // as appropriate.
-            mShortcutSubtype = if (subtypes!!.isNotEmpty()) subtypes[0] else null
+            this.shortcutSubtype = if (subtypes?.isNotEmpty() == true) subtypes[0] else null
             break
         }
         if (DEBUG) {
-            val shortcutInputMethodInfo = this.mShortcutInputMethodInfo
             Log.d(
                 TAG, ("Update shortcut IME to : "
                         + (if (shortcutInputMethodInfo == null)
                     "<null>"
                 else
                     shortcutInputMethodInfo.id) + ", "
-                        + (if (mShortcutSubtype == null) "<null>" else (mShortcutSubtype?.locale + ", " + mShortcutSubtype?.mode)))
+                        + (if (shortcutSubtype == null) "<null>" else (shortcutSubtype.locale + ", " + shortcutSubtype.mode)))
             )
         }
     }
 
     fun switchToShortcutIme(context: InputMethodService) {
-        if (mShortcutInputMethodInfo == null) {
-            return
-        }
+        val shortcutInputMethodInfo = this.shortcutInputMethodInfo ?: return
 
-        val imiId: String = mShortcutInputMethodInfo!!.id
-        switchToTargetIME(imiId, mShortcutSubtype, context)
+        val imiId: String = shortcutInputMethodInfo.id
+        switchToTargetIME(imiId, shortcutSubtype, context)
     }
 
     private fun switchToTargetIME(
         imiId: String, subtype: InputMethodSubtype?,
         context: InputMethodService
     ) {
-        val token: IBinder = context.window.window!!.attributes.token ?: return
-        val imm = inputMethodManager
+        val token: IBinder = context.window.window?.attributes?.token ?: return
+        val imm = immWrapper.mImm
         object : AsyncTask<Void?, Void?, Void?>() {
             override fun doInBackground(vararg params: Void?): Void? {
-                imm!!.setInputMethodAndSubtype(token, imiId, subtype)
+                imm.setInputMethodAndSubtype(token, imiId, subtype)
                 return null
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
@@ -551,104 +542,94 @@ class RichInputMethodManager private constructor() {
 
     val isShortcutImeReady: Boolean
         get() {
-            if (mShortcutInputMethodInfo == null) {
+            if (shortcutInputMethodInfo == null) {
                 return false
             }
-            if (mShortcutSubtype == null) {
+            if (shortcutSubtype == null) {
                 return true
             }
             return true
         }
 
-    companion object {
-        private val TAG: String = RichInputMethodManager::class.java.getSimpleName()
-        private const val DEBUG: Boolean = false
+    private val TAG: String = RichInputMethodManager::class.java.getSimpleName()
+    private const val DEBUG: Boolean = false
 
-        private val sInstance: RichInputMethodManager = RichInputMethodManager()
+    private const val INDEX_NOT_FOUND: Int = -1
 
-        private val INDEX_NOT_FOUND: Int = -1
+    fun init(context: Context) {
+        initInternal(context)
+    }
 
-        val instance: RichInputMethodManager
-            get() {
-                sInstance.checkInitialized()
-                return sInstance
+    private fun getImiIndexInList(
+        inputMethodInfo: InputMethodInfo,
+        imiList: List<InputMethodInfo>
+    ): Int {
+        val count: Int = imiList.size
+        for (index in 0 until count) {
+            val imi: InputMethodInfo = imiList.get(index)
+            if (imi == inputMethodInfo) {
+                return index
             }
-
-        fun init(context: Context) {
-            sInstance.initInternal(context)
         }
+        return INDEX_NOT_FOUND
+    }
 
-        private fun getImiIndexInList(
-            inputMethodInfo: InputMethodInfo,
-            imiList: List<InputMethodInfo>
-        ): Int {
-            val count: Int = imiList.size
-            for (index in 0 until count) {
-                val imi: InputMethodInfo = imiList.get(index)
-                if (imi == inputMethodInfo) {
-                    return index
-                }
+    // This method mimics {@link InputMethodManager#switchToNextInputMethod(IBinder,boolean)}.
+    private fun getNextNonAuxiliaryIme(
+        currentIndex: Int,
+        imiList: List<InputMethodInfo>
+    ): InputMethodInfo {
+        val count: Int = imiList.size
+        for (i in 1 until count) {
+            val nextIndex: Int = (currentIndex + i) % count
+            val nextImi: InputMethodInfo = imiList.get(nextIndex)
+            if (!isAuxiliaryIme(nextImi)) {
+                return nextImi
             }
-            return INDEX_NOT_FOUND
         }
+        return imiList.get(currentIndex)
+    }
 
-        // This method mimics {@link InputMethodManager#switchToNextInputMethod(IBinder,boolean)}.
-        private fun getNextNonAuxiliaryIme(
-            currentIndex: Int,
-            imiList: List<InputMethodInfo>
-        ): InputMethodInfo {
-            val count: Int = imiList.size
-            for (i in 1 until count) {
-                val nextIndex: Int = (currentIndex + i) % count
-                val nextImi: InputMethodInfo = imiList.get(nextIndex)
-                if (!isAuxiliaryIme(nextImi)) {
-                    return nextImi
-                }
-            }
-            return imiList.get(currentIndex)
+    // Copied from {@link InputMethodInfo}. See how auxiliary of IME is determined.
+    private fun isAuxiliaryIme(imi: InputMethodInfo): Boolean {
+        val count: Int = imi.getSubtypeCount()
+        if (count == 0) {
+            return false
         }
-
-        // Copied from {@link InputMethodInfo}. See how auxiliary of IME is determined.
-        private fun isAuxiliaryIme(imi: InputMethodInfo): Boolean {
-            val count: Int = imi.getSubtypeCount()
-            if (count == 0) {
+        for (index in 0 until count) {
+            val subtype: InputMethodSubtype = imi.getSubtypeAt(index)
+            if (!subtype.isAuxiliary()) {
                 return false
             }
-            for (index in 0 until count) {
-                val subtype: InputMethodSubtype = imi.getSubtypeAt(index)
-                if (!subtype.isAuxiliary()) {
-                    return false
-                }
+        }
+        return true
+    }
+
+    private fun checkIfSubtypeBelongsToList(
+        subtype: InputMethodSubtype?,
+        subtypes: List<InputMethodSubtype>
+    ): Boolean {
+        return getSubtypeIndexInList(subtype, subtypes) != INDEX_NOT_FOUND
+    }
+
+    private fun getSubtypeIndexInList(
+        subtype: InputMethodSubtype?,
+        subtypes: List<InputMethodSubtype>
+    ): Int {
+        val count: Int = subtypes.size
+        for (index in 0 until count) {
+            val ims: InputMethodSubtype = subtypes.get(index)
+            if (ims == subtype) {
+                return index
             }
-            return true
         }
+        return INDEX_NOT_FOUND
+    }
 
-        private fun checkIfSubtypeBelongsToList(
-            subtype: InputMethodSubtype?,
-            subtypes: List<InputMethodSubtype>
-        ): Boolean {
-            return getSubtypeIndexInList(subtype, subtypes) != INDEX_NOT_FOUND
-        }
+    private var sForcedSubtypeForTesting: RichInputMethodSubtype? = null
 
-        private fun getSubtypeIndexInList(
-            subtype: InputMethodSubtype?,
-            subtypes: List<InputMethodSubtype>
-        ): Int {
-            val count: Int = subtypes.size
-            for (index in 0 until count) {
-                val ims: InputMethodSubtype = subtypes.get(index)
-                if (ims == subtype) {
-                    return index
-                }
-            }
-            return INDEX_NOT_FOUND
-        }
-
-        private var sForcedSubtypeForTesting: RichInputMethodSubtype? = null
-
-        @UsedForTesting
-        fun forceSubtype(subtype: InputMethodSubtype) {
-            sForcedSubtypeForTesting = RichInputMethodSubtype.getRichInputMethodSubtype(subtype)
-        }
+    @UsedForTesting
+    fun forceSubtype(subtype: InputMethodSubtype) {
+        sForcedSubtypeForTesting = RichInputMethodSubtype.getRichInputMethodSubtype(subtype)
     }
 }

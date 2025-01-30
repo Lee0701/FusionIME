@@ -344,7 +344,7 @@ ${DebugLogUtils.getStackTrace(e)}""")
         return keyboardLayoutSet
     }
 
-    fun getCombiningRulesExtraValue(subtype: InputMethodSubtype): String {
-        return subtype.getExtraValueOf(ExtraValue.COMBINING_RULES) ?: ""
+    fun getCombiningRulesExtraValue(subtype: InputMethodSubtype?): String {
+        return subtype?.getExtraValueOf(ExtraValue.COMBINING_RULES) ?: ""
     }
 }
