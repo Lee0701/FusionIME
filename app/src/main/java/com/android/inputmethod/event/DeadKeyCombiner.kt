@@ -215,7 +215,7 @@ class DeadKeyCombiner : Combiner {
     // TODO: make this a list of events instead
     val mDeadSequence: StringBuilder = StringBuilder()
 
-    override fun processEvent(previousEvents: ArrayList<Event?>?, event: Event): Event {
+    override fun processEvent(previousEvents: MutableList<Event>, event: Event): Event {
         if (TextUtils.isEmpty(mDeadSequence)) {
             // No dead char is currently being tracked: this is the most common case.
             if (event.isDead) {

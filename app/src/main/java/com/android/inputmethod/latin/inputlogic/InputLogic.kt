@@ -123,7 +123,7 @@ class InputLogic(
         mEnteredText = null
         mWordBeingCorrectedByCursor = null
         mConnection.onStartInput()
-        if (!mWordComposer.typedWord.isEmpty()) {
+        if (mWordComposer.typedWord.isNotEmpty()) {
             // For messaging apps that offer send button, the IME does not get the opportunity
             // to capture the last word. This block should capture those uncommitted words.
             // The timestamp at which it is captured is not accurate but close enough.
@@ -150,8 +150,8 @@ class InputLogic(
 
         if (settingsValues.mShouldShowLxxSuggestionUi) {
             mConnection.requestCursorUpdates(
-                true,  /* enableMonitor */
-                true /* requestImmediateCallback */
+                enableMonitor = true,
+                requestImmediateCallback = true
             )
         }
     }

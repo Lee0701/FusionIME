@@ -31,7 +31,7 @@ interface Combiner {
      * @param event the event to combine with the existing state.
      * @return the resulting event.
      */
-    fun processEvent(previousEvents: ArrayList<Event?>?, event: Event): Event
+    fun processEvent(previousEvents: MutableList<Event>, event: Event): Event
 
     /**
      * Get the feedback that should be shown to the user for the current state of this combiner.

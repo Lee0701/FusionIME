@@ -33,12 +33,11 @@ import com.android.inputmethod.latin.common.Constants
  */
 class CombinerChain(initialText: String) {
     // The already combined text, as described above
-    private val mCombinedText: StringBuilder
+    private val combinedText: StringBuilder
 
     // The feedback on the composing state, as described above
-    private val mStateFeedback: SpannableStringBuilder
-    private val mCombiners =
-        ArrayList<Combiner>()
+    private val stateFeedback: SpannableStringBuilder
+    private val combiners: MutableList<Combiner> = mutableListOf()
 
     /**
      * Create an combiner chain.
@@ -52,24 +51,20 @@ class CombinerChain(initialText: String) {
      */
     init {
         // The dead key combiner is always active, and always first
-        mCombiners.add(DeadKeyCombiner())
-        mCombinedText = StringBuilder(initialText)
-        mStateFeedback = SpannableStringBuilder()
+        combiners += DeadKeyCombiner()
+        combinedText = StringBuilder(initialText)
+        stateFeedback = SpannableStringBuilder()
     }
 
     fun reset() {
-        mCombinedText.setLength(0)
-        mStateFeedback.clear()
-        for (c in mCombiners) {
-            c.reset()
-        }
+        combinedText.setLength(0)
+        stateFeedback.clear()
+        combiners.forEach { it.reset() }
     }
 
     private fun updateStateFeedback() {
-        mStateFeedback.clear()
-        for (i in mCombiners.indices.reversed()) {
-            mStateFeedback.append(mCombiners[i].combiningStateFeedback)
-        }
+        stateFeedback.clear()
+        combiners.forEach { stateFeedback.append(it.combiningStateFeedback) }
     }
 
     /**
@@ -80,12 +75,12 @@ class CombinerChain(initialText: String) {
      * new event. However it may never be null.
      */
     fun processEvent(
-        previousEvents: ArrayList<Event>,
+        previousEvents: List<Event>,
         newEvent: Event
     ): Event {
-        val modifiablePreviousEvents = ArrayList(previousEvents)
+        val modifiablePreviousEvents = previousEvents.toMutableList()
         var event = newEvent
-        for (combiner in mCombiners) {
+        for (combiner in combiners) {
             // A combiner can never return more than one event; it can return several
             // code points, but they should be encapsulated within one event.
             event = combiner.processEvent(modifiablePreviousEvents, event)
@@ -103,20 +98,17 @@ class CombinerChain(initialText: String) {
      * Apply a processed event.
      * @param event the event to be applied
      */
-    fun applyProcessedEvent(event: Event?) {
-        if (null != event) {
-            // TODO: figure out the generic way of doing this
-            if (Constants.CODE_DELETE == event.mKeyCode) {
-                val length = mCombinedText.length
-                if (length > 0) {
-                    val lastCodePoint = mCombinedText.codePointBefore(length)
-                    mCombinedText.delete(length - Character.charCount(lastCodePoint), length)
-                }
-            } else {
-                val textToCommit = event.textToCommit
-                if (!TextUtils.isEmpty(textToCommit)) {
-                    mCombinedText.append(textToCommit)
-                }
+    fun applyProcessedEvent(event: Event) {
+        if (Constants.CODE_DELETE == event.mKeyCode) {
+            val length = combinedText.length
+            if (length > 0) {
+                val lastCodePoint = combinedText.codePointBefore(length)
+                combinedText.delete(length - Character.charCount(lastCodePoint), length)
+            }
+        } else {
+            val textToCommit = event.textToCommit
+            if (!TextUtils.isEmpty(textToCommit)) {
+                combinedText.append(textToCommit)
             }
         }
         updateStateFeedback()
@@ -128,7 +120,7 @@ class CombinerChain(initialText: String) {
          * styling spans.
          */
         get() {
-            val s = SpannableStringBuilder(mCombinedText)
-            return s.append(mStateFeedback)
+            val s = SpannableStringBuilder(combinedText)
+            return s.append(stateFeedback)
         }
 }
