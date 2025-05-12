@@ -66,7 +66,7 @@ public class ClientSidePreference {
     // ID for usage stats.
     private final int id;
 
-    private KeyboardLayout(int id) {
+    KeyboardLayout(int id) {
       this.id = id;
     }
 

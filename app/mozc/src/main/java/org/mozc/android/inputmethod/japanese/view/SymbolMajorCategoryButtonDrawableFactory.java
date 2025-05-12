@@ -275,11 +275,11 @@ public class SymbolMajorCategoryButtonDrawableFactory {
         new ButtonDrawable(pathFactory,
                            skin.symbolMajorButtonSelectedTopColor,
                            skin.symbolMajorButtonSelectedBottomColor, 0),
-        Optional.<Drawable>of(BackgroundDrawableFactory.createPressableDrawable(
+        Optional.of(BackgroundDrawableFactory.createPressableDrawable(
             new ButtonDrawable(pathFactory,
                                skin.symbolMajorButtonPressedTopColor,
                                skin.symbolMajorButtonPressedBottomColor, 0),
-            Optional.<Drawable>of(new ButtonDrawable(pathFactory,
+            Optional.of(new ButtonDrawable(pathFactory,
                                                      skin.symbolMajorButtonTopColor,
                                                      skin.symbolMajorButtonBottomColor,
                                                      skin.symbolMajorButtonShadowColor)))));

@@ -49,7 +49,7 @@ public class HardwareKeyboard {
   /**
    * Used to switch the composition mode of harwdware keyboard.
    **/
-  public static enum CompositionSwitchMode {
+  public enum CompositionSwitchMode {
     TOGGLE,
     KANA,
     ALPHABET

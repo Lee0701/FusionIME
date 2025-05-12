@@ -124,12 +124,12 @@ public class KeyboardLayoutPreference extends Preference {
       // because the cached view might use to be used for another item.
       Item item = itemList.get(position);
       ImageView imageView =
-          ImageView.class.cast(convertView.findViewById(R.id.pref_inputstyle_item_image));
+              (ImageView) convertView.findViewById(R.id.pref_inputstyle_item_image);
       imageView.setImageDrawable(drawableMap.get(item.keyboardLayout));
       imageView.setEnabled(isEnabled);
 
       TextView titleView =
-          TextView.class.cast(convertView.findViewById(R.id.pref_inputstyle_item_title));
+              (TextView) convertView.findViewById(R.id.pref_inputstyle_item_title);
       titleView.setText(item.titleResId);
       titleView.setTextColor(getContext().getResources().getColor(isEnabled
           ? R.color.pref_inputstyle_title
@@ -162,10 +162,9 @@ public class KeyboardLayoutPreference extends Preference {
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
       // Update the description.
-      TextView descriptionView = TextView.class.cast(
-          View.class.cast(parent.getParent()).findViewById(R.id.pref_inputstyle_description));
+      TextView descriptionView = (TextView) ((View) parent.getParent()).findViewById(R.id.pref_inputstyle_description);
       if (descriptionView != null) {
-        Item item = Item.class.cast(parent.getItemAtPosition(position));
+        Item item = (Item) parent.getItemAtPosition(position);
         descriptionView.setText(Html.fromHtml(
             descriptionView.getContext().getResources().getString(item.descriptionResId)));
       }
@@ -256,7 +255,7 @@ public class KeyboardLayoutPreference extends Preference {
   protected void onSetInitialValue(boolean restoreValue, Object defaultValue) {
     setValue(restoreValue
         ? toKeyboardLayoutInternal(getPersistedString(null))
-        : KeyboardLayout.class.cast(defaultValue));
+        : (KeyboardLayout) defaultValue);
   }
 
   /**
@@ -282,12 +281,12 @@ public class KeyboardLayoutPreference extends Preference {
     super.onBindView(view);
 
     TextView descriptionView =
-        TextView.class.cast(view.findViewById(R.id.pref_inputstyle_description));
+            (TextView) view.findViewById(R.id.pref_inputstyle_description);
     descriptionView.setMovementMethod(LinkMovementMethod.getInstance());
 
     @SuppressWarnings("deprecation")
     android.widget.Gallery gallery =
-        android.widget.Gallery.class.cast(view.findViewById(R.id.pref_inputstyle_gallery));
+            (android.widget.Gallery) view.findViewById(R.id.pref_inputstyle_gallery);
     gallery.setAdapter(imageAdapter);
     gallery.setOnItemSelectedListener(galleryEventListener);
     gallery.setOnItemClickListener(galleryEventListener);

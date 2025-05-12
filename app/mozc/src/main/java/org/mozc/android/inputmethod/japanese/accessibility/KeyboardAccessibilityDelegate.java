@@ -88,8 +88,8 @@ public class KeyboardAccessibilityDelegate extends AccessibilityDelegateCompat {
    * Emulator interface for touch events (Key input and long press).
    */
   public interface TouchEventEmulator {
-    public void emulateKeyInput(Key key);
-    public void emulateLongPress(Key key);
+    void emulateKeyInput(Key key);
+    void emulateLongPress(Key key);
   }
 
   private class LongTapHandler implements Handler.Callback {
@@ -216,7 +216,7 @@ public class KeyboardAccessibilityDelegate extends AccessibilityDelegateCompat {
 
   private void simulateKeyInput(Key key) {
     Preconditions.checkNotNull(key);
-    Optional<KeyState> keyState = key.getKeyState(Collections.<MetaState>emptySet());
+    Optional<KeyState> keyState = key.getKeyState(Collections.emptySet());
     if (!keyState.isPresent()) {
       return;
     }
@@ -229,7 +229,7 @@ public class KeyboardAccessibilityDelegate extends AccessibilityDelegateCompat {
 
   private void simulateLongPress(Key key) {
     Preconditions.checkNotNull(key);
-    Optional<KeyState> keyState = key.getKeyState(Collections.<MetaState>emptySet());
+    Optional<KeyState> keyState = key.getKeyState(Collections.emptySet());
     if (!keyState.isPresent()) {
       return;
     }
@@ -266,7 +266,7 @@ public class KeyboardAccessibilityDelegate extends AccessibilityDelegateCompat {
     if (AccessibilityUtil.isAccessibilityEnabled(getContext())) {
       Optional<String> contentDescription = keyboard.isPresent()
           ? keyboard.get().getContentDescription()
-          : Optional.<String>absent();
+          : Optional.absent();
       sendWindowStateChanged(contentDescription);
     }
   }

@@ -82,7 +82,7 @@ public class SelectionTracker {
       if (!(obj instanceof Record)) {
         return false;
       }
-      Record other = Record.class.cast(obj);
+      Record other = (Record) obj;
       return (candidatesStart == other.candidatesStart)
           && (candidatesEnd == other.candidatesEnd)
           && (selectionStart == other.selectionStart)
@@ -119,7 +119,7 @@ public class SelectionTracker {
   private void clear() {
     recordQueue.clear();
     if (MozcLog.isLoggable(Log.DEBUG)) {
-      MozcLog.d("clear: " + toString());
+      MozcLog.d("clear: " + this);
     }
   }
 
@@ -131,7 +131,7 @@ public class SelectionTracker {
     recordQueue.offerLast(
         new Record(candidatesStart, candidatesEnd, selectionStart, selectionEnd));
     if (MozcLog.isLoggable(Log.DEBUG)) {
-      MozcLog.d("offerInternal: " + toString());
+      MozcLog.d("offerInternal: " + this);
     }
   }
 
@@ -228,7 +228,7 @@ public class SelectionTracker {
    */
   public void onRender(DeletionRange deletionRange, String commitText, Preedit preedit) {
     if (MozcLog.isLoggable(Log.DEBUG)) {
-      MozcLog.d("onRender: " + MoreObjects.firstNonNull(preedit, "").toString());
+      MozcLog.d("onRender: " + MoreObjects.firstNonNull(preedit, ""));
     }
     int preeditStartPosition = getPreeditStartPosition();
     if (deletionRange != null) {

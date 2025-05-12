@@ -105,7 +105,7 @@ public class KeyState {
      */
     final boolean isOneTimeMetaState;
 
-    private MetaState(int bitFlag, boolean isOneTimeMetaState) {
+    MetaState(int bitFlag, boolean isOneTimeMetaState) {
       this.bitFlag = bitFlag;
       this.isOneTimeMetaState = isOneTimeMetaState;
     }
@@ -133,7 +133,7 @@ public class KeyState {
         Sets.immutableEnumSet(MetaState.GLOBE, MetaState.NO_GLOBE);
     @SuppressWarnings("unchecked")
     private static final Collection<Set<MetaState>> EXCLUSIVE_GROUP =
-        Arrays.<Set<MetaState>>asList(CHAR_TYPE_EXCLUSIVE_GROUP,
+        Arrays.asList(CHAR_TYPE_EXCLUSIVE_GROUP,
                                       ACTION_EXCLUSIVE_GROUP,
                                       VARIATION_EXCLUSIVE_GROUP,
                                       GLOBE_EXCLUSIVE_OR_GROUP);

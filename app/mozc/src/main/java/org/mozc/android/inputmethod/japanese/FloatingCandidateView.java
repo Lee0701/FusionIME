@@ -64,16 +64,16 @@ import org.mozc.android.inputmethod.japanese.util.CursorAnchorInfoWrapper;
 public class FloatingCandidateView extends View {
 
   private interface FloatingCandidateViewProxy {
-    public void draw(Canvas canvas);
-    public void viewSizeChanged(int width, int height);
-    public void onStartInputView(EditorInfo editorInfo);
-    public void setCursorAnchorInfo(CursorAnchorInfoWrapper info);
-    public void setCandidates(Command outCommand);
-    public void setEditorInfo(EditorInfo editorInfo);
-    public void setCompositionMode(CompositionMode mode);
-    public void setViewEventListener(ViewEventListener listener);
-    public void setVisibility(int visibility);
-    public Optional<Rect> getVisibleRect();
+    void draw(Canvas canvas);
+    void viewSizeChanged(int width, int height);
+    void onStartInputView(EditorInfo editorInfo);
+    void setCursorAnchorInfo(CursorAnchorInfoWrapper info);
+    void setCandidates(Command outCommand);
+    void setEditorInfo(EditorInfo editorInfo);
+    void setCompositionMode(CompositionMode mode);
+    void setViewEventListener(ViewEventListener listener);
+    void setVisibility(int visibility);
+    Optional<Rect> getVisibleRect();
   }
 
   private static class FloatingCandidateViewStub implements FloatingCandidateViewProxy {
@@ -367,7 +367,6 @@ public class FloatingCandidateView extends View {
       basePositionTop = 0;
       basePositionBottom = 0;
       basePositionX = 0;
-      return;
     }
 
     /**
@@ -461,7 +460,7 @@ public class FloatingCandidateView extends View {
         rect.get().offset(offsetX, offsetY);
         return rect;
       } else {
-        return Optional.<Rect>absent();
+        return Optional.absent();
       }
     }
   }

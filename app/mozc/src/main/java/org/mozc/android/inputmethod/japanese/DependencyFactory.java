@@ -61,19 +61,19 @@ public class DependencyFactory {
     /**
      * Creates a ViewManager.
      */
-    public ViewManagerInterface createViewManager(
-        Context context,
-        ViewEventListener listener,
-        SymbolHistoryStorage symbolHistoryStorage,
-        ImeSwitcher imeSwitcher,
-        MenuDialogListener menuDialogListener);
+    ViewManagerInterface createViewManager(
+            Context context,
+            ViewEventListener listener,
+            SymbolHistoryStorage symbolHistoryStorage,
+            ImeSwitcher imeSwitcher,
+            MenuDialogListener menuDialogListener);
 
     /**
      * Returns a class for preference activity.
      */
-    public Class<? extends Activity> getPreferenceActivityClass();
+    Class<? extends Activity> getPreferenceActivityClass();
 
-    public boolean isWelcomeActivityPreferrable();
+    boolean isWelcomeActivityPreferrable();
   }
 
   /**

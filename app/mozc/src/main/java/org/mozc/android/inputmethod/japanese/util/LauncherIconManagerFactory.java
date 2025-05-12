@@ -57,7 +57,7 @@ public class LauncherIconManagerFactory {
      *
      * @param context The application's context.
      */
-    public void updateLauncherIconVisibility(Context context);
+    void updateLauncherIconVisibility(Context context);
   }
 
   @VisibleForTesting
@@ -111,26 +111,23 @@ public class LauncherIconManagerFactory {
           // System app (not updated) doesn't show the icon.
           return false;
         }
-        if (isUpdatedSystemApplication
-            && sharedPreferences.contains(
-                PreferenceUtil.PREF_LAST_LAUNCH_ABI_INDEPENDENT_VERSION_CODE)) {
           // Workaround for updated system app from preinstalled 2.16.1955.3.
           // Preinstalled 2.16.1955.3 doesn't put PREF_LAUNCHER_ICON_VISIBILITY_KEY
           // unless preference screen is shown so checking PREF_LAUNCHER_ICON_VISIBILITY_KEY
-          // doesn't work for the version. 
+          // doesn't work for the version.
           // However PREF_LAST_LAUNCH_ABI_INDEPENDENT_VERSION_CODE is always written,
           // use the preference instaed.
           // If the preference  exists, this means the IME has been launched as a preinstall
           // app at least once.
           // Therefore we should take over the visibility (== hide the icon).
-          return false;
-        }
-        return true;
+          return !isUpdatedSystemApplication
+                  || !sharedPreferences.contains(
+                  PreferenceUtil.PREF_LAST_LAUNCH_ABI_INDEPENDENT_VERSION_CODE);
       }
     }
   }
 
-  private static LauncherIconManager defaultInstance = new DefaultImplementation();
+  private static final LauncherIconManager defaultInstance = new DefaultImplementation();
 
   private LauncherIconManagerFactory() {}
 

@@ -71,6 +71,7 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.zip.ZipFile;
 
 /**
@@ -83,7 +84,7 @@ public final class MozcUtil {
    * Simple interface to use mock of TelephonyManager for testing purpose.
    */
   public interface TelephonyManagerInterface {
-    public String getNetworkOperator();
+    String getNetworkOperator();
   }
 
   /**
@@ -106,9 +107,8 @@ public final class MozcUtil {
 
     @Override
     public boolean handleMessage(Message msg) {
-      Context context = Context.class.cast(Preconditions.checkNotNull(msg).obj);
-      InputMethodManager.class.cast(
-          context.getSystemService(Context.INPUT_METHOD_SERVICE)).showInputMethodPicker();
+      Context context = (Context) Preconditions.checkNotNull(msg).obj;
+      ((InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE)).showInputMethodPicker();
       return false;
     }
   }
@@ -124,15 +124,15 @@ public final class MozcUtil {
   // If you want to change the tag name, see also kProductPrefix in base/const.h.
   public static final String LOGTAG = "Mozc";
 
-  private static Optional<Boolean> isDebug = Optional.<Boolean>absent();
-  private static Optional<Boolean> isDevChannel = Optional.<Boolean>absent();
-  private static Optional<Boolean> isMozcEnabled = Optional.<Boolean>absent();
-  private static Optional<Boolean> isMozcDefaultIme = Optional.<Boolean>absent();
-  private static Optional<Boolean> isSystemApplication = Optional.<Boolean>absent();
-  private static Optional<Boolean> isTouchUI = Optional.<Boolean>absent();
-  private static Optional<Boolean> isUpdatedSystemApplication = Optional.<Boolean>absent();
-  private static Optional<Integer> versionCode = Optional.<Integer>absent();
-  private static Optional<Long> uptimeMillis = Optional.<Long>absent();
+  private static Optional<Boolean> isDebug = Optional.absent();
+  private static Optional<Boolean> isDevChannel = Optional.absent();
+  private static Optional<Boolean> isMozcEnabled = Optional.absent();
+  private static Optional<Boolean> isMozcDefaultIme = Optional.absent();
+  private static Optional<Boolean> isSystemApplication = Optional.absent();
+  private static Optional<Boolean> isTouchUI = Optional.absent();
+  private static Optional<Boolean> isUpdatedSystemApplication = Optional.absent();
+  private static Optional<Integer> versionCode = Optional.absent();
+  private static Optional<Long> uptimeMillis = Optional.absent();
 
   private static final int SHOW_INPUT_METHOD_PICKER_WHAT = 0;
   private static Optional<Handler> showInputMethodPickerHandler = Optional.absent();
@@ -161,7 +161,7 @@ public final class MozcUtil {
   private MozcUtil() {
   }
 
-  private static final boolean checkApplicationFlag(Context context, int flag) {
+  private static boolean checkApplicationFlag(Context context, int flag) {
     Preconditions.checkNotNull(context);
     PackageManager manager = context.getPackageManager();
     try {
@@ -174,7 +174,7 @@ public final class MozcUtil {
     }
   }
 
-  public static final boolean isDebug(Context context) {
+  public static boolean isDebug(Context context) {
     Preconditions.checkNotNull(context);
     if (isDebug.isPresent()) {
       return isDebug.get();
@@ -187,11 +187,11 @@ public final class MozcUtil {
    *
    * @param isDebug Optional.absent() if default behavior is preferable
    */
-  public static final void setDebug(Optional<Boolean> isDebug) {
+  public static void setDebug(Optional<Boolean> isDebug) {
     MozcUtil.isDebug = Preconditions.checkNotNull(isDebug);
   }
 
-  public static final boolean isDevChannel(Context context) {
+  public static boolean isDevChannel(Context context) {
     Preconditions.checkNotNull(context);
     if (isDevChannel.isPresent()) {
       return isDevChannel.get();
@@ -199,7 +199,7 @@ public final class MozcUtil {
     return isDevChannelVersionName(getVersionName(context));
   }
 
-  public static final boolean isSystemApplication(Context context) {
+  public static boolean isSystemApplication(Context context) {
     Preconditions.checkNotNull(context);
     if (isSystemApplication.isPresent()) {
       return isSystemApplication.get();
@@ -211,11 +211,11 @@ public final class MozcUtil {
    * For testing purpose.
    * @param isSystemApplication Optional.absent() if default behavior is preferable
    */
-  public static final void setSystemApplication(Optional<Boolean> isSystemApplication) {
+  public static void setSystemApplication(Optional<Boolean> isSystemApplication) {
     MozcUtil.isSystemApplication = Preconditions.checkNotNull(isSystemApplication);
   }
 
-  public static final boolean isUpdatedSystemApplication(Context context) {
+  public static boolean isUpdatedSystemApplication(Context context) {
     Preconditions.checkNotNull(context);
     if (isUpdatedSystemApplication.isPresent()) {
       return isUpdatedSystemApplication.get();
@@ -227,8 +227,8 @@ public final class MozcUtil {
    * For testing purpose.
    * @param isUpdatedSystemApplication Optional.absent() if default behavior is preferable
    */
-  public static final void setUpdatedSystemApplication(
-      Optional<Boolean> isUpdatedSystemApplication) {
+  public static void setUpdatedSystemApplication(
+          Optional<Boolean> isUpdatedSystemApplication) {
     MozcUtil.isUpdatedSystemApplication = Preconditions.checkNotNull(isUpdatedSystemApplication);
   }
 
@@ -306,7 +306,7 @@ public final class MozcUtil {
    *
    * @param isDevChannel Optional.absent() if default behavior is preferable
    */
-  public static final void setDevChannel(Optional<Boolean> isDevChannel) {
+  public static void setDevChannel(Optional<Boolean> isDevChannel) {
     MozcUtil.isDevChannel = Preconditions.checkNotNull(isDevChannel);
   }
 
@@ -435,7 +435,7 @@ public final class MozcUtil {
    *
    * @param isTouchUI Optional.absent() if default behavior is preferable
    */
-  public static final void setTouchUI(Optional<Boolean> isTouchUI) {
+  public static void setTouchUI(Optional<Boolean> isTouchUI) {
     MozcUtil.isTouchUI = Preconditions.checkNotNull(isTouchUI);
   }
 
@@ -480,7 +480,7 @@ public final class MozcUtil {
   public static TelephonyManagerInterface getTelephonyManager(Context context) {
     Preconditions.checkNotNull(context);
     return new TelephonyManagerImpl(
-        TelephonyManager.class.cast(context.getSystemService(Context.TELEPHONY_SERVICE)));
+            (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE));
   }
 
   /**
@@ -606,12 +606,7 @@ public final class MozcUtil {
 
     byte[] bytes = new byte[index];
     value.copyTo(bytes, 0, 0, bytes.length);
-    try {
-      return new String(bytes, "UTF-8");
-    } catch (UnsupportedEncodingException e) {
-      // Should never happen because of Java's spec.
-      throw new IllegalStateException("UTF-8 charset is not available.");
-    }
+      return new String(bytes, StandardCharsets.UTF_8);
   }
 
   /**
@@ -718,7 +713,7 @@ public final class MozcUtil {
 
   public static InputMethodManager getInputMethodManager(Context context) {
     Preconditions.checkNotNull(context);
-    return InputMethodManager.class.cast(context.getSystemService(Context.INPUT_METHOD_SERVICE));
+    return (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
   }
 
   /**
@@ -792,9 +787,9 @@ public final class MozcUtil {
     }
     try {
       Class<?> clazz =
-          Class.forName(new StringBuilder(MozcUtil.class.getCanonicalName())
-                                          .append('$')
-                                          .append("StrictModeRelaxer").toString());
+          Class.forName(MozcUtil.class.getCanonicalName() +
+                  '$' +
+                  "StrictModeRelaxer");
       clazz.getMethod("relaxStrictMode").invoke(null);
       isStrictModeRelaxed = true;
     } catch (ClassNotFoundException e) {

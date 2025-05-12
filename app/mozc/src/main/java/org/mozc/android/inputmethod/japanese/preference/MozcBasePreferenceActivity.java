@@ -246,7 +246,6 @@ public class MozcBasePreferenceActivity extends PreferenceActivity {
     // that their system IME is Google Japanese Input.
     if (!MozcUtil.isMozcDefaultIme(context) && !MozcUtil.isSystemApplication(context)) {
       imeSwitchDialog.show();
-      return;
     }
   }
 

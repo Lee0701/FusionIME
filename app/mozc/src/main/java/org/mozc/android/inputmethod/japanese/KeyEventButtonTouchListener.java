@@ -103,14 +103,14 @@ public class KeyEventButtonTouchListener implements OnTouchListener {
   @VisibleForTesting static Key createKey(View button, int sourceId, int keyCode) {
     KeyEntity keyEntity = new KeyEntity(
             sourceId, keyCode, KeyEntity.INVALID_KEY_CODE, true, 0,
-            Optional.<String>absent(), false,
-            Optional.<PopUp>absent(), 0, 0, 0, 0);
+            Optional.absent(), false,
+            Optional.absent(), 0, 0, 0, 0);
     Flick flick = new Flick(Direction.CENTER, keyEntity);
     KeyState keyState =
         new KeyState("",
-                     Collections.<KeyState.MetaState>emptySet(),
-                     Collections.<KeyState.MetaState>emptySet(),
-                     Collections.<KeyState.MetaState>emptySet(),
+                     Collections.emptySet(),
+                     Collections.emptySet(),
+                     Collections.emptySet(),
                      Collections.singletonList(flick));
     // Now, we support repeatable keys only.
     return new Key(0, 0, button.getWidth(), button.getHeight(), 0, 0,
@@ -121,10 +121,10 @@ public class KeyEventButtonTouchListener implements OnTouchListener {
   private static KeyEventContext createKeyEventContext(
       View button, int sourceId, int keyCode, float x, float y) {
     Key key = createKey(button, sourceId, keyCode);
-    View parent = View.class.cast(button.getParent());
+    View parent = (View) button.getParent();
     return new KeyEventContext(
         key, 0, x, y, parent.getWidth(), parent.getHeight(), 0,
-        Collections.<KeyState.MetaState>emptySet());
+        Collections.emptySet());
   }
 
   /**

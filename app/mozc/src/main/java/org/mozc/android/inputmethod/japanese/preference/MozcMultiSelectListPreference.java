@@ -266,7 +266,7 @@ public class MozcMultiSelectListPreference extends DialogPreference {
       return;
     }
 
-    SavedState state = SavedState.class.cast(parcelable);
+    SavedState state = (SavedState) parcelable;
     super.onRestoreInstanceState(state.getSuperState());
     if (state.isDialogShowing) {
       // The dialog was shown when the state was saved. Re-show the dialog.

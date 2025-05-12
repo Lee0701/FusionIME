@@ -164,7 +164,7 @@ public class MozcView extends FrameLayout implements MemoryManageable {
             keyboardView,
             new HeightLinearInterpolationListener(keyboardView.getHeight(), 0),
             foldKeyboardViewInterpolator, foldDuration, 0);
-        CompoundButton.class.cast(v).setChecked(true);
+        ((CompoundButton) v).setChecked(true);
       } else {
         if (viewEventListener != null) {
           viewEventListener.onFireFeedbackEvent(FeedbackEvent.INPUTVIEW_EXPAND);
@@ -173,7 +173,7 @@ public class MozcView extends FrameLayout implements MemoryManageable {
             keyboardView,
             new HeightLinearInterpolationListener(keyboardView.getHeight(), originalHeight),
             expandKeyboardViewInterpolator, expandDuration, 0);
-        CompoundButton.class.cast(v).setChecked(false);
+        ((CompoundButton) v).setChecked(false);
       }
     }
   }
@@ -258,7 +258,7 @@ public class MozcView extends FrameLayout implements MemoryManageable {
 
     candidateViewManager = new CandidateViewManager(
         getKeyboardCandidateView(),
-        FloatingCandidateView.class.cast(findViewById(R.id.floating_candidate_view)));
+            (FloatingCandidateView) findViewById(R.id.floating_candidate_view));
   }
 
   private InputFrameFoldButtonClickListener createFoldButtonListener(View view, int height) {
@@ -403,7 +403,7 @@ public class MozcView extends FrameLayout implements MemoryManageable {
     getSymbolInputView().setSkin(skin);
     candidateViewManager.setSkin(skin);
     getMicrophoneButton().setBackgroundDrawable(BackgroundDrawableFactory.createPressableDrawable(
-        new ColorDrawable(skin.buttonFrameButtonPressedColor), Optional.<Drawable>absent()));
+        new ColorDrawable(skin.buttonFrameButtonPressedColor), Optional.absent()));
     getMicrophoneButton().setSkin(skin);
     leftFrameStubProxy.setSkin(skin);
     rightFrameStubProxy.setSkin(skin);
@@ -445,9 +445,9 @@ public class MozcView extends FrameLayout implements MemoryManageable {
         && output.getPreedit().getSegmentCount() > 0;
     if (hasPreedit) {
       getKeyboardView().updateMetaStates(EnumSet.of(MetaState.COMPOSING),
-                                         Collections.<MetaState>emptySet());
+                                         Collections.emptySet());
     } else {
-      getKeyboardView().updateMetaStates(Collections.<MetaState>emptySet(),
+      getKeyboardView().updateMetaStates(Collections.emptySet(),
                                          EnumSet.of(MetaState.COMPOSING));
     }
   }
@@ -541,7 +541,7 @@ public class MozcView extends FrameLayout implements MemoryManageable {
     if (!view.isInflated()) {
       view.inflateSelf();
       CandidateView numberCandidateView =
-          CandidateView.class.cast(view.findViewById(R.id.candidate_view_in_symbol_view));
+              (CandidateView) view.findViewById(R.id.candidate_view_in_symbol_view);
       numberCandidateView.setInputFrameFoldButtonOnClickListener(createFoldButtonListener(
           getNumberKeyboardFrame(), view.getNumberKeyboardHeight()));
       candidateViewManager.setNumberCandidateView(numberCandidateView);
@@ -647,7 +647,7 @@ public class MozcView extends FrameLayout implements MemoryManageable {
       getOverlayView().setVisibility(View.VISIBLE);
       setLayoutHeight(getTextInputFrame(), LayoutParams.MATCH_PARENT);
       candidateViewManager.setOnVisibilityChangeListener(
-          Optional.<InOutAnimatedFrameLayout.VisibilityChangeListener>absent());
+          Optional.absent());
       getSymbolInputView().setOnVisibilityChangeListener(null);
     }
     candidateViewManager.setExtractedMode(fullscreenMode);
@@ -698,7 +698,7 @@ public class MozcView extends FrameLayout implements MemoryManageable {
 
     View view = getForegroundFrame();
     LayoutParams layoutParams =
-        LayoutParams.class.cast(view.getLayoutParams());
+            (LayoutParams) view.getLayoutParams();
     Resources resources = getResources();
     layoutParams.width = temporaryAdjustment == LayoutAdjustment.FILL
         ? resources.getDisplayMetrics().widthPixels : getSideAdjustedWidth();
@@ -791,7 +791,6 @@ public class MozcView extends FrameLayout implements MemoryManageable {
         left, contentViewHeight - height, left + width, contentViewHeight);
     outInsets.contentTopInsets = contentViewHeight;
     outInsets.visibleTopInsets = contentViewHeight;
-    return;
   }
 
   @VisibleForTesting
@@ -857,8 +856,7 @@ public class MozcView extends FrameLayout implements MemoryManageable {
     }
 
     if (symbolInputView.isInflated()) {
-      CandidateView numberCandidateView = CandidateView.class.cast(
-          symbolInputView.findViewById(R.id.candidate_view_in_symbol_view));
+      CandidateView numberCandidateView = (CandidateView) symbolInputView.findViewById(R.id.candidate_view_in_symbol_view);
       numberCandidateView.setInputFrameFoldButtonOnClickListener(createFoldButtonListener(
           getNumberKeyboardFrame(), symbolInputView.getNumberKeyboardHeight()));
     }
@@ -910,16 +908,16 @@ public class MozcView extends FrameLayout implements MemoryManageable {
 
   @VisibleForTesting
   KeyboardView getKeyboardView() {
-    return KeyboardView.class.cast(findViewById(R.id.keyboard_view));
+    return (KeyboardView) findViewById(R.id.keyboard_view);
   }
 
   private CandidateView getKeyboardCandidateView() {
-    return CandidateView.class.cast(findViewById(R.id.candidate_view));
+    return (CandidateView) findViewById(R.id.candidate_view);
   }
 
   @VisibleForTesting
   SymbolInputView getSymbolInputView() {
-    return SymbolInputView.class.cast(findViewById(R.id.symbol_input_view));
+    return (SymbolInputView) findViewById(R.id.symbol_input_view);
   }
 
   @VisibleForTesting
@@ -929,12 +927,12 @@ public class MozcView extends FrameLayout implements MemoryManageable {
 
   @VisibleForTesting
   LinearLayout getTextInputFrame() {
-    return LinearLayout.class.cast(findViewById(R.id.textinput_frame));
+    return (LinearLayout) findViewById(R.id.textinput_frame);
   }
 
   @VisibleForTesting
   NarrowFrameView getNarrowFrame() {
-    return NarrowFrameView.class.cast(findViewById(R.id.narrow_frame));
+    return (NarrowFrameView) findViewById(R.id.narrow_frame);
   }
 
   @VisibleForTesting
@@ -959,7 +957,7 @@ public class MozcView extends FrameLayout implements MemoryManageable {
 
   @VisibleForTesting
   MozcImageView getMicrophoneButton() {
-    return MozcImageView.class.cast(findViewById(R.id.microphone_button));
+    return (MozcImageView) findViewById(R.id.microphone_button);
   }
 
   @VisibleForTesting

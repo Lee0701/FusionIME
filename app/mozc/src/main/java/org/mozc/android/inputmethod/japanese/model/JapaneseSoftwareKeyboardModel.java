@@ -198,7 +198,7 @@ public class JapaneseSoftwareKeyboardModel {
       }
     }
     // KeyboardMode recommended strongly is not found here, so just return null.
-    return Optional.<KeyboardMode>absent();
+    return Optional.absent();
   }
 
   /**

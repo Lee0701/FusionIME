@@ -164,7 +164,7 @@ import javax.annotation.Nullable;
   /**
    * A set of pressed keys with their direction.
    */
-  private Map<Key, Direction> pressedKeys = Maps.newHashMap();
+  private final Map<Key, Direction> pressedKeys = Maps.newHashMap();
 
   /**
    * Mapping table from Flick.Direction to appropriate DrawableType.

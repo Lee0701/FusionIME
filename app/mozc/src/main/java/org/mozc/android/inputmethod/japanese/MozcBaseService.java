@@ -328,7 +328,7 @@ public class MozcBaseService extends InputMethodService {
     public void onShowSymbolInputView(List<TouchEvent> touchEventList) {
       changeKeyboardSpecificationAndSendKey(
           null, null, KeyboardSpecification.SYMBOL_NUMBER, getConfiguration(),
-          Collections.<TouchEvent>emptyList());
+          Collections.emptyList());
       viewManager.onShowSymbolInputView();
     }
 
@@ -343,7 +343,7 @@ public class MozcBaseService extends InputMethodService {
       if (!viewManager.isNarrowMode()) {
         changeKeyboardSpecificationAndSendKey(
             null, null, viewManager.getKeyboardSpecification(), getConfiguration(),
-            Collections.<TouchEvent>emptyList());
+            Collections.emptyList());
       }
     }
 
@@ -723,7 +723,7 @@ public class MozcBaseService extends InputMethodService {
     // User preference's keyboard will be set after this step.
     changeKeyboardSpecificationAndSendKey(
         null, null, currentKeyboardSpecification, deviceConfiguration,
-        Collections.<TouchEvent>emptyList());
+        Collections.emptyList());
     if (sharedPreferences != null) {
       propagateClientSidePreference(
           new ClientSidePreference(
@@ -769,8 +769,8 @@ public class MozcBaseService extends InputMethodService {
 
     // Setup FeedbackManager.
     feedbackManager = new FeedbackManager(new RealFeedbackListener(
-        Vibrator.class.cast(getSystemService(Context.VIBRATOR_SERVICE)),
-        AudioManager.class.cast(getSystemService(Context.AUDIO_SERVICE))));
+            (Vibrator) getSystemService(Context.VIBRATOR_SERVICE),
+            (AudioManager) getSystemService(Context.AUDIO_SERVICE)));
 
     this.viewManager = viewManager;
 
@@ -858,7 +858,7 @@ public class MozcBaseService extends InputMethodService {
             Build.VERSION.SDK_INT,
             (propagatedClientSidePreference != null && EmojiUtil.isCarrierEmojiAllowed(attribute))
                 ? propagatedClientSidePreference.getEmojiProviderType() : EmojiProviderType.NONE),
-        Collections.<TouchEvent>emptyList());
+        Collections.emptyList());
     selectionTracker.onStartInput(
         attribute.initialSelStart, attribute.initialSelEnd, isWebEditText(attribute));
   }
@@ -1206,7 +1206,7 @@ public class MozcBaseService extends InputMethodService {
     // without appropriate request which is sent below.
     changeKeyboardSpecificationAndSendKey(
         null, null, currentKeyboardSpecification, getConfiguration(),
-        Collections.<TouchEvent>emptyList());
+        Collections.emptyList());
   }
 
   @Override
@@ -1394,7 +1394,7 @@ public class MozcBaseService extends InputMethodService {
     if (leftRange < 0 || rightRange < 0) {
       // If the range does not include the current position, do nothing
       // because Android's API does not expect such situation.
-      MozcLog.w("Deletion range has unsupported parameters: " + range.toString());
+      MozcLog.w("Deletion range has unsupported parameters: " + range);
       return;
     }
 
@@ -1420,7 +1420,7 @@ public class MozcBaseService extends InputMethodService {
           == -outputText.codePointCount(0, outputText.length())) {
         position = MozcUtil.CURSOR_POSITION_HEAD;
       } else {
-        MozcLog.e("Unsupported position: " + output.getResult().toString());
+        MozcLog.e("Unsupported position: " + output.getResult());
       }
     }
 
@@ -1477,7 +1477,7 @@ public class MozcBaseService extends InputMethodService {
         builder.setSpan(
             segment.hasAnnotation() && segment.getAnnotation() == Annotation.HIGHLIGHT
                 ? SPAN_CONVERT_HIGHLIGHT
-                : CharacterStyle.class.cast(new BackgroundColorSpan(CONVERT_NORMAL_COLOR)),
+                : (CharacterStyle) new BackgroundColorSpan(CONVERT_NORMAL_COLOR),
             offsetInString, offsetInString + length, spanFlags);
         offsetInString += length;
       }
@@ -1699,7 +1699,7 @@ public class MozcBaseService extends InputMethodService {
 
     sessionExecutor.updateRequest(
         MozcUtil.getRequestBuilder(getResources(), currentKeyboardSpecification, newConfig).build(),
-        Collections.<TouchEvent>emptyList());
+        Collections.emptyList());
 
     // NOTE : This method is not called at the time when the service is started.
     // Based on newConfig, client side preferences should be sent

@@ -44,9 +44,9 @@ import org.mozc.android.inputmethod.japanese.R;
  */
 public interface MozcImageCapableView {
 
-  public void setMaxImageWidth(int maxImageWidth);
-  public void setMaxImageHeight(int maxImageHeight);
-  public ImageView asImageView();
+  void setMaxImageWidth(int maxImageWidth);
+  void setMaxImageHeight(int maxImageHeight);
+  ImageView asImageView();
 
   /**
    * Delagate object used by the views implementing MozcImageCapableView.

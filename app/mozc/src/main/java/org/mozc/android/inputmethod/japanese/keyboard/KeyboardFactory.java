@@ -68,7 +68,7 @@ public class KeyboardFactory {
     @Override
     public boolean equals(Object obj) {
       if (obj instanceof CacheKey) {
-        CacheKey other = CacheKey.class.cast(obj);
+        CacheKey other = (CacheKey) obj;
         return specification == other.specification &&
                width == other.width &&
                height == other.height;
@@ -139,7 +139,7 @@ public class KeyboardFactory {
       MozcLog.e(e.getMessage());
     }
     // Returns dummy keyboard to avoid crash.
-    return new Keyboard(Optional.<String>absent(), Collections.<Row>emptyList(), 0,
+    return new Keyboard(Optional.absent(), Collections.emptyList(), 0,
                         KeyboardSpecification.TWELVE_KEY_TOGGLE_FLICK_KANA);
   }
 

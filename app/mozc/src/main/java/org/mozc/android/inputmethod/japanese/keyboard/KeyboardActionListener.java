@@ -38,8 +38,8 @@ import java.util.List;
  *
  */
 public interface KeyboardActionListener {
-  public void onCancel();
-  public void onPress(int keycode);
-  public void onRelease(int keycode);
-  public void onKey(int primaryCode, List<TouchEvent> touchEventList);
+  void onCancel();
+  void onPress(int keycode);
+  void onRelease(int keycode);
+  void onKey(int primaryCode, List<TouchEvent> touchEventList);
 }

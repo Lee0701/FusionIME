@@ -80,7 +80,7 @@ public class FloatingCandidateLayoutRenderer {
 
   /** Locale field for {@link Paint#setTextLocale(Locale)}. */
   private static final Optional<Locale> TEXT_LOCALE = (Build.VERSION.SDK_INT >= 17)
-      ? Optional.of(Locale.JAPAN) : Optional.<Locale>absent();
+      ? Optional.of(Locale.JAPAN) : Optional.absent();
 
   private static final String FOOTER_TEXT_FORMAT = "%d / %d";
 
@@ -229,7 +229,7 @@ public class FloatingCandidateLayoutRenderer {
 
     listener.onConversionCandidateSelected(
         candidates.get().getCandidate(candidateIndex).getId(),
-        Optional.<Integer>absent());
+        Optional.absent());
   }
 
   /** Sets the max width of this window. */
@@ -246,7 +246,7 @@ public class FloatingCandidateLayoutRenderer {
   public void setCandidates(Command outCommand) {
     Preconditions.checkNotNull(outCommand);
     if (outCommand.getOutput().getCandidates().getCandidateCount() == 0) {
-      candidates = Optional.<Candidates>absent();
+      candidates = Optional.absent();
       totalCandidatesCount = 0;
     } else {
       candidates = Optional.of(outCommand.getOutput().getCandidates());

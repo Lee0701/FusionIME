@@ -81,7 +81,7 @@ class UserDictionaryUtil {
    * Callback which is called when the "positive button" on a dialog is clicked.
    */
   private interface UserDictionaryBaseDialogListener {
-    public Status onPositiveButtonClicked(View view);
+    Status onPositiveButtonClicked(View view);
   }
 
   /**
@@ -122,7 +122,7 @@ class UserDictionaryUtil {
       setButton(DialogInterface.BUTTON_POSITIVE, context.getText(android.R.string.ok),
                 Message.obtain());
       setButton(DialogInterface.BUTTON_NEGATIVE, context.getText(android.R.string.cancel),
-                OnClickListener.class.cast(null));
+              (OnClickListener) null);
       setCancelable(true);
     }
 
@@ -211,8 +211,7 @@ class UserDictionaryUtil {
       // we hide the soft input method.
       // This is because the list of the POS is long so if the soft input is shown
       // continuously, a part of list would be out of the display.
-      InputMethodManager imm = InputMethodManager.class.cast(
-          getContext().getSystemService(Context.INPUT_METHOD_SERVICE));
+      InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
       imm.hideSoftInputFromWindow(getWindowToken(), 0);
 
       return super.performClick();
@@ -225,7 +224,7 @@ class UserDictionaryUtil {
      * Callback to be called when the positive button is clicked.
      * @return result status of the executed command.
      */
-    public Status onPositiveButtonClicked(String word, String reading, PosType pos);
+    Status onPositiveButtonClicked(String word, String reading, PosType pos);
   }
 
   /**
@@ -260,16 +259,14 @@ class UserDictionaryUtil {
      * To make editing convenient, select all region.
      */
     void setEntry(Entry entry) {
-      EditText wordEditText = EditText.class.cast(
-          findViewById(R.id.user_dictionary_tool_word_register_dialog_word));
+      EditText wordEditText = (EditText) findViewById(R.id.user_dictionary_tool_word_register_dialog_word);
       wordEditText.setText(entry.getValue());
-      EditText.class.cast(findViewById(R.id.user_dictionary_tool_word_register_dialog_reading))
+      ((EditText) findViewById(R.id.user_dictionary_tool_word_register_dialog_reading))
           .setText(entry.getKey());
-      Spinner posSpinner = Spinner.class.cast(
-          findViewById(R.id.user_dictionary_tool_word_register_dialog_pos));
+      Spinner posSpinner = (Spinner) findViewById(R.id.user_dictionary_tool_word_register_dialog_pos);
       int numItems = posSpinner.getCount();
       for (int i = 0; i < numItems; ++i) {
-        if (PosItem.class.cast(posSpinner.getItemAtPosition(i)).posType == entry.getPos()) {
+        if (((PosItem) posSpinner.getItemAtPosition(i)).posType == entry.getPos()) {
           posSpinner.setSelection(i);
           break;
         }
@@ -287,7 +284,7 @@ class UserDictionaryUtil {
      * @param dictionaryName the text which is filled in EditText on the dialog.
      * @return result status of the executed command.
      */
-    public Status onPositiveButtonClicked(String dictionaryName);
+    Status onPositiveButtonClicked(String dictionaryName);
   }
 
   /**
@@ -312,8 +309,7 @@ class UserDictionaryUtil {
      * To make editing convenient, select all region.
      */
     void setDictionaryName(String dictionaryName) {
-      EditText editText = EditText.class.cast(
-          findViewById(R.id.user_dictionary_tool_dictionary_name_dialog_name));
+      EditText editText = (EditText) findViewById(R.id.user_dictionary_tool_dictionary_name_dialog_name);
       editText.setText(dictionaryName);
       editText.selectAll();
     }
@@ -458,7 +454,7 @@ class UserDictionaryUtil {
    */
   private static String getText(View view, int resourceId) {
     view = view.getRootView();
-    TextView textView = TextView.class.cast(view.findViewById(resourceId));
+    TextView textView = (TextView) view.findViewById(resourceId);
     return textView.getText().toString();
   }
 
@@ -467,8 +463,8 @@ class UserDictionaryUtil {
    */
   private static PosType getPos(View view, int resourceId) {
     view = view.getRootView();
-    Spinner spinner = Spinner.class.cast(view.findViewById(resourceId));
-    return PosItem.class.cast(spinner.getSelectedItem()).posType;
+    Spinner spinner = (Spinner) view.findViewById(resourceId);
+    return ((PosItem) spinner.getSelectedItem()).posType;
   }
 
   /**

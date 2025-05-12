@@ -58,14 +58,14 @@ public class PreferenceUtil {
 
   /** Simple {@code PreferenceManager} wrapper for testing purpose. */
   interface PreferenceManagerInterface {
-    public Preference findPreference(CharSequence key);
+    Preference findPreference(CharSequence key);
   }
 
   /** Simple {@code PreferenceManager} wrapper for testing purpose.
    *  This interface wraps static method so no constructor is required.
    */
   public interface PreferenceManagerStaticInterface {
-    public void setDefaultValues(Context context, int id, boolean readAgain);
+    void setDefaultValues(Context context, int id, boolean readAgain);
   }
 
   static class PreferenceManagerInterfaceImpl implements PreferenceManagerInterface {
@@ -88,7 +88,7 @@ public class PreferenceUtil {
     // As construction cost of defaultPrereferenceManagerStatic is cheap and it is invariant,
     // no lock mechanism is employed here.
     if (!defaultPreferenceManagerStatic.isPresent()) {
-      defaultPreferenceManagerStatic = Optional.<PreferenceManagerStaticInterface>of(
+      defaultPreferenceManagerStatic = Optional.of(
           new PreferenceManagerStaticInterface() {
             @Override
             public void setDefaultValues(Context context, int id, boolean readAgain) {
@@ -115,7 +115,7 @@ public class PreferenceUtil {
               isLandscapeKeyboardSettingActive
                   ? PREF_LANDSCAPE_KEYBOARD_LAYOUT_KEY
                   : PREF_PORTRAIT_KEYBOARD_LAYOUT_KEY,
-              KeyboardLayout.class.cast(newValue).name())
+              ((KeyboardLayout) newValue).name())
           .commit();
       return true;
     }
@@ -242,7 +242,7 @@ public class PreferenceUtil {
     SharedPreferences sharedPreferences = preference.getSharedPreferences();
     boolean isLandscapeKeyboardSettingActive = isLandscapeKeyboardSettingActive(
         sharedPreferences, preference.getContext().getResources().getConfiguration().orientation);
-    KeyboardLayoutPreference.class.cast(preference).setValue(
+    ((KeyboardLayoutPreference) preference).setValue(
         getKeyboardLayout(sharedPreferences,
                           isLandscapeKeyboardSettingActive
                               ? PREF_LANDSCAPE_KEYBOARD_LAYOUT_KEY
@@ -320,8 +320,8 @@ public class PreferenceUtil {
     }
 
     Preference preference = preferenceManager.findPreference(key);
-    PreferenceGroup parentPreference = PreferenceGroup.class.cast(preferenceManager
-        .findPreference(parentKey));
+    PreferenceGroup parentPreference = (PreferenceGroup) preferenceManager
+            .findPreference(parentKey);
     if (preference == null || parentPreference == null) {
       return;
     }

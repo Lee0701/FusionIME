@@ -141,10 +141,10 @@ public class ProbableKeyEventGuesser {
    * <p>Extracted as an interface for testing.
    */
   @VisibleForTesting
-  static interface LikelihoodCalculator {
+  interface LikelihoodCalculator {
 
-    public double getLikelihood(float firstX, float firstY, float deltaX, float deltaY,
-        float[] probableEvent);
+    double getLikelihood(float firstX, float firstY, float deltaX, float deltaY,
+                         float[] probableEvent);
   }
 
   /**

@@ -65,7 +65,7 @@ public abstract class InOutAnimatedFrameLayout extends FrameLayout {
    * An event listener for visibility change.
    */
   public interface VisibilityChangeListener {
-    public void onVisibilityChange();
+    void onVisibilityChange();
   }
 
   /** Animation used when this view is shown. */

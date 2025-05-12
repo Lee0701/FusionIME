@@ -62,7 +62,7 @@ public class LayoutParamsAnimator {
     LayoutParams calculateAnimatedParams(float interpolation, LayoutParams currentLayoutParams);
   }
 
-  private Handler handler;
+  private final Handler handler;
 
   /**
    * Exported as protected for testing.

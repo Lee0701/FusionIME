@@ -66,8 +66,8 @@ public class SkinParser {
     }
 
     private static String composeMessage(XmlPullParser parser, String message) {
-      return new StringBuffer(parser.getPositionDescription())
-          .append(':').append(message).toString();
+      return parser.getPositionDescription() +
+              ':' + message;
     }
   }
 

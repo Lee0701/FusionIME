@@ -354,7 +354,7 @@ abstract class CandidateWordView extends View implements MemoryManageable {
       public float getContentSize(Optional<CandidateLayout> layout) {
         return layout.isPresent() ? layout.get().getContentHeight() : 0;
       }
-    };
+    }
   }
 
   private CandidateSelectListener candidateSelectListener;
@@ -710,7 +710,7 @@ abstract class CandidateWordView extends View implements MemoryManageable {
   @Override
   public void trimMemory() {
     calculatedLayout = null;
-    accessibilityDelegate.setCandidateLayout(Optional.<CandidateLayout>absent(), 0, 0);
+    accessibilityDelegate.setCandidateLayout(Optional.absent(), 0, 0);
     currentCandidateList = null;
   }
 

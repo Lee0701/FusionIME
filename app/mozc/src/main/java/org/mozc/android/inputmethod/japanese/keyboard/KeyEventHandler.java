@@ -78,7 +78,7 @@ public class KeyEventHandler implements Handler.Callback {
 
   @Override
   public boolean handleMessage(Message message) {
-    KeyEventContext context = KeyEventContext.class.cast(message.obj);
+    KeyEventContext context = (KeyEventContext) message.obj;
     switch (message.what) {
       case REPEAT_KEY: {
         handleMessageRepeatKey(context);

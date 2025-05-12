@@ -76,10 +76,10 @@ public class MushroomSelectionActivity extends Activity {
       PackageManager packageManager = getContext().getPackageManager();
       ResolveInfo resolveInfo = getItem(position);
       ImageView icon =
-          ImageView.class.cast(contentView.findViewById(R.id.mushroom_application_icon));
+              (ImageView) contentView.findViewById(R.id.mushroom_application_icon);
       icon.setImageDrawable(resolveInfo.loadIcon(packageManager));
       TextView text =
-          TextView.class.cast(contentView.findViewById(R.id.mushroom_application_label));
+              (TextView) contentView.findViewById(R.id.mushroom_application_label);
       text.setText(resolveInfo.loadLabel(packageManager));
       return contentView;
     }
@@ -89,7 +89,7 @@ public class MushroomSelectionActivity extends Activity {
    * ClickListener to launch the target activity.
    */
   static class MushroomApplicationListClickListener implements OnItemClickListener {
-    private Activity activity;
+    private final Activity activity;
 
     MushroomApplicationListClickListener(Activity activity) {
       this.activity = activity;
@@ -98,7 +98,7 @@ public class MushroomSelectionActivity extends Activity {
     @Override
     public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
       MushroomUtil.clearProxy();
-      ResolveInfo resolveInfo = ResolveInfo.class.cast(adapter.getItemAtPosition(position));
+      ResolveInfo resolveInfo = (ResolveInfo) adapter.getItemAtPosition(position);
       ActivityInfo activityInfo = resolveInfo.activityInfo;
       activity.startActivityForResult(
           MushroomUtil.createMushroomLaunchingIntent(
@@ -115,7 +115,7 @@ public class MushroomSelectionActivity extends Activity {
     super.onCreate(savedInstance);
     setContentView(R.layout.mushroom_selection_dialog);
 
-    ListView view = ListView.class.cast(findViewById(R.id.mushroom_selection_list_view));
+    ListView view = (ListView) findViewById(R.id.mushroom_selection_list_view);
     view.setOnItemClickListener(new MushroomApplicationListClickListener(this));
   }
 
@@ -126,7 +126,7 @@ public class MushroomSelectionActivity extends Activity {
     // Reset application list for every onResume.
     // It is because this activity is launched in singleTask mode, so that the onCreate may be
     // skipped for second (or later) launching.
-    ListView view = ListView.class.cast(findViewById(R.id.mushroom_selection_list_view));
+    ListView view = (ListView) findViewById(R.id.mushroom_selection_list_view);
     view.setAdapter(new MushroomApplicationListAdapter(this));
   }
 

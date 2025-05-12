@@ -90,7 +90,7 @@ import java.util.List;
       this.dismissHandler = new Handler(Preconditions.checkNotNull(looper), new Handler.Callback() {
         @Override
         public boolean handleMessage(Message message) {
-          PopUpPreview preview = PopUpPreview.class.cast(Preconditions.checkNotNull(message).obj);
+          PopUpPreview preview = (PopUpPreview) Preconditions.checkNotNull(message).obj;
           preview.dismiss();
           freeList.add(preview);
           return true;

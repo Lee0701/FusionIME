@@ -51,9 +51,9 @@ public class FloatingModeIndicatorController {
 
   /** Listener interface to control floating mode indicator. */
   public interface ControllerListener {
-    public void show(CompositionMode mode);
-    public void showWithDelay(CompositionMode mode);
-    public void hide();
+    void show(CompositionMode mode);
+    void showWithDelay(CompositionMode mode);
+    void hide();
   }
 
   /**

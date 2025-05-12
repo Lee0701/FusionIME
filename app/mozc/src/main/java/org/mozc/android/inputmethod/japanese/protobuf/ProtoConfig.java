@@ -179,7 +179,7 @@ public final class ProtoConfig {
     }
 
     @Override
-    public final com.google.protobuf.UnknownFieldSet
+    public com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
       return this.unknownFields;
     }
@@ -254,7 +254,7 @@ public final class ProtoConfig {
         makeExtensionsImmutable();
       }
     }
-    public static final com.google.protobuf.Descriptors.Descriptor
+    public static com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return ProtoConfig.internal_static_mozc_config_GeneralConfig_descriptor;
     }
@@ -504,7 +504,7 @@ public final class ProtoConfig {
     }
 
     private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
+    public boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
       if (isInitialized == 0) return false;
@@ -750,7 +750,7 @@ public final class ProtoConfig {
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:mozc.config.GeneralConfig)
         org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.GeneralConfigOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
+      public static com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.internal_static_mozc_config_GeneralConfig_descriptor;
       }
@@ -845,30 +845,30 @@ public final class ProtoConfig {
       }
 
       public Builder clone() {
-        return (Builder) super.clone();
+        return super.clone();
       }
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
-        return (Builder) super.setField(field, value);
+        return super.setField(field, value);
       }
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return (Builder) super.clearField(field);
+        return super.clearField(field);
       }
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return (Builder) super.clearOneof(oneof);
+        return super.clearOneof(oneof);
       }
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           int index, java.lang.Object value) {
-        return (Builder) super.setRepeatedField(field, index, value);
+        return super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
-        return (Builder) super.addRepeatedField(field, value);
+        return super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.GeneralConfig) {
@@ -910,7 +910,7 @@ public final class ProtoConfig {
         return this;
       }
 
-      public final boolean isInitialized() {
+      public boolean isInitialized() {
         return true;
       }
 
@@ -1386,13 +1386,13 @@ public final class ProtoConfig {
         onChanged();
         return this;
       }
-      public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+      public Builder setUnknownFields(
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFields(unknownFields);
       }
 
-      public final Builder mergeUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+      public Builder mergeUnknownFields(
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
       }
 
@@ -2197,7 +2197,7 @@ public final class ProtoConfig {
     }
 
     @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
+    public com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
       return this.unknownFields;
     }
@@ -2538,7 +2538,7 @@ public final class ProtoConfig {
         makeExtensionsImmutable();
       }
     }
-    public static final com.google.protobuf.Descriptors.Descriptor
+    public static com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.internal_static_mozc_config_Config_descriptor;
     }
@@ -2638,7 +2638,7 @@ public final class ProtoConfig {
 
       private final int value;
 
-      private PreeditMethod(int value) {
+      PreeditMethod(int value) {
         this.value = value;
       }
 
@@ -2793,7 +2793,7 @@ public final class ProtoConfig {
 
       private final int value;
 
-      private SessionKeymap(int value) {
+      SessionKeymap(int value) {
         this.value = value;
       }
 
@@ -2901,7 +2901,7 @@ public final class ProtoConfig {
 
       private final int value;
 
-      private PunctuationMethod(int value) {
+      PunctuationMethod(int value) {
         this.value = value;
       }
 
@@ -3009,7 +3009,7 @@ public final class ProtoConfig {
 
       private final int value;
 
-      private SymbolMethod(int value) {
+      SymbolMethod(int value) {
         this.value = value;
       }
 
@@ -3132,7 +3132,7 @@ public final class ProtoConfig {
 
       private final int value;
 
-      private FundamentalCharacterForm(int value) {
+      FundamentalCharacterForm(int value) {
         this.value = value;
       }
 
@@ -3235,7 +3235,7 @@ public final class ProtoConfig {
 
       private final int value;
 
-      private HistoryLearningLevel(int value) {
+      HistoryLearningLevel(int value) {
         this.value = value;
       }
 
@@ -3334,7 +3334,7 @@ public final class ProtoConfig {
 
       private final int value;
 
-      private SelectionShortcut(int value) {
+      SelectionShortcut(int value) {
         this.value = value;
       }
 
@@ -3446,7 +3446,7 @@ public final class ProtoConfig {
 
       private final int value;
 
-      private CharacterForm(int value) {
+      CharacterForm(int value) {
         this.value = value;
       }
 
@@ -3573,7 +3573,7 @@ public final class ProtoConfig {
 
       private final int value;
 
-      private ShiftKeyModeSwitch(int value) {
+      ShiftKeyModeSwitch(int value) {
         this.value = value;
       }
 
@@ -3681,7 +3681,7 @@ public final class ProtoConfig {
 
       private final int value;
 
-      private NumpadCharacterForm(int value) {
+      NumpadCharacterForm(int value) {
         this.value = value;
       }
 
@@ -3798,7 +3798,7 @@ public final class ProtoConfig {
 
       private final int value;
 
-      private AutoConversionKey(int value) {
+      AutoConversionKey(int value) {
         this.value = value;
       }
 
@@ -3892,7 +3892,7 @@ public final class ProtoConfig {
 
       private final int value;
 
-      private YenSignCharacter(int value) {
+      YenSignCharacter(int value) {
         this.value = value;
       }
 
@@ -3954,7 +3954,7 @@ public final class ProtoConfig {
       }
 
       @java.lang.Override
-      public final com.google.protobuf.UnknownFieldSet
+      public com.google.protobuf.UnknownFieldSet
       getUnknownFields() {
         return this.unknownFields;
       }
@@ -4024,7 +4024,7 @@ public final class ProtoConfig {
           makeExtensionsImmutable();
         }
       }
-      public static final com.google.protobuf.Descriptors.Descriptor
+      public static com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.internal_static_mozc_config_Config_CharacterFormRule_descriptor;
       }
@@ -4112,7 +4112,7 @@ public final class ProtoConfig {
       }
 
       private byte memoizedIsInitialized = -1;
-      public final boolean isInitialized() {
+      public boolean isInitialized() {
         byte isInitialized = memoizedIsInitialized;
         if (isInitialized == 1) return true;
         if (isInitialized == 0) return false;
@@ -4303,7 +4303,7 @@ public final class ProtoConfig {
           com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
           // @@protoc_insertion_point(builder_implements:mozc.config.Config.CharacterFormRule)
           org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterFormRuleOrBuilder {
-        public static final com.google.protobuf.Descriptors.Descriptor
+        public static com.google.protobuf.Descriptors.Descriptor
             getDescriptor() {
           return org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.internal_static_mozc_config_Config_CharacterFormRule_descriptor;
         }
@@ -4380,30 +4380,30 @@ public final class ProtoConfig {
         }
 
         public Builder clone() {
-          return (Builder) super.clone();
+          return super.clone();
         }
         public Builder setField(
             com.google.protobuf.Descriptors.FieldDescriptor field,
             java.lang.Object value) {
-          return (Builder) super.setField(field, value);
+          return super.setField(field, value);
         }
         public Builder clearField(
             com.google.protobuf.Descriptors.FieldDescriptor field) {
-          return (Builder) super.clearField(field);
+          return super.clearField(field);
         }
         public Builder clearOneof(
             com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-          return (Builder) super.clearOneof(oneof);
+          return super.clearOneof(oneof);
         }
         public Builder setRepeatedField(
             com.google.protobuf.Descriptors.FieldDescriptor field,
             int index, java.lang.Object value) {
-          return (Builder) super.setRepeatedField(field, index, value);
+          return super.setRepeatedField(field, index, value);
         }
         public Builder addRepeatedField(
             com.google.protobuf.Descriptors.FieldDescriptor field,
             java.lang.Object value) {
-          return (Builder) super.addRepeatedField(field, value);
+          return super.addRepeatedField(field, value);
         }
         public Builder mergeFrom(com.google.protobuf.Message other) {
           if (other instanceof org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterFormRule) {
@@ -4432,7 +4432,7 @@ public final class ProtoConfig {
           return this;
         }
 
-        public final boolean isInitialized() {
+        public boolean isInitialized() {
           return true;
         }
 
@@ -4602,13 +4602,13 @@ public final class ProtoConfig {
           onChanged();
           return this;
         }
-        public final Builder setUnknownFields(
-            final com.google.protobuf.UnknownFieldSet unknownFields) {
+        public Builder setUnknownFields(
+                final com.google.protobuf.UnknownFieldSet unknownFields) {
           return super.setUnknownFields(unknownFields);
         }
 
-        public final Builder mergeUnknownFields(
-            final com.google.protobuf.UnknownFieldSet unknownFields) {
+        public Builder mergeUnknownFields(
+                final com.google.protobuf.UnknownFieldSet unknownFields) {
           return super.mergeUnknownFields(unknownFields);
         }
 
@@ -4681,7 +4681,7 @@ public final class ProtoConfig {
       }
 
       @java.lang.Override
-      public final com.google.protobuf.UnknownFieldSet
+      public com.google.protobuf.UnknownFieldSet
       getUnknownFields() {
         return this.unknownFields;
       }
@@ -4728,7 +4728,7 @@ public final class ProtoConfig {
           makeExtensionsImmutable();
         }
       }
-      public static final com.google.protobuf.Descriptors.Descriptor
+      public static com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.internal_static_mozc_config_Config_InformationListConfig_descriptor;
       }
@@ -4757,7 +4757,7 @@ public final class ProtoConfig {
       }
 
       private byte memoizedIsInitialized = -1;
-      public final boolean isInitialized() {
+      public boolean isInitialized() {
         byte isInitialized = memoizedIsInitialized;
         if (isInitialized == 1) return true;
         if (isInitialized == 0) return false;
@@ -4920,7 +4920,7 @@ public final class ProtoConfig {
           com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
           // @@protoc_insertion_point(builder_implements:mozc.config.Config.InformationListConfig)
           org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.InformationListConfigOrBuilder {
-        public static final com.google.protobuf.Descriptors.Descriptor
+        public static com.google.protobuf.Descriptors.Descriptor
             getDescriptor() {
           return org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.internal_static_mozc_config_Config_InformationListConfig_descriptor;
         }
@@ -4985,30 +4985,30 @@ public final class ProtoConfig {
         }
 
         public Builder clone() {
-          return (Builder) super.clone();
+          return super.clone();
         }
         public Builder setField(
             com.google.protobuf.Descriptors.FieldDescriptor field,
             java.lang.Object value) {
-          return (Builder) super.setField(field, value);
+          return super.setField(field, value);
         }
         public Builder clearField(
             com.google.protobuf.Descriptors.FieldDescriptor field) {
-          return (Builder) super.clearField(field);
+          return super.clearField(field);
         }
         public Builder clearOneof(
             com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-          return (Builder) super.clearOneof(oneof);
+          return super.clearOneof(oneof);
         }
         public Builder setRepeatedField(
             com.google.protobuf.Descriptors.FieldDescriptor field,
             int index, java.lang.Object value) {
-          return (Builder) super.setRepeatedField(field, index, value);
+          return super.setRepeatedField(field, index, value);
         }
         public Builder addRepeatedField(
             com.google.protobuf.Descriptors.FieldDescriptor field,
             java.lang.Object value) {
-          return (Builder) super.addRepeatedField(field, value);
+          return super.addRepeatedField(field, value);
         }
         public Builder mergeFrom(com.google.protobuf.Message other) {
           if (other instanceof org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.InformationListConfig) {
@@ -5029,7 +5029,7 @@ public final class ProtoConfig {
           return this;
         }
 
-        public final boolean isInitialized() {
+        public boolean isInitialized() {
           return true;
         }
 
@@ -5083,13 +5083,13 @@ public final class ProtoConfig {
           onChanged();
           return this;
         }
-        public final Builder setUnknownFields(
-            final com.google.protobuf.UnknownFieldSet unknownFields) {
+        public Builder setUnknownFields(
+                final com.google.protobuf.UnknownFieldSet unknownFields) {
           return super.setUnknownFields(unknownFields);
         }
 
-        public final Builder mergeUnknownFields(
-            final com.google.protobuf.UnknownFieldSet unknownFields) {
+        public Builder mergeUnknownFields(
+                final com.google.protobuf.UnknownFieldSet unknownFields) {
           return super.mergeUnknownFields(unknownFields);
         }
 
@@ -6113,7 +6113,7 @@ public final class ProtoConfig {
     }
 
     private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
+    public boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
       if (isInitialized == 0) return false;
@@ -6959,7 +6959,7 @@ public final class ProtoConfig {
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:mozc.config.Config)
         org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.ConfigOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
+      public static com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.internal_static_mozc_config_Config_descriptor;
       }
@@ -7307,30 +7307,30 @@ public final class ProtoConfig {
       }
 
       public Builder clone() {
-        return (Builder) super.clone();
+        return super.clone();
       }
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
-        return (Builder) super.setField(field, value);
+        return super.setField(field, value);
       }
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return (Builder) super.clearField(field);
+        return super.clearField(field);
       }
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return (Builder) super.clearOneof(oneof);
+        return super.clearOneof(oneof);
       }
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           int index, java.lang.Object value) {
-        return (Builder) super.setRepeatedField(field, index, value);
+        return super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
-        return (Builder) super.addRepeatedField(field, value);
+        return super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config) {
@@ -7500,7 +7500,7 @@ public final class ProtoConfig {
         return this;
       }
 
-      public final boolean isInitialized() {
+      public boolean isInitialized() {
         return true;
       }
 
@@ -9922,13 +9922,13 @@ public final class ProtoConfig {
         onChanged();
         return this;
       }
-      public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+      public Builder setUnknownFields(
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFields(unknownFields);
       }
 
-      public final Builder mergeUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+      public Builder mergeUnknownFields(
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
       }
 
@@ -10034,7 +10034,7 @@ public final class ProtoConfig {
       ":\004true\022W\n\025shift_key_mode_switch\030; \001(\0162&." +
       "mozc.config.Config.ShiftKeyModeSwitch:\020A" +
       "SCII_INPUT_MODE\022Y\n\025numpad_character_form" +
-      "\030< \001(\0162\'.mozc.config.Config.NumpadCharac" +
+              "\030< \001(\0162'.mozc.config.Config.NumpadCharac" +
       "terForm:\021NUMPAD_HALF_WIDTH\022\"\n\023use_auto_c" +
       "onversion\030= \001(\010:\005false\022\037\n\023auto_conversio" +
       "n_key\030> \001(\r:\00213\022J\n\022yen_sign_character\030? " +
@@ -10058,7 +10058,7 @@ public final class ProtoConfig {
       "ry_suggest\030e \001(\010:\004true\022%\n\027use_realtime_c" +
       "onversion\030f \001(\010:\004true\022\033\n\020suggestions_siz" +
       "e\030n \001(\r:\0013\022 \n\022use_mode_indicator\030x \001(\010:\004" +
-      "true\022\'\n\027allow_cloud_handwriting\030\255\002 \001(\010:\005" +
+              "true\022'\n\027allow_cloud_handwriting\030\255\002 \001(\010:\005" +
       "false\032\303\001\n\021CharacterFormRule\022\r\n\005group\030\001 \001" +
       "(\t\022M\n\026preedit_character_form\030\002 \001(\0162!.moz" +
       "c.config.Config.CharacterForm:\nFULL_WIDT" +

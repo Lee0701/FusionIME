@@ -137,7 +137,7 @@ public class Key {
                                 "Default KeyState is mandatory for non-spacer.");
     this.defaultKeyState = defaultKeyState;
     this.keyStateList = tmpKeyStateList == null
-        ? Collections.<KeyState>emptyList()
+        ? Collections.emptyList()
         : Collections.unmodifiableList(tmpKeyStateList);
   }
 

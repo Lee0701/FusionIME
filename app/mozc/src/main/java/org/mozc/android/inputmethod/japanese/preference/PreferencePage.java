@@ -96,7 +96,7 @@ enum PreferencePage {
       case DEVELOPMENT:
         return Collections.singletonList(R.xml.pref_development);
       default:
-        MozcLog.e(String.format("Unexpected preference page: %s", page.toString()));
+        MozcLog.e(String.format("Unexpected preference page: %s", page));
         return Collections.emptyList();
     }
   }

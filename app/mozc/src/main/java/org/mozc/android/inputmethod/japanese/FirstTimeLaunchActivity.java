@@ -103,17 +103,17 @@ public class FirstTimeLaunchActivity extends Activity {
 
     // Fill strings, which needs replacement.
     Resources resources = getResources();
-    TextView thankYouTextView = TextView.class.cast(findViewById(R.id.description_thank_you));
+    TextView thankYouTextView = (TextView) findViewById(R.id.description_thank_you);
     thankYouTextView.setText(resources.getString(R.string.firsttime_description_thank_you,
                                                  resources.getString(R.string.app_full_name)));
     if (sendingInformationFeaturesEnabled) {
       findViewById(R.id.usage_stats_views).setVisibility(View.VISIBLE);
-      TextView usageStatsTextView = TextView.class.cast(findViewById(R.id.description_usage_stats));
+      TextView usageStatsTextView = (TextView) findViewById(R.id.description_usage_stats);
       usageStatsTextView.setText(resources.getString(R.string.firsttime_description_usage_stats,
                                                      resources.getString(
                                                          R.string.developer_organization)));
 
-      CheckBox usageStatsCheckBox = CheckBox.class.cast(findViewById(R.id.send_usage_stats));
+      CheckBox usageStatsCheckBox = (CheckBox) findViewById(R.id.send_usage_stats);
       usageStatsCheckBox.setOnCheckedChangeListener(
           new SendUsageStatsChangeListener(sharedPreferences));
       if (MozcUtil.isDevChannel(this)) {
@@ -141,7 +141,7 @@ public class FirstTimeLaunchActivity extends Activity {
 
   private void initializeAnchorTextView(int textViewId, int urlId, int descriptionId) {
     Resources resources = getResources();
-    TextView textView = TextView.class.cast(findViewById(textViewId));
+    TextView textView = (TextView) findViewById(textViewId);
     SpannableString spannable = new SpannableString(resources.getString(descriptionId));
     spannable.setSpan(
         new URLSpan(resources.getString(urlId)),
@@ -166,7 +166,7 @@ public class FirstTimeLaunchActivity extends Activity {
   }
 
   private void updateView(SharedPreferences sharedPreferences) {
-    CheckBox.class.cast(findViewById(R.id.send_usage_stats)).setChecked(
+    ((CheckBox) findViewById(R.id.send_usage_stats)).setChecked(
         sharedPreferences.getBoolean(PreferenceUtil.PREF_OTHER_USAGE_STATS_KEY, false));
   }
 }

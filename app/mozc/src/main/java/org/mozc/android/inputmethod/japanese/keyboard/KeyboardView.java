@@ -120,7 +120,7 @@ public class KeyboardView extends View implements MemoryManageable {
     private final Runnable metastateUnsetter = new Runnable() {
       @Override
       public void run() {
-        updateMetaStates(Collections.<MetaState>emptySet(),
+        updateMetaStates(Collections.emptySet(),
                          Collections.singleton(MetaState.HANDLING_TOUCH_EVENT));
       }
     };
@@ -175,14 +175,14 @@ public class KeyboardView extends View implements MemoryManageable {
           // After DELAY milliseconds, HANDLING_TOUCH_EVENT will be unset.
           delayedHandlingTouchEventHandler.postDelayed(metastateUnsetter, DELAY);
         } else {
-          updateMetaStates(Collections.<MetaState>emptySet(),
+          updateMetaStates(Collections.emptySet(),
                            Collections.singleton(MetaState.HANDLING_TOUCH_EVENT));
         }
       } else {
         // Setting HANDLING_TOUCH_EVENT must be processed immediately in order to inactivate
         // Globe key as soon as possible.
         updateMetaStates(Collections.singleton(MetaState.HANDLING_TOUCH_EVENT),
-                         Collections.<MetaState>emptySet());
+                         Collections.emptySet());
       }
     }
   }
@@ -328,13 +328,13 @@ public class KeyboardView extends View implements MemoryManageable {
 
   /** Set a given keyboard to this view, and send a request to update. */
   public void setKeyboard(Keyboard keyboard) {
-    flushPendingKeyEvent(Optional.<TouchEvent>absent());
+    flushPendingKeyEvent(Optional.absent());
 
     this.keyboard = Optional.of(keyboard);
-    updateMetaStates(Collections.<MetaState>emptySet(), MetaState.CHAR_TYPE_EXCLUSIVE_GROUP);
+    updateMetaStates(Collections.emptySet(), MetaState.CHAR_TYPE_EXCLUSIVE_GROUP);
     accessibilityDelegate.setKeyboard(this.keyboard);
     this.drawableCache.clear();
-    backgroundSurface.reset(this.keyboard, Collections.<MetaState>emptySet());
+    backgroundSurface.reset(this.keyboard, Collections.emptySet());
     invalidateIfRequired();
   }
 
@@ -362,7 +362,7 @@ public class KeyboardView extends View implements MemoryManageable {
     popupPreviewPool.setSkin(skin);
     backgroundDrawableFactory.setSkin(skin);
     if (keyboard.isPresent()) {
-      backgroundSurface.reset(this.keyboard, Collections.<MetaState>emptySet());
+      backgroundSurface.reset(this.keyboard, Collections.emptySet());
     }
     setBackgroundDrawable(skin.windowBackgroundDrawable.getConstantState().newDrawable());
   }
@@ -528,8 +528,8 @@ public class KeyboardView extends View implements MemoryManageable {
         // released this modifier key. So, we flush all pressed keys here, and
         // reset the keyboard's meta state to unmodified.
         flushPendingKeyEvent(keyEventContext.getTouchEvent());
-        updateMetaStates(Collections.<MetaState>emptySet(), MetaState.CHAR_TYPE_EXCLUSIVE_GROUP);
-        backgroundSurface.reset(keyboard, Collections.<MetaState>emptySet());
+        updateMetaStates(Collections.emptySet(), MetaState.CHAR_TYPE_EXCLUSIVE_GROUP);
+        backgroundSurface.reset(keyboard, Collections.emptySet());
       }
     } else {
       if (!metaState.isEmpty() && keyEventContextMap.isEmpty()) {
@@ -543,7 +543,7 @@ public class KeyboardView extends View implements MemoryManageable {
         }
         if (!nextMetaState.equals(metaState)) {
           setMetaStates(nextMetaState);
-          backgroundSurface.reset(keyboard, Collections.<MetaState>emptySet());
+          backgroundSurface.reset(keyboard, Collections.emptySet());
         }
       }
     }

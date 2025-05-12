@@ -117,14 +117,14 @@ public enum SymbolMajorCategory {
    * @param minColumnWidthResourceId the resource id (R.dimen.xxxx) which represents
    *        the minimum width of each column.
    */
-  private SymbolMajorCategory(
-      int buttonResourceId,
-      int buttonImageResourceId,
-      int buttonSelectedImageResourceId,
-      int maxImageHeightResourceId,
-      List<SymbolMinorCategory> minorCategories,
-      int minColumnWidthResourceId,
-      DescriptionLayoutPolicy layoutPolicy) {
+  SymbolMajorCategory(
+          int buttonResourceId,
+          int buttonImageResourceId,
+          int buttonSelectedImageResourceId,
+          int maxImageHeightResourceId,
+          List<SymbolMinorCategory> minorCategories,
+          int minColumnWidthResourceId,
+          DescriptionLayoutPolicy layoutPolicy) {
     // We just store resource id instead of real bitmap/integer
     // because we cannot obtain them here (Context instance is needed).
     this.buttonResourceId = buttonResourceId;

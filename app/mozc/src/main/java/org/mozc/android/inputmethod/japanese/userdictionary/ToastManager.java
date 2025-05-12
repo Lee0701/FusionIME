@@ -49,7 +49,7 @@ public class ToastManager {
   /**
    * Mapping from Status to the resource id.
    */
-  private static Map<Status, Integer> ERROR_MESSAGE_MAP;
+  private static final Map<Status, Integer> ERROR_MESSAGE_MAP;
   static {
     EnumMap<Status, Integer> map = new EnumMap<Status, Integer>(Status.class);
     map.put(Status.FILE_NOT_FOUND, R.string.user_dictionary_tool_status_error_file_not_found);

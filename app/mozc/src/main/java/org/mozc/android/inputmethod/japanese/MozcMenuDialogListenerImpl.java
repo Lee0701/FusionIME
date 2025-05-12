@@ -95,7 +95,7 @@ class MozcMenuDialogListenerImpl implements MenuDialogListener {
     if (inputConnection != null) {
       if (inputConnection instanceof ComposingTextTrackingInputConnection) {
         composingText =
-            ComposingTextTrackingInputConnection.class.cast(inputConnection).getComposingText();
+            ((ComposingTextTrackingInputConnection) inputConnection).getComposingText();
       }
       inputConnection.setComposingText("", MozcUtil.CURSOR_POSITION_TAIL);
     }

@@ -209,7 +209,7 @@ public class ConversionCandidateLayouter implements CandidateLayouter {
     Preconditions.checkNotNull(candidateList);
     if (minChunkWidth <= 0 || viewWidth <= 0 || candidateList.getCandidatesCount() == 0 ||
         !spanFactory.isPresent()) {
-      return Optional.<CandidateLayout>absent();
+      return Optional.absent();
     }
 
     int numChunks = getNumChunks();
@@ -231,8 +231,8 @@ public class ConversionCandidateLayouter implements CandidateLayouter {
 
     // Push empty span at the end of the first row.
     if (reserveEmptySpan) {
-      Span emptySpan = new Span(Optional.<CandidateWord>absent(), 0, 0,
-                                Collections.<String>emptyList());
+      Span emptySpan = new Span(Optional.absent(), 0, 0,
+                                Collections.emptyList());
       List<Span> spanList = rowList.get(0).getSpanList();
       emptySpan.setLeft(spanList.get(spanList.size() - 1).getRight());
       emptySpan.setRight(viewWidth);

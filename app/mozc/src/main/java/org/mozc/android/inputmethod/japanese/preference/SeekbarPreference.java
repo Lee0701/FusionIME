@@ -126,7 +126,7 @@ public class SeekbarPreference extends Preference {
   protected View onCreateView(ViewGroup parent) {
     LayoutInflater inflater = LayoutInflater.from(getContext());
     View view = inflater.inflate(R.layout.pref_seekbar, parent, false);
-    ViewGroup preferenceFrame = ViewGroup.class.cast(view.findViewById(R.id.preference_frame));
+    ViewGroup preferenceFrame = (ViewGroup) view.findViewById(R.id.preference_frame);
     // Note: Invoking getLayoutResource() is a hack to obtain the default resource id.
     inflater.inflate(getLayoutResource(), preferenceFrame);
     initializeOriginalView(view);
@@ -148,7 +148,7 @@ public class SeekbarPreference extends Preference {
     if (!(parent instanceof View)) {
       return;
     }
-    View parentView = View.class.cast(parent);
+    View parentView = (View) parent;
     shrinkBottomMarginAndPadding(parentView);
 
     ViewParent rootViewParent = parentView.getParent();
@@ -156,7 +156,7 @@ public class SeekbarPreference extends Preference {
       return;
     }
 
-    View rootView = View.class.cast(rootViewParent);
+    View rootView = (View) rootViewParent;
     rootView.setMinimumHeight(0);
 
     View widgetFrame = view.findViewById(android.R.id.widget_frame);
@@ -168,7 +168,7 @@ public class SeekbarPreference extends Preference {
   private void shrinkBottomMarginAndPadding(View view) {
     LayoutParams params = view.getLayoutParams();
     if (params instanceof MarginLayoutParams) {
-      MarginLayoutParams.class.cast(params).bottomMargin = 0;
+      ((MarginLayoutParams) params).bottomMargin = 0;
       view.setLayoutParams(params);
     }
     view.setPadding(view.getPaddingLeft(), view.getPaddingTop(), view.getPaddingRight(), 0);
@@ -181,7 +181,7 @@ public class SeekbarPreference extends Preference {
 
   @Override
   protected void onSetInitialValue(boolean restoreValue, Object defaultValue) {
-    setValue(restoreValue ? getPersistedInt(value) : Integer.class.cast(defaultValue));
+    setValue(restoreValue ? getPersistedInt(value) : (Integer) defaultValue);
   }
 
   @Override
@@ -189,8 +189,8 @@ public class SeekbarPreference extends Preference {
     super.onBindView(view);
 
     TextView valueView =
-        TextView.class.cast(view.findViewById(R.id.pref_seekbar_value));
-    SeekBar seekBar = SeekBar.class.cast(view.findViewById(R.id.pref_seekbar_seekbar));
+            (TextView) view.findViewById(R.id.pref_seekbar_value);
+    SeekBar seekBar = (SeekBar) view.findViewById(R.id.pref_seekbar_seekbar);
     if (seekBar != null) {
       seekBar.setMax(max - offset);
       seekBar.setProgress(value - offset);
@@ -199,7 +199,7 @@ public class SeekbarPreference extends Preference {
     if (valueView != null) {
       valueView.setText(String.valueOf(value));
     }
-    TextView unitView = TextView.class.cast(view.findViewById(R.id.pref_seekbar_unit));
+    TextView unitView = (TextView) view.findViewById(R.id.pref_seekbar_unit);
     if (unitView != null) {
       if (unit == null) {
         unitView.setVisibility(View.GONE);
@@ -219,7 +219,7 @@ public class SeekbarPreference extends Preference {
       return;
     }
 
-    TextView textView = TextView.class.cast(parentView.findViewById(resourceId));
+    TextView textView = (TextView) parentView.findViewById(resourceId);
     if (textView == null) {
       return;
     }

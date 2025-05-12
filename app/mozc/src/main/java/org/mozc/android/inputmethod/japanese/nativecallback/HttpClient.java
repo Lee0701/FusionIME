@@ -43,6 +43,7 @@ import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 
 /**
  * A http client class used by nativa layer instead of cURL.
@@ -102,7 +103,7 @@ public class HttpClient {
 
     @Override
     public ByteBuffer handleResponse(HttpResponse response)
-        throws ClientProtocolException, IOException {
+        throws IOException {
       return ByteBuffer.wrap(EntityUtils.toByteArray(response.getEntity()));
     }
 
@@ -130,7 +131,7 @@ public class HttpClient {
         result.append(header.getName()).append(": ").append(header.getValue()).append('\n');
       }
       result.append('\n');
-      return ByteBuffer.wrap(result.toString().getBytes("UTF-8"));
+      return ByteBuffer.wrap(result.toString().getBytes(StandardCharsets.UTF_8));
     }
 
     public static ResponseHeadHandler getInstance() {
@@ -146,10 +147,10 @@ public class HttpClient {
    * @return an byte array of the result
    */
   public static byte[] request(byte[] method, byte[] url, byte[] postData)
-      throws ClientProtocolException, IOException {
+      throws IOException {
     AbstractHttpClient httpClient = getHttpClient();
     HttpUriRequest request =
-        createRequest(new String(method, "utf-8"), new String(url, "utf-8"), postData);
+        createRequest(new String(method, StandardCharsets.UTF_8), new String(url, StandardCharsets.UTF_8), postData);
     ByteBuffer response =
         httpClient.execute(request,
                            "HEAD".equals(request.getMethod())

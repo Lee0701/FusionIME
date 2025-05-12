@@ -87,7 +87,7 @@ public class NarrowFrameView extends LinearLayout {
             skin.twelvekeysLayoutPressedFunctionKeyBottomColor,
             skin.twelvekeysLayoutPressedFunctionKeyHighlightColor,
             skin.twelvekeysLayoutPressedFunctionKeyShadowColor),
-        Optional.<Drawable>of(new RoundRectKeyDrawable(
+        Optional.of(new RoundRectKeyDrawable(
             (int) (BUTTON_LEFT_OFFSET * density),
             (int) (BUTTON_TOP_OFFSET * density),
             (int) (BUTTON_RIGHT_OFFSET * density),
@@ -152,12 +152,12 @@ public class NarrowFrameView extends LinearLayout {
 
   @VisibleForTesting
   MozcImageView getHardwareCompositionButton() {
-    return MozcImageView.class.cast(findViewById(R.id.hardware_composition_button));
+    return (MozcImageView) findViewById(R.id.hardware_composition_button);
   }
 
   @VisibleForTesting
   MozcImageView getWidenButton() {
-    return MozcImageView.class.cast(findViewById(R.id.widen_button));
+    return (MozcImageView) findViewById(R.id.widen_button);
   }
 
   @VisibleForTesting

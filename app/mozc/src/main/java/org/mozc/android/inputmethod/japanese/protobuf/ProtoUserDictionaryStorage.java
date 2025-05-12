@@ -172,7 +172,7 @@ public final class ProtoUserDictionaryStorage {
     }
 
     @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
+    public com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
       return this.unknownFields;
     }
@@ -252,7 +252,7 @@ public final class ProtoUserDictionaryStorage {
         makeExtensionsImmutable();
       }
     }
-    public static final com.google.protobuf.Descriptors.Descriptor
+    public static com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.internal_static_mozc_user_dictionary_UserDictionary_descriptor;
     }
@@ -1077,7 +1077,7 @@ public final class ProtoUserDictionaryStorage {
 
       private final int value;
 
-      private PosType(int value) {
+      PosType(int value) {
         this.value = value;
       }
 
@@ -1219,7 +1219,7 @@ public final class ProtoUserDictionaryStorage {
       }
 
       @java.lang.Override
-      public final com.google.protobuf.UnknownFieldSet
+      public com.google.protobuf.UnknownFieldSet
       getUnknownFields() {
         return this.unknownFields;
       }
@@ -1300,7 +1300,7 @@ public final class ProtoUserDictionaryStorage {
           makeExtensionsImmutable();
         }
       }
-      public static final com.google.protobuf.Descriptors.Descriptor
+      public static com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.internal_static_mozc_user_dictionary_UserDictionary_Entry_descriptor;
       }
@@ -1522,7 +1522,7 @@ public final class ProtoUserDictionaryStorage {
       }
 
       private byte memoizedIsInitialized = -1;
-      public final boolean isInitialized() {
+      public boolean isInitialized() {
         byte isInitialized = memoizedIsInitialized;
         if (isInitialized == 1) return true;
         if (isInitialized == 0) return false;
@@ -1766,7 +1766,7 @@ public final class ProtoUserDictionaryStorage {
           com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
           // @@protoc_insertion_point(builder_implements:mozc.user_dictionary.UserDictionary.Entry)
           org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.EntryOrBuilder {
-        public static final com.google.protobuf.Descriptors.Descriptor
+        public static com.google.protobuf.Descriptors.Descriptor
             getDescriptor() {
           return org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.internal_static_mozc_user_dictionary_UserDictionary_Entry_descriptor;
         }
@@ -1861,30 +1861,30 @@ public final class ProtoUserDictionaryStorage {
         }
 
         public Builder clone() {
-          return (Builder) super.clone();
+          return super.clone();
         }
         public Builder setField(
             com.google.protobuf.Descriptors.FieldDescriptor field,
             java.lang.Object value) {
-          return (Builder) super.setField(field, value);
+          return super.setField(field, value);
         }
         public Builder clearField(
             com.google.protobuf.Descriptors.FieldDescriptor field) {
-          return (Builder) super.clearField(field);
+          return super.clearField(field);
         }
         public Builder clearOneof(
             com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-          return (Builder) super.clearOneof(oneof);
+          return super.clearOneof(oneof);
         }
         public Builder setRepeatedField(
             com.google.protobuf.Descriptors.FieldDescriptor field,
             int index, java.lang.Object value) {
-          return (Builder) super.setRepeatedField(field, index, value);
+          return super.setRepeatedField(field, index, value);
         }
         public Builder addRepeatedField(
             com.google.protobuf.Descriptors.FieldDescriptor field,
             java.lang.Object value) {
-          return (Builder) super.addRepeatedField(field, value);
+          return super.addRepeatedField(field, value);
         }
         public Builder mergeFrom(com.google.protobuf.Message other) {
           if (other instanceof org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry) {
@@ -1926,7 +1926,7 @@ public final class ProtoUserDictionaryStorage {
           return this;
         }
 
-        public final boolean isInitialized() {
+        public boolean isInitialized() {
           return true;
         }
 
@@ -2348,13 +2348,13 @@ public final class ProtoUserDictionaryStorage {
           onChanged();
           return this;
         }
-        public final Builder setUnknownFields(
-            final com.google.protobuf.UnknownFieldSet unknownFields) {
+        public Builder setUnknownFields(
+                final com.google.protobuf.UnknownFieldSet unknownFields) {
           return super.setUnknownFields(unknownFields);
         }
 
-        public final Builder mergeUnknownFields(
-            final com.google.protobuf.UnknownFieldSet unknownFields) {
+        public Builder mergeUnknownFields(
+                final com.google.protobuf.UnknownFieldSet unknownFields) {
           return super.mergeUnknownFields(unknownFields);
         }
 
@@ -2594,7 +2594,7 @@ public final class ProtoUserDictionaryStorage {
     }
 
     private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
+    public boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
       if (isInitialized == 0) return false;
@@ -2836,7 +2836,7 @@ public final class ProtoUserDictionaryStorage {
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:mozc.user_dictionary.UserDictionary)
         org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
+      public static com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.internal_static_mozc_user_dictionary_UserDictionary_descriptor;
       }
@@ -2941,30 +2941,30 @@ public final class ProtoUserDictionaryStorage {
       }
 
       public Builder clone() {
-        return (Builder) super.clone();
+        return super.clone();
       }
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
-        return (Builder) super.setField(field, value);
+        return super.setField(field, value);
       }
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return (Builder) super.clearField(field);
+        return super.clearField(field);
       }
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return (Builder) super.clearOneof(oneof);
+        return super.clearOneof(oneof);
       }
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           int index, java.lang.Object value) {
-        return (Builder) super.setRepeatedField(field, index, value);
+        return super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
-        return (Builder) super.addRepeatedField(field, value);
+        return super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary) {
@@ -3025,7 +3025,7 @@ public final class ProtoUserDictionaryStorage {
         return this;
       }
 
-      public final boolean isInitialized() {
+      public boolean isInitialized() {
         return true;
       }
 
@@ -3607,13 +3607,13 @@ public final class ProtoUserDictionaryStorage {
         onChanged();
         return this;
       }
-      public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+      public Builder setUnknownFields(
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFields(unknownFields);
       }
 
-      public final Builder mergeUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+      public Builder mergeUnknownFields(
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
       }
 
@@ -3749,7 +3749,7 @@ public final class ProtoUserDictionaryStorage {
     }
 
     @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
+    public com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
       return this.unknownFields;
     }
@@ -3819,7 +3819,7 @@ public final class ProtoUserDictionaryStorage {
         makeExtensionsImmutable();
       }
     }
-    public static final com.google.protobuf.Descriptors.Descriptor
+    public static com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.internal_static_mozc_user_dictionary_UserDictionaryStorage_descriptor;
     }
@@ -3930,7 +3930,7 @@ public final class ProtoUserDictionaryStorage {
 
       private final int value;
 
-      private StorageType(int value) {
+      StorageType(int value) {
         this.value = value;
       }
 
@@ -4033,7 +4033,7 @@ public final class ProtoUserDictionaryStorage {
     }
 
     private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
+    public boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
       if (isInitialized == 0) return false;
@@ -4223,7 +4223,7 @@ public final class ProtoUserDictionaryStorage {
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:mozc.user_dictionary.UserDictionaryStorage)
         org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorageOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
+      public static com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.internal_static_mozc_user_dictionary_UserDictionaryStorage_descriptor;
       }
@@ -4310,30 +4310,30 @@ public final class ProtoUserDictionaryStorage {
       }
 
       public Builder clone() {
-        return (Builder) super.clone();
+        return super.clone();
       }
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
-        return (Builder) super.setField(field, value);
+        return super.setField(field, value);
       }
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return (Builder) super.clearField(field);
+        return super.clearField(field);
       }
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return (Builder) super.clearOneof(oneof);
+        return super.clearOneof(oneof);
       }
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           int index, java.lang.Object value) {
-        return (Builder) super.setRepeatedField(field, index, value);
+        return super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
-        return (Builder) super.addRepeatedField(field, value);
+        return super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorage) {
@@ -4383,7 +4383,7 @@ public final class ProtoUserDictionaryStorage {
         return this;
       }
 
-      public final boolean isInitialized() {
+      public boolean isInitialized() {
         return true;
       }
 
@@ -4801,13 +4801,13 @@ public final class ProtoUserDictionaryStorage {
         onChanged();
         return this;
       }
-      public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+      public Builder setUnknownFields(
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFields(unknownFields);
       }
 
-      public final Builder mergeUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+      public Builder mergeUnknownFields(
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
       }
 
@@ -4977,7 +4977,7 @@ public final class ProtoUserDictionaryStorage {
     }
 
     @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
+    public com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
       return this.unknownFields;
     }
@@ -5099,7 +5099,7 @@ public final class ProtoUserDictionaryStorage {
         makeExtensionsImmutable();
       }
     }
-    public static final com.google.protobuf.Descriptors.Descriptor
+    public static com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.internal_static_mozc_user_dictionary_UserDictionaryCommand_descriptor;
     }
@@ -5613,7 +5613,7 @@ public final class ProtoUserDictionaryStorage {
 
       private final int value;
 
-      private CommandType(int value) {
+      CommandType(int value) {
         this.value = value;
       }
 
@@ -5825,7 +5825,7 @@ public final class ProtoUserDictionaryStorage {
     }
 
     private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
+    public boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
       if (isInitialized == 0) return false;
@@ -5897,7 +5897,7 @@ public final class ProtoUserDictionaryStorage {
             .computeInt32SizeNoTag(entryIndex_.get(i));
         }
         size += dataSize;
-        size += 1 * getEntryIndexList().size();
+        size += getEntryIndexList().size();
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
@@ -6122,7 +6122,7 @@ public final class ProtoUserDictionaryStorage {
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:mozc.user_dictionary.UserDictionaryCommand)
         org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommandOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
+      public static com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.internal_static_mozc_user_dictionary_UserDictionaryCommand_descriptor;
       }
@@ -6245,30 +6245,30 @@ public final class ProtoUserDictionaryStorage {
       }
 
       public Builder clone() {
-        return (Builder) super.clone();
+        return super.clone();
       }
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
-        return (Builder) super.setField(field, value);
+        return super.setField(field, value);
       }
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return (Builder) super.clearField(field);
+        return super.clearField(field);
       }
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return (Builder) super.clearOneof(oneof);
+        return super.clearOneof(oneof);
       }
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           int index, java.lang.Object value) {
-        return (Builder) super.setRepeatedField(field, index, value);
+        return super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
-        return (Builder) super.addRepeatedField(field, value);
+        return super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommand) {
@@ -6324,11 +6324,8 @@ public final class ProtoUserDictionaryStorage {
         return this;
       }
 
-      public final boolean isInitialized() {
-        if (!hasType()) {
-          return false;
-        }
-        return true;
+      public boolean isInitialized() {
+          return hasType();
       }
 
       public Builder mergeFrom(
@@ -6849,13 +6846,13 @@ public final class ProtoUserDictionaryStorage {
         onChanged();
         return this;
       }
-      public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+      public Builder setUnknownFields(
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFields(unknownFields);
       }
 
-      public final Builder mergeUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+      public Builder mergeUnknownFields(
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
       }
 
@@ -6996,7 +6993,7 @@ public final class ProtoUserDictionaryStorage {
     }
 
     @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
+    public com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
       return this.unknownFields;
     }
@@ -7089,7 +7086,7 @@ public final class ProtoUserDictionaryStorage {
         makeExtensionsImmutable();
       }
     }
-    public static final com.google.protobuf.Descriptors.Descriptor
+    public static com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.internal_static_mozc_user_dictionary_UserDictionaryCommandStatus_descriptor;
     }
@@ -7468,7 +7465,7 @@ public final class ProtoUserDictionaryStorage {
 
       private final int value;
 
-      private Status(int value) {
+      Status(int value) {
         this.value = value;
       }
 
@@ -7594,7 +7591,7 @@ public final class ProtoUserDictionaryStorage {
     }
 
     private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
+    public boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
       if (isInitialized == 0) return false;
@@ -7838,7 +7835,7 @@ public final class ProtoUserDictionaryStorage {
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:mozc.user_dictionary.UserDictionaryCommandStatus)
         org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommandStatusOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
+      public static com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.internal_static_mozc_user_dictionary_UserDictionaryCommandStatus_descriptor;
       }
@@ -7952,30 +7949,30 @@ public final class ProtoUserDictionaryStorage {
       }
 
       public Builder clone() {
-        return (Builder) super.clone();
+        return super.clone();
       }
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
-        return (Builder) super.setField(field, value);
+        return super.setField(field, value);
       }
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return (Builder) super.clearField(field);
+        return super.clearField(field);
       }
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return (Builder) super.clearOneof(oneof);
+        return super.clearOneof(oneof);
       }
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           int index, java.lang.Object value) {
-        return (Builder) super.setRepeatedField(field, index, value);
+        return super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
-        return (Builder) super.addRepeatedField(field, value);
+        return super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommandStatus) {
@@ -8034,11 +8031,8 @@ public final class ProtoUserDictionaryStorage {
         return this;
       }
 
-      public final boolean isInitialized() {
-        if (!hasStatus()) {
-          return false;
-        }
-        return true;
+      public boolean isInitialized() {
+          return hasStatus();
       }
 
       public Builder mergeFrom(
@@ -8549,13 +8543,13 @@ public final class ProtoUserDictionaryStorage {
         }
         return entriesBuilder_;
       }
-      public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+      public Builder setUnknownFields(
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFields(unknownFields);
       }
 
-      public final Builder mergeUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+      public Builder mergeUnknownFields(
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
       }
 
@@ -8661,7 +8655,7 @@ public final class ProtoUserDictionaryStorage {
       "\022\022\n\016BA_GROUP1_VERB\020!\022\022\n\016HA_GROUP1_VERB\020\"" +
       "\022\017\n\013GROUP2_VERB\020#\022\024\n\020KURU_GROUP3_VERB\020$\022" +
       "\024\n\020SURU_GROUP3_VERB\020%\022\024\n\020ZURU_GROUP3_VER" +
-      "B\020&\022\022\n\016RU_GROUP3_VERB\020\'\022\r\n\tADJECTIVE\020(\022\034" +
+              "B\020&\022\022\n\016RU_GROUP3_VERB\020'\022\r\n\tADJECTIVE\020(\022\034" +
       "\n\030SENTENCE_ENDING_PARTICLE\020)\022\017\n\013PUNCTUAT" +
       "ION\020*\022\026\n\022FREE_STANDING_WORD\020+\022\024\n\020SUPPRES" +
       "SION_WORD\020,\"\351\001\n\025UserDictionaryStorage\022\022\n" +
@@ -8669,7 +8663,7 @@ public final class ProtoUserDictionaryStorage {
       "$.mozc.user_dictionary.UserDictionary\022W\n" +
       "\014storage_type\030\n \001(\01627.mozc.user_dictiona" +
       "ry.UserDictionaryStorage.StorageType:\010SN" +
-      "APSHOT\"\'\n\013StorageType\022\014\n\010SNAPSHOT\020\001\022\n\n\006U" +
+              "APSHOT\"'\n\013StorageType\022\014\n\010SNAPSHOT\020\001\022\n\n\006U" +
       "PDATE\020\002\"\266\006\n\025UserDictionaryCommand\022E\n\004typ" +
       "e\030\001 \002(\01627.mozc.user_dictionary.UserDicti" +
       "onaryCommand.CommandType\022\022\n\nsession_id\030\002" +

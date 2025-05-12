@@ -63,22 +63,22 @@ public class MenuDialog {
   /**
    * Listener interface for the menu dialog.
    */
-  public static interface MenuDialogListener {
+  public interface MenuDialogListener {
 
     /** Invoked when the dialog is shown. */
-    public void onShow(Context context);
+    void onShow(Context context);
 
     /** Invoked when the dialog is dismissed. */
-    public void onDismiss(Context context);
+    void onDismiss(Context context);
 
     /** Invoked when "Show Input Method Picker" item is selected. */
-    public void onShowInputMethodPickerSelected(Context context);
+    void onShowInputMethodPickerSelected(Context context);
 
     /** Invoked when "Launch Preference Activity" item is selected. */
-    public void onLaunchPreferenceActivitySelected(Context context);
+    void onLaunchPreferenceActivitySelected(Context context);
 
     /** Invoked when "Launch Mushroom" item is selected. */
-    public void onShowMushroomSelectionDialogSelected(Context context);
+    void onShowMushroomSelectionDialogSelected(Context context);
   }
 
   /**

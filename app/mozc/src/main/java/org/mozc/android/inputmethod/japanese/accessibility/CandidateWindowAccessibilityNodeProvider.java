@@ -291,9 +291,7 @@ class CandidateWindowAccessibilityNodeProvider extends AccessibilityNodeProvider
   @Override
   public boolean performAction(int virtualViewId, int action, Bundle arguments) {
     Optional<CandidateWord> candidateWord = getCandidateWordFromVirtualViewId(virtualViewId);
-    return candidateWord.isPresent()
-        ? performActionForCandidateWordInternal(candidateWord.get(), virtualViewId, action)
-        : false;
+    return candidateWord.isPresent() && performActionForCandidateWordInternal(candidateWord.get(), virtualViewId, action);
   }
 
   boolean performActionForCandidateWord(CandidateWord candidateWord,

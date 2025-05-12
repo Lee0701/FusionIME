@@ -97,7 +97,7 @@ public enum EmojiProviderType {
     NAME_SET = Collections.unmodifiableSet(nameSet);
   }
 
-  private EmojiProviderType(byte bitMask) {
+  EmojiProviderType(byte bitMask) {
     this.bitMask = bitMask;
   }
 

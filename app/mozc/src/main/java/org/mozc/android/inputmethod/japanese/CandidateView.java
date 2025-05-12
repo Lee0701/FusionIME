@@ -149,7 +149,7 @@ public class CandidateView extends InOutAnimatedFrameLayout implements MemoryMan
       float candidateChunkMinimumWidth =
           candidateTextSize + resources.getDimension(R.dimen.candidate_vertical_padding_size) * 2;
 
-      ConversionCandidateLayouter layouter = ConversionCandidateLayouter.class.cast(this.layouter);
+      ConversionCandidateLayouter layouter = (ConversionCandidateLayouter) this.layouter;
       layouter.setSpanFactory(spanFactory);
       layouter.setValueWidthCompressionRate(candidateWidthCompressionRate);
       layouter.setMinValueWidth(candidateTextMinimumWidth);
@@ -163,7 +163,7 @@ public class CandidateView extends InOutAnimatedFrameLayout implements MemoryMan
 
     @Override
     ConversionCandidateLayouter getCandidateLayouter() {
-      return ConversionCandidateLayouter.class.cast(super.getCandidateLayouter());
+      return (ConversionCandidateLayouter) super.getCandidateLayouter();
     }
 
     void setViewEventListener(ViewEventListener viewEventListener) {
@@ -278,24 +278,23 @@ public class CandidateView extends InOutAnimatedFrameLayout implements MemoryMan
   }
 
   @VisibleForTesting InputFrameFoldButtonView getInputFrameFoldButton() {
-    return InputFrameFoldButtonView.class.cast(findViewById(R.id.input_frame_fold_button));
+    return (InputFrameFoldButtonView) findViewById(R.id.input_frame_fold_button);
   }
 
   @VisibleForTesting ConversionCandidateWordView getConversionCandidateWordView() {
-    return ConversionCandidateWordView.class.cast(findViewById(R.id.candidate_word_view));
+    return (ConversionCandidateWordView) findViewById(R.id.candidate_word_view);
   }
 
   private ConversionCandidateWordContainerView getConversionCandidateWordContainerView() {
-    return ConversionCandidateWordContainerView.class.cast(
-        findViewById(R.id.conversion_candidate_word_container_view));
+    return (ConversionCandidateWordContainerView) findViewById(R.id.conversion_candidate_word_container_view);
   }
 
   @VisibleForTesting ScrollGuideView getScrollGuideView() {
-    return ScrollGuideView.class.cast(findViewById(R.id.candidate_scroll_guide_view));
+    return (ScrollGuideView) findViewById(R.id.candidate_scroll_guide_view);
   }
 
   @VisibleForTesting LinearLayout getCandidateWordFrame() {
-    return LinearLayout.class.cast(findViewById(R.id.candidate_word_frame));
+    return (LinearLayout) findViewById(R.id.candidate_word_frame);
   }
 
   /** Updates the view based on {@code Command}. */
