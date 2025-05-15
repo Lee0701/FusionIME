@@ -7,7 +7,8 @@ import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
 import com.google.common.base.Optional
 import ee.oyatl.ime.candidate.CandidateView
-import ee.oyatl.ime.candidate.CandidateViewWrapper
+import ee.oyatl.ime.candidate.ScrollingCandidateView
+import ee.oyatl.ime.candidate.VerticalScrollingCandidateView
 import ee.oyatl.ime.fusion.mozc.InputConnectionRenderer
 import ee.oyatl.ime.keyboard.Keyboard
 import ee.oyatl.ime.keyboard.keyboardset.BottomRowKeyboardSet
@@ -31,7 +32,8 @@ class FusionIMEService: InputMethodService() {
         DefaultKeyboardSet(keyboardListener, LayoutQwerty.ROWS_ROMAJI_LOWER, LayoutQwerty.ROWS_ROMAJI_UPPER),
         BottomRowKeyboardSet(keyboardListener)
     )
-    private lateinit var candidateView: CandidateViewWrapper
+    private val candidateListener = CandidateViewListener()
+    private lateinit var candidateView: CandidateView
     private lateinit var imeView: ViewGroup
 
     private lateinit var primaryKeyCodeConverter: PrimaryKeyCodeConverter
@@ -81,16 +83,20 @@ class FusionIMEService: InputMethodService() {
         sessionExecutor.resetContext()
     }
 
+    override fun onFinishInput() {
+        super.onFinishInput()
+        sessionExecutor.resetContext()
+    }
+
     override fun onCreateInputView(): View {
         keyboardSet.initView(this)
         imeView = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
         val inputView = keyboardSet.getView(keyboardListener.shiftState, false)
-        val resId = ee.oyatl.ime.keyboard.R.layout.candidate_view
-        candidateView = CandidateViewWrapper(
-            candidateView = layoutInflater.inflate(resId, null, false) as CandidateView,
-            onItemClick = { this.onCandiadteClick(it) }
-        )
-        imeView.addView(candidateView.view)
+//        candidateView = ScrollingCandidateView(this, null).apply {
+        candidateView = VerticalScrollingCandidateView(this, null, 2).apply {
+            listener = candidateListener
+        }
+        imeView.addView(candidateView as View)
         imeView.addView(inputView)
         return imeView
     }
@@ -100,9 +106,11 @@ class FusionIMEService: InputMethodService() {
         setInputView(imeView)
     }
 
-    private fun onCandiadteClick(candidate: CandidateView.Candidate) {
-        if(candidate is MozcCandidate) {
-            sessionExecutor.submitCandidate(candidate.id, Optional.absent(), renderResultCallback)
+    private inner class CandidateViewListener: CandidateView.Listener {
+        override fun onCandidateSelected(candidate: CandidateView.Candidate) {
+            if(candidate is MozcCandidate) {
+                sessionExecutor.submitCandidate(candidate.id, Optional.absent(), renderResultCallback)
+            }
         }
     }
 
