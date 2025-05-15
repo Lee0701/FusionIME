@@ -2,8 +2,11 @@ package ee.oyatl.ime.fusion
 
 import android.inputmethodservice.InputMethodService
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.widget.LinearLayout
 import com.google.common.base.Optional
+import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.fusion.mozc.InputConnectionRenderer
 import ee.oyatl.ime.keyboard.Keyboard
 import ee.oyatl.ime.keyboard.keyboardset.BottomRowKeyboardSet
@@ -12,8 +15,10 @@ import ee.oyatl.ime.keyboard.keyboardset.KeyboardSet
 import ee.oyatl.ime.keyboard.keyboardset.StackedKeyboardSet
 import ee.oyatl.ime.keyboard.layout.LayoutQwerty
 import org.mozc.android.inputmethod.japanese.PrimaryKeyCodeConverter
+import org.mozc.android.inputmethod.japanese.protobuf.ProtoCandidates.CandidateWord
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.Input.TouchEvent
+import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.Request
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config
 import org.mozc.android.inputmethod.japanese.session.SessionExecutor
 import org.mozc.android.inputmethod.japanese.session.SessionExecutor.EvaluationCallback
@@ -25,13 +30,23 @@ class FusionIMEService: InputMethodService() {
         DefaultKeyboardSet(keyboardListener, LayoutQwerty.ROWS_ROMAJI_LOWER, LayoutQwerty.ROWS_ROMAJI_UPPER),
         BottomRowKeyboardSet(keyboardListener)
     )
+    private val candidateViewAdapter: CandidateView.Adapter = CandidateView.Adapter { onCandiadteClick(it) }
+    private lateinit var candidateView: CandidateView
+    private lateinit var imeView: ViewGroup
+
     private lateinit var primaryKeyCodeConverter: PrimaryKeyCodeConverter
     private lateinit var sessionExecutor: SessionExecutor
     private var inputConnectionRenderer: InputConnectionRenderer? = null
 
     private val renderResultCallback = EvaluationCallback { command, triggeringKeyEvent ->
-        if(!command.isPresent || !triggeringKeyEvent.isPresent) return@EvaluationCallback
-        inputConnectionRenderer?.renderInputConnection(command.get(), triggeringKeyEvent.get())
+        inputConnectionRenderer?.renderInputConnection(command.orNull(), triggeringKeyEvent.orNull())
+        if(command.get().hasOutput() && command.get().output.hasAllCandidateWords()) {
+            val candidates = command.get().output.allCandidateWords.candidatesList
+                .map { candidate -> MozcCandidate(candidate) }
+            candidateViewAdapter.submitList(candidates)
+        } else {
+            candidateViewAdapter.submitList(emptyList())
+        }
     }
 
     override fun onCreate() {
@@ -53,17 +68,45 @@ class FusionIMEService: InputMethodService() {
                 .setUseEmojiConversion(false)
                 .build()
         )
+        sessionExecutor.updateRequest(
+            Request.newBuilder()
+                .setZeroQuerySuggestion(true)
+                .setMixedConversion(true)
+                .setUpdateInputModeFromSurroundingText(false)
+                .setAutoPartialSuggestion(true)
+                .setCrossingEdgeBehavior(Request.CrossingEdgeBehavior.DO_NOTHING)
+                .build(),
+            emptyList()
+        )
         sessionExecutor.resetContext()
+        candidateViewAdapter.submitList(emptyList())
+    }
+
+    override fun onFinishInput() {
+        super.onFinishInput()
+        candidateViewAdapter.submitList(emptyList())
     }
 
     override fun onCreateInputView(): View {
         keyboardSet.initView(this)
-        updateInputView()
-        return keyboardSet.getView(keyboardListener.shiftState, false)
+        imeView = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
+        val inputView = keyboardSet.getView(keyboardListener.shiftState, false)
+        candidateView = CandidateView(this, null)
+        candidateView.adapter = candidateViewAdapter
+        imeView.addView(candidateView)
+        imeView.addView(inputView)
+        return imeView
     }
 
     fun updateInputView() {
-        setInputView(keyboardSet.getView(keyboardListener.shiftState, false))
+        keyboardSet.getView(keyboardListener.shiftState, false)
+        setInputView(imeView)
+    }
+
+    private fun onCandiadteClick(candidate: CandidateView.Candidate) {
+        if(candidate is MozcCandidate) {
+            sessionExecutor.submitCandidate(candidate.id, Optional.absent(), renderResultCallback)
+        }
     }
 
     private inner class KeyboardListener(
@@ -133,6 +176,15 @@ class FusionIMEService: InputMethodService() {
             shiftTime = System.currentTimeMillis()
             inputWhileShifted = false
         }
+    }
 
+    data class MozcCandidate(
+        val id: Int,
+        override val text: CharSequence
+    ): CandidateView.Candidate {
+        constructor(mozcCandidate: CandidateWord): this(
+            id = mozcCandidate.id,
+            text = mozcCandidate.value
+        )
     }
 }

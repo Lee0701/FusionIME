@@ -5,4 +5,6 @@
     <dimen name="key_text_size">24sp</dimen>
     <dimen name="key_margin_vertical">6dp</dimen>
     <dimen name="key_margin_horizontal">2dp</dimen>
+
+    <dimen name="candidate_height">48dp</dimen>
 </resources>
