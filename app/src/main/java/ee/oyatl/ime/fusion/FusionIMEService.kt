@@ -5,9 +5,11 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import com.google.common.base.Optional
 import ee.oyatl.ime.fusion.mozc.InputConnectionRenderer
-import ee.oyatl.ime.keyboard.DefaultKeyboardSet
 import ee.oyatl.ime.keyboard.Keyboard
-import ee.oyatl.ime.keyboard.KeyboardSet
+import ee.oyatl.ime.keyboard.keyboardset.BottomRowKeyboardSet
+import ee.oyatl.ime.keyboard.keyboardset.DefaultKeyboardSet
+import ee.oyatl.ime.keyboard.keyboardset.KeyboardSet
+import ee.oyatl.ime.keyboard.keyboardset.StackedKeyboardSet
 import ee.oyatl.ime.keyboard.layout.LayoutQwerty
 import org.mozc.android.inputmethod.japanese.PrimaryKeyCodeConverter
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands
@@ -19,8 +21,10 @@ import org.mozc.android.inputmethod.japanese.session.SessionHandlerFactory
 
 class FusionIMEService: InputMethodService() {
     private val keyboardListener = KeyboardListener()
-    private val keyboardSet: KeyboardSet =
-        DefaultKeyboardSet(keyboardListener, LayoutQwerty.ROWS_LOWER, LayoutQwerty.ROWS_UPPER)
+    private val keyboardSet: KeyboardSet = StackedKeyboardSet(
+        DefaultKeyboardSet(keyboardListener, LayoutQwerty.ROWS_ROMAJI_LOWER, LayoutQwerty.ROWS_ROMAJI_UPPER),
+        BottomRowKeyboardSet(keyboardListener)
+    )
     private lateinit var primaryKeyCodeConverter: PrimaryKeyCodeConverter
     private lateinit var sessionExecutor: SessionExecutor
     private var inputConnectionRenderer: InputConnectionRenderer? = null

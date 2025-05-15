@@ -1,11 +1,16 @@
-package ee.oyatl.ime.keyboard
+package ee.oyatl.ime.keyboard.keyboardset
 
 import android.content.Context
 import android.view.View
 import android.widget.LinearLayout
+import ee.oyatl.ime.keyboard.DefaultBottomRowKeyboard
+import ee.oyatl.ime.keyboard.DefaultMobileKeyboard
+import ee.oyatl.ime.keyboard.DefaultNumberRowKeyboard
+import ee.oyatl.ime.keyboard.Keyboard
+import ee.oyatl.ime.keyboard.ShiftKeyboardSwitcher
 import ee.oyatl.ime.keyboard.layout.LayoutQwerty
 
-class DefaultKeyboardSet(
+class NumberRowHidingKeyboardSet(
     private val listener: Keyboard.Listener,
     private val normalLayout: List<String>,
     private val shiftedLayout: List<String>
