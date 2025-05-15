@@ -12,7 +12,7 @@ import ee.oyatl.ime.keyboard.R
 class VerticalScrollingCandidateView(
     context: Context,
     attrs: AttributeSet?,
-    private val rowCount: Int
+    rowCount: Int
 ): RecyclerCandidateView(context, attrs) {
 
     constructor(context: Context, attrs: AttributeSet?): this(context, attrs, 2)
