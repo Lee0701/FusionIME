@@ -23,3 +23,4 @@ rootProject.name = "FusionIME"
 include(":app")
 include(":app:mozc")
 include(":app:keyboard")
+include(":app:pinyin")

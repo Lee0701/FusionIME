@@ -13,6 +13,7 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/app/keyboard" />
             <option value="$PROJECT_DIR$/app/mozc" />
+            <option value="$PROJECT_DIR$/app/pinyin" />
           </set>
         </option>
       </GradleProjectSettings>
