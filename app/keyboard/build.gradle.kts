@@ -1,20 +1,17 @@
 plugins {
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
 }
 
 android {
-    namespace = "ee.oyatl.ime.fusion"
+    namespace = "ee.oyatl.ime.keyboard"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "ee.oyatl.ime.fusion"
         minSdk = 21
-        targetSdk = 35
-        versionCode = 1
-        versionName = "0.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -33,8 +30,8 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
-    packaging {
-        resources.excludes.add("META-INF/DEPENDENCIES")
+    buildFeatures {
+        viewBinding = true
     }
 }
 
@@ -43,10 +40,6 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
-    implementation(libs.guava)
-    implementation(libs.protobuf.java)
-    implementation(project(":app:keyboard"))
-    implementation(project(":app:mozc"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
