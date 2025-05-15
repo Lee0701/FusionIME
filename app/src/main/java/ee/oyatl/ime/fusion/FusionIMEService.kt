@@ -7,6 +7,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
 import com.google.common.base.Optional
 import ee.oyatl.ime.candidate.CandidateView
+import ee.oyatl.ime.candidate.CandidateViewWrapper
 import ee.oyatl.ime.fusion.mozc.InputConnectionRenderer
 import ee.oyatl.ime.keyboard.Keyboard
 import ee.oyatl.ime.keyboard.keyboardset.BottomRowKeyboardSet
@@ -30,8 +31,7 @@ class FusionIMEService: InputMethodService() {
         DefaultKeyboardSet(keyboardListener, LayoutQwerty.ROWS_ROMAJI_LOWER, LayoutQwerty.ROWS_ROMAJI_UPPER),
         BottomRowKeyboardSet(keyboardListener)
     )
-    private val candidateViewAdapter: CandidateView.Adapter = CandidateView.Adapter { onCandiadteClick(it) }
-    private lateinit var candidateView: CandidateView
+    private lateinit var candidateView: CandidateViewWrapper
     private lateinit var imeView: ViewGroup
 
     private lateinit var primaryKeyCodeConverter: PrimaryKeyCodeConverter
@@ -43,9 +43,9 @@ class FusionIMEService: InputMethodService() {
         if(command.get().hasOutput() && command.get().output.hasAllCandidateWords()) {
             val candidates = command.get().output.allCandidateWords.candidatesList
                 .map { candidate -> MozcCandidate(candidate) }
-            candidateViewAdapter.submitList(candidates)
+            candidateView.submitList(candidates)
         } else {
-            candidateViewAdapter.submitList(emptyList())
+            candidateView.submitList(emptyList())
         }
     }
 
@@ -79,21 +79,18 @@ class FusionIMEService: InputMethodService() {
             emptyList()
         )
         sessionExecutor.resetContext()
-        candidateViewAdapter.submitList(emptyList())
-    }
-
-    override fun onFinishInput() {
-        super.onFinishInput()
-        candidateViewAdapter.submitList(emptyList())
     }
 
     override fun onCreateInputView(): View {
         keyboardSet.initView(this)
         imeView = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
         val inputView = keyboardSet.getView(keyboardListener.shiftState, false)
-        candidateView = CandidateView(this, null)
-        candidateView.adapter = candidateViewAdapter
-        imeView.addView(candidateView)
+        val resId = ee.oyatl.ime.keyboard.R.layout.candidate_view
+        candidateView = CandidateViewWrapper(
+            candidateView = layoutInflater.inflate(resId, null, false) as CandidateView,
+            onItemClick = { this.onCandiadteClick(it) }
+        )
+        imeView.addView(candidateView.view)
         imeView.addView(inputView)
         return imeView
     }

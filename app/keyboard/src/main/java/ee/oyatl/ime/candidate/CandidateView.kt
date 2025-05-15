@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import ee.oyatl.ime.keyboard.R
 import ee.oyatl.ime.keyboard.databinding.CandidateItemBinding
 
 class CandidateView(
@@ -16,7 +15,6 @@ class CandidateView(
     attributeSet: AttributeSet?
 ): RecyclerView(context, attributeSet) {
     init {
-        this.setBackgroundResource(R.color.keyboard_bg_light)
         layoutManager = LinearLayoutManager(
             context,
             LinearLayoutManager.HORIZONTAL,
