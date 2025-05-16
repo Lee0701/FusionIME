@@ -853,7 +853,7 @@ public class ZhuYinIME extends InputMethodService implements KeyboardView.OnKeyb
 		}
 		// Fool the state watcher so that a subsequent backspace will not do a
 		// revert
-		TextEntryState.typedCharacter((char) KEYCODE_SPACE, true);
+		TextEntryState.typedCharacter(' ', true);
 	}
 
 	private void pickSuggestion(CharSequence suggestion) {

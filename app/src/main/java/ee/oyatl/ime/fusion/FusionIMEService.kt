@@ -11,8 +11,8 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
     override fun onCreate() {
         super.onCreate()
         val imeModes = mutableListOf<IMEMode>()
-        imeModes += MozcIMEMode(this, this)
-        imeModes += PinyinIMEMode(this, this)
+//        imeModes += MozcIMEMode(this, this)
+//        imeModes += PinyinIMEMode(this, this)
         imeModes += ZhuyinIMEMode(this, this)
         imeModeSwitcher = IMEModeSwitcher(imeModes, this)
     }
