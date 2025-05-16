@@ -14,6 +14,7 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
         imeModes += MozcIMEMode(this, this)
         imeModes += PinyinIMEMode(this, this)
         imeModes += ZhuyinIMEMode(this, this)
+        imeModes += CangjieIMEMode(this, this)
         imeModeSwitcher = IMEModeSwitcher(imeModes, this)
     }
 
