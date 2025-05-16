@@ -28,7 +28,7 @@ import org.mozc.android.inputmethod.japanese.session.SessionExecutor.EvaluationC
 import org.mozc.android.inputmethod.japanese.session.SessionHandlerFactory
 
 class MozcIMEMode(
-    context: Context,
+    context: Context
 ): IMEMode, CandidateView.Listener, CommonKeyboardListener.Callback {
 
     private val keyboardListener = KeyboardListener()

@@ -11,6 +11,7 @@ class FusionIMEService: InputMethodService() {
     override fun onCreate() {
         super.onCreate()
         imeMode = MozcIMEMode(this)
+        imeMode = PinyinIMEMode(this)
     }
 
     override fun onCreateInputView(): View {
