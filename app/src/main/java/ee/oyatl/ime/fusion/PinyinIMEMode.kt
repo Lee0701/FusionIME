@@ -83,23 +83,19 @@ class PinyinIMEMode(
     private lateinit var candidateView: CandidateView
     private lateinit var imeView: ViewGroup
 
-    private var currentInputConnection: InputConnection? = null
-    private var currentInputEditorInfo: EditorInfo? = null
     private var util: KeyEventUtil? = null
+    private val currentInputConnection: InputConnection? get() = util?.currentInputConnection
+    private val currentInputEditorInfo: EditorInfo? get() = util?.currentInputEditorInfo
 
     init {
         startPinyinDecoderService(context)
     }
 
     override fun onStart(inputConnection: InputConnection, editorInfo: EditorInfo) {
-        this.currentInputConnection = inputConnection
-        this.currentInputEditorInfo = editorInfo
         this.util = KeyEventUtil(inputConnection, editorInfo)
     }
 
     override fun onFinish(inputConnection: InputConnection, editorInfo: EditorInfo) {
-        this.currentInputConnection = null
-        this.currentInputEditorInfo = null
         this.util = null
     }
 

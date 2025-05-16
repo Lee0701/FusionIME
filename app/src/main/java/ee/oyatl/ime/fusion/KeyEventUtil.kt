@@ -7,8 +7,8 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
 
 class KeyEventUtil(
-    private val currentInputConnection: InputConnection,
-    private val currentInputEditorInfo: EditorInfo
+    val currentInputConnection: InputConnection,
+    val currentInputEditorInfo: EditorInfo
 ) {
 
     /**
