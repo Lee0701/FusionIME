@@ -902,7 +902,11 @@ public class PinyinIME extends InputMethodService {
     private boolean startPinyinDecoderService() {
         if (null == mDecInfo.mIPinyinDecoderService) {
             Intent serviceIntent = new Intent();
-            serviceIntent.setClass(this, PinyinDecoderService.class);
+            try {
+                serviceIntent.setClass(this, Class.forName("com.android.inputmethod.pinyin.PinyinDecoderService"));
+            } catch (ClassNotFoundException e) {
+                return false;
+            }
 
             if (null == mPinyinDecoderServiceConnection) {
                 mPinyinDecoderServiceConnection = new PinyinDecoderServiceConnection();

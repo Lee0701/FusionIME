@@ -16,17 +16,17 @@
 
 package com.android.inputmethod.pinyin;
 
-import java.io.FileDescriptor;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.List;
-import java.util.Vector;
-
 import android.app.Service;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.os.IBinder;
 import android.util.Log;
+
+import java.io.FileDescriptor;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.List;
+import java.util.Vector;
 
 import ee.oyatl.ime.fusion.R;
 
