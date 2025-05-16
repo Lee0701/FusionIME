@@ -43,36 +43,36 @@ class PinyinIMEMode(
     /**
      * Connection used to bind the decoding service.
      */
-    private var mPinyinDecoderServiceConnection: PinyinDecoderServiceConnection? = null
+    private var pinyinDecoderServiceConnection: PinyinDecoderServiceConnection? = null
 
     /**
      * The current IME status.
      *
      * @see ImeState
      */
-    private var mImeState = ImeState.STATE_IDLE
+    private var imeState = ImeState.STATE_IDLE
 
     /**
      * The decoding information, include spelling(Pinyin) string, decoding
      * result, etc.
      */
-    private val mDecInfo: DecodingInfo = DecodingInfo()
+    private val decInfo: DecodingInfo = DecodingInfo()
 
     /**
      * The floating container which contains the composing view. If necessary,
      * some other view like candiates container can also be put here.
      */
-    private lateinit var mFloatingContainer: LinearLayout
+    private lateinit var floatingContainer: LinearLayout
 
     /**
      * View to show the composing string.
      */
-    private lateinit var mComposingView: ComposingView
+    private lateinit var composingView: ComposingView
 
     /**
      * View to show candidates list.
      */
-    private lateinit var mCandidatesContainer: CandidatesContainer
+    private lateinit var candidatesContainer: CandidatesContainer
 
     private var isEnterNormalState = true
 
@@ -105,14 +105,14 @@ class PinyinIMEMode(
         val layoutInflater = LayoutInflater.from(context)
 
         // Inflate the floating container view
-        mFloatingContainer = layoutInflater.inflate(
-            com.android.inputmethod.pinyin.R.layout.floating_container, null
-        ) as LinearLayout
+        floatingContainer = layoutInflater.inflate(
+            com.android.inputmethod.pinyin.R.layout.floating_container, null)
+                as LinearLayout
 
         // The first child is the composing view.
-        mComposingView = mFloatingContainer.getChildAt(0) as ComposingView
+        composingView = floatingContainer.getChildAt(0) as ComposingView
 
-        mCandidatesContainer = layoutInflater.inflate(
+        candidatesContainer = layoutInflater.inflate(
             com.android.inputmethod.pinyin.R.layout.candidates_container, null)
                 as CandidatesContainer
 
@@ -134,25 +134,25 @@ class PinyinIMEMode(
 
     private fun showCandidateWindow(showComposingView: Boolean) {
         updateComposingText(showComposingView)
-        val candidates = mDecInfo.mCandidatesList.mapIndexed { i, s -> PinyinCandidate(i, s) }
+        val candidates = decInfo.mCandidatesList.mapIndexed { i, s -> PinyinCandidate(i, s) }
         candidateView.submitList(candidates)
     }
 
     private fun resetCandidateWindow() {
         updateComposingText(false)
-        mDecInfo.resetCandidates()
+        decInfo.resetCandidates()
         candidateView.submitList(emptyList())
     }
 
     private fun onChoiceTouched(activeCandNo: Int) {
-        if (mImeState == ImeState.STATE_COMPOSING) {
+        if (imeState == ImeState.STATE_COMPOSING) {
             changeToStateInput(true)
-        } else if (mImeState == ImeState.STATE_INPUT
-            || mImeState == ImeState.STATE_PREDICT
+        } else if (imeState == ImeState.STATE_INPUT
+            || imeState == ImeState.STATE_PREDICT
         ) {
             chooseCandidate(activeCandNo)
-        } else if (mImeState == ImeState.STATE_APP_COMPLETION) {
-            val appCompletions = mDecInfo.mAppCompletions
+        } else if (imeState == ImeState.STATE_APP_COMPLETION) {
+            val appCompletions = decInfo.mAppCompletions
             if (null != appCompletions && activeCandNo >= 0 && activeCandNo < appCompletions.size) {
                 val ci = appCompletions[activeCandNo]
                 currentInputConnection?.commitCompletion(ci)
@@ -198,7 +198,7 @@ class PinyinIMEMode(
     }
 
     private fun processKey(event: KeyEvent, realAction: Boolean): Boolean {
-        if (ImeState.STATE_BYPASS == mImeState) return false
+        if (ImeState.STATE_BYPASS == imeState) return false
 
         val keyCode = event.keyCode
         // SHIFT-SPACE is used to switch between Chinese and English
@@ -237,16 +237,16 @@ class PinyinIMEMode(
             keyChar = '\''.code
         }
 
-        if (mImeState == ImeState.STATE_IDLE ||
-            mImeState == ImeState.STATE_APP_COMPLETION
+        if (imeState == ImeState.STATE_IDLE ||
+            imeState == ImeState.STATE_APP_COMPLETION
         ) {
-            mImeState = ImeState.STATE_IDLE
+            imeState = ImeState.STATE_IDLE
             return processStateIdle(keyChar, keyCode, event, realAction)
-        } else if (mImeState == ImeState.STATE_INPUT) {
+        } else if (imeState == ImeState.STATE_INPUT) {
             return processStateInput(keyChar, keyCode, event, realAction)
-        } else if (mImeState == ImeState.STATE_PREDICT) {
+        } else if (imeState == ImeState.STATE_PREDICT) {
             return processStatePredict(keyChar, keyCode, event, realAction)
-        } else if (mImeState == ImeState.STATE_COMPOSING) {
+        } else if (imeState == ImeState.STATE_COMPOSING) {
             return processStateEditComposing(
                 keyChar, keyCode, event,
                 realAction
@@ -258,7 +258,7 @@ class PinyinIMEMode(
 
     // keyCode can be from both hard key or soft key.
     private fun processFunctionKeys(keyCode: Int, realAction: Boolean): Boolean {
-        if (!mDecInfo.isCandidatesListEmpty) {
+        if (!decInfo.isCandidatesListEmpty) {
             if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER) {
                 if (!realAction) return true
 
@@ -268,30 +268,30 @@ class PinyinIMEMode(
 
             if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
                 if (!realAction) return true
-                mCandidatesContainer.activeCurseBackward()
+                candidatesContainer.activeCurseBackward()
                 return true
             }
 
             if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
                 if (!realAction) return true
-                mCandidatesContainer.activeCurseForward()
+                candidatesContainer.activeCurseForward()
                 return true
             }
 
             if (keyCode == KeyEvent.KEYCODE_DPAD_UP) {
                 if (!realAction) return true
-                mCandidatesContainer.pageBackward(false, true)
+                candidatesContainer.pageBackward(false, true)
                 return true
             }
 
             if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
                 if (!realAction) return true
-                mCandidatesContainer.pageForward(false, true)
+                candidatesContainer.pageForward(false, true)
                 return true
             }
 
             if (keyCode == KeyEvent.KEYCODE_DEL &&
-                ImeState.STATE_PREDICT == mImeState
+                ImeState.STATE_PREDICT == imeState
             ) {
                 if (!realAction) return true
                 resetToIdleState(false)
@@ -330,7 +330,7 @@ class PinyinIMEMode(
         // change to input state.
         if (keyChar >= 'a'.code && keyChar <= 'z'.code && !event.isAltPressed) {
             if (!realAction) return true
-            mDecInfo.addSplChar(keyChar.toChar(), true)
+            decInfo.addSplChar(keyChar.toChar(), true)
             chooseAndUpdate(-1)
             return true
         } else if (keyCode == KeyEvent.KEYCODE_DEL) {
@@ -348,10 +348,10 @@ class PinyinIMEMode(
         } else if (keyCode == KeyEvent.KEYCODE_ALT_LEFT || keyCode == KeyEvent.KEYCODE_ALT_RIGHT || keyCode == KeyEvent.KEYCODE_SHIFT_LEFT || keyCode == KeyEvent.KEYCODE_SHIFT_RIGHT) {
             return true
         } else if (event.isAltPressed) {
-            val fullwidth_char = KeyMapDream.getChineseLabel(keyCode)
-            if (0 != fullwidth_char.code) {
+            val fullwidthChar = KeyMapDream.getChineseLabel(keyCode)
+            if (0 != fullwidthChar.code) {
                 if (realAction) {
-                    val result = fullwidth_char.toString()
+                    val result = fullwidthChar.toString()
                     commitResultText(result)
                 }
                 return true
@@ -367,10 +367,8 @@ class PinyinIMEMode(
                 if (keyChar == ','.code || keyChar == '.'.code) {
                     inputCommaPeriod("", keyChar, false, ImeState.STATE_IDLE)
                 } else {
-                    if (0 != keyChar) {
-                        val result = keyChar.toChar().toString()
-                        commitResultText(result)
-                    }
+                    val result = keyChar.toChar().toString()
+                    commitResultText(result)
                 }
             }
             return true
@@ -392,9 +390,9 @@ class PinyinIMEMode(
                     val fullwidth_char = KeyMapDream.getChineseLabel(keyCode)
                     if (0 != fullwidth_char.code) {
                         commitResultText(
-                            mDecInfo
+                            decInfo
                                 .getCurrentFullSent(
-                                    mCandidatesContainer
+                                    candidatesContainer
                                         .getActiveCandiatePos()
                                 ) + fullwidth_char.toString()
                         )
@@ -408,15 +406,15 @@ class PinyinIMEMode(
         }
 
         if (keyChar >= 'a'.code && keyChar <= 'z'.code || keyChar == '\''.code
-            && !mDecInfo.charBeforeCursorIsSeparator() || keyCode == KeyEvent.KEYCODE_DEL
+            && !decInfo.charBeforeCursorIsSeparator() || keyCode == KeyEvent.KEYCODE_DEL
         ) {
             if (!realAction) return true
             return processSurfaceChange(keyChar, keyCode)
         } else if (keyChar == ','.code || keyChar == '.'.code) {
             if (!realAction) return true
             inputCommaPeriod(
-                mDecInfo.getCurrentFullSent(
-                    mCandidatesContainer
+                decInfo.getCurrentFullSent(
+                    candidatesContainer
                         .getActiveCandiatePos()
                 ), keyChar, true,
                 ImeState.STATE_IDLE
@@ -425,20 +423,25 @@ class PinyinIMEMode(
         } else if (keyCode == KeyEvent.KEYCODE_DPAD_UP || keyCode == KeyEvent.KEYCODE_DPAD_DOWN || keyCode == KeyEvent.KEYCODE_DPAD_LEFT || keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
             if (!realAction) return true
 
-            if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
-                mCandidatesContainer.activeCurseBackward()
-            } else if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
-                mCandidatesContainer.activeCurseForward()
-            } else if (keyCode == KeyEvent.KEYCODE_DPAD_UP) {
-                // If it has been the first page, a up key will shift
-                // the state to edit composing string.
-                if (!mCandidatesContainer.pageBackward(false, true)) {
-                    mCandidatesContainer.enableActiveHighlight(false)
-                    changeToStateComposing(true)
-                    updateComposingText(true)
+            when(keyCode) {
+                KeyEvent.KEYCODE_DPAD_LEFT -> {
+                    candidatesContainer.activeCurseBackward()
                 }
-            } else if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
-                mCandidatesContainer.pageForward(false, true)
+                KeyEvent.KEYCODE_DPAD_RIGHT -> {
+                    candidatesContainer.activeCurseForward()
+                }
+                KeyEvent.KEYCODE_DPAD_UP -> {
+                    // If it has been the first page, a up key will shift
+                    // the state to edit composing string.
+                    if (!candidatesContainer.pageBackward(false, true)) {
+                        candidatesContainer.enableActiveHighlight(false)
+                        changeToStateComposing(true)
+                        updateComposingText(true)
+                    }
+                }
+                KeyEvent.KEYCODE_DPAD_DOWN -> {
+                    candidatesContainer.pageForward(false, true)
+                }
             }
             return true
         } else if (keyCode >= KeyEvent.KEYCODE_1
@@ -447,10 +450,10 @@ class PinyinIMEMode(
             if (!realAction) return true
 
             var activePos = keyCode - KeyEvent.KEYCODE_1
-            val currentPage: Int = mCandidatesContainer.getCurrentPage()
-            if (activePos < mDecInfo.getCurrentPageSize(currentPage)) {
+            val currentPage: Int = candidatesContainer.getCurrentPage()
+            if (activePos < decInfo.getCurrentPageSize(currentPage)) {
                 activePos = (activePos
-                        + mDecInfo.getCurrentPageStart(currentPage))
+                        + decInfo.getCurrentPageStart(currentPage))
                 if (activePos >= 0) {
                     chooseAndUpdate(activePos)
                 }
@@ -459,13 +462,13 @@ class PinyinIMEMode(
         } else if (keyCode == KeyEvent.KEYCODE_ENTER) {
             if (!realAction) return true
             if (isEnterNormalState) {
-                commitResultText(mDecInfo.origianlSplStr.toString())
+                commitResultText(decInfo.origianlSplStr.toString())
                 resetToIdleState(false)
             } else {
                 commitResultText(
-                    mDecInfo
+                    decInfo
                         .getCurrentFullSent(
-                            mCandidatesContainer
+                            candidatesContainer
                                 .getActiveCandiatePos()
                         )
                 )
@@ -496,13 +499,13 @@ class PinyinIMEMode(
 
         // If ALT key is pressed, input alternative key.
         if (event.isAltPressed) {
-            val fullwidth_char = KeyMapDream.getChineseLabel(keyCode)
-            if (0 != fullwidth_char.code) {
+            val fullwidthChar = KeyMapDream.getChineseLabel(keyCode)
+            if (0 != fullwidthChar.code) {
                 commitResultText(
-                    mDecInfo.getCandidate(
-                        mCandidatesContainer
+                    decInfo.getCandidate(
+                        candidatesContainer
                             .getActiveCandiatePos()
-                    ) + fullwidth_char.toString()
+                    ) + fullwidthChar.toString()
                 )
                 resetToIdleState(false)
             }
@@ -513,22 +516,22 @@ class PinyinIMEMode(
         // change to input state.
         if (keyChar >= 'a'.code && keyChar <= 'z'.code) {
             changeToStateInput(true)
-            mDecInfo.addSplChar(keyChar.toChar(), true)
+            decInfo.addSplChar(keyChar.toChar(), true)
             chooseAndUpdate(-1)
         } else if (keyChar == ','.code || keyChar == '.'.code) {
             inputCommaPeriod("", keyChar, true, ImeState.STATE_IDLE)
         } else if (keyCode == KeyEvent.KEYCODE_DPAD_UP || keyCode == KeyEvent.KEYCODE_DPAD_DOWN || keyCode == KeyEvent.KEYCODE_DPAD_LEFT || keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
             if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
-                mCandidatesContainer.activeCurseBackward()
+                candidatesContainer.activeCurseBackward()
             }
             if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
-                mCandidatesContainer.activeCurseForward()
+                candidatesContainer.activeCurseForward()
             }
             if (keyCode == KeyEvent.KEYCODE_DPAD_UP) {
-                mCandidatesContainer.pageBackward(false, true)
+                candidatesContainer.pageBackward(false, true)
             }
             if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
-                mCandidatesContainer.pageForward(false, true)
+                candidatesContainer.pageForward(false, true)
             }
         } else if (keyCode == KeyEvent.KEYCODE_DEL) {
             resetToIdleState(false)
@@ -539,10 +542,10 @@ class PinyinIMEMode(
             && keyCode <= KeyEvent.KEYCODE_9
         ) {
             var activePos = keyCode - KeyEvent.KEYCODE_1
-            val currentPage: Int = mCandidatesContainer.getCurrentPage()
-            if (activePos < mDecInfo.getCurrentPageSize(currentPage)) {
+            val currentPage: Int = candidatesContainer.getCurrentPage()
+            if (activePos < decInfo.getCurrentPageSize(currentPage)) {
                 activePos = (activePos
-                        + mDecInfo.getCurrentPageStart(currentPage))
+                        + decInfo.getCurrentPageStart(currentPage))
                 if (activePos >= 0) {
                     chooseAndUpdate(activePos)
                 }
@@ -567,7 +570,7 @@ class PinyinIMEMode(
         if (!realAction) return true
 
         val cmpsvStatus: ComposingStatus =
-            mComposingView.composingStatus
+            composingView.composingStatus
 
         // If ALT key is pressed, input alternative key. But if the
         // alternative key is quote key, it will be used for input a splitter
@@ -578,9 +581,9 @@ class PinyinIMEMode(
                 if (0 != fullwidth_char.code) {
                     val retStr: String
                     if (ComposingStatus.SHOW_STRING_LOWERCASE == cmpsvStatus) {
-                        retStr = mDecInfo.origianlSplStr.toString()
+                        retStr = decInfo.origianlSplStr.toString()
                     } else {
-                        retStr = mDecInfo.composingStr
+                        retStr = decInfo.composingStr
                     }
                     commitResultText(retStr + fullwidth_char.toString())
                     resetToIdleState(false)
@@ -592,41 +595,41 @@ class PinyinIMEMode(
         }
 
         if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
-            if (!mDecInfo.selectionFinished()) {
+            if (!decInfo.selectionFinished()) {
                 changeToStateInput(true)
             }
         } else if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT
             || keyCode == KeyEvent.KEYCODE_DPAD_RIGHT
         ) {
-            mComposingView.moveCursor(keyCode)
+            composingView.moveCursor(keyCode)
         } else if ((keyCode == KeyEvent.KEYCODE_ENTER && isEnterNormalState)
             || keyCode == KeyEvent.KEYCODE_DPAD_CENTER || keyCode == KeyEvent.KEYCODE_SPACE
         ) {
             if (ComposingStatus.SHOW_STRING_LOWERCASE == cmpsvStatus) {
-                val str: String = mDecInfo.origianlSplStr.toString()
+                val str: String = decInfo.origianlSplStr.toString()
                 if (!tryInputRawUnicode(str)) {
                     commitResultText(str)
                 }
             } else if (ComposingStatus.EDIT_PINYIN == cmpsvStatus) {
-                val str: String = mDecInfo.composingStr
+                val str: String = decInfo.composingStr
                 if (!tryInputRawUnicode(str)) {
                     commitResultText(str)
                 }
             } else {
-                commitResultText(mDecInfo.composingStr)
+                commitResultText(decInfo.composingStr)
             }
             resetToIdleState(false)
         } else if (keyCode == KeyEvent.KEYCODE_ENTER
             && !isEnterNormalState
         ) {
             val retStr: String
-            if (!mDecInfo.isCandidatesListEmpty) {
-                retStr = mDecInfo.getCurrentFullSent(
-                    mCandidatesContainer
+            if (!decInfo.isCandidatesListEmpty) {
+                retStr = decInfo.getCurrentFullSent(
+                    candidatesContainer
                         .getActiveCandiatePos()
                 )
             } else {
-                retStr = mDecInfo.composingStr
+                retStr = decInfo.composingStr
             }
             commitResultText(retStr)
             sendKeyChar('\n')
@@ -686,30 +689,30 @@ class PinyinIMEMode(
     }
 
     private fun processSurfaceChange(keyChar: Int, keyCode: Int): Boolean {
-        if (mDecInfo.isSplStrFull && KeyEvent.KEYCODE_DEL != keyCode) {
+        if (decInfo.isSplStrFull && KeyEvent.KEYCODE_DEL != keyCode) {
             return true
         }
 
         if ((keyChar >= 'a'.code && keyChar <= 'z'.code)
-            || (keyChar == '\''.code && !mDecInfo.charBeforeCursorIsSeparator())
-            || (((keyChar >= '0'.code && keyChar <= '9'.code) || keyChar == ' '.code) && ImeState.STATE_COMPOSING == mImeState)
+            || (keyChar == '\''.code && !decInfo.charBeforeCursorIsSeparator())
+            || (((keyChar >= '0'.code && keyChar <= '9'.code) || keyChar == ' '.code) && ImeState.STATE_COMPOSING == imeState)
         ) {
-            mDecInfo.addSplChar(keyChar.toChar(), false)
+            decInfo.addSplChar(keyChar.toChar(), false)
             chooseAndUpdate(-1)
         } else if (keyCode == KeyEvent.KEYCODE_DEL) {
-            mDecInfo.prepareDeleteBeforeCursor()
+            decInfo.prepareDeleteBeforeCursor()
             chooseAndUpdate(-1)
         }
         return true
     }
 
     private fun changeToStateComposing(updateUi: Boolean) {
-        mImeState = ImeState.STATE_COMPOSING
+        imeState = ImeState.STATE_COMPOSING
         if (!updateUi) return
     }
 
     private fun changeToStateInput(updateUi: Boolean) {
-        mImeState = ImeState.STATE_INPUT
+        imeState = ImeState.STATE_INPUT
         if (!updateUi) return
         showCandidateWindow(true)
     }
@@ -723,21 +726,19 @@ class PinyinIMEMode(
 
     private fun commitResultText(resultText: String) {
         currentInputConnection?.commitText(resultText, 1)
-        if (null != mComposingView) {
-            mComposingView.visibility = View.INVISIBLE
-            mComposingView.invalidate()
-        }
+        composingView.visibility = View.INVISIBLE
+        composingView.invalidate()
     }
 
     private fun updateComposingText(visible: Boolean) {
         if (!visible) {
-            mComposingView.visibility = View.INVISIBLE
+            composingView.visibility = View.INVISIBLE
         } else {
 //            mComposingView.setDecodingInfo(mDecInfo, mImeState)
-            mComposingView.visibility = View.VISIBLE
+            composingView.visibility = View.VISIBLE
         }
-        mComposingView.invalidate()
-        currentInputConnection?.setComposingText(mDecInfo.composingStrForDisplay, 1)
+        composingView.invalidate()
+        currentInputConnection?.setComposingText(decInfo.composingStrForDisplay, 1)
     }
 
     private fun inputCommaPeriod(
@@ -750,65 +751,65 @@ class PinyinIMEMode(
         else return
         commitResultText(preEdit)
         if (dismissCandWindow) resetCandidateWindow()
-        mImeState = nextState
+        imeState = nextState
     }
 
     private fun resetToIdleState(resetInlineText: Boolean) {
-        if (ImeState.STATE_IDLE == mImeState) return
+        if (ImeState.STATE_IDLE == imeState) return
 
-        mImeState = ImeState.STATE_IDLE
-        mDecInfo.reset()
+        imeState = ImeState.STATE_IDLE
+        decInfo.reset()
 
-        if (null != mComposingView) mComposingView.reset()
+        composingView.reset()
         if (resetInlineText) commitResultText("")
         resetCandidateWindow()
     }
 
     private fun chooseAndUpdate(candId: Int) {
-        if (ImeState.STATE_PREDICT != mImeState) {
+        if (ImeState.STATE_PREDICT != imeState) {
             // Get result candidate list, if choice_id < 0, do a new decoding.
             // If choice_id >=0, select the candidate, and get the new candidate
             // list.
-            mDecInfo.chooseDecodingCandidate(candId)
+            decInfo.chooseDecodingCandidate(candId)
         } else {
             // Choose a prediction item.
-            mDecInfo.choosePredictChoice(candId)
+            decInfo.choosePredictChoice(candId)
         }
 
-        if (mDecInfo.composingStr.isNotEmpty()) {
-            val resultStr = mDecInfo.composingStrActivePart
+        if (decInfo.composingStr.isNotEmpty()) {
+            val resultStr = decInfo.composingStrActivePart
 
             // choiceId >= 0 means user finishes a choice selection.
-            if (candId >= 0 && mDecInfo.canDoPrediction()) {
+            if (candId >= 0 && decInfo.canDoPrediction()) {
                 commitResultText(resultStr)
-                mImeState = ImeState.STATE_PREDICT
+                imeState = ImeState.STATE_PREDICT
                 // Try to get the prediction list.
                 if (Settings.getPrediction()) {
                     val ic = currentInputConnection
                     if (null != ic) {
                         val cs = ic.getTextBeforeCursor(3, 0)
                         if (null != cs) {
-                            mDecInfo.preparePredicts(cs)
+                            decInfo.preparePredicts(cs)
                         }
                     }
                 } else {
-                    mDecInfo.resetCandidates()
+                    decInfo.resetCandidates()
                 }
 
-                if (mDecInfo.mCandidatesList.size > 0) {
+                if (decInfo.mCandidatesList.size > 0) {
                     showCandidateWindow(false)
                 } else {
                     resetToIdleState(false)
                 }
             } else {
-                if (ImeState.STATE_IDLE == mImeState) {
-                    if (mDecInfo.splStrDecodedLen == 0) {
+                if (ImeState.STATE_IDLE == imeState) {
+                    if (decInfo.splStrDecodedLen == 0) {
                         changeToStateComposing(true)
                     } else {
                         changeToStateInput(true)
                     }
                 } else {
-                    if (mDecInfo.selectionFinished()) {
+                    if (decInfo.selectionFinished()) {
                         changeToStateComposing(true)
                     }
                 }
@@ -824,7 +825,7 @@ class PinyinIMEMode(
     private fun chooseCandidate(activeCandNo: Int) {
         var activeCandNo = activeCandNo
         if (activeCandNo < 0) {
-            activeCandNo = mCandidatesContainer.getActiveCandiatePos()
+            activeCandNo = candidatesContainer.getActiveCandiatePos()
         }
         if (activeCandNo >= 0) {
             chooseAndUpdate(activeCandNo)
@@ -832,7 +833,7 @@ class PinyinIMEMode(
     }
 
     private fun startPinyinDecoderService(context: Context): Boolean {
-        if (mDecInfo.mIPinyinDecoderService is Stub) {
+        if (decInfo.mIPinyinDecoderService is Stub) {
             val serviceIntent = Intent()
             try {
                 serviceIntent.setClass(
@@ -843,7 +844,7 @@ class PinyinIMEMode(
                 return false
             }
 
-            val mPinyinDecoderServiceConnection = mPinyinDecoderServiceConnection ?: PinyinDecoderServiceConnection()
+            val mPinyinDecoderServiceConnection = pinyinDecoderServiceConnection ?: PinyinDecoderServiceConnection()
 
             // Bind service
             return context.bindService(
@@ -1046,8 +1047,8 @@ class PinyinIMEMode(
 
         val composingStrActivePart: String
             get() {
-                assert(activeCmpsLen <= composingStr!!.length)
-                return composingStr!!.substring(0, activeCmpsLen)
+                assert(activeCmpsLen <= composingStr.length)
+                return composingStr.substring(0, activeCmpsLen)
             }
 
         fun getCurrentFullSent(activeCandPos: Int): String {
@@ -1071,11 +1072,11 @@ class PinyinIMEMode(
         }
 
         fun candidatesFromApp(): Boolean {
-            return ImeState.STATE_APP_COMPLETION == mImeState
+            return ImeState.STATE_APP_COMPLETION == imeState
         }
 
         fun canDoPrediction(): Boolean {
-            return composingStr!!.length == fixedLen
+            return composingStr.length == fixedLen
         }
 
         fun selectionFinished(): Boolean {
@@ -1087,29 +1088,30 @@ class PinyinIMEMode(
         // If candidate id is less than 0, means user is inputting Pinyin,
         // not selecting any choice.
         internal fun chooseDecodingCandidate(candId: Int) {
-            if (mImeState != ImeState.STATE_PREDICT) {
+            if (imeState != ImeState.STATE_PREDICT) {
                 resetCandidates()
-                var totalChoicesNum = 0
+                val totalChoicesNum: Int
                 if (candId < 0) {
                     if (length() == 0) {
                         totalChoicesNum = 0
                     } else {
-                        if (mPyBuf == null) mPyBuf = ByteArray(PY_STRING_MAX)
-                        for (i in 0..<length()) mPyBuf!![i] = charAt(i).code.toByte()
-                        mPyBuf!![length()] = 0
+                        val mPyBuf = mPyBuf ?: ByteArray(PY_STRING_MAX)
+                        this.mPyBuf = mPyBuf
+                        for (i in 0..<length()) mPyBuf[i] = charAt(i).code.toByte()
+                        mPyBuf[length()] = 0
 
                         if (mPosDelSpl < 0) {
                             totalChoicesNum = mIPinyinDecoderService
                                 .imSearch(mPyBuf, length())
                         } else {
-                            var clear_fixed_this_step = true
-                            if (ImeState.STATE_COMPOSING == mImeState) {
-                                clear_fixed_this_step = false
+                            var clearFixedThisStep = true
+                            if (ImeState.STATE_COMPOSING == imeState) {
+                                clearFixedThisStep = false
                             }
                             totalChoicesNum = mIPinyinDecoderService
                                 .imDelSearch(
                                     mPosDelSpl, mIsPosInSpl,
-                                    clear_fixed_this_step
+                                    clearFixedThisStep
                                 )
                             mPosDelSpl = -1
                         }
@@ -1145,7 +1147,7 @@ class PinyinIMEMode(
                 composingStr = (fullSent.substring(0, fixedLen)
                         + origianlSplStr.substring(splStart[fixedLen + 1]))
 
-                activeCmpsLen = composingStr!!.length
+                activeCmpsLen = composingStr.length
                 if (splStrDecodedLen > 0) {
                     activeCmpsLen = (activeCmpsLen
                             - (origianlSplStr.length - splStrDecodedLen))
@@ -1154,7 +1156,7 @@ class PinyinIMEMode(
                 // Prepare the display string.
                 if (0 == splStrDecodedLen) {
                     composingStrForDisplay = composingStr
-                    activeCmpsDisplayLen = composingStr!!.length
+                    activeCmpsDisplayLen = composingStr.length
                 } else {
                     composingStrForDisplay = fullSent.substring(0, fixedLen)
                     for (pos in fixedLen + 1..<splStart.size - 1) {
@@ -1165,7 +1167,7 @@ class PinyinIMEMode(
                             composingStrForDisplay += " "
                         }
                     }
-                    activeCmpsDisplayLen = composingStrForDisplay!!.length
+                    activeCmpsDisplayLen = composingStrForDisplay.length
                     if (splStrDecodedLen < origianlSplStr.length) {
                         composingStrForDisplay += origianlSplStr
                             .substring(splStrDecodedLen)
@@ -1188,7 +1190,7 @@ class PinyinIMEMode(
         }
 
         fun choosePredictChoice(choiceId: Int) {
-            if (ImeState.STATE_PREDICT != mImeState || choiceId < 0 || choiceId >= mTotalChoicesNum) {
+            if (ImeState.STATE_PREDICT != imeState || choiceId < 0 || choiceId >= mTotalChoicesNum) {
                 return
             }
 
@@ -1225,28 +1227,27 @@ class PinyinIMEMode(
                 if (fetchSize > MAX_PAGE_SIZE_DISPLAY) {
                     fetchSize = MAX_PAGE_SIZE_DISPLAY
                 }
-                var newList: MutableList<String>? = null
-                if (ImeState.STATE_INPUT == mImeState || ImeState.STATE_IDLE == mImeState || ImeState.STATE_COMPOSING == mImeState) {
+                var newList: List<String> = listOf()
+                if (ImeState.STATE_INPUT == imeState || ImeState.STATE_IDLE == imeState || ImeState.STATE_COMPOSING == imeState) {
                     newList = mIPinyinDecoderService.imGetChoiceList(
                         fetchStart, fetchSize, fixedLen
                     )
-                } else if (ImeState.STATE_PREDICT == mImeState) {
+                } else if (ImeState.STATE_PREDICT == imeState) {
                     newList = mIPinyinDecoderService.imGetPredictList(
                         fetchStart, fetchSize
                     )
-                } else if (ImeState.STATE_APP_COMPLETION == mImeState) {
-                    newList = ArrayList()
+                } else if (ImeState.STATE_APP_COMPLETION == imeState) {
+                    newList = mutableListOf()
+                    val mAppCompletions = mAppCompletions
                     if (null != mAppCompletions) {
                         for (pos in fetchStart..<fetchSize) {
-                            val ci = mAppCompletions!![pos]
-                            if (null != ci) {
-                                val s = ci.text
-                                if (null != s) newList.add(s.toString())
-                            }
+                            val ci = mAppCompletions[pos]
+                            val s = ci.text
+                            if (null != s) newList.add(s.toString())
                         }
                     }
                 }
-                mCandidatesList.addAll(newList!!)
+                mCandidatesList.addAll(newList)
             }
 
         fun pageReady(pageNo: Int): Boolean {
@@ -1301,10 +1302,8 @@ class PinyinIMEMode(
             if (Settings.getPrediction()) {
                 val preEdit = history.toString()
                 val predictNum = 0
-                if (null != preEdit) {
-                    mTotalChoicesNum = mIPinyinDecoderService
-                        .imGetPredictsNum(preEdit)
-                }
+                mTotalChoicesNum = mIPinyinDecoderService
+                    .imGetPredictsNum(preEdit)
             }
 
             preparePage(0)
@@ -1433,7 +1432,7 @@ class PinyinIMEMode(
      */
     inner class PinyinDecoderServiceConnection : ServiceConnection {
         override fun onServiceConnected(name: ComponentName, service: IBinder) {
-            mDecInfo.mIPinyinDecoderService = Stub
+            decInfo.mIPinyinDecoderService = Stub
                 .asInterface(service)
         }
 
@@ -1536,7 +1535,7 @@ class PinyinIMEMode(
             }
 
             else ->                 // Make sure that digits go through any text watcher on the client side.
-                if (charCode >= '0' && charCode <= '9') {
+                if (charCode in '0'..'9') {
                     sendDownUpKeyEvents(charCode.code - '0'.code + KeyEvent.KEYCODE_0)
                 } else {
                     val ic = currentInputConnection ?: return
