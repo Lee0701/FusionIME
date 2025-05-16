@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mainView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="0dp"
+    android:orientation="vertical" >
+
+    <com.diycircuits.cangjie.CandidateView
+        android:id="@+id/candidateView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+	android:layout_margin="0dp"
+        android:orientation="horizontal" >
+
+       <com.diycircuits.cangjie.CandidateSelect
+            android:id="@+id/match_view"
+            android:layout_width="224dp"
+            android:layout_height="40sp"
+            android:layout_weight="0.53" />
+
+        <ImageButton
+            android:id="@+id/arrow_right"
+            android:layout_width="48dp"
+            android:layout_height="40dp"
+            android:background="@drawable/ab_solid_dark_holo"
+            android:clickable="true"
+            android:src="@drawable/arrow_right" />
+    </com.diycircuits.cangjie.CandidateView>
+
+    <com.diycircuits.cangjie.SoftKeyboardView
+        android:id="@+id/mainKeyboard"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/keyboard_background_holo"
+        android:keyBackground="@drawable/btn_keyboard_key_ics"
+	android:verticalCorrection="0dp"
+        android:keyPreviewLayout="@layout/preview" />
+
+</LinearLayout>

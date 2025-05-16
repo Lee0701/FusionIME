@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="@string/app_name">
+
+    <CheckBoxPreference
+        android:key="@string/prefs_hongkongchar_key"
+        android:title="@string/prefs_hongkongchar_title"
+	android:defaultValue="false"
+        android:persistent="true"/>
+
+    <CheckBoxPreference
+        android:key="@string/prefs_autosend_key"
+        android:title="@string/prefs_autosend_title"
+	android:defaultValue="true"
+        android:persistent="true"/>
+
+    <ListPreference
+	android:title="@string/prefs_inputmethod_title"
+	android:summary="@string/prefs_inputmethod_summary"
+	android:key="@string/prefs_inputmethod_key"
+	android:defaultValue="0"
+	android:entries="@array/listArray"
+	android:entryValues="@array/listValues" />
+
+    <ListPreference
+	android:title="@string/prefs_next_inputmethod_title"
+	android:summary="@string/prefs_next_inputmethod_summary"
+	android:key="@string/prefs_next_inputmethod_key" />
+
+    <CheckBoxPreference
+        android:key="@string/prefs_clear_often_used_key"
+        android:title="@string/prefs_clear_often_used_title"
+        android:summary="@string/prefs_clear_often_used_summary"
+	android:defaultValue="false"
+        android:persistent="true"/>
+
+    <CheckBoxPreference
+        android:key="vibrate_on"
+        android:title="@string/vibrate_on_keypress"
+        android:defaultValue="false"
+        android:persistent="true" />
+    <PreferenceScreen
+        android:key="pref_vibration_duration_settings"
+        android:title="@string/prefs_keypress_vibration_duration_settings"
+        android:summary="5ms"/>
+
+    <CheckBoxPreference
+        android:key="sound_on"
+        android:title="@string/sound_on_keypress"
+        android:defaultValue="false"
+        android:persistent="true" />
+    <PreferenceScreen
+        android:key="pref_keypress_sound_volume"
+        android:title="@string/prefs_keypress_sound_volume_settings"
+        android:summary="50"/>
+
+</PreferenceScreen>

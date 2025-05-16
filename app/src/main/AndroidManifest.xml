@@ -29,6 +29,21 @@
         </service>
 
         <service
+            android:name="com.diycircuits.cangjie.InputIME"
+            android:permission="android.permission.BIND_INPUT_METHOD"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.view.InputMethod" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.view.im"
+                android:resource="@xml/method" />
+
+        </service>
+
+        <service
             android:name="com.android.inputmethod.pinyin.PinyinDecoderService"
             android:exported="true">
             <intent-filter>
