@@ -77,7 +77,7 @@ class PinyinIMEMode(
 
     private val keyboardListener = KeyboardListener()
     private val keyboardSet: KeyboardSet = StackedKeyboardSet(
-        DefaultKeyboardSet(keyboardListener, LayoutQwerty.ROWS_ROMAJI_LOWER, LayoutQwerty.ROWS_ROMAJI_UPPER),
+        DefaultKeyboardSet(keyboardListener, LayoutQwerty.ROWS_PINYIN_LOWER, LayoutQwerty.ROWS_PINYIN_UPPER),
         BottomRowKeyboardSet(keyboardListener)
     )
     private lateinit var candidateView: CandidateView
@@ -98,11 +98,6 @@ class PinyinIMEMode(
     override fun onFinish(inputConnection: InputConnection, editorInfo: EditorInfo) {
         this.currentInputConnection = null
         this.currentInputEditorInfo = null
-    }
-
-    private fun resetCandidateWindow() {
-        mDecInfo.resetCandidates()
-        candidateView.submitList(emptyList())
     }
 
     override fun initView(context: Context): View {
@@ -137,8 +132,15 @@ class PinyinIMEMode(
     }
 
     private fun showCandidateWindow(showComposingView: Boolean) {
+        updateComposingText(showComposingView)
         val candidates = mDecInfo.mCandidatesList.mapIndexed { i, s -> PinyinCandidate(i, s) }
         candidateView.submitList(candidates)
+    }
+
+    private fun resetCandidateWindow() {
+        updateComposingText(false)
+        mDecInfo.resetCandidates()
+        candidateView.submitList(emptyList())
     }
 
     private fun onChoiceTouched(activeCandNo: Int) {
@@ -254,7 +256,7 @@ class PinyinIMEMode(
 
     // keyCode can be from both hard key or soft key.
     private fun processFunctionKeys(keyCode: Int, realAction: Boolean): Boolean {
-        if (mCandidatesContainer.isShown() && !mDecInfo.isCandidatesListEmpty) {
+        if (!mDecInfo.isCandidatesListEmpty) {
             if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER) {
                 if (!realAction) return true
 
@@ -733,6 +735,7 @@ class PinyinIMEMode(
             mComposingView.visibility = View.VISIBLE
         }
         mComposingView.invalidate()
+        currentInputConnection?.setComposingText(mDecInfo.composingStrForDisplay, 1)
     }
 
     private fun inputCommaPeriod(
