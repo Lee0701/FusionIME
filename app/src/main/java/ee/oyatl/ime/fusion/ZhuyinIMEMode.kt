@@ -25,7 +25,8 @@ import tw.cheyingwu.zhuyin.ZhuYinDictionary
 import tw.cheyingwu.zhuyin.ZhuYinIMESettings
 
 class ZhuyinIMEMode(
-    context: Context
+    context: Context,
+    private val listener: IMEMode.Listener
 ): IMEMode, CandidateView.Listener, CommonKeyboardListener.Callback {
 
     private val handler: Handler = Handler(Looper.getMainLooper()) { msg ->
@@ -127,6 +128,14 @@ class ZhuyinIMEMode(
                 renderResult()
             }
             super.onChar(code)
+        }
+
+        override fun onSpecial(type: Keyboard.SpecialKey) {
+            when(type) {
+                Keyboard.SpecialKey.Language -> listener.onLanguageSwitch()
+                else -> {}
+            }
+            super.onSpecial(type)
         }
     }
 

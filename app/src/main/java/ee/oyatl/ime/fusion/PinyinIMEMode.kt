@@ -35,7 +35,8 @@ import ee.oyatl.ime.keyboard.layout.LayoutQwerty
 import java.util.Vector
 
 class PinyinIMEMode(
-    context: Context
+    context: Context,
+    private val listener: IMEMode.Listener
 ): IMEMode, CandidateView.Listener, CommonKeyboardListener.Callback {
     private val keyCharacterMap: KeyCharacterMap = KeyCharacterMap.load(KeyCharacterMap.VIRTUAL_KEYBOARD)
 
@@ -185,6 +186,7 @@ class PinyinIMEMode(
                 Keyboard.SpecialKey.Delete -> processKeyCode(KeyEvent.KEYCODE_DEL)
                 Keyboard.SpecialKey.Space -> processKeyCode(KeyEvent.KEYCODE_SPACE)
                 Keyboard.SpecialKey.Return -> processKeyCode(KeyEvent.KEYCODE_ENTER)
+                Keyboard.SpecialKey.Language -> listener.onLanguageSwitch()
                 else -> {}
             }
             super.onSpecial(type)
@@ -731,7 +733,7 @@ class PinyinIMEMode(
         if (!visible) {
             mComposingView.visibility = View.INVISIBLE
         } else {
-            mComposingView.setDecodingInfo(mDecInfo, mImeState)
+//            mComposingView.setDecodingInfo(mDecInfo, mImeState)
             mComposingView.visibility = View.VISIBLE
         }
         mComposingView.invalidate()

@@ -28,7 +28,8 @@ import org.mozc.android.inputmethod.japanese.session.SessionExecutor.EvaluationC
 import org.mozc.android.inputmethod.japanese.session.SessionHandlerFactory
 
 class MozcIMEMode(
-    context: Context
+    context: Context,
+    private val listener: IMEMode.Listener
 ): IMEMode, CandidateView.Listener, CommonKeyboardListener.Callback {
 
     private val keyboardListener = KeyboardListener()
@@ -126,6 +127,7 @@ class MozcIMEMode(
                 Keyboard.SpecialKey.Space -> onChar(' '.code)
                 Keyboard.SpecialKey.Return -> onChar(primaryKeyCodeConverter.keyCodeEnter)
                 Keyboard.SpecialKey.Delete -> onChar(primaryKeyCodeConverter.keyCodeBackspace)
+                Keyboard.SpecialKey.Language -> listener.onLanguageSwitch()
                 else -> {}
             }
             super.onSpecial(type)

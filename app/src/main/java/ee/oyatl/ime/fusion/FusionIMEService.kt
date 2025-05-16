@@ -4,28 +4,39 @@ import android.inputmethodservice.InputMethodService
 import android.view.View
 import android.view.inputmethod.EditorInfo
 
-class FusionIMEService: InputMethodService() {
+class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.Callback {
 
-    private lateinit var imeMode: IMEMode
+    private lateinit var imeModeSwitcher: IMEModeSwitcher
 
     override fun onCreate() {
         super.onCreate()
-        imeMode = MozcIMEMode(this)
-        imeMode = PinyinIMEMode(this)
-        imeMode = ZhuyinIMEMode(this)
+        val imeModes = mutableListOf<IMEMode>()
+        imeModes += MozcIMEMode(this, this)
+        imeModes += PinyinIMEMode(this, this)
+        imeModes += ZhuyinIMEMode(this, this)
+        imeModeSwitcher = IMEModeSwitcher(imeModes, this)
     }
 
     override fun onCreateInputView(): View {
-        return imeMode.initView(this)
+        return imeModeSwitcher.initView(this)
     }
 
     override fun onStartInput(attribute: EditorInfo?, restarting: Boolean) {
         super.onStartInput(attribute, restarting)
-        imeMode.onStart(currentInputConnection, currentInputEditorInfo)
+        imeModeSwitcher.onStart(currentInputConnection, currentInputEditorInfo)
     }
 
     override fun onFinishInput() {
+        imeModeSwitcher.onFinish(currentInputConnection, currentInputEditorInfo)
         super.onFinishInput()
-        imeMode.onFinish(currentInputConnection, currentInputEditorInfo)
+    }
+
+    override fun onLanguageSwitch() {
+        val newIndex = (imeModeSwitcher.currentModeIndex + 1) % imeModeSwitcher.modes.size
+        imeModeSwitcher.switchMode(newIndex, currentInputConnection, currentInputEditorInfo)
+    }
+
+    override fun onInputViewChanged(inputView: View) {
+        setInputView(inputView)
     }
 }

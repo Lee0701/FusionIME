@@ -11,4 +11,7 @@ interface IMEMode {
     fun initView(context: Context): View
     fun getView(): View
 
+    interface Listener {
+        fun onLanguageSwitch()
+    }
 }
