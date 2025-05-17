@@ -26,7 +26,7 @@ abstract class DefaultKeyboard(
         return keyboard.root
     }
 
-    protected fun buildRow(context: Context, chars: String, height: Int): KbdRowBinding {
+    protected open fun buildRow(context: Context, chars: String, height: Int): KbdRowBinding {
         val inflater = LayoutInflater.from(context)
         val row = KbdRowBinding.inflate(inflater)
         chars.forEach { char ->
@@ -36,7 +36,7 @@ abstract class DefaultKeyboard(
         return row
     }
 
-    protected fun buildKey(context: Context, char: Char, height: Int): KbdKeyBinding {
+    protected open fun buildKey(context: Context, char: Char, height: Int): KbdKeyBinding {
         val inflater = LayoutInflater.from(context)
         val key = KbdKeyBinding.inflate(inflater)
         key.label.text = char.toString()
@@ -47,16 +47,19 @@ abstract class DefaultKeyboard(
         return key
     }
 
-    protected fun buildSpacer(context: Context, width: Float): View {
+    protected open fun buildSpacer(context: Context, width: Float): View {
         val spacer = View(context)
-        spacer.layoutParams = LinearLayout.LayoutParams(0, 0).apply {
+        spacer.layoutParams = LinearLayout.LayoutParams(
+            0, LinearLayout.LayoutParams.MATCH_PARENT
+        ).apply {
             weight = width
         }
+        spacer.isClickable = true
         return spacer
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    protected fun buildSpecialKey(
+    protected open fun buildSpecialKey(
         context: Context,
         @ColorRes bkg: Int,
         @DrawableRes icon: Int,

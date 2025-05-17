@@ -1,6 +1,8 @@
 package ee.oyatl.ime.fusion
 
 import android.content.Context
+import android.content.res.Configuration
+import android.content.res.Resources
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
@@ -11,28 +13,51 @@ import ee.oyatl.ime.fusion.mozc.InputConnectionRenderer
 import ee.oyatl.ime.keyboard.Keyboard
 import ee.oyatl.ime.keyboard.keyboardset.BottomRowKeyboardSet
 import ee.oyatl.ime.keyboard.keyboardset.DefaultKeyboardSet
+import ee.oyatl.ime.keyboard.keyboardset.GridKanaBottomKeyboardSet
+import ee.oyatl.ime.keyboard.keyboardset.GridKeyboardSet
 import ee.oyatl.ime.keyboard.keyboardset.KeyboardSet
 import ee.oyatl.ime.keyboard.keyboardset.StackedKeyboardSet
-import ee.oyatl.ime.keyboard.layout.LayoutQwerty
+import ee.oyatl.ime.keyboard.layout.LayoutKana50OnZu
+import ee.oyatl.ime.keyboard.layout.LayoutRomaji
+import org.mozc.android.inputmethod.japanese.MozcUtil
 import org.mozc.android.inputmethod.japanese.PrimaryKeyCodeConverter
+import org.mozc.android.inputmethod.japanese.keyboard.Keyboard.KeyboardSpecification
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCandidates.CandidateWord
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.Input.TouchEvent
-import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.Request
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config
 import org.mozc.android.inputmethod.japanese.session.SessionExecutor
 import org.mozc.android.inputmethod.japanese.session.SessionExecutor.EvaluationCallback
 import org.mozc.android.inputmethod.japanese.session.SessionHandlerFactory
 
-class MozcIMEMode(
+abstract class MozcIMEMode(
     context: Context,
     listener: IMEMode.Listener
 ): CommonIMEMode(listener) {
 
-    override val keyboardSet: KeyboardSet = StackedKeyboardSet(
-        DefaultKeyboardSet(keyboardListener, LayoutQwerty.ROWS_ROMAJI_LOWER, LayoutQwerty.ROWS_ROMAJI_UPPER),
-        BottomRowKeyboardSet(keyboardListener)
-    )
+    class RomajiQwerty(context: Context, listener: IMEMode.Listener): MozcIMEMode(context, listener) {
+        override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.QWERTY_KANA
+        override val keyboardSet: KeyboardSet = StackedKeyboardSet(
+            DefaultKeyboardSet(keyboardListener, LayoutRomaji.ROWS_LOWER, LayoutRomaji.ROWS_UPPER),
+            BottomRowKeyboardSet(keyboardListener)
+        )
+    }
+
+    class Kana50OnZu(context: Context, listener: IMEMode.Listener): MozcIMEMode(context, listener) {
+        override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.TWELVE_KEY_FLICK_KANA
+        override val keyboardSet: KeyboardSet = StackedKeyboardSet(
+            GridKeyboardSet(keyboardListener, LayoutKana50OnZu.ROWS),
+            GridKanaBottomKeyboardSet(
+                keyboardListener,
+                LayoutKana50OnZu.BOTTOM_LEFT,
+                LayoutKana50OnZu.BOTTOM_RIGHT
+            )
+        )
+    }
+
+    private val resources: Resources = context.resources
+    private val configuration: Configuration = resources.configuration
+    protected abstract val keyboardSpecification: KeyboardSpecification
 
     private val primaryKeyCodeConverter: PrimaryKeyCodeConverter = PrimaryKeyCodeConverter(context)
     private val sessionExecutor: SessionExecutor =
@@ -64,13 +89,7 @@ class MozcIMEMode(
                 .build()
         )
         sessionExecutor.updateRequest(
-            Request.newBuilder()
-                .setZeroQuerySuggestion(true)
-                .setMixedConversion(true)
-                .setUpdateInputModeFromSurroundingText(false)
-                .setAutoPartialSuggestion(true)
-                .setCrossingEdgeBehavior(Request.CrossingEdgeBehavior.DO_NOTHING)
-                .build(),
+            MozcUtil.getRequestBuilder(resources, keyboardSpecification, configuration).build(),
             emptyList()
         )
         sessionExecutor.resetContext()

@@ -15,10 +15,11 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
     override fun onCreate() {
         super.onCreate()
         val entries = mutableListOf<IMEModeSwitcher.Entry>()
-        entries += IMEModeSwitcher.Entry("日", MozcIMEMode(this, this))
-        entries += IMEModeSwitcher.Entry("拼", PinyinIMEMode(this, this))
-        entries += IMEModeSwitcher.Entry("注", ZhuyinIMEMode(this, this))
-        entries += IMEModeSwitcher.Entry("倉", CangjieIMEMode(this, this))
+        entries += IMEModeSwitcher.Entry("あiu", MozcIMEMode.RomajiQwerty(this, this))
+        entries += IMEModeSwitcher.Entry("あいう", MozcIMEMode.Kana50OnZu(this, this))
+        entries += IMEModeSwitcher.Entry("拼音", PinyinIMEMode(this, this))
+        entries += IMEModeSwitcher.Entry("注音", ZhuyinIMEMode(this, this))
+        entries += IMEModeSwitcher.Entry("倉頡", CangjieIMEMode(this, this))
         imeModeSwitcher = IMEModeSwitcher(entries, this)
     }
 

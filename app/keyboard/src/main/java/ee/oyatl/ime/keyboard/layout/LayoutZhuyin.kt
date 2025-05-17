@@ -2,7 +2,7 @@ package ee.oyatl.ime.keyboard.layout
 
 object LayoutZhuyin {
 
-    val ROWS_ZHUYIN: List<String> = listOf(
+    val ROWS: List<String> = listOf(
         "ㄅㄉˇˋㄓˊ˙ㄚㄞㄢ",
         "ㄆㄊㄍㄐㄔㄗㄧㄛㄟㄣ",
         "ㄇㄋㄎㄑㄕㄘㄨㄜㄠㄤ",

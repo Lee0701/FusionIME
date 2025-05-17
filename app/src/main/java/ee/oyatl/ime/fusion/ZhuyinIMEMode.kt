@@ -33,8 +33,8 @@ class ZhuyinIMEMode(
     }
 
     override val keyboardSet: KeyboardSet = StackedKeyboardSet(
-        GridKeyboardSet(keyboardListener, LayoutZhuyin.ROWS_ZHUYIN.dropLast(1)),
-        GridBottomKeyboardSet(keyboardListener, LayoutZhuyin.ROWS_ZHUYIN.last())
+        GridKeyboardSet(keyboardListener, LayoutZhuyin.ROWS.dropLast(1)),
+        GridBottomKeyboardSet(keyboardListener, LayoutZhuyin.ROWS.last())
     )
 
     private val wordComposer: WordComposer = WordComposer()

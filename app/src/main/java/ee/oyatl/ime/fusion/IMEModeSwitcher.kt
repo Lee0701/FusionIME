@@ -54,7 +54,11 @@ class IMEModeSwitcher(
 
     fun createCandidateView(context: Context): View {
         candidateView = FrameLayout(context)
-        entries.forEach { candidateView.addView(it.imeMode.createCandidateView(context)) }
+        entries.forEach {
+            val view = it.imeMode.createCandidateView(context)
+            view.visibility = View.GONE
+            candidateView.addView(view)
+        }
         return candidateView
     }
 

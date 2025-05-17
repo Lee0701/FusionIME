@@ -6,33 +6,26 @@ import android.os.Looper
 import ee.oyatl.ime.keyboard.R
 import ee.oyatl.ime.keyboard.databinding.KbdRowBinding
 
-class GridBottomRowKeyboard(
+class GridKanaBottomRowKeyboard(
     override val listener: Keyboard.Listener,
-    private val extraRow: String,
-    private val shiftState: Keyboard.ShiftState
+    private val leftExtraRow: String,
+    private val rightExtraRow: String
 ): DefaultKeyboard(listener) {
     override fun buildRows(context: Context): List<KbdRowBinding> {
         val height = context.resources.getDimensionPixelSize(R.dimen.key_height)
         val row = buildRow(context, "", height)
-        row.root.addView(buildSpecialKey(
-            context,
-            R.color.key_bg_static_light_mod,
-            R.drawable.keyic_numbers,
-            1.25f) { pressed -> if(pressed) listener.onSpecial(Keyboard.SpecialKey.Symbols) }
-        )
 
-        val icon = when(shiftState) {
-            Keyboard.ShiftState.Unpressed -> R.drawable.keyic_shift
-            Keyboard.ShiftState.Pressed -> R.drawable.keyic_shift_pressed
-            Keyboard.ShiftState.Locked -> R.drawable.keyic_shift_locked
+        leftExtraRow.forEach { c ->
+            val key = buildKey(context, c, height)
+            row.root.addView(key.root)
         }
 
         row.root.addView(buildSpecialKey(
             context,
             R.color.key_bg_static_light_mod,
-            icon,
-            1.25f
-        ) { pressed -> listener.onShift(pressed) })
+            R.drawable.keyic_numbers,
+            1.5f) { pressed -> if(pressed) listener.onSpecial(Keyboard.SpecialKey.Symbols) }
+        )
 
         row.root.addView(buildSpecialKey(
             context,
@@ -44,10 +37,10 @@ class GridBottomRowKeyboard(
             context,
             R.color.key_bg_static_light,
             R.drawable.keyic_space,
-            3.0f
+            2.0f
         ) { pressed -> if(pressed) listener.onSpecial(Keyboard.SpecialKey.Space) })
 
-        extraRow.forEach { c ->
+        rightExtraRow.forEach { c ->
             val key = buildKey(context, c, height)
             row.root.addView(key.root)
         }

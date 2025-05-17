@@ -25,7 +25,7 @@ import ee.oyatl.ime.keyboard.keyboardset.BottomRowKeyboardSet
 import ee.oyatl.ime.keyboard.keyboardset.DefaultKeyboardSet
 import ee.oyatl.ime.keyboard.keyboardset.KeyboardSet
 import ee.oyatl.ime.keyboard.keyboardset.StackedKeyboardSet
-import ee.oyatl.ime.keyboard.layout.LayoutQwerty
+import ee.oyatl.ime.keyboard.layout.LayoutPinyin
 import java.util.Vector
 
 class PinyinIMEMode(
@@ -71,7 +71,7 @@ class PinyinIMEMode(
     private var isEnterNormalState = true
 
     override val keyboardSet: KeyboardSet = StackedKeyboardSet(
-        DefaultKeyboardSet(keyboardListener, LayoutQwerty.ROWS_PINYIN_LOWER, LayoutQwerty.ROWS_PINYIN_UPPER),
+        DefaultKeyboardSet(keyboardListener, LayoutPinyin.ROWS_LOWER, LayoutPinyin.ROWS_UPPER),
         BottomRowKeyboardSet(keyboardListener)
     )
 
