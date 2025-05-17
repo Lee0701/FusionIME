@@ -7,9 +7,10 @@ import android.view.inputmethod.InputConnection
 
 interface IMEMode {
     fun onStart(inputConnection: InputConnection, editorInfo: EditorInfo)
-    fun onFinish(inputConnection: InputConnection, editorInfo: EditorInfo)
-    fun initView(context: Context): View
-    fun getView(): View
+    fun onFinish()
+    fun createInputView(context: Context): View
+    fun createCandidateView(context: Context): View
+    fun getInputView(): View
 
     interface Listener {
         fun onLanguageSwitch()

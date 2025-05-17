@@ -17,7 +17,7 @@ class IMEModeSwitcher(
 
     fun initView(context: Context): View {
         inputView = FrameLayout(context)
-        modes.forEach { inputView.addView(it.initView(context)) }
+        modes.forEach { inputView.addView(it.createInputView(context)) }
         return inputView
     }
 
@@ -26,13 +26,13 @@ class IMEModeSwitcher(
     }
 
     fun onFinish(inputConnection: InputConnection, editorInfo: EditorInfo) {
-        currentMode.onFinish(inputConnection, editorInfo)
+        currentMode.onFinish()
     }
 
     fun switchMode(index: Int, inputConnection: InputConnection, editorInfo: EditorInfo) {
-        currentMode.onFinish(inputConnection, editorInfo)
+        currentMode.onFinish()
         currentModeIndex = index
         currentMode.onStart(inputConnection, editorInfo)
-        currentMode.getView().bringToFront()
+        currentMode.getInputView().bringToFront()
     }
 }

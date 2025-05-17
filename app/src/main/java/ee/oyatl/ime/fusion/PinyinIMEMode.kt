@@ -9,10 +9,7 @@ import android.view.KeyCharacterMap
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.CompletionInfo
-import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputConnection
 import android.widget.LinearLayout
 import com.android.inputmethod.pinyin.CandidatesContainer
 import com.android.inputmethod.pinyin.ComposingView
@@ -23,8 +20,6 @@ import com.android.inputmethod.pinyin.KeyMapDream
 import com.android.inputmethod.pinyin.PinyinIME.ImeState
 import com.android.inputmethod.pinyin.Settings
 import ee.oyatl.ime.candidate.CandidateView
-import ee.oyatl.ime.candidate.ScrollingCandidateView
-import ee.oyatl.ime.keyboard.CommonKeyboardListener
 import ee.oyatl.ime.keyboard.Keyboard
 import ee.oyatl.ime.keyboard.keyboardset.BottomRowKeyboardSet
 import ee.oyatl.ime.keyboard.keyboardset.DefaultKeyboardSet
@@ -36,7 +31,7 @@ import java.util.Vector
 class PinyinIMEMode(
     context: Context,
     private val listener: IMEMode.Listener
-): IMEMode, CandidateView.Listener, CommonKeyboardListener.Callback {
+): CommonIMEMode(listener) {
     private val keyCharacterMap: KeyCharacterMap = KeyCharacterMap.load(KeyCharacterMap.VIRTUAL_KEYBOARD)
 
     /**
@@ -75,31 +70,21 @@ class PinyinIMEMode(
 
     private var isEnterNormalState = true
 
-    private val keyboardListener = KeyboardListener()
-    private val keyboardSet: KeyboardSet = StackedKeyboardSet(
+    override val keyboardSet: KeyboardSet = StackedKeyboardSet(
         DefaultKeyboardSet(keyboardListener, LayoutQwerty.ROWS_PINYIN_LOWER, LayoutQwerty.ROWS_PINYIN_UPPER),
         BottomRowKeyboardSet(keyboardListener)
     )
-    private lateinit var candidateView: CandidateView
-    private lateinit var imeView: ViewGroup
-
-    private var util: KeyEventUtil? = null
-    private val currentInputConnection: InputConnection? get() = util?.currentInputConnection
-    private val currentInputEditorInfo: EditorInfo? get() = util?.currentInputEditorInfo
 
     init {
         startPinyinDecoderService(context)
     }
 
-    override fun onStart(inputConnection: InputConnection, editorInfo: EditorInfo) {
-        this.util = KeyEventUtil(inputConnection, editorInfo)
+    override fun onReset() {
+        super.onReset()
+        resetToIdleState(true)
     }
 
-    override fun onFinish(inputConnection: InputConnection, editorInfo: EditorInfo) {
-        this.util = null
-    }
-
-    override fun initView(context: Context): View {
+    override fun createInputView(context: Context): View {
         val layoutInflater = LayoutInflater.from(context)
 
         // Inflate the floating container view
@@ -114,20 +99,7 @@ class PinyinIMEMode(
             com.android.inputmethod.pinyin.R.layout.candidates_container, null)
                 as CandidatesContainer
 
-        keyboardSet.initView(context)
-        imeView = LinearLayout(context).apply { orientation = LinearLayout.VERTICAL }
-        val inputView = keyboardSet.getView(keyboardListener.shiftState, false)
-        candidateView = ScrollingCandidateView(context, null).apply {
-            listener = this@PinyinIMEMode
-        }
-        imeView.addView(candidateView as View)
-        imeView.addView(inputView)
-        return imeView
-    }
-
-    override fun getView(): View {
-        updateInputView()
-        return imeView
+        return super.createInputView(context)
     }
 
     private fun showCandidateWindow(showComposingView: Boolean) {
@@ -170,31 +142,17 @@ class PinyinIMEMode(
         }
     }
 
-    override fun updateInputView() {
-        keyboardSet.getView(keyboardListener.shiftState, false)
+    override fun onChar(code: Int) {
+        val keyCode = keyCharacterMap.getEvents(charArrayOf(code.toChar())).firstOrNull()?.keyCode
+        if(keyCode != null) processKeyCode(keyCode)
     }
 
-    private fun submitCandidates(candidates: List<CandidateView.Candidate>) {
-        listener.onCandidateViewVisibilityChange(candidates.isNotEmpty())
-        candidateView.submitList(candidates)
-    }
-
-    private inner class KeyboardListener: CommonKeyboardListener(this) {
-        override fun onChar(code: Int) {
-            val keyCode = keyCharacterMap.getEvents(charArrayOf(code.toChar())).firstOrNull()?.keyCode
-            if(keyCode != null) processKeyCode(keyCode)
-            super.onChar(code)
-        }
-
-        override fun onSpecial(type: Keyboard.SpecialKey) {
-            when(type) {
-                Keyboard.SpecialKey.Delete -> processKeyCode(KeyEvent.KEYCODE_DEL)
-                Keyboard.SpecialKey.Space -> processKeyCode(KeyEvent.KEYCODE_SPACE)
-                Keyboard.SpecialKey.Return -> processKeyCode(KeyEvent.KEYCODE_ENTER)
-                Keyboard.SpecialKey.Language -> listener.onLanguageSwitch()
-                else -> {}
-            }
-            super.onSpecial(type)
+    override fun onSpecial(type: Keyboard.SpecialKey) {
+        when(type) {
+            Keyboard.SpecialKey.Delete -> processKeyCode(KeyEvent.KEYCODE_DEL)
+            Keyboard.SpecialKey.Space -> processKeyCode(KeyEvent.KEYCODE_SPACE)
+            Keyboard.SpecialKey.Return -> processKeyCode(KeyEvent.KEYCODE_ENTER)
+            else -> {}
         }
     }
 

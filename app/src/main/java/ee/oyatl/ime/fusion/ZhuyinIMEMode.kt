@@ -4,17 +4,10 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.view.KeyEvent
-import android.view.View
-import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputConnection
-import android.widget.LinearLayout
 import com.android.inputmethod.latin.Suggest
 import com.android.inputmethod.latin.TextEntryState
 import com.android.inputmethod.latin.WordComposer
 import ee.oyatl.ime.candidate.CandidateView
-import ee.oyatl.ime.candidate.ScrollingCandidateView
-import ee.oyatl.ime.keyboard.CommonKeyboardListener
 import ee.oyatl.ime.keyboard.Keyboard
 import ee.oyatl.ime.keyboard.keyboardset.GridBottomKeyboardSet
 import ee.oyatl.ime.keyboard.keyboardset.GridKeyboardSet
@@ -27,7 +20,7 @@ import tw.cheyingwu.zhuyin.ZhuYinIMESettings
 class ZhuyinIMEMode(
     context: Context,
     private val listener: IMEMode.Listener
-): IMEMode, CandidateView.Listener, CommonKeyboardListener.Callback {
+): CommonIMEMode(listener) {
 
     private val handler: Handler = Handler(Looper.getMainLooper()) { msg ->
         when(msg.what) {
@@ -39,21 +32,14 @@ class ZhuyinIMEMode(
         }
     }
 
-    private val keyboardListener = KeyboardListener()
-    private val keyboardSet: KeyboardSet = StackedKeyboardSet(
+    override val keyboardSet: KeyboardSet = StackedKeyboardSet(
         GridKeyboardSet(keyboardListener, LayoutZhuyin.ROWS_ZHUYIN.dropLast(1)),
         GridBottomKeyboardSet(keyboardListener, LayoutZhuyin.ROWS_ZHUYIN.last())
     )
-    private lateinit var candidateView: CandidateView
-    private lateinit var imeView: ViewGroup
 
     private val wordComposer: WordComposer = WordComposer()
     private var mSuggest: Suggest = Suggest(context, R.raw.dict_zhuyin)
     private var mUserDictionary: ZhuYinDictionary = ZhuYinDictionary(context)
-
-    private var util: KeyEventUtil? = null
-    private val currentInputConnection: InputConnection? get() = util?.currentInputConnection
-    private val currentInputEditorInfo: EditorInfo? get() = util?.currentInputEditorInfo
 
     private var bestCandidate: ZhuyinCandidate? = null
 
@@ -63,36 +49,10 @@ class ZhuyinIMEMode(
         ZhuYinIMESettings.setCandidateCnt(50)
     }
 
-    override fun onStart(inputConnection: InputConnection, editorInfo: EditorInfo) {
-        this.util = KeyEventUtil(inputConnection, editorInfo)
-    }
-
-    override fun onFinish(inputConnection: InputConnection, editorInfo: EditorInfo) {
-        this.util = null
-    }
-
-    private fun reset() {
-        currentInputConnection?.finishComposingText()
-        submitCandidates(emptyList())
+    override fun onReset() {
+        super.onReset()
         bestCandidate = null
         wordComposer.reset()
-    }
-
-    override fun initView(context: Context): View {
-        keyboardSet.initView(context)
-        imeView = LinearLayout(context).apply { orientation = LinearLayout.VERTICAL }
-        val inputView = keyboardSet.getView(keyboardListener.shiftState, false)
-        candidateView = ScrollingCandidateView(context, null).apply {
-            listener = this@ZhuyinIMEMode
-        }
-        imeView.addView(candidateView as View)
-        imeView.addView(inputView)
-        return imeView
-    }
-
-    override fun getView(): View {
-        updateInputView()
-        return imeView
     }
 
     override fun onCandidateSelected(candidate: CandidateView.Candidate) {
@@ -101,17 +61,8 @@ class ZhuyinIMEMode(
             val text = candidate.text.toString().replace(" ", "")
             inputConnection.commitText(text, 1)
             mUserDictionary.useWordDB(text)
-            reset()
+            onReset()
         }
-    }
-
-    override fun updateInputView() {
-        keyboardSet.getView(keyboardListener.shiftState, false)
-    }
-
-    private fun submitCandidates(candidates: List<CandidateView.Candidate>) {
-        listener.onCandidateViewVisibilityChange(candidates.isNotEmpty())
-        candidateView.submitList(candidates)
     }
 
     private fun renderResult() {
@@ -149,7 +100,7 @@ class ZhuyinIMEMode(
     }
 
     private fun handleReturn() {
-        if(wordComposer.typedWord?.isNotEmpty() == true) reset()
+        if(wordComposer.typedWord?.isNotEmpty() == true) onReset()
         else {
             if (util?.sendDefaultEditorAction(true) != true)
                 currentInputConnection?.commitText("\n", 1)
@@ -177,26 +128,21 @@ class ZhuyinIMEMode(
         renderResult()
     }
 
-    inner class KeyboardListener: CommonKeyboardListener(this) {
-        override fun onChar(code: Int) {
-            val key = code.toChar()
-            val value = LayoutZhuyin.CODES_MAP[key]
-            if(value != null) {
-                wordComposer.add(code, intArrayOf(value))
-                renderResult()
-            }
-            super.onChar(code)
+    override fun onChar(code: Int) {
+        val key = code.toChar()
+        val value = LayoutZhuyin.CODES_MAP[key]
+        if(value != null) {
+            wordComposer.add(code, intArrayOf(value))
+            renderResult()
         }
+    }
 
-        override fun onSpecial(type: Keyboard.SpecialKey) {
-            when(type) {
-                Keyboard.SpecialKey.Space -> handleSpace()
-                Keyboard.SpecialKey.Return -> handleReturn()
-                Keyboard.SpecialKey.Delete -> handleBackspace()
-                Keyboard.SpecialKey.Language -> listener.onLanguageSwitch()
-                else -> {}
-            }
-            super.onSpecial(type)
+    override fun onSpecial(type: Keyboard.SpecialKey) {
+        when(type) {
+            Keyboard.SpecialKey.Space -> handleSpace()
+            Keyboard.SpecialKey.Return -> handleReturn()
+            Keyboard.SpecialKey.Delete -> handleBackspace()
+            else -> {}
         }
     }
 
