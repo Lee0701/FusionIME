@@ -38,7 +38,15 @@ abstract class MozcIMEMode(
     class RomajiQwerty(context: Context, listener: IMEMode.Listener): MozcIMEMode(context, listener) {
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.QWERTY_KANA
         override val keyboardSet: KeyboardSet = StackedKeyboardSet(
-            DefaultKeyboardSet(keyboardListener, LayoutRomaji.ROWS_LOWER, LayoutRomaji.ROWS_UPPER),
+            DefaultKeyboardSet(keyboardListener, LayoutRomaji.ROWS_QWERTY_LOWER, LayoutRomaji.ROWS_QWERTY_UPPER),
+            BottomRowKeyboardSet(keyboardListener)
+        )
+    }
+
+    class RomajiColemak(context: Context, listener: IMEMode.Listener): MozcIMEMode(context, listener) {
+        override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.QWERTY_KANA
+        override val keyboardSet: KeyboardSet = StackedKeyboardSet(
+            DefaultKeyboardSet(keyboardListener, LayoutRomaji.ROWS_COLEMAK_LOWER, LayoutRomaji.ROWS_COLEMAK_UPPER),
             BottomRowKeyboardSet(keyboardListener)
         )
     }

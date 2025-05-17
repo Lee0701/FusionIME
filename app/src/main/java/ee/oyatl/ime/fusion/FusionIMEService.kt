@@ -15,7 +15,8 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
     override fun onCreate() {
         super.onCreate()
         val entries = mutableListOf<IMEModeSwitcher.Entry>()
-        entries += IMEModeSwitcher.Entry("あiu", MozcIMEMode.RomajiQwerty(this, this))
+        entries += IMEModeSwitcher.Entry("あQ", MozcIMEMode.RomajiQwerty(this, this))
+        entries += IMEModeSwitcher.Entry("あC", MozcIMEMode.RomajiColemak(this, this))
         entries += IMEModeSwitcher.Entry("あいう", MozcIMEMode.Kana50OnZu(this, this))
         entries += IMEModeSwitcher.Entry("拼音", PinyinIMEMode(this, this))
         entries += IMEModeSwitcher.Entry("注音", ZhuyinIMEMode(this, this))

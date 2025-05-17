@@ -9,6 +9,7 @@ import android.view.inputmethod.InputConnection
 import android.widget.FrameLayout
 import ee.oyatl.ime.fusion.databinding.ModeSwitcherTabBinding
 import androidx.core.view.isVisible
+import ee.oyatl.ime.fusion.databinding.ModeSwitcherTabBarBinding
 
 class IMEModeSwitcher(
     private val entries: List<Entry>,
@@ -75,16 +76,17 @@ class IMEModeSwitcher(
 
     fun initTabBarView(context: Context): View {
         val layoutInflater = LayoutInflater.from(context)
-        tabBar = layoutInflater.inflate(R.layout.mode_switcher_tab_bar, null) as ViewGroup
+        val tabBar = ModeSwitcherTabBarBinding.inflate(layoutInflater, null, false)
         tabs = entries.mapIndexed { index, entry ->
-            val tab = ModeSwitcherTabBinding.inflate(layoutInflater, tabBar, true)
+            val tab = ModeSwitcherTabBinding.inflate(layoutInflater, tabBar.content, true)
             tab.label.text = entry.label
             tab.root.setOnClickListener {
                 callback.onSwitchInputMode(index)
             }
             return@mapIndexed tab
         }
-        return tabBar
+        this.tabBar = tabBar.root
+        return this.tabBar
     }
 
 interface Callback {

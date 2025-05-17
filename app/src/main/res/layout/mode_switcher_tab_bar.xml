@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<HorizontalScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
-    android:scrollbars="horizontal"
-    android:background="@color/candidate_bg_light"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/candidate_view_height">
+    android:layout_height="wrap_content"
+    android:scrollbars="none"
+    android:background="@color/candidate_bg_light">
 
-</LinearLayout>
+    <LinearLayout
+        android:id="@+id/content"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/candidate_view_height">
+
+    </LinearLayout>
+</HorizontalScrollView>
