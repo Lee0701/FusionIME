@@ -22,4 +22,6 @@
     <color name="key_bg_dark_return_pressed">#4bb6e8</color>
     <color name="key_fg_dark">#f0f0f3</color>
     <color name="key_fg_dark_return">#191c1e</color>
+
+    <color name="candidate_bg_light">#e0e0e3</color>
 </resources>

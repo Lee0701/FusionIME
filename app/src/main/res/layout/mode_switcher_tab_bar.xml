@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:scrollbars="horizontal"
-    android:background="@color/keyboard_bg_light"
+    android:background="@color/candidate_bg_light"
     android:layout_width="match_parent"
     android:layout_height="@dimen/candidate_view_height">
 
