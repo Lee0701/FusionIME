@@ -14,11 +14,18 @@ class IMEModeSwitcher(
     private val currentMode: IMEMode get() = modes[currentModeIndex]
 
     private lateinit var inputView: FrameLayout
+    private lateinit var candidateView: FrameLayout
 
-    fun initView(context: Context): View {
+    fun createInputView(context: Context): View {
         inputView = FrameLayout(context)
         modes.forEach { inputView.addView(it.createInputView(context)) }
         return inputView
+    }
+
+    fun createCandidateView(context: Context): View {
+        candidateView = FrameLayout(context)
+        modes.forEach { candidateView.addView(it.createCandidateView(context)) }
+        return candidateView
     }
 
     fun onStart(inputConnection: InputConnection, editorInfo: EditorInfo) {

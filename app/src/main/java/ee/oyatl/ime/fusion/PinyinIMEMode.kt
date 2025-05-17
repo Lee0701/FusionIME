@@ -106,14 +106,22 @@ class PinyinIMEMode(
         updateComposingText(showComposingView)
         val candidates = decInfo.mCandidatesList.mapIndexed { i, s -> PinyinCandidate(i, s) }
         submitCandidates(candidates)
-        listener.onCandidateViewVisibilityChange(true)
+        val candidateView = candidateView as? View
+        if(candidateView != null) {
+            candidateView.visibility = View.VISIBLE
+            listener.onCandidateViewVisibilityChange(true)
+        }
     }
 
     private fun resetCandidateWindow() {
         updateComposingText(false)
         decInfo.resetCandidates()
         submitCandidates(emptyList())
-        listener.onCandidateViewVisibilityChange(false)
+        val candidateView = candidateView as? View
+        if(candidateView != null) {
+            candidateView.visibility = View.GONE
+            listener.onCandidateViewVisibilityChange(false)
+        }
     }
 
     private fun onChoiceTouched(activeCandNo: Int) {

@@ -14,7 +14,7 @@ class ModeSwitcherTabBar(
     var isShown: Boolean
         get() = tabBar.isVisible
         set(v) {
-            tabBar.visibility = if (v) View.VISIBLE else View.GONE
+            if(v) tabBar.bringToFront()
         }
 
     private lateinit var tabBar: ViewGroup

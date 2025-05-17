@@ -2,15 +2,12 @@ package ee.oyatl.ime.fusion
 
 import android.content.Context
 import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
-import android.widget.LinearLayout
 import com.google.common.base.Optional
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.VerticalScrollingCandidateView
 import ee.oyatl.ime.fusion.mozc.InputConnectionRenderer
-import ee.oyatl.ime.keyboard.CommonKeyboardListener
 import ee.oyatl.ime.keyboard.Keyboard
 import ee.oyatl.ime.keyboard.keyboardset.BottomRowKeyboardSet
 import ee.oyatl.ime.keyboard.keyboardset.DefaultKeyboardSet
@@ -85,9 +82,11 @@ class MozcIMEMode(
     }
 
     override fun createCandidateView(context: Context): View {
-        return VerticalScrollingCandidateView(context, null, 2).apply {
+        val candidateView = VerticalScrollingCandidateView(context, null, 2).apply {
             listener = this@MozcIMEMode
         }
+        this.candidateView = candidateView
+        return candidateView
     }
 
     override fun onCandidateSelected(candidate: CandidateView.Candidate) {

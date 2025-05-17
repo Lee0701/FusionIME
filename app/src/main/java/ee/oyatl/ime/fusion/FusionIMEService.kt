@@ -2,6 +2,7 @@ package ee.oyatl.ime.fusion
 
 import android.inputmethodservice.InputMethodService
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
 
@@ -31,8 +32,10 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, ModeSwitcherTabB
     override fun onCreateInputView(): View {
         imeView = LinearLayout(this)
         imeView.orientation = LinearLayout.VERTICAL
-        imeView.addView(modeSwitcherTabBar.initView(this))
-        imeView.addView(imeModeSwitcher.initView(this))
+        val candidateView = imeModeSwitcher.createCandidateView(this) as ViewGroup
+        candidateView.addView(modeSwitcherTabBar.initView(this))
+        imeView.addView(candidateView)
+        imeView.addView(imeModeSwitcher.createInputView(this))
         onSwitchInputMode(0)
         return imeView
     }

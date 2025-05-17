@@ -20,8 +20,8 @@ abstract class CommonIMEMode(
     abstract val keyboardSet: KeyboardSet
 
     protected val keyboardListener = KeyboardListener()
-    protected lateinit var candidateView: CandidateView
-    protected lateinit var imeView: ViewGroup
+    protected var candidateView: CandidateView? = null
+    protected var imeView: View? = null
 
     protected var util: KeyEventUtil? = null
         private set
@@ -47,23 +47,21 @@ abstract class CommonIMEMode(
 
     override fun createInputView(context: Context): View {
         keyboardSet.initView(context)
-        imeView = LinearLayout(context).apply { orientation = LinearLayout.VERTICAL }
-        val inputView = keyboardSet.getView(keyboardListener.shiftState, false)
-        candidateView = createCandidateView(context) as CandidateView
-        imeView.addView(candidateView as View)
-        imeView.addView(inputView)
+        val imeView = keyboardSet.getView(keyboardListener.shiftState, false)
+        this.imeView = imeView
         return imeView
     }
 
     override fun createCandidateView(context: Context): View {
-        return ScrollingCandidateView(context, null).apply {
+        candidateView = ScrollingCandidateView(context, null).apply {
             listener = this@CommonIMEMode
         }
+        return candidateView as View
     }
 
     override fun getInputView(): View {
         updateInputView()
-        return imeView
+        return imeView!!
     }
 
     override fun updateInputView() {
@@ -71,8 +69,12 @@ abstract class CommonIMEMode(
     }
 
     protected fun submitCandidates(candidates: List<CandidateView.Candidate>) {
-        listener.onCandidateViewVisibilityChange(candidates.isNotEmpty())
-        candidateView.submitList(candidates)
+        candidateView?.submitList(candidates)
+        val visible = candidates.isNotEmpty()
+        val candidateView = candidateView as? View
+        candidateView?.visibility = if(visible) View.VISIBLE else View.GONE
+        if(visible) candidateView?.bringToFront()
+        listener.onCandidateViewVisibilityChange(visible)
     }
 
     inner class KeyboardListener: CommonKeyboardListener(this) {
