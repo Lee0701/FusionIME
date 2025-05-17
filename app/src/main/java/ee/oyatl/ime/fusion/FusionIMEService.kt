@@ -22,6 +22,8 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, ModeSwitcherTabB
         labels += "拼"
         imeModes += ZhuyinIMEMode(this, this)
         labels += "注"
+        imeModes += CangjieIMEMode(this, this)
+        labels += "倉"
         imeModeSwitcher = IMEModeSwitcher(imeModes)
         modeSwitcherTabBar = ModeSwitcherTabBar(labels, this)
     }
