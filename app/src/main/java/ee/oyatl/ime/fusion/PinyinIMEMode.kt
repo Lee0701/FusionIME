@@ -133,13 +133,15 @@ class PinyinIMEMode(
     private fun showCandidateWindow(showComposingView: Boolean) {
         updateComposingText(showComposingView)
         val candidates = decInfo.mCandidatesList.mapIndexed { i, s -> PinyinCandidate(i, s) }
-        candidateView.submitList(candidates)
+        submitCandidates(candidates)
+        listener.onCandidateViewVisibilityChange(true)
     }
 
     private fun resetCandidateWindow() {
         updateComposingText(false)
         decInfo.resetCandidates()
-        candidateView.submitList(emptyList())
+        submitCandidates(emptyList())
+        listener.onCandidateViewVisibilityChange(false)
     }
 
     private fun onChoiceTouched(activeCandNo: Int) {
@@ -170,6 +172,11 @@ class PinyinIMEMode(
 
     override fun updateInputView() {
         keyboardSet.getView(keyboardListener.shiftState, false)
+    }
+
+    private fun submitCandidates(candidates: List<CandidateView.Candidate>) {
+        listener.onCandidateViewVisibilityChange(candidates.isNotEmpty())
+        candidateView.submitList(candidates)
     }
 
     private inner class KeyboardListener: CommonKeyboardListener(this) {

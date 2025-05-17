@@ -73,7 +73,7 @@ class ZhuyinIMEMode(
 
     private fun reset() {
         currentInputConnection?.finishComposingText()
-        candidateView.submitList(emptyList())
+        submitCandidates(emptyList())
         bestCandidate = null
         wordComposer.reset()
     }
@@ -109,6 +109,11 @@ class ZhuyinIMEMode(
         keyboardSet.getView(keyboardListener.shiftState, false)
     }
 
+    private fun submitCandidates(candidates: List<CandidateView.Candidate>) {
+        listener.onCandidateViewVisibilityChange(candidates.isNotEmpty())
+        candidateView.submitList(candidates)
+    }
+
     private fun renderResult() {
         val inputConnection = currentInputConnection ?: return
         postUpdateSuggestions()
@@ -119,7 +124,7 @@ class ZhuyinIMEMode(
         val list = mSuggest.getSuggestions(imeView, wordComposer, false)
         val candidates = list.mapIndexed { i, s -> ZhuyinCandidate(i, s) }
         bestCandidate = candidates.getOrNull(0)
-        candidateView.submitList(candidates)
+        submitCandidates(candidates)
     }
 
     private fun postUpdateSuggestions() {

@@ -50,9 +50,9 @@ class MozcIMEMode(
         if(command.get().hasOutput() && command.get().output.hasAllCandidateWords()) {
             val candidates = command.get().output.allCandidateWords.candidatesList
                 .map { candidate -> MozcCandidate(candidate) }
-            candidateView.submitList(candidates)
+            submitCandidates(candidates)
         } else {
-            candidateView.submitList(emptyList())
+            submitCandidates(emptyList())
         }
     }
 
@@ -89,7 +89,6 @@ class MozcIMEMode(
         keyboardSet.initView(context)
         imeView = LinearLayout(context).apply { orientation = LinearLayout.VERTICAL }
         val inputView = keyboardSet.getView(keyboardListener.shiftState, false)
-//        candidateView = ScrollingCandidateView(this, null).apply {
         candidateView = VerticalScrollingCandidateView(context, null, 2).apply {
             listener = this@MozcIMEMode
         }
@@ -111,6 +110,11 @@ class MozcIMEMode(
         if(candidate is MozcCandidate) {
             sessionExecutor.submitCandidate(candidate.id, Optional.absent(), renderResultCallback)
         }
+    }
+
+    private fun submitCandidates(candidates: List<CandidateView.Candidate>) {
+        listener.onCandidateViewVisibilityChange(candidates.isNotEmpty())
+        candidateView.submitList(candidates)
     }
 
     inner class KeyboardListener: CommonKeyboardListener(this) {

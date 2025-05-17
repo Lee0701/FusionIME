@@ -13,5 +13,6 @@ interface IMEMode {
 
     interface Listener {
         fun onLanguageSwitch()
+        fun onCandidateViewVisibilityChange(visible: Boolean)
     }
 }

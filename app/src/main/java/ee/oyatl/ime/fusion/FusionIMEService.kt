@@ -3,22 +3,36 @@ package ee.oyatl.ime.fusion
 import android.inputmethodservice.InputMethodService
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.widget.LinearLayout
 
-class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.Callback {
+class FusionIMEService: InputMethodService(), IMEMode.Listener, ModeSwitcherTabBar.Callback {
 
     private lateinit var imeModeSwitcher: IMEModeSwitcher
+    private lateinit var modeSwitcherTabBar: ModeSwitcherTabBar
+
+    private lateinit var imeView: LinearLayout
 
     override fun onCreate() {
         super.onCreate()
         val imeModes = mutableListOf<IMEMode>()
-//        imeModes += MozcIMEMode(this, this)
-//        imeModes += PinyinIMEMode(this, this)
+        val labels = mutableListOf<String>()
+        imeModes += MozcIMEMode(this, this)
+        labels += "日"
+        imeModes += PinyinIMEMode(this, this)
+        labels += "拼"
         imeModes += ZhuyinIMEMode(this, this)
-        imeModeSwitcher = IMEModeSwitcher(imeModes, this)
+        labels += "注"
+        imeModeSwitcher = IMEModeSwitcher(imeModes)
+        modeSwitcherTabBar = ModeSwitcherTabBar(labels, this)
     }
 
     override fun onCreateInputView(): View {
-        return imeModeSwitcher.initView(this)
+        imeView = LinearLayout(this)
+        imeView.orientation = LinearLayout.VERTICAL
+        imeView.addView(modeSwitcherTabBar.initView(this))
+        imeView.addView(imeModeSwitcher.initView(this))
+        onSwitchInputMode(0)
+        return imeView
     }
 
     override fun onStartInput(attribute: EditorInfo?, restarting: Boolean) {
@@ -33,10 +47,15 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
 
     override fun onLanguageSwitch() {
         val newIndex = (imeModeSwitcher.currentModeIndex + 1) % imeModeSwitcher.modes.size
-        imeModeSwitcher.switchMode(newIndex, currentInputConnection, currentInputEditorInfo)
+        onSwitchInputMode(newIndex)
     }
 
-    override fun onInputViewChanged(inputView: View) {
-        setInputView(inputView)
+    override fun onSwitchInputMode(index: Int) {
+        imeModeSwitcher.switchMode(index, currentInputConnection, currentInputEditorInfo)
+        modeSwitcherTabBar.activate(index)
+    }
+
+    override fun onCandidateViewVisibilityChange(visible: Boolean) {
+        modeSwitcherTabBar.isShown = !visible
     }
 }

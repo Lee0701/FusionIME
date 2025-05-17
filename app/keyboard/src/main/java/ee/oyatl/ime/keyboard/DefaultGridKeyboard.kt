@@ -11,7 +11,8 @@ class DefaultGridKeyboard(
     private val shiftState: Keyboard.ShiftState
 ): DefaultKeyboard(listener) {
     override fun buildRows(context: Context): List<KbdRowBinding> {
-        val height = context.resources.getDimensionPixelSize(R.dimen.key_height)
+        val height = context.resources.getDimensionPixelSize(R.dimen.key_height) *
+                context.resources.getInteger(R.integer.standard_row_count) / rows.size
         val builtRows = rows.map { buildRow(context, it, height) }
         return builtRows
     }
