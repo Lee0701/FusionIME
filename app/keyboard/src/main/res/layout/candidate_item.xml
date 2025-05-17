@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:theme="@style/Theme.FusionIME.Candidates.Item"
     android:orientation="vertical"
     android:layout_width="wrap_content"
     android:layout_height="@dimen/candidate_view_height"
@@ -8,7 +9,7 @@
 
     <TextView
         android:id="@+id/text"
-        android:textColor="@color/black"
+        android:textColor="?foregroundColor"
         android:textSize="20sp"
         android:layout_marginVertical="2dp"
         android:layout_marginHorizontal="8dp"

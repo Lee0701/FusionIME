@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.FusionIME">
+    </style>
+
+    <style name="Theme.FusionIME.Keyboard">
+        <item name="backgroundColor">@color/keyboard_bg_dark</item>
+    </style>
+
+    <style name="Theme.FusionIME.Keyboard.Key">
+        <item name="backgroundColor">@color/key_bg_static_dark</item>
+        <item name="foregroundColor">@color/white</item>
+    </style>
+
+    <style name="Theme.FusionIME.Keyboard.Key.Modifier">
+        <item name="backgroundColor">@color/key_bg_static_dark_mod</item>
+    </style>
+
+    <style name="Theme.FusionIME.Keyboard.Key.Return">
+        <item name="backgroundColor">@color/key_bg_static_dark_return</item>
+        <item name="foregroundColor">@color/black</item>
+    </style>
+
+    <style name="Theme.FusionIME.Candidates">
+        <item name="backgroundColor">@color/candidate_bg_dark</item>
+    </style>
+
+    <style name="Theme.FusionIME.Candidates.Item">
+        <item name="foregroundColor">@color/white</item>
+    </style>
+
+    <style name="Theme.FusionIME.TabBar">
+        <item name="backgroundColor">@color/candidate_bg_dark</item>
+    </style>
+
+    <style name="Theme.FusionIME.TabBar.Item">
+        <item name="backgroundColor">@color/tabbar_item_dark</item>
+        <item name="foregroundColor">@color/white</item>
+    </style>
+</resources>

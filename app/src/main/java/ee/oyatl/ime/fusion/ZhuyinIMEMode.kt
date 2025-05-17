@@ -19,7 +19,7 @@ import tw.cheyingwu.zhuyin.ZhuYinIMESettings
 
 class ZhuyinIMEMode(
     context: Context,
-    private val listener: IMEMode.Listener
+    listener: IMEMode.Listener
 ): CommonIMEMode(listener) {
 
     private val handler: Handler = Handler(Looper.getMainLooper()) { msg ->

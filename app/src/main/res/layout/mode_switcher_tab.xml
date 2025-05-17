@@ -2,6 +2,8 @@
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="@drawable/mode_switcher_tab_background"
+    android:backgroundTint="?backgroundColor"
+    android:theme="@style/Theme.FusionIME.TabBar.Item"
     android:layout_width="64dp"
     android:layout_height="match_parent"
     android:layout_marginTop="4dp"
@@ -10,7 +12,7 @@
     <TextView
         android:id="@+id/label"
         android:textSize="20sp"
-        android:textColor="@color/black"
+        android:textColor="?foregroundColor"
         android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />

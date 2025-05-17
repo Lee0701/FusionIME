@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:scrollbars="none"
-    android:background="@color/candidate_bg_light">
+    android:background="?backgroundColor"
+    android:theme="@style/Theme.FusionIME.TabBar">
 
     <LinearLayout
         android:id="@+id/content"

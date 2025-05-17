@@ -9,7 +9,7 @@
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/bkg"
         android:src="@drawable/key_bg"
-        app:tint="@color/key_bg_static_light"
+        app:tint="?backgroundColor"
         android:adjustViewBounds="true"
         android:layout_marginVertical="@dimen/key_margin_vertical"
         android:layout_marginHorizontal="@dimen/key_margin_horizontal"
@@ -19,7 +19,7 @@
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/label"
         tools:text="A"
-        android:textColor="@color/black"
+        android:textColor="?foregroundColor"
         android:textSize="@dimen/key_text_size"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -27,7 +27,7 @@
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/icon"
-        app:tint="@color/black"
+        app:tint="?foregroundColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center" />

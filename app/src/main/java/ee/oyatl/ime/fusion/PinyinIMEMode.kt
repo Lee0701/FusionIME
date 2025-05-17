@@ -30,7 +30,7 @@ import java.util.Vector
 
 class PinyinIMEMode(
     context: Context,
-    private val listener: IMEMode.Listener
+    listener: IMEMode.Listener
 ): CommonIMEMode(listener) {
     private val keyCharacterMap: KeyCharacterMap = KeyCharacterMap.load(KeyCharacterMap.VIRTUAL_KEYBOARD)
 
@@ -109,7 +109,6 @@ class PinyinIMEMode(
         val candidateView = candidateView as? View
         if(candidateView != null) {
             candidateView.visibility = View.VISIBLE
-            listener.onCandidateViewVisibilityChange(true)
         }
     }
 
@@ -120,7 +119,6 @@ class PinyinIMEMode(
         val candidateView = candidateView as? View
         if(candidateView != null) {
             candidateView.visibility = View.GONE
-            listener.onCandidateViewVisibilityChange(false)
         }
     }
 

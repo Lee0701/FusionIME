@@ -17,11 +17,12 @@
     <color name="key_bg_dark_unpressed">#2e3133</color>
     <color name="key_bg_dark_pressed">#191c1e</color>
     <color name="key_bg_dark_mod_unpressed">#454749</color>
-    <color name="key_bg_dark_mod_pressed">#9aaebb</color>
+    <color name="key_bg_dark_mod_pressed">#575959</color>
     <color name="key_bg_dark_return_unpressed">#c1e8ff</color>
     <color name="key_bg_dark_return_pressed">#4bb6e8</color>
     <color name="key_fg_dark">#f0f0f3</color>
     <color name="key_fg_dark_return">#191c1e</color>
 
     <color name="candidate_bg_light">#e0e0e3</color>
+    <color name="candidate_bg_dark">#292c2e</color>
 </resources>

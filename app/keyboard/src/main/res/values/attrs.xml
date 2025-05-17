@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="backgroundColor" format="color" />
+    <attr name="foregroundColor" format="color" />
+
+    <declare-styleable name="kbd_keyboard">
+        <attr name="backgroundColor" />
+    </declare-styleable>
+
+    <declare-styleable name="kbd_key">
+        <attr name="backgroundColor" />
+        <attr name="foregroundColor" />
+    </declare-styleable>
+</resources>

@@ -2,12 +2,14 @@ package ee.oyatl.ime.keyboard
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.widget.LinearLayout
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
+import androidx.annotation.StyleRes
 import androidx.core.content.ContextCompat
 import ee.oyatl.ime.keyboard.databinding.KbdKeyBinding
 import ee.oyatl.ime.keyboard.databinding.KbdKeyboardBinding
@@ -20,7 +22,7 @@ abstract class DefaultKeyboard(
     abstract fun buildRows(context: Context): List<KbdRowBinding>
 
     override fun createView(context: Context): View {
-        val inflater = LayoutInflater.from(context)
+        val inflater = LayoutInflater.from(ContextThemeWrapper(context, R.style.Theme_FusionIME_Keyboard))
         val keyboard = KbdKeyboardBinding.inflate(inflater)
         buildRows(context).forEach { keyboard.root.addView(it.root) }
         return keyboard.root
@@ -37,7 +39,7 @@ abstract class DefaultKeyboard(
     }
 
     protected open fun buildKey(context: Context, char: Char, height: Int): KbdKeyBinding {
-        val inflater = LayoutInflater.from(context)
+        val inflater = LayoutInflater.from(ContextThemeWrapper(context, R.style.Theme_FusionIME_Keyboard_Key))
         val key = KbdKeyBinding.inflate(inflater)
         key.label.text = char.toString()
         key.root.setOnClickListener { listener.onChar(char.code) }
@@ -61,15 +63,14 @@ abstract class DefaultKeyboard(
     @SuppressLint("ClickableViewAccessibility")
     protected open fun buildSpecialKey(
         context: Context,
-        @ColorRes bkg: Int,
+        @StyleRes theme: Int,
         @DrawableRes icon: Int,
         width: Float,
         onTouch: (Boolean) -> Unit
     ): View {
-        val inflater = LayoutInflater.from(context)
+        val inflater = LayoutInflater.from(ContextThemeWrapper(context, theme))
         val height = context.resources.getDimensionPixelSize(R.dimen.key_height)
         val key = KbdKeyBinding.inflate(inflater)
-        key.bkg.imageTintList = ContextCompat.getColorStateList(context, bkg)
         key.icon.setImageResource(icon)
         key.root.setOnTouchListener { view, event ->
             when(event.actionMasked) {

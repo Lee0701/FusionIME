@@ -2,12 +2,15 @@ package ee.oyatl.ime.candidate
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.view.ContextThemeWrapper
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ee.oyatl.ime.candidate.CandidateView.Candidate
+import ee.oyatl.ime.keyboard.R
 import ee.oyatl.ime.keyboard.databinding.CandidateItemBinding
 
 abstract class RecyclerCandidateView(
@@ -16,9 +19,13 @@ abstract class RecyclerCandidateView(
 ): RecyclerView(context, attributeSet), CandidateView {
 
     override var listener: CandidateView.Listener? = null
+    protected val backgroundColor: Int
 
     init {
         adapter = Adapter { listener?.onCandidateSelected(it) }
+        val typedValue = TypedValue()
+        ContextThemeWrapper(context, R.style.Theme_FusionIME_Candidates).theme.resolveAttribute(R.attr.backgroundColor, typedValue, false)
+        backgroundColor = context.resources.getColor(typedValue.data)
     }
 
     override fun submitList(list: List<Candidate>) {

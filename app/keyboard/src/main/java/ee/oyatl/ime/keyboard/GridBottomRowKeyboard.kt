@@ -16,7 +16,7 @@ class GridBottomRowKeyboard(
         val row = buildRow(context, "", height)
         row.root.addView(buildSpecialKey(
             context,
-            R.color.key_bg_static_light_mod,
+            R.style.Theme_FusionIME_Keyboard_Key_Modifier,
             R.drawable.keyic_numbers,
             1.25f) { pressed -> if(pressed) listener.onSpecial(Keyboard.SpecialKey.Symbols) }
         )
@@ -29,20 +29,20 @@ class GridBottomRowKeyboard(
 
         row.root.addView(buildSpecialKey(
             context,
-            R.color.key_bg_static_light_mod,
+            R.style.Theme_FusionIME_Keyboard_Key_Modifier,
             icon,
             1.25f
         ) { pressed -> listener.onShift(pressed) })
 
         row.root.addView(buildSpecialKey(
             context,
-            R.color.key_bg_static_light_mod,
+            R.style.Theme_FusionIME_Keyboard_Key_Modifier,
             R.drawable.keyic_language,
             1.0f) { pressed -> if(pressed) listener.onSpecial(Keyboard.SpecialKey.Language) })
 
         row.root.addView(buildSpecialKey(
             context,
-            R.color.key_bg_static_light,
+            R.style.Theme_FusionIME_Keyboard_Key,
             R.drawable.keyic_space,
             3.0f
         ) { pressed -> if(pressed) listener.onSpecial(Keyboard.SpecialKey.Space) })
@@ -54,7 +54,7 @@ class GridBottomRowKeyboard(
 
         row.root.addView(buildSpecialKey(
             context,
-            R.color.key_bg_static_light_return,
+            R.style.Theme_FusionIME_Keyboard_Key_Return,
             R.drawable.keyic_return,
             1.25f
         ) { pressed -> if(pressed) listener.onSpecial(Keyboard.SpecialKey.Return) })
@@ -66,7 +66,7 @@ class GridBottomRowKeyboard(
         }
         row.root.addView(buildSpecialKey(
             context,
-            R.color.key_bg_static_light_mod,
+            R.style.Theme_FusionIME_Keyboard_Key_Modifier,
             R.drawable.keyic_backspace,
             1.25f
         ) { pressed ->

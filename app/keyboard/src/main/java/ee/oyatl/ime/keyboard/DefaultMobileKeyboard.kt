@@ -31,7 +31,7 @@ class DefaultMobileKeyboard(
 
         row3.root.addView(buildSpecialKey(
             context,
-            R.color.key_bg_static_light_mod,
+            R.style.Theme_FusionIME_Keyboard_Key_Modifier,
             icon,
             1.5f
         ) { pressed -> listener.onShift(pressed) }, 0)
@@ -43,7 +43,7 @@ class DefaultMobileKeyboard(
         }
         row3.root.addView(buildSpecialKey(
             context,
-            R.color.key_bg_static_light_mod,
+            R.style.Theme_FusionIME_Keyboard_Key_Modifier,
             R.drawable.keyic_backspace,
             1.5f
         ) { pressed ->
