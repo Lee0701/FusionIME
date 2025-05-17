@@ -6,34 +6,27 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
 
-class FusionIMEService: InputMethodService(), IMEMode.Listener, ModeSwitcherTabBar.Callback {
+class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.Callback {
 
     private lateinit var imeModeSwitcher: IMEModeSwitcher
-    private lateinit var modeSwitcherTabBar: ModeSwitcherTabBar
 
     private lateinit var imeView: LinearLayout
 
     override fun onCreate() {
         super.onCreate()
-        val imeModes = mutableListOf<IMEMode>()
-        val labels = mutableListOf<String>()
-        imeModes += MozcIMEMode(this, this)
-        labels += "日"
-        imeModes += PinyinIMEMode(this, this)
-        labels += "拼"
-        imeModes += ZhuyinIMEMode(this, this)
-        labels += "注"
-        imeModes += CangjieIMEMode(this, this)
-        labels += "倉"
-        imeModeSwitcher = IMEModeSwitcher(imeModes)
-        modeSwitcherTabBar = ModeSwitcherTabBar(labels, this)
+        val entries = mutableListOf<IMEModeSwitcher.Entry>()
+        entries += IMEModeSwitcher.Entry("日", MozcIMEMode(this, this))
+        entries += IMEModeSwitcher.Entry("拼", PinyinIMEMode(this, this))
+        entries += IMEModeSwitcher.Entry("注", ZhuyinIMEMode(this, this))
+        entries += IMEModeSwitcher.Entry("倉", CangjieIMEMode(this, this))
+        imeModeSwitcher = IMEModeSwitcher(entries, this)
     }
 
     override fun onCreateInputView(): View {
         imeView = LinearLayout(this)
         imeView.orientation = LinearLayout.VERTICAL
         val candidateView = imeModeSwitcher.createCandidateView(this) as ViewGroup
-        candidateView.addView(modeSwitcherTabBar.initView(this))
+        candidateView.addView(imeModeSwitcher.initTabBarView(this))
         imeView.addView(candidateView)
         imeView.addView(imeModeSwitcher.createInputView(this))
         onSwitchInputMode(0)
@@ -46,21 +39,20 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, ModeSwitcherTabB
     }
 
     override fun onFinishInput() {
-        imeModeSwitcher.onFinish(currentInputConnection, currentInputEditorInfo)
+        imeModeSwitcher.onFinish()
         super.onFinishInput()
     }
 
     override fun onLanguageSwitch() {
-        val newIndex = (imeModeSwitcher.currentModeIndex + 1) % imeModeSwitcher.modes.size
+        val newIndex = (imeModeSwitcher.currentModeIndex + 1) % imeModeSwitcher.size
         onSwitchInputMode(newIndex)
     }
 
     override fun onSwitchInputMode(index: Int) {
-        imeModeSwitcher.switchMode(index, currentInputConnection, currentInputEditorInfo)
-        modeSwitcherTabBar.activate(index)
+        imeModeSwitcher.switchMode(index)
     }
 
     override fun onCandidateViewVisibilityChange(visible: Boolean) {
-        modeSwitcherTabBar.isShown = !visible
+        imeModeSwitcher.isShown = !visible
     }
 }
