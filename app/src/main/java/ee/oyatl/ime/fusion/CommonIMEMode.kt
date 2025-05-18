@@ -4,23 +4,19 @@ import android.content.Context
 import android.view.KeyCharacterMap
 import android.view.KeyEvent
 import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
-import android.widget.LinearLayout
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.ScrollingCandidateView
-import ee.oyatl.ime.candidate.VerticalScrollingCandidateView
 import ee.oyatl.ime.keyboard.CommonKeyboardListener
 import ee.oyatl.ime.keyboard.Keyboard
-import ee.oyatl.ime.keyboard.keyboardset.KeyboardSet
 
 abstract class CommonIMEMode(
     private val listener: IMEMode.Listener
 ): IMEMode, CandidateView.Listener, CommonKeyboardListener.Callback {
     private val keyCharacterMap = KeyCharacterMap.load(KeyCharacterMap.VIRTUAL_KEYBOARD)
 
-    abstract val keyboardSet: KeyboardSet
+    abstract val softKeyboard: Keyboard
 
     protected val keyboardListener = KeyboardListener()
     protected var candidateView: CandidateView? = null
@@ -49,8 +45,7 @@ abstract class CommonIMEMode(
     }
 
     override fun createInputView(context: Context): View {
-        keyboardSet.initView(context)
-        val imeView = keyboardSet.getView(keyboardListener.shiftState, false)
+        val imeView = softKeyboard.createView(context, keyboardListener)
         this.imeView = imeView
         return imeView
     }
@@ -68,7 +63,7 @@ abstract class CommonIMEMode(
     }
 
     override fun updateInputView() {
-        keyboardSet.getView(keyboardListener.shiftState, false)
+        softKeyboard.changeState(keyboardListener.shiftState)
     }
 
     override fun onKeyDown(keyCode: Int, metaState: Int) {

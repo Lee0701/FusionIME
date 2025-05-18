@@ -4,18 +4,14 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.view.KeyEvent
-import android.view.View
-import android.widget.LinearLayout
 import com.android.inputmethod.latin.WordComposer
 import com.diycircuits.cangjie.TableLoader
 import ee.oyatl.ime.candidate.CandidateView
-import ee.oyatl.ime.candidate.ScrollingCandidateView
-import ee.oyatl.ime.keyboard.CommonKeyboardListener
+import ee.oyatl.ime.keyboard.DefaultBottomRowKeyboard
+import ee.oyatl.ime.keyboard.DefaultMobileKeyboard
 import ee.oyatl.ime.keyboard.Keyboard
-import ee.oyatl.ime.keyboard.keyboardset.BottomRowKeyboardSet
-import ee.oyatl.ime.keyboard.keyboardset.DefaultKeyboardSet
-import ee.oyatl.ime.keyboard.keyboardset.KeyboardSet
-import ee.oyatl.ime.keyboard.keyboardset.StackedKeyboardSet
+import ee.oyatl.ime.keyboard.ShiftStateKeyboard
+import ee.oyatl.ime.keyboard.StackedKeyboard
 import ee.oyatl.ime.keyboard.layout.LayoutCangjie
 
 class CangjieIMEMode(
@@ -33,9 +29,12 @@ class CangjieIMEMode(
         }
     }
 
-    override val keyboardSet: KeyboardSet = StackedKeyboardSet(
-        DefaultKeyboardSet(keyboardListener, LayoutCangjie.ROWS_LOWER, LayoutCangjie.ROWS_UPPER),
-        BottomRowKeyboardSet(keyboardListener)
+    override val softKeyboard: Keyboard = StackedKeyboard(
+        ShiftStateKeyboard(
+            DefaultMobileKeyboard(LayoutCangjie.ROWS_LOWER),
+            DefaultMobileKeyboard(LayoutCangjie.ROWS_UPPER)
+        ),
+        DefaultBottomRowKeyboard()
     )
 
     private val table: TableLoader = TableLoader()

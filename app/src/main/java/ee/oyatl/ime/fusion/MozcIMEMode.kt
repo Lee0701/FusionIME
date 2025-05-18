@@ -10,13 +10,13 @@ import com.google.common.base.Optional
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.VerticalScrollingCandidateView
 import ee.oyatl.ime.fusion.mozc.InputConnectionRenderer
+import ee.oyatl.ime.keyboard.DefaultBottomRowKeyboard
+import ee.oyatl.ime.keyboard.DefaultGridKeyboard
+import ee.oyatl.ime.keyboard.DefaultMobileKeyboard
+import ee.oyatl.ime.keyboard.GridKanaBottomRowKeyboard
 import ee.oyatl.ime.keyboard.Keyboard
-import ee.oyatl.ime.keyboard.keyboardset.BottomRowKeyboardSet
-import ee.oyatl.ime.keyboard.keyboardset.DefaultKeyboardSet
-import ee.oyatl.ime.keyboard.keyboardset.GridKanaBottomKeyboardSet
-import ee.oyatl.ime.keyboard.keyboardset.GridKeyboardSet
-import ee.oyatl.ime.keyboard.keyboardset.KeyboardSet
-import ee.oyatl.ime.keyboard.keyboardset.StackedKeyboardSet
+import ee.oyatl.ime.keyboard.ShiftStateKeyboard
+import ee.oyatl.ime.keyboard.StackedKeyboard
 import ee.oyatl.ime.keyboard.layout.LayoutKana50OnZu
 import ee.oyatl.ime.keyboard.layout.LayoutRomaji
 import org.mozc.android.inputmethod.japanese.MozcUtil
@@ -37,26 +37,31 @@ abstract class MozcIMEMode(
 
     class RomajiQwerty(context: Context, listener: IMEMode.Listener): MozcIMEMode(context, listener) {
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.QWERTY_KANA
-        override val keyboardSet: KeyboardSet = StackedKeyboardSet(
-            DefaultKeyboardSet(keyboardListener, LayoutRomaji.ROWS_QWERTY_LOWER, LayoutRomaji.ROWS_QWERTY_UPPER),
-            BottomRowKeyboardSet(keyboardListener)
+        override val softKeyboard: Keyboard = StackedKeyboard(
+            ShiftStateKeyboard(
+                DefaultMobileKeyboard(LayoutRomaji.ROWS_QWERTY_LOWER),
+                DefaultMobileKeyboard(LayoutRomaji.ROWS_QWERTY_UPPER)
+            ),
+            DefaultBottomRowKeyboard()
         )
     }
 
     class RomajiColemak(context: Context, listener: IMEMode.Listener): MozcIMEMode(context, listener) {
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.QWERTY_KANA
-        override val keyboardSet: KeyboardSet = StackedKeyboardSet(
-            DefaultKeyboardSet(keyboardListener, LayoutRomaji.ROWS_COLEMAK_LOWER, LayoutRomaji.ROWS_COLEMAK_UPPER),
-            BottomRowKeyboardSet(keyboardListener)
+        override val softKeyboard: Keyboard = StackedKeyboard(
+            ShiftStateKeyboard(
+                DefaultMobileKeyboard(LayoutRomaji.ROWS_COLEMAK_LOWER),
+                DefaultMobileKeyboard(LayoutRomaji.ROWS_COLEMAK_UPPER)
+            ),
+            DefaultBottomRowKeyboard()
         )
     }
 
     class Kana50OnZu(context: Context, listener: IMEMode.Listener): MozcIMEMode(context, listener) {
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.TWELVE_KEY_FLICK_KANA
-        override val keyboardSet: KeyboardSet = StackedKeyboardSet(
-            GridKeyboardSet(keyboardListener, LayoutKana50OnZu.ROWS),
-            GridKanaBottomKeyboardSet(
-                keyboardListener,
+        override val softKeyboard: Keyboard = StackedKeyboard(
+            DefaultGridKeyboard(LayoutKana50OnZu.ROWS),
+            GridKanaBottomRowKeyboard(
                 LayoutKana50OnZu.BOTTOM_LEFT,
                 LayoutKana50OnZu.BOTTOM_RIGHT
             )

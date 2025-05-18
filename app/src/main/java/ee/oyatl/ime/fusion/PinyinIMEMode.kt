@@ -20,11 +20,11 @@ import com.android.inputmethod.pinyin.KeyMapDream
 import com.android.inputmethod.pinyin.PinyinIME.ImeState
 import com.android.inputmethod.pinyin.Settings
 import ee.oyatl.ime.candidate.CandidateView
+import ee.oyatl.ime.keyboard.DefaultBottomRowKeyboard
+import ee.oyatl.ime.keyboard.DefaultMobileKeyboard
 import ee.oyatl.ime.keyboard.Keyboard
-import ee.oyatl.ime.keyboard.keyboardset.BottomRowKeyboardSet
-import ee.oyatl.ime.keyboard.keyboardset.DefaultKeyboardSet
-import ee.oyatl.ime.keyboard.keyboardset.KeyboardSet
-import ee.oyatl.ime.keyboard.keyboardset.StackedKeyboardSet
+import ee.oyatl.ime.keyboard.ShiftStateKeyboard
+import ee.oyatl.ime.keyboard.StackedKeyboard
 import ee.oyatl.ime.keyboard.layout.LayoutPinyin
 import java.util.Vector
 
@@ -70,9 +70,12 @@ class PinyinIMEMode(
 
     private var isEnterNormalState = true
 
-    override val keyboardSet: KeyboardSet = StackedKeyboardSet(
-        DefaultKeyboardSet(keyboardListener, LayoutPinyin.ROWS_LOWER, LayoutPinyin.ROWS_UPPER),
-        BottomRowKeyboardSet(keyboardListener)
+    override val softKeyboard: Keyboard = StackedKeyboard(
+        ShiftStateKeyboard(
+            DefaultMobileKeyboard(LayoutPinyin.ROWS_LOWER),
+            DefaultMobileKeyboard(LayoutPinyin.ROWS_UPPER)
+        ),
+        DefaultBottomRowKeyboard()
     )
 
     init {

@@ -5,6 +5,7 @@ import android.view.View
 
 interface Keyboard {
     fun createView(context: Context, listener: Listener): View
+    fun changeState(shiftState: ShiftState)
 
     interface Listener {
         fun onChar(code: Int)

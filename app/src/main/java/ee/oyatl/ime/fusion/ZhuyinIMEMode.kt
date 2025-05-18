@@ -8,11 +8,10 @@ import com.android.inputmethod.latin.Suggest
 import com.android.inputmethod.latin.TextEntryState
 import com.android.inputmethod.latin.WordComposer
 import ee.oyatl.ime.candidate.CandidateView
+import ee.oyatl.ime.keyboard.DefaultGridKeyboard
+import ee.oyatl.ime.keyboard.GridBottomRowKeyboard
 import ee.oyatl.ime.keyboard.Keyboard
-import ee.oyatl.ime.keyboard.keyboardset.GridBottomKeyboardSet
-import ee.oyatl.ime.keyboard.keyboardset.GridKeyboardSet
-import ee.oyatl.ime.keyboard.keyboardset.KeyboardSet
-import ee.oyatl.ime.keyboard.keyboardset.StackedKeyboardSet
+import ee.oyatl.ime.keyboard.StackedKeyboard
 import ee.oyatl.ime.keyboard.layout.LayoutZhuyin
 import tw.cheyingwu.zhuyin.ZhuYinDictionary
 import tw.cheyingwu.zhuyin.ZhuYinIMESettings
@@ -32,9 +31,9 @@ class ZhuyinIMEMode(
         }
     }
 
-    override val keyboardSet: KeyboardSet = StackedKeyboardSet(
-        GridKeyboardSet(keyboardListener, LayoutZhuyin.ROWS.dropLast(1)),
-        GridBottomKeyboardSet(keyboardListener, LayoutZhuyin.ROWS.last())
+    override val softKeyboard: Keyboard = StackedKeyboard(
+        DefaultGridKeyboard(LayoutZhuyin.ROWS.dropLast(1)),
+        GridBottomRowKeyboard(LayoutZhuyin.ROWS.last())
     )
 
     private val wordComposer: WordComposer = WordComposer()

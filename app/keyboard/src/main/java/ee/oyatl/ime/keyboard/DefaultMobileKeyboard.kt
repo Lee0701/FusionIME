@@ -1,13 +1,11 @@
 package ee.oyatl.ime.keyboard
 
 import android.content.Context
-import android.os.Handler
-import android.os.Looper
+import ee.oyatl.ime.keyboard.databinding.KbdKeyBinding
 import ee.oyatl.ime.keyboard.databinding.KbdRowBinding
 
 class DefaultMobileKeyboard(
-    private val rows: List<String>,
-    private val shiftState: Keyboard.ShiftState
+    private val rows: List<String>
 ): DefaultKeyboard() {
     override fun buildRows(context: Context, listener: Keyboard.Listener): List<KbdRowBinding> {
         val height = context.resources.getDimensionPixelSize(R.dimen.key_height) *
@@ -22,20 +20,16 @@ class DefaultMobileKeyboard(
             row2.root.addView(buildSpacer(context, listener, space))
         }
 
-        val icon = when(shiftState) {
-            Keyboard.ShiftState.Unpressed -> R.drawable.keyic_shift
-            Keyboard.ShiftState.Pressed -> R.drawable.keyic_shift_pressed
-            Keyboard.ShiftState.Locked -> R.drawable.keyic_shift_locked
-        }
-
-        row3.root.addView(buildSpecialKey(
+        val shiftKey = KbdKeyBinding.bind(buildSpecialKey(
             context,
             listener,
             Keyboard.SpecialKey.Shift,
             R.style.Theme_FusionIME_Keyboard_Key_Modifier,
-            icon,
+            R.drawable.keyic_shift,
             1.5f
-        ), 0)
+        ))
+        shiftKeys += shiftKey
+        row3.root.addView(shiftKey.root, 0)
 
         row3.root.addView(buildSpecialKey(
             context,

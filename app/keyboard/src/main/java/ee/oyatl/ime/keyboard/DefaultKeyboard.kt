@@ -15,6 +15,8 @@ import ee.oyatl.ime.keyboard.databinding.KbdRowBinding
 
 abstract class DefaultKeyboard: Keyboard {
 
+    protected val shiftKeys: MutableList<KbdKeyBinding> = mutableListOf()
+
     abstract fun buildRows(context: Context, listener: Keyboard.Listener): List<KbdRowBinding>
 
     override fun createView(context: Context, listener: Keyboard.Listener): View {
@@ -22,6 +24,15 @@ abstract class DefaultKeyboard: Keyboard {
         val keyboard = KbdKeyboardBinding.inflate(inflater)
         buildRows(context, listener).forEach { keyboard.root.addView(it.root) }
         return keyboard.root
+    }
+
+    override fun changeState(shiftState: Keyboard.ShiftState) {
+        val icon = when(shiftState) {
+            Keyboard.ShiftState.Unpressed -> R.drawable.keyic_shift
+            Keyboard.ShiftState.Pressed -> R.drawable.keyic_shift_pressed
+            Keyboard.ShiftState.Locked -> R.drawable.keyic_shift_locked
+        }
+        shiftKeys.forEach { it.icon.setImageResource(icon) }
     }
 
     protected open fun buildRow(context: Context, listener: Keyboard.Listener, chars: String, height: Int): KbdRowBinding {
