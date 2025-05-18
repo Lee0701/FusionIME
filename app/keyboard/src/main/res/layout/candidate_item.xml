@@ -4,7 +4,9 @@
     android:theme="@style/Theme.FusionIME.Candidates.Item"
     android:orientation="vertical"
     android:layout_width="wrap_content"
-    android:layout_height="@dimen/candidate_view_height"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:minHeight="@dimen/candidate_view_height"
     android:background="?android:selectableItemBackground">
 
     <TextView
@@ -13,7 +15,6 @@
         android:textSize="20sp"
         android:layout_marginVertical="2dp"
         android:layout_marginHorizontal="8dp"
-        android:gravity="center_vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 </LinearLayout>
