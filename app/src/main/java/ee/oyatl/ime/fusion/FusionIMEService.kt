@@ -1,6 +1,7 @@
 package ee.oyatl.ime.fusion
 
 import android.inputmethodservice.InputMethodService
+import android.view.KeyEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
@@ -45,6 +46,20 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
         super.onFinishInput()
     }
 
+    override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
+        if(event.isSystem || event.isCtrlPressed || event.isAltPressed || event.isMetaPressed)
+            return super.onKeyDown(keyCode, event)
+        imeModeSwitcher.currentMode.onKeyDown(keyCode, event.metaState)
+        return true
+    }
+
+    override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
+        if(event.isSystem || event.isCtrlPressed || event.isAltPressed || event.isMetaPressed)
+            return super.onKeyUp(keyCode, event)
+        imeModeSwitcher.currentMode.onKeyUp(keyCode, event.metaState)
+        return true
+    }
+
     override fun onLanguageSwitch() {
         val newIndex = (imeModeSwitcher.currentModeIndex + 1) % imeModeSwitcher.size
         onSwitchInputMode(newIndex)
@@ -56,5 +71,15 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
 
     override fun onCandidateViewVisibilityChange(visible: Boolean) {
         imeModeSwitcher.isShown = !visible
+    }
+
+    override fun onEvaluateFullscreenMode(): Boolean {
+        super.onEvaluateFullscreenMode()
+        return false
+    }
+
+    override fun onEvaluateInputViewShown(): Boolean {
+        super.onEvaluateInputViewShown()
+        return true
     }
 }

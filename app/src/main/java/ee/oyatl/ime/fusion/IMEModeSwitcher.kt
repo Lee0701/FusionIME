@@ -18,7 +18,7 @@ class IMEModeSwitcher(
     val size: Int get() = entries.size
     var currentModeIndex: Int = 0
         private set
-    private val currentMode: IMEMode get() = entries[currentModeIndex].imeMode
+    val currentMode: IMEMode get() = entries[currentModeIndex].imeMode
 
     private lateinit var inputView: FrameLayout
     private lateinit var candidateView: FrameLayout

@@ -1,6 +1,8 @@
 package ee.oyatl.ime.fusion
 
 import android.content.Context
+import android.view.KeyCharacterMap
+import android.view.KeyEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
@@ -16,6 +18,7 @@ import ee.oyatl.ime.keyboard.keyboardset.KeyboardSet
 abstract class CommonIMEMode(
     private val listener: IMEMode.Listener
 ): IMEMode, CandidateView.Listener, CommonKeyboardListener.Callback {
+    private val keyCharacterMap = KeyCharacterMap.load(KeyCharacterMap.VIRTUAL_KEYBOARD)
 
     abstract val keyboardSet: KeyboardSet
 
@@ -68,6 +71,30 @@ abstract class CommonIMEMode(
         keyboardSet.getView(keyboardListener.shiftState, false)
     }
 
+    override fun onKeyDown(keyCode: Int, metaState: Int) {
+        val specialKey = getSpecialKeyType(keyCode)
+        if(specialKey != null) keyboardListener.onSpecial(specialKey, true)
+        else keyboardListener.onChar(keyCharacterMap.get(keyCode, metaState))
+    }
+
+    override fun onKeyUp(keyCode: Int, metaState: Int) {
+        val specialKey = getSpecialKeyType(keyCode)
+        if(specialKey != null) keyboardListener.onSpecial(specialKey, false)
+    }
+
+    private fun getSpecialKeyType(keyCode: Int): Keyboard.SpecialKey? {
+        return when(keyCode) {
+            KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.KEYCODE_SHIFT_RIGHT -> Keyboard.SpecialKey.Shift
+            KeyEvent.KEYCODE_CAPS_LOCK -> Keyboard.SpecialKey.Caps
+            KeyEvent.KEYCODE_SPACE -> Keyboard.SpecialKey.Space
+            KeyEvent.KEYCODE_ENTER -> Keyboard.SpecialKey.Return
+            KeyEvent.KEYCODE_DEL -> Keyboard.SpecialKey.Delete
+            KeyEvent.KEYCODE_LANGUAGE_SWITCH -> Keyboard.SpecialKey.Language
+            KeyEvent.KEYCODE_SYM -> Keyboard.SpecialKey.Symbols
+            else -> null
+        }
+    }
+
     protected fun submitCandidates(candidates: List<CandidateView.Candidate>) {
         candidateView?.submitList(candidates)
         val visible = candidates.isNotEmpty()
@@ -84,7 +111,7 @@ abstract class CommonIMEMode(
         }
 
         override fun onSpecial(type: Keyboard.SpecialKey, pressed: Boolean) {
-            if(!pressed) when(type) {
+            if(pressed) when(type) {
                 Keyboard.SpecialKey.Language -> listener.onLanguageSwitch()
                 else -> this@CommonIMEMode.onSpecial(type)
             }
