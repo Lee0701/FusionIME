@@ -26,6 +26,7 @@ abstract class CommonIMEMode(
 ): IMEMode, CandidateView.Listener, CommonKeyboardListener.Callback {
     private val keyCharacterMap = KeyCharacterMap.load(KeyCharacterMap.VIRTUAL_KEYBOARD)
 
+    open val layoutTable: Map<Int, List<Int>> = LayoutQwerty.TABLE_QWERTY
     private val textKeyboardLayers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE_APOSTROPHE, LayoutQwerty.TABLE_QWERTY)
     open val textKeyboard: Keyboard = StackedKeyboard(
         ShiftStateKeyboard(
@@ -103,14 +104,14 @@ abstract class CommonIMEMode(
     }
 
     override fun onKeyDown(keyCode: Int, metaState: Int) {
+        val shiftOn = (metaState and KeyEvent.META_SHIFT_MASK) != 0
+        val layer = if(shiftOn) 1 else 0
         val specialKey = getSpecialKeyType(keyCode)
-        if(specialKey != null) keyboardListener.onSpecial(specialKey, true)
-        else keyboardListener.onChar(keyCharacterMap.get(keyCode, metaState))
+        if(specialKey != null) onSpecial(specialKey)
+        else onChar(layoutTable[keyCode]?.get(layer) ?: keyCharacterMap.get(keyCode, metaState))
     }
 
     override fun onKeyUp(keyCode: Int, metaState: Int) {
-        val specialKey = getSpecialKeyType(keyCode)
-        if(specialKey != null) keyboardListener.onSpecial(specialKey, false)
     }
 
     private fun getSpecialKeyType(keyCode: Int): Keyboard.SpecialKey? {

@@ -21,6 +21,7 @@ class KoreanIMEMode(
     private val stateStack: MutableList<Combiner.State> = mutableListOf()
     private val currentState: HangulCombiner.State get() = stateStack.last() as HangulCombiner.State
 
+    override val layoutTable: Map<Int, List<Int>> = Hangul3Set.TABLE_391
     private val layers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE_WITH_SLASH, Hangul3Set.TABLE_391)
     override val textKeyboard: Keyboard = StackedKeyboard(
         ShiftStateKeyboard(
