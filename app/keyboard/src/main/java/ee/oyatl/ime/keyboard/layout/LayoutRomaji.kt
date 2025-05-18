@@ -1,25 +1,9 @@
 package ee.oyatl.ime.keyboard.layout
 
-object LayoutRomaji {
-    val ROWS_QWERTY_LOWER: List<String> = listOf(
-        "qwertyuiop",
-        "asdfghjklー",
-        "zxcvbnm"
-    )
-    val ROWS_QWERTY_UPPER: List<String> = listOf(
-        "QWERTYUIOP",
-        "ASDFGHJKLー",
-        "ZXCVBNM"
-    )
+import android.view.KeyEvent
 
-    val ROWS_COLEMAK_LOWER: List<String> = listOf(
-        "qwfpgjluyー",
-        "arstdhneio",
-        "zxcvbkm"
-    )
-    val ROWS_COLEMAK_UPPER: List<String> = listOf(
-        "QWFPGJLUYー",
-        "ARSTDHNEIO",
-        "ZXCVBKM"
+object LayoutRomaji {
+    val TABLE_QWERTY = LayoutQwerty.TABLE_QWERTY + mapOf(
+        KeyEvent.KEYCODE_MINUS to listOf('ー'.code, 'ー'.code),
     )
 }

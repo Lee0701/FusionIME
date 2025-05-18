@@ -35,21 +35,21 @@ abstract class DefaultKeyboard: Keyboard {
         shiftKeys.forEach { it.icon.setImageResource(icon) }
     }
 
-    protected open fun buildRow(context: Context, listener: Keyboard.Listener, chars: String, height: Int): KbdRowBinding {
+    protected open fun buildRow(context: Context, listener: Keyboard.Listener, codes: List<Int>, height: Int): KbdRowBinding {
         val inflater = LayoutInflater.from(context)
         val row = KbdRowBinding.inflate(inflater)
-        chars.forEach { char ->
-            val key = buildKey(context, listener, char, height)
+        codes.forEach { code ->
+            val key = buildKey(context, listener, code, code.toChar().toString(), height)
             row.root.addView(key.root)
         }
         return row
     }
 
-    protected open fun buildKey(context: Context, listener: Keyboard.Listener, char: Char, height: Int): KbdKeyBinding {
+    protected open fun buildKey(context: Context, listener: Keyboard.Listener, code: Int, label: String, height: Int): KbdKeyBinding {
         val inflater = LayoutInflater.from(ContextThemeWrapper(context, R.style.Theme_FusionIME_Keyboard_Key))
         val key = KbdKeyBinding.inflate(inflater)
-        key.label.text = char.toString()
-        key.root.setOnClickListener { listener.onChar(char.code) }
+        key.label.text = label
+        key.root.setOnClickListener { listener.onChar(code) }
         key.root.layoutParams = LinearLayout.LayoutParams(0, height).apply {
             weight = 1.0f
         }

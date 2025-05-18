@@ -7,7 +7,7 @@ import ee.oyatl.ime.keyboard.databinding.KbdRowBinding
 class DefaultBottomRowKeyboard: DefaultKeyboard() {
     override fun buildRows(context: Context, listener: Keyboard.Listener): List<KbdRowBinding> {
         val height = context.resources.getDimensionPixelSize(R.dimen.key_height)
-        val row = buildRow(context, listener, "", height)
+        val row = buildRow(context, listener, listOf(), height)
         row.root.addView(buildSpecialKey(
             context,
             listener,
@@ -16,7 +16,7 @@ class DefaultBottomRowKeyboard: DefaultKeyboard() {
             R.drawable.keyic_numbers,
             1.5f
         ))
-        row.root.addView(buildKey(context, listener, ',', height).root)
+        row.root.addView(buildKey(context, listener, ','.code, ",", height).root)
         row.root.addView(buildSpecialKey(
             context,
             listener,
@@ -32,7 +32,7 @@ class DefaultBottomRowKeyboard: DefaultKeyboard() {
             R.drawable.keyic_space,
             4.0f
         ))
-        row.root.addView(buildKey(context, listener, '.', height).root)
+        row.root.addView(buildKey(context, listener, '.'.code, ".", height).root)
         row.root.addView(buildSpecialKey(
             context,
             listener,

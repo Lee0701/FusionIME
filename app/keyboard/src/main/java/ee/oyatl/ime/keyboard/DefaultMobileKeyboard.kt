@@ -5,7 +5,7 @@ import ee.oyatl.ime.keyboard.databinding.KbdKeyBinding
 import ee.oyatl.ime.keyboard.databinding.KbdRowBinding
 
 class DefaultMobileKeyboard(
-    private val rows: List<String>
+    private val rows: List<List<Int>>
 ): DefaultKeyboard() {
     override fun buildRows(context: Context, listener: Keyboard.Listener): List<KbdRowBinding> {
         val height = context.resources.getDimensionPixelSize(R.dimen.key_height) *
@@ -14,8 +14,8 @@ class DefaultMobileKeyboard(
         val row2 = buildRow(context, listener, rows[1], height)
         val row3 = buildRow(context, listener, rows[2], height)
 
-        if(rows[1].length != 10) {
-            val space = (10 - rows[1].length) / 2f
+        if(rows[1].size != 10) {
+            val space = (10 - rows[1].size) / 2f
             row2.root.addView(buildSpacer(context, listener, space), 0)
             row2.root.addView(buildSpacer(context, listener, space))
         }

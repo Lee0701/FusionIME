@@ -15,8 +15,10 @@ import ee.oyatl.ime.keyboard.DefaultGridKeyboard
 import ee.oyatl.ime.keyboard.DefaultMobileKeyboard
 import ee.oyatl.ime.keyboard.GridKanaBottomRowKeyboard
 import ee.oyatl.ime.keyboard.Keyboard
+import ee.oyatl.ime.keyboard.KeyboardInflater
 import ee.oyatl.ime.keyboard.ShiftStateKeyboard
 import ee.oyatl.ime.keyboard.StackedKeyboard
+import ee.oyatl.ime.keyboard.layout.KeyboardTemplates
 import ee.oyatl.ime.keyboard.layout.LayoutKana50OnZu
 import ee.oyatl.ime.keyboard.layout.LayoutRomaji
 import org.mozc.android.inputmethod.japanese.MozcUtil
@@ -37,21 +39,11 @@ abstract class MozcIMEMode(
 
     class RomajiQwerty(context: Context, listener: IMEMode.Listener): MozcIMEMode(context, listener) {
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.QWERTY_KANA
+        private val layers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE_MINUS, LayoutRomaji.TABLE_QWERTY)
         override val textKeyboard: Keyboard = StackedKeyboard(
             ShiftStateKeyboard(
-                DefaultMobileKeyboard(LayoutRomaji.ROWS_QWERTY_LOWER),
-                DefaultMobileKeyboard(LayoutRomaji.ROWS_QWERTY_UPPER)
-            ),
-            DefaultBottomRowKeyboard()
-        )
-    }
-
-    class RomajiColemak(context: Context, listener: IMEMode.Listener): MozcIMEMode(context, listener) {
-        override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.QWERTY_KANA
-        override val textKeyboard: Keyboard = StackedKeyboard(
-            ShiftStateKeyboard(
-                DefaultMobileKeyboard(LayoutRomaji.ROWS_COLEMAK_LOWER),
-                DefaultMobileKeyboard(LayoutRomaji.ROWS_COLEMAK_UPPER)
+                DefaultMobileKeyboard(layers[0]),
+                DefaultMobileKeyboard(layers[1])
             ),
             DefaultBottomRowKeyboard()
         )
@@ -59,11 +51,12 @@ abstract class MozcIMEMode(
 
     class Kana50OnZu(context: Context, listener: IMEMode.Listener): MozcIMEMode(context, listener) {
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.TWELVE_KEY_FLICK_KANA
+        private val layers = KeyboardInflater.inflate(LayoutKana50OnZu.ROWS)
         override val textKeyboard: Keyboard = StackedKeyboard(
-            DefaultGridKeyboard(LayoutKana50OnZu.ROWS),
+            DefaultGridKeyboard(layers[0]),
             GridKanaBottomRowKeyboard(
-                LayoutKana50OnZu.BOTTOM_LEFT,
-                LayoutKana50OnZu.BOTTOM_RIGHT
+                KeyboardInflater.inflate(listOf(LayoutKana50OnZu.BOTTOM_LEFT))[0][0],
+                KeyboardInflater.inflate(listOf(LayoutKana50OnZu.BOTTOM_RIGHT))[0][0]
             )
         )
     }

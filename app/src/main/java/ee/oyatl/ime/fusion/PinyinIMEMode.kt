@@ -23,6 +23,7 @@ import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.keyboard.DefaultBottomRowKeyboard
 import ee.oyatl.ime.keyboard.DefaultMobileKeyboard
 import ee.oyatl.ime.keyboard.Keyboard
+import ee.oyatl.ime.keyboard.KeyboardInflater
 import ee.oyatl.ime.keyboard.ShiftStateKeyboard
 import ee.oyatl.ime.keyboard.StackedKeyboard
 import ee.oyatl.ime.keyboard.layout.LayoutPinyin
@@ -70,8 +71,8 @@ class PinyinIMEMode(
 
     override val textKeyboard: Keyboard = StackedKeyboard(
         ShiftStateKeyboard(
-            DefaultMobileKeyboard(LayoutPinyin.ROWS_LOWER),
-            DefaultMobileKeyboard(LayoutPinyin.ROWS_UPPER)
+            DefaultMobileKeyboard(KeyboardInflater.inflate(LayoutPinyin.ROWS_LOWER)[0]),
+            DefaultMobileKeyboard(KeyboardInflater.inflate(LayoutPinyin.ROWS_UPPER)[0])
         ),
         DefaultBottomRowKeyboard()
     )
