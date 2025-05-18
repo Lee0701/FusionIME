@@ -9,7 +9,7 @@ class ShiftKeyboardSwitcher(
     private val normalView: View,
     private val shiftedView: View,
     private val lockedView: View
-): KeyboardSwitcher<Keyboard.ShiftState> {
+): KeyboardSwitcher<KeyboardState.Shift> {
     private val switcherView: FrameLayout = FrameLayout(context)
 
     init {
@@ -21,15 +21,15 @@ class ShiftKeyboardSwitcher(
     override val view: View
         get() = switcherView
 
-    override fun switch(state: Keyboard.ShiftState) {
+    override fun switch(state: KeyboardState.Shift) {
         when(state) {
-            Keyboard.ShiftState.Unpressed -> {
+            KeyboardState.Shift.Released -> {
                 normalView.bringToFront()
             }
-            Keyboard.ShiftState.Pressed -> {
+            KeyboardState.Shift.Pressed -> {
                 shiftedView.bringToFront()
             }
-            Keyboard.ShiftState.Locked -> {
+            KeyboardState.Shift.Locked -> {
                 lockedView.bringToFront()
             }
         }

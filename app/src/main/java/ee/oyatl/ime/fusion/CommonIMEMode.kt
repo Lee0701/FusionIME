@@ -63,7 +63,7 @@ abstract class CommonIMEMode(
     }
 
     override fun updateInputView() {
-        softKeyboard.changeState(keyboardListener.shiftState)
+        softKeyboard.changeState(keyboardListener.state)
     }
 
     override fun onKeyDown(keyCode: Int, metaState: Int) {

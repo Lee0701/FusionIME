@@ -26,11 +26,11 @@ abstract class DefaultKeyboard: Keyboard {
         return keyboard.root
     }
 
-    override fun changeState(shiftState: Keyboard.ShiftState) {
-        val icon = when(shiftState) {
-            Keyboard.ShiftState.Unpressed -> R.drawable.keyic_shift
-            Keyboard.ShiftState.Pressed -> R.drawable.keyic_shift_pressed
-            Keyboard.ShiftState.Locked -> R.drawable.keyic_shift_locked
+    override fun changeState(state: KeyboardStateSet) {
+        val icon = when(state.shift) {
+            KeyboardState.Shift.Released -> R.drawable.keyic_shift
+            KeyboardState.Shift.Pressed -> R.drawable.keyic_shift_pressed
+            KeyboardState.Shift.Locked -> R.drawable.keyic_shift_locked
         }
         shiftKeys.forEach { it.icon.setImageResource(icon) }
     }

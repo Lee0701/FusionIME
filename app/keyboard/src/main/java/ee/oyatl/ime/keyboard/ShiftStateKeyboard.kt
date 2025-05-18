@@ -18,10 +18,10 @@ class ShiftStateKeyboard(
         return keyboardSwitcher.view
     }
 
-    override fun changeState(shiftState: Keyboard.ShiftState) {
-        keyboardSwitcher.switch(shiftState)
-        normal.changeState(shiftState)
-        shifted.changeState(shiftState)
-        locked.changeState(shiftState)
+    override fun changeState(state: KeyboardStateSet) {
+        keyboardSwitcher.switch(state.shift)
+        normal.changeState(state)
+        shifted.changeState(state)
+        locked.changeState(state)
     }
 }

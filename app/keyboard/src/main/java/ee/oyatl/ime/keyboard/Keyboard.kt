@@ -5,7 +5,7 @@ import android.view.View
 
 interface Keyboard {
     fun createView(context: Context, listener: Listener): View
-    fun changeState(shiftState: ShiftState)
+    fun changeState(state: KeyboardStateSet)
 
     interface Listener {
         fun onChar(code: Int)
@@ -16,9 +16,5 @@ interface Keyboard {
         Shift, Caps,
         Space, Return, Delete,
         Language, Symbols,
-    }
-
-    enum class ShiftState {
-        Unpressed, Pressed, Locked
     }
 }

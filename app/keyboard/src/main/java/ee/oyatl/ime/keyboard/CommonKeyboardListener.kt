@@ -4,7 +4,7 @@ abstract class CommonKeyboardListener(
     private val callback: Callback,
     private val autoReleaseShift: Boolean = true
 ): Keyboard.Listener {
-    var shiftState: Keyboard.ShiftState = Keyboard.ShiftState.Unpressed
+    var state: KeyboardStateSet = KeyboardStateSet()
         private set
     private var shiftPressing: Boolean = false
     private var shiftTime: Long = 0
@@ -17,42 +17,42 @@ abstract class CommonKeyboardListener(
     override fun onSpecial(type: Keyboard.SpecialKey, pressed: Boolean) {
         if(type == Keyboard.SpecialKey.Shift) {
             shiftPressing = pressed
-            val oldShiftState = shiftState
+            val oldShiftState = state
             if(pressed) onShiftPressed()
             else onShiftReleased()
-            if(shiftState != oldShiftState) callback.updateInputView()
+            if(state != oldShiftState) callback.updateInputView()
         }
     }
 
     private fun onShiftPressed() {
-        when(shiftState) {
-            Keyboard.ShiftState.Unpressed -> {
-                shiftState = Keyboard.ShiftState.Pressed
+        when(state.shift) {
+            KeyboardState.Shift.Released -> {
+                state = state.copy(shift = KeyboardState.Shift.Pressed)
             }
-            Keyboard.ShiftState.Pressed -> {
+            KeyboardState.Shift.Pressed -> {
                 if(autoReleaseShift) {
                     val diff = System.currentTimeMillis() - shiftTime
-                    if(diff < 300) shiftState = Keyboard.ShiftState.Locked
-                    else shiftState = Keyboard.ShiftState.Unpressed
+                    if(diff < 300) state = state.copy(shift = KeyboardState.Shift.Locked)
+                    else state = state.copy(shift = KeyboardState.Shift.Released)
                 } else {
-                    shiftState = Keyboard.ShiftState.Unpressed
+                    state = state.copy(shift = KeyboardState.Shift.Released)
                 }
             }
-            Keyboard.ShiftState.Locked -> {
-                shiftState = Keyboard.ShiftState.Unpressed
+            KeyboardState.Shift.Locked -> {
+                state = state.copy(shift = KeyboardState.Shift.Released)
             }
         }
     }
 
     private fun onShiftReleased() {
-        when(shiftState) {
-            Keyboard.ShiftState.Unpressed -> {
+        when(state.shift) {
+            KeyboardState.Shift.Released -> {
             }
-            Keyboard.ShiftState.Pressed -> {
-                if(inputWhileShifted) shiftState = Keyboard.ShiftState.Unpressed
-                else shiftState = Keyboard.ShiftState.Pressed
+            KeyboardState.Shift.Pressed -> {
+                if(inputWhileShifted) state = state.copy(shift = KeyboardState.Shift.Released)
+                else state = state.copy(shift = KeyboardState.Shift.Pressed)
             }
-            Keyboard.ShiftState.Locked -> {
+            KeyboardState.Shift.Locked -> {
             }
         }
         shiftTime = System.currentTimeMillis()
@@ -61,9 +61,9 @@ abstract class CommonKeyboardListener(
 
     protected fun autoReleaseShift() {
         if(!autoReleaseShift) return
-        if(shiftState == Keyboard.ShiftState.Pressed) {
+        if(state.shift == KeyboardState.Shift.Pressed) {
             if(!shiftPressing) {
-                shiftState = Keyboard.ShiftState.Unpressed
+                state = state.copy(shift = KeyboardState.Shift.Released)
                 callback.updateInputView()
             } else {
                 inputWhileShifted = true
