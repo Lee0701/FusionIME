@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
-import android.view.KeyCharacterMap
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -821,15 +820,20 @@ class PinyinIMEMode(
                 return false
             }
 
-            val mPinyinDecoderServiceConnection = pinyinDecoderServiceConnection ?: PinyinDecoderServiceConnection()
+            val pinyinDecoderServiceConnection1 = pinyinDecoderServiceConnection ?: PinyinDecoderServiceConnection()
 
             // Bind service
             return context.bindService(
-                    serviceIntent, mPinyinDecoderServiceConnection,
+                    serviceIntent, pinyinDecoderServiceConnection1,
                     Context.BIND_AUTO_CREATE
                 )
         }
         return true
+    }
+
+    fun stopPinyinDecoderService(context: Context) {
+        val pinyinDecoderServiceConnection = pinyinDecoderServiceConnection ?: return
+        context.unbindService(pinyinDecoderServiceConnection)
     }
 
     inner class DecodingInfo {

@@ -19,10 +19,17 @@ object KeyboardTemplates {
         "zxcvbnm"
     )
 
-    val MOBILE_WITH_SLASH: List<String> = listOf(
+    val MOBILE_WITH_QUOTE: List<String> = listOf(
         "1234567890",
         "qwertyuiop",
         "asdfghjkl;",
         "zxcvbnm\'",
+    )
+
+    val MOBILE_GRID: List<String> = listOf(
+        "1234567890",
+        "qwertyuiop",
+        "asdfghjkl;",
+        "zxcvbnm,./",
     )
 }

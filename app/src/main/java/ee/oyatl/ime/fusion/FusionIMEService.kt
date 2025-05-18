@@ -25,6 +25,13 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
         imeModeSwitcher = IMEModeSwitcher(entries, this)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        imeModeSwitcher.entries.forEach { entry ->
+            if(entry.imeMode is PinyinIMEMode) entry.imeMode.stopPinyinDecoderService(this)
+        }
+    }
+
     override fun onCreateInputView(): View {
         imeView = LinearLayout(this)
         imeView.orientation = LinearLayout.VERTICAL

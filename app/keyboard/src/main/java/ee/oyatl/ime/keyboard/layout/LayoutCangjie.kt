@@ -25,7 +25,6 @@ object LayoutCangjie {
         KeyEvent.KEYCODE_J to listOf('十'.code, 'J'.code),
         KeyEvent.KEYCODE_K to listOf('大'.code, 'K'.code),
         KeyEvent.KEYCODE_L to listOf('中'.code, 'L'.code),
-        KeyEvent.KEYCODE_MINUS to listOf('ー'.code, 'ー'.code),
 
         KeyEvent.KEYCODE_Z to listOf('重'.code, 'Z'.code),
         KeyEvent.KEYCODE_X to listOf('難'.code, 'X'.code),

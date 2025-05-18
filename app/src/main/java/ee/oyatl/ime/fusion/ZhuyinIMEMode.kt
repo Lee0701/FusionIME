@@ -13,6 +13,7 @@ import ee.oyatl.ime.keyboard.GridBottomRowKeyboard
 import ee.oyatl.ime.keyboard.Keyboard
 import ee.oyatl.ime.keyboard.KeyboardInflater
 import ee.oyatl.ime.keyboard.StackedKeyboard
+import ee.oyatl.ime.keyboard.layout.KeyboardTemplates
 import ee.oyatl.ime.keyboard.layout.LayoutZhuyin
 import tw.cheyingwu.zhuyin.ZhuYinDictionary
 import tw.cheyingwu.zhuyin.ZhuYinIMESettings
@@ -32,9 +33,11 @@ class ZhuyinIMEMode(
         }
     }
 
+    override val layoutTable: Map<Int, List<Int>> = LayoutZhuyin.TABLE
+    private val layers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE_GRID, layoutTable)
     override val textKeyboard: Keyboard = StackedKeyboard(
-        DefaultGridKeyboard(KeyboardInflater.inflate(LayoutZhuyin.ROWS.dropLast(1))[0]),
-        GridBottomRowKeyboard(KeyboardInflater.inflate(listOf(LayoutZhuyin.ROWS.last()))[0][0])
+        DefaultGridKeyboard(layers[0]),
+        GridBottomRowKeyboard(KeyboardInflater.inflate(LayoutZhuyin.EXTRA_KEYS, layoutTable)[0][0])
     )
 
     private val wordComposer: WordComposer = WordComposer()

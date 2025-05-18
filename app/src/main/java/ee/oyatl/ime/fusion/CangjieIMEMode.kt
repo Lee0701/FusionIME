@@ -32,7 +32,7 @@ class CangjieIMEMode(
     }
 
     override val layoutTable: Map<Int, List<Int>> = LayoutCangjie.TABLE_QWERTY
-    private val textKeyboardTemplate = KeyboardInflater.inflate(KeyboardTemplates.MOBILE, LayoutCangjie.TABLE_QWERTY)
+    private val textKeyboardTemplate = KeyboardInflater.inflate(KeyboardTemplates.MOBILE, layoutTable)
     override val textKeyboard: Keyboard = StackedKeyboard(
         ShiftStateKeyboard(
             DefaultMobileKeyboard(textKeyboardTemplate[0]),

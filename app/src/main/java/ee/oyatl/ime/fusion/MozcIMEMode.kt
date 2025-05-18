@@ -39,7 +39,8 @@ abstract class MozcIMEMode(
 
     class RomajiQwerty(context: Context, listener: IMEMode.Listener): MozcIMEMode(context, listener) {
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.QWERTY_KANA
-        private val layers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE_MINUS, LayoutRomaji.TABLE_QWERTY)
+        override val layoutTable: Map<Int, List<Int>> = LayoutRomaji.TABLE_QWERTY
+        private val layers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE_MINUS, layoutTable)
         override val textKeyboard: Keyboard = StackedKeyboard(
             ShiftStateKeyboard(
                 DefaultMobileKeyboard(layers[0]),

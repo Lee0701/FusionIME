@@ -12,7 +12,7 @@ import androidx.core.view.isVisible
 import ee.oyatl.ime.fusion.databinding.ModeSwitcherTabBarBinding
 
 class IMEModeSwitcher(
-    private val entries: List<Entry>,
+    val entries: List<Entry>,
     private val callback: Callback
 ) {
     val size: Int get() = entries.size
