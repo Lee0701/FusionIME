@@ -56,7 +56,7 @@ abstract class RecyclerCandidateView(
             view.text.text = candidate.text
             view.root.setOnClickListener { onClick() }
             if(candidate is CandidateView.FocusableCandidate) {
-                view.root.isPressed = candidate.focused
+                view.root.isHovered = candidate.focused
             }
         }
     }
