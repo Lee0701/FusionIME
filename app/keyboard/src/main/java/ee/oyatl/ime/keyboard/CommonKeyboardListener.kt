@@ -14,15 +14,14 @@ abstract class CommonKeyboardListener(
         autoReleaseShift()
     }
 
-    override fun onSpecial(type: Keyboard.SpecialKey) {
-    }
-
-    override fun onShift(pressed: Boolean) {
-        shiftPressing = pressed
-        val oldShiftState = shiftState
-        if(pressed) onShiftPressed()
-        else onShiftReleased()
-        if(shiftState != oldShiftState) callback.updateInputView()
+    override fun onSpecial(type: Keyboard.SpecialKey, pressed: Boolean) {
+        if(type == Keyboard.SpecialKey.Shift) {
+            shiftPressing = pressed
+            val oldShiftState = shiftState
+            if(pressed) onShiftPressed()
+            else onShiftReleased()
+            if(shiftState != oldShiftState) callback.updateInputView()
+        }
     }
 
     private fun onShiftPressed() {

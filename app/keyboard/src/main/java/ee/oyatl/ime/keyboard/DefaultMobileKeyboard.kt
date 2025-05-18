@@ -34,11 +34,12 @@ class DefaultMobileKeyboard(
             R.style.Theme_FusionIME_Keyboard_Key_Modifier,
             icon,
             1.5f
-        ) { pressed -> listener.onShift(pressed) }, 0)
+        ) { pressed -> listener.onSpecial(Keyboard.SpecialKey.Shift, pressed) }, 0)
 
         val handler = Handler(Looper.getMainLooper())
         fun repeat() {
-            listener.onSpecial(Keyboard.SpecialKey.Delete)
+            listener.onSpecial(Keyboard.SpecialKey.Delete, true)
+            listener.onSpecial(Keyboard.SpecialKey.Delete, false)
             handler.postDelayed({ repeat() }, 50)
         }
         row3.root.addView(buildSpecialKey(
@@ -47,8 +48,8 @@ class DefaultMobileKeyboard(
             R.drawable.keyic_backspace,
             1.5f
         ) { pressed ->
+            listener.onSpecial(Keyboard.SpecialKey.Delete, pressed)
             if(pressed) {
-                listener.onSpecial(Keyboard.SpecialKey.Delete)
                 handler.postDelayed({ repeat() }, 500)
             } else {
                 handler.removeCallbacksAndMessages(null)

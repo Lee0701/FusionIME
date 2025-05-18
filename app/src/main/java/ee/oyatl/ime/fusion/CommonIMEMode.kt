@@ -83,12 +83,12 @@ abstract class CommonIMEMode(
             super.onChar(code)
         }
 
-        override fun onSpecial(type: Keyboard.SpecialKey) {
-            when(type) {
+        override fun onSpecial(type: Keyboard.SpecialKey, pressed: Boolean) {
+            if(!pressed) when(type) {
                 Keyboard.SpecialKey.Language -> listener.onLanguageSwitch()
                 else -> this@CommonIMEMode.onSpecial(type)
             }
-            super.onSpecial(type)
+            super.onSpecial(type, pressed)
         }
     }
 
