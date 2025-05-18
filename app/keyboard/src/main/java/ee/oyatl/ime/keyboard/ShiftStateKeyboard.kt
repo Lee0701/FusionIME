@@ -20,5 +20,8 @@ class ShiftStateKeyboard(
 
     override fun changeState(shiftState: Keyboard.ShiftState) {
         keyboardSwitcher.switch(shiftState)
+        normal.changeState(shiftState)
+        shifted.changeState(shiftState)
+        locked.changeState(shiftState)
     }
 }
