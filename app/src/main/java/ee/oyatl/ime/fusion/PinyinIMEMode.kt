@@ -32,8 +32,6 @@ class PinyinIMEMode(
     context: Context,
     listener: IMEMode.Listener
 ): CommonIMEMode(listener) {
-    private val keyCharacterMap: KeyCharacterMap = KeyCharacterMap.load(KeyCharacterMap.VIRTUAL_KEYBOARD)
-
     /**
      * Connection used to bind the decoding service.
      */
@@ -70,7 +68,7 @@ class PinyinIMEMode(
 
     private var isEnterNormalState = true
 
-    override val softKeyboard: Keyboard = StackedKeyboard(
+    override val textKeyboard: Keyboard = StackedKeyboard(
         ShiftStateKeyboard(
             DefaultMobileKeyboard(LayoutPinyin.ROWS_LOWER),
             DefaultMobileKeyboard(LayoutPinyin.ROWS_UPPER)
@@ -152,8 +150,14 @@ class PinyinIMEMode(
     }
 
     override fun onChar(code: Int) {
-        val keyCode = keyCharacterMap.getEvents(charArrayOf(code.toChar())).firstOrNull()?.keyCode
-        if(keyCode != null) processKeyCode(keyCode)
+        if(code in 'a'.code .. 'z'.code) {
+            processKeyCode(code - 'a'.code + KeyEvent.KEYCODE_A)
+        } else if(code == '\''.code) {
+            processKeyCode(KeyEvent.KEYCODE_APOSTROPHE)
+        } else {
+            onReset()
+            util?.sendKeyChar(code.toChar())
+        }
     }
 
     override fun onSpecial(type: Keyboard.SpecialKey) {
@@ -165,8 +169,8 @@ class PinyinIMEMode(
         }
     }
 
-    private fun processKeyCode(keyCode: Int) {
-        processKey(KeyEvent(KeyEvent.ACTION_DOWN, keyCode), true)
+    private fun processKeyCode(keyCode: Int): Boolean {
+        return processKey(KeyEvent(KeyEvent.ACTION_DOWN, keyCode), true)
     }
 
     private fun processKey(event: KeyEvent, realAction: Boolean): Boolean {

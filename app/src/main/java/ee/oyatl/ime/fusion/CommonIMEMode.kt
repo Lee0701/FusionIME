@@ -6,21 +6,46 @@ import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
+import android.widget.FrameLayout
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.ScrollingCandidateView
 import ee.oyatl.ime.keyboard.CommonKeyboardListener
+import ee.oyatl.ime.keyboard.DefaultBottomRowKeyboard
+import ee.oyatl.ime.keyboard.DefaultMobileKeyboard
 import ee.oyatl.ime.keyboard.Keyboard
+import ee.oyatl.ime.keyboard.KeyboardState
+import ee.oyatl.ime.keyboard.ShiftStateKeyboard
+import ee.oyatl.ime.keyboard.StackedKeyboard
+import ee.oyatl.ime.keyboard.layout.LayoutQwerty
+import ee.oyatl.ime.keyboard.layout.LayoutSymbol
 
 abstract class CommonIMEMode(
     private val listener: IMEMode.Listener
 ): IMEMode, CandidateView.Listener, CommonKeyboardListener.Callback {
     private val keyCharacterMap = KeyCharacterMap.load(KeyCharacterMap.VIRTUAL_KEYBOARD)
 
-    abstract val softKeyboard: Keyboard
+    open val textKeyboard: Keyboard = StackedKeyboard(
+        ShiftStateKeyboard(
+            DefaultMobileKeyboard(LayoutQwerty.ROWS_LOWER),
+            DefaultMobileKeyboard(LayoutQwerty.ROWS_UPPER)
+        ),
+        DefaultBottomRowKeyboard()
+    )
+
+    open val symbolKeyboard: Keyboard = StackedKeyboard(
+        ShiftStateKeyboard(
+            DefaultMobileKeyboard(LayoutSymbol.ROWS_LOWER),
+            DefaultMobileKeyboard(LayoutSymbol.ROWS_UPPER)
+        ),
+        DefaultBottomRowKeyboard()
+    )
+
+    private lateinit var switcherView: FrameLayout
+    private lateinit var textKeyboardView: View
+    private lateinit var symbolKeyboardView: View
 
     protected val keyboardListener = KeyboardListener()
     protected var candidateView: CandidateView? = null
-    protected var imeView: View? = null
 
     protected var util: KeyEventUtil? = null
         private set
@@ -45,9 +70,12 @@ abstract class CommonIMEMode(
     }
 
     override fun createInputView(context: Context): View {
-        val imeView = softKeyboard.createView(context, keyboardListener)
-        this.imeView = imeView
-        return imeView
+        switcherView = FrameLayout(context)
+        textKeyboardView = textKeyboard.createView(context, keyboardListener)
+        symbolKeyboardView = symbolKeyboard.createView(context, keyboardListener)
+        switcherView.addView(textKeyboardView)
+        switcherView.addView(symbolKeyboardView)
+        return switcherView
     }
 
     override fun createCandidateView(context: Context): View {
@@ -59,11 +87,16 @@ abstract class CommonIMEMode(
 
     override fun getInputView(): View {
         updateInputView()
-        return imeView!!
+        return switcherView
     }
 
     override fun updateInputView() {
-        softKeyboard.changeState(keyboardListener.state)
+        textKeyboard.changeState(keyboardListener.state)
+        symbolKeyboard.changeState(keyboardListener.state)
+        if(keyboardListener.state.symbol == KeyboardState.Symbol.Text)
+            textKeyboardView.bringToFront()
+        else if(keyboardListener.state.symbol == KeyboardState.Symbol.Symbol)
+            symbolKeyboardView.bringToFront()
     }
 
     override fun onKeyDown(keyCode: Int, metaState: Int) {
@@ -105,9 +138,18 @@ abstract class CommonIMEMode(
             super.onChar(code)
         }
 
+        private fun onSymbols() {
+            state = state.copy(symbol =
+                if(state.symbol == KeyboardState.Symbol.Text) KeyboardState.Symbol.Symbol
+                else KeyboardState.Symbol.Text
+            )
+            updateInputView()
+        }
+
         override fun onSpecial(type: Keyboard.SpecialKey, pressed: Boolean) {
             if(pressed) when(type) {
                 Keyboard.SpecialKey.Language -> listener.onLanguageSwitch()
+                Keyboard.SpecialKey.Symbols -> onSymbols()
                 else -> this@CommonIMEMode.onSpecial(type)
             }
             super.onSpecial(type, pressed)

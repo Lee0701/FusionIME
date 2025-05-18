@@ -31,7 +31,7 @@ class ZhuyinIMEMode(
         }
     }
 
-    override val softKeyboard: Keyboard = StackedKeyboard(
+    override val textKeyboard: Keyboard = StackedKeyboard(
         DefaultGridKeyboard(LayoutZhuyin.ROWS.dropLast(1)),
         GridBottomRowKeyboard(LayoutZhuyin.ROWS.last())
     )
@@ -71,7 +71,7 @@ class ZhuyinIMEMode(
     }
 
     private fun updateSuggestions() {
-        val list = mSuggest.getSuggestions(imeView, wordComposer, false)
+        val list = mSuggest.getSuggestions(getInputView(), wordComposer, false)
         val candidates = list.mapIndexed { i, s -> ZhuyinCandidate(i, s) }
         bestCandidate = candidates.getOrNull(0)
         submitCandidates(candidates)
@@ -133,6 +133,9 @@ class ZhuyinIMEMode(
         if(value != null) {
             wordComposer.add(code, intArrayOf(value))
             renderResult()
+        } else {
+            onReset()
+            util?.sendKeyChar(code.toChar())
         }
     }
 

@@ -5,7 +5,7 @@ abstract class CommonKeyboardListener(
     private val autoReleaseShift: Boolean = true
 ): Keyboard.Listener {
     var state: KeyboardStateSet = KeyboardStateSet()
-        private set
+        protected set
     private var shiftPressing: Boolean = false
     private var shiftTime: Long = 0
     private var inputWhileShifted: Boolean = false

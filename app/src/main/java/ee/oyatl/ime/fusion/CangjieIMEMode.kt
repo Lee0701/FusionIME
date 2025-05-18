@@ -29,7 +29,7 @@ class CangjieIMEMode(
         }
     }
 
-    override val softKeyboard: Keyboard = StackedKeyboard(
+    override val textKeyboard: Keyboard = StackedKeyboard(
         ShiftStateKeyboard(
             DefaultMobileKeyboard(LayoutCangjie.ROWS_LOWER),
             DefaultMobileKeyboard(LayoutCangjie.ROWS_UPPER)
