@@ -147,7 +147,7 @@ abstract class CommonIMEMode(
         }
 
         override fun onSpecial(type: Keyboard.SpecialKey, pressed: Boolean) {
-            if(pressed) when(type) {
+            if(!pressed) when(type) {
                 Keyboard.SpecialKey.Language -> listener.onLanguageSwitch()
                 Keyboard.SpecialKey.Symbols -> onSymbols()
                 else -> this@CommonIMEMode.onSpecial(type)
