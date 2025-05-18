@@ -11,7 +11,7 @@ class BottomRowKeyboardSet(
     private lateinit var view: View
 
     override fun initView(context: Context): View {
-        view = DefaultBottomRowKeyboard(listener).createView(context)
+        view = DefaultBottomRowKeyboard().createView(context, listener)
         return view
     }
 

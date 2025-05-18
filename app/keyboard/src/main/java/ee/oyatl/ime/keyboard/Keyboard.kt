@@ -4,9 +4,7 @@ import android.content.Context
 import android.view.View
 
 interface Keyboard {
-    val listener: Listener
-
-    fun createView(context: Context): View
+    fun createView(context: Context, listener: Listener): View
 
     interface Listener {
         fun onChar(code: Int)

@@ -6,21 +6,20 @@ import android.os.Looper
 import ee.oyatl.ime.keyboard.databinding.KbdRowBinding
 
 class DefaultMobileKeyboard(
-    override val listener: Keyboard.Listener,
     private val rows: List<String>,
     private val shiftState: Keyboard.ShiftState
-): DefaultKeyboard(listener) {
-    override fun buildRows(context: Context): List<KbdRowBinding> {
+): DefaultKeyboard() {
+    override fun buildRows(context: Context, listener: Keyboard.Listener): List<KbdRowBinding> {
         val height = context.resources.getDimensionPixelSize(R.dimen.key_height) *
                 context.resources.getInteger(R.integer.standard_row_count) / rows.size
-        val row1 = buildRow(context, rows[0], height)
-        val row2 = buildRow(context, rows[1], height)
-        val row3 = buildRow(context, rows[2], height)
+        val row1 = buildRow(context, listener, rows[0], height)
+        val row2 = buildRow(context, listener, rows[1], height)
+        val row3 = buildRow(context, listener, rows[2], height)
 
         if(rows[1].length != 10) {
             val space = (10 - rows[1].length) / 2f
-            row2.root.addView(buildSpacer(context, space), 0)
-            row2.root.addView(buildSpacer(context, space))
+            row2.root.addView(buildSpacer(context, listener, space), 0)
+            row2.root.addView(buildSpacer(context, listener, space))
         }
 
         val icon = when(shiftState) {
@@ -31,31 +30,21 @@ class DefaultMobileKeyboard(
 
         row3.root.addView(buildSpecialKey(
             context,
+            listener,
+            Keyboard.SpecialKey.Shift,
             R.style.Theme_FusionIME_Keyboard_Key_Modifier,
             icon,
             1.5f
-        ) { pressed -> listener.onSpecial(Keyboard.SpecialKey.Shift, pressed) }, 0)
+        ), 0)
 
-        val handler = Handler(Looper.getMainLooper())
-        fun repeat() {
-            listener.onSpecial(Keyboard.SpecialKey.Delete, true)
-            listener.onSpecial(Keyboard.SpecialKey.Delete, false)
-            handler.postDelayed({ repeat() }, 50)
-        }
         row3.root.addView(buildSpecialKey(
             context,
+            RepeatableKeyListener(listener),
+            Keyboard.SpecialKey.Delete,
             R.style.Theme_FusionIME_Keyboard_Key_Modifier,
             R.drawable.keyic_backspace,
             1.5f
-        ) { pressed ->
-            listener.onSpecial(Keyboard.SpecialKey.Delete, pressed)
-            if(pressed) {
-                handler.postDelayed({ repeat() }, 500)
-            } else {
-                handler.removeCallbacksAndMessages(null)
-            }
-            Unit
-        })
+        ))
 
         return listOf(row1, row2, row3)
     }

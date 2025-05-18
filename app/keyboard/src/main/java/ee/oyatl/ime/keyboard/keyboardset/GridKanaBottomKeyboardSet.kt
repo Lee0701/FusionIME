@@ -15,7 +15,7 @@ class GridKanaBottomKeyboardSet(
 
     override fun initView(context: Context): View {
         run {
-            val normal = GridKanaBottomRowKeyboard(listener, leftLayout, rightLayout).createView(context)
+            val normal = GridKanaBottomRowKeyboard(leftLayout, rightLayout).createView(context, listener)
             keyboardSwitcher = ShiftKeyboardSwitcher(context, normal, normal, normal)
         }
         return keyboardSwitcher.view

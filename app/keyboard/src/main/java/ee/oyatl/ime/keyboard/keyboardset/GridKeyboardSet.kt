@@ -17,9 +17,9 @@ class GridKeyboardSet(
 
     override fun initView(context: Context): View {
         run {
-            val normal = DefaultGridKeyboard(listener, normalLayout, Keyboard.ShiftState.Unpressed).createView(context)
-            val shifted = DefaultGridKeyboard(listener, shiftedLayout, Keyboard.ShiftState.Pressed).createView(context)
-            val locked = DefaultGridKeyboard(listener, lockedLayout, Keyboard.ShiftState.Locked).createView(context)
+            val normal = DefaultGridKeyboard(normalLayout).createView(context, listener)
+            val shifted = DefaultGridKeyboard(shiftedLayout).createView(context, listener)
+            val locked = DefaultGridKeyboard(lockedLayout).createView(context, listener)
             keyboardSwitcher = ShiftKeyboardSwitcher(context, normal, shifted, locked)
         }
         return keyboardSwitcher.view

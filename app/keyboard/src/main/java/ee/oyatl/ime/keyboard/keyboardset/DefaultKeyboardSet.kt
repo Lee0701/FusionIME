@@ -16,9 +16,9 @@ class DefaultKeyboardSet(
 
     override fun initView(context: Context): View {
         run {
-            val normal = DefaultMobileKeyboard(listener, normalLayout, Keyboard.ShiftState.Unpressed).createView(context)
-            val shifted = DefaultMobileKeyboard(listener, shiftedLayout, Keyboard.ShiftState.Pressed).createView(context)
-            val locked = DefaultMobileKeyboard(listener, lockedLayout, Keyboard.ShiftState.Locked).createView(context)
+            val normal = DefaultMobileKeyboard(normalLayout, Keyboard.ShiftState.Unpressed).createView(context, listener)
+            val shifted = DefaultMobileKeyboard(shiftedLayout, Keyboard.ShiftState.Pressed).createView(context, listener)
+            val locked = DefaultMobileKeyboard(lockedLayout, Keyboard.ShiftState.Locked).createView(context, listener)
             keyboardSwitcher = ShiftKeyboardSwitcher(context, normal, shifted, locked)
         }
         return keyboardSwitcher.view
