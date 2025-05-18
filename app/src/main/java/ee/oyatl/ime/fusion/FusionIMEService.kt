@@ -19,6 +19,7 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
         entries += IMEModeSwitcher.Entry("한", KoreanIMEMode(this))
         entries += IMEModeSwitcher.Entry("あQ", MozcIMEMode.RomajiQwerty(this, this))
         entries += IMEModeSwitcher.Entry("あいう", MozcIMEMode.Kana50OnZu(this, this))
+        entries += IMEModeSwitcher.Entry("JIS", MozcIMEMode.KanaJIS(this, this))
         entries += IMEModeSwitcher.Entry("拼音", PinyinIMEMode(this, this))
         entries += IMEModeSwitcher.Entry("注音", ZhuyinIMEMode(this, this))
         entries += IMEModeSwitcher.Entry("倉頡", CangjieIMEMode(this, this))

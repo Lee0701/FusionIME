@@ -108,7 +108,11 @@ abstract class CommonIMEMode(
         val layer = if(shiftOn) 1 else 0
         val specialKey = getSpecialKeyType(keyCode)
         if(specialKey != null) onSpecial(specialKey)
-        else onChar(layoutTable[keyCode]?.get(layer) ?: keyCharacterMap.get(keyCode, metaState))
+        else onChar(
+            layoutTable[keyCode]?.getOrNull(layer)
+                ?: layoutTable[keyCode]?.getOrNull(0)
+                ?: keyCharacterMap.get(keyCode, metaState)
+        )
     }
 
     override fun onKeyUp(keyCode: Int, metaState: Int) {
