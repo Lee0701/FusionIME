@@ -79,10 +79,20 @@ abstract class MozcIMEMode(
 
     private val renderResultCallback = EvaluationCallback { command, triggeringKeyEvent ->
         inputConnectionRenderer?.renderInputConnection(command.orNull(), triggeringKeyEvent.orNull())
-        if(command.get().hasOutput() && command.get().output.hasAllCandidateWords()) {
-            val candidates = command.get().output.allCandidateWords.candidatesList
-                .map { candidate -> MozcCandidate(candidate) }
-            submitCandidates(candidates)
+        if(command.get().hasOutput()) {
+            val output = command.get().output
+            if(output.hasAllCandidateWords()) {
+                val index =
+                    if(output.allCandidateWords.hasFocusedIndex())
+                        output.allCandidateWords.focusedIndex
+                    else 0
+                val candidates = output
+                    .allCandidateWords.candidatesList
+                    .mapIndexed { i, candidate -> MozcCandidate(candidate, index == i) }
+                submitCandidates(candidates)
+            } else {
+                submitCandidates(emptyList())
+            }
         } else {
             submitCandidates(emptyList())
         }
@@ -145,11 +155,16 @@ abstract class MozcIMEMode(
 
     data class MozcCandidate(
         val id: Int,
-        override val text: CharSequence
-    ): CandidateView.Candidate {
-        constructor(mozcCandidate: CandidateWord): this(
+        override val text: CharSequence,
+        override val focused: Boolean
+    ): CandidateView.FocusableCandidate {
+        constructor(
+            mozcCandidate: CandidateWord,
+            focused: Boolean
+        ): this(
             id = mozcCandidate.id,
-            text = mozcCandidate.value
+            text = mozcCandidate.value,
+            focused = focused
         )
     }
 }

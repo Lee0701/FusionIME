@@ -6,6 +6,7 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.view.ContextThemeWrapper
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -26,11 +27,14 @@ abstract class RecyclerCandidateView(
         val typedValue = TypedValue()
         ContextThemeWrapper(context, R.style.Theme_FusionIME_Candidates).theme.resolveAttribute(R.attr.backgroundColor, typedValue, false)
         backgroundColor = context.resources.getColor(typedValue.data)
+        itemAnimator = null
     }
 
     override fun submitList(list: List<Candidate>) {
         val adapter = this.adapter as Adapter
         adapter.submitList(list)
+        val focusedIndex = list.indexOfFirst { it is CandidateView.FocusableCandidate && it.focused }
+        if(focusedIndex > -1) smoothScrollToPosition(focusedIndex)
     }
 
     class Adapter(
@@ -51,12 +55,15 @@ abstract class RecyclerCandidateView(
         fun onBind(candidate: Candidate, onClick: () -> Unit) {
             view.text.text = candidate.text
             view.root.setOnClickListener { onClick() }
+            if(candidate is CandidateView.FocusableCandidate) {
+                view.root.isPressed = candidate.focused
+            }
         }
     }
 
     class DiffCallback: DiffUtil.ItemCallback<Candidate>() {
         override fun areItemsTheSame(oldItem: Candidate, newItem: Candidate): Boolean {
-            return oldItem === newItem
+            return oldItem == newItem
         }
         override fun areContentsTheSame(oldItem: Candidate, newItem: Candidate): Boolean {
             return oldItem == newItem

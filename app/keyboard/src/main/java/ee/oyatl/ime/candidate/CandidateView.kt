@@ -11,6 +11,10 @@ interface CandidateView {
         override fun equals(other: Any?): Boolean
     }
 
+    interface FocusableCandidate: Candidate {
+        val focused: Boolean
+    }
+
     interface Listener {
         fun onCandidateSelected(candidate: Candidate)
     }

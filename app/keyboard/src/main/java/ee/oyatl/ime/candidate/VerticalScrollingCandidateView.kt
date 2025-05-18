@@ -30,11 +30,6 @@ class VerticalScrollingCandidateView(
         )
     }
 
-    override fun submitList(list: List<CandidateView.Candidate>) {
-        super.submitList(list)
-        this.visibility = if(list.isEmpty()) View.GONE else View.VISIBLE
-    }
-
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
         return super.dispatchTouchEvent(ev) || this.onTouchEvent(ev)
     }
