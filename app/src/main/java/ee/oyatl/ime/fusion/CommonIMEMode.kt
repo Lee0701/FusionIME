@@ -13,9 +13,11 @@ import ee.oyatl.ime.keyboard.CommonKeyboardListener
 import ee.oyatl.ime.keyboard.DefaultBottomRowKeyboard
 import ee.oyatl.ime.keyboard.DefaultMobileKeyboard
 import ee.oyatl.ime.keyboard.Keyboard
+import ee.oyatl.ime.keyboard.KeyboardInflater
 import ee.oyatl.ime.keyboard.KeyboardState
 import ee.oyatl.ime.keyboard.ShiftStateKeyboard
 import ee.oyatl.ime.keyboard.StackedKeyboard
+import ee.oyatl.ime.keyboard.layout.KeyboardTemplates
 import ee.oyatl.ime.keyboard.layout.LayoutQwerty
 import ee.oyatl.ime.keyboard.layout.LayoutSymbol
 
@@ -24,18 +26,19 @@ abstract class CommonIMEMode(
 ): IMEMode, CandidateView.Listener, CommonKeyboardListener.Callback {
     private val keyCharacterMap = KeyCharacterMap.load(KeyCharacterMap.VIRTUAL_KEYBOARD)
 
+    private val textKeyboardLayers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE_APOSTROPHE, LayoutQwerty.TABLE_QWERTY)
     open val textKeyboard: Keyboard = StackedKeyboard(
         ShiftStateKeyboard(
-            DefaultMobileKeyboard(LayoutQwerty.ROWS_LOWER),
-            DefaultMobileKeyboard(LayoutQwerty.ROWS_UPPER)
+            DefaultMobileKeyboard(textKeyboardLayers[0]),
+            DefaultMobileKeyboard(textKeyboardLayers[1])
         ),
         DefaultBottomRowKeyboard()
     )
 
     open val symbolKeyboard: Keyboard = StackedKeyboard(
         ShiftStateKeyboard(
-            DefaultMobileKeyboard(LayoutSymbol.ROWS_LOWER),
-            DefaultMobileKeyboard(LayoutSymbol.ROWS_UPPER)
+            DefaultMobileKeyboard(KeyboardInflater.inflate(LayoutSymbol.ROWS_LOWER, mapOf())[0]),
+            DefaultMobileKeyboard(KeyboardInflater.inflate(LayoutSymbol.ROWS_UPPER, mapOf())[0])
         ),
         DefaultBottomRowKeyboard()
     )

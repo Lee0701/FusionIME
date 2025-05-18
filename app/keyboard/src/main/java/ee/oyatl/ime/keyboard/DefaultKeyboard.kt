@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.widget.LinearLayout
+import android.widget.LinearLayout.LayoutParams
 import androidx.annotation.DrawableRes
 import androidx.annotation.StyleRes
 import ee.oyatl.ime.keyboard.databinding.KbdKeyBinding
@@ -35,21 +36,21 @@ abstract class DefaultKeyboard: Keyboard {
         shiftKeys.forEach { it.icon.setImageResource(icon) }
     }
 
-    protected open fun buildRow(context: Context, listener: Keyboard.Listener, chars: String, height: Int): KbdRowBinding {
+    protected open fun buildRow(context: Context, listener: Keyboard.Listener, codes: List<Int>, height: Int): KbdRowBinding {
         val inflater = LayoutInflater.from(context)
         val row = KbdRowBinding.inflate(inflater)
-        chars.forEach { char ->
-            val key = buildKey(context, listener, char, height)
+        codes.forEach { code ->
+            val key = buildKey(context, listener, code, code.toChar().toString(), height)
             row.root.addView(key.root)
         }
         return row
     }
 
-    protected open fun buildKey(context: Context, listener: Keyboard.Listener, char: Char, height: Int): KbdKeyBinding {
+    protected open fun buildKey(context: Context, listener: Keyboard.Listener, code: Int, label: String, height: Int): KbdKeyBinding {
         val inflater = LayoutInflater.from(ContextThemeWrapper(context, R.style.Theme_FusionIME_Keyboard_Key))
         val key = KbdKeyBinding.inflate(inflater)
-        key.label.text = char.toString()
-        key.root.setOnClickListener { listener.onChar(char.code) }
+        key.label.text = label
+        key.root.setOnClickListener { listener.onChar(code) }
         key.root.layoutParams = LinearLayout.LayoutParams(0, height).apply {
             weight = 1.0f
         }
@@ -77,7 +78,6 @@ abstract class DefaultKeyboard: Keyboard {
         width: Float
     ): View {
         val inflater = LayoutInflater.from(ContextThemeWrapper(context, theme))
-        val height = context.resources.getDimensionPixelSize(R.dimen.key_height)
         val key = KbdKeyBinding.inflate(inflater)
         key.icon.setImageResource(icon)
         key.root.setOnTouchListener { view, event ->
@@ -94,7 +94,7 @@ abstract class DefaultKeyboard: Keyboard {
             view.invalidate()
             true
         }
-        key.root.layoutParams = LinearLayout.LayoutParams(0, height).apply {
+        key.root.layoutParams = LayoutParams(0, LayoutParams.MATCH_PARENT).apply {
             weight = width
         }
         return key.root

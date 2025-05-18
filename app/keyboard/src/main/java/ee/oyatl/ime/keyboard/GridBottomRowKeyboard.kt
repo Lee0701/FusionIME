@@ -7,11 +7,11 @@ import ee.oyatl.ime.keyboard.databinding.KbdKeyBinding
 import ee.oyatl.ime.keyboard.databinding.KbdRowBinding
 
 class GridBottomRowKeyboard(
-    private val extraRow: String
+    private val extraRow: List<Int>
 ): DefaultKeyboard() {
     override fun buildRows(context: Context, listener: Keyboard.Listener): List<KbdRowBinding> {
         val height = context.resources.getDimensionPixelSize(R.dimen.key_height)
-        val row = buildRow(context, listener, "", height)
+        val row = buildRow(context, listener, listOf(), height)
         row.root.addView(buildSpecialKey(
             context,
             listener,
@@ -50,7 +50,7 @@ class GridBottomRowKeyboard(
         ))
 
         extraRow.forEach { c ->
-            val key = buildKey(context, listener, c, height)
+            val key = buildKey(context, listener, c, c.toChar().toString(), height)
             row.root.addView(key.root)
         }
 
