@@ -21,6 +21,15 @@ class DefaultGridKeyboard(
             if(code == '　'.code) {
                 val spacer = buildSpacer(context, listener, 1.0f)
                 row.root.addView(spacer)
+            } else if(code == '\b'.code) {
+                row.root.addView(buildSpecialKey(
+                    context,
+                    RepeatableKeyListener(listener),
+                    Keyboard.SpecialKey.Delete,
+                    R.style.Theme_FusionIME_Keyboard_Key_Modifier,
+                    R.drawable.keyic_backspace,
+                    1.0f
+                ))
             } else {
                 val key = buildKey(context, listener, code, code.toChar().toString(), height)
                 row.root.addView(key.root)

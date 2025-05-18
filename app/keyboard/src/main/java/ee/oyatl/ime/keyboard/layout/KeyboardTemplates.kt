@@ -18,4 +18,11 @@ object KeyboardTemplates {
         "asdfghjkl-",
         "zxcvbnm"
     )
+
+    val MOBILE_WITH_SLASH: List<String> = listOf(
+        "1234567890",
+        "qwertyuiop",
+        "asdfghjkl;",
+        "zxcvbnm\'",
+    )
 }

@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.widget.LinearLayout
+import android.widget.LinearLayout.LayoutParams
 import androidx.annotation.DrawableRes
 import androidx.annotation.StyleRes
 import ee.oyatl.ime.keyboard.databinding.KbdKeyBinding
@@ -77,7 +78,6 @@ abstract class DefaultKeyboard: Keyboard {
         width: Float
     ): View {
         val inflater = LayoutInflater.from(ContextThemeWrapper(context, theme))
-        val height = context.resources.getDimensionPixelSize(R.dimen.key_height)
         val key = KbdKeyBinding.inflate(inflater)
         key.icon.setImageResource(icon)
         key.root.setOnTouchListener { view, event ->
@@ -94,7 +94,7 @@ abstract class DefaultKeyboard: Keyboard {
             view.invalidate()
             true
         }
-        key.root.layoutParams = LinearLayout.LayoutParams(0, height).apply {
+        key.root.layoutParams = LayoutParams(0, LayoutParams.MATCH_PARENT).apply {
             weight = width
         }
         return key.root

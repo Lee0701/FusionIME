@@ -10,15 +10,15 @@ class DefaultMobileKeyboard(
     override fun buildRows(context: Context, listener: Keyboard.Listener): List<KbdRowBinding> {
         val height = context.resources.getDimensionPixelSize(R.dimen.key_height) *
                 context.resources.getInteger(R.integer.standard_row_count) / rows.size
-        val row1 = buildRow(context, listener, rows[0], height)
-        val row2 = buildRow(context, listener, rows[1], height)
-        val row3 = buildRow(context, listener, rows[2], height)
+        val builtRows = rows.map { buildRow(context, listener, it, height) }
 
-        if(rows[1].size != 10) {
+        if(rows[rows.size - 2].size != 10) {
             val space = (10 - rows[1].size) / 2f
-            row2.root.addView(buildSpacer(context, listener, space), 0)
-            row2.root.addView(buildSpacer(context, listener, space))
+            builtRows[rows.size - 2].root.addView(buildSpacer(context, listener, space), 0)
+            builtRows[rows.size - 2].root.addView(buildSpacer(context, listener, space))
         }
+
+        val shiftDelWidth = if(rows.last().size == 7) 1.5f else 1.0f
 
         val shiftKey = KbdKeyBinding.bind(buildSpecialKey(
             context,
@@ -26,20 +26,20 @@ class DefaultMobileKeyboard(
             Keyboard.SpecialKey.Shift,
             R.style.Theme_FusionIME_Keyboard_Key_Modifier,
             R.drawable.keyic_shift,
-            1.5f
+            shiftDelWidth
         ))
         shiftKeys += shiftKey
-        row3.root.addView(shiftKey.root, 0)
+        builtRows.last().root.addView(shiftKey.root, 0)
 
-        row3.root.addView(buildSpecialKey(
+        builtRows.last().root.addView(buildSpecialKey(
             context,
             RepeatableKeyListener(listener),
             Keyboard.SpecialKey.Delete,
             R.style.Theme_FusionIME_Keyboard_Key_Modifier,
             R.drawable.keyic_backspace,
-            1.5f
+            shiftDelWidth
         ))
 
-        return listOf(row1, row2, row3)
+        return builtRows
     }
 }
