@@ -30,6 +30,10 @@ abstract class KoreanIMEMode(
                 convert()
                 true
             }
+            MSG_PREDICT -> {
+                predict()
+                true
+            }
             else -> false
         }
     }
@@ -60,6 +64,9 @@ abstract class KoreanIMEMode(
         )
     }
 
+    private var conversionCandidates: List<CandidateView.Candidate> = listOf()
+    private var predictionCandidates: List<CandidateView.Candidate> = listOf()
+
     protected abstract val hangulCombiner: HangulCombiner
     private val stateStack: MutableList<Combiner.State> = mutableListOf(HangulCombiner.State.Initial)
     private val currentState: HangulCombiner.State get() = stateStack.last() as HangulCombiner.State
@@ -69,6 +76,8 @@ abstract class KoreanIMEMode(
 
     override fun onReset() {
         super.onReset()
+        conversionCandidates = listOf()
+        predictionCandidates = listOf()
         wordComposer.reset()
         resetStack()
     }
@@ -84,22 +93,50 @@ abstract class KoreanIMEMode(
         resetStack()
         inputConnection.commitText(candidate.text, 1)
         inputConnection.setComposingText(wordComposer.word, 1)
+        conversionCandidates = listOf()
+        predictionCandidates = listOf()
         convert()
     }
 
-    private fun convert() {
-        val candidates = hanjaConverter.convert(wordComposer.word)
+    private fun nextCandidate() {
+        val candidate = conversionCandidates.getOrNull(0) ?: return
+        if(candidate is HanjaConverter.CompoundCandidate) {
+            val candidates = candidate.candidates
+            onCandidateSelected(candidates[0])
+        } else {
+            onCandidateSelected(candidate)
+        }
+    }
+
+    private fun predict() {
+        val candidates = hanjaConverter.predict(wordComposer.word)
         submitCandidates(candidates)
+        this.conversionCandidates = listOf()
+        this.predictionCandidates = candidates
+    }
+
+    private fun postPredict() {
+        handler.removeMessages(MSG_PREDICT)
+        handler.sendMessageDelayed(handler.obtainMessage(MSG_PREDICT), 100)
+    }
+
+    private fun convert() {
+        val candidates =
+            if(wordComposer.word.isNotEmpty()) hanjaConverter.convert(wordComposer.word)
+            else emptyList()
+        submitCandidates(candidates)
+        this.predictionCandidates = listOf()
+        this.conversionCandidates = candidates
     }
 
     private fun postConvert() {
         handler.removeMessages(MSG_CONVERT)
-        handler.sendMessageDelayed(handler.obtainMessage(MSG_CONVERT), 100)
+        handler.sendMessageDelayed(handler.obtainMessage(MSG_CONVERT), 10)
     }
 
     private fun renderInputView() {
         currentInputConnection?.setComposingText(wordComposer.word, 1)
-        postConvert()
+        postPredict()
     }
 
     override fun onChar(code: Int) {
@@ -123,12 +160,20 @@ abstract class KoreanIMEMode(
                 renderInputView()
             }
             Keyboard.SpecialKey.Space -> {
-                onReset()
-                util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_SPACE)
+                if(conversionCandidates.isEmpty() && wordComposer.word.isNotEmpty()) {
+                    postConvert()
+                } else {
+                    onReset()
+                    util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_SPACE)
+                }
             }
             Keyboard.SpecialKey.Return -> {
-                onReset()
-                util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_ENTER)
+                if(conversionCandidates.isNotEmpty()) {
+                    nextCandidate()
+                } else {
+                    onReset()
+                    util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_ENTER)
+                }
             }
             else -> {}
         }
@@ -136,5 +181,6 @@ abstract class KoreanIMEMode(
 
     companion object {
         const val MSG_CONVERT = 0
+        const val MSG_PREDICT = 1
     }
 }

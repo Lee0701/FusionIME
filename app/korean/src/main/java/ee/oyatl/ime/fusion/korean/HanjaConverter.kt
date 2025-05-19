@@ -14,15 +14,21 @@ class HanjaConverter(
     private val unigramsDict: DiskIndexDictionary = DiskIndexDictionary(context.resources.openRawResource(R.raw.unigrams))
     private val bigramsDict: DiskIndexDictionary = DiskIndexDictionary(context.resources.openRawResource(R.raw.bigrams))
 
+    fun predict(text: String): List<CandidateView.Candidate> {
+        val result = decodeConversion(convertRecursive(text, DEPTH))
+            .sortedByDescending { if(it is Candidate) it.score else 0f }
+        return result
+    }
+
     fun convert(text: String): List<CandidateView.Candidate> {
-        val hanjaResult = (1 .. text.length).map { l ->
+        val result = (1 .. text.length).map { l ->
             hanjaDict.search(text.take(l))
                 .filter { it.result.length == l }
                 .map { SingleCandidate(it.result, it.frequency.toFloat()) }
-        }.flatten().sortedByDescending { it.text.length }
-        val result = decodeConversion(convertRecursive(text, DEPTH))
-            .sortedByDescending { if(it is Candidate) it.score else 0f }
-        return (result + hanjaResult).distinctBy { it.text }
+        }.flatten()
+            .sortedByDescending { it.score }
+            .sortedByDescending { it.text.length }
+        return listOf(result.firstOrNull(), SingleCandidate(text.take(1), 0f)).filterNotNull() + result.drop(1)
     }
 
     private fun convertRecursive(text: String, depth: Int): List<List<Int>> {
