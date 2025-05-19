@@ -1,6 +1,8 @@
 package ee.oyatl.ime.fusion
 
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import android.view.KeyEvent
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.fusion.korean.HanjaConverter
@@ -21,6 +23,16 @@ abstract class KoreanIMEMode(
     context: Context,
     listener: IMEMode.Listener
 ): CommonIMEMode(listener) {
+
+    private val handler: Handler = Handler(Looper.getMainLooper()) { msg ->
+        when(msg.what) {
+            MSG_CONVERT -> {
+                convert()
+                true
+            }
+            else -> false
+        }
+    }
 
     class Hangul2SetKS(context: Context, listener: IMEMode.Listener): KoreanIMEMode(context, listener) {
         override val hangulCombiner: HangulCombiner = HangulCombiner(Hangul2Set.COMB_KS, true)
@@ -71,13 +83,22 @@ abstract class KoreanIMEMode(
         wordComposer.consume(candidate.text.length)
         resetStack()
         inputConnection.commitText(candidate.text, 1)
-        renderResult()
+        convert()
     }
 
-    private fun renderResult() {
-        currentInputConnection?.setComposingText(wordComposer.word, 1)
+    private fun convert() {
         val candidates = hanjaConverter.convert(wordComposer.word)
         submitCandidates(candidates)
+    }
+
+    private fun postConvert() {
+        handler.removeMessages(MSG_CONVERT)
+        handler.sendMessageDelayed(handler.obtainMessage(MSG_CONVERT), 100)
+    }
+
+    private fun renderInputView() {
+        currentInputConnection?.setComposingText(wordComposer.word, 1)
+        postConvert()
     }
 
     override fun onChar(code: Int) {
@@ -86,7 +107,7 @@ abstract class KoreanIMEMode(
         if(result.newState.combined.isNotEmpty()) stateStack += result.newState
         wordComposer.commit(result.textToCommit.toString())
         wordComposer.compose(currentState.combined.toString())
-        renderResult()
+        renderInputView()
     }
 
     override fun onSpecial(type: Keyboard.SpecialKey) {
@@ -98,7 +119,7 @@ abstract class KoreanIMEMode(
                 } else if(!wordComposer.delete(1)) {
                     util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_DEL)
                 }
-                renderResult()
+                renderInputView()
             }
             Keyboard.SpecialKey.Space -> {
                 onReset()
@@ -110,5 +131,9 @@ abstract class KoreanIMEMode(
             }
             else -> {}
         }
+    }
+
+    companion object {
+        const val MSG_CONVERT = 0
     }
 }
