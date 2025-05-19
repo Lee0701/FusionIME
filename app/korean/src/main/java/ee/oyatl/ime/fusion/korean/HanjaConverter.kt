@@ -18,22 +18,68 @@ class HanjaConverter(
         val hanjaResult = (1 .. text.length).map { l ->
             hanjaDict.search(text.take(l))
                 .filter { it.result.length == l }
-                .map { Candidate(it.result, it.frequency.toFloat()) }
-        }.flatten()
-        val unigramResult = (1 .. text.length).asSequence()
-            .map { l -> unigramsDict.search(text.take(l)) }
-            .flatten()
-            .map { vocabDict[it] }
-            .map { Candidate(it.result, it.frequency.toFloat()) }
-            .toList()
-        return (unigramResult + hanjaResult)
-            .sortedByDescending { it.score }
-            .distinctBy { it.text }
-            .sortedByDescending { it.text.length }
+                .map { SingleCandidate(it.result, it.frequency.toFloat()) }
+        }.flatten().sortedByDescending { it.text.length }
+        val result = decodeConversion(convertRecursive(text, DEPTH))
+            .sortedByDescending { if(it is Candidate) it.score else 0f }
+        return (result + hanjaResult).distinctBy { it.text }
     }
 
-    data class Candidate(
-        override val text: CharSequence,
+    private fun convertRecursive(text: String, depth: Int): List<List<Int>> {
+        val firsts = (1..text.length).associateWith { len -> unigramsDict.search(text.take(len)) }
+        val unigrams = firsts.values.flatten().map { listOf(it) }
+        if(depth == 0) return unigrams
+        val result = firsts.map { (off, items) ->
+            val firstsTopN = items.sortedByDescending { vocabDict[it].frequency }.take(depth)
+            val seconds = convertRecursive(text.drop(off), depth - 1)
+            val secondsTopN = seconds
+            secondsTopN.map { second ->
+                firstsTopN.map { listOf(it) + second }
+            }.flatten()
+        }.flatten()
+        return unigrams + result
+    }
+
+    private fun decodeConversion(data: List<List<Int>>): List<CandidateView.Candidate> {
+        return data
+            .map { list ->
+                val candidates = list.map { vocabDict[it] }.map { SingleCandidate(it.result, it.frequency.toFloat()) }
+                val bigramScore = getBigramScore(list)
+                CompoundCandidate(candidates, bigramScore)
+            }
+            .filter { candidate ->
+                candidate.text.length == 1 || candidate.text.length > candidate.candidates.size
+            }
+            .filter { candidate ->
+                candidate.candidates.size == 1 || candidate.bigramScore > 0f
+            }
+    }
+
+    private fun getBigramScore(list: List<Int>): Float {
+        return list.zipWithNext().sumOf { (a, b) -> bigramsDict.search(listOf(a, b)).sum() }.toFloat() / list.size
+//        return bigramsDict.search(list).sum().toFloat()
+    }
+
+    interface Candidate: CandidateView.Candidate {
         val score: Float
-    ): CandidateView.Candidate
+    }
+
+    data class SingleCandidate(
+        override val text: CharSequence,
+        override val score: Float
+    ): Candidate
+
+    data class CompoundCandidate(
+        val candidates: List<Candidate>,
+        val bigramScore: Float
+    ): Candidate {
+        override val text: CharSequence = candidates.joinToString("") { it.text }
+        private val averageScore: Float = candidates.sumOf { it.score.toDouble() }.toFloat() / candidates.size
+        override val score: Float = (averageScore + bigramScore) / 2 * text.length
+    }
+
+    companion object {
+        const val DEPTH = 3
+        const val THRESHOLD = 3
+    }
 }

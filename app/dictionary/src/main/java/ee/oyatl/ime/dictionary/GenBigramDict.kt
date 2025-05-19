@@ -5,7 +5,7 @@ import java.io.File
 
 fun main(args: Array<String>) {
     val (inDict, inUnigrams, inBigrams) = args.take(3)
-    val (outVocab, outDict, outBigrams) = args.drop(3)
+    val (outVocab, outUnigrams, outBigrams) = args.drop(3)
 
     println("load vocab...")
     val vocab = mutableListOf<DiskVocabDictionary.Entry>()
@@ -19,20 +19,21 @@ fun main(args: Array<String>) {
     val revVocab = vocab.mapIndexed { i, entry -> entry.result to i }.toMap()
 
     println("load dict...")
-    val dict = mutableMapOf<String, String>()
+    val dict = mutableMapOf<String, List<String>>()
     File(inDict).forEachLine { line ->
-        val tokens = line.split('\t')
-        if(tokens.size == 2) {
-            val (hanja, hangul) = tokens
-            dict += hanja to hangul
+        if(line.startsWith('#')) return@forEachLine
+        val tokens = line.split(':')
+        if(tokens.size == 3) {
+            val (hangul, hanja, _) = tokens
+            dict += hanja to (dict[hanja] ?: listOf()) + hangul
         }
     }
 
     println("generate unigrams...")
     val unigrams = IndexDictionary()
     revVocab.forEach { (key, index) ->
-        val hangul = dict[key]
-        if(hangul != null) unigrams.insert(hangul, index)
+        val hanguls = dict[key]
+        if(hanguls != null) hanguls.forEach { unigrams.insert(it, index) }
         else unigrams.insert(key, index)
     }
 
@@ -47,6 +48,6 @@ fun main(args: Array<String>) {
         }
     }
     DiskVocabDictionary.write(File(outVocab).outputStream(), vocab)
-    unigrams.write(DataOutputStream(File(outDict).outputStream()))
+    unigrams.write(DataOutputStream(File(outUnigrams).outputStream()))
     bigrams.write(DataOutputStream(File(outBigrams).outputStream()))
 }
