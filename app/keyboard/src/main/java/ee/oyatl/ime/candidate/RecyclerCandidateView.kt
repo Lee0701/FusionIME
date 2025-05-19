@@ -63,7 +63,7 @@ abstract class RecyclerCandidateView(
 
     class DiffCallback: DiffUtil.ItemCallback<Candidate>() {
         override fun areItemsTheSame(oldItem: Candidate, newItem: Candidate): Boolean {
-            return oldItem == newItem
+            return oldItem === newItem
         }
         override fun areContentsTheSame(oldItem: Candidate, newItem: Candidate): Boolean {
             return oldItem == newItem

@@ -26,25 +26,7 @@ class HanjaConverter(
             .map { vocabDict[it] }
             .map { Candidate(it.result, it.frequency.toFloat()) }
             .toList()
-        val bigramResult = (1 .. text.length).asSequence()
-            .map { l ->
-                val firsts = unigramsDict.search(text.take(l)).take(3)
-                val seconds = (1 .. l + 1).flatMap { l2 ->
-                    unigramsDict.search(text.drop(l).take(l2))
-                }
-                firsts.flatMap { first -> seconds.map { second -> listOf(first, second) } }
-            }
-            .flatten().map { it to bigramsDict.search(it) }
-            .filter { (_, value) -> value.isNotEmpty() }
-            .map { (key, value) -> key.map { vocabDict[it] } to value }
-            .map { (key, value) -> Candidate(
-                text = key.joinToString("") { it.result },
-                score = value[0].toFloat()
-            ) }
-            .sortedByDescending { it.score }
-            .distinct()
-            .toList()
-        return (unigramResult + bigramResult + hanjaResult)
+        return (unigramResult + hanjaResult)
             .sortedByDescending { it.score }
             .distinctBy { it.text }
             .sortedByDescending { it.text.length }
