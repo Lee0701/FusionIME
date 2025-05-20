@@ -618,7 +618,7 @@ public class KeyboardParser {
     float flickThreshold;
     Optional<String> contentDescription = Optional.absent();
     {
-      TypedArray attributes = resources.obtainAttributes(parser, R.styleable.Keyboard);
+      TypedArray attributes = resources.obtainAttributes(parser, R.styleable.MozcKeyboard);
       try {
         DisplayMetrics metrics = resources.getDisplayMetrics();
         // The default keyWidth is 10% of the display for width, and 50px for height.
@@ -636,30 +636,30 @@ public class KeyboardParser {
             metrics,
             this.keyboardWidth,
             this.keyboardHeight,
-            R.styleable.Keyboard_keyWidth,
-            R.styleable.Keyboard_keyHeight,
-            R.styleable.Keyboard_keyHorizontalLayoutWeight,
-            R.styleable.Keyboard_horizontalGap,
-            R.styleable.Keyboard_verticalGap,
-            R.styleable.Keyboard_defaultIconWidth,
-            R.styleable.Keyboard_defaultIconHeight,
-            R.styleable.Keyboard_defaultHorizontalPadding,
-            R.styleable.Keyboard_defaultVerticalPadding,
-            R.styleable.Keyboard_keyBackground);
+            R.styleable.MozcKeyboard_keyWidth,
+            R.styleable.MozcKeyboard_keyHeight,
+            R.styleable.MozcKeyboard_keyHorizontalLayoutWeight,
+            R.styleable.MozcKeyboard_horizontalGap,
+            R.styleable.MozcKeyboard_verticalGap,
+            R.styleable.MozcKeyboard_defaultIconWidth,
+            R.styleable.MozcKeyboard_defaultIconHeight,
+            R.styleable.MozcKeyboard_defaultHorizontalPadding,
+            R.styleable.MozcKeyboard_defaultVerticalPadding,
+            R.styleable.MozcKeyboard_keyBackground);
         popUpAttributes = parsePopUpAttributes(
             attributes,
             new PopUpAttributes(0, 0, 0, 0, 0),
             metrics,
             this.keyboardWidth,
-            R.styleable.Keyboard_popUpHeight,
-            R.styleable.Keyboard_popUpXOffset,
-            R.styleable.Keyboard_popUpYOffset,
-            R.styleable.Keyboard_popUpIconWidth,
-            R.styleable.Keyboard_popUpIconHeight);
+            R.styleable.MozcKeyboard_popUpHeight,
+            R.styleable.MozcKeyboard_popUpXOffset,
+            R.styleable.MozcKeyboard_popUpYOffset,
+            R.styleable.MozcKeyboard_popUpIconWidth,
+            R.styleable.MozcKeyboard_popUpIconHeight);
         flickThreshold = parseFlickThreshold(
-            attributes, R.styleable.Keyboard_flickThreshold);
+            attributes, R.styleable.MozcKeyboard_flickThreshold);
         contentDescription = Optional.fromNullable(
-            attributes.getString(R.styleable.Keyboard_keyboardContentDescription));
+            attributes.getString(R.styleable.MozcKeyboard_keyboardContentDescription));
       } finally {
         attributes.recycle();
       }

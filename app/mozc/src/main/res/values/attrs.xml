@@ -43,7 +43,7 @@
     <attr name="entries" format="reference" />
   </declare-styleable>
 
-  <declare-styleable name="Keyboard">
+  <declare-styleable name="MozcKeyboard">
     <attr name="keyboardContentDescription" format="string" />
 
     <attr name="flickThreshold" format="dimension" />
@@ -79,14 +79,14 @@
     <attr name="popUpIconHeight" format="dimension|fraction" />
   </declare-styleable>
 
-  <declare-styleable name="Row">
+  <declare-styleable name="MozcRow">
     <attr name="rowEdgeFlags">
       <flag name="top" value="4" />
       <flag name="bottom" value="8" />
     </attr>
   </declare-styleable>
 
-  <declare-styleable name="Key">
+  <declare-styleable name="MozcKey">
     <attr name="keyEdgeFlags">
       <flag name="left" value="1" />
       <flag name="right" value="2" />
