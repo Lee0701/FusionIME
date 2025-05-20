@@ -240,173 +240,173 @@ public class KeyboardParser {
 
   /** The attributes for a {@code <Row>} element. */
   private static final int[] ROW_ATTRIBUTES = {
-    R.attr.verticalGap,
-    R.attr.keyHeight,
-    R.attr.rowEdgeFlags,
+    R.attr.mozc_verticalGap,
+    R.attr.mozc_keyHeight,
+    R.attr.mozc_rowEdgeFlags,
   };
   static {
     Arrays.sort(ROW_ATTRIBUTES);
   }
   private static final int ROW_VERTICAL_GAP_INDEX =
-      Arrays.binarySearch(ROW_ATTRIBUTES, R.attr.verticalGap);
+      Arrays.binarySearch(ROW_ATTRIBUTES, R.attr.mozc_verticalGap);
   private static final int ROW_KEY_HEIGHT_INDEX =
-      Arrays.binarySearch(ROW_ATTRIBUTES, R.attr.keyHeight);
+      Arrays.binarySearch(ROW_ATTRIBUTES, R.attr.mozc_keyHeight);
   private static final int ROW_ROW_EDGE_FLAGS_INDEX =
-      Arrays.binarySearch(ROW_ATTRIBUTES, R.attr.rowEdgeFlags);
+      Arrays.binarySearch(ROW_ATTRIBUTES, R.attr.mozc_rowEdgeFlags);
 
   private static final int[] POPUP_ATTRIBUTES = {
-    R.attr.popUpIcon,
-    R.attr.popUpLongPressIcon,
-    R.attr.popUpHeight,
-    R.attr.popUpXOffset,
-    R.attr.popUpYOffset,
-    R.attr.popUpIconWidth,
-    R.attr.popUpIconHeight,
+    R.attr.mozc_popUpIcon,
+    R.attr.mozc_popUpLongPressIcon,
+    R.attr.mozc_popUpHeight,
+    R.attr.mozc_popUpXOffset,
+    R.attr.mozc_popUpYOffset,
+    R.attr.mozc_popUpIconWidth,
+    R.attr.mozc_popUpIconHeight,
   };
   static {
     Arrays.sort(POPUP_ATTRIBUTES);
   }
   private static final int POPUP_KEY_ICON_INDEX =
-      Arrays.binarySearch(POPUP_ATTRIBUTES, R.attr.popUpIcon);
+      Arrays.binarySearch(POPUP_ATTRIBUTES, R.attr.mozc_popUpIcon);
   private static final int POPUP_KEY_LONG_PRESS_ICON_INDEX =
-      Arrays.binarySearch(POPUP_ATTRIBUTES, R.attr.popUpLongPressIcon);
+      Arrays.binarySearch(POPUP_ATTRIBUTES, R.attr.mozc_popUpLongPressIcon);
   private static final int POPUP_KEY_HEIGHT_INDEX =
-      Arrays.binarySearch(POPUP_ATTRIBUTES, R.attr.popUpHeight);
+      Arrays.binarySearch(POPUP_ATTRIBUTES, R.attr.mozc_popUpHeight);
   private static final int POPUP_KEY_X_OFFSET_INDEX =
-      Arrays.binarySearch(POPUP_ATTRIBUTES, R.attr.popUpXOffset);
+      Arrays.binarySearch(POPUP_ATTRIBUTES, R.attr.mozc_popUpXOffset);
   private static final int POPUP_KEY_Y_OFFSET_INDEX =
-      Arrays.binarySearch(POPUP_ATTRIBUTES, R.attr.popUpYOffset);
+      Arrays.binarySearch(POPUP_ATTRIBUTES, R.attr.mozc_popUpYOffset);
   private static final int POPUP_KEY_ICON_WIDTH_INDEX =
-      Arrays.binarySearch(POPUP_ATTRIBUTES, R.attr.popUpIconWidth);
+      Arrays.binarySearch(POPUP_ATTRIBUTES, R.attr.mozc_popUpIconWidth);
   private static final int POPUP_KEY_ICON_HEIGHT_INDEX =
-      Arrays.binarySearch(POPUP_ATTRIBUTES, R.attr.popUpIconHeight);
+      Arrays.binarySearch(POPUP_ATTRIBUTES, R.attr.mozc_popUpIconHeight);
 
   /** Attributes for a {@code <Key>} element. */
   private static final int[] KEY_ATTRIBUTES = {
-    R.attr.keyWidth,
-    R.attr.keyHeight,
-    R.attr.keyHorizontalLayoutWeight,
-    R.attr.horizontalGap,
-    R.attr.defaultIconWidth,
-    R.attr.defaultIconHeight,
-    R.attr.defaultHorizontalPadding,
-    R.attr.defaultVerticalPadding,
-    R.attr.keyBackground,
-    R.attr.keyEdgeFlags,
-    R.attr.isRepeatable,
-    R.attr.isModifier,
+    R.attr.mozc_keyWidth,
+    R.attr.mozc_keyHeight,
+    R.attr.mozc_keyHorizontalLayoutWeight,
+    R.attr.mozc_horizontalGap,
+    R.attr.mozc_defaultIconWidth,
+    R.attr.mozc_defaultIconHeight,
+    R.attr.mozc_defaultHorizontalPadding,
+    R.attr.mozc_defaultVerticalPadding,
+    R.attr.mozc_keyBackground,
+    R.attr.mozc_keyEdgeFlags,
+    R.attr.mozc_isRepeatable,
+    R.attr.mozc_isModifier,
   };
   static {
     Arrays.sort(KEY_ATTRIBUTES);
   }
   private static final int KEY_KEY_WIDTH_INDEX =
-      Arrays.binarySearch(KEY_ATTRIBUTES, R.attr.keyWidth);
+      Arrays.binarySearch(KEY_ATTRIBUTES, R.attr.mozc_keyWidth);
   private static final int KEY_KEY_HEIGHT_INDEX =
-      Arrays.binarySearch(KEY_ATTRIBUTES, R.attr.keyHeight);
+      Arrays.binarySearch(KEY_ATTRIBUTES, R.attr.mozc_keyHeight);
   private static final int KEY_KEY_HORIZONTAL_LAYOUT_WEIGHT_INDEX =
-      Arrays.binarySearch(KEY_ATTRIBUTES, R.attr.keyHorizontalLayoutWeight);
+      Arrays.binarySearch(KEY_ATTRIBUTES, R.attr.mozc_keyHorizontalLayoutWeight);
   private static final int KEY_HORIZONTAL_GAP_INDEX =
-      Arrays.binarySearch(KEY_ATTRIBUTES, R.attr.horizontalGap);
+      Arrays.binarySearch(KEY_ATTRIBUTES, R.attr.mozc_horizontalGap);
   private static final int KEY_DEFAULT_ICON_WIDTH_INDEX =
-      Arrays.binarySearch(KEY_ATTRIBUTES, R.attr.defaultIconWidth);
+      Arrays.binarySearch(KEY_ATTRIBUTES, R.attr.mozc_defaultIconWidth);
   private static final int KEY_DEFAULT_ICON_HEIGHT_INDEX =
-      Arrays.binarySearch(KEY_ATTRIBUTES, R.attr.defaultIconHeight);
+      Arrays.binarySearch(KEY_ATTRIBUTES, R.attr.mozc_defaultIconHeight);
   private static final int KEY_DEFAULT_HORIZONTAL_PADDING_INDEX =
-      Arrays.binarySearch(KEY_ATTRIBUTES, R.attr.defaultHorizontalPadding);
+      Arrays.binarySearch(KEY_ATTRIBUTES, R.attr.mozc_defaultHorizontalPadding);
   private static final int KEY_DEFAULT_VERTICAL_PADDING_INDEX =
-      Arrays.binarySearch(KEY_ATTRIBUTES, R.attr.defaultVerticalPadding);
+      Arrays.binarySearch(KEY_ATTRIBUTES, R.attr.mozc_defaultVerticalPadding);
   private static final int KEY_KEY_BACKGROUND_INDEX =
-      Arrays.binarySearch(KEY_ATTRIBUTES, R.attr.keyBackground);
+      Arrays.binarySearch(KEY_ATTRIBUTES, R.attr.mozc_keyBackground);
   private static final int KEY_KEY_EDGE_FLAGS_INDEX =
-      Arrays.binarySearch(KEY_ATTRIBUTES, R.attr.keyEdgeFlags);
+      Arrays.binarySearch(KEY_ATTRIBUTES, R.attr.mozc_keyEdgeFlags);
   private static final int KEY_IS_REPEATABLE_INDEX =
-      Arrays.binarySearch(KEY_ATTRIBUTES, R.attr.isRepeatable);
+      Arrays.binarySearch(KEY_ATTRIBUTES, R.attr.mozc_isRepeatable);
   private static final int KEY_IS_MODIFIER_INDEX =
-      Arrays.binarySearch(KEY_ATTRIBUTES, R.attr.isModifier);
+      Arrays.binarySearch(KEY_ATTRIBUTES, R.attr.mozc_isModifier);
 
   /** Attributes for a {@code <Spacer>} element. */
   private static final int[] SPACER_ATTRIBUTES = {
-    R.attr.keyWidth,
-    R.attr.keyHeight,
-    R.attr.keyHorizontalLayoutWeight,
-    R.attr.keyEdgeFlags,
-    R.attr.stick,
-    R.attr.keyBackground,
+    R.attr.mozc_keyWidth,
+    R.attr.mozc_keyHeight,
+    R.attr.mozc_keyHorizontalLayoutWeight,
+    R.attr.mozc_keyEdgeFlags,
+    R.attr.mozc_stick,
+    R.attr.mozc_keyBackground,
   };
   static {
     Arrays.sort(SPACER_ATTRIBUTES);
   }
   private static final int SPACER_KEY_WIDTH_INDEX =
-      Arrays.binarySearch(SPACER_ATTRIBUTES, R.attr.keyWidth);
+      Arrays.binarySearch(SPACER_ATTRIBUTES, R.attr.mozc_keyWidth);
   private static final int SPACER_KEY_HEIGHT_INDEX =
-      Arrays.binarySearch(SPACER_ATTRIBUTES, R.attr.keyHeight);
+      Arrays.binarySearch(SPACER_ATTRIBUTES, R.attr.mozc_keyHeight);
   private static final int SPACER_KEY_HORIZONTAL_LAYOUT_WEIGHT_INDEX =
-      Arrays.binarySearch(SPACER_ATTRIBUTES, R.attr.keyHorizontalLayoutWeight);
+      Arrays.binarySearch(SPACER_ATTRIBUTES, R.attr.mozc_keyHorizontalLayoutWeight);
   private static final int SPACER_KEY_EDGE_FLAGS_INDEX =
-      Arrays.binarySearch(SPACER_ATTRIBUTES, R.attr.keyEdgeFlags);
+      Arrays.binarySearch(SPACER_ATTRIBUTES, R.attr.mozc_keyEdgeFlags);
   private static final int SPACER_STICK_INDEX =
-      Arrays.binarySearch(SPACER_ATTRIBUTES, R.attr.stick);
+      Arrays.binarySearch(SPACER_ATTRIBUTES, R.attr.mozc_stick);
   private static final int SPACER_KEY_BACKGROUND_INDEX =
-      Arrays.binarySearch(SPACER_ATTRIBUTES, R.attr.keyBackground);
+      Arrays.binarySearch(SPACER_ATTRIBUTES, R.attr.mozc_keyBackground);
 
   /** Attributes for a {@code <KeyState>} element. */
   private static final int[] KEY_STATE_ATTRIBUTES = {
-    R.attr.contentDescription,
-    R.attr.metaState,
-    R.attr.nextMetaState,
-    R.attr.nextRemovedMetaStates,
+    R.attr.mozc_contentDescription,
+    R.attr.mozc_metaState,
+    R.attr.mozc_nextMetaState,
+    R.attr.mozc_nextRemovedMetaStates,
   };
   static {
     Arrays.sort(KEY_STATE_ATTRIBUTES);
   }
   private static final int KEY_STATE_CONTENT_DESCRIPTION_INDEX =
-      Arrays.binarySearch(KEY_STATE_ATTRIBUTES, R.attr.contentDescription);
+      Arrays.binarySearch(KEY_STATE_ATTRIBUTES, R.attr.mozc_contentDescription);
   private static final int KEY_STATE_META_STATE_INDEX =
-      Arrays.binarySearch(KEY_STATE_ATTRIBUTES, R.attr.metaState);
+      Arrays.binarySearch(KEY_STATE_ATTRIBUTES, R.attr.mozc_metaState);
   private static final int KEY_STATE_NEXT_META_STATE_INDEX =
-      Arrays.binarySearch(KEY_STATE_ATTRIBUTES, R.attr.nextMetaState);
+      Arrays.binarySearch(KEY_STATE_ATTRIBUTES, R.attr.mozc_nextMetaState);
   private static final int KEY_STATE_NEXT_REMOVED_META_STATES_INDEX =
-      Arrays.binarySearch(KEY_STATE_ATTRIBUTES, R.attr.nextRemovedMetaStates);
+      Arrays.binarySearch(KEY_STATE_ATTRIBUTES, R.attr.mozc_nextRemovedMetaStates);
 
   /** Attributes for a {@code <KeyEntity>} element. */
   private static final int[] KEY_ENTITY_ATTRIBUTES = {
-    R.attr.sourceId,
-    R.attr.keyCode,
-    R.attr.longPressKeyCode,
-    R.attr.longPressTimeoutTrigger,
-    R.attr.keyIcon,
-    R.attr.keyCharacter,
-    R.attr.flickHighlight,
-    R.attr.horizontalPadding,
-    R.attr.verticalPadding,
-    R.attr.iconWidth,
-    R.attr.iconHeight,
+    R.attr.mozc_sourceId,
+    R.attr.mozc_keyCode,
+    R.attr.mozc_longPressKeyCode,
+    R.attr.mozc_longPressTimeoutTrigger,
+    R.attr.mozc_keyIcon,
+    R.attr.mozc_keyCharacter,
+    R.attr.mozc_flickHighlight,
+    R.attr.mozc_horizontalPadding,
+    R.attr.mozc_verticalPadding,
+    R.attr.mozc_iconWidth,
+    R.attr.mozc_iconHeight,
   };
   static {
     Arrays.sort(KEY_ENTITY_ATTRIBUTES);
   }
   private static final int KEY_ENTITY_SOURCE_ID_INDEX =
-      Arrays.binarySearch(KEY_ENTITY_ATTRIBUTES, R.attr.sourceId);
+      Arrays.binarySearch(KEY_ENTITY_ATTRIBUTES, R.attr.mozc_sourceId);
   private static final int KEY_ENTITY_KEY_CODE_INDEX =
-      Arrays.binarySearch(KEY_ENTITY_ATTRIBUTES, R.attr.keyCode);
+      Arrays.binarySearch(KEY_ENTITY_ATTRIBUTES, R.attr.mozc_keyCode);
   private static final int KEY_ENTITY_LONG_PRESS_KEY_CODE_INDEX =
-      Arrays.binarySearch(KEY_ENTITY_ATTRIBUTES, R.attr.longPressKeyCode);
+      Arrays.binarySearch(KEY_ENTITY_ATTRIBUTES, R.attr.mozc_longPressKeyCode);
   private static final int KEY_ENTITY_LONG_PRESS_TIMEOUT_TRIGGER_INDEX =
-      Arrays.binarySearch(KEY_ENTITY_ATTRIBUTES, R.attr.longPressTimeoutTrigger);
+      Arrays.binarySearch(KEY_ENTITY_ATTRIBUTES, R.attr.mozc_longPressTimeoutTrigger);
   private static final int KEY_ENTITY_KEY_ICON_INDEX =
-      Arrays.binarySearch(KEY_ENTITY_ATTRIBUTES, R.attr.keyIcon);
+      Arrays.binarySearch(KEY_ENTITY_ATTRIBUTES, R.attr.mozc_keyIcon);
   private static final int KEY_ENTITY_KEY_CHAR_INDEX =
-      Arrays.binarySearch(KEY_ENTITY_ATTRIBUTES, R.attr.keyCharacter);
+      Arrays.binarySearch(KEY_ENTITY_ATTRIBUTES, R.attr.mozc_keyCharacter);
   private static final int KEY_ENTITY_FLICK_HIGHLIGHT_INDEX =
-      Arrays.binarySearch(KEY_ENTITY_ATTRIBUTES, R.attr.flickHighlight);
+      Arrays.binarySearch(KEY_ENTITY_ATTRIBUTES, R.attr.mozc_flickHighlight);
   private static final int KEY_ENTITY_HORIZONTAL_PADDING_INDEX =
-      Arrays.binarySearch(KEY_ENTITY_ATTRIBUTES, R.attr.horizontalPadding);
+      Arrays.binarySearch(KEY_ENTITY_ATTRIBUTES, R.attr.mozc_horizontalPadding);
   private static final int KEY_ENTITY_VERTICAL_PADDING_INDEX =
-      Arrays.binarySearch(KEY_ENTITY_ATTRIBUTES, R.attr.verticalPadding);
+      Arrays.binarySearch(KEY_ENTITY_ATTRIBUTES, R.attr.mozc_verticalPadding);
   private static final int KEY_ENTITY_ICON_WIDTH_INDEX =
-      Arrays.binarySearch(KEY_ENTITY_ATTRIBUTES, R.attr.iconWidth);
+      Arrays.binarySearch(KEY_ENTITY_ATTRIBUTES, R.attr.mozc_iconWidth);
   private static final int KEY_ENTITY_ICON_HEIGHT_INDEX =
-      Arrays.binarySearch(KEY_ENTITY_ATTRIBUTES, R.attr.iconHeight);
+      Arrays.binarySearch(KEY_ENTITY_ATTRIBUTES, R.attr.mozc_iconHeight);
 
   /**
    * Mapping table from enum value in xml to DrawableType by using the enum value as index.
@@ -636,30 +636,30 @@ public class KeyboardParser {
             metrics,
             this.keyboardWidth,
             this.keyboardHeight,
-            R.styleable.MozcKeyboard_keyWidth,
-            R.styleable.MozcKeyboard_keyHeight,
-            R.styleable.MozcKeyboard_keyHorizontalLayoutWeight,
-            R.styleable.MozcKeyboard_horizontalGap,
-            R.styleable.MozcKeyboard_verticalGap,
-            R.styleable.MozcKeyboard_defaultIconWidth,
-            R.styleable.MozcKeyboard_defaultIconHeight,
-            R.styleable.MozcKeyboard_defaultHorizontalPadding,
-            R.styleable.MozcKeyboard_defaultVerticalPadding,
-            R.styleable.MozcKeyboard_keyBackground);
+            R.styleable.MozcKeyboard_mozc_keyWidth,
+            R.styleable.MozcKeyboard_mozc_keyHeight,
+            R.styleable.MozcKeyboard_mozc_keyHorizontalLayoutWeight,
+            R.styleable.MozcKeyboard_mozc_horizontalGap,
+            R.styleable.MozcKeyboard_mozc_verticalGap,
+            R.styleable.MozcKeyboard_mozc_defaultIconWidth,
+            R.styleable.MozcKeyboard_mozc_defaultIconHeight,
+            R.styleable.MozcKeyboard_mozc_defaultHorizontalPadding,
+            R.styleable.MozcKeyboard_mozc_defaultVerticalPadding,
+            R.styleable.MozcKeyboard_mozc_keyBackground);
         popUpAttributes = parsePopUpAttributes(
             attributes,
             new PopUpAttributes(0, 0, 0, 0, 0),
             metrics,
             this.keyboardWidth,
-            R.styleable.MozcKeyboard_popUpHeight,
-            R.styleable.MozcKeyboard_popUpXOffset,
-            R.styleable.MozcKeyboard_popUpYOffset,
-            R.styleable.MozcKeyboard_popUpIconWidth,
-            R.styleable.MozcKeyboard_popUpIconHeight);
+            R.styleable.MozcKeyboard_mozc_popUpHeight,
+            R.styleable.MozcKeyboard_mozc_popUpXOffset,
+            R.styleable.MozcKeyboard_mozc_popUpYOffset,
+            R.styleable.MozcKeyboard_mozc_popUpIconWidth,
+            R.styleable.MozcKeyboard_mozc_popUpIconHeight);
         flickThreshold = parseFlickThreshold(
-            attributes, R.styleable.MozcKeyboard_flickThreshold);
+            attributes, R.styleable.MozcKeyboard_mozc_flickThreshold);
         contentDescription = Optional.fromNullable(
-            attributes.getString(R.styleable.MozcKeyboard_keyboardContentDescription));
+            attributes.getString(R.styleable.MozcKeyboard_mozc_keyboardContentDescription));
       } finally {
         attributes.recycle();
       }
@@ -942,9 +942,9 @@ public class KeyboardParser {
 
     Flick.Direction direction;
     {
-      TypedArray attributes = resources.obtainAttributes(parser, R.styleable.Flick);
+      TypedArray attributes = resources.obtainAttributes(parser, R.styleable.MozcFlick);
       try {
-        direction = parseFlickDirection(attributes, R.styleable.Flick_direction);
+        direction = parseFlickDirection(attributes, R.styleable.MozcFlick_mozc_direction);
       } finally {
         attributes.recycle();
       }

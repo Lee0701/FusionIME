@@ -94,7 +94,7 @@ public class SkinParser {
 
   private static final int[] DIMENSION_ATTRIBUTES = {
     android.R.attr.name,
-    R.attr.dimension,
+    R.attr.mozc_dimension,
   };
   static {
     Arrays.sort(DIMENSION_ATTRIBUTES);
@@ -102,7 +102,7 @@ public class SkinParser {
   private static final int DIMENSION_KEY_NAME_INDEX =
       Arrays.binarySearch(DIMENSION_ATTRIBUTES, android.R.attr.name);
   private static final int DIMENSION_KEY_DIMENSION_INDEX =
-      Arrays.binarySearch(DIMENSION_ATTRIBUTES, R.attr.dimension);
+      Arrays.binarySearch(DIMENSION_ATTRIBUTES, R.attr.mozc_dimension);
 
   public SkinParser(Resources resources, XmlResourceParser parser) {
     this.resources = Preconditions.checkNotNull(resources);
