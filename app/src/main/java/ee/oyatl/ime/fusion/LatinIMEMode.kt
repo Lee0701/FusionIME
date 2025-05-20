@@ -70,6 +70,7 @@ class LatinIMEMode(
     override fun onReset() {
         super.onReset()
         wordComposer.reset()
+        lastComposedWord = LastComposedWord.NOT_A_COMPOSED_WORD
     }
 
     override fun onCandidateSelected(candidate: CandidateView.Candidate) {
@@ -96,13 +97,19 @@ class LatinIMEMode(
     }
 
     private fun updateSuggestions() {
+        val ngramContext =
+            if(lastComposedWord == LastComposedWord.NOT_A_COMPOSED_WORD) NgramContext.BEGINNING_OF_SENTENCE
+            else NgramContext(NgramContext.WordInfo(lastComposedWord.mCommittedWord))
+        val inputStyle =
+            if(wordComposer.isComposingWord) SuggestedWords.INPUT_STYLE_TYPING
+            else SuggestedWords.INPUT_STYLE_PREDICTION
         suggest.getSuggestedWords(
             wordComposer,
-            NgramContext.EMPTY_PREV_WORDS_INFO,
+            ngramContext,
             dummyKeyboard,
             SettingsValuesForSuggestion(true),
-            false,
-            SuggestedWords.INPUT_STYLE_TYPING,
+            true,
+            inputStyle,
             SuggestedWords.NOT_A_SEQUENCE_NUMBER,
             this
         )
@@ -126,8 +133,12 @@ class LatinIMEMode(
             SpecialKey.Delete -> {
                 val event = Event.createSoftwareKeypressEvent(Event.NOT_A_CODE_POINT, Constants.CODE_DELETE, 0, 0, false)
                 val processedEvent = wordComposer.processEvent(event)
-                if(wordComposer.isComposingWord) wordComposer.applyProcessedEvent(processedEvent)
-                else util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_DEL)
+                if(wordComposer.isComposingWord) {
+                    wordComposer.applyProcessedEvent(processedEvent)
+                } else {
+                    onReset()
+                    util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_DEL)
+                }
                 updateSuggestions()
             }
             SpecialKey.Space -> {
