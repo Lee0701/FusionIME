@@ -377,49 +377,49 @@
 
     <Dimension
         android:name="twelvekeysLeftOffsetDimension"
-        mozc:dimension="0dip" />
+        mozc:mozc_dimension="0dip" />
     <Dimension
         android:name="twelvekeysTopOffsetDimension"
-        mozc:dimension="0dip" />
+        mozc:mozc_dimension="0dip" />
     <Dimension
         android:name="twelvekeysRightOffsetDimension"
-        mozc:dimension="0dip" />
+        mozc:mozc_dimension="0dip" />
     <Dimension
         android:name="twelvekeysBottomOffsetDimension"
-        mozc:dimension="0dip" />
+        mozc:mozc_dimension="0dip" />
     <Dimension
         android:name="qwertyLeftOffsetDimension"
-        mozc:dimension="0dip" />
+        mozc:mozc_dimension="0dip" />
     <Dimension
         android:name="qwertyTopOffsetDimension"
-        mozc:dimension="0dip" />
+        mozc:mozc_dimension="0dip" />
     <Dimension
         android:name="qwertyRightOffsetDimension"
-        mozc:dimension="0dip" />
+        mozc:mozc_dimension="0dip" />
     <Dimension
         android:name="qwertyBottomOffsetDimension"
-        mozc:dimension="0dip" />
+        mozc:mozc_dimension="0dip" />
     <Dimension
         android:name="qwertyRoundRadiusDimension"
-        mozc:dimension="2dip" />
+        mozc:mozc_dimension="2dip" />
     <Dimension
         android:name="qwertySpaceKeyHeightDimension"
-        mozc:dimension="24dip" />
+        mozc:mozc_dimension="24dip" />
     <Dimension
         android:name="qwertySpaceKeyHorizontalOffsetDimension"
-        mozc:dimension="5dip" />
+        mozc:mozc_dimension="5dip" />
     <Dimension
         android:name="qwertySpaceKeyRoundRadiusDimension"
-        mozc:dimension="4dip" />
+        mozc:mozc_dimension="4dip" />
     <Dimension
         android:name="symbolMajorButtonRoundDimension"
-        mozc:dimension="0dip" />
+        mozc:mozc_dimension="0dip" />
     <Dimension
         android:name="symbolMajorButtonPaddingDimension"
-        mozc:dimension="0dip" />
+        mozc:mozc_dimension="0dip" />
     <Dimension
         android:name="symbolMinorIndicatorHeightDimension"
-        mozc:dimension="2dip" />
+        mozc:mozc_dimension="2dip" />
 
     <Drawable android:name="buttonFrameBackgroundDrawable" >
         <color android:color="#FFE4E7E9" />

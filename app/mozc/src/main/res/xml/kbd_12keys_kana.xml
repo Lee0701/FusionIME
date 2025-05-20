@@ -31,388 +31,388 @@
 -->
 <Keyboard
     xmlns:mozc="http://schemas.android.com/apk/res-auto"
-    mozc:keyboardContentDescription="@string/cd_keyboard_kana"
-    mozc:keyBackground="twelvekeysRegular"
-    mozc:keyWidth="17.3%p" mozc:keyHeight="25%p" mozc:keyHorizontalLayoutWeight="1"
-    mozc:horizontalGap="0dip" mozc:verticalGap="0dip"
-    mozc:popUpHeight="@dimen/key_preview_height"
-    mozc:popUpIconHeight="@dimen/key_preview_icon_height"
-    mozc:popUpXOffset="0dip" mozc:popUpYOffset="@dimen/mini_keyboard_vertical_correction"
-    mozc:defaultIconWidth="@dimen/unlimited" mozc:defaultIconHeight="@dimen/keyboard_twelvekeys_default_height">
+    mozc:mozc_keyboardContentDescription="@string/cd_keyboard_kana"
+    mozc:mozc_keyBackground="twelvekeysRegular"
+    mozc:mozc_keyWidth="17.3%p" mozc:mozc_keyHeight="25%p" mozc:mozc_keyHorizontalLayoutWeight="1"
+    mozc:mozc_horizontalGap="0dip" mozc:mozc_verticalGap="0dip"
+    mozc:mozc_popUpHeight="@dimen/key_preview_height"
+    mozc:mozc_popUpIconHeight="@dimen/key_preview_icon_height"
+    mozc:mozc_popUpXOffset="0dip" mozc:mozc_popUpYOffset="@dimen/mini_keyboard_vertical_correction"
+    mozc:mozc_defaultIconWidth="@dimen/unlimited" mozc:mozc_defaultIconHeight="@dimen/keyboard_twelvekeys_default_height">
   <Row>
-    <Key mozc:keyBackground="twelvekeysFunction"
-         mozc:keyHorizontalLayoutWeight="0" mozc:keyEdgeFlags="left">
-      <KeyState mozc:contentDescription="@string/cd_key_undo">
+    <Key mozc:mozc_keyBackground="twelvekeysFunction"
+         mozc:mozc_keyHorizontalLayoutWeight="0" mozc:mozc_keyEdgeFlags="left">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_undo">
         <Flick>
-          <KeyEntity mozc:sourceId="1"
-                     mozc:keyCode="@integer/key_undo"
-                     mozc:keyIcon="@raw/twelvekeys__function__undo__icon"
-                     mozc:iconWidth="@dimen/unlimited"
-                     mozc:iconHeight="@dimen/default_function_icon_height" />
+          <KeyEntity mozc:mozc_sourceId="1"
+                     mozc:mozc_keyCode="@integer/key_undo"
+                     mozc:mozc_keyIcon="@raw/twelvekeys__function__undo__icon"
+                     mozc:mozc_iconWidth="@dimen/unlimited"
+                     mozc:mozc_iconHeight="@dimen/default_function_icon_height" />
         </Flick>
       </KeyState>
     </Key>
-    <Spacer mozc:keyWidth="@dimen/keyboard_separator_width" mozc:keyHorizontalLayoutWeight="0"
-            mozc:keyBackground="keyboardSeparatorTop"/>
+    <Spacer mozc:mozc_keyWidth="@dimen/keyboard_separator_width" mozc:mozc_keyHorizontalLayoutWeight="0"
+            mozc:mozc_keyBackground="keyboardSeparatorTop"/>
     <Key>
-      <KeyState mozc:contentDescription="@string/cd_key_kana_line_a">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_kana_line_a">
         <Flick>
-          <KeyEntity mozc:sourceId="2"
-                     mozc:keyCode="@integer/uchar_digit_one"
-                     mozc:keyIcon="@raw/twelvekeys__kana__keyicon__a">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__popup__a" />
+          <KeyEntity mozc:mozc_sourceId="2"
+                     mozc:mozc_keyCode="@integer/uchar_digit_one"
+                     mozc:mozc_keyIcon="@raw/twelvekeys__kana__keyicon__a">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__popup__a" />
           </KeyEntity>
         </Flick>
       </KeyState>
     </Key>
     <Key>
-      <KeyState mozc:contentDescription="@string/cd_key_kana_line_ka">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_kana_line_ka">
         <Flick>
-          <KeyEntity mozc:sourceId="3"
-                     mozc:keyCode="@integer/uchar_digit_two"
-                     mozc:keyIcon="@raw/twelvekeys__kana__keyicon__ka">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__popup__ka" />
+          <KeyEntity mozc:mozc_sourceId="3"
+                     mozc:mozc_keyCode="@integer/uchar_digit_two"
+                     mozc:mozc_keyIcon="@raw/twelvekeys__kana__keyicon__ka">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__popup__ka" />
           </KeyEntity>
         </Flick>
       </KeyState>
     </Key>
     <Key>
-      <KeyState mozc:contentDescription="@string/cd_key_kana_line_sa">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_kana_line_sa">
         <Flick>
-          <KeyEntity mozc:sourceId="4"
-                     mozc:keyCode="@integer/uchar_digit_three"
-                     mozc:keyIcon="@raw/twelvekeys__kana__keyicon__sa">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__popup__sa" />
+          <KeyEntity mozc:mozc_sourceId="4"
+                     mozc:mozc_keyCode="@integer/uchar_digit_three"
+                     mozc:mozc_keyIcon="@raw/twelvekeys__kana__keyicon__sa">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__popup__sa" />
           </KeyEntity>
         </Flick>
       </KeyState>
     </Key>
-    <Spacer mozc:keyWidth="@dimen/keyboard_separator_width" mozc:keyHorizontalLayoutWeight="0"
-            mozc:keyBackground="keyboardSeparatorTop"/>
-    <Key mozc:keyBackground="twelvekeysFunction"
-         mozc:keyHorizontalLayoutWeight="0" mozc:keyEdgeFlags="right" mozc:isRepeatable="true">
-      <KeyState mozc:contentDescription="@string/cd_key_uchar_backspace">
+    <Spacer mozc:mozc_keyWidth="@dimen/keyboard_separator_width" mozc:mozc_keyHorizontalLayoutWeight="0"
+            mozc:mozc_keyBackground="keyboardSeparatorTop"/>
+    <Key mozc:mozc_keyBackground="twelvekeysFunction"
+         mozc:mozc_keyHorizontalLayoutWeight="0" mozc:mozc_keyEdgeFlags="right" mozc:mozc_isRepeatable="true">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_uchar_backspace">
         <Flick>
-          <KeyEntity mozc:sourceId="5"
-                     mozc:keyCode="@integer/uchar_backspace"
-                     mozc:keyIcon="@raw/twelvekeys__function__delete__icon"
-                     mozc:iconWidth="@dimen/unlimited"
-                     mozc:iconHeight="@dimen/default_function_icon_height" />
+          <KeyEntity mozc:mozc_sourceId="5"
+                     mozc:mozc_keyCode="@integer/uchar_backspace"
+                     mozc:mozc_keyIcon="@raw/twelvekeys__function__delete__icon"
+                     mozc:mozc_iconWidth="@dimen/unlimited"
+                     mozc:mozc_iconHeight="@dimen/default_function_icon_height" />
         </Flick>
       </KeyState>
     </Key>
   </Row>
   <Row>
-    <Key mozc:keyBackground="twelvekeysFunction"
-         mozc:keyHorizontalLayoutWeight="0" mozc:keyEdgeFlags="left" mozc:isRepeatable="true">
-      <KeyState mozc:contentDescription="@string/cd_key_left">
+    <Key mozc:mozc_keyBackground="twelvekeysFunction"
+         mozc:mozc_keyHorizontalLayoutWeight="0" mozc:mozc_keyEdgeFlags="left" mozc:mozc_isRepeatable="true">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_left">
         <Flick>
-          <KeyEntity mozc:sourceId="6"
-                     mozc:keyCode="@integer/key_left"
-                     mozc:keyIcon="@raw/twelvekeys__function__left_arrow__icon"
-                     mozc:iconWidth="@dimen/unlimited"
-                     mozc:iconHeight="@dimen/default_function_icon_height" />
+          <KeyEntity mozc:mozc_sourceId="6"
+                     mozc:mozc_keyCode="@integer/key_left"
+                     mozc:mozc_keyIcon="@raw/twelvekeys__function__left_arrow__icon"
+                     mozc:mozc_iconWidth="@dimen/unlimited"
+                     mozc:mozc_iconHeight="@dimen/default_function_icon_height" />
         </Flick>
       </KeyState>
     </Key>
-    <Spacer mozc:keyWidth="@dimen/keyboard_separator_width" mozc:keyHorizontalLayoutWeight="0"
-            mozc:keyBackground="keyboardSeparatorCenter"/>
+    <Spacer mozc:mozc_keyWidth="@dimen/keyboard_separator_width" mozc:mozc_keyHorizontalLayoutWeight="0"
+            mozc:mozc_keyBackground="keyboardSeparatorCenter"/>
     <Key>
-      <KeyState mozc:contentDescription="@string/cd_key_kana_line_ta">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_kana_line_ta">
         <Flick>
-          <KeyEntity mozc:sourceId="7"
-                     mozc:keyCode="@integer/uchar_digit_four"
-                     mozc:keyIcon="@raw/twelvekeys__kana__keyicon__ta">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__popup__ta" />
+          <KeyEntity mozc:mozc_sourceId="7"
+                     mozc:mozc_keyCode="@integer/uchar_digit_four"
+                     mozc:mozc_keyIcon="@raw/twelvekeys__kana__keyicon__ta">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__popup__ta" />
           </KeyEntity>
         </Flick>
       </KeyState>
     </Key>
     <Key>
-      <KeyState mozc:contentDescription="@string/cd_key_kana_line_na">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_kana_line_na">
         <Flick>
-          <KeyEntity mozc:sourceId="8"
-                     mozc:keyCode="@integer/uchar_digit_five"
-                     mozc:keyIcon="@raw/twelvekeys__kana__keyicon__na">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__popup__na" />
+          <KeyEntity mozc:mozc_sourceId="8"
+                     mozc:mozc_keyCode="@integer/uchar_digit_five"
+                     mozc:mozc_keyIcon="@raw/twelvekeys__kana__keyicon__na">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__popup__na" />
           </KeyEntity>
         </Flick>
       </KeyState>
     </Key>
     <Key>
-      <KeyState mozc:contentDescription="@string/cd_key_kana_line_ha">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_kana_line_ha">
         <Flick>
-          <KeyEntity mozc:sourceId="9"
-                     mozc:keyCode="@integer/uchar_digit_six"
-                     mozc:keyIcon="@raw/twelvekeys__kana__keyicon__ha">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__popup__ha" />
+          <KeyEntity mozc:mozc_sourceId="9"
+                     mozc:mozc_keyCode="@integer/uchar_digit_six"
+                     mozc:mozc_keyIcon="@raw/twelvekeys__kana__keyicon__ha">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__popup__ha" />
           </KeyEntity>
         </Flick>
       </KeyState>
     </Key>
-    <Spacer mozc:keyWidth="@dimen/keyboard_separator_width" mozc:keyHorizontalLayoutWeight="0"
-            mozc:keyBackground="keyboardSeparatorCenter"/>
-    <Key mozc:keyBackground="twelvekeysFunction"
-         mozc:keyHorizontalLayoutWeight="0" mozc:keyEdgeFlags="right" mozc:isRepeatable="true">
-      <KeyState mozc:contentDescription="@string/cd_key_right">
+    <Spacer mozc:mozc_keyWidth="@dimen/keyboard_separator_width" mozc:mozc_keyHorizontalLayoutWeight="0"
+            mozc:mozc_keyBackground="keyboardSeparatorCenter"/>
+    <Key mozc:mozc_keyBackground="twelvekeysFunction"
+         mozc:mozc_keyHorizontalLayoutWeight="0" mozc:mozc_keyEdgeFlags="right" mozc:mozc_isRepeatable="true">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_right">
         <Flick>
-          <KeyEntity mozc:sourceId="10"
-                     mozc:keyCode="@integer/key_right"
-                     mozc:keyIcon="@raw/twelvekeys__function__right_arrow__icon"
-                     mozc:iconWidth="@dimen/unlimited"
-                     mozc:iconHeight="@dimen/default_function_icon_height" />
+          <KeyEntity mozc:mozc_sourceId="10"
+                     mozc:mozc_keyCode="@integer/key_right"
+                     mozc:mozc_keyIcon="@raw/twelvekeys__function__right_arrow__icon"
+                     mozc:mozc_iconWidth="@dimen/unlimited"
+                     mozc:mozc_iconHeight="@dimen/default_function_icon_height" />
         </Flick>
       </KeyState>
     </Key>
   </Row>
   <Row>
-    <Key mozc:keyBackground="twelvekeysFunction"
-         mozc:keyHorizontalLayoutWeight="0" mozc:keyEdgeFlags="left">
-      <KeyState mozc:contentDescription="@string/cd_key_symbol">
+    <Key mozc:mozc_keyBackground="twelvekeysFunction"
+         mozc:mozc_keyHorizontalLayoutWeight="0" mozc:mozc_keyEdgeFlags="left">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_symbol">
         <Flick>
-          <KeyEntity mozc:sourceId="11"
-                     mozc:keyCode="@integer/key_symbol"
-                     mozc:keyIcon="@raw/twelvekeys__function__symbol__icon"
-                     mozc:iconWidth="@dimen/unlimited"
-                     mozc:iconHeight="@dimen/default_function_icon_height" />
+          <KeyEntity mozc:mozc_sourceId="11"
+                     mozc:mozc_keyCode="@integer/key_symbol"
+                     mozc:mozc_keyIcon="@raw/twelvekeys__function__symbol__icon"
+                     mozc:mozc_iconWidth="@dimen/unlimited"
+                     mozc:mozc_iconHeight="@dimen/default_function_icon_height" />
         </Flick>
       </KeyState>
-      <KeyState mozc:contentDescription="@string/cd_key_symbol" mozc:metaState="handling_touch_event">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_symbol" mozc:mozc_metaState="handling_touch_event">
         <Flick>
-          <KeyEntity mozc:sourceId="30"
-                     mozc:keyIcon="@raw/twelvekeys__function__symbol__icon"
-                     mozc:iconWidth="@dimen/unlimited"
-                     mozc:iconHeight="@dimen/default_function_icon_height" />
+          <KeyEntity mozc:mozc_sourceId="30"
+                     mozc:mozc_keyIcon="@raw/twelvekeys__function__symbol__icon"
+                     mozc:mozc_iconWidth="@dimen/unlimited"
+                     mozc:mozc_iconHeight="@dimen/default_function_icon_height" />
         </Flick>
       </KeyState>
     </Key>
-    <Spacer mozc:keyWidth="@dimen/keyboard_separator_width" mozc:keyHorizontalLayoutWeight="0"
-            mozc:keyBackground="keyboardSeparatorCenter"/>
+    <Spacer mozc:mozc_keyWidth="@dimen/keyboard_separator_width" mozc:mozc_keyHorizontalLayoutWeight="0"
+            mozc:mozc_keyBackground="keyboardSeparatorCenter"/>
     <Key>
-      <KeyState mozc:contentDescription="@string/cd_key_kana_line_ma">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_kana_line_ma">
         <Flick>
-          <KeyEntity mozc:sourceId="12"
-                     mozc:keyCode="@integer/uchar_digit_seven"
-                     mozc:keyIcon="@raw/twelvekeys__kana__keyicon__ma">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__popup__ma" />
+          <KeyEntity mozc:mozc_sourceId="12"
+                     mozc:mozc_keyCode="@integer/uchar_digit_seven"
+                     mozc:mozc_keyIcon="@raw/twelvekeys__kana__keyicon__ma">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__popup__ma" />
           </KeyEntity>
         </Flick>
       </KeyState>
     </Key>
     <Key>
-      <KeyState mozc:contentDescription="@string/cd_key_kana_line_ya">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_kana_line_ya">
         <Flick>
-          <KeyEntity mozc:sourceId="13"
-                     mozc:keyCode="@integer/uchar_digit_eight"
-                     mozc:keyIcon="@raw/twelvekeys__kana__keyicon__ya">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__popup__ya" />
+          <KeyEntity mozc:mozc_sourceId="13"
+                     mozc:mozc_keyCode="@integer/uchar_digit_eight"
+                     mozc:mozc_keyIcon="@raw/twelvekeys__kana__keyicon__ya">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__popup__ya" />
           </KeyEntity>
         </Flick>
       </KeyState>
     </Key>
     <Key>
-      <KeyState mozc:contentDescription="@string/cd_key_kana_line_ra">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_kana_line_ra">
         <Flick>
-          <KeyEntity mozc:sourceId="14"
-                     mozc:keyCode="@integer/uchar_digit_nine"
-                     mozc:keyIcon="@raw/twelvekeys__kana__keyicon__ra">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__popup__ra" />
+          <KeyEntity mozc:mozc_sourceId="14"
+                     mozc:mozc_keyCode="@integer/uchar_digit_nine"
+                     mozc:mozc_keyIcon="@raw/twelvekeys__kana__keyicon__ra">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__popup__ra" />
           </KeyEntity>
         </Flick>
       </KeyState>
     </Key>
-    <Spacer mozc:keyWidth="@dimen/keyboard_separator_width" mozc:keyHorizontalLayoutWeight="0"
-            mozc:keyBackground="keyboardSeparatorCenter"/>
-    <Key mozc:keyBackground="twelvekeysFunctionWithThreeDots"
-         mozc:keyHorizontalLayoutWeight="0" mozc:keyEdgeFlags="right">
-      <KeyState mozc:contentDescription="@string/cd_key_uchar_space">
+    <Spacer mozc:mozc_keyWidth="@dimen/keyboard_separator_width" mozc:mozc_keyHorizontalLayoutWeight="0"
+            mozc:mozc_keyBackground="keyboardSeparatorCenter"/>
+    <Key mozc:mozc_keyBackground="twelvekeysFunctionWithThreeDots"
+         mozc:mozc_keyHorizontalLayoutWeight="0" mozc:mozc_keyEdgeFlags="right">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_uchar_space">
         <Flick>
-          <KeyEntity mozc:sourceId="15"
-                     mozc:keyCode="@integer/uchar_space"
-                     mozc:longPressKeyCode="@integer/key_ime_picker_dialog"
-                     mozc:keyIcon="@raw/twelvekeys__function__space__icon"
-                     mozc:iconWidth="@dimen/unlimited"
-                     mozc:iconHeight="@dimen/default_function_icon_height" />
+          <KeyEntity mozc:mozc_sourceId="15"
+                     mozc:mozc_keyCode="@integer/uchar_space"
+                     mozc:mozc_longPressKeyCode="@integer/key_ime_picker_dialog"
+                     mozc:mozc_keyIcon="@raw/twelvekeys__function__space__icon"
+                     mozc:mozc_iconWidth="@dimen/unlimited"
+                     mozc:mozc_iconHeight="@dimen/default_function_icon_height" />
         </Flick>
       </KeyState>
     </Key>
   </Row>
   <Row>
-    <Key mozc:keyBackground="twelvekeysFunctionWithThreeDots"
-         mozc:keyHorizontalLayoutWeight="0" mozc:keyEdgeFlags="left">
-      <KeyState mozc:contentDescription="@string/cd_key_chartype_to_abc">
+    <Key mozc:mozc_keyBackground="twelvekeysFunctionWithThreeDots"
+         mozc:mozc_keyHorizontalLayoutWeight="0" mozc:mozc_keyEdgeFlags="left">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_chartype_to_abc">
         <Flick>
-          <KeyEntity mozc:sourceId="16"
-                     mozc:keyCode="@integer/key_chartype_to_abc"
-                     mozc:longPressKeyCode="@integer/key_menu_dialog"
-                     mozc:keyIcon="@raw/twelvekeys__function__kana__icon"
-                     mozc:iconWidth="@dimen/unlimited"
-                     mozc:iconHeight="@dimen/default_function_icon_height" />
+          <KeyEntity mozc:mozc_sourceId="16"
+                     mozc:mozc_keyCode="@integer/key_chartype_to_abc"
+                     mozc:mozc_longPressKeyCode="@integer/key_menu_dialog"
+                     mozc:mozc_keyIcon="@raw/twelvekeys__function__kana__icon"
+                     mozc:mozc_iconWidth="@dimen/unlimited"
+                     mozc:mozc_iconHeight="@dimen/default_function_icon_height" />
         </Flick>
       </KeyState>
     </Key>
-    <Spacer mozc:keyWidth="@dimen/keyboard_separator_width" mozc:keyHorizontalLayoutWeight="0"
-            mozc:keyBackground="keyboardSeparatorBottom"/>
+    <Spacer mozc:mozc_keyWidth="@dimen/keyboard_separator_width" mozc:mozc_keyHorizontalLayoutWeight="0"
+            mozc:mozc_keyBackground="keyboardSeparatorBottom"/>
     <Key>
-      <KeyState mozc:contentDescription="@string/cd_key_kana_modifier" mozc:metaState="fallback|composing|no_globe">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_kana_modifier" mozc:mozc_metaState="fallback|composing|no_globe">
         <Flick>
-          <KeyEntity mozc:sourceId="17"
-                     mozc:keyCode="@integer/uchar_asterisk"
-                     mozc:keyIcon="@raw/twelvekeys__kana__10">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__kana__popup__10" />
+          <KeyEntity mozc:mozc_sourceId="17"
+                     mozc:mozc_keyCode="@integer/uchar_asterisk"
+                     mozc:mozc_keyIcon="@raw/twelvekeys__kana__10">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__kana__popup__10" />
           </KeyEntity>
         </Flick>
       </KeyState>
-      <KeyState mozc:contentDescription="@string/cd_key_kana_modifier" mozc:metaState="handling_touch_event" >
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_kana_modifier" mozc:mozc_metaState="handling_touch_event" >
         <Flick>
-          <KeyEntity mozc:sourceId="29"
-                     mozc:keyCode="@integer/uchar_asterisk"
-                     mozc:keyIcon="@raw/globe_keyicon"
-                     mozc:iconWidth="@dimen/unlimited"
-                     mozc:iconHeight="@dimen/default_function_icon_height">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__kana__popup__10" />
+          <KeyEntity mozc:mozc_sourceId="29"
+                     mozc:mozc_keyCode="@integer/uchar_asterisk"
+                     mozc:mozc_keyIcon="@raw/globe_keyicon"
+                     mozc:mozc_iconWidth="@dimen/unlimited"
+                     mozc:mozc_iconHeight="@dimen/default_function_icon_height">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__kana__popup__10" />
           </KeyEntity>
         </Flick>
       </KeyState>
-      <KeyState mozc:contentDescription="@string/cd_key_globe" mozc:metaState="globe" >
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_globe" mozc:mozc_metaState="globe" >
         <Flick>
-          <KeyEntity mozc:sourceId="28"
-                     mozc:keyCode="@integer/key_globe"
-                     mozc:keyIcon="@raw/globe_keyicon"
-                     mozc:iconWidth="@dimen/unlimited"
-                     mozc:iconHeight="@dimen/default_function_icon_height"
-                     mozc:longPressKeyCode="@integer/key_ime_picker_dialog" />
-        </Flick>
-      </KeyState>
-    </Key>
-    <Key>
-      <KeyState mozc:contentDescription="@string/cd_key_kana_line_wa">
-        <Flick>
-          <KeyEntity mozc:sourceId="18"
-                     mozc:keyCode="@integer/uchar_digit_zero"
-                     mozc:keyIcon="@raw/twelvekeys__kana__keyicon__wa">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__popup__wa" />
-          </KeyEntity>
+          <KeyEntity mozc:mozc_sourceId="28"
+                     mozc:mozc_keyCode="@integer/key_globe"
+                     mozc:mozc_keyIcon="@raw/globe_keyicon"
+                     mozc:mozc_iconWidth="@dimen/unlimited"
+                     mozc:mozc_iconHeight="@dimen/default_function_icon_height"
+                     mozc:mozc_longPressKeyCode="@integer/key_ime_picker_dialog" />
         </Flick>
       </KeyState>
     </Key>
     <Key>
-      <KeyState mozc:contentDescription="@string/cd_key_kana_punctuation">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_kana_line_wa">
         <Flick>
-          <KeyEntity mozc:sourceId="19"
-                     mozc:keyCode="@integer/uchar_number_sign"
-                     mozc:keyIcon="@raw/twelvekeys__kana__simple__12">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__kana__simple__12" />
+          <KeyEntity mozc:mozc_sourceId="18"
+                     mozc:mozc_keyCode="@integer/uchar_digit_zero"
+                     mozc:mozc_keyIcon="@raw/twelvekeys__kana__keyicon__wa">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__popup__wa" />
           </KeyEntity>
         </Flick>
       </KeyState>
     </Key>
-    <Spacer mozc:keyWidth="@dimen/keyboard_separator_width" mozc:keyHorizontalLayoutWeight="0"
-            mozc:keyBackground="keyboardSeparatorBottom"/>
-    <Key mozc:keyBackground="twelvekeysFunctionWithThreeDots"
-         mozc:keyHorizontalLayoutWeight="0" mozc:keyEdgeFlags="right"
-         mozc:defaultIconWidth="@dimen/keyboard_enter_width"
-         mozc:defaultIconHeight="@dimen/unlimited">
-      <KeyState mozc:contentDescription="@string/cd_key_uchar_linefeed">
+    <Key>
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_kana_punctuation">
         <Flick>
-          <KeyEntity mozc:sourceId="20"
-                     mozc:keyCode="@integer/uchar_linefeed"
-                     mozc:longPressKeyCode="@integer/key_symbol_emoji"
-                     mozc:longPressTimeoutTrigger="false"
-                     mozc:keyIcon="@raw/function__enter__icon">
-            <PopUp mozc:popUpLongPressIcon="@raw/function__symbol__popup"
-                   mozc:popUpIconHeight="@dimen/key_preview_emoji_icon_height" />
+          <KeyEntity mozc:mozc_sourceId="19"
+                     mozc:mozc_keyCode="@integer/uchar_number_sign"
+                     mozc:mozc_keyIcon="@raw/twelvekeys__kana__simple__12">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__kana__simple__12" />
           </KeyEntity>
         </Flick>
       </KeyState>
-      <KeyState mozc:contentDescription="@string/cd_key_composing_done"
-                mozc:metaState="composing">
+    </Key>
+    <Spacer mozc:mozc_keyWidth="@dimen/keyboard_separator_width" mozc:mozc_keyHorizontalLayoutWeight="0"
+            mozc:mozc_keyBackground="keyboardSeparatorBottom"/>
+    <Key mozc:mozc_keyBackground="twelvekeysFunctionWithThreeDots"
+         mozc:mozc_keyHorizontalLayoutWeight="0" mozc:mozc_keyEdgeFlags="right"
+         mozc:mozc_defaultIconWidth="@dimen/keyboard_enter_width"
+         mozc:mozc_defaultIconHeight="@dimen/unlimited">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_uchar_linefeed">
         <Flick>
-          <KeyEntity mozc:sourceId="21"
-                     mozc:keyCode="@integer/uchar_linefeed"
-                     mozc:longPressKeyCode="@integer/key_symbol_emoji"
-                     mozc:longPressTimeoutTrigger="false"
-                     mozc:keyIcon="@raw/function__enter__icon">
-            <PopUp mozc:popUpLongPressIcon="@raw/function__symbol__popup"
-                   mozc:popUpIconHeight="@dimen/key_preview_emoji_icon_height" />
+          <KeyEntity mozc:mozc_sourceId="20"
+                     mozc:mozc_keyCode="@integer/uchar_linefeed"
+                     mozc:mozc_longPressKeyCode="@integer/key_symbol_emoji"
+                     mozc:mozc_longPressTimeoutTrigger="false"
+                     mozc:mozc_keyIcon="@raw/function__enter__icon">
+            <PopUp mozc:mozc_popUpLongPressIcon="@raw/function__symbol__popup"
+                   mozc:mozc_popUpIconHeight="@dimen/key_preview_emoji_icon_height" />
           </KeyEntity>
         </Flick>
       </KeyState>
-      <KeyState mozc:contentDescription="@string/cd_key_action_done"
-                mozc:metaState="action_done">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_composing_done"
+                mozc:mozc_metaState="composing">
         <Flick>
-          <KeyEntity mozc:sourceId="22"
-                     mozc:keyCode="@integer/uchar_linefeed"
-                     mozc:longPressKeyCode="@integer/key_symbol_emoji"
-                     mozc:longPressTimeoutTrigger="false"
-                     mozc:keyIcon="@raw/function__action_done__icon">
-            <PopUp mozc:popUpLongPressIcon="@raw/function__symbol__popup"
-                   mozc:popUpIconHeight="@dimen/key_preview_emoji_icon_height" />
+          <KeyEntity mozc:mozc_sourceId="21"
+                     mozc:mozc_keyCode="@integer/uchar_linefeed"
+                     mozc:mozc_longPressKeyCode="@integer/key_symbol_emoji"
+                     mozc:mozc_longPressTimeoutTrigger="false"
+                     mozc:mozc_keyIcon="@raw/function__enter__icon">
+            <PopUp mozc:mozc_popUpLongPressIcon="@raw/function__symbol__popup"
+                   mozc:mozc_popUpIconHeight="@dimen/key_preview_emoji_icon_height" />
           </KeyEntity>
         </Flick>
       </KeyState>
-      <KeyState mozc:contentDescription="@string/cd_key_action_go"
-                mozc:metaState="action_go">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_action_done"
+                mozc:mozc_metaState="action_done">
         <Flick>
-          <KeyEntity mozc:sourceId="23"
-                     mozc:keyCode="@integer/uchar_linefeed"
-                     mozc:longPressKeyCode="@integer/key_symbol_emoji"
-                     mozc:longPressTimeoutTrigger="false"
-                     mozc:keyIcon="@raw/function__action_go__icon">
-            <PopUp mozc:popUpLongPressIcon="@raw/function__symbol__popup"
-                   mozc:popUpIconHeight="@dimen/key_preview_emoji_icon_height" />
+          <KeyEntity mozc:mozc_sourceId="22"
+                     mozc:mozc_keyCode="@integer/uchar_linefeed"
+                     mozc:mozc_longPressKeyCode="@integer/key_symbol_emoji"
+                     mozc:mozc_longPressTimeoutTrigger="false"
+                     mozc:mozc_keyIcon="@raw/function__action_done__icon">
+            <PopUp mozc:mozc_popUpLongPressIcon="@raw/function__symbol__popup"
+                   mozc:mozc_popUpIconHeight="@dimen/key_preview_emoji_icon_height" />
           </KeyEntity>
         </Flick>
       </KeyState>
-      <KeyState mozc:contentDescription="@string/cd_key_action_next"
-                mozc:metaState="action_next">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_action_go"
+                mozc:mozc_metaState="action_go">
         <Flick>
-          <KeyEntity mozc:sourceId="24"
-                     mozc:keyCode="@integer/uchar_linefeed"
-                     mozc:longPressKeyCode="@integer/key_symbol_emoji"
-                     mozc:longPressTimeoutTrigger="false"
-                     mozc:keyIcon="@raw/function__action_next__icon">
-            <PopUp mozc:popUpLongPressIcon="@raw/function__symbol__popup"
-                   mozc:popUpIconHeight="@dimen/key_preview_emoji_icon_height" />
+          <KeyEntity mozc:mozc_sourceId="23"
+                     mozc:mozc_keyCode="@integer/uchar_linefeed"
+                     mozc:mozc_longPressKeyCode="@integer/key_symbol_emoji"
+                     mozc:mozc_longPressTimeoutTrigger="false"
+                     mozc:mozc_keyIcon="@raw/function__action_go__icon">
+            <PopUp mozc:mozc_popUpLongPressIcon="@raw/function__symbol__popup"
+                   mozc:mozc_popUpIconHeight="@dimen/key_preview_emoji_icon_height" />
           </KeyEntity>
         </Flick>
       </KeyState>
-      <KeyState mozc:contentDescription="@string/cd_key_action_previous"
-                mozc:metaState="action_previous">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_action_next"
+                mozc:mozc_metaState="action_next">
         <Flick>
-          <KeyEntity mozc:sourceId="25"
-                     mozc:keyCode="@integer/uchar_linefeed"
-                     mozc:longPressKeyCode="@integer/key_symbol_emoji"
-                     mozc:longPressTimeoutTrigger="false"
-                     mozc:keyIcon="@raw/function__action_previous__icon">
-            <PopUp mozc:popUpLongPressIcon="@raw/function__symbol__popup"
-                   mozc:popUpIconHeight="@dimen/key_preview_emoji_icon_height" />
+          <KeyEntity mozc:mozc_sourceId="24"
+                     mozc:mozc_keyCode="@integer/uchar_linefeed"
+                     mozc:mozc_longPressKeyCode="@integer/key_symbol_emoji"
+                     mozc:mozc_longPressTimeoutTrigger="false"
+                     mozc:mozc_keyIcon="@raw/function__action_next__icon">
+            <PopUp mozc:mozc_popUpLongPressIcon="@raw/function__symbol__popup"
+                   mozc:mozc_popUpIconHeight="@dimen/key_preview_emoji_icon_height" />
           </KeyEntity>
         </Flick>
       </KeyState>
-      <KeyState mozc:contentDescription="@string/cd_key_action_search"
-                mozc:metaState="action_search">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_action_previous"
+                mozc:mozc_metaState="action_previous">
         <Flick>
-          <KeyEntity mozc:sourceId="26"
-                     mozc:keyCode="@integer/uchar_linefeed"
-                     mozc:longPressKeyCode="@integer/key_symbol_emoji"
-                     mozc:longPressTimeoutTrigger="false"
-                     mozc:keyIcon="@raw/function__action_search__icon">
-            <PopUp mozc:popUpLongPressIcon="@raw/function__symbol__popup"
-                   mozc:popUpIconHeight="@dimen/key_preview_emoji_icon_height" />
+          <KeyEntity mozc:mozc_sourceId="25"
+                     mozc:mozc_keyCode="@integer/uchar_linefeed"
+                     mozc:mozc_longPressKeyCode="@integer/key_symbol_emoji"
+                     mozc:mozc_longPressTimeoutTrigger="false"
+                     mozc:mozc_keyIcon="@raw/function__action_previous__icon">
+            <PopUp mozc:mozc_popUpLongPressIcon="@raw/function__symbol__popup"
+                   mozc:mozc_popUpIconHeight="@dimen/key_preview_emoji_icon_height" />
           </KeyEntity>
         </Flick>
       </KeyState>
-      <KeyState mozc:contentDescription="@string/cd_key_action_send"
-                mozc:metaState="action_send">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_action_search"
+                mozc:mozc_metaState="action_search">
         <Flick>
-          <KeyEntity mozc:sourceId="27"
-                     mozc:keyCode="@integer/uchar_linefeed"
-                     mozc:longPressKeyCode="@integer/key_symbol_emoji"
-                     mozc:longPressTimeoutTrigger="false"
-                     mozc:keyIcon="@raw/function__action_send__icon">
-            <PopUp mozc:popUpLongPressIcon="@raw/function__symbol__popup"
-                   mozc:popUpIconHeight="@dimen/key_preview_emoji_icon_height" />
+          <KeyEntity mozc:mozc_sourceId="26"
+                     mozc:mozc_keyCode="@integer/uchar_linefeed"
+                     mozc:mozc_longPressKeyCode="@integer/key_symbol_emoji"
+                     mozc:mozc_longPressTimeoutTrigger="false"
+                     mozc:mozc_keyIcon="@raw/function__action_search__icon">
+            <PopUp mozc:mozc_popUpLongPressIcon="@raw/function__symbol__popup"
+                   mozc:mozc_popUpIconHeight="@dimen/key_preview_emoji_icon_height" />
+          </KeyEntity>
+        </Flick>
+      </KeyState>
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_action_send"
+                mozc:mozc_metaState="action_send">
+        <Flick>
+          <KeyEntity mozc:mozc_sourceId="27"
+                     mozc:mozc_keyCode="@integer/uchar_linefeed"
+                     mozc:mozc_longPressKeyCode="@integer/key_symbol_emoji"
+                     mozc:mozc_longPressTimeoutTrigger="false"
+                     mozc:mozc_keyIcon="@raw/function__action_send__icon">
+            <PopUp mozc:mozc_popUpLongPressIcon="@raw/function__symbol__popup"
+                   mozc:mozc_popUpIconHeight="@dimen/key_preview_emoji_icon_height" />
           </KeyEntity>
         </Flick>
       </KeyState>

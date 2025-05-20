@@ -55,874 +55,874 @@
   -->
 <Keyboard
     xmlns:mozc="http://schemas.android.com/apk/res-auto"
-    mozc:keyboardContentDescription="@string/cd_keyboard_kana"
-    mozc:flickThreshold="32dip"
-    mozc:keyBackground="twelvekeysRegular"
-    mozc:keyWidth="17.3%p" mozc:keyHeight="20%p" mozc:keyHorizontalLayoutWeight="1"
-    mozc:horizontalGap="0dip" mozc:verticalGap="0dip"
-    mozc:popUpHeight="@dimen/key_preview_height"
-    mozc:popUpIconHeight="@dimen/key_preview_icon_height"
-    mozc:popUpXOffset="0dip" mozc:popUpYOffset="@dimen/mini_keyboard_vertical_correction"
-    mozc:defaultIconWidth="@dimen/unlimited" mozc:defaultIconHeight="@dimen/keyboard_godan_default_height">
+    mozc:mozc_keyboardContentDescription="@string/cd_keyboard_kana"
+    mozc:mozc_flickThreshold="32dip"
+    mozc:mozc_keyBackground="twelvekeysRegular"
+    mozc:mozc_keyWidth="17.3%p" mozc:mozc_keyHeight="20%p" mozc:mozc_keyHorizontalLayoutWeight="1"
+    mozc:mozc_horizontalGap="0dip" mozc:mozc_verticalGap="0dip"
+    mozc:mozc_popUpHeight="@dimen/key_preview_height"
+    mozc:mozc_popUpIconHeight="@dimen/key_preview_icon_height"
+    mozc:mozc_popUpXOffset="0dip" mozc:mozc_popUpYOffset="@dimen/mini_keyboard_vertical_correction"
+    mozc:mozc_defaultIconWidth="@dimen/unlimited" mozc:mozc_defaultIconHeight="@dimen/keyboard_godan_default_height">
   <Row>
-    <Key mozc:keyBackground="twelvekeysFunction"
-         mozc:keyHorizontalLayoutWeight="0" mozc:keyEdgeFlags="left">
-      <KeyState mozc:contentDescription="@string/cd_key_undo">
+    <Key mozc:mozc_keyBackground="twelvekeysFunction"
+         mozc:mozc_keyHorizontalLayoutWeight="0" mozc:mozc_keyEdgeFlags="left">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_undo">
         <Flick>
-          <KeyEntity mozc:sourceId="101"
-                     mozc:keyCode="@integer/key_undo"
-                     mozc:keyIcon="@raw/twelvekeys__function__undo__icon"
-                     mozc:iconWidth="@dimen/unlimited"
-                     mozc:iconHeight="@dimen/default_function_icon_height" />
+          <KeyEntity mozc:mozc_sourceId="101"
+                     mozc:mozc_keyCode="@integer/key_undo"
+                     mozc:mozc_keyIcon="@raw/twelvekeys__function__undo__icon"
+                     mozc:mozc_iconWidth="@dimen/unlimited"
+                     mozc:mozc_iconHeight="@dimen/default_function_icon_height" />
         </Flick>
       </KeyState>
     </Key>
-    <Spacer mozc:keyWidth="@dimen/keyboard_separator_width" mozc:keyHorizontalLayoutWeight="0"
-            mozc:keyBackground="keyboardSeparatorTop"/>
+    <Spacer mozc:mozc_keyWidth="@dimen/keyboard_separator_width" mozc:mozc_keyHorizontalLayoutWeight="0"
+            mozc:mozc_keyBackground="keyboardSeparatorTop"/>
     <Key>
-      <KeyState mozc:contentDescription="@string/cd_key_uchar_latin_small_letter_a">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_uchar_latin_small_letter_a">
         <Flick>
-          <KeyEntity mozc:sourceId="1"
-                     mozc:keyCode="@integer/uchar_latin_small_letter_a"
-                     mozc:keyIcon="@raw/godan__kana__support__01_center"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/godan__kana__support__popup__01"/>
+          <KeyEntity mozc:mozc_sourceId="1"
+                     mozc:mozc_keyCode="@integer/uchar_latin_small_letter_a"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__01_center"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/godan__kana__support__popup__01"/>
           </KeyEntity>
         </Flick>
-        <Flick mozc:direction="left">
-          <KeyEntity mozc:sourceId="2"
-                     mozc:keyCode="@integer/uchar_dollar_sign"
-                     mozc:keyIcon="@raw/godan__kana__support__01_center"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__kana__keyicon__axtu"/>
+        <Flick mozc:mozc_direction="left">
+          <KeyEntity mozc:mozc_sourceId="2"
+                     mozc:mozc_keyCode="@integer/uchar_dollar_sign"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__01_center"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__kana__keyicon__axtu"/>
           </KeyEntity>
         </Flick>
-        <Flick mozc:direction="up">
-          <KeyEntity mozc:sourceId="3"
-                     mozc:keyCode="@integer/uchar_less_than_sign"
-                     mozc:keyIcon="@raw/godan__kana__support__01_center"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__kana__keyicon__an"/>
+        <Flick mozc:mozc_direction="up">
+          <KeyEntity mozc:mozc_sourceId="3"
+                     mozc:mozc_keyCode="@integer/uchar_less_than_sign"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__01_center"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__kana__keyicon__an"/>
           </KeyEntity>
         </Flick>
-        <Flick mozc:direction="right">
-          <KeyEntity mozc:sourceId="4"
-                     mozc:keyCode="@integer/uchar_number_sign"
-                     mozc:keyIcon="@raw/godan__kana__support__01_center"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__kana__keyicon__xya"/>
+        <Flick mozc:mozc_direction="right">
+          <KeyEntity mozc:mozc_sourceId="4"
+                     mozc:mozc_keyCode="@integer/uchar_number_sign"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__01_center"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__kana__keyicon__xya"/>
           </KeyEntity>
         </Flick>
-        <Flick mozc:direction="down">
-          <KeyEntity mozc:sourceId="5"
-                     mozc:keyCode="@integer/uchar_digit_one"
-                     mozc:keyIcon="@raw/godan__kana__support__01_down"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__popup__one"/>
-          </KeyEntity>
-        </Flick>
-      </KeyState>
-    </Key>
-    <Key>
-      <KeyState mozc:contentDescription="@string/cd_key_uchar_latin_small_letter_k">
-        <Flick>
-          <KeyEntity mozc:sourceId="6"
-                     mozc:keyCode="@integer/uchar_latin_small_letter_k"
-                     mozc:keyIcon="@raw/godan__kana__support__02_center"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/godan__kana__support__popup__02"/>
-          </KeyEntity>
-        </Flick>
-        <Flick mozc:direction="up">
-          <KeyEntity mozc:sourceId="8"
-                     mozc:keyCode="@integer/uchar_latin_small_letter_q"
-                     mozc:keyIcon="@raw/godan__kana__support__02_up"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__popup__latin_q"/>
-          </KeyEntity>
-        </Flick>
-        <Flick mozc:direction="right">
-          <KeyEntity mozc:sourceId="9"
-                     mozc:keyCode="@integer/uchar_latin_small_letter_g"
-                     mozc:keyIcon="@raw/godan__kana__support__02_right"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__popup__latin_g"/>
-          </KeyEntity>
-        </Flick>
-        <Flick mozc:direction="down">
-          <KeyEntity mozc:sourceId="10"
-                     mozc:keyCode="@integer/uchar_digit_two"
-                     mozc:keyIcon="@raw/godan__kana__support__02_down"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__popup__two"/>
+        <Flick mozc:mozc_direction="down">
+          <KeyEntity mozc:mozc_sourceId="5"
+                     mozc:mozc_keyCode="@integer/uchar_digit_one"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__01_down"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__popup__one"/>
           </KeyEntity>
         </Flick>
       </KeyState>
     </Key>
     <Key>
-      <KeyState mozc:contentDescription="@string/cd_key_uchar_latin_small_letter_h">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_uchar_latin_small_letter_k">
         <Flick>
-          <KeyEntity mozc:sourceId="11"
-                     mozc:keyCode="@integer/uchar_latin_small_letter_h"
-                     mozc:keyIcon="@raw/godan__kana__support__03_center"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/godan__kana__support__popup__03"/>
+          <KeyEntity mozc:mozc_sourceId="6"
+                     mozc:mozc_keyCode="@integer/uchar_latin_small_letter_k"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__02_center"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/godan__kana__support__popup__02"/>
           </KeyEntity>
         </Flick>
-        <Flick mozc:direction="left">
-          <KeyEntity mozc:sourceId="12"
-                     mozc:keyCode="@integer/uchar_latin_small_letter_p"
-                     mozc:keyIcon="@raw/godan__kana__support__03_left"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__popup__latin_p"/>
+        <Flick mozc:mozc_direction="up">
+          <KeyEntity mozc:mozc_sourceId="8"
+                     mozc:mozc_keyCode="@integer/uchar_latin_small_letter_q"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__02_up"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__popup__latin_q"/>
           </KeyEntity>
         </Flick>
-        <Flick mozc:direction="up">
-          <KeyEntity mozc:sourceId="13"
-                     mozc:keyCode="@integer/uchar_latin_small_letter_f"
-                     mozc:keyIcon="@raw/godan__kana__support__03_up"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__popup__latin_f"/>
+        <Flick mozc:mozc_direction="right">
+          <KeyEntity mozc:mozc_sourceId="9"
+                     mozc:mozc_keyCode="@integer/uchar_latin_small_letter_g"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__02_right"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__popup__latin_g"/>
           </KeyEntity>
         </Flick>
-        <Flick mozc:direction="right">
-          <KeyEntity mozc:sourceId="14"
-                     mozc:keyCode="@integer/uchar_latin_small_letter_b"
-                     mozc:keyIcon="@raw/godan__kana__support__03_right"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__popup__latin_b"/>
-          </KeyEntity>
-        </Flick>
-        <Flick mozc:direction="down">
-          <KeyEntity mozc:sourceId="15"
-                     mozc:keyCode="@integer/uchar_digit_three"
-                     mozc:keyIcon="@raw/godan__kana__support__03_down"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__popup__three"/>
+        <Flick mozc:mozc_direction="down">
+          <KeyEntity mozc:mozc_sourceId="10"
+                     mozc:mozc_keyCode="@integer/uchar_digit_two"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__02_down"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__popup__two"/>
           </KeyEntity>
         </Flick>
       </KeyState>
     </Key>
-    <Spacer mozc:keyWidth="@dimen/keyboard_separator_width" mozc:keyHorizontalLayoutWeight="0"
-            mozc:keyBackground="keyboardSeparatorTop"/>
-    <Key mozc:keyBackground="twelvekeysFunction"
-         mozc:keyHorizontalLayoutWeight="0" mozc:keyEdgeFlags="right" mozc:isRepeatable="true">
-      <KeyState mozc:contentDescription="@string/cd_key_uchar_backspace">
+    <Key>
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_uchar_latin_small_letter_h">
         <Flick>
-          <KeyEntity mozc:sourceId="102"
-                     mozc:keyCode="@integer/uchar_backspace"
-                     mozc:keyIcon="@raw/twelvekeys__function__delete__icon"
-                     mozc:iconWidth="@dimen/unlimited"
-                     mozc:iconHeight="@dimen/default_function_icon_height" />
+          <KeyEntity mozc:mozc_sourceId="11"
+                     mozc:mozc_keyCode="@integer/uchar_latin_small_letter_h"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__03_center"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/godan__kana__support__popup__03"/>
+          </KeyEntity>
+        </Flick>
+        <Flick mozc:mozc_direction="left">
+          <KeyEntity mozc:mozc_sourceId="12"
+                     mozc:mozc_keyCode="@integer/uchar_latin_small_letter_p"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__03_left"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__popup__latin_p"/>
+          </KeyEntity>
+        </Flick>
+        <Flick mozc:mozc_direction="up">
+          <KeyEntity mozc:mozc_sourceId="13"
+                     mozc:mozc_keyCode="@integer/uchar_latin_small_letter_f"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__03_up"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__popup__latin_f"/>
+          </KeyEntity>
+        </Flick>
+        <Flick mozc:mozc_direction="right">
+          <KeyEntity mozc:mozc_sourceId="14"
+                     mozc:mozc_keyCode="@integer/uchar_latin_small_letter_b"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__03_right"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__popup__latin_b"/>
+          </KeyEntity>
+        </Flick>
+        <Flick mozc:mozc_direction="down">
+          <KeyEntity mozc:mozc_sourceId="15"
+                     mozc:mozc_keyCode="@integer/uchar_digit_three"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__03_down"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__popup__three"/>
+          </KeyEntity>
+        </Flick>
+      </KeyState>
+    </Key>
+    <Spacer mozc:mozc_keyWidth="@dimen/keyboard_separator_width" mozc:mozc_keyHorizontalLayoutWeight="0"
+            mozc:mozc_keyBackground="keyboardSeparatorTop"/>
+    <Key mozc:mozc_keyBackground="twelvekeysFunction"
+         mozc:mozc_keyHorizontalLayoutWeight="0" mozc:mozc_keyEdgeFlags="right" mozc:mozc_isRepeatable="true">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_uchar_backspace">
+        <Flick>
+          <KeyEntity mozc:mozc_sourceId="102"
+                     mozc:mozc_keyCode="@integer/uchar_backspace"
+                     mozc:mozc_keyIcon="@raw/twelvekeys__function__delete__icon"
+                     mozc:mozc_iconWidth="@dimen/unlimited"
+                     mozc:mozc_iconHeight="@dimen/default_function_icon_height" />
         </Flick>
       </KeyState>
     </Key>
   </Row>
   <Row>
-    <Key mozc:keyBackground="twelvekeysFunction"
-         mozc:keyHorizontalLayoutWeight="0" mozc:keyEdgeFlags="left" mozc:isRepeatable="true">
-      <KeyState mozc:contentDescription="@string/cd_key_left">
+    <Key mozc:mozc_keyBackground="twelvekeysFunction"
+         mozc:mozc_keyHorizontalLayoutWeight="0" mozc:mozc_keyEdgeFlags="left" mozc:mozc_isRepeatable="true">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_left">
         <Flick>
-          <KeyEntity mozc:sourceId="103"
-                     mozc:keyCode="@integer/key_left"
-                     mozc:keyIcon="@raw/twelvekeys__function__left_arrow__icon"
-                     mozc:iconWidth="@dimen/unlimited"
-                     mozc:iconHeight="@dimen/default_function_icon_height" />
+          <KeyEntity mozc:mozc_sourceId="103"
+                     mozc:mozc_keyCode="@integer/key_left"
+                     mozc:mozc_keyIcon="@raw/twelvekeys__function__left_arrow__icon"
+                     mozc:mozc_iconWidth="@dimen/unlimited"
+                     mozc:mozc_iconHeight="@dimen/default_function_icon_height" />
         </Flick>
       </KeyState>
     </Key>
-    <Spacer mozc:keyWidth="@dimen/keyboard_separator_width" mozc:keyHorizontalLayoutWeight="0"
-            mozc:keyBackground="keyboardSeparatorCenter"/>
+    <Spacer mozc:mozc_keyWidth="@dimen/keyboard_separator_width" mozc:mozc_keyHorizontalLayoutWeight="0"
+            mozc:mozc_keyBackground="keyboardSeparatorCenter"/>
     <Key>
-      <KeyState mozc:contentDescription="@string/cd_key_uchar_latin_small_letter_i">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_uchar_latin_small_letter_i">
         <Flick>
-          <KeyEntity mozc:sourceId="16"
-                     mozc:keyCode="@integer/uchar_latin_small_letter_i"
-                     mozc:keyIcon="@raw/godan__kana__support__04_center"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/godan__kana__support__popup__04"/>
+          <KeyEntity mozc:mozc_sourceId="16"
+                     mozc:mozc_keyCode="@integer/uchar_latin_small_letter_i"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__04_center"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/godan__kana__support__popup__04"/>
           </KeyEntity>
         </Flick>
-        <Flick mozc:direction="left">
-          <KeyEntity mozc:sourceId="17"
-                     mozc:keyCode="@integer/uchar_percent_sign"
-                     mozc:keyIcon="@raw/godan__kana__support__04_center"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__kana__keyicon__ixtu"/>
+        <Flick mozc:mozc_direction="left">
+          <KeyEntity mozc:mozc_sourceId="17"
+                     mozc:mozc_keyCode="@integer/uchar_percent_sign"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__04_center"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__kana__keyicon__ixtu"/>
           </KeyEntity>
         </Flick>
-        <Flick mozc:direction="up">
-          <KeyEntity mozc:sourceId="18"
-                     mozc:keyCode="@integer/uchar_greater_than_sign"
-                     mozc:keyIcon="@raw/godan__kana__support__04_center"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__kana__keyicon__in"/>
+        <Flick mozc:mozc_direction="up">
+          <KeyEntity mozc:mozc_sourceId="18"
+                     mozc:mozc_keyCode="@integer/uchar_greater_than_sign"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__04_center"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__kana__keyicon__in"/>
           </KeyEntity>
         </Flick>
-        <Flick mozc:direction="right">
-          <KeyEntity mozc:sourceId="19"
-                     mozc:keyCode="@integer/uchar_plus_sign"
-                     mozc:keyIcon="@raw/godan__kana__support__04_center"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__kana__keyicon__xi"/>
+        <Flick mozc:mozc_direction="right">
+          <KeyEntity mozc:mozc_sourceId="19"
+                     mozc:mozc_keyCode="@integer/uchar_plus_sign"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__04_center"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__kana__keyicon__xi"/>
           </KeyEntity>
         </Flick>
-        <Flick mozc:direction="down">
-          <KeyEntity mozc:sourceId="20"
-                     mozc:keyCode="@integer/uchar_digit_four"
-                     mozc:keyIcon="@raw/godan__kana__support__04_down"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__popup__four"/>
-          </KeyEntity>
-        </Flick>
-      </KeyState>
-    </Key>
-    <Key>
-      <KeyState mozc:contentDescription="@string/cd_key_uchar_latin_small_letter_s">
-        <Flick>
-          <KeyEntity mozc:sourceId="21"
-                     mozc:keyCode="@integer/uchar_latin_small_letter_s"
-                     mozc:keyIcon="@raw/godan__kana__support__05_center"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/godan__kana__support__popup__05"/>
-          </KeyEntity>
-        </Flick>
-        <Flick mozc:direction="up">
-          <KeyEntity mozc:sourceId="23"
-                     mozc:keyCode="@integer/uchar_latin_small_letter_j"
-                     mozc:keyIcon="@raw/godan__kana__support__05_up"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__popup__latin_j"/>
-          </KeyEntity>
-        </Flick>
-        <Flick mozc:direction="right">
-          <KeyEntity mozc:sourceId="24"
-                     mozc:keyCode="@integer/uchar_latin_small_letter_z"
-                     mozc:keyIcon="@raw/godan__kana__support__05_right"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__popup__latin_z"/>
-          </KeyEntity>
-        </Flick>
-        <Flick mozc:direction="down">
-          <KeyEntity mozc:sourceId="25"
-                     mozc:keyCode="@integer/uchar_digit_five"
-                     mozc:keyIcon="@raw/godan__kana__support__05_down"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__popup__five"/>
+        <Flick mozc:mozc_direction="down">
+          <KeyEntity mozc:mozc_sourceId="20"
+                     mozc:mozc_keyCode="@integer/uchar_digit_four"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__04_down"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__popup__four"/>
           </KeyEntity>
         </Flick>
       </KeyState>
     </Key>
     <Key>
-      <KeyState mozc:contentDescription="@string/cd_key_uchar_latin_small_letter_m">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_uchar_latin_small_letter_s">
         <Flick>
-          <KeyEntity mozc:sourceId="26"
-                     mozc:keyCode="@integer/uchar_latin_small_letter_m"
-                     mozc:keyIcon="@raw/godan__kana__support__06_center"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/godan__kana__support__popup__06"/>
+          <KeyEntity mozc:mozc_sourceId="21"
+                     mozc:mozc_keyCode="@integer/uchar_latin_small_letter_s"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__05_center"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/godan__kana__support__popup__05"/>
           </KeyEntity>
         </Flick>
-        <Flick mozc:direction="left">
-          <KeyEntity mozc:sourceId="27"
-                     mozc:keyCode="@integer/uchar_solidus"
-                     mozc:keyIcon="@raw/godan__kana__support__06_left"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__popup__fullwidth_solidus"/>
+        <Flick mozc:mozc_direction="up">
+          <KeyEntity mozc:mozc_sourceId="23"
+                     mozc:mozc_keyCode="@integer/uchar_latin_small_letter_j"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__05_up"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__popup__latin_j"/>
           </KeyEntity>
         </Flick>
-        <Flick mozc:direction="up">
-          <KeyEntity mozc:sourceId="28"
-                     mozc:keyCode="@integer/uchar_latin_small_letter_l"
-                     mozc:keyIcon="@raw/godan__kana__support__06_up"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__popup__latin_l"/>
+        <Flick mozc:mozc_direction="right">
+          <KeyEntity mozc:mozc_sourceId="24"
+                     mozc:mozc_keyCode="@integer/uchar_latin_small_letter_z"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__05_right"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__popup__latin_z"/>
           </KeyEntity>
         </Flick>
-        <Flick mozc:direction="right">
-          <KeyEntity mozc:sourceId="29"
-                     mozc:keyCode="@integer/uchar_hyphen_minus"
-                     mozc:keyIcon="@raw/godan__kana__support__06_right"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__kana__keyicon__prolonged_sound_mark"/>
-          </KeyEntity>
-        </Flick>
-        <Flick mozc:direction="down">
-          <KeyEntity mozc:sourceId="30"
-                     mozc:keyCode="@integer/uchar_digit_six"
-                     mozc:keyIcon="@raw/godan__kana__support__06_down"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__popup__six"/>
+        <Flick mozc:mozc_direction="down">
+          <KeyEntity mozc:mozc_sourceId="25"
+                     mozc:mozc_keyCode="@integer/uchar_digit_five"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__05_down"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__popup__five"/>
           </KeyEntity>
         </Flick>
       </KeyState>
     </Key>
-    <Spacer mozc:keyWidth="@dimen/keyboard_separator_width" mozc:keyHorizontalLayoutWeight="0"
-            mozc:keyBackground="keyboardSeparatorCenter"/>
-    <Key mozc:keyBackground="twelvekeysFunction"
-         mozc:keyHorizontalLayoutWeight="0" mozc:keyEdgeFlags="right" mozc:isRepeatable="true">
-      <KeyState mozc:contentDescription="@string/cd_key_right">
+    <Key>
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_uchar_latin_small_letter_m">
         <Flick>
-          <KeyEntity mozc:sourceId="104"
-                     mozc:keyCode="@integer/key_right"
-                     mozc:keyIcon="@raw/twelvekeys__function__right_arrow__icon"
-                     mozc:iconWidth="@dimen/unlimited"
-                     mozc:iconHeight="@dimen/default_function_icon_height" />
+          <KeyEntity mozc:mozc_sourceId="26"
+                     mozc:mozc_keyCode="@integer/uchar_latin_small_letter_m"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__06_center"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/godan__kana__support__popup__06"/>
+          </KeyEntity>
+        </Flick>
+        <Flick mozc:mozc_direction="left">
+          <KeyEntity mozc:mozc_sourceId="27"
+                     mozc:mozc_keyCode="@integer/uchar_solidus"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__06_left"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__popup__fullwidth_solidus"/>
+          </KeyEntity>
+        </Flick>
+        <Flick mozc:mozc_direction="up">
+          <KeyEntity mozc:mozc_sourceId="28"
+                     mozc:mozc_keyCode="@integer/uchar_latin_small_letter_l"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__06_up"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__popup__latin_l"/>
+          </KeyEntity>
+        </Flick>
+        <Flick mozc:mozc_direction="right">
+          <KeyEntity mozc:mozc_sourceId="29"
+                     mozc:mozc_keyCode="@integer/uchar_hyphen_minus"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__06_right"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__kana__keyicon__prolonged_sound_mark"/>
+          </KeyEntity>
+        </Flick>
+        <Flick mozc:mozc_direction="down">
+          <KeyEntity mozc:mozc_sourceId="30"
+                     mozc:mozc_keyCode="@integer/uchar_digit_six"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__06_down"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__popup__six"/>
+          </KeyEntity>
+        </Flick>
+      </KeyState>
+    </Key>
+    <Spacer mozc:mozc_keyWidth="@dimen/keyboard_separator_width" mozc:mozc_keyHorizontalLayoutWeight="0"
+            mozc:mozc_keyBackground="keyboardSeparatorCenter"/>
+    <Key mozc:mozc_keyBackground="twelvekeysFunction"
+         mozc:mozc_keyHorizontalLayoutWeight="0" mozc:mozc_keyEdgeFlags="right" mozc:mozc_isRepeatable="true">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_right">
+        <Flick>
+          <KeyEntity mozc:mozc_sourceId="104"
+                     mozc:mozc_keyCode="@integer/key_right"
+                     mozc:mozc_keyIcon="@raw/twelvekeys__function__right_arrow__icon"
+                     mozc:mozc_iconWidth="@dimen/unlimited"
+                     mozc:mozc_iconHeight="@dimen/default_function_icon_height" />
         </Flick>
       </KeyState>
     </Key>
   </Row>
   <Row>
-    <Key mozc:keyBackground="twelvekeysFunction"
-         mozc:keyHorizontalLayoutWeight="0" mozc:keyEdgeFlags="left">
-      <KeyState mozc:contentDescription="@string/cd_key_symbol">
+    <Key mozc:mozc_keyBackground="twelvekeysFunction"
+         mozc:mozc_keyHorizontalLayoutWeight="0" mozc:mozc_keyEdgeFlags="left">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_symbol">
         <Flick>
-          <KeyEntity mozc:sourceId="105"
-                     mozc:keyCode="@integer/key_symbol"
-                     mozc:keyIcon="@raw/twelvekeys__function__symbol__icon"
-                     mozc:iconWidth="@dimen/unlimited"
-                     mozc:iconHeight="@dimen/default_function_icon_height" />
+          <KeyEntity mozc:mozc_sourceId="105"
+                     mozc:mozc_keyCode="@integer/key_symbol"
+                     mozc:mozc_keyIcon="@raw/twelvekeys__function__symbol__icon"
+                     mozc:mozc_iconWidth="@dimen/unlimited"
+                     mozc:mozc_iconHeight="@dimen/default_function_icon_height" />
         </Flick>
       </KeyState>
-      <KeyState mozc:contentDescription="@string/cd_key_symbol" mozc:metaState="handling_touch_event">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_symbol" mozc:mozc_metaState="handling_touch_event">
         <Flick>
-          <KeyEntity mozc:sourceId="118"
-                     mozc:keyIcon="@raw/twelvekeys__function__symbol__icon"
-                     mozc:iconWidth="@dimen/unlimited"
-                     mozc:iconHeight="@dimen/default_function_icon_height" />
+          <KeyEntity mozc:mozc_sourceId="118"
+                     mozc:mozc_keyIcon="@raw/twelvekeys__function__symbol__icon"
+                     mozc:mozc_iconWidth="@dimen/unlimited"
+                     mozc:mozc_iconHeight="@dimen/default_function_icon_height" />
         </Flick>
       </KeyState>
     </Key>
-    <Spacer mozc:keyWidth="@dimen/keyboard_separator_width" mozc:keyHorizontalLayoutWeight="0"
-            mozc:keyBackground="keyboardSeparatorCenter"/>
+    <Spacer mozc:mozc_keyWidth="@dimen/keyboard_separator_width" mozc:mozc_keyHorizontalLayoutWeight="0"
+            mozc:mozc_keyBackground="keyboardSeparatorCenter"/>
     <Key>
-      <KeyState mozc:contentDescription="@string/cd_key_uchar_latin_small_letter_u">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_uchar_latin_small_letter_u">
         <Flick>
-          <KeyEntity mozc:sourceId="31"
-                     mozc:keyCode="@integer/uchar_latin_small_letter_u"
-                     mozc:keyIcon="@raw/godan__kana__support__07_center"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/godan__kana__support__popup__07"/>
+          <KeyEntity mozc:mozc_sourceId="31"
+                     mozc:mozc_keyCode="@integer/uchar_latin_small_letter_u"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__07_center"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/godan__kana__support__popup__07"/>
           </KeyEntity>
         </Flick>
-        <Flick mozc:direction="left">
-          <KeyEntity mozc:sourceId="32"
-                     mozc:keyCode="@integer/uchar_ampersand"
-                     mozc:keyIcon="@raw/godan__kana__support__07_center"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__kana__keyicon__uxtu"/>
+        <Flick mozc:mozc_direction="left">
+          <KeyEntity mozc:mozc_sourceId="32"
+                     mozc:mozc_keyCode="@integer/uchar_ampersand"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__07_center"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__kana__keyicon__uxtu"/>
           </KeyEntity>
         </Flick>
-        <Flick mozc:direction="up">
-          <KeyEntity mozc:sourceId="33"
-                     mozc:keyCode="@integer/uchar_left_curly_bracket"
-                     mozc:keyIcon="@raw/godan__kana__support__07_center"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__kana__keyicon__un"/>
+        <Flick mozc:mozc_direction="up">
+          <KeyEntity mozc:mozc_sourceId="33"
+                     mozc:mozc_keyCode="@integer/uchar_left_curly_bracket"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__07_center"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__kana__keyicon__un"/>
           </KeyEntity>
         </Flick>
-        <Flick mozc:direction="right">
-          <KeyEntity mozc:sourceId="34"
-                     mozc:keyCode="@integer/uchar_circumflex_accent"
-                     mozc:keyIcon="@raw/godan__kana__support__07_center"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__kana__keyicon__xyu"/>
+        <Flick mozc:mozc_direction="right">
+          <KeyEntity mozc:mozc_sourceId="34"
+                     mozc:mozc_keyCode="@integer/uchar_circumflex_accent"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__07_center"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__kana__keyicon__xyu"/>
           </KeyEntity>
         </Flick>
-        <Flick mozc:direction="down">
-          <KeyEntity mozc:sourceId="35"
-                     mozc:keyCode="@integer/uchar_digit_seven"
-                     mozc:keyIcon="@raw/godan__kana__support__07_down"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__popup__seven"/>
+        <Flick mozc:mozc_direction="down">
+          <KeyEntity mozc:mozc_sourceId="35"
+                     mozc:mozc_keyCode="@integer/uchar_digit_seven"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__07_down"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__popup__seven"/>
           </KeyEntity>
         </Flick>
       </KeyState>
     </Key>
     <Key>
-      <KeyState mozc:contentDescription="@string/cd_key_uchar_latin_small_letter_t">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_uchar_latin_small_letter_t">
         <Flick>
-          <KeyEntity mozc:sourceId="36"
-                     mozc:keyCode="@integer/uchar_latin_small_letter_t"
-                     mozc:keyIcon="@raw/godan__kana__support__08_center"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/godan__kana__support__popup__08"/>
+          <KeyEntity mozc:mozc_sourceId="36"
+                     mozc:mozc_keyCode="@integer/uchar_latin_small_letter_t"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__08_center"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/godan__kana__support__popup__08"/>
           </KeyEntity>
         </Flick>
-        <Flick mozc:direction="up">
-          <KeyEntity mozc:sourceId="38"
-                     mozc:keyCode="@integer/uchar_latin_small_letter_c"
-                     mozc:keyIcon="@raw/godan__kana__support__08_up"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__popup__latin_c"/>
+        <Flick mozc:mozc_direction="up">
+          <KeyEntity mozc:mozc_sourceId="38"
+                     mozc:mozc_keyCode="@integer/uchar_latin_small_letter_c"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__08_up"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__popup__latin_c"/>
           </KeyEntity>
         </Flick>
-        <Flick mozc:direction="right">
-          <KeyEntity mozc:sourceId="39"
-                     mozc:keyCode="@integer/uchar_latin_small_letter_d"
-                     mozc:keyIcon="@raw/godan__kana__support__08_right"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__popup__latin_d"/>
+        <Flick mozc:mozc_direction="right">
+          <KeyEntity mozc:mozc_sourceId="39"
+                     mozc:mozc_keyCode="@integer/uchar_latin_small_letter_d"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__08_right"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__popup__latin_d"/>
           </KeyEntity>
         </Flick>
-        <Flick mozc:direction="down">
-          <KeyEntity mozc:sourceId="40"
-                     mozc:keyCode="@integer/uchar_digit_eight"
-                     mozc:keyIcon="@raw/godan__kana__support__08_down"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__popup__eight"/>
+        <Flick mozc:mozc_direction="down">
+          <KeyEntity mozc:mozc_sourceId="40"
+                     mozc:mozc_keyCode="@integer/uchar_digit_eight"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__08_down"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__popup__eight"/>
           </KeyEntity>
         </Flick>
       </KeyState>
     </Key>
-    <Key mozc:keyEdgeFlags="right">
-      <KeyState mozc:contentDescription="@string/cd_key_uchar_latin_small_letter_y">
+    <Key mozc:mozc_keyEdgeFlags="right">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_uchar_latin_small_letter_y">
         <Flick>
-          <KeyEntity mozc:sourceId="41"
-                     mozc:keyCode="@integer/uchar_latin_small_letter_y"
-                     mozc:keyIcon="@raw/godan__kana__support__09_center"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/godan__kana__support__popup__09"/>
+          <KeyEntity mozc:mozc_sourceId="41"
+                     mozc:mozc_keyCode="@integer/uchar_latin_small_letter_y"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__09_center"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/godan__kana__support__popup__09"/>
           </KeyEntity>
         </Flick>
-        <Flick mozc:direction="left">
-          <KeyEntity mozc:sourceId="42"
-                     mozc:keyCode="@integer/uchar_left_parenthesis"
-                     mozc:keyIcon="@raw/godan__kana__support__09_left"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__popup__left_parenthesis"/>
+        <Flick mozc:mozc_direction="left">
+          <KeyEntity mozc:mozc_sourceId="42"
+                     mozc:mozc_keyCode="@integer/uchar_left_parenthesis"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__09_left"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__popup__left_parenthesis"/>
           </KeyEntity>
         </Flick>
-        <Flick mozc:direction="up">
-          <KeyEntity mozc:sourceId="43"
-                     mozc:keyCode="@integer/uchar_latin_small_letter_x"
-                     mozc:keyIcon="@raw/godan__kana__support__09_up"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__popup__latin_x"/>
+        <Flick mozc:mozc_direction="up">
+          <KeyEntity mozc:mozc_sourceId="43"
+                     mozc:mozc_keyCode="@integer/uchar_latin_small_letter_x"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__09_up"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__popup__latin_x"/>
           </KeyEntity>
         </Flick>
-        <Flick mozc:direction="right">
-          <KeyEntity mozc:sourceId="44"
-                     mozc:keyCode="@integer/uchar_right_parenthesis"
-                     mozc:keyIcon="@raw/godan__kana__support__09_right"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__popup__right_parenthesis"/>
+        <Flick mozc:mozc_direction="right">
+          <KeyEntity mozc:mozc_sourceId="44"
+                     mozc:mozc_keyCode="@integer/uchar_right_parenthesis"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__09_right"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__popup__right_parenthesis"/>
           </KeyEntity>
         </Flick>
-        <Flick mozc:direction="down">
-          <KeyEntity mozc:sourceId="45"
-                     mozc:keyCode="@integer/uchar_digit_nine"
-                     mozc:keyIcon="@raw/godan__kana__support__09_down"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__popup__nine"/>
+        <Flick mozc:mozc_direction="down">
+          <KeyEntity mozc:mozc_sourceId="45"
+                     mozc:mozc_keyCode="@integer/uchar_digit_nine"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__09_down"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__popup__nine"/>
           </KeyEntity>
         </Flick>
       </KeyState>
     </Key>
-    <Spacer mozc:keyWidth="@dimen/keyboard_separator_width" mozc:keyHorizontalLayoutWeight="0"
-            mozc:keyBackground="keyboardSeparatorCenter"/>
-    <Key mozc:keyBackground="twelvekeysFunctionWithThreeDots"
-         mozc:keyHorizontalLayoutWeight="0" mozc:keyEdgeFlags="right">
-      <KeyState mozc:contentDescription="@string/cd_key_uchar_space">
+    <Spacer mozc:mozc_keyWidth="@dimen/keyboard_separator_width" mozc:mozc_keyHorizontalLayoutWeight="0"
+            mozc:mozc_keyBackground="keyboardSeparatorCenter"/>
+    <Key mozc:mozc_keyBackground="twelvekeysFunctionWithThreeDots"
+         mozc:mozc_keyHorizontalLayoutWeight="0" mozc:mozc_keyEdgeFlags="right">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_uchar_space">
         <Flick>
-          <KeyEntity mozc:sourceId="106"
-                     mozc:keyCode="@integer/uchar_space"
-                     mozc:longPressKeyCode="@integer/key_ime_picker_dialog"
-                     mozc:keyIcon="@raw/twelvekeys__function__space__icon"
-                     mozc:iconWidth="@dimen/unlimited"
-                     mozc:iconHeight="@dimen/default_function_icon_height" />
+          <KeyEntity mozc:mozc_sourceId="106"
+                     mozc:mozc_keyCode="@integer/uchar_space"
+                     mozc:mozc_longPressKeyCode="@integer/key_ime_picker_dialog"
+                     mozc:mozc_keyIcon="@raw/twelvekeys__function__space__icon"
+                     mozc:mozc_iconWidth="@dimen/unlimited"
+                     mozc:mozc_iconHeight="@dimen/default_function_icon_height" />
         </Flick>
       </KeyState>
     </Key>
   </Row>
   <Row>
-    <Key mozc:keyBackground="twelvekeysFunctionWithThreeDots"
-         mozc:keyHorizontalLayoutWeight="0" mozc:keyHeight="40%p"
-         mozc:keyEdgeFlags="left">
-      <KeyState mozc:contentDescription="@string/cd_key_chartype_to_abc">
+    <Key mozc:mozc_keyBackground="twelvekeysFunctionWithThreeDots"
+         mozc:mozc_keyHorizontalLayoutWeight="0" mozc:mozc_keyHeight="40%p"
+         mozc:mozc_keyEdgeFlags="left">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_chartype_to_abc">
         <Flick>
-          <KeyEntity mozc:sourceId="107"
-                     mozc:keyCode="@integer/key_chartype_to_abc"
-                     mozc:longPressKeyCode="@integer/key_menu_dialog"
-                     mozc:keyIcon="@raw/twelvekeys__function__kana__icon"
-                     mozc:iconWidth="@dimen/unlimited"
-                     mozc:iconHeight="@dimen/default_function_icon_height" />
+          <KeyEntity mozc:mozc_sourceId="107"
+                     mozc:mozc_keyCode="@integer/key_chartype_to_abc"
+                     mozc:mozc_longPressKeyCode="@integer/key_menu_dialog"
+                     mozc:mozc_keyIcon="@raw/twelvekeys__function__kana__icon"
+                     mozc:mozc_iconWidth="@dimen/unlimited"
+                     mozc:mozc_iconHeight="@dimen/default_function_icon_height" />
         </Flick>
       </KeyState>
     </Key>
-    <Spacer mozc:keyWidth="@dimen/keyboard_separator_width" mozc:keyHorizontalLayoutWeight="0"
-            mozc:keyBackground="keyboardSeparatorCenter"/>
+    <Spacer mozc:mozc_keyWidth="@dimen/keyboard_separator_width" mozc:mozc_keyHorizontalLayoutWeight="0"
+            mozc:mozc_keyBackground="keyboardSeparatorCenter"/>
     <Key>
-      <KeyState mozc:contentDescription="@string/cd_key_uchar_latin_small_letter_e">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_uchar_latin_small_letter_e">
         <Flick>
-          <KeyEntity mozc:sourceId="46"
-                     mozc:keyCode="@integer/uchar_latin_small_letter_e"
-                     mozc:keyIcon="@raw/godan__kana__support__10_center"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/godan__kana__support__popup__10"/>
+          <KeyEntity mozc:mozc_sourceId="46"
+                     mozc:mozc_keyCode="@integer/uchar_latin_small_letter_e"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__10_center"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/godan__kana__support__popup__10"/>
           </KeyEntity>
         </Flick>
-        <Flick mozc:direction="left">
-          <KeyEntity mozc:sourceId="47"
-                     mozc:keyCode="@integer/uchar_equals_sign"
-                     mozc:keyIcon="@raw/godan__kana__support__10_center"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__kana__keyicon__extu"/>
+        <Flick mozc:mozc_direction="left">
+          <KeyEntity mozc:mozc_sourceId="47"
+                     mozc:mozc_keyCode="@integer/uchar_equals_sign"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__10_center"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__kana__keyicon__extu"/>
           </KeyEntity>
         </Flick>
-        <Flick mozc:direction="up">
-          <KeyEntity mozc:sourceId="48"
-                     mozc:keyCode="@integer/uchar_right_curly_bracket"
-                     mozc:keyIcon="@raw/godan__kana__support__10_center"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__kana__keyicon__en"/>
+        <Flick mozc:mozc_direction="up">
+          <KeyEntity mozc:mozc_sourceId="48"
+                     mozc:mozc_keyCode="@integer/uchar_right_curly_bracket"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__10_center"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__kana__keyicon__en"/>
           </KeyEntity>
         </Flick>
-        <Flick mozc:direction="right">
-          <KeyEntity mozc:sourceId="49"
-                     mozc:keyCode="@integer/uchar_low_line"
-                     mozc:keyIcon="@raw/godan__kana__support__10_center"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__kana__keyicon__xe"/>
-          </KeyEntity>
-        </Flick>
-      </KeyState>
-    </Key>
-    <Key>
-      <KeyState mozc:contentDescription="@string/cd_key_uchar_latin_small_letter_n">
-        <Flick>
-          <KeyEntity mozc:sourceId="51"
-                     mozc:keyCode="@integer/uchar_latin_small_letter_n"
-                     mozc:keyIcon="@raw/godan__kana__support__11_center"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/godan__kana__support__popup__11"/>
-          </KeyEntity>
-        </Flick>
-        <Flick mozc:direction="left">
-          <KeyEntity mozc:sourceId="52"
-                     mozc:keyCode="@integer/uchar_colon"
-                     mozc:keyIcon="@raw/godan__kana__support__11_left"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__popup__fullwidth_colon"/>
-          </KeyEntity>
-        </Flick>
-        <Flick mozc:direction="up">
-          <KeyEntity mozc:sourceId="53"
-                     mozc:keyCode="@integer/uchar_reverse_solidus"
-                     mozc:keyIcon="@raw/godan__kana__support__11_center"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__kana__keyicon__nn"/>
-          </KeyEntity>
-        </Flick>
-        <Flick mozc:direction="right">
-          <KeyEntity mozc:sourceId="54"
-                     mozc:keyCode="@integer/uchar_semicolon"
-                     mozc:keyIcon="@raw/godan__kana__support__11_right"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__popup__katakana_middle_dot"/>
-          </KeyEntity>
-        </Flick>
-        <Flick mozc:direction="down">
-          <KeyEntity mozc:sourceId="55"
-                     mozc:keyCode="@integer/uchar_digit_zero"
-                     mozc:keyIcon="@raw/godan__kana__support__11_down"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__popup__zero"/>
+        <Flick mozc:mozc_direction="right">
+          <KeyEntity mozc:mozc_sourceId="49"
+                     mozc:mozc_keyCode="@integer/uchar_low_line"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__10_center"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__kana__keyicon__xe"/>
           </KeyEntity>
         </Flick>
       </KeyState>
     </Key>
     <Key>
-      <KeyState mozc:contentDescription="@string/cd_key_uchar_latin_small_letter_r">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_uchar_latin_small_letter_n">
         <Flick>
-          <KeyEntity mozc:sourceId="56"
-                     mozc:keyCode="@integer/uchar_latin_small_letter_r"
-                     mozc:keyIcon="@raw/godan__kana__support__12_center"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/godan__kana__support__popup__12"/>
+          <KeyEntity mozc:mozc_sourceId="51"
+                     mozc:mozc_keyCode="@integer/uchar_latin_small_letter_n"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__11_center"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/godan__kana__support__popup__11"/>
           </KeyEntity>
         </Flick>
-        <Flick mozc:direction="left">
-          <KeyEntity mozc:sourceId="57"
-                     mozc:keyCode="@integer/uchar_full_stop"
-                     mozc:keyIcon="@raw/godan__kana__support__12_left"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__popup__ideographic_full_stop"/>
+        <Flick mozc:mozc_direction="left">
+          <KeyEntity mozc:mozc_sourceId="52"
+                     mozc:mozc_keyCode="@integer/uchar_colon"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__11_left"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__popup__fullwidth_colon"/>
           </KeyEntity>
         </Flick>
-        <Flick mozc:direction="up">
-          <KeyEntity mozc:sourceId="58"
-                     mozc:keyCode="@integer/uchar_question_mark"
-                     mozc:keyIcon="@raw/godan__kana__support__12_up"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__kana__keyicon__question_mark"/>
+        <Flick mozc:mozc_direction="up">
+          <KeyEntity mozc:mozc_sourceId="53"
+                     mozc:mozc_keyCode="@integer/uchar_reverse_solidus"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__11_center"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__kana__keyicon__nn"/>
           </KeyEntity>
         </Flick>
-        <Flick mozc:direction="right">
-          <KeyEntity mozc:sourceId="59"
-                     mozc:keyCode="@integer/uchar_exclamation_mark"
-                     mozc:keyIcon="@raw/godan__kana__support__12_right"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__kana__keyicon__exclamation_mark"/>
+        <Flick mozc:mozc_direction="right">
+          <KeyEntity mozc:mozc_sourceId="54"
+                     mozc:mozc_keyCode="@integer/uchar_semicolon"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__11_right"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__popup__katakana_middle_dot"/>
           </KeyEntity>
         </Flick>
-        <Flick mozc:direction="down">
-          <KeyEntity mozc:sourceId="60"
-                     mozc:keyCode="@integer/uchar_comma"
-                     mozc:keyIcon="@raw/godan__kana__support__12_down"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__popup__ideographic_comma"/>
+        <Flick mozc:mozc_direction="down">
+          <KeyEntity mozc:mozc_sourceId="55"
+                     mozc:mozc_keyCode="@integer/uchar_digit_zero"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__11_down"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__popup__zero"/>
           </KeyEntity>
         </Flick>
       </KeyState>
     </Key>
-    <Spacer mozc:keyWidth="@dimen/keyboard_separator_width" mozc:keyHorizontalLayoutWeight="0"
-            mozc:keyBackground="keyboardSeparatorCenter"/>
-    <Key mozc:keyBackground="twelvekeysFunctionWithThreeDots"
-         mozc:keyHorizontalLayoutWeight="0" mozc:keyHeight="40%p"
-         mozc:keyEdgeFlags="right"
-         mozc:defaultIconWidth="@dimen/keyboard_enter_width"
-         mozc:defaultIconHeight="@dimen/unlimited">
-      <KeyState mozc:contentDescription="@string/cd_key_uchar_linefeed">
+    <Key>
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_uchar_latin_small_letter_r">
         <Flick>
-          <KeyEntity mozc:sourceId="108"
-                     mozc:keyCode="@integer/uchar_linefeed"
-                     mozc:longPressKeyCode="@integer/key_symbol_emoji"
-                     mozc:longPressTimeoutTrigger="false"
-                     mozc:keyIcon="@raw/function__enter__icon">
-            <PopUp mozc:popUpLongPressIcon="@raw/function__symbol__popup"
-                   mozc:popUpIconHeight="@dimen/key_preview_emoji_icon_height" />
+          <KeyEntity mozc:mozc_sourceId="56"
+                     mozc:mozc_keyCode="@integer/uchar_latin_small_letter_r"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__12_center"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/godan__kana__support__popup__12"/>
+          </KeyEntity>
+        </Flick>
+        <Flick mozc:mozc_direction="left">
+          <KeyEntity mozc:mozc_sourceId="57"
+                     mozc:mozc_keyCode="@integer/uchar_full_stop"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__12_left"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__popup__ideographic_full_stop"/>
+          </KeyEntity>
+        </Flick>
+        <Flick mozc:mozc_direction="up">
+          <KeyEntity mozc:mozc_sourceId="58"
+                     mozc:mozc_keyCode="@integer/uchar_question_mark"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__12_up"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__kana__keyicon__question_mark"/>
+          </KeyEntity>
+        </Flick>
+        <Flick mozc:mozc_direction="right">
+          <KeyEntity mozc:mozc_sourceId="59"
+                     mozc:mozc_keyCode="@integer/uchar_exclamation_mark"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__12_right"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__kana__keyicon__exclamation_mark"/>
+          </KeyEntity>
+        </Flick>
+        <Flick mozc:mozc_direction="down">
+          <KeyEntity mozc:mozc_sourceId="60"
+                     mozc:mozc_keyCode="@integer/uchar_comma"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__12_down"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__popup__ideographic_comma"/>
           </KeyEntity>
         </Flick>
       </KeyState>
-      <KeyState mozc:contentDescription="@string/cd_key_composing_done"
-                mozc:metaState="composing">
+    </Key>
+    <Spacer mozc:mozc_keyWidth="@dimen/keyboard_separator_width" mozc:mozc_keyHorizontalLayoutWeight="0"
+            mozc:mozc_keyBackground="keyboardSeparatorCenter"/>
+    <Key mozc:mozc_keyBackground="twelvekeysFunctionWithThreeDots"
+         mozc:mozc_keyHorizontalLayoutWeight="0" mozc:mozc_keyHeight="40%p"
+         mozc:mozc_keyEdgeFlags="right"
+         mozc:mozc_defaultIconWidth="@dimen/keyboard_enter_width"
+         mozc:mozc_defaultIconHeight="@dimen/unlimited">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_uchar_linefeed">
         <Flick>
-          <KeyEntity mozc:sourceId="109"
-                     mozc:keyCode="@integer/uchar_linefeed"
-                     mozc:longPressKeyCode="@integer/key_symbol_emoji"
-                     mozc:longPressTimeoutTrigger="false"
-                     mozc:keyIcon="@raw/function__enter__icon">
-            <PopUp mozc:popUpLongPressIcon="@raw/function__symbol__popup"
-                   mozc:popUpIconHeight="@dimen/key_preview_emoji_icon_height" />
+          <KeyEntity mozc:mozc_sourceId="108"
+                     mozc:mozc_keyCode="@integer/uchar_linefeed"
+                     mozc:mozc_longPressKeyCode="@integer/key_symbol_emoji"
+                     mozc:mozc_longPressTimeoutTrigger="false"
+                     mozc:mozc_keyIcon="@raw/function__enter__icon">
+            <PopUp mozc:mozc_popUpLongPressIcon="@raw/function__symbol__popup"
+                   mozc:mozc_popUpIconHeight="@dimen/key_preview_emoji_icon_height" />
           </KeyEntity>
         </Flick>
       </KeyState>
-      <KeyState mozc:contentDescription="@string/cd_key_action_done"
-                mozc:metaState="action_done">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_composing_done"
+                mozc:mozc_metaState="composing">
         <Flick>
-          <KeyEntity mozc:sourceId="110"
-                     mozc:keyCode="@integer/uchar_linefeed"
-                     mozc:longPressKeyCode="@integer/key_symbol_emoji"
-                     mozc:longPressTimeoutTrigger="false"
-                     mozc:keyIcon="@raw/function__action_done__icon">
-            <PopUp mozc:popUpLongPressIcon="@raw/function__symbol__popup"
-                   mozc:popUpIconHeight="@dimen/key_preview_emoji_icon_height" />
+          <KeyEntity mozc:mozc_sourceId="109"
+                     mozc:mozc_keyCode="@integer/uchar_linefeed"
+                     mozc:mozc_longPressKeyCode="@integer/key_symbol_emoji"
+                     mozc:mozc_longPressTimeoutTrigger="false"
+                     mozc:mozc_keyIcon="@raw/function__enter__icon">
+            <PopUp mozc:mozc_popUpLongPressIcon="@raw/function__symbol__popup"
+                   mozc:mozc_popUpIconHeight="@dimen/key_preview_emoji_icon_height" />
           </KeyEntity>
         </Flick>
       </KeyState>
-      <KeyState mozc:contentDescription="@string/cd_key_action_go"
-                mozc:metaState="action_go">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_action_done"
+                mozc:mozc_metaState="action_done">
         <Flick>
-          <KeyEntity mozc:sourceId="111"
-                     mozc:keyCode="@integer/uchar_linefeed"
-                     mozc:longPressKeyCode="@integer/key_symbol_emoji"
-                     mozc:longPressTimeoutTrigger="false"
-                     mozc:keyIcon="@raw/function__action_go__icon">
-            <PopUp mozc:popUpLongPressIcon="@raw/function__symbol__popup"
-                   mozc:popUpIconHeight="@dimen/key_preview_emoji_icon_height" />
+          <KeyEntity mozc:mozc_sourceId="110"
+                     mozc:mozc_keyCode="@integer/uchar_linefeed"
+                     mozc:mozc_longPressKeyCode="@integer/key_symbol_emoji"
+                     mozc:mozc_longPressTimeoutTrigger="false"
+                     mozc:mozc_keyIcon="@raw/function__action_done__icon">
+            <PopUp mozc:mozc_popUpLongPressIcon="@raw/function__symbol__popup"
+                   mozc:mozc_popUpIconHeight="@dimen/key_preview_emoji_icon_height" />
           </KeyEntity>
         </Flick>
       </KeyState>
-      <KeyState mozc:contentDescription="@string/cd_key_action_next"
-                mozc:metaState="action_next">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_action_go"
+                mozc:mozc_metaState="action_go">
         <Flick>
-          <KeyEntity mozc:sourceId="112"
-                     mozc:keyCode="@integer/uchar_linefeed"
-                     mozc:longPressKeyCode="@integer/key_symbol_emoji"
-                     mozc:longPressTimeoutTrigger="false"
-                     mozc:keyIcon="@raw/function__action_next__icon">
-            <PopUp mozc:popUpLongPressIcon="@raw/function__symbol__popup"
-                   mozc:popUpIconHeight="@dimen/key_preview_emoji_icon_height" />
+          <KeyEntity mozc:mozc_sourceId="111"
+                     mozc:mozc_keyCode="@integer/uchar_linefeed"
+                     mozc:mozc_longPressKeyCode="@integer/key_symbol_emoji"
+                     mozc:mozc_longPressTimeoutTrigger="false"
+                     mozc:mozc_keyIcon="@raw/function__action_go__icon">
+            <PopUp mozc:mozc_popUpLongPressIcon="@raw/function__symbol__popup"
+                   mozc:mozc_popUpIconHeight="@dimen/key_preview_emoji_icon_height" />
           </KeyEntity>
         </Flick>
       </KeyState>
-      <KeyState mozc:contentDescription="@string/cd_key_action_previous"
-                mozc:metaState="action_previous">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_action_next"
+                mozc:mozc_metaState="action_next">
         <Flick>
-          <KeyEntity mozc:sourceId="113"
-                     mozc:keyCode="@integer/uchar_linefeed"
-                     mozc:longPressKeyCode="@integer/key_symbol_emoji"
-                     mozc:longPressTimeoutTrigger="false"
-                     mozc:keyIcon="@raw/function__action_previous__icon">
-            <PopUp mozc:popUpLongPressIcon="@raw/function__symbol__popup"
-                   mozc:popUpIconHeight="@dimen/key_preview_emoji_icon_height" />
+          <KeyEntity mozc:mozc_sourceId="112"
+                     mozc:mozc_keyCode="@integer/uchar_linefeed"
+                     mozc:mozc_longPressKeyCode="@integer/key_symbol_emoji"
+                     mozc:mozc_longPressTimeoutTrigger="false"
+                     mozc:mozc_keyIcon="@raw/function__action_next__icon">
+            <PopUp mozc:mozc_popUpLongPressIcon="@raw/function__symbol__popup"
+                   mozc:mozc_popUpIconHeight="@dimen/key_preview_emoji_icon_height" />
           </KeyEntity>
         </Flick>
       </KeyState>
-      <KeyState mozc:contentDescription="@string/cd_key_action_search"
-                mozc:metaState="action_search">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_action_previous"
+                mozc:mozc_metaState="action_previous">
         <Flick>
-          <KeyEntity mozc:sourceId="114"
-                     mozc:keyCode="@integer/uchar_linefeed"
-                     mozc:longPressKeyCode="@integer/key_symbol_emoji"
-                     mozc:longPressTimeoutTrigger="false"
-                     mozc:keyIcon="@raw/function__action_search__icon">
-            <PopUp mozc:popUpLongPressIcon="@raw/function__symbol__popup"
-                   mozc:popUpIconHeight="@dimen/key_preview_emoji_icon_height" />
+          <KeyEntity mozc:mozc_sourceId="113"
+                     mozc:mozc_keyCode="@integer/uchar_linefeed"
+                     mozc:mozc_longPressKeyCode="@integer/key_symbol_emoji"
+                     mozc:mozc_longPressTimeoutTrigger="false"
+                     mozc:mozc_keyIcon="@raw/function__action_previous__icon">
+            <PopUp mozc:mozc_popUpLongPressIcon="@raw/function__symbol__popup"
+                   mozc:mozc_popUpIconHeight="@dimen/key_preview_emoji_icon_height" />
           </KeyEntity>
         </Flick>
       </KeyState>
-      <KeyState mozc:contentDescription="@string/cd_key_action_send"
-                mozc:metaState="action_send">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_action_search"
+                mozc:mozc_metaState="action_search">
         <Flick>
-          <KeyEntity mozc:sourceId="115"
-                     mozc:keyCode="@integer/uchar_linefeed"
-                     mozc:longPressKeyCode="@integer/key_symbol_emoji"
-                     mozc:longPressTimeoutTrigger="false"
-                     mozc:keyIcon="@raw/function__action_send__icon">
-            <PopUp mozc:popUpLongPressIcon="@raw/function__symbol__popup"
-                   mozc:popUpIconHeight="@dimen/key_preview_emoji_icon_height" />
+          <KeyEntity mozc:mozc_sourceId="114"
+                     mozc:mozc_keyCode="@integer/uchar_linefeed"
+                     mozc:mozc_longPressKeyCode="@integer/key_symbol_emoji"
+                     mozc:mozc_longPressTimeoutTrigger="false"
+                     mozc:mozc_keyIcon="@raw/function__action_search__icon">
+            <PopUp mozc:mozc_popUpLongPressIcon="@raw/function__symbol__popup"
+                   mozc:mozc_popUpIconHeight="@dimen/key_preview_emoji_icon_height" />
+          </KeyEntity>
+        </Flick>
+      </KeyState>
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_action_send"
+                mozc:mozc_metaState="action_send">
+        <Flick>
+          <KeyEntity mozc:mozc_sourceId="115"
+                     mozc:mozc_keyCode="@integer/uchar_linefeed"
+                     mozc:mozc_longPressKeyCode="@integer/key_symbol_emoji"
+                     mozc:mozc_longPressTimeoutTrigger="false"
+                     mozc:mozc_keyIcon="@raw/function__action_send__icon">
+            <PopUp mozc:mozc_popUpLongPressIcon="@raw/function__symbol__popup"
+                   mozc:mozc_popUpIconHeight="@dimen/key_preview_emoji_icon_height" />
           </KeyEntity>
         </Flick>
       </KeyState>
     </Key>
   </Row>
   <Row>
-    <Spacer mozc:keyHorizontalLayoutWeight="0" mozc:keyBackground="transparent"/>
-    <Spacer mozc:keyWidth="@dimen/keyboard_separator_width" mozc:keyHorizontalLayoutWeight="0"
-            mozc:keyBackground="keyboardSeparatorBottom"/>
+    <Spacer mozc:mozc_keyHorizontalLayoutWeight="0" mozc:mozc_keyBackground="transparent"/>
+    <Spacer mozc:mozc_keyWidth="@dimen/keyboard_separator_width" mozc:mozc_keyHorizontalLayoutWeight="0"
+            mozc:mozc_keyBackground="keyboardSeparatorBottom"/>
     <Key>
-      <KeyState mozc:contentDescription="@string/cd_key_uchar_latin_small_letter_o">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_uchar_latin_small_letter_o">
         <Flick>
-          <KeyEntity mozc:sourceId="61"
-                     mozc:keyCode="@integer/uchar_latin_small_letter_o"
-                     mozc:keyIcon="@raw/godan__kana__support__13_center"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/godan__kana__support__popup__13"/>
+          <KeyEntity mozc:mozc_sourceId="61"
+                     mozc:mozc_keyCode="@integer/uchar_latin_small_letter_o"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__13_center"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/godan__kana__support__popup__13"/>
           </KeyEntity>
         </Flick>
-        <Flick mozc:direction="left">
-          <KeyEntity mozc:sourceId="62"
-                     mozc:keyCode="@integer/uchar_commercial_at"
-                     mozc:keyIcon="@raw/godan__kana__support__13_center"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__kana__keyicon__oxtu"/>
+        <Flick mozc:mozc_direction="left">
+          <KeyEntity mozc:mozc_sourceId="62"
+                     mozc:mozc_keyCode="@integer/uchar_commercial_at"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__13_center"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__kana__keyicon__oxtu"/>
           </KeyEntity>
         </Flick>
-        <Flick mozc:direction="up">
-          <KeyEntity mozc:sourceId="63"
-                     mozc:keyCode="@integer/uchar_tilde"
-                     mozc:keyIcon="@raw/godan__kana__support__13_center"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__kana__keyicon__on"/>
+        <Flick mozc:mozc_direction="up">
+          <KeyEntity mozc:mozc_sourceId="63"
+                     mozc:mozc_keyCode="@integer/uchar_tilde"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__13_center"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__kana__keyicon__on"/>
           </KeyEntity>
         </Flick>
-        <Flick mozc:direction="right">
-          <KeyEntity mozc:sourceId="64"
-                     mozc:keyCode="@integer/uchar_vertical_line"
-                     mozc:keyIcon="@raw/godan__kana__support__13_center"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__kana__keyicon__xyo"/>
+        <Flick mozc:mozc_direction="right">
+          <KeyEntity mozc:mozc_sourceId="64"
+                     mozc:mozc_keyCode="@integer/uchar_vertical_line"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__13_center"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__kana__keyicon__xyo"/>
           </KeyEntity>
         </Flick>
       </KeyState>
     </Key>
     <Key>
-      <KeyState mozc:contentDescription="@string/cd_key_kana_modifier" mozc:metaState="fallback|composing|no_globe">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_kana_modifier" mozc:mozc_metaState="fallback|composing|no_globe">
         <Flick>
-          <KeyEntity mozc:sourceId="66"
-                     mozc:keyCode="@integer/uchar_asterisk"
-                     mozc:keyIcon="@raw/godan__kana__14">
-            <PopUp mozc:popUpIcon="@raw/godan__kana__14"/>
+          <KeyEntity mozc:mozc_sourceId="66"
+                     mozc:mozc_keyCode="@integer/uchar_asterisk"
+                     mozc:mozc_keyIcon="@raw/godan__kana__14">
+            <PopUp mozc:mozc_popUpIcon="@raw/godan__kana__14"/>
           </KeyEntity>
         </Flick>
-        <Flick mozc:direction="left">
-          <KeyEntity mozc:sourceId="67"
-                     mozc:keyCode="@integer/uchar_apostrophe"
-                     mozc:keyIcon="@raw/godan__kana__14"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__kana__popup__semi_voiced_mark"/>
+        <Flick mozc:mozc_direction="left">
+          <KeyEntity mozc:mozc_sourceId="67"
+                     mozc:mozc_keyCode="@integer/uchar_apostrophe"
+                     mozc:mozc_keyIcon="@raw/godan__kana__14"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__kana__popup__semi_voiced_mark"/>
           </KeyEntity>
         </Flick>
-        <Flick mozc:direction="up">
-          <KeyEntity mozc:sourceId="68"
-                     mozc:keyCode="@integer/uchar_grave_accent"
-                     mozc:keyIcon="@raw/godan__kana__14"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__kana__popup__small"/>
+        <Flick mozc:mozc_direction="up">
+          <KeyEntity mozc:mozc_sourceId="68"
+                     mozc:mozc_keyCode="@integer/uchar_grave_accent"
+                     mozc:mozc_keyIcon="@raw/godan__kana__14"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__kana__popup__small"/>
           </KeyEntity>
         </Flick>
-        <Flick mozc:direction="right">
-          <KeyEntity mozc:sourceId="69"
-                     mozc:keyCode="@integer/uchar_quotation_mark"
-                     mozc:keyIcon="@raw/godan__kana__14"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__kana__popup__voiced_mark"/>
+        <Flick mozc:mozc_direction="right">
+          <KeyEntity mozc:mozc_sourceId="69"
+                     mozc:mozc_keyCode="@integer/uchar_quotation_mark"
+                     mozc:mozc_keyIcon="@raw/godan__kana__14"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__kana__popup__voiced_mark"/>
           </KeyEntity>
         </Flick>
       </KeyState>
-      <KeyState mozc:contentDescription="@string/cd_key_kana_modifier" mozc:metaState="handling_touch_event" >
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_kana_modifier" mozc:mozc_metaState="handling_touch_event" >
         <Flick>
-          <KeyEntity mozc:sourceId="117"
-                     mozc:keyCode="@integer/uchar_asterisk"
-                     mozc:keyIcon="@raw/globe_keyicon"
-                     mozc:iconWidth="@dimen/unlimited"
-                     mozc:iconHeight="@dimen/default_function_icon_height">
-            <PopUp mozc:popUpIcon="@raw/godan__kana__14"/>
+          <KeyEntity mozc:mozc_sourceId="117"
+                     mozc:mozc_keyCode="@integer/uchar_asterisk"
+                     mozc:mozc_keyIcon="@raw/globe_keyicon"
+                     mozc:mozc_iconWidth="@dimen/unlimited"
+                     mozc:mozc_iconHeight="@dimen/default_function_icon_height">
+            <PopUp mozc:mozc_popUpIcon="@raw/godan__kana__14"/>
           </KeyEntity>
         </Flick>
       </KeyState>
-      <KeyState mozc:contentDescription="@string/cd_key_globe" mozc:metaState="globe" >
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_globe" mozc:mozc_metaState="globe" >
         <Flick>
-          <KeyEntity mozc:sourceId="116"
-                     mozc:keyCode="@integer/key_globe"
-                     mozc:keyIcon="@raw/globe_keyicon"
-                     mozc:iconWidth="@dimen/unlimited"
-                     mozc:iconHeight="@dimen/default_function_icon_height"
-                     mozc:longPressKeyCode="@integer/key_ime_picker_dialog" />
+          <KeyEntity mozc:mozc_sourceId="116"
+                     mozc:mozc_keyCode="@integer/key_globe"
+                     mozc:mozc_keyIcon="@raw/globe_keyicon"
+                     mozc:mozc_iconWidth="@dimen/unlimited"
+                     mozc:mozc_iconHeight="@dimen/default_function_icon_height"
+                     mozc:mozc_longPressKeyCode="@integer/key_ime_picker_dialog" />
         </Flick>
       </KeyState>
     </Key>
     <Key>
-      <KeyState mozc:contentDescription="@string/cd_key_uchar_latin_small_letter_w">
+      <KeyState mozc:mozc_contentDescription="@string/cd_key_uchar_latin_small_letter_w">
         <Flick>
-          <KeyEntity mozc:sourceId="71"
-                     mozc:keyCode="@integer/uchar_latin_small_letter_w"
-                     mozc:keyIcon="@raw/godan__kana__support__15_center"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/godan__kana__support__popup__15"/>
+          <KeyEntity mozc:mozc_sourceId="71"
+                     mozc:mozc_keyCode="@integer/uchar_latin_small_letter_w"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__15_center"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/godan__kana__support__popup__15"/>
           </KeyEntity>
         </Flick>
-        <Flick mozc:direction="left">
-          <KeyEntity mozc:sourceId="72"
-                     mozc:keyCode="@integer/uchar_left_square_bracket"
-                     mozc:keyIcon="@raw/godan__kana__support__15_left"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__popup__left_corner_bracket"/>
+        <Flick mozc:mozc_direction="left">
+          <KeyEntity mozc:mozc_sourceId="72"
+                     mozc:mozc_keyCode="@integer/uchar_left_square_bracket"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__15_left"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__popup__left_corner_bracket"/>
           </KeyEntity>
         </Flick>
-        <Flick mozc:direction="up">
-          <KeyEntity mozc:sourceId="73"
-                     mozc:keyCode="@integer/uchar_latin_small_letter_v"
-                     mozc:keyIcon="@raw/godan__kana__support__15_up"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__popup__latin_v"/>
+        <Flick mozc:mozc_direction="up">
+          <KeyEntity mozc:mozc_sourceId="73"
+                     mozc:mozc_keyCode="@integer/uchar_latin_small_letter_v"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__15_up"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__popup__latin_v"/>
           </KeyEntity>
         </Flick>
-        <Flick mozc:direction="right">
-          <KeyEntity mozc:sourceId="74"
-                     mozc:keyCode="@integer/uchar_right_square_bracket"
-                     mozc:keyIcon="@raw/godan__kana__support__15_right"
-                     mozc:flickHighlight="true">
-            <PopUp mozc:popUpIcon="@raw/twelvekeys__popup__right_corner_bracket"/>
+        <Flick mozc:mozc_direction="right">
+          <KeyEntity mozc:mozc_sourceId="74"
+                     mozc:mozc_keyCode="@integer/uchar_right_square_bracket"
+                     mozc:mozc_keyIcon="@raw/godan__kana__support__15_right"
+                     mozc:mozc_flickHighlight="true">
+            <PopUp mozc:mozc_popUpIcon="@raw/twelvekeys__popup__right_corner_bracket"/>
           </KeyEntity>
         </Flick>
       </KeyState>
     </Key>
-    <Spacer mozc:keyWidth="@dimen/keyboard_separator_width" mozc:keyHorizontalLayoutWeight="0"
-            mozc:keyBackground="keyboardSeparatorBottom"/>
-    <Spacer mozc:keyHorizontalLayoutWeight="0" mozc:keyBackground="transparent"/>
+    <Spacer mozc:mozc_keyWidth="@dimen/keyboard_separator_width" mozc:mozc_keyHorizontalLayoutWeight="0"
+            mozc:mozc_keyBackground="keyboardSeparatorBottom"/>
+    <Spacer mozc:mozc_keyHorizontalLayoutWeight="0" mozc:mozc_keyBackground="transparent"/>
   </Row>
   <!-- Next sourceId: 119 -->
 </Keyboard>

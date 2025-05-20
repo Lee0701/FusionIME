@@ -43,12 +43,12 @@
     <attr name="entries" format="reference" />
   </declare-styleable>
 
-  <declare-styleable name="Keyboard">
-    <attr name="keyboardContentDescription" format="string" />
+  <declare-styleable name="MozcKeyboard">
+    <attr name="mozc_keyboardContentDescription" format="string" />
 
-    <attr name="flickThreshold" format="dimension" />
+    <attr name="mozc_flickThreshold" format="dimension" />
 
-    <attr name="keyBackground">
+    <attr name="mozc_keyBackground">
       <enum name="twelvekeysRegular" value="0" />
       <enum name="twelvekeysFunction" value="1" />
       <enum name="twelvekeysFunctionWithThreeDots" value="2" />
@@ -62,50 +62,50 @@
       <enum name="transparent" value="10" />
     </attr>
 
-    <attr name="keyWidth" format="dimension|fraction" />
-    <attr name="keyHeight" format="dimension|fraction" />
-    <attr name="keyHorizontalLayoutWeight" format="integer" />
-    <attr name="horizontalGap" format="dimension|fraction" />
-    <attr name="verticalGap" format="dimension|fraction" />
-    <attr name="defaultIconWidth" format="dimension|fraction" />
-    <attr name="defaultIconHeight" format="dimension|fraction" />
-    <attr name="defaultHorizontalPadding" format="dimension|fraction" />
-    <attr name="defaultVerticalPadding" format="dimension|fraction" />
-    <attr name="popUpHeight" format="dimension|fraction" />
+    <attr name="mozc_keyWidth" format="dimension|fraction" />
+    <attr name="mozc_keyHeight" format="dimension|fraction" />
+    <attr name="mozc_keyHorizontalLayoutWeight" format="integer" />
+    <attr name="mozc_horizontalGap" format="dimension|fraction" />
+    <attr name="mozc_verticalGap" format="dimension|fraction" />
+    <attr name="mozc_defaultIconWidth" format="dimension|fraction" />
+    <attr name="mozc_defaultIconHeight" format="dimension|fraction" />
+    <attr name="mozc_defaultHorizontalPadding" format="dimension|fraction" />
+    <attr name="mozc_defaultVerticalPadding" format="dimension|fraction" />
+    <attr name="mozc_popUpHeight" format="dimension|fraction" />
     <!-- following offset is diff between a center of a key and a center of the popup window. -->
-    <attr name="popUpXOffset" format="dimension|fraction" />
-    <attr name="popUpYOffset" format="dimension|fraction" />
-    <attr name="popUpIconWidth" format="dimension|fraction" />
-    <attr name="popUpIconHeight" format="dimension|fraction" />
+    <attr name="mozc_popUpXOffset" format="dimension|fraction" />
+    <attr name="mozc_popUpYOffset" format="dimension|fraction" />
+    <attr name="mozc_popUpIconWidth" format="dimension|fraction" />
+    <attr name="mozc_popUpIconHeight" format="dimension|fraction" />
   </declare-styleable>
 
-  <declare-styleable name="Row">
-    <attr name="rowEdgeFlags">
+  <declare-styleable name="MozcRow">
+    <attr name="mozc_rowEdgeFlags">
       <flag name="top" value="4" />
       <flag name="bottom" value="8" />
     </attr>
   </declare-styleable>
 
-  <declare-styleable name="Key">
-    <attr name="keyEdgeFlags">
+  <declare-styleable name="MozcKey">
+    <attr name="mozc_keyEdgeFlags">
       <flag name="left" value="1" />
       <flag name="right" value="2" />
     </attr>
-    <attr name="stick">
+    <attr name="mozc_stick">
       <enum name="even" value="0" />
       <enum name="left" value="1" />
       <enum name="right" value="2" />
     </attr>
-    <attr name="isRepeatable" format="boolean" />
-    <attr name="isModifier" format="boolean" />
+    <attr name="mozc_isRepeatable" format="boolean" />
+    <attr name="mozc_isModifier" format="boolean" />
   </declare-styleable>
 
-  <declare-styleable name="KeyState">
-    <attr name="contentDescription" format="string" />
+  <declare-styleable name="MozcKeyState">
+    <attr name="mozc_contentDescription" format="string" />
     <!-- We now support four meta states here; shift, caps_lock, alt and unmodified.
          Please also see KeyState.MetaState for more details.
       -->
-    <attr name="metaState">
+    <attr name="mozc_metaState">
       <!-- It is allowed to set multiple state here (by concatenating '|' separator).
            If we don't specify this attribute it means unmodified state.
         -->
@@ -138,21 +138,21 @@
            e.g., metaState="fallback|composing" -->
       <flag name="fallback" value="1073741824" />
     </attr>
-    <attr name="nextMetaState">
+    <attr name="mozc_nextMetaState">
       <!-- TODO(matsuzakit): Rename to nextAddedMetaStates -->
       <flag name="shift" value="1" />
       <flag name="capsLock" value="2" />
       <flag name="alt" value="4" />
     </attr>
-    <attr name="nextRemovedMetaStates">
+    <attr name="mozc_nextRemovedMetaStates">
       <flag name="shift" value="1" />
       <flag name="capsLock" value="2" />
       <flag name="alt" value="4" />
     </attr>
   </declare-styleable>
 
-  <declare-styleable name="Flick">
-    <attr name="direction">
+  <declare-styleable name="MozcFlick">
+    <attr name="mozc_direction">
       <!-- A flick to the center here means just a tap of a key. -->
       <enum name="center" value="0" />
       <enum name="left" value="1" />
@@ -162,16 +162,16 @@
     </attr>
   </declare-styleable>
 
-  <declare-styleable name="KeyEntity">
-    <attr name="sourceId" format="integer" />
-    <attr name="keyCode" format="integer|string" />
-    <attr name="longPressKeyCode" format="integer|string" />
-    <attr name="longPressTimeoutTrigger" format="boolean" />
-    <attr name="keyIcon" format="reference" />
-    <attr name="keyCharacter" format="string" />
-    <attr name="flickHighlight" format="boolean" />
-    <attr name="horizontalPadding" format="fraction" />
-    <attr name="verticalPadding" format="fraction" />
+  <declare-styleable name="MozcKeyEntity">
+    <attr name="mozc_sourceId" format="integer" />
+    <attr name="mozc_keyCode" format="integer|string" />
+    <attr name="mozc_longPressKeyCode" format="integer|string" />
+    <attr name="mozc_longPressTimeoutTrigger" format="boolean" />
+    <attr name="mozc_keyIcon" format="reference" />
+    <attr name="mozc_keyCharacter" format="string" />
+    <attr name="mozc_flickHighlight" format="boolean" />
+    <attr name="mozc_horizontalPadding" format="fraction" />
+    <attr name="mozc_verticalPadding" format="fraction" />
     <!-- iconWidth/Height are used to control the size of shown icon.
          The region on which an icon is shown is detemined in below way:
          1. The region is initially given by keyboard parser (Size: Key width x Row height).
@@ -182,17 +182,17 @@
          4. Aspect ratio is always kept.
          The default values are too large so
          if not provided the icon is drawn as large as possible. -->
-    <attr name="iconHeight" format="fraction|dimension" />
-    <attr name="iconWidth" format="fraction|dimension" />
+    <attr name="mozc_iconHeight" format="fraction|dimension" />
+    <attr name="mozc_iconWidth" format="fraction|dimension" />
     </declare-styleable>
 
-  <declare-styleable name="PopUp">
-    <attr name="popUpIcon" format="reference" />
-    <attr name="popUpLongPressIcon" format="reference" />
+  <declare-styleable name="MozcPopUp">
+    <attr name="mozc_popUpIcon" format="reference" />
+    <attr name="mozc_popUpLongPressIcon" format="reference" />
   </declare-styleable>
 
-  <declare-styleable name="Skin">
-    <attr name="dimension" format="dimension|fraction|reference" />
+  <declare-styleable name="MozcSkin">
+    <attr name="mozc_dimension" format="dimension|fraction|reference" />
   </declare-styleable>
 
   <declare-styleable name="MozcImageView">
