@@ -1,24 +1,20 @@
 package tw.cheyingwu.zhuyin;
 
-//import com.android.inputmethod.latin.CandidateView;
+//import com.android.inputmethod.zhuyin.CandidateView;
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.android.inputmethod.latin.CandidateView;
-import com.android.inputmethod.latin.CandidateViewContainer;
-import com.android.inputmethod.latin.KeyboardSwitcher;
-import com.android.inputmethod.latin.LatinKeyboard;
-import com.android.inputmethod.latin.LatinKeyboardView;
-import com.android.inputmethod.latin.Suggest;
-import com.android.inputmethod.latin.TextEntryState;
-import com.android.inputmethod.latin.Tutorial;
-import com.android.inputmethod.latin.UserDictionary;
-import com.android.inputmethod.latin.WordComposer;
-
-import tw.cheyingwu.zhuyin.R;
-import tw.cheyingwu.zhuyin.ZhuYinIMESettings;
+import com.android.inputmethod.zhuyin.CandidateView;
+import com.android.inputmethod.zhuyin.CandidateViewContainer;
+import com.android.inputmethod.zhuyin.KeyboardSwitcher;
+import com.android.inputmethod.zhuyin.LatinKeyboard;
+import com.android.inputmethod.zhuyin.LatinKeyboardView;
+import com.android.inputmethod.zhuyin.Suggest;
+import com.android.inputmethod.zhuyin.TextEntryState;
+import com.android.inputmethod.zhuyin.Tutorial;
+import com.android.inputmethod.zhuyin.WordComposer;
 
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
@@ -41,7 +37,6 @@ import android.preference.PreferenceManager;
 import android.text.AutoText;
 import android.text.ClipboardManager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.PrintWriterPrinter;
 import android.util.Printer;
 import android.view.KeyEvent;

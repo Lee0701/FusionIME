@@ -4,9 +4,9 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.view.KeyEvent
-import com.android.inputmethod.latin.Suggest
-import com.android.inputmethod.latin.TextEntryState
-import com.android.inputmethod.latin.WordComposer
+import com.android.inputmethod.zhuyin.Suggest
+import com.android.inputmethod.zhuyin.TextEntryState
+import com.android.inputmethod.zhuyin.WordComposer
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.keyboard.DefaultGridKeyboard
 import ee.oyatl.ime.keyboard.GridBottomRowKeyboard
@@ -40,8 +40,10 @@ class ZhuyinIMEMode(
         GridBottomRowKeyboard(KeyboardInflater.inflate(LayoutZhuyin.EXTRA_KEYS, layoutTable)[0][0])
     )
 
-    private val wordComposer: WordComposer = WordComposer()
-    private var mSuggest: Suggest = Suggest(context, R.raw.dict_zhuyin)
+    private val wordComposer: WordComposer =
+        WordComposer()
+    private var mSuggest: Suggest =
+        Suggest(context, R.raw.dict_zhuyin)
     private var mUserDictionary: ZhuYinDictionary = ZhuYinDictionary(context)
 
     private var bestCandidate: ZhuyinCandidate? = null

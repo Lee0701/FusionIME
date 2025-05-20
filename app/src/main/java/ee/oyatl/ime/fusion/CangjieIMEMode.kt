@@ -4,7 +4,7 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.view.KeyEvent
-import com.android.inputmethod.latin.WordComposer
+import com.android.inputmethod.zhuyin.WordComposer
 import com.diycircuits.cangjie.TableLoader
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.keyboard.DefaultBottomRowKeyboard
@@ -42,7 +42,8 @@ class CangjieIMEMode(
     )
 
     private val table: TableLoader = TableLoader()
-    private val wordComposer: WordComposer = WordComposer()
+    private val wordComposer: WordComposer =
+        WordComposer()
 
     private var bestCandidate: CangjieCandidate? = null
 

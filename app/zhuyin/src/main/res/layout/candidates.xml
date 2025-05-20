@@ -18,7 +18,7 @@
 */
 -->
 
-<com.android.inputmethod.latin.CandidateViewContainer
+<com.android.inputmethod.zhuyin.CandidateViewContainer
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="horizontal"
         android:layout_width="fill_parent"
@@ -47,7 +47,7 @@
             />
     </LinearLayout>
     
-    <com.android.inputmethod.latin.CandidateView
+    <com.android.inputmethod.zhuyin.CandidateView
         android:id="@+id/candidates"
         android:layout_width="wrap_content"
         android:layout_height="38dp"
@@ -98,4 +98,4 @@
             />
     </LinearLayout>
 
-</com.android.inputmethod.latin.CandidateViewContainer>
+</com.android.inputmethod.zhuyin.CandidateViewContainer>

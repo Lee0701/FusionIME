@@ -14,7 +14,7 @@
  * the License.
  */
 
-package com.android.inputmethod.latin;
+package com.android.inputmethod.zhuyin;
 
 import tw.cheyingwu.zhuyin.R;
 import android.content.Context;

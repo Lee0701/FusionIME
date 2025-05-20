@@ -14,7 +14,7 @@
  * the License.
  */
 
-package com.android.inputmethod.latin;
+package com.android.inputmethod.zhuyin;
 
 import java.util.ArrayList;
 import java.util.List;

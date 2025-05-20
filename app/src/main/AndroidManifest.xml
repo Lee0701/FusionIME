@@ -7,7 +7,7 @@
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="@string/fusion_app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FusionIME"
@@ -24,9 +24,18 @@
 
             <meta-data
                 android:name="android.view.im"
-                android:resource="@xml/method" />
+                android:resource="@xml/fusion_method" />
 
         </service>
+
+        <provider
+            android:name="com.android.inputmethod.dictionarypack.DictionaryProvider"
+            android:grantUriPermissions="true"
+            android:exported="false"
+            android:authorities="@string/authority"
+            android:multiprocess="false"
+            android:label="@string/dictionary_provider_name">
+        </provider>
 
         <service
             android:name="com.android.inputmethod.pinyin.PinyinDecoderService"

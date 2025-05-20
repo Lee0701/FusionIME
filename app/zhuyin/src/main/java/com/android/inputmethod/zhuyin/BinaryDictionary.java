@@ -14,13 +14,12 @@
  * the License.
  */
 
-package com.android.inputmethod.latin;
+package com.android.inputmethod.zhuyin;
 
 import java.util.Arrays;
 
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.util.Log;
 
 /**
  * Implements a static, compacted, binary dictionary of standard words.

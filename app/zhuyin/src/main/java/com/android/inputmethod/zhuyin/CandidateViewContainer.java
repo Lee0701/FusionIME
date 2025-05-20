@@ -14,13 +14,12 @@
  * the License.
  */
 
-package com.android.inputmethod.latin;
+package com.android.inputmethod.zhuyin;
 
 import tw.cheyingwu.zhuyin.R;
-import tw.cheyingwu.zhuyin.ZhuYinIME;
+
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;

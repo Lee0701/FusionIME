@@ -35,6 +35,7 @@ android {
     }
     androidResources {
         noCompress += "dat"
+        noCompress += "dict"
     }
     packaging {
         resources.excludes.add("META-INF/DEPENDENCIES")
@@ -57,6 +58,7 @@ dependencies {
     implementation(project(":app:zhuyin"))
     implementation(project(":app:cangjie"))
     implementation(project(":app:korean"))
+    implementation(project(":app:latin"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

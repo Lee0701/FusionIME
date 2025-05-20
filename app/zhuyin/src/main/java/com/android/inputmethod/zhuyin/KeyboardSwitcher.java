@@ -14,10 +14,9 @@
  * the License.
  */
 
-package com.android.inputmethod.latin;
+package com.android.inputmethod.zhuyin;
 
 import android.inputmethodservice.Keyboard;
-import android.util.Log;
 
 import java.util.List;
 

@@ -1,0 +1,149 @@
+package ee.oyatl.ime.fusion
+
+import android.content.Context
+import android.view.KeyEvent
+import android.view.View
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputConnection
+import com.android.inputmethod.event.Event
+import com.android.inputmethod.keyboard.Keyboard
+import com.android.inputmethod.keyboard.internal.KeyboardBuilder
+import com.android.inputmethod.keyboard.internal.KeyboardParams
+import com.android.inputmethod.latin.DictionaryFacilitator
+import com.android.inputmethod.latin.DictionaryFacilitatorProvider
+import com.android.inputmethod.latin.LastComposedWord
+import com.android.inputmethod.latin.NgramContext
+import com.android.inputmethod.latin.Suggest
+import com.android.inputmethod.latin.Suggest.OnGetSuggestedWordsCallback
+import com.android.inputmethod.latin.SuggestedWords
+import com.android.inputmethod.latin.WordComposer
+import com.android.inputmethod.latin.common.Constants
+import com.android.inputmethod.latin.settings.SettingsValuesForSuggestion
+import ee.oyatl.ime.candidate.CandidateView
+import ee.oyatl.ime.keyboard.Keyboard.SpecialKey
+import java.util.Locale
+
+class LatinIMEMode(
+    context: Context,
+    listener: IMEMode.Listener
+): CommonIMEMode(listener), DictionaryFacilitator.DictionaryInitializationListener, OnGetSuggestedWordsCallback {
+
+    private val dictionaryFacilitator: DictionaryFacilitator =
+        DictionaryFacilitatorProvider.getDictionaryFacilitator(false)
+    private val suggest: Suggest = Suggest(dictionaryFacilitator)
+
+    private val wordComposer: WordComposer = WordComposer()
+    private var lastComposedWord: LastComposedWord = LastComposedWord.NOT_A_COMPOSED_WORD
+    private val keyboardParams: KeyboardParams = KeyboardParams().apply {
+        mOccupiedWidth = 1
+        mOccupiedHeight = 1
+    }
+    private val dummyKeyboard: Keyboard = KeyboardBuilder(context, keyboardParams).build()
+
+    init {
+        dictionaryFacilitator.resetDictionaries(
+            context,
+            Locale.ENGLISH,
+            false,
+            false,
+            true,
+            null,
+            "",
+            this
+        )
+    }
+
+    override fun createInputView(context: Context): View {
+        return super.createInputView(context)
+    }
+
+    override fun onStart(inputConnection: InputConnection, editorInfo: EditorInfo) {
+        super.onStart(inputConnection, editorInfo)
+        wordComposer.restartCombining(null)
+    }
+
+    override fun onReset() {
+        super.onReset()
+        wordComposer.reset()
+    }
+
+    override fun onCandidateSelected(candidate: CandidateView.Candidate) {
+        lastComposedWord = wordComposer.commitWord(
+            LastComposedWord.COMMIT_TYPE_MANUAL_PICK,
+            candidate.text,
+            LastComposedWord.NOT_A_SEPARATOR,
+            NgramContext.EMPTY_PREV_WORDS_INFO
+        )
+        val ic = currentInputConnection
+        if(ic != null) {
+            ic.commitText(lastComposedWord.mCommittedWord, 1)
+            ic.commitText(" ", 1)
+        }
+        renderInputView()
+        updateSuggestions()
+    }
+
+    override fun onGetSuggestedWords(suggestedWords: SuggestedWords?) {
+        suggestedWords ?: return
+        val wordList = (0 until suggestedWords.size()).map { suggestedWords.getWord(it) }
+        val candidates = wordList.mapIndexed { i, s -> LatinCandidate(i, s) }
+        submitCandidates(candidates)
+    }
+
+    private fun updateSuggestions() {
+        suggest.getSuggestedWords(
+            wordComposer,
+            NgramContext.EMPTY_PREV_WORDS_INFO,
+            dummyKeyboard,
+            SettingsValuesForSuggestion(true),
+            false,
+            SuggestedWords.INPUT_STYLE_TYPING,
+            SuggestedWords.NOT_A_SEQUENCE_NUMBER,
+            this
+        )
+    }
+
+    private fun renderInputView() {
+        val ic = currentInputConnection ?: return
+        ic.setComposingText(wordComposer.typedWord, 1)
+    }
+
+    override fun onChar(code: Int) {
+        val event = Event.createEventForCodePointFromUnknownSource(code)
+        val processedEvent = wordComposer.processEvent(event)
+            wordComposer.applyProcessedEvent(processedEvent)
+        renderInputView()
+        updateSuggestions()
+    }
+
+    override fun onSpecial(type: SpecialKey) {
+        when(type) {
+            SpecialKey.Delete -> {
+                val event = Event.createSoftwareKeypressEvent(Event.NOT_A_CODE_POINT, Constants.CODE_DELETE, 0, 0, false)
+                val processedEvent = wordComposer.processEvent(event)
+                if(wordComposer.isComposingWord) wordComposer.applyProcessedEvent(processedEvent)
+                else util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_DEL)
+                updateSuggestions()
+            }
+            SpecialKey.Space -> {
+                onReset()
+                util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_SPACE)
+            }
+            SpecialKey.Return -> {
+                onReset()
+                if (util?.sendDefaultEditorAction(true) != true)
+                    util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_ENTER)
+            }
+            else -> {}
+        }
+        renderInputView()
+    }
+
+    override fun onUpdateMainDictionaryAvailability(isMainDictionaryAvailable: Boolean) {
+    }
+
+    data class LatinCandidate(
+        val index: Int,
+        override val text: CharSequence
+    ): CandidateView.Candidate
+}

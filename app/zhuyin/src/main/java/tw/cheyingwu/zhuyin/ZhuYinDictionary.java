@@ -1,18 +1,14 @@
 package tw.cheyingwu.zhuyin;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteCursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.provider.UserDictionary.Words;
-import android.util.Log;
 
-import com.android.inputmethod.latin.Dictionary;
-import com.android.inputmethod.latin.WordComposer;
-import com.android.inputmethod.latin.CandidateView;
+import com.android.inputmethod.zhuyin.Dictionary;
+import com.android.inputmethod.zhuyin.WordComposer;
+import com.android.inputmethod.zhuyin.CandidateView;
 
 public class ZhuYinDictionary extends Dictionary {
 	private static final String TAG = "ZhuYinIME";

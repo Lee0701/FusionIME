@@ -27,7 +27,7 @@ abstract class CommonIMEMode(
     private val keyCharacterMap = KeyCharacterMap.load(KeyCharacterMap.VIRTUAL_KEYBOARD)
 
     open val layoutTable: Map<Int, List<Int>> = LayoutQwerty.TABLE_QWERTY
-    private val textKeyboardLayers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE_APOSTROPHE, LayoutQwerty.TABLE_QWERTY)
+    private val textKeyboardLayers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE, LayoutQwerty.TABLE_QWERTY)
     open val textKeyboard: Keyboard = StackedKeyboard(
         ShiftStateKeyboard(
             DefaultMobileKeyboard(textKeyboardLayers[0]),
