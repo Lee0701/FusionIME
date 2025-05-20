@@ -20,6 +20,7 @@ import com.android.inputmethod.latin.WordComposer
 import com.android.inputmethod.latin.common.Constants
 import com.android.inputmethod.latin.settings.SettingsValuesForSuggestion
 import ee.oyatl.ime.candidate.CandidateView
+import ee.oyatl.ime.candidate.TripleCandidateView
 import ee.oyatl.ime.keyboard.Keyboard.SpecialKey
 import java.util.Locale
 
@@ -34,6 +35,7 @@ class LatinIMEMode(
 
     private val wordComposer: WordComposer = WordComposer()
     private var lastComposedWord: LastComposedWord = LastComposedWord.NOT_A_COMPOSED_WORD
+
     private val keyboardParams: KeyboardParams = KeyboardParams().apply {
         mOccupiedWidth = 1
         mOccupiedHeight = 1
@@ -53,8 +55,11 @@ class LatinIMEMode(
         )
     }
 
-    override fun createInputView(context: Context): View {
-        return super.createInputView(context)
+    override fun createCandidateView(context: Context): View {
+        candidateView = TripleCandidateView(context, null).apply {
+            listener = this@LatinIMEMode
+        }
+        return candidateView as View
     }
 
     override fun onStart(inputConnection: InputConnection, editorInfo: EditorInfo) {
@@ -87,7 +92,7 @@ class LatinIMEMode(
         suggestedWords ?: return
         val wordList = (0 until suggestedWords.size()).map { suggestedWords.getWord(it) }
         val candidates = wordList.mapIndexed { i, s -> LatinCandidate(i, s) }
-        submitCandidates(candidates)
+        submitCandidates(if(candidates.size > 1) candidates.drop(1) else candidates)
     }
 
     private fun updateSuggestions() {
@@ -111,7 +116,7 @@ class LatinIMEMode(
     override fun onChar(code: Int) {
         val event = Event.createEventForCodePointFromUnknownSource(code)
         val processedEvent = wordComposer.processEvent(event)
-            wordComposer.applyProcessedEvent(processedEvent)
+        wordComposer.applyProcessedEvent(processedEvent)
         renderInputView()
         updateSuggestions()
     }

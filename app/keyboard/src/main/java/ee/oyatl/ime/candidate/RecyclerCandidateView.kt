@@ -41,7 +41,7 @@ abstract class RecyclerCandidateView(
         private val onItemClick: (Candidate) -> Unit
     ): ListAdapter<Candidate, ViewHolder>(DiffCallback()) {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            return ViewHolder(CandidateItemBinding.inflate(LayoutInflater.from(parent.context)))
+            return ViewHolder(CandidateItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
         }
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val item = getItem(position)
