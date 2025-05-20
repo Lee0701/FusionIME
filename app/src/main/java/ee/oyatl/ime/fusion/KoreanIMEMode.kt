@@ -83,6 +83,7 @@ abstract class KoreanIMEMode(
         wordComposer.consume(candidate.text.length)
         resetStack()
         inputConnection.commitText(candidate.text, 1)
+        renderInputView()
         convert()
     }
 
