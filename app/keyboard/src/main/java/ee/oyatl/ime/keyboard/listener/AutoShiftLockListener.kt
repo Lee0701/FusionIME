@@ -5,6 +5,7 @@ import ee.oyatl.ime.keyboard.KeyboardState
 
 class AutoShiftLockListener(
     private val listener: KeyboardListener,
+    private val lockDelay: Int = 300,
     private val autoReleaseOnInput: Boolean = true
 ): KeyboardListener {
     var state: KeyboardState.Shift = KeyboardState.Shift.Released
@@ -36,7 +37,7 @@ class AutoShiftLockListener(
             KeyboardState.Shift.Pressed -> {
                 if(autoReleaseOnInput) {
                     val diff = System.currentTimeMillis() - shiftTime
-                    if(diff < 300) state = KeyboardState.Shift.Locked
+                    if(diff < lockDelay) state = KeyboardState.Shift.Locked
                     else state = KeyboardState.Shift.Released
                 } else {
                     state = KeyboardState.Shift.Released
