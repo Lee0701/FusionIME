@@ -1,11 +1,17 @@
 package ee.oyatl.ime.fusion
 
+import android.graphics.Color
 import android.inputmethodservice.InputMethodService
+import android.os.Build
+import android.util.TypedValue
 import android.view.KeyEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowInsets.Type
 import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
+import androidx.annotation.RequiresApi
+import androidx.appcompat.view.ContextThemeWrapper
 
 class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.Callback {
 
@@ -42,6 +48,8 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
         candidateView.addView(imeModeSwitcher.initTabBarView(this))
         imeView.addView(candidateView)
         imeView.addView(imeModeSwitcher.createInputView(this))
+        imeView.fitsSystemWindows = true
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) updateStatusBarColor()
         onSwitchInputMode(0)
         return imeView
     }
@@ -99,5 +107,18 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
     override fun onEvaluateInputViewShown(): Boolean {
         super.onEvaluateInputViewShown()
         return true
+    }
+
+    @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
+    private fun updateStatusBarColor() {
+        val typedValue = TypedValue()
+        val theme = ContextThemeWrapper(this, ee.oyatl.ime.keyboard.R.style.Theme_FusionIME_Keyboard).theme
+        theme.resolveAttribute(ee.oyatl.ime.keyboard.R.attr.backgroundColor, typedValue, true)
+        window.window?.decorView?.setOnApplyWindowInsetsListener { view, insets ->
+            val statusBarInsets = insets.getInsets(Type.statusBars())
+            view.setBackgroundColor(typedValue.data)
+            view.setPadding(0, statusBarInsets.top, 0, 0)
+            insets
+        }
     }
 }
