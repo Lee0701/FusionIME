@@ -53,6 +53,19 @@ abstract class MozcIMEMode(
     class KanaJIS(context: Context, listener: IMEMode.Listener): MozcIMEMode(context, listener) {
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.QWERTY_KANA_JIS
         override val layoutTable: Map<Int, List<Int>> = LayoutKana.TABLE_JIS
+        private val lower = KeyboardInflater.inflate(LayoutKana.ROWS_JIS_LOWER)
+        private val upper = KeyboardInflater.inflate(LayoutKana.ROWS_JIS_UPPER)
+        private val bottomRight = KeyboardInflater.inflate(listOf(LayoutKana.BOTTOM_RIGHT_JIS), layoutTable)
+        override val textKeyboard: Keyboard = StackedKeyboard(
+            ShiftStateKeyboard(
+                DefaultGridKeyboard(lower[0]),
+                DefaultGridKeyboard(upper[0])
+            ),
+            ShiftStateKeyboard(
+                GridKanaBottomRowKeyboard(listOf(), bottomRight[0][0]),
+                GridKanaBottomRowKeyboard(listOf(), bottomRight[1][0])
+            )
+        )
     }
 
     class Kana50OnZu(context: Context, listener: IMEMode.Listener): MozcIMEMode(context, listener) {

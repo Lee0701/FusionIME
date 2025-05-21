@@ -14,7 +14,7 @@ object KeyboardInflater {
             template.map { row ->
                 row.map { ch ->
                     val keyCode = charToKeyCode(ch)
-                    table[keyCode]?.get(layer) ?: ch.code
+                    table[keyCode]?.getOrNull(layer) ?: table[keyCode]?.getOrNull(0) ?: ch.code
                 }
             }
         }

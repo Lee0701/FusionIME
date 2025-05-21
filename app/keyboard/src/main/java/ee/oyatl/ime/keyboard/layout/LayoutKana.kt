@@ -14,6 +14,7 @@ object LayoutKana {
     const val BOTTOM_RIGHT_50ONZU: String = "*ー"
 
     val TABLE_JIS = mapOf(
+        KeyEvent.KEYCODE_GRAVE to listOf('ろ'.code),
         KeyEvent.KEYCODE_1 to listOf('ぬ'.code),
         KeyEvent.KEYCODE_2 to listOf('ふ'.code),
         KeyEvent.KEYCODE_3 to listOf('あ'.code, 'ぁ'.code),
@@ -25,7 +26,7 @@ object LayoutKana {
         KeyEvent.KEYCODE_9 to listOf('よ'.code, 'ょ'.code),
         KeyEvent.KEYCODE_0 to listOf('わ'.code, 'を'.code),
         KeyEvent.KEYCODE_MINUS to listOf('ほ'.code, 'ー'.code),
-        KeyEvent.KEYCODE_EQUALS to listOf('へ'.code),
+        KeyEvent.KEYCODE_EQUALS to listOf('へ'.code, 'ゑ'.code),
 
         KeyEvent.KEYCODE_Q to listOf('た'.code),
         KeyEvent.KEYCODE_W to listOf('て'.code),
@@ -57,7 +58,7 @@ object LayoutKana {
         KeyEvent.KEYCODE_X to listOf('さ'.code),
         KeyEvent.KEYCODE_C to listOf('そ'.code),
         KeyEvent.KEYCODE_V to listOf('ひ'.code),
-        KeyEvent.KEYCODE_B to listOf('こ'.code),
+        KeyEvent.KEYCODE_B to listOf('こ'.code, 'ゐ'.code),
         KeyEvent.KEYCODE_N to listOf('み'.code),
         KeyEvent.KEYCODE_M to listOf('も'.code),
         KeyEvent.KEYCODE_COMMA to listOf('ね'.code, '、'.code),
@@ -65,4 +66,19 @@ object LayoutKana {
         KeyEvent.KEYCODE_SLASH to listOf('め'.code, '・'.code)
     )
 
+    val ROWS_JIS_LOWER: List<String> = listOf(
+        "ぬふあうえおやゆよわほ",
+        "たていすかんなにらせ゛",
+        "ちとしはきくまのりれけ",
+        "つさそひこみもねるめろ",
+    )
+
+    val ROWS_JIS_UPPER: List<String> = listOf(
+        "ぬふぁぅぇぉゃゅょをー",
+        "たてぃすかんなにらせ゜",
+        "ちとしはきくまのりれけ",
+        "っさそゐこみもねるめろ",
+    )
+
+    const val BOTTOM_RIGHT_JIS: String = "\\="
 }

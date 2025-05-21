@@ -3,7 +3,7 @@ package ee.oyatl.ime.keyboard
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
-import ee.oyatl.ime.keyboard.R
+import ee.oyatl.ime.keyboard.databinding.KbdKeyBinding
 import ee.oyatl.ime.keyboard.databinding.KbdRowBinding
 
 class GridKanaBottomRowKeyboard(
@@ -17,6 +17,20 @@ class GridKanaBottomRowKeyboard(
         leftExtraRow.forEach { c ->
             val key = buildKey(context, listener, c, c.toChar().toString(), height)
             row.root.addView(key.root)
+        }
+
+        if(leftExtraRow.isEmpty()) {
+            val shiftKey = KbdKeyBinding.bind(buildSpecialKey(
+                context,
+                listener,
+                Keyboard.SpecialKey.Shift,
+                R.style.Theme_FusionIME_Keyboard_Key_Modifier,
+                R.drawable.keyic_shift,
+                1.0f
+            ))
+            shiftKeys += shiftKey
+            row.root.addView(shiftKey.root)
+
         }
 
         row.root.addView(buildSpecialKey(
