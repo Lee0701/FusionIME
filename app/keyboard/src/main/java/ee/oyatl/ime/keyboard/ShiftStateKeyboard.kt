@@ -2,6 +2,7 @@ package ee.oyatl.ime.keyboard
 
 import android.content.Context
 import android.view.View
+import ee.oyatl.ime.keyboard.listener.KeyboardListener
 
 class ShiftStateKeyboard(
     private val normal: Keyboard,
@@ -12,7 +13,7 @@ class ShiftStateKeyboard(
 
     override val numRows: Int = listOf(normal, shifted, locked).maxOf { it.numRows }
 
-    override fun createView(context: Context, listener: Keyboard.Listener, height: Int): View {
+    override fun createView(context: Context, listener: KeyboardListener, height: Int): View {
         val normal = normal.createView(context, listener, height)
         val shifted = shifted.createView(context, listener, height)
         val locked = locked.createView(context, listener, height)

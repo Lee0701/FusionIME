@@ -3,13 +3,15 @@ package ee.oyatl.ime.keyboard
 import android.content.Context
 import ee.oyatl.ime.keyboard.databinding.KbdKeyBinding
 import ee.oyatl.ime.keyboard.databinding.KbdRowBinding
+import ee.oyatl.ime.keyboard.listener.KeyboardListener
+import ee.oyatl.ime.keyboard.listener.RepeatableKeyListener
 
 class DefaultMobileKeyboard(
     private val rows: List<List<Int>>
 ): DefaultKeyboard() {
     override val numRows: Int = rows.size
 
-    override fun buildRows(context: Context, listener: Keyboard.Listener, height: Int): List<KbdRowBinding> {
+    override fun buildRows(context: Context, listener: KeyboardListener, height: Int): List<KbdRowBinding> {
         val builtRows = rows.map { buildRow(context, listener, it, height) }
 
         if(rows[rows.size - 2].size != 10) {

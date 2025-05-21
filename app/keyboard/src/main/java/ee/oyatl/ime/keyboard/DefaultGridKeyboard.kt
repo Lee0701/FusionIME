@@ -3,18 +3,24 @@ package ee.oyatl.ime.keyboard
 import android.content.Context
 import android.view.LayoutInflater
 import ee.oyatl.ime.keyboard.databinding.KbdRowBinding
+import ee.oyatl.ime.keyboard.listener.KeyboardListener
+import ee.oyatl.ime.keyboard.listener.RepeatableKeyListener
 
 class DefaultGridKeyboard(
     private val rows: List<List<Int>>
 ): DefaultKeyboard() {
     override val numRows: Int = rows.size
 
-    override fun buildRows(context: Context, listener: Keyboard.Listener, height: Int): List<KbdRowBinding> {
+    override fun buildRows(
+        context: Context,
+        listener: KeyboardListener,
+        height: Int
+    ): List<KbdRowBinding> {
         val builtRows = rows.map { buildRow(context, listener, it, height) }
         return builtRows
     }
 
-    override fun buildRow(context: Context, listener: Keyboard.Listener, codes: List<Int>, height: Int): KbdRowBinding {
+    override fun buildRow(context: Context, listener: KeyboardListener, codes: List<Int>, height: Int): KbdRowBinding {
         val inflater = LayoutInflater.from(context)
         val row = KbdRowBinding.inflate(inflater)
         codes.forEach { code ->

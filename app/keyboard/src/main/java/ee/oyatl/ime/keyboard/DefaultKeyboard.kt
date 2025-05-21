@@ -13,14 +13,15 @@ import androidx.annotation.StyleRes
 import ee.oyatl.ime.keyboard.databinding.KbdKeyBinding
 import ee.oyatl.ime.keyboard.databinding.KbdKeyboardBinding
 import ee.oyatl.ime.keyboard.databinding.KbdRowBinding
+import ee.oyatl.ime.keyboard.listener.KeyboardListener
 
 abstract class DefaultKeyboard: Keyboard {
 
     protected val shiftKeys: MutableList<KbdKeyBinding> = mutableListOf()
 
-    abstract fun buildRows(context: Context, listener: Keyboard.Listener, height: Int): List<KbdRowBinding>
+    abstract fun buildRows(context: Context, listener: KeyboardListener, height: Int): List<KbdRowBinding>
 
-    override fun createView(context: Context, listener: Keyboard.Listener, height: Int): View {
+    override fun createView(context: Context, listener: KeyboardListener, height: Int): View {
         val inflater = LayoutInflater.from(ContextThemeWrapper(context, R.style.Theme_FusionIME_Keyboard))
         val keyboard = KbdKeyboardBinding.inflate(inflater)
         buildRows(context, listener, height).forEach { keyboard.root.addView(it.root) }
@@ -36,7 +37,7 @@ abstract class DefaultKeyboard: Keyboard {
         shiftKeys.forEach { it.icon.setImageResource(icon) }
     }
 
-    protected open fun buildRow(context: Context, listener: Keyboard.Listener, codes: List<Int>, height: Int): KbdRowBinding {
+    protected open fun buildRow(context: Context, listener: KeyboardListener, codes: List<Int>, height: Int): KbdRowBinding {
         val inflater = LayoutInflater.from(context)
         val row = KbdRowBinding.inflate(inflater)
         codes.forEach { code ->
@@ -46,18 +47,31 @@ abstract class DefaultKeyboard: Keyboard {
         return row
     }
 
-    protected open fun buildKey(context: Context, listener: Keyboard.Listener, code: Int, label: String, height: Int): KbdKeyBinding {
+    @SuppressLint("ClickableViewAccessibility")
+    protected open fun buildKey(context: Context, listener: KeyboardListener, code: Int, label: String, height: Int): KbdKeyBinding {
         val inflater = LayoutInflater.from(ContextThemeWrapper(context, R.style.Theme_FusionIME_Keyboard_Key))
         val key = KbdKeyBinding.inflate(inflater)
         key.label.text = label
-        key.root.setOnClickListener { listener.onChar(code) }
+        key.root.setOnTouchListener { view, event ->
+            when(event.actionMasked) {
+                MotionEvent.ACTION_DOWN, MotionEvent.ACTION_POINTER_DOWN -> {
+                    listener.onKeyDown(code)
+                    view.isPressed = true
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_UP -> {
+                    listener.onKeyUp(code)
+                    view.isPressed = false
+                }
+            }
+            true
+        }
         key.root.layoutParams = LayoutParams(0, height).apply {
             weight = 1.0f
         }
         return key
     }
 
-    protected open fun buildSpacer(context: Context, listener: Keyboard.Listener, width: Float): View {
+    protected open fun buildSpacer(context: Context, listener: KeyboardListener, width: Float): View {
         val spacer = View(context)
         spacer.layoutParams = LayoutParams(
             0, LayoutParams.MATCH_PARENT
@@ -71,7 +85,7 @@ abstract class DefaultKeyboard: Keyboard {
     @SuppressLint("ClickableViewAccessibility")
     protected open fun buildSpecialKey(
         context: Context,
-        listener: Keyboard.Listener,
+        listener: KeyboardListener,
         type: Keyboard.SpecialKey,
         @StyleRes theme: Int,
         @DrawableRes icon: Int,
@@ -83,15 +97,14 @@ abstract class DefaultKeyboard: Keyboard {
         key.root.setOnTouchListener { view, event ->
             when(event.actionMasked) {
                 MotionEvent.ACTION_DOWN, MotionEvent.ACTION_POINTER_DOWN -> {
-                    listener.onSpecial(type, true)
+                    listener.onKeyDown(type.code)
                     view.isPressed = true
                 }
                 MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_UP -> {
-                    listener.onSpecial(type, false)
+                    listener.onKeyUp(type.code)
                     view.isPressed = false
                 }
             }
-            view.invalidate()
             true
         }
         key.root.layoutParams = LayoutParams(0, LayoutParams.MATCH_PARENT).apply {

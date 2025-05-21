@@ -5,6 +5,8 @@ import android.os.Handler
 import android.os.Looper
 import ee.oyatl.ime.keyboard.databinding.KbdKeyBinding
 import ee.oyatl.ime.keyboard.databinding.KbdRowBinding
+import ee.oyatl.ime.keyboard.listener.KeyboardListener
+import ee.oyatl.ime.keyboard.listener.RepeatableKeyListener
 
 class GridKanaBottomRowKeyboard(
     private val leftExtraRow: List<Int>,
@@ -12,7 +14,7 @@ class GridKanaBottomRowKeyboard(
 ): DefaultKeyboard() {
     override val numRows: Int = 1
 
-    override fun buildRows(context: Context, listener: Keyboard.Listener, height: Int): List<KbdRowBinding> {
+    override fun buildRows(context: Context, listener: KeyboardListener, height: Int): List<KbdRowBinding> {
         val row = buildRow(context, listener, listOf(), height)
 
         leftExtraRow.forEach { c ->
@@ -75,12 +77,6 @@ class GridKanaBottomRowKeyboard(
             1.25f
         ))
 
-        val handler = Handler(Looper.getMainLooper())
-        fun repeat() {
-            listener.onSpecial(Keyboard.SpecialKey.Delete, true)
-            listener.onSpecial(Keyboard.SpecialKey.Delete, false)
-            handler.postDelayed({ repeat() }, 50)
-        }
         row.root.addView(buildSpecialKey(
             context,
             RepeatableKeyListener(listener),
