@@ -43,7 +43,10 @@ abstract class CommonIMEMode(
             DefaultMobileKeyboard(KeyboardInflater.inflate(LayoutSymbol.ROWS_LOWER, mapOf())[0]),
             DefaultMobileKeyboard(KeyboardInflater.inflate(LayoutSymbol.ROWS_UPPER, mapOf())[0])
         ),
-        DefaultSymbolsBottomRowKeyboard()
+        ShiftStateKeyboard(
+            DefaultSymbolsBottomRowKeyboard(),
+            DefaultSymbolsBottomRowKeyboard(listOf('<'.code, '>'.code))
+        )
     )
 
     open val numpadKeyboard: Keyboard = DefaultNumberKeyboard()

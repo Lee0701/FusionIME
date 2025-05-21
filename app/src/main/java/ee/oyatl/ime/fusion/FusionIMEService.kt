@@ -1,6 +1,5 @@
 package ee.oyatl.ime.fusion
 
-import android.graphics.Color
 import android.inputmethodservice.InputMethodService
 import android.os.Build
 import android.util.TypedValue
@@ -49,7 +48,7 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
         imeView.addView(candidateView)
         imeView.addView(imeModeSwitcher.createInputView(this))
         imeView.fitsSystemWindows = true
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) updateStatusBarColor()
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) updateNavigationBar()
         onSwitchInputMode(0)
         return imeView
     }
@@ -110,7 +109,7 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
     }
 
     @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
-    private fun updateStatusBarColor() {
+    private fun updateNavigationBar() {
         val typedValue = TypedValue()
         val theme = ContextThemeWrapper(this, ee.oyatl.ime.keyboard.R.style.Theme_FusionIME_Keyboard).theme
         theme.resolveAttribute(ee.oyatl.ime.keyboard.R.attr.backgroundColor, typedValue, true)
