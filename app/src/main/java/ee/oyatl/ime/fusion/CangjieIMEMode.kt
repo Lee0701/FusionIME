@@ -79,7 +79,7 @@ class CangjieIMEMode(
 
     private fun postUpdateSuggestions() {
         handler.removeMessages(MSG_UPDATE_SUGGESTIONS)
-        handler.sendMessageDelayed(handler.obtainMessage(MSG_UPDATE_SUGGESTIONS), 10)
+        handler.sendMessageDelayed(handler.obtainMessage(MSG_UPDATE_SUGGESTIONS), 100)
     }
 
     private fun renderInput() {
