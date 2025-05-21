@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.android.inputmethod.pinyin;
+package ee.oyatl.ime.fusion.pinyin;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -27,7 +27,8 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 
-import ee.oyatl.ime.fusion.PinyinIMEMode;
+import com.android.inputmethod.pinyin.PinyinIME;
+import com.android.inputmethod.pinyin.R;
 
 /**
  * View used to show composing string (The Pinyin string for the unselected
@@ -106,7 +107,7 @@ public class ComposingView extends View {
 
     private ComposingStatus mComposingStatus;
 
-    PinyinIMEMode.DecodingInfo mDecInfo;
+    DecodingInfo mDecInfo;
 
     public ComposingView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -140,7 +141,7 @@ public class ComposingView extends View {
      * view will set its status to {@link ComposingStatus#SHOW_STRING_LOWERCASE}
      * or {@link ComposingStatus#EDIT_PINYIN} automatically.
      */
-    public void setDecodingInfo(PinyinIMEMode.DecodingInfo decInfo,
+    public void setDecodingInfo(DecodingInfo decInfo,
             PinyinIME.ImeState imeStatus) {
         mDecInfo = decInfo;
 

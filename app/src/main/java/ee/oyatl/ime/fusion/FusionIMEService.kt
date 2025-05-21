@@ -84,6 +84,10 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
         imeModeSwitcher.isShown = !visible
     }
 
+    override fun onRequestHideSelf(flags: Int) {
+        this.requestHideSelf(flags)
+    }
+
     override fun onEvaluateFullscreenMode(): Boolean {
         super.onEvaluateFullscreenMode()
         return false

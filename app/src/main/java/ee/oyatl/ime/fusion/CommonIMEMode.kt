@@ -136,6 +136,10 @@ abstract class CommonIMEMode(
         listener.onCandidateViewVisibilityChange(visible)
     }
 
+    protected fun requestHideSelf(flags: Int) {
+        listener.onRequestHideSelf(flags)
+    }
+
     inner class KeyboardListener: CommonKeyboardListener(this) {
         override fun onChar(code: Int) {
             this@CommonIMEMode.onChar(code)
