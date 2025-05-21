@@ -17,7 +17,7 @@ class GridBottomRowKeyboard(
             listener,
             Keyboard.SpecialKey.Symbols,
             R.style.Theme_FusionIME_Keyboard_Key_Modifier,
-            R.drawable.keyic_numbers,
+            R.drawable.keyic_option,
             1.25f
         ))
 

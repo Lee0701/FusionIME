@@ -51,7 +51,7 @@ abstract class DefaultKeyboard: Keyboard {
         val key = KbdKeyBinding.inflate(inflater)
         key.label.text = label
         key.root.setOnClickListener { listener.onChar(code) }
-        key.root.layoutParams = LinearLayout.LayoutParams(0, height).apply {
+        key.root.layoutParams = LayoutParams(0, height).apply {
             weight = 1.0f
         }
         return key
@@ -59,8 +59,8 @@ abstract class DefaultKeyboard: Keyboard {
 
     protected open fun buildSpacer(context: Context, listener: Keyboard.Listener, width: Float): View {
         val spacer = View(context)
-        spacer.layoutParams = LinearLayout.LayoutParams(
-            0, LinearLayout.LayoutParams.MATCH_PARENT
+        spacer.layoutParams = LayoutParams(
+            0, LayoutParams.MATCH_PARENT
         ).apply {
             weight = width
         }

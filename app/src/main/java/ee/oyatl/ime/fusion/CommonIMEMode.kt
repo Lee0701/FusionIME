@@ -12,6 +12,8 @@ import ee.oyatl.ime.candidate.ScrollingCandidateView
 import ee.oyatl.ime.keyboard.CommonKeyboardListener
 import ee.oyatl.ime.keyboard.DefaultBottomRowKeyboard
 import ee.oyatl.ime.keyboard.DefaultMobileKeyboard
+import ee.oyatl.ime.keyboard.DefaultNumberKeyboard
+import ee.oyatl.ime.keyboard.DefaultSymbolsBottomRowKeyboard
 import ee.oyatl.ime.keyboard.Keyboard
 import ee.oyatl.ime.keyboard.KeyboardInflater
 import ee.oyatl.ime.keyboard.KeyboardState
@@ -41,12 +43,15 @@ abstract class CommonIMEMode(
             DefaultMobileKeyboard(KeyboardInflater.inflate(LayoutSymbol.ROWS_LOWER, mapOf())[0]),
             DefaultMobileKeyboard(KeyboardInflater.inflate(LayoutSymbol.ROWS_UPPER, mapOf())[0])
         ),
-        DefaultBottomRowKeyboard()
+        DefaultSymbolsBottomRowKeyboard()
     )
+
+    open val numpadKeyboard: Keyboard = DefaultNumberKeyboard()
 
     private lateinit var switcherView: FrameLayout
     private lateinit var textKeyboardView: View
     private lateinit var symbolKeyboardView: View
+    private lateinit var numpadKeyboardView: View
 
     protected val keyboardListener = KeyboardListener()
     protected var candidateView: CandidateView? = null
@@ -77,8 +82,10 @@ abstract class CommonIMEMode(
         switcherView = FrameLayout(context)
         textKeyboardView = textKeyboard.createView(context, keyboardListener)
         symbolKeyboardView = symbolKeyboard.createView(context, keyboardListener)
+        numpadKeyboardView = numpadKeyboard.createView(context, keyboardListener)
         switcherView.addView(textKeyboardView)
         switcherView.addView(symbolKeyboardView)
+        switcherView.addView(numpadKeyboardView)
         return switcherView
     }
 
@@ -101,6 +108,8 @@ abstract class CommonIMEMode(
             textKeyboardView.bringToFront()
         else if(keyboardListener.state.symbol == KeyboardState.Symbol.Symbol)
             symbolKeyboardView.bringToFront()
+        else if(keyboardListener.state.symbol == KeyboardState.Symbol.Number)
+            numpadKeyboardView.bringToFront()
     }
 
     override fun onKeyDown(keyCode: Int, metaState: Int) {
@@ -150,7 +159,7 @@ abstract class CommonIMEMode(
             super.onChar(code)
         }
 
-        private fun onSymbols() {
+        private fun onSymbolsKey() {
             state = state.copy(symbol =
                 if(state.symbol == KeyboardState.Symbol.Text) KeyboardState.Symbol.Symbol
                 else KeyboardState.Symbol.Text
@@ -158,10 +167,19 @@ abstract class CommonIMEMode(
             updateInputView()
         }
 
+        private fun onNumbersKey() {
+            state = state.copy(symbol =
+                if(state.symbol == KeyboardState.Symbol.Symbol) KeyboardState.Symbol.Number
+                else KeyboardState.Symbol.Symbol
+            )
+            updateInputView()
+        }
+
         override fun onSpecial(type: Keyboard.SpecialKey, pressed: Boolean) {
             if(!pressed) when(type) {
                 Keyboard.SpecialKey.Language -> listener.onLanguageSwitch()
-                Keyboard.SpecialKey.Symbols -> onSymbols()
+                Keyboard.SpecialKey.Symbols -> onSymbolsKey()
+                Keyboard.SpecialKey.Numbers -> onNumbersKey()
                 else -> this@CommonIMEMode.onSpecial(type)
             }
             super.onSpecial(type, pressed)

@@ -15,6 +15,6 @@ interface Keyboard {
     enum class SpecialKey {
         Shift, Caps,
         Space, Return, Delete,
-        Language, Symbols,
+        Language, Symbols, Numbers
     }
 }

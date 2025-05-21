@@ -3,7 +3,7 @@ package ee.oyatl.ime.keyboard
 import android.content.Context
 import ee.oyatl.ime.keyboard.databinding.KbdRowBinding
 
-class DefaultBottomRowKeyboard(
+class DefaultSymbolsBottomRowKeyboard(
     private val extraKeys: List<Int> = listOf(','.code, '.'.code)
 ): DefaultKeyboard() {
     override fun buildRows(context: Context, listener: Keyboard.Listener): List<KbdRowBinding> {
@@ -22,9 +22,9 @@ class DefaultBottomRowKeyboard(
         row.root.addView(buildSpecialKey(
             context,
             listener,
-            Keyboard.SpecialKey.Language,
+            Keyboard.SpecialKey.Numbers,
             R.style.Theme_FusionIME_Keyboard_Key_Modifier,
-            R.drawable.keyic_language,
+            R.drawable.keyic_numbers,
             1.0f
         ))
         row.root.addView(buildSpecialKey(
