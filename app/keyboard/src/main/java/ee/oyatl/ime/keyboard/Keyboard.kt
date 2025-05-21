@@ -4,7 +4,9 @@ import android.content.Context
 import android.view.View
 
 interface Keyboard {
-    fun createView(context: Context, listener: Listener): View
+    val numRows: Int
+
+    fun createView(context: Context, listener: Listener, height: Int): View
     fun changeState(state: KeyboardStateSet)
 
     interface Listener {

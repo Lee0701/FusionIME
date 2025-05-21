@@ -10,8 +10,9 @@ class GridKanaBottomRowKeyboard(
     private val leftExtraRow: List<Int>,
     private val rightExtraRow: List<Int>
 ): DefaultKeyboard() {
-    override fun buildRows(context: Context, listener: Keyboard.Listener): List<KbdRowBinding> {
-        val height = context.resources.getDimensionPixelSize(R.dimen.key_height)
+    override val numRows: Int = 1
+
+    override fun buildRows(context: Context, listener: Keyboard.Listener, height: Int): List<KbdRowBinding> {
         val row = buildRow(context, listener, listOf(), height)
 
         leftExtraRow.forEach { c ->

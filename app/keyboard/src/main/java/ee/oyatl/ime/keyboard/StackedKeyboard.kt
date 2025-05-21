@@ -9,10 +9,12 @@ class StackedKeyboard(
 ): Keyboard {
     constructor(vararg keyboards: Keyboard): this(keyboards.toList())
 
-    override fun createView(context: Context, listener: Keyboard.Listener): View {
+    override val numRows: Int = keyboards.sumOf { it.numRows }
+
+    override fun createView(context: Context, listener: Keyboard.Listener, height: Int): View {
         val view = LinearLayout(context)
         view.orientation = LinearLayout.VERTICAL
-        keyboards.forEach { view.addView(it.createView(context, listener)) }
+        keyboards.forEach { view.addView(it.createView(context, listener, height)) }
         return view
     }
 

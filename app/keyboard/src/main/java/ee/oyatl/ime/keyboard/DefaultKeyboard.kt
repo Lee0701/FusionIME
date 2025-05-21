@@ -18,12 +18,12 @@ abstract class DefaultKeyboard: Keyboard {
 
     protected val shiftKeys: MutableList<KbdKeyBinding> = mutableListOf()
 
-    abstract fun buildRows(context: Context, listener: Keyboard.Listener): List<KbdRowBinding>
+    abstract fun buildRows(context: Context, listener: Keyboard.Listener, height: Int): List<KbdRowBinding>
 
-    override fun createView(context: Context, listener: Keyboard.Listener): View {
+    override fun createView(context: Context, listener: Keyboard.Listener, height: Int): View {
         val inflater = LayoutInflater.from(ContextThemeWrapper(context, R.style.Theme_FusionIME_Keyboard))
         val keyboard = KbdKeyboardBinding.inflate(inflater)
-        buildRows(context, listener).forEach { keyboard.root.addView(it.root) }
+        buildRows(context, listener, height).forEach { keyboard.root.addView(it.root) }
         return keyboard.root
     }
 

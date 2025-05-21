@@ -7,9 +7,9 @@ import ee.oyatl.ime.keyboard.databinding.KbdRowBinding
 class DefaultGridKeyboard(
     private val rows: List<List<Int>>
 ): DefaultKeyboard() {
-    override fun buildRows(context: Context, listener: Keyboard.Listener): List<KbdRowBinding> {
-        val height = context.resources.getDimensionPixelSize(R.dimen.key_height) *
-                context.resources.getInteger(R.integer.standard_row_count) / rows.size
+    override val numRows: Int = rows.size
+
+    override fun buildRows(context: Context, listener: Keyboard.Listener, height: Int): List<KbdRowBinding> {
         val builtRows = rows.map { buildRow(context, listener, it, height) }
         return builtRows
     }

@@ -81,9 +81,10 @@ abstract class CommonIMEMode(
 
     override fun createInputView(context: Context): View {
         switcherView = FrameLayout(context)
-        textKeyboardView = textKeyboard.createView(context, keyboardListener)
-        symbolKeyboardView = symbolKeyboard.createView(context, keyboardListener)
-        numpadKeyboardView = numpadKeyboard.createView(context, directKeyboardListener)
+        val height = context.resources.getDimensionPixelSize(ee.oyatl.ime.keyboard.R.dimen.keyboard_height)
+        textKeyboardView = textKeyboard.createView(context, keyboardListener, height / textKeyboard.numRows)
+        symbolKeyboardView = symbolKeyboard.createView(context, keyboardListener, height / symbolKeyboard.numRows)
+        numpadKeyboardView = numpadKeyboard.createView(context, directKeyboardListener, height / numpadKeyboard.numRows)
         switcherView.addView(textKeyboardView)
         switcherView.addView(symbolKeyboardView)
         switcherView.addView(numpadKeyboardView)

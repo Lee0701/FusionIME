@@ -8,10 +8,9 @@ import ee.oyatl.ime.keyboard.databinding.KbdRowBinding
 class DefaultNumberKeyboard(
     private val rows: List<List<Int>> = ROWS
 ): DefaultKeyboard() {
-    override fun buildRows(context: Context, listener: Keyboard.Listener): List<KbdRowBinding> {
-        val height = context.resources.getDimensionPixelSize(R.dimen.key_height) *
-                (context.resources.getInteger(R.integer.standard_row_count) + 1) / rows.size
+    override val numRows: Int = rows.size
 
+    override fun buildRows(context: Context, listener: Keyboard.Listener, height: Int): List<KbdRowBinding> {
         val delete = buildSpecialKey(
             context,
             RepeatableKeyListener(listener),

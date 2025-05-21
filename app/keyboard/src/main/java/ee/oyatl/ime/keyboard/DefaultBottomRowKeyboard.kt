@@ -6,8 +6,9 @@ import ee.oyatl.ime.keyboard.databinding.KbdRowBinding
 class DefaultBottomRowKeyboard(
     private val extraKeys: List<Int> = listOf(','.code, '.'.code)
 ): DefaultKeyboard() {
-    override fun buildRows(context: Context, listener: Keyboard.Listener): List<KbdRowBinding> {
-        val height = context.resources.getDimensionPixelSize(R.dimen.key_height)
+    override val numRows: Int = 1
+
+    override fun buildRows(context: Context, listener: Keyboard.Listener, height: Int): List<KbdRowBinding> {
         val row = buildRow(context, listener, listOf(), height)
         row.root.addView(buildSpecialKey(
             context,
