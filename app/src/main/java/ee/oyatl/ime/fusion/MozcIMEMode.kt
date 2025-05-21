@@ -19,7 +19,7 @@ import ee.oyatl.ime.keyboard.KeyboardInflater
 import ee.oyatl.ime.keyboard.ShiftStateKeyboard
 import ee.oyatl.ime.keyboard.StackedKeyboard
 import ee.oyatl.ime.keyboard.layout.KeyboardTemplates
-import ee.oyatl.ime.keyboard.layout.LayoutKana50OnZu
+import ee.oyatl.ime.keyboard.layout.LayoutKana
 import ee.oyatl.ime.keyboard.layout.LayoutRomaji
 import org.mozc.android.inputmethod.japanese.MozcUtil
 import org.mozc.android.inputmethod.japanese.PrimaryKeyCodeConverter
@@ -50,14 +50,19 @@ abstract class MozcIMEMode(
         )
     }
 
+    class KanaJIS(context: Context, listener: IMEMode.Listener): MozcIMEMode(context, listener) {
+        override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.QWERTY_KANA_JIS
+        override val layoutTable: Map<Int, List<Int>> = LayoutKana.TABLE_JIS
+    }
+
     class Kana50OnZu(context: Context, listener: IMEMode.Listener): MozcIMEMode(context, listener) {
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.TWELVE_KEY_FLICK_KANA
-        private val layers = KeyboardInflater.inflate(LayoutKana50OnZu.ROWS)
+        private val layers = KeyboardInflater.inflate(LayoutKana.ROWS_50ONZU)
         override val textKeyboard: Keyboard = StackedKeyboard(
             DefaultGridKeyboard(layers[0]),
             GridKanaBottomRowKeyboard(
-                KeyboardInflater.inflate(listOf(LayoutKana50OnZu.BOTTOM_LEFT))[0][0],
-                KeyboardInflater.inflate(listOf(LayoutKana50OnZu.BOTTOM_RIGHT))[0][0]
+                KeyboardInflater.inflate(listOf(LayoutKana.BOTTOM_LEFT_50ONZU))[0][0],
+                KeyboardInflater.inflate(listOf(LayoutKana.BOTTOM_RIGHT_50ONZU))[0][0]
             )
         )
     }
@@ -72,6 +77,7 @@ abstract class MozcIMEMode(
     private var inputConnectionRenderer: InputConnectionRenderer? = null
 
     private val renderResultCallback = EvaluationCallback { command, triggeringKeyEvent ->
+        if(!command.isPresent) return@EvaluationCallback
         inputConnectionRenderer?.renderInputConnection(command.orNull(), triggeringKeyEvent.orNull())
         if(command.get().hasOutput()) {
             val output = command.get().output
@@ -135,7 +141,11 @@ abstract class MozcIMEMode(
         val eventList = emptyList<TouchEvent>()
         val keyEvent = primaryKeyCodeConverter.getPrimaryCodeKeyEvent(code)
         val mozcKeyEvent = primaryKeyCodeConverter.createMozcKeyEvent(code, eventList).orNull()
-        sessionExecutor.sendKey(mozcKeyEvent, keyEvent, eventList, renderResultCallback)
+        if(mozcKeyEvent != null) {
+            sessionExecutor.sendKey(mozcKeyEvent, keyEvent, eventList, renderResultCallback)
+        } else if(keyEvent != null) {
+            sessionExecutor.sendKeyEvent(keyEvent, renderResultCallback)
+        }
     }
 
     override fun onSpecial(type: Keyboard.SpecialKey) {
