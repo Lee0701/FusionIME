@@ -39,6 +39,7 @@ abstract class VietIMEMode(
     override fun onReset() {
         super.onReset()
         wordComposer.reset()
+        bestCandidate = null
     }
 
     override fun onCandidateSelected(candidate: CandidateView.Candidate) {
