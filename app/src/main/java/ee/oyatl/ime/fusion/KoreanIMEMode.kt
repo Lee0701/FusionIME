@@ -84,7 +84,6 @@ abstract class KoreanIMEMode(
         resetStack()
         inputConnection.commitText(candidate.text, 1)
         renderInputView()
-        convert()
     }
 
     private fun convert() {

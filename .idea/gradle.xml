@@ -18,6 +18,8 @@
             <option value="$PROJECT_DIR$/app/latin" />
             <option value="$PROJECT_DIR$/app/mozc" />
             <option value="$PROJECT_DIR$/app/pinyin" />
+            <option value="$PROJECT_DIR$/app/viet" />
+            <option value="$PROJECT_DIR$/app/viet/host" />
             <option value="$PROJECT_DIR$/app/zhuyin" />
           </set>
         </option>
