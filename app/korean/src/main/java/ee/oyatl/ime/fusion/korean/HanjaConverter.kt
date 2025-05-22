@@ -15,8 +15,6 @@ class HanjaConverter(
         DiskVocabDictionary(context.resources.openRawResource(R.raw.vocab))
     private val unigramsDict: DiskIndexDictionary =
         DiskIndexDictionary(context.resources.openRawResource(R.raw.unigrams))
-    private val bigramsDict: DiskIndexDictionary =
-        DiskIndexDictionary(context.resources.openRawResource(R.raw.bigrams))
 
     fun convert(text: String): List<CandidateView.Candidate> {
         val hanjaResult = (1 .. text.length).map { l ->
