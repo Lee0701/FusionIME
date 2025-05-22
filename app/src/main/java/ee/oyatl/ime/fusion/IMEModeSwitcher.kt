@@ -27,13 +27,13 @@ class IMEModeSwitcher(
     private var editorInfo: EditorInfo? = null
 
     var isShown: Boolean
-        get() = tabBar.isVisible
+        get() = tabBar?.isVisible == true
         set(v) {
-            if(v) tabBar.bringToFront()
+            if(v) tabBar?.bringToFront()
         }
 
-    private lateinit var tabBar: ViewGroup
-    private lateinit var tabs: List<ModeSwitcherTabBinding>
+    private var tabBar: ViewGroup? = null
+    private var tabs: List<ModeSwitcherTabBinding> = listOf()
 
     fun onStart(inputConnection: InputConnection, editorInfo: EditorInfo) {
         this.inputConnection = inputConnection
@@ -86,7 +86,7 @@ class IMEModeSwitcher(
             return@mapIndexed tab
         }
         this.tabBar = tabBar.root
-        return this.tabBar
+        return tabBar.root
     }
 
 interface Callback {

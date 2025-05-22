@@ -131,9 +131,10 @@ abstract class MozcIMEMode(
         sessionExecutor.resetContext()
     }
 
-    override fun onFinish() {
-        super.onFinish()
+    override fun onReset() {
         sessionExecutor.resetContext()
+        sessionExecutor.deleteSession()
+        super.onReset()
     }
 
     override fun createCandidateView(context: Context): View {

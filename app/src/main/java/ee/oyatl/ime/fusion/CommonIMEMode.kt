@@ -70,6 +70,7 @@ abstract class CommonIMEMode(
 
     override fun onStart(inputConnection: InputConnection, editorInfo: EditorInfo) {
         util = KeyEventUtil(inputConnection, editorInfo)
+        onReset()
     }
 
     override fun onFinish() {
