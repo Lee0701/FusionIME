@@ -1,6 +1,5 @@
 package ee.oyatl.ime.dictionary
 
-import ee.oyatl.ime.dictionary.Dictionary
 import java.io.DataOutputStream
 import java.io.File
 

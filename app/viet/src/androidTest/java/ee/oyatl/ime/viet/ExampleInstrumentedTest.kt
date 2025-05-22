@@ -1,4 +1,4 @@
-package ee.oyatl.ime.dictionary
+package ee.oyatl.ime.viet
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("ee.oyatl.ime.dictionary.test", appContext.packageName)
+        assertEquals("ee.oyatl.ime.viet.test", appContext.packageName)
     }
 }

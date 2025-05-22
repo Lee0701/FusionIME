@@ -1,4 +1,4 @@
-package ee.oyatl.ime.dictionary
+package ee.oyatl.ime.viet
 
 import org.junit.Test
 
