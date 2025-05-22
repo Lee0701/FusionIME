@@ -5,6 +5,8 @@ import android.view.KeyEvent
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.fusion.korean.WordComposer
 import ee.oyatl.ime.keyboard.Keyboard
+import ee.oyatl.ime.viet.ChuQuocNguTable
+import ee.oyatl.ime.viet.ChuQuocNguTableConverter
 import ee.oyatl.ime.viet.HanNomConverter
 
 abstract class VietIMEMode(
@@ -29,7 +31,8 @@ abstract class VietIMEMode(
     abstract val keyboardMode: String
 
     private val wordComposer: WordComposer = WordComposer()
-    private val converter: HanNomConverter = HanNomConverter(context)
+    private val hanNomConverter: HanNomConverter = HanNomConverter(context)
+    private val chuQuocNguTableConverter: ChuQuocNguTableConverter = ChuQuocNguTableConverter()
 
     private var bestCandidate: HanNomConverter.Candidate? = null
 
@@ -48,13 +51,14 @@ abstract class VietIMEMode(
     }
 
     private fun convert() {
-        val candidates = converter.convert(wordComposer.word, keyboardMode)
+        val candidates = hanNomConverter.convert(wordComposer.word, keyboardMode)
         bestCandidate = candidates.firstOrNull() as? HanNomConverter.Candidate
         submitCandidates(candidates)
     }
 
     private fun renderInputView() {
-        currentInputConnection?.setComposingText(wordComposer.word, 1)
+        val composing = chuQuocNguTableConverter.convert(wordComposer.word, keyboardMode)
+        currentInputConnection?.setComposingText(composing, 1)
         convert()
     }
 
@@ -75,9 +79,12 @@ abstract class VietIMEMode(
                 }
             }
             Keyboard.SpecialKey.Return -> {
+                val send = wordComposer.word.isEmpty()
                 onReset()
-                if(util?.sendDefaultEditorAction(true) != true)
-                    util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_ENTER)
+                if(send) {
+                    if(util?.sendDefaultEditorAction(true) != true)
+                        util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_ENTER)
+                }
             }
             Keyboard.SpecialKey.Delete -> {
                 if(wordComposer.word.isNotEmpty()) {
