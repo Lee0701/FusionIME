@@ -23,6 +23,7 @@ import ee.oyatl.ime.keyboard.layout.LayoutQwerty
 import ee.oyatl.ime.keyboard.layout.LayoutSymbol
 import ee.oyatl.ime.keyboard.listener.AutoShiftLockListener
 import ee.oyatl.ime.keyboard.listener.ClickKeyOnReleaseListener
+import ee.oyatl.ime.keyboard.listener.FeedbackListener
 import ee.oyatl.ime.keyboard.listener.KeyboardListener
 import ee.oyatl.ime.keyboard.listener.OnKeyClickListener
 
@@ -60,9 +61,10 @@ abstract class CommonIMEMode(
     private lateinit var numpadKeyboardView: View
     protected var candidateView: CandidateView? = null
 
-    private val textKeyboardListener: KeyboardListener = AutoShiftLockListener(ClickKeyOnReleaseListener(KeyListener()), this)
-    private val symbolKeyboardListener: KeyboardListener = AutoShiftLockListener(ClickKeyOnReleaseListener(KeyListener()), this, autoReleaseOnInput = false)
-    private val directKeyboardListener: KeyboardListener = AutoShiftLockListener(ClickKeyOnReleaseListener(DirectKeyListener()), this)
+    private lateinit var textKeyboardListener: KeyboardListener
+    private lateinit var symbolKeyboardListener: KeyboardListener
+    private lateinit var directKeyboardListener: KeyboardListener
+
     private var symbolState: KeyboardState.Symbol = KeyboardState.Symbol.Text
     override var shiftState: KeyboardState.Shift = KeyboardState.Shift.Released
 
@@ -90,6 +92,9 @@ abstract class CommonIMEMode(
     }
 
     override fun createInputView(context: Context): View {
+        textKeyboardListener = AutoShiftLockListener(FeedbackListener(context, ClickKeyOnReleaseListener(KeyListener())), this)
+        symbolKeyboardListener = AutoShiftLockListener(FeedbackListener(context, ClickKeyOnReleaseListener(KeyListener())), this, autoReleaseOnInput = false)
+        directKeyboardListener = AutoShiftLockListener(FeedbackListener(context, ClickKeyOnReleaseListener(DirectKeyListener())), this)
         switcherView = FrameLayout(context)
         val height = context.resources.getDimensionPixelSize(ee.oyatl.ime.keyboard.R.dimen.keyboard_height)
         textKeyboardView = textKeyboard.createView(context, textKeyboardListener, height / textKeyboard.numRows)
