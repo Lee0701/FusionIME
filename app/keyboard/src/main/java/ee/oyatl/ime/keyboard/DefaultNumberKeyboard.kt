@@ -4,13 +4,15 @@ import android.content.Context
 import android.view.KeyEvent
 import android.widget.LinearLayout
 import ee.oyatl.ime.keyboard.databinding.KbdRowBinding
+import ee.oyatl.ime.keyboard.listener.KeyboardListener
+import ee.oyatl.ime.keyboard.listener.RepeatableKeyListener
 
 class DefaultNumberKeyboard(
     private val rows: List<List<Int>> = ROWS
 ): DefaultKeyboard() {
     override val numRows: Int = rows.size
 
-    override fun buildRows(context: Context, listener: Keyboard.Listener, height: Int): List<KbdRowBinding> {
+    override fun buildRows(context: Context, listener: KeyboardListener, height: Int): List<KbdRowBinding> {
         val delete = buildSpecialKey(
             context,
             RepeatableKeyListener(listener),

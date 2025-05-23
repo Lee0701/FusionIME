@@ -2,13 +2,14 @@ package ee.oyatl.ime.keyboard
 
 import android.content.Context
 import ee.oyatl.ime.keyboard.databinding.KbdRowBinding
+import ee.oyatl.ime.keyboard.listener.KeyboardListener
 
 class DefaultBottomRowKeyboard(
     private val extraKeys: List<Int> = listOf(','.code, '.'.code)
 ): DefaultKeyboard() {
     override val numRows: Int = 1
 
-    override fun buildRows(context: Context, listener: Keyboard.Listener, height: Int): List<KbdRowBinding> {
+    override fun buildRows(context: Context, listener: KeyboardListener, height: Int): List<KbdRowBinding> {
         val row = buildRow(context, listener, listOf(), height)
         row.root.addView(buildSpecialKey(
             context,
