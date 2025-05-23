@@ -116,6 +116,17 @@ abstract class MozcIMEMode(
     override fun onStart(inputConnection: InputConnection, editorInfo: EditorInfo) {
         super.onStart(inputConnection, editorInfo)
         inputConnectionRenderer = InputConnectionRenderer(inputConnection, editorInfo)
+        restartInput()
+    }
+
+    override fun onReset() {
+        sessionExecutor?.resetContext()
+        sessionExecutor?.deleteSession()
+        super.onReset()
+        restartInput()
+    }
+
+    private fun restartInput() {
         val sessionExecutor = this.sessionExecutor
         if(sessionExecutor != null) {
             sessionExecutor.switchInputFieldType(ProtoCommands.Context.InputFieldType.NORMAL)
@@ -126,6 +137,7 @@ abstract class MozcIMEMode(
                     .setSessionKeymap(Config.SessionKeymap.MOBILE)
                     .clearSelectionShortcut()
                     .setUseEmojiConversion(false)
+                    .setIncognitoMode(passwordField)
                     .build()
             )
             sessionExecutor.updateRequest(
@@ -134,12 +146,6 @@ abstract class MozcIMEMode(
             )
             sessionExecutor.resetContext()
         }
-    }
-
-    override fun onReset() {
-        sessionExecutor?.resetContext()
-        sessionExecutor?.deleteSession()
-        super.onReset()
     }
 
     override fun createCandidateView(context: Context): View {

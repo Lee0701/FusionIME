@@ -122,7 +122,12 @@ class LatinIMEMode(
 
     private fun renderInputView() {
         val ic = currentInputConnection ?: return
-        ic.setComposingText(wordComposer.typedWord, 1)
+        if(passwordField) {
+            ic.commitText(wordComposer.typedWord, 1)
+            onReset()
+        } else {
+            ic.setComposingText(wordComposer.typedWord, 1)
+        }
     }
 
     override fun onChar(code: Int) {

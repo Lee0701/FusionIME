@@ -75,6 +75,7 @@ abstract class CommonIMEMode(
 
     protected var util: KeyEventUtil? = null
         private set
+    protected var passwordField: Boolean = false
     protected val currentInputConnection: InputConnection? get() = util?.currentInputConnection
     protected val currentInputEditorInfo: EditorInfo? get() = util?.currentInputEditorInfo
 
@@ -86,6 +87,7 @@ abstract class CommonIMEMode(
     override fun onStart(inputConnection: InputConnection, editorInfo: EditorInfo) {
         util = KeyEventUtil(inputConnection, editorInfo)
         onReset()
+        setPreferredKeyboard(editorInfo)
     }
 
     override fun onFinish() {
@@ -140,6 +142,37 @@ abstract class CommonIMEMode(
             KeyboardState.Symbol.Number -> {
                 numpadKeyboardView?.bringToFront()
                 numpadKeyboard.setShiftState(shiftState)
+            }
+        }
+    }
+
+    private fun setPreferredKeyboard(editorInfo: EditorInfo) {
+        when(editorInfo.inputType and EditorInfo.TYPE_MASK_CLASS) {
+            EditorInfo.TYPE_CLASS_NUMBER -> {
+                if(symbolState != KeyboardState.Symbol.Number) {
+                    symbolState = KeyboardState.Symbol.Number
+                    updateInputView()
+                }
+            }
+            EditorInfo.TYPE_CLASS_TEXT -> {
+                when(editorInfo.inputType and EditorInfo.TYPE_MASK_VARIATION) {
+                    EditorInfo.TYPE_TEXT_VARIATION_PASSWORD,
+                    EditorInfo.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD,
+                    EditorInfo.TYPE_TEXT_VARIATION_WEB_PASSWORD -> {
+                        if(!passwordField) {
+                            passwordField = true
+                            onReset()
+                        }
+                    }
+                    else -> {
+                        if(passwordField) {
+                            passwordField = false
+                            onReset()
+                        }
+                    }
+                }
+                symbolState = KeyboardState.Symbol.Text
+                updateInputView()
             }
         }
     }

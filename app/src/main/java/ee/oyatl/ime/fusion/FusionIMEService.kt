@@ -66,6 +66,19 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
 
     override fun onStartInput(attribute: EditorInfo?, restarting: Boolean) {
         super.onStartInput(attribute, restarting)
+        if(attribute != null) {
+            val cls = attribute.inputType and EditorInfo.TYPE_MASK_CLASS
+            val variation = attribute.inputType and EditorInfo.TYPE_MASK_VARIATION
+            val passwordVariations = setOf(
+                EditorInfo.TYPE_TEXT_VARIATION_PASSWORD,
+                EditorInfo.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD,
+                EditorInfo.TYPE_TEXT_VARIATION_WEB_PASSWORD,
+            )
+            if(cls == EditorInfo.TYPE_CLASS_TEXT && variation in passwordVariations) {
+                val englishModeIndex = imeModeSwitcher.entries.indexOfFirst { it.imeMode is LatinIMEMode }
+                if(englishModeIndex != -1) imeModeSwitcher.switchMode(englishModeIndex)
+            }
+        }
         imeModeSwitcher.onStart(currentInputConnection, currentInputEditorInfo)
     }
 
