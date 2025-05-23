@@ -43,12 +43,13 @@ open class FeedbackListener(
 
     class Repeatable(
         context: Context,
-        listener: KeyboardListener,
+        private val listener: RepeatableKeyListener.Listener,
         vibrationDuration: Long = 10,
         private val repeatVibrationDuration: Long = vibrationDuration / 2
     ): FeedbackListener(context, listener, vibrationDuration), RepeatableKeyListener.Listener {
         override fun onKeyRepeat(code: Int) {
             vibrate(repeatVibrationDuration)
+            listener.onKeyRepeat(code)
         }
     }
 }

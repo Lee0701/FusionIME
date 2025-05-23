@@ -197,12 +197,12 @@ abstract class CommonIMEMode(
     ): KeyboardListener {
         return FeedbackListener.Repeatable(
             context,
-            AutoShiftLockListener(
-                RepeatableKeyListener.RepeatToKeyDownUp(
-                        ClickKeyOnReleaseListener(listener)
-                ),
-                stateContainer = this,
-                autoReleaseOnInput = autoReleaseOnInput
+            RepeatableKeyListener.RepeatToKeyDownUp(
+                AutoShiftLockListener(
+                    ClickKeyOnReleaseListener(listener),
+                    stateContainer = this,
+                    autoReleaseOnInput = autoReleaseOnInput
+                )
             ),
             vibrationDuration = 10,
             repeatVibrationDuration = 5
