@@ -9,10 +9,10 @@ import android.os.VibratorManager
 import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresPermission
 
-class FeedbackListener(
+open class FeedbackListener(
     context: Context,
     private val listener: KeyboardListener,
-    private val duration: Long = 10
+    private val vibrationDuration: Long = 10
 ): KeyboardListener {
     @RequiresApi(Build.VERSION_CODES.S)
     private val vibratorManager = context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
@@ -23,6 +23,7 @@ class FeedbackListener(
 
     @RequiresPermission(Manifest.permission.VIBRATE)
     fun vibrate(duration: Long) {
+        if(duration == 0L) return
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val effect = VibrationEffect.createOneShot(duration, VibrationEffect.DEFAULT_AMPLITUDE)
             vibrator.vibrate(effect)
@@ -32,11 +33,22 @@ class FeedbackListener(
     }
 
     override fun onKeyDown(code: Int) {
-        vibrate(duration)
+        vibrate(vibrationDuration)
         listener.onKeyDown(code)
     }
 
     override fun onKeyUp(code: Int) {
         listener.onKeyUp(code)
+    }
+
+    class Repeatable(
+        context: Context,
+        listener: KeyboardListener,
+        vibrationDuration: Long = 10,
+        private val repeatVibrationDuration: Long = vibrationDuration / 2
+    ): FeedbackListener(context, listener, vibrationDuration), RepeatableKeyListener.Listener {
+        override fun onKeyRepeat(code: Int) {
+            vibrate(repeatVibrationDuration)
+        }
     }
 }

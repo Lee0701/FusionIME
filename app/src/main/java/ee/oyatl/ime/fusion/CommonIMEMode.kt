@@ -26,6 +26,7 @@ import ee.oyatl.ime.keyboard.listener.ClickKeyOnReleaseListener
 import ee.oyatl.ime.keyboard.listener.FeedbackListener
 import ee.oyatl.ime.keyboard.listener.KeyboardListener
 import ee.oyatl.ime.keyboard.listener.OnKeyClickListener
+import ee.oyatl.ime.keyboard.listener.RepeatableKeyListener
 
 abstract class CommonIMEMode(
     private val listener: IMEMode.Listener
@@ -92,9 +93,9 @@ abstract class CommonIMEMode(
     }
 
     override fun createInputView(context: Context): View {
-        textKeyboardListener = AutoShiftLockListener(FeedbackListener(context, ClickKeyOnReleaseListener(KeyListener())), this)
-        symbolKeyboardListener = AutoShiftLockListener(FeedbackListener(context, ClickKeyOnReleaseListener(KeyListener())), this, autoReleaseOnInput = false)
-        directKeyboardListener = AutoShiftLockListener(FeedbackListener(context, ClickKeyOnReleaseListener(DirectKeyListener())), this)
+        textKeyboardListener = createKeyboardListener(context, KeyListener())
+        symbolKeyboardListener = createKeyboardListener(context, KeyListener(), false)
+        directKeyboardListener = createKeyboardListener(context, DirectKeyListener())
         switcherView = FrameLayout(context)
         val height = context.resources.getDimensionPixelSize(ee.oyatl.ime.keyboard.R.dimen.keyboard_height)
         textKeyboardView = textKeyboard.createView(context, textKeyboardListener, height / textKeyboard.numRows)
@@ -187,6 +188,25 @@ abstract class CommonIMEMode(
 
     protected fun requestHideSelf(flags: Int) {
         listener.onRequestHideSelf(flags)
+    }
+
+    private fun createKeyboardListener(
+        context: Context,
+        listener: OnKeyClickListener,
+        autoReleaseOnInput: Boolean = true
+    ): KeyboardListener {
+        return FeedbackListener.Repeatable(
+            context,
+            AutoShiftLockListener(
+                RepeatableKeyListener.RepeatToKeyDownUp(
+                        ClickKeyOnReleaseListener(listener)
+                ),
+                stateContainer = this,
+                autoReleaseOnInput = autoReleaseOnInput
+            ),
+            vibrationDuration = 10,
+            repeatVibrationDuration = 5
+        )
     }
 
     inner class KeyListener: OnKeyClickListener {

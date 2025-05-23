@@ -10,8 +10,12 @@ class RepeatableKeyListener(
 ): KeyboardListener {
     private val handler = Handler(Looper.getMainLooper())
     private fun repeat(code: Int) {
-        listener.onKeyDown(code)
-        listener.onKeyUp(code)
+        if(listener is Listener) {
+            listener.onKeyRepeat(code)
+        } else {
+            listener.onKeyDown(code)
+            listener.onKeyUp(code)
+        }
         handler.postDelayed({ repeat(code) }, interval.toLong())
     }
 
@@ -23,5 +27,24 @@ class RepeatableKeyListener(
 
     override fun onKeyUp(code: Int) {
         handler.removeCallbacksAndMessages(null)
+    }
+
+    interface Listener: KeyboardListener {
+        fun onKeyRepeat(code: Int)
+    }
+
+    class RepeatToKeyDownUp(private val listener: KeyboardListener): Listener {
+        override fun onKeyDown(code: Int) {
+            listener.onKeyDown(code)
+        }
+
+        override fun onKeyUp(code: Int) {
+            listener.onKeyUp(code)
+        }
+
+        override fun onKeyRepeat(code: Int) {
+            listener.onKeyDown(code)
+            listener.onKeyUp(code)
+        }
     }
 }
