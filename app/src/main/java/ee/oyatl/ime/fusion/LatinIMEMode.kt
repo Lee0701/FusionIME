@@ -34,6 +34,7 @@ class LatinIMEMode(
 
     private val wordComposer: WordComposer = WordComposer()
     private var lastComposedWord: LastComposedWord = LastComposedWord.NOT_A_COMPOSED_WORD
+    private var ghostSpace = false
 
     private val keyboardParams: KeyboardParams = KeyboardParams().apply {
         mOccupiedWidth = 1
@@ -66,6 +67,7 @@ class LatinIMEMode(
         super.onReset()
         wordComposer.reset()
         lastComposedWord = LastComposedWord.NOT_A_COMPOSED_WORD
+        ghostSpace = false
     }
 
     override fun createCandidateView(context: Context): View {
@@ -84,8 +86,9 @@ class LatinIMEMode(
         )
         val ic = currentInputConnection
         if(ic != null) {
+            if(ghostSpace) ic.commitText(" ", 1)
             ic.commitText(lastComposedWord.mCommittedWord, 1)
-            ic.commitText(" ", 1)
+            ghostSpace = true
         }
         renderInputView()
         updateSuggestions()
@@ -126,6 +129,8 @@ class LatinIMEMode(
         val event = Event.createEventForCodePointFromUnknownSource(code)
         val processedEvent = wordComposer.processEvent(event)
         wordComposer.applyProcessedEvent(processedEvent)
+        if(ghostSpace) currentInputConnection?.commitText(" ", 1)
+        ghostSpace = false
         renderInputView()
         updateSuggestions()
     }
@@ -154,6 +159,7 @@ class LatinIMEMode(
             }
             else -> {}
         }
+        ghostSpace = false
         renderInputView()
     }
 
