@@ -19,7 +19,7 @@ class StackedKeyboard(
         return view
     }
 
-    override fun changeState(state: KeyboardStateSet) {
-        keyboards.forEach { it.changeState(state) }
+    override fun setShiftState(state: KeyboardState.Shift) {
+        keyboards.forEach { it.setShiftState(state) }
     }
 }

@@ -5,11 +5,14 @@ import ee.oyatl.ime.keyboard.KeyboardState
 
 class AutoShiftLockListener(
     private val listener: KeyboardListener,
+    private val stateContainer: StateContainer,
     private val lockDelay: Int = 300,
     private val autoReleaseOnInput: Boolean = true
 ): KeyboardListener {
-    var state: KeyboardState.Shift = KeyboardState.Shift.Released
-        private set
+    private var state: KeyboardState.Shift
+        get() = stateContainer.shiftState
+        set(value) { stateContainer.shiftState = value }
+
     private var shiftPressing: Boolean = false
     private var shiftTime: Long = 0
     private var inputWhileShifted: Boolean = false
@@ -75,5 +78,9 @@ class AutoShiftLockListener(
                 inputWhileShifted = true
             }
         }
+    }
+
+    interface StateContainer {
+        var shiftState: KeyboardState.Shift
     }
 }
