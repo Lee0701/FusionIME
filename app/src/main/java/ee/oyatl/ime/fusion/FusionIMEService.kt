@@ -11,28 +11,36 @@ import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import androidx.appcompat.view.ContextThemeWrapper
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.Callback {
+    val coroutineScope = CoroutineScope(Dispatchers.IO)
 
     private lateinit var imeModeSwitcher: IMEModeSwitcher
-
     private lateinit var imeView: LinearLayout
 
     override fun onCreate() {
         super.onCreate()
         val entries = mutableListOf<IMEModeSwitcher.Entry>()
         entries += IMEModeSwitcher.Entry("ABC", LatinIMEMode(this, this))
-        entries += IMEModeSwitcher.Entry("한3", KoreanIMEMode.Hangul3Set391(this, this))
-        entries += IMEModeSwitcher.Entry("한2", KoreanIMEMode.Hangul2SetKS(this, this))
-        entries += IMEModeSwitcher.Entry("あQ", MozcIMEMode.RomajiQwerty(this, this))
-        entries += IMEModeSwitcher.Entry("あいう", MozcIMEMode.Kana50OnZu(this, this))
-        entries += IMEModeSwitcher.Entry("JIS", MozcIMEMode.KanaJIS(this, this))
-        entries += IMEModeSwitcher.Entry("拼音", PinyinIMEMode(this, this))
-        entries += IMEModeSwitcher.Entry("注音", ZhuyinIMEMode(this, this))
-        entries += IMEModeSwitcher.Entry("倉頡", CangjieIMEMode(this, this))
-        entries += IMEModeSwitcher.Entry("越Q", VietIMEMode.Qwerty(this, this))
-        entries += IMEModeSwitcher.Entry("越T", VietIMEMode.Telex(this, this))
+        entries += IMEModeSwitcher.Entry("한3", KoreanIMEMode.Hangul3Set391(this))
+        entries += IMEModeSwitcher.Entry("한2", KoreanIMEMode.Hangul2SetKS(this))
+        entries += IMEModeSwitcher.Entry("あQ", MozcIMEMode.RomajiQwerty(this))
+        entries += IMEModeSwitcher.Entry("あいう", MozcIMEMode.Kana50OnZu(this))
+        entries += IMEModeSwitcher.Entry("JIS", MozcIMEMode.KanaJIS(this))
+        entries += IMEModeSwitcher.Entry("拼音", PinyinIMEMode(this))
+        entries += IMEModeSwitcher.Entry("注音", ZhuyinIMEMode(this))
+        entries += IMEModeSwitcher.Entry("倉頡", CangjieIMEMode(this))
+        entries += IMEModeSwitcher.Entry("越Q", VietIMEMode.Qwerty(this))
+        entries += IMEModeSwitcher.Entry("越T", VietIMEMode.Telex(this))
         imeModeSwitcher = IMEModeSwitcher(entries, this)
+
+        coroutineScope.launch {
+            entries.forEach { it.imeMode.onLoad(this@FusionIMEService) }
+        }
     }
 
     override fun onDestroy() {

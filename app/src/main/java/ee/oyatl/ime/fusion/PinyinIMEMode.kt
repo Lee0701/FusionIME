@@ -35,7 +35,6 @@ import ee.oyatl.ime.keyboard.layout.LayoutPinyin
 import java.util.Vector
 
 class PinyinIMEMode(
-    context: Context,
     listener: IMEMode.Listener
 ): CommonIMEMode(listener) {
     /**
@@ -82,7 +81,7 @@ class PinyinIMEMode(
         DefaultBottomRowKeyboard()
     )
 
-    init {
+    override suspend fun onLoad(context: Context) {
         startPinyinDecoderService(context)
     }
 

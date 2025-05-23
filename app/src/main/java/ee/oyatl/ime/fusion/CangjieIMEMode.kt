@@ -17,7 +17,6 @@ import ee.oyatl.ime.keyboard.layout.KeyboardTemplates
 import ee.oyatl.ime.keyboard.layout.LayoutCangjie
 
 class CangjieIMEMode(
-    context: Context,
     listener: IMEMode.Listener
 ): CommonIMEMode(listener) {
 
@@ -41,15 +40,16 @@ class CangjieIMEMode(
         DefaultBottomRowKeyboard()
     )
 
-    private val table: TableLoader = TableLoader()
-    private val wordComposer: WordComposer =
-        WordComposer()
+    private var table: TableLoader? = null
+    private val wordComposer = WordComposer()
 
     private var bestCandidate: CangjieCandidate? = null
 
-    init {
+    override suspend fun onLoad(context: Context) {
+        val table = TableLoader()
         table.setPath(context.filesDir.absolutePath.encodeToByteArray())
         table.initialize()
+        this.table = table
     }
 
     override fun onReset() {
@@ -66,6 +66,7 @@ class CangjieIMEMode(
     }
 
     private fun updateSuggestions() {
+        val table = table ?: return
         val chars = (wordComposer.typedWord?.toString().orEmpty()
             .map { LayoutCangjie.KEY_MAP[it] ?: it }.toCharArray() +
                 (0 until 5).map { 0.toChar() }).take(5)
@@ -89,7 +90,7 @@ class CangjieIMEMode(
 
     override fun onChar(code: Int) {
         wordComposer.add(code, intArrayOf(code))
-        table.setInputMethod(TableLoader.CANGJIE)
+        table?.setInputMethod(TableLoader.CANGJIE)
         renderInput()
     }
 

@@ -19,7 +19,6 @@ import tw.cheyingwu.zhuyin.ZhuYinDictionary
 import tw.cheyingwu.zhuyin.ZhuYinIMESettings
 
 class ZhuyinIMEMode(
-    context: Context,
     listener: IMEMode.Listener
 ): CommonIMEMode(listener) {
 
@@ -40,18 +39,21 @@ class ZhuyinIMEMode(
         GridBottomRowKeyboard(KeyboardInflater.inflate(LayoutZhuyin.EXTRA_KEYS, layoutTable)[0][0])
     )
 
-    private val wordComposer: WordComposer =
-        WordComposer()
-    private var mSuggest: Suggest =
-        Suggest(context, R.raw.dict_zhuyin)
-    private var mUserDictionary: ZhuYinDictionary = ZhuYinDictionary(context)
+    private val wordComposer = WordComposer()
+    private var mSuggest: Suggest? = null
+    private var mUserDictionary: ZhuYinDictionary? = null
 
     private var bestCandidate: ZhuyinCandidate? = null
 
-    init {
-        mSuggest.correctionMode = Suggest.CORRECTION_BASIC
-        mSuggest.setUserDictionary(mUserDictionary)
+    override suspend fun onLoad(context: Context) {
+        val suggest = Suggest(context, R.raw.dict_zhuyin)
+        mUserDictionary = ZhuYinDictionary(context)
+
+        suggest.correctionMode = Suggest.CORRECTION_BASIC
+        suggest.setUserDictionary(mUserDictionary)
         ZhuYinIMESettings.setCandidateCnt(50)
+
+        this.mSuggest = suggest
     }
 
     override fun onReset() {
@@ -65,7 +67,7 @@ class ZhuyinIMEMode(
         if(candidate is ZhuyinCandidate) {
             val text = candidate.text.toString().replace(" ", "")
             inputConnection.commitText(text, 1)
-            mUserDictionary.useWordDB(text)
+            mUserDictionary?.useWordDB(text)
             onReset()
         }
     }
@@ -77,7 +79,7 @@ class ZhuyinIMEMode(
     }
 
     private fun updateSuggestions() {
-        val list = mSuggest.getSuggestions(getInputView(), wordComposer, false)
+        val list = mSuggest?.getSuggestions(getInputView(), wordComposer, false) ?: return
         val candidates = list.mapIndexed { i, s -> ZhuyinCandidate(i, s) }
         bestCandidate = candidates.getOrNull(0)
         submitCandidates(candidates)

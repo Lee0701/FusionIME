@@ -29,9 +29,8 @@ class LatinIMEMode(
     listener: IMEMode.Listener
 ): CommonIMEMode(listener), DictionaryFacilitator.DictionaryInitializationListener, OnGetSuggestedWordsCallback {
 
-    private val dictionaryFacilitator: DictionaryFacilitator =
-        DictionaryFacilitatorProvider.getDictionaryFacilitator(false)
-    private val suggest: Suggest = Suggest(dictionaryFacilitator)
+    private var dictionaryFacilitator: DictionaryFacilitator? = null
+    private var suggest: Suggest? = null
 
     private val wordComposer: WordComposer = WordComposer()
     private var lastComposedWord: LastComposedWord = LastComposedWord.NOT_A_COMPOSED_WORD
@@ -42,7 +41,8 @@ class LatinIMEMode(
     }
     private val dummyKeyboard: Keyboard = KeyboardBuilder(context, keyboardParams).build()
 
-    init {
+    override suspend fun onLoad(context: Context) {
+        val dictionaryFacilitator = DictionaryFacilitatorProvider.getDictionaryFacilitator(false)
         dictionaryFacilitator.resetDictionaries(
             context,
             Locale.ENGLISH,
@@ -53,13 +53,8 @@ class LatinIMEMode(
             "",
             this
         )
-    }
-
-    override fun createCandidateView(context: Context): View {
-        candidateView = TripleCandidateView(context, null).apply {
-            listener = this@LatinIMEMode
-        }
-        return candidateView as View
+        suggest = Suggest(dictionaryFacilitator)
+        this.dictionaryFacilitator = dictionaryFacilitator
     }
 
     override fun onStart(inputConnection: InputConnection, editorInfo: EditorInfo) {
@@ -71,6 +66,13 @@ class LatinIMEMode(
         super.onReset()
         wordComposer.reset()
         lastComposedWord = LastComposedWord.NOT_A_COMPOSED_WORD
+    }
+
+    override fun createCandidateView(context: Context): View {
+        candidateView = TripleCandidateView(context, null).apply {
+            listener = this@LatinIMEMode
+        }
+        return candidateView as View
     }
 
     override fun onCandidateSelected(candidate: CandidateView.Candidate) {
@@ -103,7 +105,7 @@ class LatinIMEMode(
         val inputStyle =
             if(wordComposer.isComposingWord) SuggestedWords.INPUT_STYLE_TYPING
             else SuggestedWords.INPUT_STYLE_PREDICTION
-        suggest.getSuggestedWords(
+        suggest?.getSuggestedWords(
             wordComposer,
             ngramContext,
             dummyKeyboard,

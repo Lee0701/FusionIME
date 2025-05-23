@@ -20,7 +20,6 @@ import ee.oyatl.ime.keyboard.StackedKeyboard
 import ee.oyatl.ime.keyboard.layout.KeyboardTemplates
 
 abstract class KoreanIMEMode(
-    context: Context,
     listener: IMEMode.Listener
 ): CommonIMEMode(listener) {
 
@@ -34,7 +33,7 @@ abstract class KoreanIMEMode(
         }
     }
 
-    class Hangul2SetKS(context: Context, listener: IMEMode.Listener): KoreanIMEMode(context, listener) {
+    class Hangul2SetKS(listener: IMEMode.Listener): KoreanIMEMode(listener) {
         override val hangulCombiner: HangulCombiner = HangulCombiner(Hangul2Set.COMB_KS, true)
         override val layoutTable: Map<Int, List<Int>> = Hangul2Set.TABLE_KS
         private val layers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE, layoutTable)
@@ -47,7 +46,7 @@ abstract class KoreanIMEMode(
         )
     }
 
-    class Hangul3Set391(context: Context, listener: IMEMode.Listener): KoreanIMEMode(context, listener) {
+    class Hangul3Set391(listener: IMEMode.Listener): KoreanIMEMode(listener) {
         override val hangulCombiner: HangulCombiner = HangulCombiner(Hangul3Set.COMBINATION_391, true)
         override val layoutTable: Map<Int, List<Int>> = Hangul3Set.TABLE_391
         private val layers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE_WITH_QUOTE, layoutTable)
@@ -65,7 +64,11 @@ abstract class KoreanIMEMode(
     private val currentState: HangulCombiner.State get() = stateStack.last() as HangulCombiner.State
 
     private val wordComposer: WordComposer = WordComposer()
-    private val hanjaConverter: HanjaConverter = HanjaConverter(context)
+    private var hanjaConverter: HanjaConverter? = null
+
+    override suspend fun onLoad(context: Context) {
+        hanjaConverter = HanjaConverter(context)
+    }
 
     override fun onReset() {
         super.onReset()
@@ -87,8 +90,8 @@ abstract class KoreanIMEMode(
     }
 
     private fun convert() {
-        val candidates = hanjaConverter.convert(wordComposer.word)
-        submitCandidates(candidates)
+        val candidates = hanjaConverter?.convert(wordComposer.word)
+        if(candidates != null) submitCandidates(candidates)
     }
 
     private fun postConvert() {

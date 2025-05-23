@@ -10,31 +10,32 @@ import ee.oyatl.ime.viet.ChuQuocNguTableConverter
 import ee.oyatl.ime.viet.HanNomConverter
 
 abstract class VietIMEMode(
-    context: Context,
     listener: IMEMode.Listener
 ): CommonIMEMode(listener) {
 
     class Qwerty(
-        context: Context,
         listener: IMEMode.Listener
-    ): VietIMEMode(context, listener) {
+    ): VietIMEMode(listener) {
         override val keyboardMode: String = "q"
     }
 
     class Telex(
-        context: Context,
         listener: IMEMode.Listener
-    ): VietIMEMode(context, listener) {
+    ): VietIMEMode(listener) {
         override val keyboardMode: String = "t"
     }
 
     abstract val keyboardMode: String
 
     private val wordComposer: WordComposer = WordComposer()
-    private val hanNomConverter: HanNomConverter = HanNomConverter(context)
+    private var hanNomConverter: HanNomConverter? = null
     private val chuQuocNguTableConverter: ChuQuocNguTableConverter = ChuQuocNguTableConverter()
 
     private var bestCandidate: HanNomConverter.Candidate? = null
+
+    override suspend fun onLoad(context: Context) {
+        hanNomConverter = HanNomConverter(context)
+    }
 
     override fun onReset() {
         super.onReset()
@@ -52,7 +53,7 @@ abstract class VietIMEMode(
     }
 
     private fun convert() {
-        val candidates = hanNomConverter.convert(wordComposer.word, keyboardMode)
+        val candidates = hanNomConverter?.convert(wordComposer.word, keyboardMode) ?: return
         bestCandidate = candidates.firstOrNull() as? HanNomConverter.Candidate
         submitCandidates(candidates)
     }

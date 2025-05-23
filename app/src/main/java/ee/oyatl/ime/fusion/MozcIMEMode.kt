@@ -1,7 +1,6 @@
 package ee.oyatl.ime.fusion
 
 import android.content.Context
-import android.content.res.Configuration
 import android.content.res.Resources
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -33,11 +32,10 @@ import org.mozc.android.inputmethod.japanese.session.SessionExecutor.EvaluationC
 import org.mozc.android.inputmethod.japanese.session.SessionHandlerFactory
 
 abstract class MozcIMEMode(
-    context: Context,
     listener: IMEMode.Listener
 ): CommonIMEMode(listener) {
 
-    class RomajiQwerty(context: Context, listener: IMEMode.Listener): MozcIMEMode(context, listener) {
+    class RomajiQwerty(listener: IMEMode.Listener): MozcIMEMode(listener) {
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.QWERTY_KANA
         override val layoutTable: Map<Int, List<Int>> = LayoutRomaji.TABLE_QWERTY
         private val layers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE_MINUS, layoutTable)
@@ -50,7 +48,7 @@ abstract class MozcIMEMode(
         )
     }
 
-    class KanaJIS(context: Context, listener: IMEMode.Listener): MozcIMEMode(context, listener) {
+    class KanaJIS(listener: IMEMode.Listener): MozcIMEMode(listener) {
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.QWERTY_KANA_JIS
         override val layoutTable: Map<Int, List<Int>> = LayoutKana.TABLE_JIS
         private val lower = KeyboardInflater.inflate(LayoutKana.ROWS_JIS_LOWER)
@@ -68,7 +66,7 @@ abstract class MozcIMEMode(
         )
     }
 
-    class Kana50OnZu(context: Context, listener: IMEMode.Listener): MozcIMEMode(context, listener) {
+    class Kana50OnZu(listener: IMEMode.Listener): MozcIMEMode(listener) {
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.TWELVE_KEY_FLICK_KANA
         private val layers = KeyboardInflater.inflate(LayoutKana.ROWS_50ONZU)
         override val textKeyboard: Keyboard = StackedKeyboard(
@@ -80,13 +78,11 @@ abstract class MozcIMEMode(
         )
     }
 
-    private val resources: Resources = context.resources
-    private val configuration: Configuration = resources.configuration
+    private lateinit var resources: Resources
     protected abstract val keyboardSpecification: KeyboardSpecification
 
-    private val primaryKeyCodeConverter: PrimaryKeyCodeConverter = PrimaryKeyCodeConverter(context)
-    private val sessionExecutor: SessionExecutor =
-        SessionExecutor.getInstanceInitializedIfNecessary(SessionHandlerFactory(context), context)
+    private var primaryKeyCodeConverter: PrimaryKeyCodeConverter? = null
+    private var sessionExecutor: SessionExecutor? = null
     private var inputConnectionRenderer: InputConnectionRenderer? = null
 
     private val renderResultCallback = EvaluationCallback { command, triggeringKeyEvent ->
@@ -111,29 +107,38 @@ abstract class MozcIMEMode(
         }
     }
 
+    override suspend fun onLoad(context: Context) {
+        primaryKeyCodeConverter = PrimaryKeyCodeConverter(context)
+        sessionExecutor = SessionExecutor.getInstanceInitializedIfNecessary(SessionHandlerFactory(context), context)
+        resources = context.resources
+    }
+
     override fun onStart(inputConnection: InputConnection, editorInfo: EditorInfo) {
         super.onStart(inputConnection, editorInfo)
         inputConnectionRenderer = InputConnectionRenderer(inputConnection, editorInfo)
-        sessionExecutor.switchInputFieldType(ProtoCommands.Context.InputFieldType.NORMAL)
-        sessionExecutor.switchInputMode(
-            Optional.absent(), ProtoCommands.CompositionMode.HIRAGANA, renderResultCallback)
-        sessionExecutor.setImposedConfig(
-            Config.newBuilder()
-                .setSessionKeymap(Config.SessionKeymap.MOBILE)
-                .clearSelectionShortcut()
-                .setUseEmojiConversion(false)
-                .build()
-        )
-        sessionExecutor.updateRequest(
-            MozcUtil.getRequestBuilder(resources, keyboardSpecification, configuration).build(),
-            emptyList()
-        )
-        sessionExecutor.resetContext()
+        val sessionExecutor = this.sessionExecutor
+        if(sessionExecutor != null) {
+            sessionExecutor.switchInputFieldType(ProtoCommands.Context.InputFieldType.NORMAL)
+            sessionExecutor.switchInputMode(
+                Optional.absent(), ProtoCommands.CompositionMode.HIRAGANA, renderResultCallback)
+            sessionExecutor.setImposedConfig(
+                Config.newBuilder()
+                    .setSessionKeymap(Config.SessionKeymap.MOBILE)
+                    .clearSelectionShortcut()
+                    .setUseEmojiConversion(false)
+                    .build()
+            )
+            sessionExecutor.updateRequest(
+                MozcUtil.getRequestBuilder(resources, keyboardSpecification, resources.configuration).build(),
+                emptyList()
+            )
+            sessionExecutor.resetContext()
+        }
     }
 
     override fun onReset() {
-        sessionExecutor.resetContext()
-        sessionExecutor.deleteSession()
+        sessionExecutor?.resetContext()
+        sessionExecutor?.deleteSession()
         super.onReset()
     }
 
@@ -147,11 +152,13 @@ abstract class MozcIMEMode(
 
     override fun onCandidateSelected(candidate: CandidateView.Candidate) {
         if(candidate is MozcCandidate) {
-            sessionExecutor.submitCandidate(candidate.id, Optional.absent(), renderResultCallback)
+            sessionExecutor?.submitCandidate(candidate.id, Optional.absent(), renderResultCallback)
         }
     }
 
     override fun onChar(code: Int) {
+        val primaryKeyCodeConverter = primaryKeyCodeConverter ?: return
+        val sessionExecutor = sessionExecutor ?: return
         val eventList = emptyList<TouchEvent>()
         val keyEvent = primaryKeyCodeConverter.getPrimaryCodeKeyEvent(code)
         val mozcKeyEvent = primaryKeyCodeConverter.createMozcKeyEvent(code, eventList).orNull()
@@ -165,8 +172,8 @@ abstract class MozcIMEMode(
     override fun onSpecial(type: Keyboard.SpecialKey) {
         when(type) {
             Keyboard.SpecialKey.Space -> onChar(' '.code)
-            Keyboard.SpecialKey.Return -> onChar(primaryKeyCodeConverter.keyCodeEnter)
-            Keyboard.SpecialKey.Delete -> onChar(primaryKeyCodeConverter.keyCodeBackspace)
+            Keyboard.SpecialKey.Return -> onChar(primaryKeyCodeConverter?.keyCodeEnter ?: return)
+            Keyboard.SpecialKey.Delete -> onChar(primaryKeyCodeConverter?.keyCodeBackspace ?: return)
             else -> {}
         }
     }

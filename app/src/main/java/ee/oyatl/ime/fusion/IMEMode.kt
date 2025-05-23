@@ -6,6 +6,8 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
 
 interface IMEMode {
+
+    suspend fun onLoad(context: Context)
     fun onStart(inputConnection: InputConnection, editorInfo: EditorInfo)
     fun onFinish()
     fun createInputView(context: Context): View

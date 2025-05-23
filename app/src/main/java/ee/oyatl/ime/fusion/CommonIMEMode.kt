@@ -68,6 +68,8 @@ abstract class CommonIMEMode(
     abstract fun onChar(code: Int)
     abstract fun onSpecial(type: Keyboard.SpecialKey)
 
+    override suspend fun onLoad(context: Context) = Unit
+
     override fun onStart(inputConnection: InputConnection, editorInfo: EditorInfo) {
         util = KeyEventUtil(inputConnection, editorInfo)
         onReset()
