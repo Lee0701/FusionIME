@@ -1,7 +1,6 @@
 package ee.oyatl.ime.dictionary
 
 import java.io.InputStream
-import java.lang.StringBuilder
 import java.nio.ByteBuffer
 
 class DiskIndexDictionary(input: InputStream) {

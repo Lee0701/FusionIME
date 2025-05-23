@@ -24,6 +24,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     compileOptions {
@@ -59,6 +60,7 @@ dependencies {
     implementation(project(":app:cangjie"))
     implementation(project(":app:korean"))
     implementation(project(":app:latin"))
+    implementation(project(":app:viet"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

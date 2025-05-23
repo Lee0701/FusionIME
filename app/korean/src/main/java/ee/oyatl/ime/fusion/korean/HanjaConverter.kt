@@ -9,10 +9,12 @@ import ee.oyatl.ime.dictionary.DiskVocabDictionary
 class HanjaConverter(
     context: Context
 ) {
-    private val hanjaDict: DiskDictionary = DiskDictionary(context.resources.openRawResource(R.raw.hanja))
-    private val vocabDict: DiskVocabDictionary = DiskVocabDictionary(context.resources.openRawResource(R.raw.vocab))
-    private val unigramsDict: DiskIndexDictionary = DiskIndexDictionary(context.resources.openRawResource(R.raw.unigrams))
-    private val bigramsDict: DiskIndexDictionary = DiskIndexDictionary(context.resources.openRawResource(R.raw.bigrams))
+    private val hanjaDict: DiskDictionary =
+        DiskDictionary(context.resources.openRawResource(R.raw.hanja))
+    private val vocabDict: DiskVocabDictionary =
+        DiskVocabDictionary(context.resources.openRawResource(R.raw.vocab))
+    private val unigramsDict: DiskIndexDictionary =
+        DiskIndexDictionary(context.resources.openRawResource(R.raw.unigrams))
 
     fun convert(text: String): List<CandidateView.Candidate> {
         val hanjaResult = (1 .. text.length).map { l ->

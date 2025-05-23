@@ -13,6 +13,7 @@ class DiskDictionary(input: InputStream) {
         for(c in key) {
             // children count
             val children = data.getShort(p)
+            if(children == 0.toShort()) return listOf()
             for(i in 0 until children) {
                 val ch = data.getChar(p + 2 + i*6)
                 val addr = data.getInt(p + 2 + i*6 + 2)
