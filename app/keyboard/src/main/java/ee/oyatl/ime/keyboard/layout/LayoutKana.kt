@@ -77,7 +77,7 @@ object LayoutKana {
         "ぬふぁぅぇぉゃゅょをー",
         "たてぃすかんなにらせ゜",
         "ちとしはきくまのりれけ",
-        "っさそゐこみもねるめろ",
+        "っさそゐこみも、。・ろ",
     )
 
     const val BOTTOM_RIGHT_JIS: String = "\\="
