@@ -9,12 +9,12 @@ class ShiftStateKeyboard(
     private val shifted: Keyboard = normal,
     private val locked: Keyboard = shifted,
 ): Keyboard {
-    private lateinit var keyboardSwitcher: ShiftKeyboardSwitcher
+    private var keyboardSwitcher: ShiftKeyboardSwitcher? = null
 
     override val numRows: Int = listOf(normal, shifted, locked).maxOf { it.numRows }
 
     override fun createView(context: Context, listener: KeyboardListener, height: Int): View {
-        keyboardSwitcher = ShiftKeyboardSwitcher(
+        val keyboardSwitcher = ShiftKeyboardSwitcher(
             context,
             normal.createView(context, listener, height),
             shifted.createView(context, listener, height),
@@ -23,10 +23,11 @@ class ShiftStateKeyboard(
         normal.setShiftState(KeyboardState.Shift.Released)
         shifted.setShiftState(KeyboardState.Shift.Pressed)
         locked.setShiftState(KeyboardState.Shift.Locked)
+        this.keyboardSwitcher = keyboardSwitcher
         return keyboardSwitcher.view
     }
 
     override fun setShiftState(state: KeyboardState.Shift) {
-        keyboardSwitcher.switch(state)
+        keyboardSwitcher?.switch(state)
     }
 }

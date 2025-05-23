@@ -12,16 +12,18 @@ import androidx.core.view.isVisible
 import ee.oyatl.ime.fusion.databinding.ModeSwitcherTabBarBinding
 
 class IMEModeSwitcher(
+    private val context: Context,
     val entries: List<Entry>,
     private val callback: Callback
 ) {
     val size: Int get() = entries.size
     var currentModeIndex: Int = 0
         private set
-    val currentMode: IMEMode get() = entries[currentModeIndex].imeMode
+    private val currentEntry: Entry get() = entries[currentModeIndex]
+    val currentMode: IMEMode get() = currentEntry.imeMode
 
-    private lateinit var inputView: FrameLayout
-    private lateinit var candidateView: FrameLayout
+    val inputView: FrameLayout = FrameLayout(context)
+    val candidateView: FrameLayout = FrameLayout(context)
 
     private var inputConnection: InputConnection? = null
     private var editorInfo: EditorInfo? = null
@@ -30,6 +32,7 @@ class IMEModeSwitcher(
         get() = tabBar?.isVisible == true
         set(v) {
             if(v) tabBar?.bringToFront()
+            tabBar?.visibility = if(v) View.VISIBLE else View.INVISIBLE
         }
 
     private var tabBar: ViewGroup? = null
@@ -38,38 +41,37 @@ class IMEModeSwitcher(
     fun onStart(inputConnection: InputConnection, editorInfo: EditorInfo) {
         this.inputConnection = inputConnection
         this.editorInfo = editorInfo
-        currentMode.onStart(inputConnection, editorInfo)
+        currentEntry.imeMode.onStart(inputConnection, editorInfo)
     }
 
     fun onFinish() {
         this.inputConnection = null
         this.editorInfo = null
-        currentMode.onFinish()
+        currentEntry.imeMode.onFinish()
     }
 
-    fun createInputView(context: Context): View {
-        inputView = FrameLayout(context)
-        entries.forEach { inputView.addView(it.imeMode.createInputView(context)) }
-        return inputView
+    private fun updateInputView() {
+        inputView.removeAllViews()
+        val view = currentEntry.inputView ?: currentEntry.imeMode.createInputView(context)
+        currentEntry.inputView = view
+        inputView.addView(view)
     }
 
-    fun createCandidateView(context: Context): View {
-        candidateView = FrameLayout(context)
-        entries.forEach {
-            val view = it.imeMode.createCandidateView(context)
-            view.visibility = View.GONE
-            candidateView.addView(view)
-        }
-        return candidateView
+    private fun updateCandidateView() {
+        candidateView.removeAllViews()
+        val view = currentEntry.candidateView ?: currentEntry.imeMode.createCandidateView(context)
+        currentEntry.candidateView = view
+        candidateView.addView(view)
     }
 
     fun switchMode(index: Int) {
         val inputConnection = this.inputConnection ?: return
         val editorInfo = this.editorInfo ?: return
-        currentMode.onFinish()
+        currentEntry.imeMode.onFinish()
         currentModeIndex = index
-        currentMode.onStart(inputConnection, editorInfo)
-        currentMode.getInputView().bringToFront()
+        updateInputView()
+        updateCandidateView()
+        currentEntry.imeMode.onStart(inputConnection, editorInfo)
         tabs.forEach { it.root.isSelected = false }
         tabs[index].root.isSelected = true
     }
@@ -96,5 +98,8 @@ interface Callback {
     data class Entry(
         val label: String,
         val imeMode: IMEMode
-    )
+    ) {
+        internal var inputView: View? = null
+        internal var candidateView: View? = null
+    }
 }

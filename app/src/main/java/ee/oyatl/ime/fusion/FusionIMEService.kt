@@ -8,16 +8,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowInsets.Type
 import android.view.inputmethod.EditorInfo
+import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import androidx.appcompat.view.ContextThemeWrapper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.Callback {
-    val coroutineScope = CoroutineScope(Dispatchers.IO)
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
     private lateinit var imeModeSwitcher: IMEModeSwitcher
     private lateinit var imeView: LinearLayout
@@ -36,7 +36,7 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
         entries += IMEModeSwitcher.Entry("倉頡", CangjieIMEMode(this))
         entries += IMEModeSwitcher.Entry("越Q", VietIMEMode.Qwerty(this))
         entries += IMEModeSwitcher.Entry("越T", VietIMEMode.Telex(this))
-        imeModeSwitcher = IMEModeSwitcher(entries, this)
+        imeModeSwitcher = IMEModeSwitcher(this, entries, this)
 
         coroutineScope.launch {
             entries.forEach { it.imeMode.onLoad(this@FusionIMEService) }
@@ -53,10 +53,11 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
     override fun onCreateInputView(): View {
         imeView = LinearLayout(this)
         imeView.orientation = LinearLayout.VERTICAL
-        val candidateView = imeModeSwitcher.createCandidateView(this) as ViewGroup
-        candidateView.addView(imeModeSwitcher.initTabBarView(this))
-        imeView.addView(candidateView)
-        imeView.addView(imeModeSwitcher.createInputView(this))
+        val candidateSwitchView = FrameLayout(this)
+        candidateSwitchView.addView(imeModeSwitcher.initTabBarView(this))
+        candidateSwitchView.addView(imeModeSwitcher.candidateView)
+        imeView.addView(candidateSwitchView)
+        imeView.addView(imeModeSwitcher.inputView)
         imeView.fitsSystemWindows = true
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) updateNavigationBar()
         onSwitchInputMode(0)

@@ -56,10 +56,10 @@ abstract class CommonIMEMode(
 
     open val numpadKeyboard: Keyboard = DefaultNumberKeyboard()
 
-    private lateinit var switcherView: FrameLayout
-    private lateinit var textKeyboardView: View
-    private lateinit var symbolKeyboardView: View
-    private lateinit var numpadKeyboardView: View
+    private var switcherView: FrameLayout? = null
+    private var textKeyboardView: View? = null
+    private var symbolKeyboardView: View? = null
+    private var numpadKeyboardView: View? = null
     protected var candidateView: CandidateView? = null
 
     private lateinit var textKeyboardListener: KeyboardListener
@@ -98,7 +98,7 @@ abstract class CommonIMEMode(
         textKeyboardListener = createKeyboardListener(context, KeyListener())
         symbolKeyboardListener = createKeyboardListener(context, KeyListener(), false)
         directKeyboardListener = createKeyboardListener(context, DirectKeyListener())
-        switcherView = FrameLayout(context)
+        val switcherView = FrameLayout(context)
         val height = context.resources.getDimensionPixelSize(ee.oyatl.ime.keyboard.R.dimen.keyboard_height)
         textKeyboardView = textKeyboard.createView(context, textKeyboardListener, height / textKeyboard.numRows)
         symbolKeyboardView = symbolKeyboard.createView(context, symbolKeyboardListener, height / symbolKeyboard.numRows)
@@ -106,6 +106,8 @@ abstract class CommonIMEMode(
         switcherView.addView(textKeyboardView)
         switcherView.addView(symbolKeyboardView)
         switcherView.addView(numpadKeyboardView)
+        this.switcherView = switcherView
+        updateInputView()
         return switcherView
     }
 
@@ -116,7 +118,7 @@ abstract class CommonIMEMode(
         return candidateView as View
     }
 
-    override fun getInputView(): View {
+    override fun getInputView(): View? {
         updateInputView()
         return switcherView
     }
@@ -126,9 +128,9 @@ abstract class CommonIMEMode(
         symbolKeyboard.setShiftState(shiftState)
         numpadKeyboard.setShiftState(shiftState)
         when (symbolState) {
-            KeyboardState.Symbol.Text -> textKeyboardView.bringToFront()
-            KeyboardState.Symbol.Symbol -> symbolKeyboardView.bringToFront()
-            KeyboardState.Symbol.Number -> numpadKeyboardView.bringToFront()
+            KeyboardState.Symbol.Text -> textKeyboardView?.bringToFront()
+            KeyboardState.Symbol.Symbol -> symbolKeyboardView?.bringToFront()
+            KeyboardState.Symbol.Number -> numpadKeyboardView?.bringToFront()
         }
     }
 

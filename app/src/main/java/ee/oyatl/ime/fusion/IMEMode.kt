@@ -12,7 +12,7 @@ interface IMEMode {
     fun onFinish()
     fun createInputView(context: Context): View
     fun createCandidateView(context: Context): View
-    fun getInputView(): View
+    fun getInputView(): View?
 
     fun onKeyDown(keyCode: Int, metaState: Int)
     fun onKeyUp(keyCode: Int, metaState: Int)
