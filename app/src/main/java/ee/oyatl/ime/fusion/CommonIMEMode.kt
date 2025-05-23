@@ -68,6 +68,10 @@ abstract class CommonIMEMode(
 
     private var symbolState: KeyboardState.Symbol = KeyboardState.Symbol.Text
     override var shiftState: KeyboardState.Shift = KeyboardState.Shift.Released
+        set(value) {
+            field = value
+            updateInputView()
+        }
 
     protected var util: KeyEventUtil? = null
         private set
@@ -124,13 +128,19 @@ abstract class CommonIMEMode(
     }
 
     private fun updateInputView() {
-        textKeyboard.setShiftState(shiftState)
-        symbolKeyboard.setShiftState(shiftState)
-        numpadKeyboard.setShiftState(shiftState)
         when (symbolState) {
-            KeyboardState.Symbol.Text -> textKeyboardView?.bringToFront()
-            KeyboardState.Symbol.Symbol -> symbolKeyboardView?.bringToFront()
-            KeyboardState.Symbol.Number -> numpadKeyboardView?.bringToFront()
+            KeyboardState.Symbol.Text -> {
+                textKeyboardView?.bringToFront()
+                textKeyboard.setShiftState(shiftState)
+            }
+            KeyboardState.Symbol.Symbol -> {
+                symbolKeyboardView?.bringToFront()
+                symbolKeyboard.setShiftState(shiftState)
+            }
+            KeyboardState.Symbol.Number -> {
+                numpadKeyboardView?.bringToFront()
+                numpadKeyboard.setShiftState(shiftState)
+            }
         }
     }
 
@@ -156,13 +166,11 @@ abstract class CommonIMEMode(
                 symbolState =
                     if(symbolState != KeyboardState.Symbol.Symbol) KeyboardState.Symbol.Symbol
                     else KeyboardState.Symbol.Text
-                updateInputView()
             }
             Keyboard.SpecialKey.Numbers -> {
                 symbolState =
                     if(symbolState != KeyboardState.Symbol.Number) KeyboardState.Symbol.Number
                     else KeyboardState.Symbol.Text
-                updateInputView()
             }
             else -> onSpecial(type)
         }

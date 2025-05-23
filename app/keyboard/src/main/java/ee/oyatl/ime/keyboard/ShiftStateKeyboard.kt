@@ -20,14 +20,14 @@ class ShiftStateKeyboard(
             shifted.createView(context, listener, height),
             locked.createView(context, listener, height)
         )
-        normal.setShiftState(KeyboardState.Shift.Released)
-        shifted.setShiftState(KeyboardState.Shift.Pressed)
-        locked.setShiftState(KeyboardState.Shift.Locked)
         this.keyboardSwitcher = keyboardSwitcher
         return keyboardSwitcher.view
     }
 
     override fun setShiftState(state: KeyboardState.Shift) {
         keyboardSwitcher?.switch(state)
+        normal.setShiftState(state)
+        shifted.setShiftState(state)
+        locked.setShiftState(state)
     }
 }

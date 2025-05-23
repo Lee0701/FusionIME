@@ -21,11 +21,11 @@ class RepeatableKeyListener(
 
     override fun onKeyDown(code: Int) {
         listener.onKeyDown(code)
-        listener.onKeyUp(code)
         handler.postDelayed({ repeat(code) }, delay.toLong())
     }
 
     override fun onKeyUp(code: Int) {
+        listener.onKeyUp(code)
         handler.removeCallbacksAndMessages(null)
     }
 
