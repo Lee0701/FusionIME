@@ -55,9 +55,9 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
         imeView.orientation = LinearLayout.VERTICAL
         val candidateSwitchView = FrameLayout(this)
         candidateSwitchView.addView(imeModeSwitcher.initTabBarView(this))
-        candidateSwitchView.addView(imeModeSwitcher.candidateView)
+        candidateSwitchView.addView(imeModeSwitcher.createCandidateView())
         imeView.addView(candidateSwitchView)
-        imeView.addView(imeModeSwitcher.inputView)
+        imeView.addView(imeModeSwitcher.createInputView())
         imeView.fitsSystemWindows = true
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) updateNavigationBar()
         onSwitchInputMode(0)

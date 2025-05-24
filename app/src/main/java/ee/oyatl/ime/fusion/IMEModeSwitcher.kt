@@ -22,8 +22,8 @@ class IMEModeSwitcher(
     private val currentEntry: Entry get() = entries[currentModeIndex]
     val currentMode: IMEMode get() = currentEntry.imeMode
 
-    val inputView: FrameLayout = FrameLayout(context)
-    val candidateView: FrameLayout = FrameLayout(context)
+    private var inputView: FrameLayout? = null
+    private var candidateView: FrameLayout? = null
 
     private var inputConnection: InputConnection? = null
     private var editorInfo: EditorInfo? = null
@@ -50,18 +50,32 @@ class IMEModeSwitcher(
         currentEntry.imeMode.onFinish()
     }
 
+    fun createInputView(): View {
+        val inputView = FrameLayout(context)
+        this.inputView = inputView
+        return inputView
+    }
+
+    fun createCandidateView(): View {
+        val candidateView = FrameLayout(context)
+        this.candidateView = candidateView
+        return candidateView
+    }
+
     private fun updateInputView() {
-        inputView.removeAllViews()
+        inputView?.removeAllViews()
         val view = currentEntry.inputView ?: currentEntry.imeMode.createInputView(context)
         currentEntry.inputView = view
-        inputView.addView(view)
+        (view.parent as ViewGroup?)?.removeView(view)
+        inputView?.addView(view)
     }
 
     private fun updateCandidateView() {
-        candidateView.removeAllViews()
+        candidateView?.removeAllViews()
         val view = currentEntry.candidateView ?: currentEntry.imeMode.createCandidateView(context)
         currentEntry.candidateView = view
-        candidateView.addView(view)
+        (view.parent as ViewGroup?)?.removeView(view)
+        candidateView?.addView(view)
     }
 
     fun switchMode(index: Int) {
