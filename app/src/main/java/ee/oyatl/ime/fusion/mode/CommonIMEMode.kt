@@ -7,6 +7,7 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
 import android.widget.FrameLayout
+import androidx.preference.PreferenceManager
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.ScrollingCandidateView
 import ee.oyatl.ime.fusion.KeyEventUtil
@@ -242,6 +243,11 @@ abstract class CommonIMEMode(
         listener: OnKeyClickListener,
         autoReleaseOnInput: Boolean = true
     ): KeyboardListener {
+        val pref = PreferenceManager.getDefaultSharedPreferences(context)
+        val sound = pref.getBoolean("sound_feedback", false)
+        val haptic = pref.getBoolean("haptic_feedback", false)
+        val soundVolume = if(sound) 1f else 0f
+        val vibrationDuration = if(haptic) 10L else 0L
         return FeedbackListener.Repeatable(
             context,
             RepeatableKeyListener.RepeatToKeyDownUp(
@@ -251,9 +257,9 @@ abstract class CommonIMEMode(
                     autoReleaseOnInput = autoReleaseOnInput
                 )
             ),
-            soundVolume = 1f,
-            vibrationDuration = 10,
-            repeatVibrationDuration = 5
+            soundVolume = soundVolume,
+            vibrationDuration = vibrationDuration,
+            repeatVibrationDuration = vibrationDuration / 2
         )
     }
 
