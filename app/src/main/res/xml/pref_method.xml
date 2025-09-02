@@ -1,0 +1,12 @@
+<PreferenceScreen
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ee.oyatl.ime.fusion.preference.EnableInputMethodPreference
+        app:title="@string/settings_method_enable_method_title"
+        app:summary="@string/settings_method_enable_method_summary" />
+
+    <ee.oyatl.ime.fusion.preference.ChooseInputMethodPreference
+        app:title="@string/settings_method_choose_method_title"
+        app:summary="@string/settings_method_choose_method_summary" />
+
+</PreferenceScreen>

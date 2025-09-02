@@ -14,12 +14,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FusionIME"
         tools:targetApi="31">
+        <activity
+            android:name=".SettingsActivity"
+            android:exported="false"
+            android:label="@string/settings_activity_name" />
 
         <service
             android:name=".FusionIMEService"
-            android:permission="android.permission.BIND_INPUT_METHOD"
-            android:exported="true">
-
+            android:exported="true"
+            android:permission="android.permission.BIND_INPUT_METHOD">
             <intent-filter>
                 <action android:name="android.view.InputMethod" />
             </intent-filter>
@@ -27,27 +30,25 @@
             <meta-data
                 android:name="android.view.im"
                 android:resource="@xml/fusion_method" />
-
         </service>
 
         <provider
             android:name="com.android.inputmethod.dictionarypack.DictionaryProvider"
-            android:grantUriPermissions="true"
-            android:exported="false"
             android:authorities="@string/authority"
-            android:multiprocess="false"
-            android:label="@string/dictionary_provider_name">
-        </provider>
+            android:exported="false"
+            android:grantUriPermissions="true"
+            android:label="@string/dictionary_provider_name"
+            android:multiprocess="false"></provider>
 
         <service
             android:name="com.android.inputmethod.pinyin.PinyinDecoderService"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.android.inputmethod.pinyin.Decoder_Service" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
-
     </application>
 
 </manifest>

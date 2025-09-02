@@ -1,3 +1,20 @@
 <resources>
     <string name="fusion_app_name">FusionIME</string>
+
+    <string name="settings_activity_name">FusionIME Settings</string>
+
+    <string name="settings_method_header">Input Method</string>
+    <string name="settings_behaviour_header">Behaviour</string>
+    <string name="settings_mode_header">Input Mode</string>
+
+    <string name="settings_method_enable_method_title">Enable Input Method</string>
+    <string name="settings_method_enable_method_summary">Please enable \'FusionIME\'.</string>
+    <string name="settings_method_choose_method_title">Choose Input Method</string>
+    <string name="settings_method_choose_method_summary">Please choose \'FusionIME\'.</string>
+
+    <string name="settings_behaviour_sound_feedback_title">Sound Feedback</string>
+    <string name="settings_behaviour_sound_feedback_summary">Play sound effect on key press.</string>
+    <string name="settings_behaviour_haptic_feedback_title">Haptic Feedback</string>
+    <string name="settings_behaviour_haptic_feedback_summary">Vibrate on key press.</string>
+
 </resources>

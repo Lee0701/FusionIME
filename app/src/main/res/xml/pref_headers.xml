@@ -1,0 +1,22 @@
+<PreferenceScreen
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <Preference
+        app:fragment="ee.oyatl.ime.fusion.SettingsActivity$MethodFragment"
+        app:icon="@drawable/checklist_24"
+        app:key="method_header"
+        app:title="@string/settings_method_header" />
+
+    <Preference
+        app:fragment="ee.oyatl.ime.fusion.SettingsActivity$BehaviourFragment"
+        app:icon="@drawable/psychology_24"
+        app:key="behaviour_header"
+        app:title="@string/settings_behaviour_header" />
+
+    <Preference
+        app:fragment="ee.oyatl.ime.fusion.SettingsActivity$ModeFragment"
+        app:icon="@drawable/keyboard_24"
+        app:key="mode_header"
+        app:title="@string/settings_mode_header" />
+
+</PreferenceScreen>
