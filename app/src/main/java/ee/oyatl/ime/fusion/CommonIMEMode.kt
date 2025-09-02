@@ -199,11 +199,13 @@ abstract class CommonIMEMode(
                 symbolState =
                     if(symbolState != KeyboardState.Symbol.Symbol) KeyboardState.Symbol.Symbol
                     else KeyboardState.Symbol.Text
+                shiftState = KeyboardState.Shift.Released
             }
             Keyboard.SpecialKey.Numbers -> {
                 symbolState =
                     if(symbolState != KeyboardState.Symbol.Number) KeyboardState.Symbol.Number
                     else KeyboardState.Symbol.Text
+                shiftState = KeyboardState.Shift.Released
             }
             else -> onSpecial(type)
         }
