@@ -1,4 +1,4 @@
-package ee.oyatl.ime.fusion
+package ee.oyatl.ime.fusion.mode
 
 import android.content.ComponentName
 import android.content.Context
@@ -10,18 +10,17 @@ import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.MeasureSpec
-import android.view.inputmethod.CompletionInfo
 import android.widget.LinearLayout
 import com.android.inputmethod.pinyin.BalloonHint
 import com.android.inputmethod.pinyin.CandidateViewListener
 import ee.oyatl.ime.fusion.pinyin.CandidatesContainer
 import ee.oyatl.ime.fusion.pinyin.ComposingView
 import ee.oyatl.ime.fusion.pinyin.ComposingView.ComposingStatus
-import com.android.inputmethod.pinyin.IPinyinDecoderService
 import com.android.inputmethod.pinyin.IPinyinDecoderService.Stub
 import com.android.inputmethod.pinyin.KeyMapDream
 import ee.oyatl.ime.fusion.pinyin.OnGestureListener
 import com.android.inputmethod.pinyin.PinyinIME.ImeState
+import com.android.inputmethod.pinyin.R
 import com.android.inputmethod.pinyin.Settings
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.fusion.pinyin.DecodingInfo
@@ -32,7 +31,6 @@ import ee.oyatl.ime.keyboard.KeyboardInflater
 import ee.oyatl.ime.keyboard.ShiftStateKeyboard
 import ee.oyatl.ime.keyboard.StackedKeyboard
 import ee.oyatl.ime.keyboard.layout.LayoutPinyin
-import java.util.Vector
 
 class PinyinIMEMode(
     listener: IMEMode.Listener
@@ -95,14 +93,14 @@ class PinyinIMEMode(
 
         // Inflate the floating container view
         floatingContainer = layoutInflater.inflate(
-            com.android.inputmethod.pinyin.R.layout.floating_container, null)
+            R.layout.floating_container, null)
                 as LinearLayout
 
         // The first child is the composing view.
         composingView = floatingContainer.getChildAt(0) as ComposingView
 
         candidatesContainer = layoutInflater.inflate(
-            com.android.inputmethod.pinyin.R.layout.candidates_container, null)
+            R.layout.candidates_container, null)
                 as CandidatesContainer
         val balloonHint = BalloonHint(context, candidatesContainer, MeasureSpec.UNSPECIFIED)
         val gestureDetector = GestureDetector(context,

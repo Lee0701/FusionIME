@@ -1,4 +1,4 @@
-package ee.oyatl.ime.fusion
+package ee.oyatl.ime.fusion.mode
 
 import android.content.Context
 import android.view.KeyCharacterMap
@@ -9,6 +9,7 @@ import android.view.inputmethod.InputConnection
 import android.widget.FrameLayout
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.ScrollingCandidateView
+import ee.oyatl.ime.fusion.KeyEventUtil
 import ee.oyatl.ime.keyboard.DefaultBottomRowKeyboard
 import ee.oyatl.ime.keyboard.DefaultMobileKeyboard
 import ee.oyatl.ime.keyboard.DefaultNumberKeyboard
@@ -16,6 +17,7 @@ import ee.oyatl.ime.keyboard.DefaultSymbolsBottomRowKeyboard
 import ee.oyatl.ime.keyboard.Keyboard
 import ee.oyatl.ime.keyboard.KeyboardInflater
 import ee.oyatl.ime.keyboard.KeyboardState
+import ee.oyatl.ime.keyboard.R
 import ee.oyatl.ime.keyboard.ShiftStateKeyboard
 import ee.oyatl.ime.keyboard.StackedKeyboard
 import ee.oyatl.ime.keyboard.layout.KeyboardTemplates
@@ -105,7 +107,7 @@ abstract class CommonIMEMode(
         symbolKeyboardListener = createKeyboardListener(context, KeyListener(), false)
         directKeyboardListener = createKeyboardListener(context, DirectKeyListener())
         val switcherView = FrameLayout(context)
-        val height = context.resources.getDimensionPixelSize(ee.oyatl.ime.keyboard.R.dimen.keyboard_height)
+        val height = context.resources.getDimensionPixelSize(R.dimen.keyboard_height)
         textKeyboardView = textKeyboard.createView(context, textKeyboardListener, height / textKeyboard.numRows)
         symbolKeyboardView = symbolKeyboard.createView(context, symbolKeyboardListener, height / symbolKeyboard.numRows)
         numpadKeyboardView = numpadKeyboard.createView(context, directKeyboardListener, height / numpadKeyboard.numRows)
