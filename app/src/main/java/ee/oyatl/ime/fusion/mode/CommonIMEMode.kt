@@ -251,6 +251,7 @@ abstract class CommonIMEMode(
                     autoReleaseOnInput = autoReleaseOnInput
                 )
             ),
+            soundVolume = 1f,
             vibrationDuration = 10,
             repeatVibrationDuration = 5
         )
