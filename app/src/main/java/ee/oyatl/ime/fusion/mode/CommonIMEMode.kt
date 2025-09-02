@@ -1,6 +1,7 @@
 package ee.oyatl.ime.fusion.mode
 
 import android.content.Context
+import android.content.res.Configuration
 import android.util.TypedValue
 import android.view.KeyCharacterMap
 import android.view.KeyEvent
@@ -110,7 +111,10 @@ abstract class CommonIMEMode(
         symbolKeyboardListener = createKeyboardListener(context, KeyListener(), false)
         directKeyboardListener = createKeyboardListener(context, DirectKeyListener())
         val switcherView = FrameLayout(context)
-        val rowHeightDIP = preference.getFloat("keyboard_height", 55f)
+        val landscape = context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+        val rowHeightKey = if(landscape) "keyboard_height_landscape" else "keyboard_height_portrait"
+        val rowHeightDefault = if(landscape) 45f else 55f
+        val rowHeightDIP = preference.getFloat(rowHeightKey, rowHeightDefault)
         val height = (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, rowHeightDIP, context.resources.displayMetrics) * 4).roundToInt()
         textKeyboardView = textKeyboard.createView(context, textKeyboardListener, height / textKeyboard.numRows)
         symbolKeyboardView = symbolKeyboard.createView(context, symbolKeyboardListener, height / symbolKeyboard.numRows)

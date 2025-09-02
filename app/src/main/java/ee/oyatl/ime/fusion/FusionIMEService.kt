@@ -1,6 +1,7 @@
 package ee.oyatl.ime.fusion
 
 import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.inputmethodservice.InputMethodService
 import android.os.Build
 import android.util.TypedValue
@@ -51,7 +52,12 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
         onLoad()
         if(currentInputConnection != null && currentInputEditorInfo != null)
             imeModeSwitcher.onStart(currentInputConnection, currentInputEditorInfo)
-        setInputView(onCreateInputView())
+        onResetViews()
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        onResetViews()
     }
 
     fun onInit() {
@@ -92,6 +98,12 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
         imeModeSwitcher.entries.forEach { entry ->
             if(entry.imeMode is PinyinIMEMode) entry.imeMode.stopPinyinDecoderService(this)
         }
+    }
+
+    fun onResetViews() {
+        imeModeSwitcher.resetInputViews()
+        imeModeSwitcher.resetCandidateViews()
+        setInputView(onCreateInputView())
     }
 
     override fun onCreateInputView(): View {

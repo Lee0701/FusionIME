@@ -62,6 +62,14 @@ class IMEModeSwitcher(
         return candidateView
     }
 
+    fun resetInputViews() {
+        entries.forEach { it.inputView = null }
+    }
+
+    fun resetCandidateViews() {
+        entries.forEach { it.candidateView = null }
+    }
+
     private fun updateInputView() {
         inputView?.removeAllViews()
         val view = currentEntry.inputView ?: currentEntry.imeMode.createInputView(context)
