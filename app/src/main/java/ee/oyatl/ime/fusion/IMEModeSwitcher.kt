@@ -105,7 +105,7 @@ class IMEModeSwitcher(
         return tabBar.root
     }
 
-interface Callback {
+    interface Callback {
         fun onSwitchInputMode(index: Int)
     }
 
