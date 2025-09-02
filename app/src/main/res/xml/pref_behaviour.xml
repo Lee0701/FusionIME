@@ -1,0 +1,16 @@
+<PreferenceScreen
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <SwitchPreferenceCompat
+        app:key="sound_feedback"
+        app:defaultValue="true"
+        app:title="@string/settings_behaviour_sound_feedback_title"
+        app:summary="@string/settings_behaviour_sound_feedback_summary" />
+
+    <SwitchPreferenceCompat
+        app:key="haptic_feedback"
+        app:defaultValue="true"
+        app:title="@string/settings_behaviour_haptic_feedback_title"
+        app:summary="@string/settings_behaviour_haptic_feedback_summary" />
+
+</PreferenceScreen>

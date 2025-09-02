@@ -1,11 +1,10 @@
-package ee.oyatl.ime.fusion
+package ee.oyatl.ime.fusion.mode
 
 import android.content.Context
 import android.view.KeyEvent
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.fusion.korean.WordComposer
 import ee.oyatl.ime.keyboard.Keyboard
-import ee.oyatl.ime.viet.ChuQuocNguTable
 import ee.oyatl.ime.viet.ChuQuocNguTableConverter
 import ee.oyatl.ime.viet.HanNomConverter
 

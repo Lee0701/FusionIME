@@ -1,4 +1,4 @@
-package ee.oyatl.ime.fusion
+package ee.oyatl.ime.fusion.mode
 
 import android.content.Context
 import android.os.Handler
@@ -8,6 +8,7 @@ import com.android.inputmethod.zhuyin.Suggest
 import com.android.inputmethod.zhuyin.TextEntryState
 import com.android.inputmethod.zhuyin.WordComposer
 import ee.oyatl.ime.candidate.CandidateView
+import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.keyboard.DefaultGridKeyboard
 import ee.oyatl.ime.keyboard.GridBottomRowKeyboard
 import ee.oyatl.ime.keyboard.Keyboard

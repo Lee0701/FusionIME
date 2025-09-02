@@ -1,53 +1,110 @@
 package ee.oyatl.ime.fusion
 
+import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.inputmethodservice.InputMethodService
 import android.os.Build
 import android.util.TypedValue
 import android.view.KeyEvent
 import android.view.View
-import android.view.ViewGroup
 import android.view.WindowInsets.Type
 import android.view.inputmethod.EditorInfo
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import androidx.appcompat.view.ContextThemeWrapper
+import androidx.preference.PreferenceManager
+import ee.oyatl.ime.fusion.mode.CangjieIMEMode
+import ee.oyatl.ime.fusion.mode.IMEMode
+import ee.oyatl.ime.fusion.mode.IMEModeSwitcher
+import ee.oyatl.ime.fusion.mode.KoreanIMEMode
+import ee.oyatl.ime.fusion.mode.LatinIMEMode
+import ee.oyatl.ime.fusion.mode.MozcIMEMode
+import ee.oyatl.ime.fusion.mode.PinyinIMEMode
+import ee.oyatl.ime.fusion.mode.VietIMEMode
+import ee.oyatl.ime.fusion.mode.ZhuyinIMEMode
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.Callback {
+class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.Callback, SharedPreferences.OnSharedPreferenceChangeListener {
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
-
+    private lateinit var preference: SharedPreferences
     private lateinit var imeModeSwitcher: IMEModeSwitcher
     private lateinit var imeView: LinearLayout
 
     override fun onCreate() {
         super.onCreate()
-        val entries = mutableListOf<IMEModeSwitcher.Entry>()
-        entries += IMEModeSwitcher.Entry("ABC", LatinIMEMode(this, this))
-        entries += IMEModeSwitcher.Entry("한3", KoreanIMEMode.Hangul3Set391(this))
-        entries += IMEModeSwitcher.Entry("한2", KoreanIMEMode.Hangul2SetKS(this))
-        entries += IMEModeSwitcher.Entry("あQ", MozcIMEMode.RomajiQwerty(this))
-        entries += IMEModeSwitcher.Entry("あいう", MozcIMEMode.Kana50OnZu(this))
-        entries += IMEModeSwitcher.Entry("JIS", MozcIMEMode.KanaJIS(this))
-        entries += IMEModeSwitcher.Entry("拼音", PinyinIMEMode(this))
-        entries += IMEModeSwitcher.Entry("注音", ZhuyinIMEMode(this))
-        entries += IMEModeSwitcher.Entry("倉頡", CangjieIMEMode(this))
-        entries += IMEModeSwitcher.Entry("越Q", VietIMEMode.Qwerty(this))
-        entries += IMEModeSwitcher.Entry("越T", VietIMEMode.Telex(this))
-        imeModeSwitcher = IMEModeSwitcher(this, entries, this)
-
-        coroutineScope.launch {
-            entries.forEach { it.imeMode.onLoad(this@FusionIMEService) }
-        }
+        preference = PreferenceManager.getDefaultSharedPreferences(this)
+        onInit()
+        onLoad()
+        preference.registerOnSharedPreferenceChangeListener(this)
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        onUnload()
+    }
+
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        onUnload()
+        onInit()
+        onLoad()
+        if(currentInputConnection != null && currentInputEditorInfo != null)
+            imeModeSwitcher.onStart(currentInputConnection, currentInputEditorInfo)
+        onResetViews()
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        onResetViews()
+    }
+
+    fun onInit() {
+        val defaults = resources.getStringArray(R.array.settings_input_mode_defaults).toSet()
+        val list = preference.getStringSet("input_modes", defaults).orEmpty()
+        val entries = mutableListOf<IMEModeSwitcher.Entry>()
+        if("qwerty" in list || list.isEmpty())
+            entries += IMEModeSwitcher.Entry("ABC", LatinIMEMode(this, this))
+        if("ko_391" in list)
+            entries += IMEModeSwitcher.Entry("한3", KoreanIMEMode.Hangul3Set391(this))
+        if("ko_ks" in list)
+            entries += IMEModeSwitcher.Entry("한2", KoreanIMEMode.Hangul2SetKS(this))
+        if("ja_qwerty" in list)
+            entries += IMEModeSwitcher.Entry("あQ", MozcIMEMode.RomajiQwerty(this))
+        if("ja_50onzu" in list)
+            entries += IMEModeSwitcher.Entry("あいう", MozcIMEMode.Kana50OnZu(this))
+        if("ja_jis" in list)
+            entries += IMEModeSwitcher.Entry("JIS", MozcIMEMode.KanaJIS(this))
+        if("zh_pinyin" in list)
+            entries += IMEModeSwitcher.Entry("拼音", PinyinIMEMode(this))
+        if("zh_zhuyin" in list)
+            entries += IMEModeSwitcher.Entry("注音", ZhuyinIMEMode(this))
+        if("zh_cangjie" in list)
+            entries += IMEModeSwitcher.Entry("倉頡", CangjieIMEMode(this))
+        if("vi_qwerty" in list)
+            entries += IMEModeSwitcher.Entry("越Q", VietIMEMode.Qwerty(this))
+        if("vi_telex" in list)
+            entries += IMEModeSwitcher.Entry("越T", VietIMEMode.Telex(this))
+        imeModeSwitcher = IMEModeSwitcher(this, entries, this)
+    }
+
+    fun onLoad() {
+        coroutineScope.launch {
+            imeModeSwitcher.entries.forEach { it.imeMode.onLoad(this@FusionIMEService) }
+        }
+    }
+
+    fun onUnload() {
         imeModeSwitcher.entries.forEach { entry ->
             if(entry.imeMode is PinyinIMEMode) entry.imeMode.stopPinyinDecoderService(this)
         }
+    }
+
+    fun onResetViews() {
+        imeModeSwitcher.resetInputViews()
+        imeModeSwitcher.resetCandidateViews()
+        setInputView(onCreateInputView())
     }
 
     override fun onCreateInputView(): View {

@@ -1,4 +1,4 @@
-package ee.oyatl.ime.fusion
+package ee.oyatl.ime.fusion.mode
 
 import android.content.Context
 import android.content.res.Resources

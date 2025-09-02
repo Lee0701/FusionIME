@@ -1,14 +1,18 @@
-package ee.oyatl.ime.fusion
+package ee.oyatl.ime.fusion.mode
 
 import android.content.Context
+import android.content.res.Configuration
+import android.util.TypedValue
 import android.view.KeyCharacterMap
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
 import android.widget.FrameLayout
+import androidx.preference.PreferenceManager
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.ScrollingCandidateView
+import ee.oyatl.ime.fusion.KeyEventUtil
 import ee.oyatl.ime.keyboard.DefaultBottomRowKeyboard
 import ee.oyatl.ime.keyboard.DefaultMobileKeyboard
 import ee.oyatl.ime.keyboard.DefaultNumberKeyboard
@@ -27,6 +31,7 @@ import ee.oyatl.ime.keyboard.listener.FeedbackListener
 import ee.oyatl.ime.keyboard.listener.KeyboardListener
 import ee.oyatl.ime.keyboard.listener.OnKeyClickListener
 import ee.oyatl.ime.keyboard.listener.RepeatableKeyListener
+import kotlin.math.roundToInt
 
 abstract class CommonIMEMode(
     private val listener: IMEMode.Listener
@@ -101,11 +106,16 @@ abstract class CommonIMEMode(
     }
 
     override fun createInputView(context: Context): View {
+        val preference = PreferenceManager.getDefaultSharedPreferences(context)
         textKeyboardListener = createKeyboardListener(context, KeyListener())
         symbolKeyboardListener = createKeyboardListener(context, KeyListener(), false)
         directKeyboardListener = createKeyboardListener(context, DirectKeyListener())
         val switcherView = FrameLayout(context)
-        val height = context.resources.getDimensionPixelSize(ee.oyatl.ime.keyboard.R.dimen.keyboard_height)
+        val landscape = context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+        val rowHeightKey = if(landscape) "keyboard_height_landscape" else "keyboard_height_portrait"
+        val rowHeightDefault = if(landscape) 45f else 55f
+        val rowHeightDIP = preference.getFloat(rowHeightKey, rowHeightDefault)
+        val height = (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, rowHeightDIP, context.resources.displayMetrics) * 4).roundToInt()
         textKeyboardView = textKeyboard.createView(context, textKeyboardListener, height / textKeyboard.numRows)
         symbolKeyboardView = symbolKeyboard.createView(context, symbolKeyboardListener, height / symbolKeyboard.numRows)
         numpadKeyboardView = numpadKeyboard.createView(context, directKeyboardListener, height / numpadKeyboard.numRows)
@@ -242,6 +252,11 @@ abstract class CommonIMEMode(
         listener: OnKeyClickListener,
         autoReleaseOnInput: Boolean = true
     ): KeyboardListener {
+        val pref = PreferenceManager.getDefaultSharedPreferences(context)
+        val sound = pref.getBoolean("sound_feedback", true)
+        val haptic = pref.getBoolean("haptic_feedback", true)
+        val soundVolume = if(sound) 1f else 0f
+        val vibrationDuration = if(haptic) 10L else 0L
         return FeedbackListener.Repeatable(
             context,
             RepeatableKeyListener.RepeatToKeyDownUp(
@@ -251,8 +266,9 @@ abstract class CommonIMEMode(
                     autoReleaseOnInput = autoReleaseOnInput
                 )
             ),
-            vibrationDuration = 10,
-            repeatVibrationDuration = 5
+            soundVolume = soundVolume,
+            vibrationDuration = vibrationDuration,
+            repeatVibrationDuration = vibrationDuration / 2
         )
     }
 

@@ -1,4 +1,4 @@
-package ee.oyatl.ime.fusion
+package ee.oyatl.ime.fusion.mode
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -60,6 +60,14 @@ class IMEModeSwitcher(
         val candidateView = FrameLayout(context)
         this.candidateView = candidateView
         return candidateView
+    }
+
+    fun resetInputViews() {
+        entries.forEach { it.inputView = null }
+    }
+
+    fun resetCandidateViews() {
+        entries.forEach { it.candidateView = null }
     }
 
     private fun updateInputView() {

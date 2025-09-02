@@ -1,0 +1,37 @@
+<resources>
+    <string-array name="settings_input_mode_entries">
+        <item>Latin QWERTY</item>
+        <item>Korean 3-Set 391</item>
+        <item>Korean 2-Set KS</item>
+        <item>Japanese Romaji QWERTY</item>
+        <item>Japanese Kana Syllables</item>
+        <item>Japanese Kana JIS</item>
+        <item>Chinese Pinyin</item>
+        <item>Chinese Zhuyin</item>
+        <item>Chinese Cangjie</item>
+        <item>Vietnamese QWERTY</item>
+        <item>Vietnamese Telex</item>
+    </string-array>
+
+    <string-array name="settings_input_mode_values">
+        <item>qwerty</item>
+        <item>ko_391</item>
+        <item>ko_ks</item>
+        <item>ja_qwerty</item>
+        <item>ja_50onzu</item>
+        <item>ja_jis</item>
+        <item>zh_pinyin</item>
+        <item>zh_zhuyin</item>
+        <item>zh_cangjie</item>
+        <item>vi_qwerty</item>
+        <item>vi_telex</item>
+    </string-array>
+
+    <string-array name="settings_input_mode_defaults">
+        <item>qwerty</item>
+        <item>ko_ks</item>
+        <item>ja_qwerty</item>
+        <item>zh_pinyin</item>
+        <item>vi_telex</item>
+    </string-array>
+</resources>

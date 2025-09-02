@@ -1,0 +1,12 @@
+<PreferenceScreen
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <MultiSelectListPreference
+        app:key="input_modes"
+        app:entries="@array/settings_input_mode_entries"
+        app:entryValues="@array/settings_input_mode_values"
+        app:defaultValue="@array/settings_input_mode_defaults"
+        app:title="@string/settings_input_mode_choose_title"
+        app:summary="@string/settings_input_mode_choose_summary" />
+
+</PreferenceScreen>
