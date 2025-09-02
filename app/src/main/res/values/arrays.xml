@@ -26,4 +26,12 @@
         <item>vi_qwerty</item>
         <item>vi_telex</item>
     </string-array>
+
+    <string-array name="settings_input_mode_defaults">
+        <item>qwerty</item>
+        <item>ko_ks</item>
+        <item>ja_qwerty</item>
+        <item>zh_pinyin</item>
+        <item>vi_telex</item>
+    </string-array>
 </resources>

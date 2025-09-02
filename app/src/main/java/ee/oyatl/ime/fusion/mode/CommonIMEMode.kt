@@ -251,8 +251,8 @@ abstract class CommonIMEMode(
         autoReleaseOnInput: Boolean = true
     ): KeyboardListener {
         val pref = PreferenceManager.getDefaultSharedPreferences(context)
-        val sound = pref.getBoolean("sound_feedback", false)
-        val haptic = pref.getBoolean("haptic_feedback", false)
+        val sound = pref.getBoolean("sound_feedback", true)
+        val haptic = pref.getBoolean("haptic_feedback", true)
         val soundVolume = if(sound) 1f else 0f
         val vibrationDuration = if(haptic) 10L else 0L
         return FeedbackListener.Repeatable(

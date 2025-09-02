@@ -61,7 +61,8 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
     }
 
     fun onInit() {
-        val list = preference.getStringSet("input_modes", null).orEmpty()
+        val defaults = resources.getStringArray(R.array.settings_input_mode_defaults).toSet()
+        val list = preference.getStringSet("input_modes", defaults).orEmpty()
         val entries = mutableListOf<IMEModeSwitcher.Entry>()
         if("qwerty" in list || list.isEmpty())
             entries += IMEModeSwitcher.Entry("ABC", LatinIMEMode(this, this))
