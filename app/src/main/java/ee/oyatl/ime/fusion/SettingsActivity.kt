@@ -77,6 +77,12 @@ class SettingsActivity : AppCompatActivity(),
         }
     }
 
+    class AppearanceFragment : PreferenceFragmentCompat() {
+        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+            setPreferencesFromResource(R.xml.pref_appearance, rootKey)
+        }
+    }
+
     class BehaviourFragment : PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.pref_behaviour, rootKey)

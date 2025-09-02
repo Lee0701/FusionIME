@@ -8,6 +8,12 @@
         app:title="@string/settings_method_header" />
 
     <Preference
+        app:fragment="ee.oyatl.ime.fusion.SettingsActivity$AppearanceFragment"
+        app:icon="@drawable/format_paint_24"
+        app:key="appearance_header"
+        app:title="@string/settings_appearance_header" />
+
+    <Preference
         app:fragment="ee.oyatl.ime.fusion.SettingsActivity$BehaviourFragment"
         app:icon="@drawable/psychology_24"
         app:key="behaviour_header"

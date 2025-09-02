@@ -1,0 +1,13 @@
+<PreferenceScreen
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ee.oyatl.ime.fusion.preference.SliderPreference
+        app:key="keyboard_height"
+        app:valueFrom="30.0"
+        app:valueTo="100.0"
+        app:stepSize="5.0"
+        app:defaultValue="55.0"
+        app:title="@string/settings_appearance_keyboard_height_title"
+        app:useSimpleSummaryProvider="true" />
+
+</PreferenceScreen>
