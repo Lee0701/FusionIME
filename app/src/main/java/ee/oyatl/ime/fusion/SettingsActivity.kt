@@ -2,8 +2,12 @@ package ee.oyatl.ime.fusion
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import ee.oyatl.ime.fusion.databinding.SettingsActivityBinding
 
 private const val TITLE_TAG = "settingsActivityTitle"
 
@@ -12,7 +16,20 @@ class SettingsActivity : AppCompatActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.settings_activity)
+        val binding = SettingsActivityBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
+            val bars = insets.getInsets(
+                WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
+            )
+            v.updatePadding(
+                left = bars.left,
+                top = bars.top,
+                right = bars.right,
+                bottom = bars.bottom
+            )
+            WindowInsetsCompat.CONSUMED
+        }
         if (savedInstanceState == null) {
             supportFragmentManager
                 .beginTransaction()
@@ -24,9 +41,12 @@ class SettingsActivity : AppCompatActivity(),
         supportFragmentManager.addOnBackStackChangedListener {
             if (supportFragmentManager.backStackEntryCount == 0) {
                 setTitle(R.string.settings_activity_name)
+                supportActionBar?.setDisplayHomeAsUpEnabled(false)
+            } else {
+                supportActionBar?.setDisplayHomeAsUpEnabled(true)
             }
         }
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(false)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
