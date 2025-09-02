@@ -9,8 +9,8 @@ import ee.oyatl.ime.fusion.korean.HanjaConverter
 import ee.oyatl.ime.fusion.korean.WordComposer
 import ee.oyatl.ime.fusion.korean.layout.Hangul2Set
 import ee.oyatl.ime.fusion.korean.layout.Hangul3Set
-import ee.oyatl.ime.hardhanja.hangul.Combiner
-import ee.oyatl.ime.hardhanja.hangul.HangulCombiner
+import ee.oyatl.ime.fusion.hangul.Combiner
+import ee.oyatl.ime.fusion.hangul.HangulCombiner
 import ee.oyatl.ime.keyboard.DefaultBottomRowKeyboard
 import ee.oyatl.ime.keyboard.DefaultMobileKeyboard
 import ee.oyatl.ime.keyboard.Keyboard
@@ -60,8 +60,7 @@ abstract class KoreanIMEMode(
     }
 
     protected abstract val hangulCombiner: HangulCombiner
-    private val stateStack: MutableList<Combiner.State> = mutableListOf(HangulCombiner.State.Initial)
-    private val currentState: HangulCombiner.State get() = stateStack.last() as HangulCombiner.State
+    private var currentState = HangulCombiner.State.Initial
 
     private val wordComposer: WordComposer = WordComposer()
     private var hanjaConverter: HanjaConverter? = null
@@ -73,18 +72,13 @@ abstract class KoreanIMEMode(
     override fun onReset() {
         super.onReset()
         wordComposer.reset()
-        resetStack()
-    }
-
-    private fun resetStack() {
-        stateStack.clear()
-        stateStack += HangulCombiner.State.Initial
+        currentState = HangulCombiner.State.Initial
     }
 
     override fun onCandidateSelected(candidate: CandidateView.Candidate) {
         val inputConnection = currentInputConnection ?: return
         wordComposer.consume(candidate.text.length)
-        resetStack()
+        currentState = HangulCombiner.State.Initial
         inputConnection.commitText(candidate.text, 1)
         renderInputView()
     }
@@ -106,8 +100,8 @@ abstract class KoreanIMEMode(
 
     override fun onChar(code: Int) {
         val result = hangulCombiner.combine(currentState, code)
-        if(result.textToCommit.isNotEmpty()) resetStack()
-        if(result.newState.combined.isNotEmpty()) stateStack += result.newState
+        if(result.textToCommit.isNotEmpty()) currentState = HangulCombiner.State.Initial
+        if(result.newState.combined.isNotEmpty()) currentState = result.newState as HangulCombiner.State
         wordComposer.commit(result.textToCommit.toString())
         wordComposer.compose(currentState.combined.toString())
         renderInputView()
@@ -117,7 +111,7 @@ abstract class KoreanIMEMode(
         when(type) {
             Keyboard.SpecialKey.Delete -> {
                 if(currentState != HangulCombiner.State.Initial) {
-                    stateStack.removeLastOrNull()
+                    currentState = currentState.previous as HangulCombiner.State
                     wordComposer.compose(currentState.combined.toString())
                 } else if(!wordComposer.delete(1)) {
                     util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_DEL)

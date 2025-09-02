@@ -1,4 +1,4 @@
-package ee.oyatl.ime.hardhanja.hangul
+package ee.oyatl.ime.fusion.hangul
 
 object Hangul {
     /**

@@ -1,4 +1,4 @@
-package ee.oyatl.ime.hardhanja.hangul
+package ee.oyatl.ime.fusion.hangul
 
 class HangulCombiner(
     private val jamoCombinationTable: Map<Pair<Int, Int>, Int>,
@@ -151,7 +151,7 @@ class HangulCombiner(
         val jong: Int? = null,
         val lastInput: Int? = null,
         val jongCombination: Pair<Int, Int>? = null,
-        override val previous: State? = Initial,
+        override val previous: State? = Initial
     ): Combiner.State {
         val choChar: Char? = cho?.and(0xffff)?.toChar()
         val jungChar: Char? = jung?.and(0xffff)?.toChar()
