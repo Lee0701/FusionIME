@@ -1,5 +1,6 @@
 package ee.oyatl.ime.fusion
 
+import android.content.SharedPreferences
 import android.inputmethodservice.InputMethodService
 import android.os.Build
 import android.util.TypedValue
@@ -25,16 +26,36 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.Callback {
+class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.Callback, SharedPreferences.OnSharedPreferenceChangeListener {
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
-
+    private lateinit var preference: SharedPreferences
     private lateinit var imeModeSwitcher: IMEModeSwitcher
     private lateinit var imeView: LinearLayout
 
     override fun onCreate() {
         super.onCreate()
-        val pref = PreferenceManager.getDefaultSharedPreferences(this)
-        val list = pref.getStringSet("input_modes", null).orEmpty()
+        preference = PreferenceManager.getDefaultSharedPreferences(this)
+        onInit()
+        onLoad()
+        preference.registerOnSharedPreferenceChangeListener(this)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        onUnload()
+    }
+
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        onUnload()
+        onInit()
+        onLoad()
+        if(currentInputConnection != null && currentInputEditorInfo != null)
+            imeModeSwitcher.onStart(currentInputConnection, currentInputEditorInfo)
+        setInputView(onCreateInputView())
+    }
+
+    fun onInit() {
+        val list = preference.getStringSet("input_modes", null).orEmpty()
         val entries = mutableListOf<IMEModeSwitcher.Entry>()
         if("qwerty" in list || list.isEmpty())
             entries += IMEModeSwitcher.Entry("ABC", LatinIMEMode(this, this))
@@ -59,14 +80,15 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
         if("vi_telex" in list)
             entries += IMEModeSwitcher.Entry("越T", VietIMEMode.Telex(this))
         imeModeSwitcher = IMEModeSwitcher(this, entries, this)
+    }
 
+    fun onLoad() {
         coroutineScope.launch {
-            entries.forEach { it.imeMode.onLoad(this@FusionIMEService) }
+            imeModeSwitcher.entries.forEach { it.imeMode.onLoad(this@FusionIMEService) }
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    fun onUnload() {
         imeModeSwitcher.entries.forEach { entry ->
             if(entry.imeMode is PinyinIMEMode) entry.imeMode.stopPinyinDecoderService(this)
         }
