@@ -45,9 +45,9 @@ import com.google.common.base.Preconditions;
 import org.mozc.android.inputmethod.japanese.MozcUtil;
 import org.mozc.android.inputmethod.japanese.R;
 import org.mozc.android.inputmethod.japanese.ViewEventListener;
-import org.mozc.android.inputmethod.japanese.protobuf.ProtoCandidates.Candidates;
-import org.mozc.android.inputmethod.japanese.protobuf.ProtoCandidates.Candidates.Candidate;
-import org.mozc.android.inputmethod.japanese.protobuf.ProtoCandidates.Category;
+import org.mozc.android.inputmethod.japanese.protobuf.ProtoCandidateWindow.CandidateWindow;
+import org.mozc.android.inputmethod.japanese.protobuf.ProtoCandidateWindow.CandidateWindow.Candidate;
+import org.mozc.android.inputmethod.japanese.protobuf.ProtoCandidateWindow.Category;
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.Command;
 
 import java.util.Locale;
@@ -110,7 +110,7 @@ public class FloatingCandidateLayoutRenderer {
 
   private Optional<WindowRects> windowRects = Optional.absent();
   private Optional<ViewEventListener> viewEventListener = Optional.absent();
-  private Optional<Candidates> candidates = Optional.absent();
+  private Optional<CandidateWindow> candidates = Optional.absent();
   private Optional<Integer> maxWidth = Optional.absent();
   /** Focused candidate index, or tapped candidate index if exists. */
   private Optional<Integer> focusedOrTappedCandidateIndexOnPage = Optional.absent();
@@ -245,11 +245,11 @@ public class FloatingCandidateLayoutRenderer {
   /** Sets candidates. */
   public void setCandidates(Command outCommand) {
     Preconditions.checkNotNull(outCommand);
-    if (outCommand.getOutput().getCandidates().getCandidateCount() == 0) {
+    if (outCommand.getOutput().getCandidateWindow().getCandidateCount() == 0) {
       candidates = Optional.absent();
       totalCandidatesCount = 0;
     } else {
-      candidates = Optional.of(outCommand.getOutput().getCandidates());
+      candidates = Optional.of(outCommand.getOutput().getCandidateWindow());
       totalCandidatesCount = outCommand.getOutput().getAllCandidateWords().getCandidatesCount();
     }
     updateLayout();
@@ -278,7 +278,7 @@ public class FloatingCandidateLayoutRenderer {
     Preconditions.checkState(candidates.isPresent());
     Preconditions.checkState(windowRects.isPresent());
 
-    Candidates candidatesData = candidates.get();
+    CandidateWindow candidatesData = candidates.get();
     WindowRects rects = windowRects.get();
 
     canvas.drawRoundRect(
@@ -404,7 +404,7 @@ public class FloatingCandidateLayoutRenderer {
       return;
     }
 
-    Candidates candidatesData = candidates.get();
+    CandidateWindow candidatesData = candidates.get();
     int candidateNumberOnPage = candidatesData.getCandidateCount();
     boolean hasShortcut = candidatesData.getCandidateCount() > 0
         && !candidatesData.getCandidate(0).getAnnotation().getShortcut().isEmpty();

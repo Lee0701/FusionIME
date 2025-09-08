@@ -34,7 +34,7 @@ import android.text.Layout;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 
-import org.mozc.android.inputmethod.japanese.protobuf.ProtoCandidates.CandidateWord;
+import org.mozc.android.inputmethod.japanese.protobuf.ProtoCandidateWindow.CandidateWord;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -48,7 +48,7 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 
-import org.mozc.android.inputmethod.japanese.protobuf.ProtoCandidates.Category;
+import org.mozc.android.inputmethod.japanese.protobuf.ProtoCandidateWindow.Category;
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.Command;
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.CompositionMode;
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.Output;

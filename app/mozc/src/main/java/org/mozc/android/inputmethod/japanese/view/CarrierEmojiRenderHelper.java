@@ -52,8 +52,8 @@ import org.mozc.android.inputmethod.japanese.emoji.EmojiData;
 import org.mozc.android.inputmethod.japanese.emoji.EmojiProviderType;
 import org.mozc.android.inputmethod.japanese.emoji.EmojiRenderableChecker;
 import org.mozc.android.inputmethod.japanese.emoji.EmojiUtil;
-import org.mozc.android.inputmethod.japanese.protobuf.ProtoCandidates.CandidateList;
-import org.mozc.android.inputmethod.japanese.protobuf.ProtoCandidates.CandidateWord;
+import org.mozc.android.inputmethod.japanese.protobuf.ProtoCandidateWindow.CandidateList;
+import org.mozc.android.inputmethod.japanese.protobuf.ProtoCandidateWindow.CandidateWord;
 
 import java.util.BitSet;
 import java.util.Collections;

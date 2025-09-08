@@ -19,7 +19,7 @@ import org.mozc.android.inputmethod.japanese.KeycodeConverter;
 import org.mozc.android.inputmethod.japanese.MozcLog;
 import org.mozc.android.inputmethod.japanese.MozcUtil;
 import org.mozc.android.inputmethod.japanese.model.SelectionTracker;
-import org.mozc.android.inputmethod.japanese.protobuf.ProtoCandidates;
+import org.mozc.android.inputmethod.japanese.protobuf.ProtoCandidateWindow;
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands;
 
 import javax.annotation.Nullable;
@@ -192,7 +192,7 @@ public class InputConnectionRenderer {
         int spanFlags = Spanned.SPAN_EXCLUSIVE_EXCLUSIVE | Spanned.SPAN_COMPOSING;
         if (output.hasAllCandidateWords()
                 && output.getAllCandidateWords().hasCategory()
-                && output.getAllCandidateWords().getCategory() == ProtoCandidates.Category.CONVERSION) {
+                && output.getAllCandidateWords().getCategory() == ProtoCandidateWindow.Category.CONVERSION) {
             int offsetInString = 0;
             for (ProtoCommands.Preedit.Segment segment : preedit.getSegmentList()) {
                 int length = segment.getValue().length();
