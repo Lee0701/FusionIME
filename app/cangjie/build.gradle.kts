@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.diycircuits.cangjie"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 21
@@ -40,6 +40,7 @@ android {
             path = file("src/main/jni/Android.mk")
         }
     }
+    ndkVersion = "29.0.14033849 rc4"
 }
 
 dependencies {

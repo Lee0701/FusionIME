@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "org.mozc.android.inputmethod.japanese"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 21

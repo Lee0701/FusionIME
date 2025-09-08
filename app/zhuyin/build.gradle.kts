@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "tw.cheyingwu.zhuyin"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 21

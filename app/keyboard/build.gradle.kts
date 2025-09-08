@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "ee.oyatl.ime.keyboard"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 21

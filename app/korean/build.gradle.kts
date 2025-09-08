@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "ee.oyatl.ime.fusion.korean"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 21
