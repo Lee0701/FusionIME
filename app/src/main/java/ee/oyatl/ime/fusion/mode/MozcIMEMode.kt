@@ -23,7 +23,7 @@ import ee.oyatl.ime.keyboard.layout.LayoutRomaji
 import org.mozc.android.inputmethod.japanese.MozcUtil
 import org.mozc.android.inputmethod.japanese.PrimaryKeyCodeConverter
 import org.mozc.android.inputmethod.japanese.keyboard.Keyboard.KeyboardSpecification
-import org.mozc.android.inputmethod.japanese.protobuf.ProtoCandidates.CandidateWord
+import org.mozc.android.inputmethod.japanese.protobuf.ProtoCandidateWindow.CandidateWord
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.Input.TouchEvent
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config

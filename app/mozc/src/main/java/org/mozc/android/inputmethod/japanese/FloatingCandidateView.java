@@ -255,7 +255,7 @@ public class FloatingCandidateView extends View {
         currentPreeditPosition += segment.getValueLength();
       }
       compositionCharacterEnd = currentPreeditPosition;
-      candidatesCategory = output.getCandidates().getCategory();
+      candidatesCategory = output.getCandidateWindow().getCategory();
       updateCandidateWindow();
     }
 

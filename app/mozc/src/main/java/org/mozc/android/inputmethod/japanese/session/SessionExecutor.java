@@ -55,8 +55,6 @@ import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.Capability.T
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.Command;
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.CompositionMode;
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.Context.InputFieldType;
-import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.GenericStorageEntry;
-import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.GenericStorageEntry.StorageType;
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.Input;
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.Input.CommandType;
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.Input.TouchEvent;
@@ -65,7 +63,6 @@ import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.KeyEvent.Spe
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.Output;
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.Request;
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.SessionCommand;
-import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.SessionCommand.UsageStatsEvent;
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config;
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommand;
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommandStatus;
@@ -289,12 +286,12 @@ public class SessionExecutor {
             CommandType.NO_OPERATION,
             CommandType.SET_CONFIG,
             CommandType.GET_CONFIG,
-            CommandType.SET_IMPOSED_CONFIG,
+//            CommandType.SET_IMPOSED_CONFIG,
             CommandType.CLEAR_USER_HISTORY,
             CommandType.CLEAR_USER_PREDICTION,
             CommandType.CLEAR_UNUSED_USER_PREDICTION,
-            CommandType.CLEAR_STORAGE,
-            CommandType.READ_ALL_FROM_STORAGE,
+//            CommandType.CLEAR_STORAGE,
+//            CommandType.READ_ALL_FROM_STORAGE,
             CommandType.RELOAD,
             CommandType.SEND_USER_DICTIONARY_COMMAND));
 
@@ -446,13 +443,13 @@ public class SessionExecutor {
       // reason of less powerful devices.
       Input.Builder inputBuilder = context.inputBuilder;
       Optional<Handler> callbackHandler = context.callbackHandler;
-      if (callbackHandler.isPresent()
-          && inputBuilder.getCommand().getType() != SessionCommand.CommandType.EXPAND_SUGGESTION) {
+//      if (callbackHandler.isPresent()
+//          && inputBuilder.getCommand().getType() != SessionCommand.CommandType.EXPAND_SUGGESTION) {
         // Do not squash by EXPAND_SUGGESTION request, because the result of EXPAND_SUGGESTION
         // won't affect the inputConnection in MozcService, as the result should update
         // only candidates conceptually.
         callbackHandler.get().removeMessages(CallbackHandler.SQUASHABLE_OUTPUT);
-      }
+//      }
 
       if (inputBuilder.hasKey() &&
           (!inputBuilder.getKey().hasSpecialKey() ||
@@ -721,51 +718,51 @@ public class SessionExecutor {
     evaluateAsynchronously(
         inputBuilder, Optional.absent(), Optional.of(callback));
 
-    if (rowIndex.isPresent()) {
-      candidateSubmissionStatsEvent(rowIndex.get());
-    }
+//    if (rowIndex.isPresent()) {
+//      candidateSubmissionStatsEvent(rowIndex.get());
+//    }
   }
 
-  private void candidateSubmissionStatsEvent(int rowIndex) {
-    Preconditions.checkArgument(rowIndex >= 0);
-
-    UsageStatsEvent event;
-    switch (rowIndex) {
-      case 0:
-        event = UsageStatsEvent.SUBMITTED_CANDIDATE_ROW_0;
-        break;
-      case 1:
-        event = UsageStatsEvent.SUBMITTED_CANDIDATE_ROW_1;
-        break;
-      case 2:
-        event = UsageStatsEvent.SUBMITTED_CANDIDATE_ROW_2;
-        break;
-      case 3:
-        event = UsageStatsEvent.SUBMITTED_CANDIDATE_ROW_3;
-        break;
-      case 4:
-        event = UsageStatsEvent.SUBMITTED_CANDIDATE_ROW_4;
-        break;
-      case 5:
-        event = UsageStatsEvent.SUBMITTED_CANDIDATE_ROW_5;
-        break;
-      case 6:
-        event = UsageStatsEvent.SUBMITTED_CANDIDATE_ROW_6;
-        break;
-      case 7:
-        event = UsageStatsEvent.SUBMITTED_CANDIDATE_ROW_7;
-        break;
-      case 8:
-        event = UsageStatsEvent.SUBMITTED_CANDIDATE_ROW_8;
-        break;
-      case 9:
-        event = UsageStatsEvent.SUBMITTED_CANDIDATE_ROW_9;
-        break;
-      default:
-        event = UsageStatsEvent.SUBMITTED_CANDIDATE_ROW_GE10;
-    }
-    sendUsageStatsEvent(event);
-  }
+//  private void candidateSubmissionStatsEvent(int rowIndex) {
+//    Preconditions.checkArgument(rowIndex >= 0);
+//
+//    UsageStatsEvent event;
+//    switch (rowIndex) {
+//      case 0:
+//        event = UsageStatsEvent.SUBMITTED_CANDIDATE_ROW_0;
+//        break;
+//      case 1:
+//        event = UsageStatsEvent.SUBMITTED_CANDIDATE_ROW_1;
+//        break;
+//      case 2:
+//        event = UsageStatsEvent.SUBMITTED_CANDIDATE_ROW_2;
+//        break;
+//      case 3:
+//        event = UsageStatsEvent.SUBMITTED_CANDIDATE_ROW_3;
+//        break;
+//      case 4:
+//        event = UsageStatsEvent.SUBMITTED_CANDIDATE_ROW_4;
+//        break;
+//      case 5:
+//        event = UsageStatsEvent.SUBMITTED_CANDIDATE_ROW_5;
+//        break;
+//      case 6:
+//        event = UsageStatsEvent.SUBMITTED_CANDIDATE_ROW_6;
+//        break;
+//      case 7:
+//        event = UsageStatsEvent.SUBMITTED_CANDIDATE_ROW_7;
+//        break;
+//      case 8:
+//        event = UsageStatsEvent.SUBMITTED_CANDIDATE_ROW_8;
+//        break;
+//      case 9:
+//        event = UsageStatsEvent.SUBMITTED_CANDIDATE_ROW_9;
+//        break;
+//      default:
+//        event = UsageStatsEvent.SUBMITTED_CANDIDATE_ROW_GE10;
+//    }
+//    sendUsageStatsEvent(event);
+//  }
   /**
    * Sends {@code RESET_CONTEXT} command to the server asynchronously.
    */
@@ -852,90 +849,90 @@ public class SessionExecutor {
    * Sends {@code INSERT_TO_STORAGE} with given {@code type}, {@code key} and {@code values}
    * to the server asynchronously.
    */
-  public void insertToStorage(StorageType type, String key, List<ByteString> values) {
-    Preconditions.checkNotNull(type);
-    Preconditions.checkNotNull(key);
-    Preconditions.checkNotNull(values);
-    Input.Builder inputBuilder = Input.newBuilder()
-        .setType(CommandType.INSERT_TO_STORAGE)
-        .setStorageEntry(GenericStorageEntry.newBuilder()
-            .setType(type)
-            .setKey(key)
-            .addAllValue(values));
-    evaluateAsynchronously(
-        inputBuilder, Optional.absent(), Optional.absent());
-  }
+//  public void insertToStorage(StorageType type, String key, List<ByteString> values) {
+//    Preconditions.checkNotNull(type);
+//    Preconditions.checkNotNull(key);
+//    Preconditions.checkNotNull(values);
+//    Input.Builder inputBuilder = Input.newBuilder()
+//        .setType(CommandType.INSERT_TO_STORAGE)
+//        .setStorageEntry(GenericStorageEntry.newBuilder()
+//            .setType(type)
+//            .setKey(key)
+//            .addAllValue(values));
+//    evaluateAsynchronously(
+//        inputBuilder, Optional.absent(), Optional.absent());
+//  }
 
   public void expandSuggestion(EvaluationCallback callback) {
-    Preconditions.checkNotNull(callback);
-    Input.Builder inputBuilder = Input.newBuilder()
-        .setType(CommandType.SEND_COMMAND)
-        .setCommand(
-            SessionCommand.newBuilder().setType(SessionCommand.CommandType.EXPAND_SUGGESTION));
-    evaluateAsynchronously(
-        inputBuilder, Optional.absent(), Optional.of(callback));
+//    Preconditions.checkNotNull(callback);
+//    Input.Builder inputBuilder = Input.newBuilder()
+//        .setType(CommandType.SEND_COMMAND)
+//        .setCommand(
+//            SessionCommand.newBuilder().setType(SessionCommand.CommandType.EXPAND_SUGGESTION));
+//    evaluateAsynchronously(
+//        inputBuilder, Optional.absent(), Optional.of(callback));
   }
 
   public void preferenceUsageStatsEvent(SharedPreferences sharedPreferences, Resources resources) {
     Preconditions.checkNotNull(sharedPreferences);
     Preconditions.checkNotNull(resources);
 
-    sendIntegerUsageStatsUsageStatsEvent(
-        UsageStatsEvent.SOFTWARE_KEYBOARD_HEIGHT_DIP_LANDSCAPE,
-        (int) Math.ceil(MozcUtil.getDimensionForOrientation(
-            resources, R.dimen.ime_window_height, Configuration.ORIENTATION_LANDSCAPE)));
-    sendIntegerUsageStatsUsageStatsEvent(
-        UsageStatsEvent.SOFTWARE_KEYBOARD_HEIGHT_DIP_PORTRAIT,
-        (int) Math.ceil(MozcUtil.getDimensionForOrientation(
-            resources, R.dimen.ime_window_height, Configuration.ORIENTATION_PORTRAIT)));
+//    sendIntegerUsageStatsUsageStatsEvent(
+//        UsageStatsEvent.SOFTWARE_KEYBOARD_HEIGHT_DIP_LANDSCAPE,
+//        (int) Math.ceil(MozcUtil.getDimensionForOrientation(
+//            resources, R.dimen.ime_window_height, Configuration.ORIENTATION_LANDSCAPE)));
+//    sendIntegerUsageStatsUsageStatsEvent(
+//        UsageStatsEvent.SOFTWARE_KEYBOARD_HEIGHT_DIP_PORTRAIT,
+//        (int) Math.ceil(MozcUtil.getDimensionForOrientation(
+//            resources, R.dimen.ime_window_height, Configuration.ORIENTATION_PORTRAIT)));
 
     ClientSidePreference landscapePreference = new ClientSidePreference(
             sharedPreferences, resources, Configuration.ORIENTATION_LANDSCAPE);
     ClientSidePreference portraitPreference = new ClientSidePreference(
         sharedPreferences, resources, Configuration.ORIENTATION_PORTRAIT);
 
-    sendIntegerUsageStatsUsageStatsEvent(
-        UsageStatsEvent.SOFTWARE_KEYBOARD_LAYOUT_LANDSCAPE,
-        landscapePreference.getKeyboardLayout().getId());
-    sendIntegerUsageStatsUsageStatsEvent(
-        UsageStatsEvent.SOFTWARE_KEYBOARD_LAYOUT_PORTRAIT,
-        portraitPreference.getKeyboardLayout().getId());
+//    sendIntegerUsageStatsUsageStatsEvent(
+//        UsageStatsEvent.SOFTWARE_KEYBOARD_LAYOUT_LANDSCAPE,
+//        landscapePreference.getKeyboardLayout().getId());
+//    sendIntegerUsageStatsUsageStatsEvent(
+//        UsageStatsEvent.SOFTWARE_KEYBOARD_LAYOUT_PORTRAIT,
+//        portraitPreference.getKeyboardLayout().getId());
 
     boolean layoutAdjustmentEnabledInLandscape =
         landscapePreference.getLayoutAdjustment() != LayoutAdjustment.FILL;
     boolean layoutAdjustmentEnabledInPortrait =
         portraitPreference.getLayoutAdjustment() != LayoutAdjustment.FILL;
 
-    sendIntegerUsageStatsUsageStatsEvent(
-        UsageStatsEvent.SOFTWARE_KEYBOARD_LAYOUT_ADJUSTMENT_ENABLED_LANDSCAPE,
-        layoutAdjustmentEnabledInLandscape ? 1 : 0);
-    sendIntegerUsageStatsUsageStatsEvent(
-        UsageStatsEvent.SOFTWARE_KEYBOARD_LAYOUT_ADJUSTMENT_ENABLED_PORTRAIT,
-        layoutAdjustmentEnabledInPortrait ? 1 : 0);
+//    sendIntegerUsageStatsUsageStatsEvent(
+//        UsageStatsEvent.SOFTWARE_KEYBOARD_LAYOUT_ADJUSTMENT_ENABLED_LANDSCAPE,
+//        layoutAdjustmentEnabledInLandscape ? 1 : 0);
+//    sendIntegerUsageStatsUsageStatsEvent(
+//        UsageStatsEvent.SOFTWARE_KEYBOARD_LAYOUT_ADJUSTMENT_ENABLED_PORTRAIT,
+//        layoutAdjustmentEnabledInPortrait ? 1 : 0);
   }
 
-  private void sendIntegerUsageStatsUsageStatsEvent(UsageStatsEvent event, int value) {
-    evaluateAsynchronously(Input.newBuilder()
-        .setType(CommandType.SEND_COMMAND)
-        .setCommand(SessionCommand.newBuilder()
-            .setType(SessionCommand.CommandType.USAGE_STATS_EVENT)
-            .setUsageStatsEvent(event)
-            .setUsageStatsEventIntValue(value)),
-        Optional.absent(), Optional.absent());
-  }
+//  private void sendIntegerUsageStatsUsageStatsEvent(UsageStatsEvent event, int value) {
+//    evaluateAsynchronously(Input.newBuilder()
+//        .setType(CommandType.SEND_COMMAND)
+//        .setCommand(SessionCommand.newBuilder()
+//            .setType(SessionCommand.CommandType.USAGE_STATS_EVENT)
+//            .setUsageStatsEvent(event)
+//            .setUsageStatsEventIntValue(value)),
+//        Optional.absent(), Optional.absent());
+//  }
 
   public void touchEventUsageStatsEvent(List<TouchEvent> touchEventList) {
     if (Preconditions.checkNotNull(touchEventList).isEmpty()) {
       return;
     }
 
-    Input.Builder inputBuilder = Input.newBuilder()
-        .setType(CommandType.SEND_COMMAND)
-        .setCommand(SessionCommand.newBuilder()
-            .setType(SessionCommand.CommandType.USAGE_STATS_EVENT))
-        .addAllTouchEvents(touchEventList);
-    evaluateAsynchronously(
-        inputBuilder, Optional.absent(), Optional.absent());
+//    Input.Builder inputBuilder = Input.newBuilder()
+//        .setType(CommandType.SEND_COMMAND)
+//        .setCommand(SessionCommand.newBuilder()
+//            .setType(SessionCommand.CommandType.USAGE_STATS_EVENT))
+//        .addAllTouchEvents(touchEventList);
+//    evaluateAsynchronously(
+//        inputBuilder, Optional.absent(), Optional.absent());
   }
 
   public void syncData() {
@@ -991,9 +988,9 @@ public class SessionExecutor {
   public void setImposedConfig(Config config) {
     Preconditions.checkNotNull(config);
     // Ignore output.
-    evaluateAsynchronously(
-        Input.newBuilder().setType(Input.CommandType.SET_IMPOSED_CONFIG).setConfig(config),
-        Optional.absent(), Optional.absent());
+//    evaluateAsynchronously(
+//        Input.newBuilder().setType(Input.CommandType.SET_IMPOSED_CONFIG).setConfig(config),
+//        Optional.absent(), Optional.absent());
   }
 
   /**
@@ -1024,28 +1021,28 @@ public class SessionExecutor {
    * Clears a generic storage, which is used typically by symbol history.
    * @param storageType the storage to be cleared
    */
-  public void clearStorage(StorageType storageType) {
-    Preconditions.checkNotNull(storageType);
-    evaluateSynchronously(
-        Input.newBuilder()
-            .setType(CommandType.CLEAR_STORAGE)
-            .setStorageEntry(GenericStorageEntry.newBuilder().setType(storageType))
-            .build());
-  }
+//  public void clearStorage(StorageType storageType) {
+//    Preconditions.checkNotNull(storageType);
+//    evaluateSynchronously(
+//        Input.newBuilder()
+//            .setType(CommandType.CLEAR_STORAGE)
+//            .setStorageEntry(GenericStorageEntry.newBuilder().setType(storageType))
+//            .build());
+//  }
 
   /**
    * Reads stored values of the given {@code type} from the server, and returns it.
    */
-  public List<ByteString> readAllFromStorage(StorageType type) {
-    Preconditions.checkNotNull(type);
-    Input input = Input.newBuilder()
-        .setType(CommandType.READ_ALL_FROM_STORAGE)
-        .setStorageEntry(GenericStorageEntry.newBuilder()
-            .setType(type))
-        .build();
-    Output output = evaluateSynchronously(input);
-    return output.getStorageEntry().getValueList();
-  }
+//  public List<ByteString> readAllFromStorage(StorageType type) {
+//    Preconditions.checkNotNull(type);
+//    Input input = Input.newBuilder()
+//        .setType(CommandType.READ_ALL_FROM_STORAGE)
+//        .setStorageEntry(GenericStorageEntry.newBuilder()
+//            .setType(type))
+//        .build();
+//    Output output = evaluateSynchronously(input);
+//    return output.getStorageEntry().getValueList();
+//  }
 
   /**
    * Sends 'Reload' request to the server, typically for reloading user dictionaries.
@@ -1093,13 +1090,13 @@ public class SessionExecutor {
         handler.get().obtainMessage(ExecutorMainCallback.PASS_TO_CALLBACK, context));
   }
 
-  public void sendUsageStatsEvent(UsageStatsEvent event) {
-    evaluateAsynchronously(
-        Input.newBuilder()
-            .setType(CommandType.SEND_COMMAND)
-            .setCommand(SessionCommand.newBuilder()
-                .setType(SessionCommand.CommandType.USAGE_STATS_EVENT)
-                .setUsageStatsEvent(event)),
-        Optional.absent(), Optional.absent());
-  }
+//  public void sendUsageStatsEvent(UsageStatsEvent event) {
+//    evaluateAsynchronously(
+//        Input.newBuilder()
+//            .setType(CommandType.SEND_COMMAND)
+//            .setCommand(SessionCommand.newBuilder()
+//                .setType(SessionCommand.CommandType.USAGE_STATS_EVENT)
+//                .setUsageStatsEvent(event)),
+//        Optional.absent(), Optional.absent());
+//  }
 }

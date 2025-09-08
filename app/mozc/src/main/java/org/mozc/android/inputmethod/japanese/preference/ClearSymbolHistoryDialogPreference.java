@@ -34,7 +34,7 @@ import android.content.DialogInterface;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
 
-import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.GenericStorageEntry.StorageType;
+//import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.GenericStorageEntry.StorageType;
 import org.mozc.android.inputmethod.japanese.session.SessionExecutor;
 import org.mozc.android.inputmethod.japanese.session.SessionHandlerFactory;
 
@@ -57,9 +57,9 @@ public class ClearSymbolHistoryDialogPreference extends DialogPreference {
     if (which == DialogInterface.BUTTON_POSITIVE) {
       SessionExecutor sessionExecutor = SessionExecutor.getInstanceInitializedIfNecessary(
           new SessionHandlerFactory(getContext()), getContext());
-      sessionExecutor.clearStorage(StorageType.EMOJI_HISTORY);
-      sessionExecutor.clearStorage(StorageType.EMOTICON_HISTORY);
-      sessionExecutor.clearStorage(StorageType.SYMBOL_HISTORY);
+//      sessionExecutor.clearStorage(StorageType.EMOJI_HISTORY);
+//      sessionExecutor.clearStorage(StorageType.EMOTICON_HISTORY);
+//      sessionExecutor.clearStorage(StorageType.SYMBOL_HISTORY);
     }
   }
 }

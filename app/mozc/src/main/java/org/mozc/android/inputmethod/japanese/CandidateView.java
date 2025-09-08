@@ -306,12 +306,12 @@ public class CandidateView extends InOutAnimatedFrameLayout implements MemoryMan
 
     Input input = outCommand.getInput();
     CandidateList allCandidateWords = outCommand.getOutput().getAllCandidateWords();
-    if (input.getType() == CommandType.SEND_COMMAND
-        && input.getCommand().getType() == SessionCommand.CommandType.EXPAND_SUGGESTION) {
-      getConversionCandidateWordView().updateForExpandSuggestion(allCandidateWords);
-    } else {
+//    if (input.getType() == CommandType.SEND_COMMAND
+//        && input.getCommand().getType() == SessionCommand.CommandType.EXPAND_SUGGESTION) {
+//      getConversionCandidateWordView().updateForExpandSuggestion(allCandidateWords);
+//    } else {
       getConversionCandidateWordView().update(allCandidateWords);
-    }
+//    }
   }
 
   /**

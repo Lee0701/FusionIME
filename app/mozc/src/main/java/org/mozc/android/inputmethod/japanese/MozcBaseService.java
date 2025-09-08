@@ -84,7 +84,6 @@ import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands;
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.Command;
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.Context.InputFieldType;
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.DeletionRange;
-import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.GenericStorageEntry.StorageType;
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.Input;
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.Input.TouchEvent;
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.Output;
@@ -92,7 +91,6 @@ import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.Preedit;
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.Preedit.Segment;
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.Preedit.Segment.Annotation;
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.SessionCommand;
-import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.SessionCommand.UsageStatsEvent;
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config;
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SelectionShortcut;
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SessionKeymap;
@@ -184,15 +182,15 @@ public class MozcBaseService extends InputMethodService {
 
   /** Adapter implementation of the symbol history manipulation. */
   static class SymbolHistoryStorageImpl implements SymbolHistoryStorage {
-    static final Map<SymbolMajorCategory, StorageType> STORAGE_TYPE_MAP;
-    static {
-      Map<SymbolMajorCategory, StorageType> map =
-          new EnumMap<SymbolMajorCategory, StorageType>(SymbolMajorCategory.class);
-      map.put(SymbolMajorCategory.SYMBOL, StorageType.SYMBOL_HISTORY);
-      map.put(SymbolMajorCategory.EMOTICON, StorageType.EMOTICON_HISTORY);
-      map.put(SymbolMajorCategory.EMOJI, StorageType.EMOJI_HISTORY);
-      STORAGE_TYPE_MAP = Collections.unmodifiableMap(map);
-    }
+//    static final Map<SymbolMajorCategory, StorageType> STORAGE_TYPE_MAP;
+//    static {
+//      Map<SymbolMajorCategory, StorageType> map =
+//          new EnumMap<SymbolMajorCategory, StorageType>(SymbolMajorCategory.class);
+//      map.put(SymbolMajorCategory.SYMBOL, StorageType.SYMBOL_HISTORY);
+//      map.put(SymbolMajorCategory.EMOTICON, StorageType.EMOTICON_HISTORY);
+//      map.put(SymbolMajorCategory.EMOJI, StorageType.EMOJI_HISTORY);
+//      STORAGE_TYPE_MAP = Collections.unmodifiableMap(map);
+//    }
 
     private final SessionExecutor sessionExecutor;
 
@@ -202,23 +200,24 @@ public class MozcBaseService extends InputMethodService {
 
     @Override
     public List<String> getAllHistory(SymbolMajorCategory majorCategory) {
-      List<ByteString> historyList =
-          sessionExecutor.readAllFromStorage(STORAGE_TYPE_MAP.get(majorCategory));
-      List<String> result = new ArrayList<String>(historyList.size());
-      for (ByteString value : historyList) {
-        result.add(MozcUtil.utf8CStyleByteStringToString(value));
-      }
-      return result;
+//      List<ByteString> historyList =
+//          sessionExecutor.readAllFromStorage(STORAGE_TYPE_MAP.get(majorCategory));
+//      List<String> result = new ArrayList<String>(historyList.size());
+//      for (ByteString value : historyList) {
+//        result.add(MozcUtil.utf8CStyleByteStringToString(value));
+//      }
+//      return result;
+      return new ArrayList<>();
     }
 
     @Override
     public void addHistory(SymbolMajorCategory majorCategory, String value) {
       Preconditions.checkNotNull(majorCategory);
       Preconditions.checkNotNull(value);
-      sessionExecutor.insertToStorage(
-          STORAGE_TYPE_MAP.get(majorCategory),
-          value,
-          Collections.singletonList(ByteString.copyFromUtf8(value)));
+//      sessionExecutor.insertToStorage(
+//          STORAGE_TYPE_MAP.get(majorCategory),
+//          value,
+//          Collections.singletonList(ByteString.copyFromUtf8(value)));
     }
   }
 
@@ -302,11 +301,11 @@ public class MozcBaseService extends InputMethodService {
     @Override
     public void onFireFeedbackEvent(FeedbackEvent event) {
       feedbackManager.fireFeedback(event);
-      if (event.equals(FeedbackEvent.INPUTVIEW_EXPAND)) {
-        sessionExecutor.sendUsageStatsEvent(UsageStatsEvent.KEYBOARD_EXPAND_EVENT);
-      } else if (event.equals(FeedbackEvent.INPUTVIEW_FOLD)) {
-        sessionExecutor.sendUsageStatsEvent(UsageStatsEvent.KEYBOARD_FOLD_EVENT);
-      }
+//      if (event.equals(FeedbackEvent.INPUTVIEW_EXPAND)) {
+//        sessionExecutor.sendUsageStatsEvent(UsageStatsEvent.KEYBOARD_EXPAND_EVENT);
+//      } else if (event.equals(FeedbackEvent.INPUTVIEW_FOLD)) {
+//        sessionExecutor.sendUsageStatsEvent(UsageStatsEvent.KEYBOARD_FOLD_EVENT);
+//      }
     }
 
     @Override
@@ -391,7 +390,7 @@ public class MozcBaseService extends InputMethodService {
 
     @Override
     public void onShowMushroomSelectionDialog() {
-      sessionExecutor.sendUsageStatsEvent(UsageStatsEvent.MUSHROOM_SELECTION_DIALOG_OPEN_EVENT);
+//      sessionExecutor.sendUsageStatsEvent(UsageStatsEvent.MUSHROOM_SELECTION_DIALOG_OPEN_EVENT);
     }
   }
 
@@ -405,11 +404,11 @@ public class MozcBaseService extends InputMethodService {
         Optional<Command> command, Optional<KeyEventInterface> triggeringKeyEvent) {
       Preconditions.checkArgument(Preconditions.checkNotNull(command).isPresent());
       Preconditions.checkNotNull(triggeringKeyEvent);
-      if (command.get().getInput().getCommand().getType()
-          != SessionCommand.CommandType.EXPAND_SUGGESTION) {
+//      if (command.get().getInput().getCommand().getType()
+//          != SessionCommand.CommandType.EXPAND_SUGGESTION) {
         // For expanding suggestions, we don't need to update our rendering result.
         renderInputConnection(command.get(), triggeringKeyEvent.orNull());
-      }
+//      }
       // Transit to narrow mode if required (e.g., Typed 'a' key from h/w keyboard).
       viewManager.maybeTransitToNarrowMode(command.get(), triggeringKeyEvent.orNull());
       viewManager.render(command.get());
@@ -1470,7 +1469,7 @@ public class MozcBaseService extends InputMethodService {
     int spanFlags = Spanned.SPAN_EXCLUSIVE_EXCLUSIVE | Spanned.SPAN_COMPOSING;
     if (output.hasAllCandidateWords()
         && output.getAllCandidateWords().hasCategory()
-        && output.getAllCandidateWords().getCategory() == ProtoCandidates.Category.CONVERSION) {
+        && output.getAllCandidateWords().getCategory() == ProtoCandidateWindow.Category.CONVERSION) {
       int offsetInString = 0;
       for (Segment segment : preedit.getSegmentList()) {
         int length = segment.getValue().length();
