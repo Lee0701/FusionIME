@@ -448,7 +448,7 @@ public class SessionExecutor {
         // Do not squash by EXPAND_SUGGESTION request, because the result of EXPAND_SUGGESTION
         // won't affect the inputConnection in MozcService, as the result should update
         // only candidates conceptually.
-        callbackHandler.get().removeMessages(CallbackHandler.SQUASHABLE_OUTPUT);
+//        callbackHandler.get().removeMessages(CallbackHandler.SQUASHABLE_OUTPUT);
 //      }
 
       if (inputBuilder.hasKey() &&
