@@ -24,6 +24,7 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional uint32 config_version = 1 [default = 0];</code>
+     * @return Whether the configVersion field is set.
      */
     boolean hasConfigVersion();
     /**
@@ -32,6 +33,7 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional uint32 config_version = 1 [default = 0];</code>
+     * @return The configVersion.
      */
     int getConfigVersion();
 
@@ -41,6 +43,7 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional string last_modified_product_version = 2 [default = "0.0.0.0"];</code>
+     * @return Whether the lastModifiedProductVersion field is set.
      */
     boolean hasLastModifiedProductVersion();
     /**
@@ -49,14 +52,16 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional string last_modified_product_version = 2 [default = "0.0.0.0"];</code>
+     * @return The lastModifiedProductVersion.
      */
-    String getLastModifiedProductVersion();
+    java.lang.String getLastModifiedProductVersion();
     /**
      * <pre>
      * The product version that wrote this config
      * </pre>
      *
      * <code>optional string last_modified_product_version = 2 [default = "0.0.0.0"];</code>
+     * @return The bytes for lastModifiedProductVersion.
      */
     com.google.protobuf.ByteString
         getLastModifiedProductVersionBytes();
@@ -66,7 +71,8 @@ public final class ProtoConfig {
      * last modified time in UTC second
      * </pre>
      *
-     * <code>optional uint64 last_modified_time = 3 [default = 0];</code>
+     * <code>optional uint64 last_modified_time = 3 [default = 0, jstype = JS_STRING];</code>
+     * @return Whether the lastModifiedTime field is set.
      */
     boolean hasLastModifiedTime();
     /**
@@ -74,35 +80,39 @@ public final class ProtoConfig {
      * last modified time in UTC second
      * </pre>
      *
-     * <code>optional uint64 last_modified_time = 3 [default = 0];</code>
+     * <code>optional uint64 last_modified_time = 3 [default = 0, jstype = JS_STRING];</code>
+     * @return The lastModifiedTime.
      */
     long getLastModifiedTime();
 
     /**
      * <pre>
-     * These fileds are not used now
+     * These fields are not used now
      * platform of machine that wrote this config
      * </pre>
      *
      * <code>optional string platform = 4 [default = ""];</code>
+     * @return Whether the platform field is set.
      */
     boolean hasPlatform();
     /**
      * <pre>
-     * These fileds are not used now
+     * These fields are not used now
      * platform of machine that wrote this config
      * </pre>
      *
      * <code>optional string platform = 4 [default = ""];</code>
+     * @return The platform.
      */
-    String getPlatform();
+    java.lang.String getPlatform();
     /**
      * <pre>
-     * These fileds are not used now
+     * These fields are not used now
      * platform of machine that wrote this config
      * </pre>
      *
      * <code>optional string platform = 4 [default = ""];</code>
+     * @return The bytes for platform.
      */
     com.google.protobuf.ByteString
         getPlatformBytes();
@@ -113,6 +123,7 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional string ui_locale = 5 [default = ""];</code>
+     * @return Whether the uiLocale field is set.
      */
     boolean hasUiLocale();
     /**
@@ -121,14 +132,16 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional string ui_locale = 5 [default = ""];</code>
+     * @return The uiLocale.
      */
-    String getUiLocale();
+    java.lang.String getUiLocale();
     /**
      * <pre>
      * UI locale of machine that wrote this config
      * </pre>
      *
      * <code>optional string ui_locale = 5 [default = ""];</code>
+     * @return The bytes for uiLocale.
      */
     com.google.protobuf.ByteString
         getUiLocaleBytes();
@@ -140,6 +153,7 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional bool upload_usage_stats = 6 [default = false];</code>
+     * @return Whether the uploadUsageStats field is set.
      */
     boolean hasUploadUsageStats();
     /**
@@ -149,6 +163,7 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional bool upload_usage_stats = 6 [default = false];</code>
+     * @return The uploadUsageStats.
      */
     boolean getUploadUsageStats();
   }
@@ -160,7 +175,7 @@ public final class ProtoConfig {
    *
    * Protobuf type {@code mozc.config.GeneralConfig}
    */
-  public  static final class GeneralConfig extends
+  public static final class GeneralConfig extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:mozc.config.GeneralConfig)
       GeneralConfigOrBuilder {
@@ -170,114 +185,50 @@ public final class ProtoConfig {
       super(builder);
     }
     private GeneralConfig() {
-      configVersion_ = 0;
       lastModifiedProductVersion_ = "0.0.0.0";
-      lastModifiedTime_ = 0L;
       platform_ = "";
       uiLocale_ = "";
-      uploadUsageStats_ = false;
     }
 
-    @Override
-    public com.google.protobuf.UnknownFieldSet
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new GeneralConfig();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
       return this.unknownFields;
     }
-    private GeneralConfig(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new NullPointerException();
-      }
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            case 8: {
-              bitField0_ |= 0x00000001;
-              configVersion_ = input.readUInt32();
-              break;
-            }
-            case 18: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00000002;
-              lastModifiedProductVersion_ = bs;
-              break;
-            }
-            case 24: {
-              bitField0_ |= 0x00000004;
-              lastModifiedTime_ = input.readUInt64();
-              break;
-            }
-            case 34: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00000008;
-              platform_ = bs;
-              break;
-            }
-            case 42: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00000010;
-              uiLocale_ = bs;
-              break;
-            }
-            case 48: {
-              bitField0_ |= 0x00000020;
-              uploadUsageStats_ = input.readBool();
-              break;
-            }
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static com.google.protobuf.Descriptors.Descriptor
+    public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return ProtoConfig.internal_static_mozc_config_GeneralConfig_descriptor;
+      return org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.internal_static_mozc_config_GeneralConfig_descriptor;
     }
 
+    @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return ProtoConfig.internal_static_mozc_config_GeneralConfig_fieldAccessorTable
+      return org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.internal_static_mozc_config_GeneralConfig_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              GeneralConfig.class, Builder.class);
+              org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.GeneralConfig.class, org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.GeneralConfig.Builder.class);
     }
 
     private int bitField0_;
     public static final int CONFIG_VERSION_FIELD_NUMBER = 1;
-    private int configVersion_;
+    private int configVersion_ = 0;
     /**
      * <pre>
      * config version, corresponding to the suffix of config file
      * </pre>
      *
      * <code>optional uint32 config_version = 1 [default = 0];</code>
+     * @return Whether the configVersion field is set.
      */
+    @java.lang.Override
     public boolean hasConfigVersion() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
+      return ((bitField0_ & 0x00000001) != 0);
     }
     /**
      * <pre>
@@ -285,22 +236,27 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional uint32 config_version = 1 [default = 0];</code>
+     * @return The configVersion.
      */
+    @java.lang.Override
     public int getConfigVersion() {
       return configVersion_;
     }
 
     public static final int LAST_MODIFIED_PRODUCT_VERSION_FIELD_NUMBER = 2;
-    private volatile Object lastModifiedProductVersion_;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object lastModifiedProductVersion_ = "0.0.0.0";
     /**
      * <pre>
      * The product version that wrote this config
      * </pre>
      *
      * <code>optional string last_modified_product_version = 2 [default = "0.0.0.0"];</code>
+     * @return Whether the lastModifiedProductVersion field is set.
      */
+    @java.lang.Override
     public boolean hasLastModifiedProductVersion() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
+      return ((bitField0_ & 0x00000002) != 0);
     }
     /**
      * <pre>
@@ -308,15 +264,17 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional string last_modified_product_version = 2 [default = "0.0.0.0"];</code>
+     * @return The lastModifiedProductVersion.
      */
-    public String getLastModifiedProductVersion() {
-      Object ref = lastModifiedProductVersion_;
-      if (ref instanceof String) {
-        return (String) ref;
+    @java.lang.Override
+    public java.lang.String getLastModifiedProductVersion() {
+      java.lang.Object ref = lastModifiedProductVersion_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
+        java.lang.String s = bs.toStringUtf8();
         if (bs.isValidUtf8()) {
           lastModifiedProductVersion_ = s;
         }
@@ -329,14 +287,16 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional string last_modified_product_version = 2 [default = "0.0.0.0"];</code>
+     * @return The bytes for lastModifiedProductVersion.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getLastModifiedProductVersionBytes() {
-      Object ref = lastModifiedProductVersion_;
-      if (ref instanceof String) {
+      java.lang.Object ref = lastModifiedProductVersion_;
+      if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
+                (java.lang.String) ref);
         lastModifiedProductVersion_ = b;
         return b;
       } else {
@@ -345,49 +305,58 @@ public final class ProtoConfig {
     }
 
     public static final int LAST_MODIFIED_TIME_FIELD_NUMBER = 3;
-    private long lastModifiedTime_;
+    private long lastModifiedTime_ = 0L;
     /**
      * <pre>
      * last modified time in UTC second
      * </pre>
      *
-     * <code>optional uint64 last_modified_time = 3 [default = 0];</code>
+     * <code>optional uint64 last_modified_time = 3 [default = 0, jstype = JS_STRING];</code>
+     * @return Whether the lastModifiedTime field is set.
      */
+    @java.lang.Override
     public boolean hasLastModifiedTime() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
+      return ((bitField0_ & 0x00000004) != 0);
     }
     /**
      * <pre>
      * last modified time in UTC second
      * </pre>
      *
-     * <code>optional uint64 last_modified_time = 3 [default = 0];</code>
+     * <code>optional uint64 last_modified_time = 3 [default = 0, jstype = JS_STRING];</code>
+     * @return The lastModifiedTime.
      */
+    @java.lang.Override
     public long getLastModifiedTime() {
       return lastModifiedTime_;
     }
 
     public static final int PLATFORM_FIELD_NUMBER = 4;
-    private volatile java.lang.Object platform_;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object platform_ = "";
     /**
      * <pre>
-     * These fileds are not used now
+     * These fields are not used now
      * platform of machine that wrote this config
      * </pre>
      *
      * <code>optional string platform = 4 [default = ""];</code>
+     * @return Whether the platform field is set.
      */
+    @java.lang.Override
     public boolean hasPlatform() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
+      return ((bitField0_ & 0x00000008) != 0);
     }
     /**
      * <pre>
-     * These fileds are not used now
+     * These fields are not used now
      * platform of machine that wrote this config
      * </pre>
      *
      * <code>optional string platform = 4 [default = ""];</code>
+     * @return The platform.
      */
+    @java.lang.Override
     public java.lang.String getPlatform() {
       java.lang.Object ref = platform_;
       if (ref instanceof java.lang.String) {
@@ -404,12 +373,14 @@ public final class ProtoConfig {
     }
     /**
      * <pre>
-     * These fileds are not used now
+     * These fields are not used now
      * platform of machine that wrote this config
      * </pre>
      *
      * <code>optional string platform = 4 [default = ""];</code>
+     * @return The bytes for platform.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getPlatformBytes() {
       java.lang.Object ref = platform_;
@@ -425,16 +396,19 @@ public final class ProtoConfig {
     }
 
     public static final int UI_LOCALE_FIELD_NUMBER = 5;
-    private volatile java.lang.Object uiLocale_;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object uiLocale_ = "";
     /**
      * <pre>
      * UI locale of machine that wrote this config
      * </pre>
      *
      * <code>optional string ui_locale = 5 [default = ""];</code>
+     * @return Whether the uiLocale field is set.
      */
+    @java.lang.Override
     public boolean hasUiLocale() {
-      return ((bitField0_ & 0x00000010) == 0x00000010);
+      return ((bitField0_ & 0x00000010) != 0);
     }
     /**
      * <pre>
@@ -442,7 +416,9 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional string ui_locale = 5 [default = ""];</code>
+     * @return The uiLocale.
      */
+    @java.lang.Override
     public java.lang.String getUiLocale() {
       java.lang.Object ref = uiLocale_;
       if (ref instanceof java.lang.String) {
@@ -463,7 +439,9 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional string ui_locale = 5 [default = ""];</code>
+     * @return The bytes for uiLocale.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getUiLocaleBytes() {
       java.lang.Object ref = uiLocale_;
@@ -479,7 +457,7 @@ public final class ProtoConfig {
     }
 
     public static final int UPLOAD_USAGE_STATS_FIELD_NUMBER = 6;
-    private boolean uploadUsageStats_;
+    private boolean uploadUsageStats_ = false;
     /**
      * <pre>
      * Whether to upload usage stats
@@ -487,9 +465,11 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional bool upload_usage_stats = 6 [default = false];</code>
+     * @return Whether the uploadUsageStats field is set.
      */
+    @java.lang.Override
     public boolean hasUploadUsageStats() {
-      return ((bitField0_ & 0x00000020) == 0x00000020);
+      return ((bitField0_ & 0x00000020) != 0);
     }
     /**
      * <pre>
@@ -498,13 +478,16 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional bool upload_usage_stats = 6 [default = false];</code>
+     * @return The uploadUsageStats.
      */
+    @java.lang.Override
     public boolean getUploadUsageStats() {
       return uploadUsageStats_;
     }
 
     private byte memoizedIsInitialized = -1;
-    public boolean isInitialized() {
+    @java.lang.Override
+    public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
       if (isInitialized == 0) return false;
@@ -513,56 +496,58 @@ public final class ProtoConfig {
       return true;
     }
 
+    @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+      if (((bitField0_ & 0x00000001) != 0)) {
         output.writeUInt32(1, configVersion_);
       }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+      if (((bitField0_ & 0x00000002) != 0)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 2, lastModifiedProductVersion_);
       }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+      if (((bitField0_ & 0x00000004) != 0)) {
         output.writeUInt64(3, lastModifiedTime_);
       }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+      if (((bitField0_ & 0x00000008) != 0)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 4, platform_);
       }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+      if (((bitField0_ & 0x00000010) != 0)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 5, uiLocale_);
       }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+      if (((bitField0_ & 0x00000020) != 0)) {
         output.writeBool(6, uploadUsageStats_);
       }
-      unknownFields.writeTo(output);
+      getUnknownFields().writeTo(output);
     }
 
+    @java.lang.Override
     public int getSerializedSize() {
       int size = memoizedSize;
       if (size != -1) return size;
 
       size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+      if (((bitField0_ & 0x00000001) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeUInt32Size(1, configVersion_);
       }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+      if (((bitField0_ & 0x00000002) != 0)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, lastModifiedProductVersion_);
       }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+      if (((bitField0_ & 0x00000004) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeUInt64Size(3, lastModifiedTime_);
       }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+      if (((bitField0_ & 0x00000008) != 0)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, platform_);
       }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+      if (((bitField0_ & 0x00000010) != 0)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, uiLocale_);
       }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+      if (((bitField0_ & 0x00000020) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(6, uploadUsageStats_);
       }
-      size += unknownFields.getSerializedSize();
+      size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
     }
@@ -577,39 +562,38 @@ public final class ProtoConfig {
       }
       org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.GeneralConfig other = (org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.GeneralConfig) obj;
 
-      boolean result = true;
-      result = result && (hasConfigVersion() == other.hasConfigVersion());
+      if (hasConfigVersion() != other.hasConfigVersion()) return false;
       if (hasConfigVersion()) {
-        result = result && (getConfigVersion()
-            == other.getConfigVersion());
+        if (getConfigVersion()
+            != other.getConfigVersion()) return false;
       }
-      result = result && (hasLastModifiedProductVersion() == other.hasLastModifiedProductVersion());
+      if (hasLastModifiedProductVersion() != other.hasLastModifiedProductVersion()) return false;
       if (hasLastModifiedProductVersion()) {
-        result = result && getLastModifiedProductVersion()
-            .equals(other.getLastModifiedProductVersion());
+        if (!getLastModifiedProductVersion()
+            .equals(other.getLastModifiedProductVersion())) return false;
       }
-      result = result && (hasLastModifiedTime() == other.hasLastModifiedTime());
+      if (hasLastModifiedTime() != other.hasLastModifiedTime()) return false;
       if (hasLastModifiedTime()) {
-        result = result && (getLastModifiedTime()
-            == other.getLastModifiedTime());
+        if (getLastModifiedTime()
+            != other.getLastModifiedTime()) return false;
       }
-      result = result && (hasPlatform() == other.hasPlatform());
+      if (hasPlatform() != other.hasPlatform()) return false;
       if (hasPlatform()) {
-        result = result && getPlatform()
-            .equals(other.getPlatform());
+        if (!getPlatform()
+            .equals(other.getPlatform())) return false;
       }
-      result = result && (hasUiLocale() == other.hasUiLocale());
+      if (hasUiLocale() != other.hasUiLocale()) return false;
       if (hasUiLocale()) {
-        result = result && getUiLocale()
-            .equals(other.getUiLocale());
+        if (!getUiLocale()
+            .equals(other.getUiLocale())) return false;
       }
-      result = result && (hasUploadUsageStats() == other.hasUploadUsageStats());
+      if (hasUploadUsageStats() != other.hasUploadUsageStats()) return false;
       if (hasUploadUsageStats()) {
-        result = result && (getUploadUsageStats()
-            == other.getUploadUsageStats());
+        if (getUploadUsageStats()
+            != other.getUploadUsageStats()) return false;
       }
-      result = result && unknownFields.equals(other.unknownFields);
-      return result;
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
+      return true;
     }
 
     @java.lang.Override
@@ -645,7 +629,7 @@ public final class ProtoConfig {
         hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
             getUploadUsageStats());
       }
-      hash = (29 * hash) + unknownFields.hashCode();
+      hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
     }
@@ -720,6 +704,7 @@ public final class ProtoConfig {
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
+    @java.lang.Override
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
@@ -727,6 +712,7 @@ public final class ProtoConfig {
     public static Builder newBuilder(org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.GeneralConfig prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
+    @java.lang.Override
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
@@ -750,11 +736,12 @@ public final class ProtoConfig {
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:mozc.config.GeneralConfig)
         org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.GeneralConfigOrBuilder {
-      public static com.google.protobuf.Descriptors.Descriptor
+      public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.internal_static_mozc_config_GeneralConfig_descriptor;
       }
 
+      @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.internal_static_mozc_config_GeneralConfig_fieldAccessorTable
@@ -764,45 +751,39 @@ public final class ProtoConfig {
 
       // Construct using org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.GeneralConfig.newBuilder()
       private Builder() {
-        maybeForceBuilderInitialization();
+
       }
 
       private Builder(
           com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
-        maybeForceBuilderInitialization();
+
       }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
-      }
+      @java.lang.Override
       public Builder clear() {
         super.clear();
+        bitField0_ = 0;
         configVersion_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000001);
         lastModifiedProductVersion_ = "0.0.0.0";
-        bitField0_ = (bitField0_ & ~0x00000002);
         lastModifiedTime_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00000004);
         platform_ = "";
-        bitField0_ = (bitField0_ & ~0x00000008);
         uiLocale_ = "";
-        bitField0_ = (bitField0_ & ~0x00000010);
         uploadUsageStats_ = false;
-        bitField0_ = (bitField0_ & ~0x00000020);
         return this;
       }
 
+      @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
         return org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.internal_static_mozc_config_GeneralConfig_descriptor;
       }
 
+      @java.lang.Override
       public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.GeneralConfig getDefaultInstanceForType() {
         return org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.GeneralConfig.getDefaultInstance();
       }
 
+      @java.lang.Override
       public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.GeneralConfig build() {
         org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.GeneralConfig result = buildPartial();
         if (!result.isInitialized()) {
@@ -811,65 +792,77 @@ public final class ProtoConfig {
         return result;
       }
 
+      @java.lang.Override
       public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.GeneralConfig buildPartial() {
         org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.GeneralConfig result = new org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.GeneralConfig(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.configVersion_ = configVersion_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        result.lastModifiedProductVersion_ = lastModifiedProductVersion_;
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000004;
-        }
-        result.lastModifiedTime_ = lastModifiedTime_;
-        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
-          to_bitField0_ |= 0x00000008;
-        }
-        result.platform_ = platform_;
-        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
-          to_bitField0_ |= 0x00000010;
-        }
-        result.uiLocale_ = uiLocale_;
-        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
-          to_bitField0_ |= 0x00000020;
-        }
-        result.uploadUsageStats_ = uploadUsageStats_;
-        result.bitField0_ = to_bitField0_;
+        if (bitField0_ != 0) { buildPartial0(result); }
         onBuilt();
         return result;
       }
 
+      private void buildPartial0(org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.GeneralConfig result) {
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          result.configVersion_ = configVersion_;
+          to_bitField0_ |= 0x00000001;
+        }
+        if (((from_bitField0_ & 0x00000002) != 0)) {
+          result.lastModifiedProductVersion_ = lastModifiedProductVersion_;
+          to_bitField0_ |= 0x00000002;
+        }
+        if (((from_bitField0_ & 0x00000004) != 0)) {
+          result.lastModifiedTime_ = lastModifiedTime_;
+          to_bitField0_ |= 0x00000004;
+        }
+        if (((from_bitField0_ & 0x00000008) != 0)) {
+          result.platform_ = platform_;
+          to_bitField0_ |= 0x00000008;
+        }
+        if (((from_bitField0_ & 0x00000010) != 0)) {
+          result.uiLocale_ = uiLocale_;
+          to_bitField0_ |= 0x00000010;
+        }
+        if (((from_bitField0_ & 0x00000020) != 0)) {
+          result.uploadUsageStats_ = uploadUsageStats_;
+          to_bitField0_ |= 0x00000020;
+        }
+        result.bitField0_ |= to_bitField0_;
+      }
+
+      @java.lang.Override
       public Builder clone() {
         return super.clone();
       }
+      @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
         return super.setField(field, value);
       }
+      @java.lang.Override
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
         return super.clearField(field);
       }
+      @java.lang.Override
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return super.clearOneof(oneof);
       }
+      @java.lang.Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           int index, java.lang.Object value) {
         return super.setRepeatedField(field, index, value);
       }
+      @java.lang.Override
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
         return super.addRepeatedField(field, value);
       }
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.GeneralConfig) {
           return mergeFrom((org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.GeneralConfig)other);
@@ -885,50 +878,95 @@ public final class ProtoConfig {
           setConfigVersion(other.getConfigVersion());
         }
         if (other.hasLastModifiedProductVersion()) {
-          bitField0_ |= 0x00000002;
           lastModifiedProductVersion_ = other.lastModifiedProductVersion_;
+          bitField0_ |= 0x00000002;
           onChanged();
         }
         if (other.hasLastModifiedTime()) {
           setLastModifiedTime(other.getLastModifiedTime());
         }
         if (other.hasPlatform()) {
-          bitField0_ |= 0x00000008;
           platform_ = other.platform_;
+          bitField0_ |= 0x00000008;
           onChanged();
         }
         if (other.hasUiLocale()) {
-          bitField0_ |= 0x00000010;
           uiLocale_ = other.uiLocale_;
+          bitField0_ |= 0x00000010;
           onChanged();
         }
         if (other.hasUploadUsageStats()) {
           setUploadUsageStats(other.getUploadUsageStats());
         }
-        this.mergeUnknownFields(other.unknownFields);
+        this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
       }
 
-      public boolean isInitialized() {
+      @java.lang.Override
+      public final boolean isInitialized() {
         return true;
       }
 
+      @java.lang.Override
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.GeneralConfig parsedMessage = null;
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
         try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 8: {
+                configVersion_ = input.readUInt32();
+                bitField0_ |= 0x00000001;
+                break;
+              } // case 8
+              case 18: {
+                lastModifiedProductVersion_ = input.readBytes();
+                bitField0_ |= 0x00000002;
+                break;
+              } // case 18
+              case 24: {
+                lastModifiedTime_ = input.readUInt64();
+                bitField0_ |= 0x00000004;
+                break;
+              } // case 24
+              case 34: {
+                platform_ = input.readBytes();
+                bitField0_ |= 0x00000008;
+                break;
+              } // case 34
+              case 42: {
+                uiLocale_ = input.readBytes();
+                bitField0_ |= 0x00000010;
+                break;
+              } // case 42
+              case 48: {
+                uploadUsageStats_ = input.readBool();
+                bitField0_ |= 0x00000020;
+                break;
+              } // case 48
+              default: {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+            } // switch (tag)
+          } // while (!done)
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.GeneralConfig) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
+          onChanged();
+        } // finally
         return this;
       }
       private int bitField0_;
@@ -940,9 +978,11 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional uint32 config_version = 1 [default = 0];</code>
+       * @return Whether the configVersion field is set.
        */
+      @java.lang.Override
       public boolean hasConfigVersion() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
+        return ((bitField0_ & 0x00000001) != 0);
       }
       /**
        * <pre>
@@ -950,7 +990,9 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional uint32 config_version = 1 [default = 0];</code>
+       * @return The configVersion.
        */
+      @java.lang.Override
       public int getConfigVersion() {
         return configVersion_;
       }
@@ -960,10 +1002,13 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional uint32 config_version = 1 [default = 0];</code>
+       * @param value The configVersion to set.
+       * @return This builder for chaining.
        */
       public Builder setConfigVersion(int value) {
-        bitField0_ |= 0x00000001;
+        
         configVersion_ = value;
+        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -973,6 +1018,7 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional uint32 config_version = 1 [default = 0];</code>
+       * @return This builder for chaining.
        */
       public Builder clearConfigVersion() {
         bitField0_ = (bitField0_ & ~0x00000001);
@@ -988,9 +1034,10 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional string last_modified_product_version = 2 [default = "0.0.0.0"];</code>
+       * @return Whether the lastModifiedProductVersion field is set.
        */
       public boolean hasLastModifiedProductVersion() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
+        return ((bitField0_ & 0x00000002) != 0);
       }
       /**
        * <pre>
@@ -998,6 +1045,7 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional string last_modified_product_version = 2 [default = "0.0.0.0"];</code>
+       * @return The lastModifiedProductVersion.
        */
       public java.lang.String getLastModifiedProductVersion() {
         java.lang.Object ref = lastModifiedProductVersion_;
@@ -1019,6 +1067,7 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional string last_modified_product_version = 2 [default = "0.0.0.0"];</code>
+       * @return The bytes for lastModifiedProductVersion.
        */
       public com.google.protobuf.ByteString
           getLastModifiedProductVersionBytes() {
@@ -1039,14 +1088,14 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional string last_modified_product_version = 2 [default = "0.0.0.0"];</code>
+       * @param value The lastModifiedProductVersion to set.
+       * @return This builder for chaining.
        */
       public Builder setLastModifiedProductVersion(
           java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000002;
+        if (value == null) { throw new NullPointerException(); }
         lastModifiedProductVersion_ = value;
+        bitField0_ |= 0x00000002;
         onChanged();
         return this;
       }
@@ -1056,10 +1105,11 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional string last_modified_product_version = 2 [default = "0.0.0.0"];</code>
+       * @return This builder for chaining.
        */
       public Builder clearLastModifiedProductVersion() {
-        bitField0_ = (bitField0_ & ~0x00000002);
         lastModifiedProductVersion_ = getDefaultInstance().getLastModifiedProductVersion();
+        bitField0_ = (bitField0_ & ~0x00000002);
         onChanged();
         return this;
       }
@@ -1069,14 +1119,14 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional string last_modified_product_version = 2 [default = "0.0.0.0"];</code>
+       * @param value The bytes for lastModifiedProductVersion to set.
+       * @return This builder for chaining.
        */
       public Builder setLastModifiedProductVersionBytes(
           com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000002;
+        if (value == null) { throw new NullPointerException(); }
         lastModifiedProductVersion_ = value;
+        bitField0_ |= 0x00000002;
         onChanged();
         return this;
       }
@@ -1087,18 +1137,22 @@ public final class ProtoConfig {
        * last modified time in UTC second
        * </pre>
        *
-       * <code>optional uint64 last_modified_time = 3 [default = 0];</code>
+       * <code>optional uint64 last_modified_time = 3 [default = 0, jstype = JS_STRING];</code>
+       * @return Whether the lastModifiedTime field is set.
        */
+      @java.lang.Override
       public boolean hasLastModifiedTime() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
+        return ((bitField0_ & 0x00000004) != 0);
       }
       /**
        * <pre>
        * last modified time in UTC second
        * </pre>
        *
-       * <code>optional uint64 last_modified_time = 3 [default = 0];</code>
+       * <code>optional uint64 last_modified_time = 3 [default = 0, jstype = JS_STRING];</code>
+       * @return The lastModifiedTime.
        */
+      @java.lang.Override
       public long getLastModifiedTime() {
         return lastModifiedTime_;
       }
@@ -1107,11 +1161,14 @@ public final class ProtoConfig {
        * last modified time in UTC second
        * </pre>
        *
-       * <code>optional uint64 last_modified_time = 3 [default = 0];</code>
+       * <code>optional uint64 last_modified_time = 3 [default = 0, jstype = JS_STRING];</code>
+       * @param value The lastModifiedTime to set.
+       * @return This builder for chaining.
        */
       public Builder setLastModifiedTime(long value) {
-        bitField0_ |= 0x00000004;
+        
         lastModifiedTime_ = value;
+        bitField0_ |= 0x00000004;
         onChanged();
         return this;
       }
@@ -1120,7 +1177,8 @@ public final class ProtoConfig {
        * last modified time in UTC second
        * </pre>
        *
-       * <code>optional uint64 last_modified_time = 3 [default = 0];</code>
+       * <code>optional uint64 last_modified_time = 3 [default = 0, jstype = JS_STRING];</code>
+       * @return This builder for chaining.
        */
       public Builder clearLastModifiedTime() {
         bitField0_ = (bitField0_ & ~0x00000004);
@@ -1132,22 +1190,24 @@ public final class ProtoConfig {
       private java.lang.Object platform_ = "";
       /**
        * <pre>
-       * These fileds are not used now
+       * These fields are not used now
        * platform of machine that wrote this config
        * </pre>
        *
        * <code>optional string platform = 4 [default = ""];</code>
+       * @return Whether the platform field is set.
        */
       public boolean hasPlatform() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
+        return ((bitField0_ & 0x00000008) != 0);
       }
       /**
        * <pre>
-       * These fileds are not used now
+       * These fields are not used now
        * platform of machine that wrote this config
        * </pre>
        *
        * <code>optional string platform = 4 [default = ""];</code>
+       * @return The platform.
        */
       public java.lang.String getPlatform() {
         java.lang.Object ref = platform_;
@@ -1165,11 +1225,12 @@ public final class ProtoConfig {
       }
       /**
        * <pre>
-       * These fileds are not used now
+       * These fields are not used now
        * platform of machine that wrote this config
        * </pre>
        *
        * <code>optional string platform = 4 [default = ""];</code>
+       * @return The bytes for platform.
        */
       public com.google.protobuf.ByteString
           getPlatformBytes() {
@@ -1186,51 +1247,52 @@ public final class ProtoConfig {
       }
       /**
        * <pre>
-       * These fileds are not used now
+       * These fields are not used now
        * platform of machine that wrote this config
        * </pre>
        *
        * <code>optional string platform = 4 [default = ""];</code>
+       * @param value The platform to set.
+       * @return This builder for chaining.
        */
       public Builder setPlatform(
           java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000008;
+        if (value == null) { throw new NullPointerException(); }
         platform_ = value;
+        bitField0_ |= 0x00000008;
         onChanged();
         return this;
       }
       /**
        * <pre>
-       * These fileds are not used now
+       * These fields are not used now
        * platform of machine that wrote this config
        * </pre>
        *
        * <code>optional string platform = 4 [default = ""];</code>
+       * @return This builder for chaining.
        */
       public Builder clearPlatform() {
-        bitField0_ = (bitField0_ & ~0x00000008);
         platform_ = getDefaultInstance().getPlatform();
+        bitField0_ = (bitField0_ & ~0x00000008);
         onChanged();
         return this;
       }
       /**
        * <pre>
-       * These fileds are not used now
+       * These fields are not used now
        * platform of machine that wrote this config
        * </pre>
        *
        * <code>optional string platform = 4 [default = ""];</code>
+       * @param value The bytes for platform to set.
+       * @return This builder for chaining.
        */
       public Builder setPlatformBytes(
           com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000008;
+        if (value == null) { throw new NullPointerException(); }
         platform_ = value;
+        bitField0_ |= 0x00000008;
         onChanged();
         return this;
       }
@@ -1242,9 +1304,10 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional string ui_locale = 5 [default = ""];</code>
+       * @return Whether the uiLocale field is set.
        */
       public boolean hasUiLocale() {
-        return ((bitField0_ & 0x00000010) == 0x00000010);
+        return ((bitField0_ & 0x00000010) != 0);
       }
       /**
        * <pre>
@@ -1252,6 +1315,7 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional string ui_locale = 5 [default = ""];</code>
+       * @return The uiLocale.
        */
       public java.lang.String getUiLocale() {
         java.lang.Object ref = uiLocale_;
@@ -1273,6 +1337,7 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional string ui_locale = 5 [default = ""];</code>
+       * @return The bytes for uiLocale.
        */
       public com.google.protobuf.ByteString
           getUiLocaleBytes() {
@@ -1293,14 +1358,14 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional string ui_locale = 5 [default = ""];</code>
+       * @param value The uiLocale to set.
+       * @return This builder for chaining.
        */
       public Builder setUiLocale(
           java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000010;
+        if (value == null) { throw new NullPointerException(); }
         uiLocale_ = value;
+        bitField0_ |= 0x00000010;
         onChanged();
         return this;
       }
@@ -1310,10 +1375,11 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional string ui_locale = 5 [default = ""];</code>
+       * @return This builder for chaining.
        */
       public Builder clearUiLocale() {
-        bitField0_ = (bitField0_ & ~0x00000010);
         uiLocale_ = getDefaultInstance().getUiLocale();
+        bitField0_ = (bitField0_ & ~0x00000010);
         onChanged();
         return this;
       }
@@ -1323,14 +1389,14 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional string ui_locale = 5 [default = ""];</code>
+       * @param value The bytes for uiLocale to set.
+       * @return This builder for chaining.
        */
       public Builder setUiLocaleBytes(
           com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000010;
+        if (value == null) { throw new NullPointerException(); }
         uiLocale_ = value;
+        bitField0_ |= 0x00000010;
         onChanged();
         return this;
       }
@@ -1343,9 +1409,11 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bool upload_usage_stats = 6 [default = false];</code>
+       * @return Whether the uploadUsageStats field is set.
        */
+      @java.lang.Override
       public boolean hasUploadUsageStats() {
-        return ((bitField0_ & 0x00000020) == 0x00000020);
+        return ((bitField0_ & 0x00000020) != 0);
       }
       /**
        * <pre>
@@ -1354,7 +1422,9 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bool upload_usage_stats = 6 [default = false];</code>
+       * @return The uploadUsageStats.
        */
+      @java.lang.Override
       public boolean getUploadUsageStats() {
         return uploadUsageStats_;
       }
@@ -1365,10 +1435,13 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bool upload_usage_stats = 6 [default = false];</code>
+       * @param value The uploadUsageStats to set.
+       * @return This builder for chaining.
        */
       public Builder setUploadUsageStats(boolean value) {
-        bitField0_ |= 0x00000020;
+        
         uploadUsageStats_ = value;
+        bitField0_ |= 0x00000020;
         onChanged();
         return this;
       }
@@ -1379,6 +1452,7 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bool upload_usage_stats = 6 [default = false];</code>
+       * @return This builder for chaining.
        */
       public Builder clearUploadUsageStats() {
         bitField0_ = (bitField0_ & ~0x00000020);
@@ -1386,13 +1460,15 @@ public final class ProtoConfig {
         onChanged();
         return this;
       }
-      public Builder setUnknownFields(
-              final com.google.protobuf.UnknownFieldSet unknownFields) {
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFields(unknownFields);
       }
 
-      public Builder mergeUnknownFields(
-              final com.google.protobuf.UnknownFieldSet unknownFields) {
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
       }
 
@@ -1412,11 +1488,23 @@ public final class ProtoConfig {
 
     @java.lang.Deprecated public static final com.google.protobuf.Parser<GeneralConfig>
         PARSER = new com.google.protobuf.AbstractParser<GeneralConfig>() {
+      @java.lang.Override
       public GeneralConfig parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new GeneralConfig(input, extensionRegistry);
+        Builder builder = newBuilder();
+        try {
+          builder.mergeFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(builder.buildPartial());
+        } catch (com.google.protobuf.UninitializedMessageException e) {
+          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(e)
+              .setUnfinishedMessage(builder.buildPartial());
+        }
+        return builder.buildPartial();
       }
     };
 
@@ -1429,6 +1517,7 @@ public final class ProtoConfig {
       return PARSER;
     }
 
+    @java.lang.Override
     public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.GeneralConfig getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
@@ -1446,6 +1535,7 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional .mozc.config.GeneralConfig general_config = 1;</code>
+     * @return Whether the generalConfig field is set.
      */
     boolean hasGeneralConfig();
     /**
@@ -1455,6 +1545,7 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional .mozc.config.GeneralConfig general_config = 1;</code>
+     * @return The generalConfig.
      */
     org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.GeneralConfig getGeneralConfig();
     /**
@@ -1473,6 +1564,7 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional int32 verbose_level = 10 [default = 0];</code>
+     * @return Whether the verboseLevel field is set.
      */
     boolean hasVerboseLevel();
     /**
@@ -1481,6 +1573,7 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional int32 verbose_level = 10 [default = 0];</code>
+     * @return The verboseLevel.
      */
     int getVerboseLevel();
 
@@ -1488,18 +1581,26 @@ public final class ProtoConfig {
      * <pre>
      * Incognito mode:
      * Disable all mutable operation if incognito_mode is true
+     * Clients needs to check ConversionRequest::incognito_mode() instead
+     * of Config::incognito_mode(), as the incoginto mode can also set
+     * via Options.
      * </pre>
      *
      * <code>optional bool incognito_mode = 20 [default = false];</code>
+     * @return Whether the incognitoMode field is set.
      */
     boolean hasIncognitoMode();
     /**
      * <pre>
      * Incognito mode:
      * Disable all mutable operation if incognito_mode is true
+     * Clients needs to check ConversionRequest::incognito_mode() instead
+     * of Config::incognito_mode(), as the incoginto mode can also set
+     * via Options.
      * </pre>
      *
      * <code>optional bool incognito_mode = 20 [default = false];</code>
+     * @return The incognitoMode.
      */
     boolean getIncognitoMode();
 
@@ -1509,6 +1610,7 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional bool check_default = 22 [default = true];</code>
+     * @return Whether the checkDefault field is set.
      */
     boolean hasCheckDefault();
     /**
@@ -1517,6 +1619,7 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional bool check_default = 22 [default = true];</code>
+     * @return The checkDefault.
      */
     boolean getCheckDefault();
 
@@ -1527,6 +1630,7 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional bool presentation_mode = 23 [default = false];</code>
+     * @return Whether the presentationMode field is set.
      */
     boolean hasPresentationMode();
     /**
@@ -1536,6 +1640,7 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional bool presentation_mode = 23 [default = false];</code>
+     * @return The presentationMode.
      */
     boolean getPresentationMode();
 
@@ -1545,6 +1650,7 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional .mozc.config.Config.PreeditMethod preedit_method = 40 [default = ROMAN];</code>
+     * @return Whether the preeditMethod field is set.
      */
     boolean hasPreeditMethod();
     /**
@@ -1553,15 +1659,18 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional .mozc.config.Config.PreeditMethod preedit_method = 40 [default = ROMAN];</code>
+     * @return The preeditMethod.
      */
     org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.PreeditMethod getPreeditMethod();
 
     /**
      * <code>optional .mozc.config.Config.SessionKeymap session_keymap = 41 [default = NONE];</code>
+     * @return Whether the sessionKeymap field is set.
      */
     boolean hasSessionKeymap();
     /**
      * <code>optional .mozc.config.Config.SessionKeymap session_keymap = 41 [default = NONE];</code>
+     * @return The sessionKeymap.
      */
     org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SessionKeymap getSessionKeymap();
 
@@ -1572,6 +1681,7 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional bytes custom_keymap_table = 42;</code>
+     * @return Whether the customKeymapTable field is set.
      */
     boolean hasCustomKeymapTable();
     /**
@@ -1581,6 +1691,7 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional bytes custom_keymap_table = 42;</code>
+     * @return The customKeymapTable.
      */
     com.google.protobuf.ByteString getCustomKeymapTable();
 
@@ -1590,6 +1701,7 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional bytes custom_roman_table = 43;</code>
+     * @return Whether the customRomanTable field is set.
      */
     boolean hasCustomRomanTable();
     /**
@@ -1598,33 +1710,40 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional bytes custom_roman_table = 43;</code>
+     * @return The customRomanTable.
      */
     com.google.protobuf.ByteString getCustomRomanTable();
 
     /**
      * <code>optional .mozc.config.Config.PunctuationMethod punctuation_method = 45 [default = KUTEN_TOUTEN];</code>
+     * @return Whether the punctuationMethod field is set.
      */
     boolean hasPunctuationMethod();
     /**
      * <code>optional .mozc.config.Config.PunctuationMethod punctuation_method = 45 [default = KUTEN_TOUTEN];</code>
+     * @return The punctuationMethod.
      */
     org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.PunctuationMethod getPunctuationMethod();
 
     /**
      * <code>optional .mozc.config.Config.SymbolMethod symbol_method = 46 [default = CORNER_BRACKET_MIDDLE_DOT];</code>
+     * @return Whether the symbolMethod field is set.
      */
     boolean hasSymbolMethod();
     /**
      * <code>optional .mozc.config.Config.SymbolMethod symbol_method = 46 [default = CORNER_BRACKET_MIDDLE_DOT];</code>
+     * @return The symbolMethod.
      */
     org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SymbolMethod getSymbolMethod();
 
     /**
      * <code>optional .mozc.config.Config.FundamentalCharacterForm space_character_form = 47 [default = FUNDAMENTAL_INPUT_MODE];</code>
+     * @return Whether the spaceCharacterForm field is set.
      */
     boolean hasSpaceCharacterForm();
     /**
      * <code>optional .mozc.config.Config.FundamentalCharacterForm space_character_form = 47 [default = FUNDAMENTAL_INPUT_MODE];</code>
+     * @return The spaceCharacterForm.
      */
     org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.FundamentalCharacterForm getSpaceCharacterForm();
 
@@ -1647,6 +1766,7 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional bool use_keyboard_to_change_preedit_method = 48 [default = false];</code>
+     * @return Whether the useKeyboardToChangePreeditMethod field is set.
      */
     boolean hasUseKeyboardToChangePreeditMethod();
     /**
@@ -1668,24 +1788,29 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional bool use_keyboard_to_change_preedit_method = 48 [default = false];</code>
+     * @return The useKeyboardToChangePreeditMethod.
      */
     boolean getUseKeyboardToChangePreeditMethod();
 
     /**
      * <code>optional .mozc.config.Config.HistoryLearningLevel history_learning_level = 50 [default = DEFAULT_HISTORY];</code>
+     * @return Whether the historyLearningLevel field is set.
      */
     boolean hasHistoryLearningLevel();
     /**
      * <code>optional .mozc.config.Config.HistoryLearningLevel history_learning_level = 50 [default = DEFAULT_HISTORY];</code>
+     * @return The historyLearningLevel.
      */
     org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.HistoryLearningLevel getHistoryLearningLevel();
 
     /**
      * <code>optional .mozc.config.Config.SelectionShortcut selection_shortcut = 52 [default = SHORTCUT_123456789];</code>
+     * @return Whether the selectionShortcut field is set.
      */
     boolean hasSelectionShortcut();
     /**
      * <code>optional .mozc.config.Config.SelectionShortcut selection_shortcut = 52 [default = SHORTCUT_123456789];</code>
+     * @return The selectionShortcut.
      */
     org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SelectionShortcut getSelectionShortcut();
 
@@ -1719,6 +1844,7 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional bool use_auto_ime_turn_off = 56 [default = true];</code>
+     * @return Whether the useAutoImeTurnOff field is set.
      */
     boolean hasUseAutoImeTurnOff();
     /**
@@ -1727,50 +1853,59 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional bool use_auto_ime_turn_off = 56 [default = true];</code>
+     * @return The useAutoImeTurnOff.
      */
     boolean getUseAutoImeTurnOff();
 
     /**
      * <pre>
-     * Toggle to use cascanding window for debuging.
+     * Toggle to use cascanding window for debugging.
      * </pre>
      *
      * <code>optional bool use_cascading_window = 58 [default = true];</code>
+     * @return Whether the useCascadingWindow field is set.
      */
     boolean hasUseCascadingWindow();
     /**
      * <pre>
-     * Toggle to use cascanding window for debuging.
+     * Toggle to use cascanding window for debugging.
      * </pre>
      *
      * <code>optional bool use_cascading_window = 58 [default = true];</code>
+     * @return The useCascadingWindow.
      */
     boolean getUseCascadingWindow();
 
     /**
      * <code>optional .mozc.config.Config.ShiftKeyModeSwitch shift_key_mode_switch = 59 [default = ASCII_INPUT_MODE];</code>
+     * @return Whether the shiftKeyModeSwitch field is set.
      */
     boolean hasShiftKeyModeSwitch();
     /**
      * <code>optional .mozc.config.Config.ShiftKeyModeSwitch shift_key_mode_switch = 59 [default = ASCII_INPUT_MODE];</code>
+     * @return The shiftKeyModeSwitch.
      */
     org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.ShiftKeyModeSwitch getShiftKeyModeSwitch();
 
     /**
      * <code>optional .mozc.config.Config.NumpadCharacterForm numpad_character_form = 60 [default = NUMPAD_HALF_WIDTH];</code>
+     * @return Whether the numpadCharacterForm field is set.
      */
     boolean hasNumpadCharacterForm();
     /**
      * <code>optional .mozc.config.Config.NumpadCharacterForm numpad_character_form = 60 [default = NUMPAD_HALF_WIDTH];</code>
+     * @return The numpadCharacterForm.
      */
     org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.NumpadCharacterForm getNumpadCharacterForm();
 
     /**
      * <code>optional bool use_auto_conversion = 61 [default = false];</code>
+     * @return Whether the useAutoConversion field is set.
      */
     boolean hasUseAutoConversion();
     /**
      * <code>optional bool use_auto_conversion = 61 [default = false];</code>
+     * @return The useAutoConversion.
      */
     boolean getUseAutoConversion();
 
@@ -1781,6 +1916,7 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional uint32 auto_conversion_key = 62 [default = 13];</code>
+     * @return Whether the autoConversionKey field is set.
      */
     boolean hasAutoConversionKey();
     /**
@@ -1790,6 +1926,7 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional uint32 auto_conversion_key = 62 [default = 13];</code>
+     * @return The autoConversionKey.
      */
     int getAutoConversionKey();
 
@@ -1803,6 +1940,7 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional .mozc.config.Config.YenSignCharacter yen_sign_character = 63 [default = YEN_SIGN];</code>
+     * @return Whether the yenSignCharacter field is set.
      */
     boolean hasYenSignCharacter();
     /**
@@ -1815,6 +1953,7 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional .mozc.config.Config.YenSignCharacter yen_sign_character = 63 [default = YEN_SIGN];</code>
+     * @return The yenSignCharacter.
      */
     org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.YenSignCharacter getYenSignCharacter();
 
@@ -1827,6 +1966,7 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional bool use_japanese_layout = 64 [default = false];</code>
+     * @return Whether the useJapaneseLayout field is set.
      */
     boolean hasUseJapaneseLayout();
     /**
@@ -1838,6 +1978,7 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional bool use_japanese_layout = 64 [default = false];</code>
+     * @return The useJapaneseLayout.
      */
     boolean getUseJapaneseLayout();
 
@@ -1853,6 +1994,7 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional bool use_kana_modifier_insensitive_conversion = 65 [default = false];</code>
+     * @return Whether the useKanaModifierInsensitiveConversion field is set.
      */
     boolean hasUseKanaModifierInsensitiveConversion();
     /**
@@ -1867,6 +2009,7 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional bool use_kana_modifier_insensitive_conversion = 65 [default = false];</code>
+     * @return The useKanaModifierInsensitiveConversion.
      */
     boolean getUseKanaModifierInsensitiveConversion();
 
@@ -1877,6 +2020,7 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional bool use_typing_correction = 66 [default = false];</code>
+     * @return Whether the useTypingCorrection field is set.
      */
     boolean hasUseTypingCorrection();
     /**
@@ -1886,8 +2030,72 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional bool use_typing_correction = 66 [default = false];</code>
+     * @return The useTypingCorrection.
      */
     boolean getUseTypingCorrection();
+
+    /**
+     * <pre>
+     * The duration in millisecond to determine the timeout.
+     * If the duration between key inputs is more than this value,
+     * a SessionCommand::STOP_KEY_TOGGLING is prepended to the next key input.
+     * If the value is 0, STOP_KEY_TOGGLING is not sent.
+     * </pre>
+     *
+     * <code>optional int32 composing_timeout_threshold_msec = 67 [default = 0];</code>
+     * @return Whether the composingTimeoutThresholdMsec field is set.
+     */
+    boolean hasComposingTimeoutThresholdMsec();
+    /**
+     * <pre>
+     * The duration in millisecond to determine the timeout.
+     * If the duration between key inputs is more than this value,
+     * a SessionCommand::STOP_KEY_TOGGLING is prepended to the next key input.
+     * If the value is 0, STOP_KEY_TOGGLING is not sent.
+     * </pre>
+     *
+     * <code>optional int32 composing_timeout_threshold_msec = 67 [default = 0];</code>
+     * @return The composingTimeoutThresholdMsec.
+     */
+    int getComposingTimeoutThresholdMsec();
+
+    /**
+     * <pre>
+     * The keymaps which are loaded on top of `session_keymap`.
+     * Overlay keymaps are prioritized over `session_keymap`.
+     * They are used to partially modify the session keymap, for example
+     * using Henkan key as IME_ON.
+     * </pre>
+     *
+     * <code>repeated .mozc.config.Config.SessionKeymap overlay_keymaps = 68 [packed = true];</code>
+     * @return A list containing the overlayKeymaps.
+     */
+    java.util.List<org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SessionKeymap> getOverlayKeymapsList();
+    /**
+     * <pre>
+     * The keymaps which are loaded on top of `session_keymap`.
+     * Overlay keymaps are prioritized over `session_keymap`.
+     * They are used to partially modify the session keymap, for example
+     * using Henkan key as IME_ON.
+     * </pre>
+     *
+     * <code>repeated .mozc.config.Config.SessionKeymap overlay_keymaps = 68 [packed = true];</code>
+     * @return The count of overlayKeymaps.
+     */
+    int getOverlayKeymapsCount();
+    /**
+     * <pre>
+     * The keymaps which are loaded on top of `session_keymap`.
+     * Overlay keymaps are prioritized over `session_keymap`.
+     * They are used to partially modify the session keymap, for example
+     * using Henkan key as IME_ON.
+     * </pre>
+     *
+     * <code>repeated .mozc.config.Config.SessionKeymap overlay_keymaps = 68 [packed = true];</code>
+     * @param index The index of the element to return.
+     * @return The overlayKeymaps at the given index.
+     */
+    org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SessionKeymap getOverlayKeymaps(int index);
 
     /**
      * <pre>
@@ -1896,6 +2104,7 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional bool use_date_conversion = 80 [default = true];</code>
+     * @return Whether the useDateConversion field is set.
      */
     boolean hasUseDateConversion();
     /**
@@ -1905,78 +2114,95 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional bool use_date_conversion = 80 [default = true];</code>
+     * @return The useDateConversion.
      */
     boolean getUseDateConversion();
 
     /**
      * <code>optional bool use_single_kanji_conversion = 81 [default = true];</code>
+     * @return Whether the useSingleKanjiConversion field is set.
      */
     boolean hasUseSingleKanjiConversion();
     /**
      * <code>optional bool use_single_kanji_conversion = 81 [default = true];</code>
+     * @return The useSingleKanjiConversion.
      */
     boolean getUseSingleKanjiConversion();
 
     /**
      * <code>optional bool use_symbol_conversion = 82 [default = true];</code>
+     * @return Whether the useSymbolConversion field is set.
      */
     boolean hasUseSymbolConversion();
     /**
      * <code>optional bool use_symbol_conversion = 82 [default = true];</code>
+     * @return The useSymbolConversion.
      */
     boolean getUseSymbolConversion();
 
     /**
      * <code>optional bool use_number_conversion = 83 [default = true];</code>
+     * @return Whether the useNumberConversion field is set.
      */
     boolean hasUseNumberConversion();
     /**
      * <code>optional bool use_number_conversion = 83 [default = true];</code>
+     * @return The useNumberConversion.
      */
     boolean getUseNumberConversion();
 
     /**
      * <code>optional bool use_emoticon_conversion = 84 [default = true];</code>
+     * @return Whether the useEmoticonConversion field is set.
      */
     boolean hasUseEmoticonConversion();
     /**
      * <code>optional bool use_emoticon_conversion = 84 [default = true];</code>
+     * @return The useEmoticonConversion.
      */
     boolean getUseEmoticonConversion();
 
     /**
      * <code>optional bool use_calculator = 85 [default = true];</code>
+     * @return Whether the useCalculator field is set.
      */
     boolean hasUseCalculator();
     /**
      * <code>optional bool use_calculator = 85 [default = true];</code>
+     * @return The useCalculator.
      */
     boolean getUseCalculator();
 
     /**
      * <code>optional bool use_t13n_conversion = 86 [default = true];</code>
+     * @return Whether the useT13nConversion field is set.
      */
     boolean hasUseT13NConversion();
     /**
      * <code>optional bool use_t13n_conversion = 86 [default = true];</code>
+     * @return The useT13nConversion.
      */
     boolean getUseT13NConversion();
 
     /**
      * <code>optional bool use_zip_code_conversion = 87 [default = true];</code>
+     * @return Whether the useZipCodeConversion field is set.
      */
     boolean hasUseZipCodeConversion();
     /**
      * <code>optional bool use_zip_code_conversion = 87 [default = true];</code>
+     * @return The useZipCodeConversion.
      */
     boolean getUseZipCodeConversion();
 
     /**
      * <code>optional bool use_spelling_correction = 88 [default = true];</code>
+     * @return Whether the useSpellingCorrection field is set.
      */
     boolean hasUseSpellingCorrection();
     /**
      * <code>optional bool use_spelling_correction = 88 [default = true];</code>
+     * @return The useSpellingCorrection.
      */
     boolean getUseSpellingCorrection();
 
@@ -1993,6 +2219,7 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional bool use_emoji_conversion = 89 [default = false];</code>
+     * @return Whether the useEmojiConversion field is set.
      */
     boolean hasUseEmojiConversion();
     /**
@@ -2008,15 +2235,18 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional bool use_emoji_conversion = 89 [default = false];</code>
+     * @return The useEmojiConversion.
      */
     boolean getUseEmojiConversion();
 
     /**
      * <code>optional .mozc.config.Config.InformationListConfig information_list_config = 90;</code>
+     * @return Whether the informationListConfig field is set.
      */
     boolean hasInformationListConfig();
     /**
      * <code>optional .mozc.config.Config.InformationListConfig information_list_config = 90;</code>
+     * @return The informationListConfig.
      */
     org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.InformationListConfig getInformationListConfig();
     /**
@@ -2028,37 +2258,53 @@ public final class ProtoConfig {
      * <pre>
      *&#47;///////////////////////////////////////////////////////////
      * Suggest (100-119)
+     * Suggest is a feature of word suggestion with prefix search.
+     * When you type "あ", you may get "ありがとう", "朝" (あさ), "明日" (あした)
+     * as suggested words.
      * Use history-based suggest feature.
+     * If this is true, your previously typed words are prioritized.
      * </pre>
      *
      * <code>optional bool use_history_suggest = 100 [default = true];</code>
+     * @return Whether the useHistorySuggest field is set.
      */
     boolean hasUseHistorySuggest();
     /**
      * <pre>
      *&#47;///////////////////////////////////////////////////////////
      * Suggest (100-119)
+     * Suggest is a feature of word suggestion with prefix search.
+     * When you type "あ", you may get "ありがとう", "朝" (あさ), "明日" (あした)
+     * as suggested words.
      * Use history-based suggest feature.
+     * If this is true, your previously typed words are prioritized.
      * </pre>
      *
      * <code>optional bool use_history_suggest = 100 [default = true];</code>
+     * @return The useHistorySuggest.
      */
     boolean getUseHistorySuggest();
 
     /**
      * <pre>
      * Use dictionary-based suggest feature.
+     * If this is true, words in the word dictionary are suggested even if
+     * you haven't typed before.
      * </pre>
      *
      * <code>optional bool use_dictionary_suggest = 101 [default = true];</code>
+     * @return Whether the useDictionarySuggest field is set.
      */
     boolean hasUseDictionarySuggest();
     /**
      * <pre>
      * Use dictionary-based suggest feature.
+     * If this is true, words in the word dictionary are suggested even if
+     * you haven't typed before.
      * </pre>
      *
      * <code>optional bool use_dictionary_suggest = 101 [default = true];</code>
+     * @return The useDictionarySuggest.
      */
     boolean getUseDictionarySuggest();
 
@@ -2068,6 +2314,7 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional bool use_realtime_conversion = 102 [default = true];</code>
+     * @return Whether the useRealtimeConversion field is set.
      */
     boolean hasUseRealtimeConversion();
     /**
@@ -2076,6 +2323,7 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional bool use_realtime_conversion = 102 [default = true];</code>
+     * @return The useRealtimeConversion.
      */
     boolean getUseRealtimeConversion();
 
@@ -2085,6 +2333,7 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional uint32 suggestions_size = 110 [default = 3];</code>
+     * @return Whether the suggestionsSize field is set.
      */
     boolean hasSuggestionsSize();
     /**
@@ -2093,6 +2342,7 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional uint32 suggestions_size = 110 [default = 3];</code>
+     * @return The suggestionsSize.
      */
     int getSuggestionsSize();
 
@@ -2104,6 +2354,7 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional bool use_mode_indicator = 120 [default = true];</code>
+     * @return Whether the useModeIndicator field is set.
      */
     boolean hasUseModeIndicator();
     /**
@@ -2114,36 +2365,14 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional bool use_mode_indicator = 120 [default = true];</code>
+     * @return The useModeIndicator.
      */
     boolean getUseModeIndicator();
-
-    /**
-     * <pre>
-     * Allow the cloud handwriting.  The handwriting UI has to notice
-     * user before activating the feature, and set this field to true
-     * when the user permit.
-     * NOTE: OSS version does not handle this field.
-     * </pre>
-     *
-     * <code>optional bool allow_cloud_handwriting = 301 [default = false];</code>
-     */
-    boolean hasAllowCloudHandwriting();
-    /**
-     * <pre>
-     * Allow the cloud handwriting.  The handwriting UI has to notice
-     * user before activating the feature, and set this field to true
-     * when the user permit.
-     * NOTE: OSS version does not handle this field.
-     * </pre>
-     *
-     * <code>optional bool allow_cloud_handwriting = 301 [default = false];</code>
-     */
-    boolean getAllowCloudHandwriting();
   }
   /**
    * Protobuf type {@code mozc.config.Config}
    */
-  public  static final class Config extends
+  public static final class Config extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:mozc.config.Config)
       ConfigOrBuilder {
@@ -2153,10 +2382,7 @@ public final class ProtoConfig {
       super(builder);
     }
     private Config() {
-      verboseLevel_ = 0;
-      incognitoMode_ = false;
       checkDefault_ = true;
-      presentationMode_ = false;
       preeditMethod_ = 0;
       sessionKeymap_ = -1;
       customKeymapTable_ = com.google.protobuf.ByteString.EMPTY;
@@ -2164,7 +2390,6 @@ public final class ProtoConfig {
       punctuationMethod_ = 0;
       symbolMethod_ = 0;
       spaceCharacterForm_ = 0;
-      useKeyboardToChangePreeditMethod_ = false;
       historyLearningLevel_ = 0;
       selectionShortcut_ = 1;
       characterFormRules_ = java.util.Collections.emptyList();
@@ -2172,12 +2397,9 @@ public final class ProtoConfig {
       useCascadingWindow_ = true;
       shiftKeyModeSwitch_ = 1;
       numpadCharacterForm_ = 2;
-      useAutoConversion_ = false;
       autoConversionKey_ = 13;
       yenSignCharacter_ = 0;
-      useJapaneseLayout_ = false;
-      useKanaModifierInsensitiveConversion_ = false;
-      useTypingCorrection_ = false;
+      overlayKeymaps_ = java.util.Collections.emptyList();
       useDateConversion_ = true;
       useSingleKanjiConversion_ = true;
       useSymbolConversion_ = true;
@@ -2187,362 +2409,31 @@ public final class ProtoConfig {
       useT13NConversion_ = true;
       useZipCodeConversion_ = true;
       useSpellingCorrection_ = true;
-      useEmojiConversion_ = false;
       useHistorySuggest_ = true;
       useDictionarySuggest_ = true;
       useRealtimeConversion_ = true;
       suggestionsSize_ = 3;
       useModeIndicator_ = true;
-      allowCloudHandwriting_ = false;
     }
 
     @java.lang.Override
-    public com.google.protobuf.UnknownFieldSet
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new Config();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
       return this.unknownFields;
     }
-    private Config(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      int mutable_bitField0_ = 0;
-      int mutable_bitField1_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            case 10: {
-              org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.GeneralConfig.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000001) == 0x00000001)) {
-                subBuilder = generalConfig_.toBuilder();
-              }
-              generalConfig_ = input.readMessage(org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.GeneralConfig.PARSER, extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(generalConfig_);
-                generalConfig_ = subBuilder.buildPartial();
-              }
-              bitField0_ |= 0x00000001;
-              break;
-            }
-            case 80: {
-              bitField0_ |= 0x00000002;
-              verboseLevel_ = input.readInt32();
-              break;
-            }
-            case 160: {
-              bitField0_ |= 0x00000004;
-              incognitoMode_ = input.readBool();
-              break;
-            }
-            case 176: {
-              bitField0_ |= 0x00000008;
-              checkDefault_ = input.readBool();
-              break;
-            }
-            case 184: {
-              bitField0_ |= 0x00000010;
-              presentationMode_ = input.readBool();
-              break;
-            }
-            case 320: {
-              int rawValue = input.readEnum();
-              org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.PreeditMethod value = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.PreeditMethod.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(40, rawValue);
-              } else {
-                bitField0_ |= 0x00000020;
-                preeditMethod_ = rawValue;
-              }
-              break;
-            }
-            case 328: {
-              int rawValue = input.readEnum();
-              org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SessionKeymap value = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SessionKeymap.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(41, rawValue);
-              } else {
-                bitField0_ |= 0x00000040;
-                sessionKeymap_ = rawValue;
-              }
-              break;
-            }
-            case 338: {
-              bitField0_ |= 0x00000080;
-              customKeymapTable_ = input.readBytes();
-              break;
-            }
-            case 346: {
-              bitField0_ |= 0x00000100;
-              customRomanTable_ = input.readBytes();
-              break;
-            }
-            case 360: {
-              int rawValue = input.readEnum();
-              org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.PunctuationMethod value = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.PunctuationMethod.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(45, rawValue);
-              } else {
-                bitField0_ |= 0x00000200;
-                punctuationMethod_ = rawValue;
-              }
-              break;
-            }
-            case 368: {
-              int rawValue = input.readEnum();
-              org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SymbolMethod value = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SymbolMethod.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(46, rawValue);
-              } else {
-                bitField0_ |= 0x00000400;
-                symbolMethod_ = rawValue;
-              }
-              break;
-            }
-            case 376: {
-              int rawValue = input.readEnum();
-              org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.FundamentalCharacterForm value = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.FundamentalCharacterForm.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(47, rawValue);
-              } else {
-                bitField0_ |= 0x00000800;
-                spaceCharacterForm_ = rawValue;
-              }
-              break;
-            }
-            case 384: {
-              bitField0_ |= 0x00001000;
-              useKeyboardToChangePreeditMethod_ = input.readBool();
-              break;
-            }
-            case 400: {
-              int rawValue = input.readEnum();
-              org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.HistoryLearningLevel value = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.HistoryLearningLevel.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(50, rawValue);
-              } else {
-                bitField0_ |= 0x00002000;
-                historyLearningLevel_ = rawValue;
-              }
-              break;
-            }
-            case 416: {
-              int rawValue = input.readEnum();
-              org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SelectionShortcut value = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SelectionShortcut.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(52, rawValue);
-              } else {
-                bitField0_ |= 0x00004000;
-                selectionShortcut_ = rawValue;
-              }
-              break;
-            }
-            case 434: {
-              if (!((mutable_bitField0_ & 0x00008000) == 0x00008000)) {
-                characterFormRules_ = new java.util.ArrayList<org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterFormRule>();
-                mutable_bitField0_ |= 0x00008000;
-              }
-              characterFormRules_.add(
-                  input.readMessage(org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterFormRule.PARSER, extensionRegistry));
-              break;
-            }
-            case 448: {
-              bitField0_ |= 0x00008000;
-              useAutoImeTurnOff_ = input.readBool();
-              break;
-            }
-            case 464: {
-              bitField0_ |= 0x00010000;
-              useCascadingWindow_ = input.readBool();
-              break;
-            }
-            case 472: {
-              int rawValue = input.readEnum();
-              org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.ShiftKeyModeSwitch value = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.ShiftKeyModeSwitch.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(59, rawValue);
-              } else {
-                bitField0_ |= 0x00020000;
-                shiftKeyModeSwitch_ = rawValue;
-              }
-              break;
-            }
-            case 480: {
-              int rawValue = input.readEnum();
-              org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.NumpadCharacterForm value = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.NumpadCharacterForm.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(60, rawValue);
-              } else {
-                bitField0_ |= 0x00040000;
-                numpadCharacterForm_ = rawValue;
-              }
-              break;
-            }
-            case 488: {
-              bitField0_ |= 0x00080000;
-              useAutoConversion_ = input.readBool();
-              break;
-            }
-            case 496: {
-              bitField0_ |= 0x00100000;
-              autoConversionKey_ = input.readUInt32();
-              break;
-            }
-            case 504: {
-              int rawValue = input.readEnum();
-              org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.YenSignCharacter value = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.YenSignCharacter.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(63, rawValue);
-              } else {
-                bitField0_ |= 0x00200000;
-                yenSignCharacter_ = rawValue;
-              }
-              break;
-            }
-            case 512: {
-              bitField0_ |= 0x00400000;
-              useJapaneseLayout_ = input.readBool();
-              break;
-            }
-            case 520: {
-              bitField0_ |= 0x00800000;
-              useKanaModifierInsensitiveConversion_ = input.readBool();
-              break;
-            }
-            case 528: {
-              bitField0_ |= 0x01000000;
-              useTypingCorrection_ = input.readBool();
-              break;
-            }
-            case 640: {
-              bitField0_ |= 0x02000000;
-              useDateConversion_ = input.readBool();
-              break;
-            }
-            case 648: {
-              bitField0_ |= 0x04000000;
-              useSingleKanjiConversion_ = input.readBool();
-              break;
-            }
-            case 656: {
-              bitField0_ |= 0x08000000;
-              useSymbolConversion_ = input.readBool();
-              break;
-            }
-            case 664: {
-              bitField0_ |= 0x10000000;
-              useNumberConversion_ = input.readBool();
-              break;
-            }
-            case 672: {
-              bitField0_ |= 0x20000000;
-              useEmoticonConversion_ = input.readBool();
-              break;
-            }
-            case 680: {
-              bitField0_ |= 0x40000000;
-              useCalculator_ = input.readBool();
-              break;
-            }
-            case 688: {
-              bitField0_ |= 0x80000000;
-              useT13NConversion_ = input.readBool();
-              break;
-            }
-            case 696: {
-              bitField1_ |= 0x00000001;
-              useZipCodeConversion_ = input.readBool();
-              break;
-            }
-            case 704: {
-              bitField1_ |= 0x00000002;
-              useSpellingCorrection_ = input.readBool();
-              break;
-            }
-            case 712: {
-              bitField1_ |= 0x00000004;
-              useEmojiConversion_ = input.readBool();
-              break;
-            }
-            case 722: {
-              org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.InformationListConfig.Builder subBuilder = null;
-              if (((bitField1_ & 0x00000008) == 0x00000008)) {
-                subBuilder = informationListConfig_.toBuilder();
-              }
-              informationListConfig_ = input.readMessage(org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.InformationListConfig.PARSER, extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(informationListConfig_);
-                informationListConfig_ = subBuilder.buildPartial();
-              }
-              bitField1_ |= 0x00000008;
-              break;
-            }
-            case 800: {
-              bitField1_ |= 0x00000010;
-              useHistorySuggest_ = input.readBool();
-              break;
-            }
-            case 808: {
-              bitField1_ |= 0x00000020;
-              useDictionarySuggest_ = input.readBool();
-              break;
-            }
-            case 816: {
-              bitField1_ |= 0x00000040;
-              useRealtimeConversion_ = input.readBool();
-              break;
-            }
-            case 880: {
-              bitField1_ |= 0x00000080;
-              suggestionsSize_ = input.readUInt32();
-              break;
-            }
-            case 960: {
-              bitField1_ |= 0x00000100;
-              useModeIndicator_ = input.readBool();
-              break;
-            }
-            case 2408: {
-              bitField1_ |= 0x00000200;
-              allowCloudHandwriting_ = input.readBool();
-              break;
-            }
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
-      } finally {
-        if (((mutable_bitField0_ & 0x00008000) == 0x00008000)) {
-          characterFormRules_ = java.util.Collections.unmodifiableList(characterFormRules_);
-        }
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static com.google.protobuf.Descriptors.Descriptor
+    public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.internal_static_mozc_config_Config_descriptor;
     }
 
+    @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
       return org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.internal_static_mozc_config_Config_fieldAccessorTable
@@ -2585,6 +2476,8 @@ public final class ProtoConfig {
       }
 
       /**
+       * @param value The numeric wire value of the corresponding enum entry.
+       * @return The enum associated with the given numeric wire value.
        * @deprecated Use {@link #forNumber(int)} instead.
        */
       @java.lang.Deprecated
@@ -2592,6 +2485,10 @@ public final class ProtoConfig {
         return forNumber(value);
       }
 
+      /**
+       * @param value The numeric wire value of the corresponding enum entry.
+       * @return The enum associated with the given numeric wire value.
+       */
       public static PreeditMethod forNumber(int value) {
         switch (value) {
           case 0: return ROMAN;
@@ -2638,7 +2535,7 @@ public final class ProtoConfig {
 
       private final int value;
 
-      PreeditMethod(int value) {
+      private PreeditMethod(int value) {
         this.value = value;
       }
 
@@ -2688,6 +2585,14 @@ public final class ProtoConfig {
        * <code>CHROMEOS = 5;</code>
        */
       CHROMEOS(5),
+      /**
+       * <code>OVERLAY_HENKAN_MUHENKAN_TO_IME_ON_OFF = 100;</code>
+       */
+      OVERLAY_HENKAN_MUHENKAN_TO_IME_ON_OFF(100),
+      /**
+       * <code>OVERLAY_FOR_TEST = 10000;</code>
+       */
+      OVERLAY_FOR_TEST(10000),
       ;
 
       /**
@@ -2728,6 +2633,14 @@ public final class ProtoConfig {
        * <code>CHROMEOS = 5;</code>
        */
       public static final int CHROMEOS_VALUE = 5;
+      /**
+       * <code>OVERLAY_HENKAN_MUHENKAN_TO_IME_ON_OFF = 100;</code>
+       */
+      public static final int OVERLAY_HENKAN_MUHENKAN_TO_IME_ON_OFF_VALUE = 100;
+      /**
+       * <code>OVERLAY_FOR_TEST = 10000;</code>
+       */
+      public static final int OVERLAY_FOR_TEST_VALUE = 10000;
 
 
       public final int getNumber() {
@@ -2735,6 +2648,8 @@ public final class ProtoConfig {
       }
 
       /**
+       * @param value The numeric wire value of the corresponding enum entry.
+       * @return The enum associated with the given numeric wire value.
        * @deprecated Use {@link #forNumber(int)} instead.
        */
       @java.lang.Deprecated
@@ -2742,6 +2657,10 @@ public final class ProtoConfig {
         return forNumber(value);
       }
 
+      /**
+       * @param value The numeric wire value of the corresponding enum entry.
+       * @return The enum associated with the given numeric wire value.
+       */
       public static SessionKeymap forNumber(int value) {
         switch (value) {
           case -1: return NONE;
@@ -2751,6 +2670,8 @@ public final class ProtoConfig {
           case 3: return KOTOERI;
           case 4: return MOBILE;
           case 5: return CHROMEOS;
+          case 100: return OVERLAY_HENKAN_MUHENKAN_TO_IME_ON_OFF;
+          case 10000: return OVERLAY_FOR_TEST;
           default: return null;
         }
       }
@@ -2793,7 +2714,7 @@ public final class ProtoConfig {
 
       private final int value;
 
-      SessionKeymap(int value) {
+      private SessionKeymap(int value) {
         this.value = value;
       }
 
@@ -2846,6 +2767,8 @@ public final class ProtoConfig {
       }
 
       /**
+       * @param value The numeric wire value of the corresponding enum entry.
+       * @return The enum associated with the given numeric wire value.
        * @deprecated Use {@link #forNumber(int)} instead.
        */
       @java.lang.Deprecated
@@ -2853,6 +2776,10 @@ public final class ProtoConfig {
         return forNumber(value);
       }
 
+      /**
+       * @param value The numeric wire value of the corresponding enum entry.
+       * @return The enum associated with the given numeric wire value.
+       */
       public static PunctuationMethod forNumber(int value) {
         switch (value) {
           case 0: return KUTEN_TOUTEN;
@@ -2901,7 +2828,7 @@ public final class ProtoConfig {
 
       private final int value;
 
-      PunctuationMethod(int value) {
+      private PunctuationMethod(int value) {
         this.value = value;
       }
 
@@ -2954,6 +2881,8 @@ public final class ProtoConfig {
       }
 
       /**
+       * @param value The numeric wire value of the corresponding enum entry.
+       * @return The enum associated with the given numeric wire value.
        * @deprecated Use {@link #forNumber(int)} instead.
        */
       @java.lang.Deprecated
@@ -2961,6 +2890,10 @@ public final class ProtoConfig {
         return forNumber(value);
       }
 
+      /**
+       * @param value The numeric wire value of the corresponding enum entry.
+       * @return The enum associated with the given numeric wire value.
+       */
       public static SymbolMethod forNumber(int value) {
         switch (value) {
           case 0: return CORNER_BRACKET_MIDDLE_DOT;
@@ -3009,7 +2942,7 @@ public final class ProtoConfig {
 
       private final int value;
 
-      SymbolMethod(int value) {
+      private SymbolMethod(int value) {
         this.value = value;
       }
 
@@ -3078,6 +3011,8 @@ public final class ProtoConfig {
       }
 
       /**
+       * @param value The numeric wire value of the corresponding enum entry.
+       * @return The enum associated with the given numeric wire value.
        * @deprecated Use {@link #forNumber(int)} instead.
        */
       @java.lang.Deprecated
@@ -3085,6 +3020,10 @@ public final class ProtoConfig {
         return forNumber(value);
       }
 
+      /**
+       * @param value The numeric wire value of the corresponding enum entry.
+       * @return The enum associated with the given numeric wire value.
+       */
       public static FundamentalCharacterForm forNumber(int value) {
         switch (value) {
           case 0: return FUNDAMENTAL_INPUT_MODE;
@@ -3132,7 +3071,7 @@ public final class ProtoConfig {
 
       private final int value;
 
-      FundamentalCharacterForm(int value) {
+      private FundamentalCharacterForm(int value) {
         this.value = value;
       }
 
@@ -3181,6 +3120,8 @@ public final class ProtoConfig {
       }
 
       /**
+       * @param value The numeric wire value of the corresponding enum entry.
+       * @return The enum associated with the given numeric wire value.
        * @deprecated Use {@link #forNumber(int)} instead.
        */
       @java.lang.Deprecated
@@ -3188,6 +3129,10 @@ public final class ProtoConfig {
         return forNumber(value);
       }
 
+      /**
+       * @param value The numeric wire value of the corresponding enum entry.
+       * @return The enum associated with the given numeric wire value.
+       */
       public static HistoryLearningLevel forNumber(int value) {
         switch (value) {
           case 0: return DEFAULT_HISTORY;
@@ -3235,7 +3180,7 @@ public final class ProtoConfig {
 
       private final int value;
 
-      HistoryLearningLevel(int value) {
+      private HistoryLearningLevel(int value) {
         this.value = value;
       }
 
@@ -3243,6 +3188,12 @@ public final class ProtoConfig {
     }
 
     /**
+     * <pre>
+     * The style of candidate selection shortcut.
+     * Note that if the current Request has SpecialRomajiTable (== the keyevent
+     * is from a virtual keyboard), shortcut is no-op.
+     * </pre>
+     *
      * Protobuf enum {@code mozc.config.Config.SelectionShortcut}
      */
     public enum SelectionShortcut
@@ -3280,6 +3231,8 @@ public final class ProtoConfig {
       }
 
       /**
+       * @param value The numeric wire value of the corresponding enum entry.
+       * @return The enum associated with the given numeric wire value.
        * @deprecated Use {@link #forNumber(int)} instead.
        */
       @java.lang.Deprecated
@@ -3287,6 +3240,10 @@ public final class ProtoConfig {
         return forNumber(value);
       }
 
+      /**
+       * @param value The numeric wire value of the corresponding enum entry.
+       * @return The enum associated with the given numeric wire value.
+       */
       public static SelectionShortcut forNumber(int value) {
         switch (value) {
           case 0: return NO_SHORTCUT;
@@ -3334,7 +3291,7 @@ public final class ProtoConfig {
 
       private final int value;
 
-      SelectionShortcut(int value) {
+      private SelectionShortcut(int value) {
         this.value = value;
       }
 
@@ -3391,6 +3348,8 @@ public final class ProtoConfig {
       }
 
       /**
+       * @param value The numeric wire value of the corresponding enum entry.
+       * @return The enum associated with the given numeric wire value.
        * @deprecated Use {@link #forNumber(int)} instead.
        */
       @java.lang.Deprecated
@@ -3398,6 +3357,10 @@ public final class ProtoConfig {
         return forNumber(value);
       }
 
+      /**
+       * @param value The numeric wire value of the corresponding enum entry.
+       * @return The enum associated with the given numeric wire value.
+       */
       public static CharacterForm forNumber(int value) {
         switch (value) {
           case 0: return HALF_WIDTH;
@@ -3446,7 +3409,7 @@ public final class ProtoConfig {
 
       private final int value;
 
-      CharacterForm(int value) {
+      private CharacterForm(int value) {
         this.value = value;
       }
 
@@ -3519,6 +3482,8 @@ public final class ProtoConfig {
       }
 
       /**
+       * @param value The numeric wire value of the corresponding enum entry.
+       * @return The enum associated with the given numeric wire value.
        * @deprecated Use {@link #forNumber(int)} instead.
        */
       @java.lang.Deprecated
@@ -3526,6 +3491,10 @@ public final class ProtoConfig {
         return forNumber(value);
       }
 
+      /**
+       * @param value The numeric wire value of the corresponding enum entry.
+       * @return The enum associated with the given numeric wire value.
+       */
       public static ShiftKeyModeSwitch forNumber(int value) {
         switch (value) {
           case 0: return OFF;
@@ -3573,7 +3542,7 @@ public final class ProtoConfig {
 
       private final int value;
 
-      ShiftKeyModeSwitch(int value) {
+      private ShiftKeyModeSwitch(int value) {
         this.value = value;
       }
 
@@ -3626,6 +3595,8 @@ public final class ProtoConfig {
       }
 
       /**
+       * @param value The numeric wire value of the corresponding enum entry.
+       * @return The enum associated with the given numeric wire value.
        * @deprecated Use {@link #forNumber(int)} instead.
        */
       @java.lang.Deprecated
@@ -3633,6 +3604,10 @@ public final class ProtoConfig {
         return forNumber(value);
       }
 
+      /**
+       * @param value The numeric wire value of the corresponding enum entry.
+       * @return The enum associated with the given numeric wire value.
+       */
       public static NumpadCharacterForm forNumber(int value) {
         switch (value) {
           case 0: return NUMPAD_INPUT_MODE;
@@ -3681,7 +3656,7 @@ public final class ProtoConfig {
 
       private final int value;
 
-      NumpadCharacterForm(int value) {
+      private NumpadCharacterForm(int value) {
         this.value = value;
       }
 
@@ -3742,6 +3717,8 @@ public final class ProtoConfig {
       }
 
       /**
+       * @param value The numeric wire value of the corresponding enum entry.
+       * @return The enum associated with the given numeric wire value.
        * @deprecated Use {@link #forNumber(int)} instead.
        */
       @java.lang.Deprecated
@@ -3749,6 +3726,10 @@ public final class ProtoConfig {
         return forNumber(value);
       }
 
+      /**
+       * @param value The numeric wire value of the corresponding enum entry.
+       * @return The enum associated with the given numeric wire value.
+       */
       public static AutoConversionKey forNumber(int value) {
         switch (value) {
           case 0: return AUTO_CONVERSION_OFF;
@@ -3798,7 +3779,7 @@ public final class ProtoConfig {
 
       private final int value;
 
-      AutoConversionKey(int value) {
+      private AutoConversionKey(int value) {
         this.value = value;
       }
 
@@ -3839,6 +3820,8 @@ public final class ProtoConfig {
       }
 
       /**
+       * @param value The numeric wire value of the corresponding enum entry.
+       * @return The enum associated with the given numeric wire value.
        * @deprecated Use {@link #forNumber(int)} instead.
        */
       @java.lang.Deprecated
@@ -3846,6 +3829,10 @@ public final class ProtoConfig {
         return forNumber(value);
       }
 
+      /**
+       * @param value The numeric wire value of the corresponding enum entry.
+       * @return The enum associated with the given numeric wire value.
+       */
       public static YenSignCharacter forNumber(int value) {
         switch (value) {
           case 0: return YEN_SIGN;
@@ -3892,7 +3879,7 @@ public final class ProtoConfig {
 
       private final int value;
 
-      YenSignCharacter(int value) {
+      private YenSignCharacter(int value) {
         this.value = value;
       }
 
@@ -3905,40 +3892,47 @@ public final class ProtoConfig {
 
       /**
        * <code>optional string group = 1;</code>
+       * @return Whether the group field is set.
        */
       boolean hasGroup();
       /**
        * <code>optional string group = 1;</code>
+       * @return The group.
        */
       java.lang.String getGroup();
       /**
        * <code>optional string group = 1;</code>
+       * @return The bytes for group.
        */
       com.google.protobuf.ByteString
           getGroupBytes();
 
       /**
        * <code>optional .mozc.config.Config.CharacterForm preedit_character_form = 2 [default = FULL_WIDTH];</code>
+       * @return Whether the preeditCharacterForm field is set.
        */
       boolean hasPreeditCharacterForm();
       /**
        * <code>optional .mozc.config.Config.CharacterForm preedit_character_form = 2 [default = FULL_WIDTH];</code>
+       * @return The preeditCharacterForm.
        */
       org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterForm getPreeditCharacterForm();
 
       /**
        * <code>optional .mozc.config.Config.CharacterForm conversion_character_form = 3 [default = FULL_WIDTH];</code>
+       * @return Whether the conversionCharacterForm field is set.
        */
       boolean hasConversionCharacterForm();
       /**
        * <code>optional .mozc.config.Config.CharacterForm conversion_character_form = 3 [default = FULL_WIDTH];</code>
+       * @return The conversionCharacterForm.
        */
       org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterForm getConversionCharacterForm();
     }
     /**
      * Protobuf type {@code mozc.config.Config.CharacterFormRule}
      */
-    public  static final class CharacterFormRule extends
+    public static final class CharacterFormRule extends
         com.google.protobuf.GeneratedMessageV3 implements
         // @@protoc_insertion_point(message_implements:mozc.config.Config.CharacterFormRule)
         CharacterFormRuleOrBuilder {
@@ -3954,81 +3948,23 @@ public final class ProtoConfig {
       }
 
       @java.lang.Override
-      public com.google.protobuf.UnknownFieldSet
+      @SuppressWarnings({"unused"})
+      protected java.lang.Object newInstance(
+          UnusedPrivateParameter unused) {
+        return new CharacterFormRule();
+      }
+
+      @java.lang.Override
+      public final com.google.protobuf.UnknownFieldSet
       getUnknownFields() {
         return this.unknownFields;
       }
-      private CharacterFormRule(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        this();
-        if (extensionRegistry == null) {
-          throw new java.lang.NullPointerException();
-        }
-        int mutable_bitField0_ = 0;
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-            com.google.protobuf.UnknownFieldSet.newBuilder();
-        try {
-          boolean done = false;
-          while (!done) {
-            int tag = input.readTag();
-            switch (tag) {
-              case 0:
-                done = true;
-                break;
-              case 10: {
-                com.google.protobuf.ByteString bs = input.readBytes();
-                bitField0_ |= 0x00000001;
-                group_ = bs;
-                break;
-              }
-              case 16: {
-                int rawValue = input.readEnum();
-                org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterForm value = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterForm.valueOf(rawValue);
-                if (value == null) {
-                  unknownFields.mergeVarintField(2, rawValue);
-                } else {
-                  bitField0_ |= 0x00000002;
-                  preeditCharacterForm_ = rawValue;
-                }
-                break;
-              }
-              case 24: {
-                int rawValue = input.readEnum();
-                org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterForm value = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterForm.valueOf(rawValue);
-                if (value == null) {
-                  unknownFields.mergeVarintField(3, rawValue);
-                } else {
-                  bitField0_ |= 0x00000004;
-                  conversionCharacterForm_ = rawValue;
-                }
-                break;
-              }
-              default: {
-                if (!parseUnknownField(
-                    input, unknownFields, extensionRegistry, tag)) {
-                  done = true;
-                }
-                break;
-              }
-            }
-          }
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          throw e.setUnfinishedMessage(this);
-        } catch (java.io.IOException e) {
-          throw new com.google.protobuf.InvalidProtocolBufferException(
-              e).setUnfinishedMessage(this);
-        } finally {
-          this.unknownFields = unknownFields.build();
-          makeExtensionsImmutable();
-        }
-      }
-      public static com.google.protobuf.Descriptors.Descriptor
+      public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.internal_static_mozc_config_Config_CharacterFormRule_descriptor;
       }
 
+      @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.internal_static_mozc_config_Config_CharacterFormRule_fieldAccessorTable
@@ -4038,16 +3974,21 @@ public final class ProtoConfig {
 
       private int bitField0_;
       public static final int GROUP_FIELD_NUMBER = 1;
-      private volatile java.lang.Object group_;
+      @SuppressWarnings("serial")
+      private volatile java.lang.Object group_ = "";
       /**
        * <code>optional string group = 1;</code>
+       * @return Whether the group field is set.
        */
+      @java.lang.Override
       public boolean hasGroup() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
+        return ((bitField0_ & 0x00000001) != 0);
       }
       /**
        * <code>optional string group = 1;</code>
+       * @return The group.
        */
+      @java.lang.Override
       public java.lang.String getGroup() {
         java.lang.Object ref = group_;
         if (ref instanceof java.lang.String) {
@@ -4064,7 +4005,9 @@ public final class ProtoConfig {
       }
       /**
        * <code>optional string group = 1;</code>
+       * @return The bytes for group.
        */
+      @java.lang.Override
       public com.google.protobuf.ByteString
           getGroupBytes() {
         java.lang.Object ref = group_;
@@ -4080,39 +4023,44 @@ public final class ProtoConfig {
       }
 
       public static final int PREEDIT_CHARACTER_FORM_FIELD_NUMBER = 2;
-      private int preeditCharacterForm_;
+      private int preeditCharacterForm_ = 1;
       /**
        * <code>optional .mozc.config.Config.CharacterForm preedit_character_form = 2 [default = FULL_WIDTH];</code>
+       * @return Whether the preeditCharacterForm field is set.
        */
-      public boolean hasPreeditCharacterForm() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
+      @java.lang.Override public boolean hasPreeditCharacterForm() {
+        return ((bitField0_ & 0x00000002) != 0);
       }
       /**
        * <code>optional .mozc.config.Config.CharacterForm preedit_character_form = 2 [default = FULL_WIDTH];</code>
+       * @return The preeditCharacterForm.
        */
-      public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterForm getPreeditCharacterForm() {
-        org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterForm result = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterForm.valueOf(preeditCharacterForm_);
+      @java.lang.Override public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterForm getPreeditCharacterForm() {
+        org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterForm result = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterForm.forNumber(preeditCharacterForm_);
         return result == null ? org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterForm.FULL_WIDTH : result;
       }
 
       public static final int CONVERSION_CHARACTER_FORM_FIELD_NUMBER = 3;
-      private int conversionCharacterForm_;
+      private int conversionCharacterForm_ = 1;
       /**
        * <code>optional .mozc.config.Config.CharacterForm conversion_character_form = 3 [default = FULL_WIDTH];</code>
+       * @return Whether the conversionCharacterForm field is set.
        */
-      public boolean hasConversionCharacterForm() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
+      @java.lang.Override public boolean hasConversionCharacterForm() {
+        return ((bitField0_ & 0x00000004) != 0);
       }
       /**
        * <code>optional .mozc.config.Config.CharacterForm conversion_character_form = 3 [default = FULL_WIDTH];</code>
+       * @return The conversionCharacterForm.
        */
-      public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterForm getConversionCharacterForm() {
-        org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterForm result = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterForm.valueOf(conversionCharacterForm_);
+      @java.lang.Override public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterForm getConversionCharacterForm() {
+        org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterForm result = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterForm.forNumber(conversionCharacterForm_);
         return result == null ? org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterForm.FULL_WIDTH : result;
       }
 
       private byte memoizedIsInitialized = -1;
-      public boolean isInitialized() {
+      @java.lang.Override
+      public final boolean isInitialized() {
         byte isInitialized = memoizedIsInitialized;
         if (isInitialized == 1) return true;
         if (isInitialized == 0) return false;
@@ -4121,37 +4069,39 @@ public final class ProtoConfig {
         return true;
       }
 
+      @java.lang.Override
       public void writeTo(com.google.protobuf.CodedOutputStream output)
                           throws java.io.IOException {
-        if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        if (((bitField0_ & 0x00000001) != 0)) {
           com.google.protobuf.GeneratedMessageV3.writeString(output, 1, group_);
         }
-        if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        if (((bitField0_ & 0x00000002) != 0)) {
           output.writeEnum(2, preeditCharacterForm_);
         }
-        if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        if (((bitField0_ & 0x00000004) != 0)) {
           output.writeEnum(3, conversionCharacterForm_);
         }
-        unknownFields.writeTo(output);
+        getUnknownFields().writeTo(output);
       }
 
+      @java.lang.Override
       public int getSerializedSize() {
         int size = memoizedSize;
         if (size != -1) return size;
 
         size = 0;
-        if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        if (((bitField0_ & 0x00000001) != 0)) {
           size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, group_);
         }
-        if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        if (((bitField0_ & 0x00000002) != 0)) {
           size += com.google.protobuf.CodedOutputStream
             .computeEnumSize(2, preeditCharacterForm_);
         }
-        if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        if (((bitField0_ & 0x00000004) != 0)) {
           size += com.google.protobuf.CodedOutputStream
             .computeEnumSize(3, conversionCharacterForm_);
         }
-        size += unknownFields.getSerializedSize();
+        size += getUnknownFields().getSerializedSize();
         memoizedSize = size;
         return size;
       }
@@ -4166,22 +4116,21 @@ public final class ProtoConfig {
         }
         org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterFormRule other = (org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterFormRule) obj;
 
-        boolean result = true;
-        result = result && (hasGroup() == other.hasGroup());
+        if (hasGroup() != other.hasGroup()) return false;
         if (hasGroup()) {
-          result = result && getGroup()
-              .equals(other.getGroup());
+          if (!getGroup()
+              .equals(other.getGroup())) return false;
         }
-        result = result && (hasPreeditCharacterForm() == other.hasPreeditCharacterForm());
+        if (hasPreeditCharacterForm() != other.hasPreeditCharacterForm()) return false;
         if (hasPreeditCharacterForm()) {
-          result = result && preeditCharacterForm_ == other.preeditCharacterForm_;
+          if (preeditCharacterForm_ != other.preeditCharacterForm_) return false;
         }
-        result = result && (hasConversionCharacterForm() == other.hasConversionCharacterForm());
+        if (hasConversionCharacterForm() != other.hasConversionCharacterForm()) return false;
         if (hasConversionCharacterForm()) {
-          result = result && conversionCharacterForm_ == other.conversionCharacterForm_;
+          if (conversionCharacterForm_ != other.conversionCharacterForm_) return false;
         }
-        result = result && unknownFields.equals(other.unknownFields);
-        return result;
+        if (!getUnknownFields().equals(other.getUnknownFields())) return false;
+        return true;
       }
 
       @java.lang.Override
@@ -4203,7 +4152,7 @@ public final class ProtoConfig {
           hash = (37 * hash) + CONVERSION_CHARACTER_FORM_FIELD_NUMBER;
           hash = (53 * hash) + conversionCharacterForm_;
         }
-        hash = (29 * hash) + unknownFields.hashCode();
+        hash = (29 * hash) + getUnknownFields().hashCode();
         memoizedHashCode = hash;
         return hash;
       }
@@ -4278,6 +4227,7 @@ public final class ProtoConfig {
             .parseWithIOException(PARSER, input, extensionRegistry);
       }
 
+      @java.lang.Override
       public Builder newBuilderForType() { return newBuilder(); }
       public static Builder newBuilder() {
         return DEFAULT_INSTANCE.toBuilder();
@@ -4285,6 +4235,7 @@ public final class ProtoConfig {
       public static Builder newBuilder(org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterFormRule prototype) {
         return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
       }
+      @java.lang.Override
       public Builder toBuilder() {
         return this == DEFAULT_INSTANCE
             ? new Builder() : new Builder().mergeFrom(this);
@@ -4303,11 +4254,12 @@ public final class ProtoConfig {
           com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
           // @@protoc_insertion_point(builder_implements:mozc.config.Config.CharacterFormRule)
           org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterFormRuleOrBuilder {
-        public static com.google.protobuf.Descriptors.Descriptor
+        public static final com.google.protobuf.Descriptors.Descriptor
             getDescriptor() {
           return org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.internal_static_mozc_config_Config_CharacterFormRule_descriptor;
         }
 
+        @java.lang.Override
         protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
             internalGetFieldAccessorTable() {
           return org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.internal_static_mozc_config_Config_CharacterFormRule_fieldAccessorTable
@@ -4317,39 +4269,36 @@ public final class ProtoConfig {
 
         // Construct using org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterFormRule.newBuilder()
         private Builder() {
-          maybeForceBuilderInitialization();
+
         }
 
         private Builder(
             com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
           super(parent);
-          maybeForceBuilderInitialization();
+
         }
-        private void maybeForceBuilderInitialization() {
-          if (com.google.protobuf.GeneratedMessageV3
-                  .alwaysUseFieldBuilders) {
-          }
-        }
+        @java.lang.Override
         public Builder clear() {
           super.clear();
+          bitField0_ = 0;
           group_ = "";
-          bitField0_ = (bitField0_ & ~0x00000001);
           preeditCharacterForm_ = 1;
-          bitField0_ = (bitField0_ & ~0x00000002);
           conversionCharacterForm_ = 1;
-          bitField0_ = (bitField0_ & ~0x00000004);
           return this;
         }
 
+        @java.lang.Override
         public com.google.protobuf.Descriptors.Descriptor
             getDescriptorForType() {
           return org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.internal_static_mozc_config_Config_CharacterFormRule_descriptor;
         }
 
+        @java.lang.Override
         public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterFormRule getDefaultInstanceForType() {
           return org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterFormRule.getDefaultInstance();
         }
 
+        @java.lang.Override
         public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterFormRule build() {
           org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterFormRule result = buildPartial();
           if (!result.isInitialized()) {
@@ -4358,53 +4307,65 @@ public final class ProtoConfig {
           return result;
         }
 
+        @java.lang.Override
         public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterFormRule buildPartial() {
           org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterFormRule result = new org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterFormRule(this);
-          int from_bitField0_ = bitField0_;
-          int to_bitField0_ = 0;
-          if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-            to_bitField0_ |= 0x00000001;
-          }
-          result.group_ = group_;
-          if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-            to_bitField0_ |= 0x00000002;
-          }
-          result.preeditCharacterForm_ = preeditCharacterForm_;
-          if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-            to_bitField0_ |= 0x00000004;
-          }
-          result.conversionCharacterForm_ = conversionCharacterForm_;
-          result.bitField0_ = to_bitField0_;
+          if (bitField0_ != 0) { buildPartial0(result); }
           onBuilt();
           return result;
         }
 
+        private void buildPartial0(org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterFormRule result) {
+          int from_bitField0_ = bitField0_;
+          int to_bitField0_ = 0;
+          if (((from_bitField0_ & 0x00000001) != 0)) {
+            result.group_ = group_;
+            to_bitField0_ |= 0x00000001;
+          }
+          if (((from_bitField0_ & 0x00000002) != 0)) {
+            result.preeditCharacterForm_ = preeditCharacterForm_;
+            to_bitField0_ |= 0x00000002;
+          }
+          if (((from_bitField0_ & 0x00000004) != 0)) {
+            result.conversionCharacterForm_ = conversionCharacterForm_;
+            to_bitField0_ |= 0x00000004;
+          }
+          result.bitField0_ |= to_bitField0_;
+        }
+
+        @java.lang.Override
         public Builder clone() {
           return super.clone();
         }
+        @java.lang.Override
         public Builder setField(
             com.google.protobuf.Descriptors.FieldDescriptor field,
             java.lang.Object value) {
           return super.setField(field, value);
         }
+        @java.lang.Override
         public Builder clearField(
             com.google.protobuf.Descriptors.FieldDescriptor field) {
           return super.clearField(field);
         }
+        @java.lang.Override
         public Builder clearOneof(
             com.google.protobuf.Descriptors.OneofDescriptor oneof) {
           return super.clearOneof(oneof);
         }
+        @java.lang.Override
         public Builder setRepeatedField(
             com.google.protobuf.Descriptors.FieldDescriptor field,
             int index, java.lang.Object value) {
           return super.setRepeatedField(field, index, value);
         }
+        @java.lang.Override
         public Builder addRepeatedField(
             com.google.protobuf.Descriptors.FieldDescriptor field,
             java.lang.Object value) {
           return super.addRepeatedField(field, value);
         }
+        @java.lang.Override
         public Builder mergeFrom(com.google.protobuf.Message other) {
           if (other instanceof org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterFormRule) {
             return mergeFrom((org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterFormRule)other);
@@ -4417,8 +4378,8 @@ public final class ProtoConfig {
         public Builder mergeFrom(org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterFormRule other) {
           if (other == org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterFormRule.getDefaultInstance()) return this;
           if (other.hasGroup()) {
-            bitField0_ |= 0x00000001;
             group_ = other.group_;
+            bitField0_ |= 0x00000001;
             onChanged();
           }
           if (other.hasPreeditCharacterForm()) {
@@ -4427,30 +4388,74 @@ public final class ProtoConfig {
           if (other.hasConversionCharacterForm()) {
             setConversionCharacterForm(other.getConversionCharacterForm());
           }
-          this.mergeUnknownFields(other.unknownFields);
+          this.mergeUnknownFields(other.getUnknownFields());
           onChanged();
           return this;
         }
 
-        public boolean isInitialized() {
+        @java.lang.Override
+        public final boolean isInitialized() {
           return true;
         }
 
+        @java.lang.Override
         public Builder mergeFrom(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws java.io.IOException {
-          org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterFormRule parsedMessage = null;
+          if (extensionRegistry == null) {
+            throw new java.lang.NullPointerException();
+          }
           try {
-            parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+            boolean done = false;
+            while (!done) {
+              int tag = input.readTag();
+              switch (tag) {
+                case 0:
+                  done = true;
+                  break;
+                case 10: {
+                  group_ = input.readBytes();
+                  bitField0_ |= 0x00000001;
+                  break;
+                } // case 10
+                case 16: {
+                  int tmpRaw = input.readEnum();
+                  org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterForm tmpValue =
+                      org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterForm.forNumber(tmpRaw);
+                  if (tmpValue == null) {
+                    mergeUnknownVarintField(2, tmpRaw);
+                  } else {
+                    preeditCharacterForm_ = tmpRaw;
+                    bitField0_ |= 0x00000002;
+                  }
+                  break;
+                } // case 16
+                case 24: {
+                  int tmpRaw = input.readEnum();
+                  org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterForm tmpValue =
+                      org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterForm.forNumber(tmpRaw);
+                  if (tmpValue == null) {
+                    mergeUnknownVarintField(3, tmpRaw);
+                  } else {
+                    conversionCharacterForm_ = tmpRaw;
+                    bitField0_ |= 0x00000004;
+                  }
+                  break;
+                } // case 24
+                default: {
+                  if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                    done = true; // was an endgroup tag
+                  }
+                  break;
+                } // default:
+              } // switch (tag)
+            } // while (!done)
           } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-            parsedMessage = (org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterFormRule) e.getUnfinishedMessage();
             throw e.unwrapIOException();
           } finally {
-            if (parsedMessage != null) {
-              mergeFrom(parsedMessage);
-            }
-          }
+            onChanged();
+          } // finally
           return this;
         }
         private int bitField0_;
@@ -4458,12 +4463,14 @@ public final class ProtoConfig {
         private java.lang.Object group_ = "";
         /**
          * <code>optional string group = 1;</code>
+         * @return Whether the group field is set.
          */
         public boolean hasGroup() {
-          return ((bitField0_ & 0x00000001) == 0x00000001);
+          return ((bitField0_ & 0x00000001) != 0);
         }
         /**
          * <code>optional string group = 1;</code>
+         * @return The group.
          */
         public java.lang.String getGroup() {
           java.lang.Object ref = group_;
@@ -4481,6 +4488,7 @@ public final class ProtoConfig {
         }
         /**
          * <code>optional string group = 1;</code>
+         * @return The bytes for group.
          */
         public com.google.protobuf.ByteString
             getGroupBytes() {
@@ -4497,36 +4505,37 @@ public final class ProtoConfig {
         }
         /**
          * <code>optional string group = 1;</code>
+         * @param value The group to set.
+         * @return This builder for chaining.
          */
         public Builder setGroup(
             java.lang.String value) {
-          if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
+          if (value == null) { throw new NullPointerException(); }
           group_ = value;
+          bitField0_ |= 0x00000001;
           onChanged();
           return this;
         }
         /**
          * <code>optional string group = 1;</code>
+         * @return This builder for chaining.
          */
         public Builder clearGroup() {
-          bitField0_ = (bitField0_ & ~0x00000001);
           group_ = getDefaultInstance().getGroup();
+          bitField0_ = (bitField0_ & ~0x00000001);
           onChanged();
           return this;
         }
         /**
          * <code>optional string group = 1;</code>
+         * @param value The bytes for group to set.
+         * @return This builder for chaining.
          */
         public Builder setGroupBytes(
             com.google.protobuf.ByteString value) {
-          if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
+          if (value == null) { throw new NullPointerException(); }
           group_ = value;
+          bitField0_ |= 0x00000001;
           onChanged();
           return this;
         }
@@ -4534,19 +4543,24 @@ public final class ProtoConfig {
         private int preeditCharacterForm_ = 1;
         /**
          * <code>optional .mozc.config.Config.CharacterForm preedit_character_form = 2 [default = FULL_WIDTH];</code>
+         * @return Whether the preeditCharacterForm field is set.
          */
-        public boolean hasPreeditCharacterForm() {
-          return ((bitField0_ & 0x00000002) == 0x00000002);
+        @java.lang.Override public boolean hasPreeditCharacterForm() {
+          return ((bitField0_ & 0x00000002) != 0);
         }
         /**
          * <code>optional .mozc.config.Config.CharacterForm preedit_character_form = 2 [default = FULL_WIDTH];</code>
+         * @return The preeditCharacterForm.
          */
+        @java.lang.Override
         public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterForm getPreeditCharacterForm() {
-          org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterForm result = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterForm.valueOf(preeditCharacterForm_);
+          org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterForm result = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterForm.forNumber(preeditCharacterForm_);
           return result == null ? org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterForm.FULL_WIDTH : result;
         }
         /**
          * <code>optional .mozc.config.Config.CharacterForm preedit_character_form = 2 [default = FULL_WIDTH];</code>
+         * @param value The preeditCharacterForm to set.
+         * @return This builder for chaining.
          */
         public Builder setPreeditCharacterForm(org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterForm value) {
           if (value == null) {
@@ -4559,6 +4573,7 @@ public final class ProtoConfig {
         }
         /**
          * <code>optional .mozc.config.Config.CharacterForm preedit_character_form = 2 [default = FULL_WIDTH];</code>
+         * @return This builder for chaining.
          */
         public Builder clearPreeditCharacterForm() {
           bitField0_ = (bitField0_ & ~0x00000002);
@@ -4570,19 +4585,24 @@ public final class ProtoConfig {
         private int conversionCharacterForm_ = 1;
         /**
          * <code>optional .mozc.config.Config.CharacterForm conversion_character_form = 3 [default = FULL_WIDTH];</code>
+         * @return Whether the conversionCharacterForm field is set.
          */
-        public boolean hasConversionCharacterForm() {
-          return ((bitField0_ & 0x00000004) == 0x00000004);
+        @java.lang.Override public boolean hasConversionCharacterForm() {
+          return ((bitField0_ & 0x00000004) != 0);
         }
         /**
          * <code>optional .mozc.config.Config.CharacterForm conversion_character_form = 3 [default = FULL_WIDTH];</code>
+         * @return The conversionCharacterForm.
          */
+        @java.lang.Override
         public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterForm getConversionCharacterForm() {
-          org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterForm result = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterForm.valueOf(conversionCharacterForm_);
+          org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterForm result = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterForm.forNumber(conversionCharacterForm_);
           return result == null ? org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterForm.FULL_WIDTH : result;
         }
         /**
          * <code>optional .mozc.config.Config.CharacterForm conversion_character_form = 3 [default = FULL_WIDTH];</code>
+         * @param value The conversionCharacterForm to set.
+         * @return This builder for chaining.
          */
         public Builder setConversionCharacterForm(org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterForm value) {
           if (value == null) {
@@ -4595,6 +4615,7 @@ public final class ProtoConfig {
         }
         /**
          * <code>optional .mozc.config.Config.CharacterForm conversion_character_form = 3 [default = FULL_WIDTH];</code>
+         * @return This builder for chaining.
          */
         public Builder clearConversionCharacterForm() {
           bitField0_ = (bitField0_ & ~0x00000004);
@@ -4602,13 +4623,15 @@ public final class ProtoConfig {
           onChanged();
           return this;
         }
-        public Builder setUnknownFields(
-                final com.google.protobuf.UnknownFieldSet unknownFields) {
+        @java.lang.Override
+        public final Builder setUnknownFields(
+            final com.google.protobuf.UnknownFieldSet unknownFields) {
           return super.setUnknownFields(unknownFields);
         }
 
-        public Builder mergeUnknownFields(
-                final com.google.protobuf.UnknownFieldSet unknownFields) {
+        @java.lang.Override
+        public final Builder mergeUnknownFields(
+            final com.google.protobuf.UnknownFieldSet unknownFields) {
           return super.mergeUnknownFields(unknownFields);
         }
 
@@ -4628,11 +4651,23 @@ public final class ProtoConfig {
 
       @java.lang.Deprecated public static final com.google.protobuf.Parser<CharacterFormRule>
           PARSER = new com.google.protobuf.AbstractParser<CharacterFormRule>() {
+        @java.lang.Override
         public CharacterFormRule parsePartialFrom(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
-          return new CharacterFormRule(input, extensionRegistry);
+          Builder builder = newBuilder();
+          try {
+            builder.mergeFrom(input, extensionRegistry);
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            throw e.setUnfinishedMessage(builder.buildPartial());
+          } catch (com.google.protobuf.UninitializedMessageException e) {
+            throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+          } catch (java.io.IOException e) {
+            throw new com.google.protobuf.InvalidProtocolBufferException(e)
+                .setUnfinishedMessage(builder.buildPartial());
+          }
+          return builder.buildPartial();
         }
       };
 
@@ -4645,6 +4680,7 @@ public final class ProtoConfig {
         return PARSER;
       }
 
+      @java.lang.Override
       public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterFormRule getDefaultInstanceForType() {
         return DEFAULT_INSTANCE;
       }
@@ -4657,17 +4693,19 @@ public final class ProtoConfig {
 
       /**
        * <code>optional bool use_local_usage_dictionary = 1 [default = true];</code>
+       * @return Whether the useLocalUsageDictionary field is set.
        */
       boolean hasUseLocalUsageDictionary();
       /**
        * <code>optional bool use_local_usage_dictionary = 1 [default = true];</code>
+       * @return The useLocalUsageDictionary.
        */
       boolean getUseLocalUsageDictionary();
     }
     /**
      * Protobuf type {@code mozc.config.Config.InformationListConfig}
      */
-    public  static final class InformationListConfig extends
+    public static final class InformationListConfig extends
         com.google.protobuf.GeneratedMessageV3 implements
         // @@protoc_insertion_point(message_implements:mozc.config.Config.InformationListConfig)
         InformationListConfigOrBuilder {
@@ -4681,58 +4719,23 @@ public final class ProtoConfig {
       }
 
       @java.lang.Override
-      public com.google.protobuf.UnknownFieldSet
+      @SuppressWarnings({"unused"})
+      protected java.lang.Object newInstance(
+          UnusedPrivateParameter unused) {
+        return new InformationListConfig();
+      }
+
+      @java.lang.Override
+      public final com.google.protobuf.UnknownFieldSet
       getUnknownFields() {
         return this.unknownFields;
       }
-      private InformationListConfig(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        this();
-        if (extensionRegistry == null) {
-          throw new java.lang.NullPointerException();
-        }
-        int mutable_bitField0_ = 0;
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-            com.google.protobuf.UnknownFieldSet.newBuilder();
-        try {
-          boolean done = false;
-          while (!done) {
-            int tag = input.readTag();
-            switch (tag) {
-              case 0:
-                done = true;
-                break;
-              case 8: {
-                bitField0_ |= 0x00000001;
-                useLocalUsageDictionary_ = input.readBool();
-                break;
-              }
-              default: {
-                if (!parseUnknownField(
-                    input, unknownFields, extensionRegistry, tag)) {
-                  done = true;
-                }
-                break;
-              }
-            }
-          }
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          throw e.setUnfinishedMessage(this);
-        } catch (java.io.IOException e) {
-          throw new com.google.protobuf.InvalidProtocolBufferException(
-              e).setUnfinishedMessage(this);
-        } finally {
-          this.unknownFields = unknownFields.build();
-          makeExtensionsImmutable();
-        }
-      }
-      public static com.google.protobuf.Descriptors.Descriptor
+      public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.internal_static_mozc_config_Config_InformationListConfig_descriptor;
       }
 
+      @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.internal_static_mozc_config_Config_InformationListConfig_fieldAccessorTable
@@ -4742,22 +4745,27 @@ public final class ProtoConfig {
 
       private int bitField0_;
       public static final int USE_LOCAL_USAGE_DICTIONARY_FIELD_NUMBER = 1;
-      private boolean useLocalUsageDictionary_;
+      private boolean useLocalUsageDictionary_ = true;
       /**
        * <code>optional bool use_local_usage_dictionary = 1 [default = true];</code>
+       * @return Whether the useLocalUsageDictionary field is set.
        */
+      @java.lang.Override
       public boolean hasUseLocalUsageDictionary() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
+        return ((bitField0_ & 0x00000001) != 0);
       }
       /**
        * <code>optional bool use_local_usage_dictionary = 1 [default = true];</code>
+       * @return The useLocalUsageDictionary.
        */
+      @java.lang.Override
       public boolean getUseLocalUsageDictionary() {
         return useLocalUsageDictionary_;
       }
 
       private byte memoizedIsInitialized = -1;
-      public boolean isInitialized() {
+      @java.lang.Override
+      public final boolean isInitialized() {
         byte isInitialized = memoizedIsInitialized;
         if (isInitialized == 1) return true;
         if (isInitialized == 0) return false;
@@ -4766,24 +4774,26 @@ public final class ProtoConfig {
         return true;
       }
 
+      @java.lang.Override
       public void writeTo(com.google.protobuf.CodedOutputStream output)
                           throws java.io.IOException {
-        if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        if (((bitField0_ & 0x00000001) != 0)) {
           output.writeBool(1, useLocalUsageDictionary_);
         }
-        unknownFields.writeTo(output);
+        getUnknownFields().writeTo(output);
       }
 
+      @java.lang.Override
       public int getSerializedSize() {
         int size = memoizedSize;
         if (size != -1) return size;
 
         size = 0;
-        if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        if (((bitField0_ & 0x00000001) != 0)) {
           size += com.google.protobuf.CodedOutputStream
             .computeBoolSize(1, useLocalUsageDictionary_);
         }
-        size += unknownFields.getSerializedSize();
+        size += getUnknownFields().getSerializedSize();
         memoizedSize = size;
         return size;
       }
@@ -4798,14 +4808,13 @@ public final class ProtoConfig {
         }
         org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.InformationListConfig other = (org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.InformationListConfig) obj;
 
-        boolean result = true;
-        result = result && (hasUseLocalUsageDictionary() == other.hasUseLocalUsageDictionary());
+        if (hasUseLocalUsageDictionary() != other.hasUseLocalUsageDictionary()) return false;
         if (hasUseLocalUsageDictionary()) {
-          result = result && (getUseLocalUsageDictionary()
-              == other.getUseLocalUsageDictionary());
+          if (getUseLocalUsageDictionary()
+              != other.getUseLocalUsageDictionary()) return false;
         }
-        result = result && unknownFields.equals(other.unknownFields);
-        return result;
+        if (!getUnknownFields().equals(other.getUnknownFields())) return false;
+        return true;
       }
 
       @java.lang.Override
@@ -4820,7 +4829,7 @@ public final class ProtoConfig {
           hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
               getUseLocalUsageDictionary());
         }
-        hash = (29 * hash) + unknownFields.hashCode();
+        hash = (29 * hash) + getUnknownFields().hashCode();
         memoizedHashCode = hash;
         return hash;
       }
@@ -4895,6 +4904,7 @@ public final class ProtoConfig {
             .parseWithIOException(PARSER, input, extensionRegistry);
       }
 
+      @java.lang.Override
       public Builder newBuilderForType() { return newBuilder(); }
       public static Builder newBuilder() {
         return DEFAULT_INSTANCE.toBuilder();
@@ -4902,6 +4912,7 @@ public final class ProtoConfig {
       public static Builder newBuilder(org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.InformationListConfig prototype) {
         return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
       }
+      @java.lang.Override
       public Builder toBuilder() {
         return this == DEFAULT_INSTANCE
             ? new Builder() : new Builder().mergeFrom(this);
@@ -4920,11 +4931,12 @@ public final class ProtoConfig {
           com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
           // @@protoc_insertion_point(builder_implements:mozc.config.Config.InformationListConfig)
           org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.InformationListConfigOrBuilder {
-        public static com.google.protobuf.Descriptors.Descriptor
+        public static final com.google.protobuf.Descriptors.Descriptor
             getDescriptor() {
           return org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.internal_static_mozc_config_Config_InformationListConfig_descriptor;
         }
 
+        @java.lang.Override
         protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
             internalGetFieldAccessorTable() {
           return org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.internal_static_mozc_config_Config_InformationListConfig_fieldAccessorTable
@@ -4934,35 +4946,34 @@ public final class ProtoConfig {
 
         // Construct using org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.InformationListConfig.newBuilder()
         private Builder() {
-          maybeForceBuilderInitialization();
+
         }
 
         private Builder(
             com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
           super(parent);
-          maybeForceBuilderInitialization();
+
         }
-        private void maybeForceBuilderInitialization() {
-          if (com.google.protobuf.GeneratedMessageV3
-                  .alwaysUseFieldBuilders) {
-          }
-        }
+        @java.lang.Override
         public Builder clear() {
           super.clear();
+          bitField0_ = 0;
           useLocalUsageDictionary_ = true;
-          bitField0_ = (bitField0_ & ~0x00000001);
           return this;
         }
 
+        @java.lang.Override
         public com.google.protobuf.Descriptors.Descriptor
             getDescriptorForType() {
           return org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.internal_static_mozc_config_Config_InformationListConfig_descriptor;
         }
 
+        @java.lang.Override
         public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.InformationListConfig getDefaultInstanceForType() {
           return org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.InformationListConfig.getDefaultInstance();
         }
 
+        @java.lang.Override
         public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.InformationListConfig build() {
           org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.InformationListConfig result = buildPartial();
           if (!result.isInitialized()) {
@@ -4971,45 +4982,57 @@ public final class ProtoConfig {
           return result;
         }
 
+        @java.lang.Override
         public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.InformationListConfig buildPartial() {
           org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.InformationListConfig result = new org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.InformationListConfig(this);
-          int from_bitField0_ = bitField0_;
-          int to_bitField0_ = 0;
-          if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-            to_bitField0_ |= 0x00000001;
-          }
-          result.useLocalUsageDictionary_ = useLocalUsageDictionary_;
-          result.bitField0_ = to_bitField0_;
+          if (bitField0_ != 0) { buildPartial0(result); }
           onBuilt();
           return result;
         }
 
+        private void buildPartial0(org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.InformationListConfig result) {
+          int from_bitField0_ = bitField0_;
+          int to_bitField0_ = 0;
+          if (((from_bitField0_ & 0x00000001) != 0)) {
+            result.useLocalUsageDictionary_ = useLocalUsageDictionary_;
+            to_bitField0_ |= 0x00000001;
+          }
+          result.bitField0_ |= to_bitField0_;
+        }
+
+        @java.lang.Override
         public Builder clone() {
           return super.clone();
         }
+        @java.lang.Override
         public Builder setField(
             com.google.protobuf.Descriptors.FieldDescriptor field,
             java.lang.Object value) {
           return super.setField(field, value);
         }
+        @java.lang.Override
         public Builder clearField(
             com.google.protobuf.Descriptors.FieldDescriptor field) {
           return super.clearField(field);
         }
+        @java.lang.Override
         public Builder clearOneof(
             com.google.protobuf.Descriptors.OneofDescriptor oneof) {
           return super.clearOneof(oneof);
         }
+        @java.lang.Override
         public Builder setRepeatedField(
             com.google.protobuf.Descriptors.FieldDescriptor field,
             int index, java.lang.Object value) {
           return super.setRepeatedField(field, index, value);
         }
+        @java.lang.Override
         public Builder addRepeatedField(
             com.google.protobuf.Descriptors.FieldDescriptor field,
             java.lang.Object value) {
           return super.addRepeatedField(field, value);
         }
+        @java.lang.Override
         public Builder mergeFrom(com.google.protobuf.Message other) {
           if (other instanceof org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.InformationListConfig) {
             return mergeFrom((org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.InformationListConfig)other);
@@ -5024,30 +5047,50 @@ public final class ProtoConfig {
           if (other.hasUseLocalUsageDictionary()) {
             setUseLocalUsageDictionary(other.getUseLocalUsageDictionary());
           }
-          this.mergeUnknownFields(other.unknownFields);
+          this.mergeUnknownFields(other.getUnknownFields());
           onChanged();
           return this;
         }
 
-        public boolean isInitialized() {
+        @java.lang.Override
+        public final boolean isInitialized() {
           return true;
         }
 
+        @java.lang.Override
         public Builder mergeFrom(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws java.io.IOException {
-          org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.InformationListConfig parsedMessage = null;
+          if (extensionRegistry == null) {
+            throw new java.lang.NullPointerException();
+          }
           try {
-            parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+            boolean done = false;
+            while (!done) {
+              int tag = input.readTag();
+              switch (tag) {
+                case 0:
+                  done = true;
+                  break;
+                case 8: {
+                  useLocalUsageDictionary_ = input.readBool();
+                  bitField0_ |= 0x00000001;
+                  break;
+                } // case 8
+                default: {
+                  if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                    done = true; // was an endgroup tag
+                  }
+                  break;
+                } // default:
+              } // switch (tag)
+            } // while (!done)
           } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-            parsedMessage = (org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.InformationListConfig) e.getUnfinishedMessage();
             throw e.unwrapIOException();
           } finally {
-            if (parsedMessage != null) {
-              mergeFrom(parsedMessage);
-            }
-          }
+            onChanged();
+          } // finally
           return this;
         }
         private int bitField0_;
@@ -5055,27 +5098,35 @@ public final class ProtoConfig {
         private boolean useLocalUsageDictionary_ = true;
         /**
          * <code>optional bool use_local_usage_dictionary = 1 [default = true];</code>
+         * @return Whether the useLocalUsageDictionary field is set.
          */
+        @java.lang.Override
         public boolean hasUseLocalUsageDictionary() {
-          return ((bitField0_ & 0x00000001) == 0x00000001);
+          return ((bitField0_ & 0x00000001) != 0);
         }
         /**
          * <code>optional bool use_local_usage_dictionary = 1 [default = true];</code>
+         * @return The useLocalUsageDictionary.
          */
+        @java.lang.Override
         public boolean getUseLocalUsageDictionary() {
           return useLocalUsageDictionary_;
         }
         /**
          * <code>optional bool use_local_usage_dictionary = 1 [default = true];</code>
+         * @param value The useLocalUsageDictionary to set.
+         * @return This builder for chaining.
          */
         public Builder setUseLocalUsageDictionary(boolean value) {
-          bitField0_ |= 0x00000001;
+          
           useLocalUsageDictionary_ = value;
+          bitField0_ |= 0x00000001;
           onChanged();
           return this;
         }
         /**
          * <code>optional bool use_local_usage_dictionary = 1 [default = true];</code>
+         * @return This builder for chaining.
          */
         public Builder clearUseLocalUsageDictionary() {
           bitField0_ = (bitField0_ & ~0x00000001);
@@ -5083,13 +5134,15 @@ public final class ProtoConfig {
           onChanged();
           return this;
         }
-        public Builder setUnknownFields(
-                final com.google.protobuf.UnknownFieldSet unknownFields) {
+        @java.lang.Override
+        public final Builder setUnknownFields(
+            final com.google.protobuf.UnknownFieldSet unknownFields) {
           return super.setUnknownFields(unknownFields);
         }
 
-        public Builder mergeUnknownFields(
-                final com.google.protobuf.UnknownFieldSet unknownFields) {
+        @java.lang.Override
+        public final Builder mergeUnknownFields(
+            final com.google.protobuf.UnknownFieldSet unknownFields) {
           return super.mergeUnknownFields(unknownFields);
         }
 
@@ -5109,11 +5162,23 @@ public final class ProtoConfig {
 
       @java.lang.Deprecated public static final com.google.protobuf.Parser<InformationListConfig>
           PARSER = new com.google.protobuf.AbstractParser<InformationListConfig>() {
+        @java.lang.Override
         public InformationListConfig parsePartialFrom(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
-          return new InformationListConfig(input, extensionRegistry);
+          Builder builder = newBuilder();
+          try {
+            builder.mergeFrom(input, extensionRegistry);
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            throw e.setUnfinishedMessage(builder.buildPartial());
+          } catch (com.google.protobuf.UninitializedMessageException e) {
+            throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+          } catch (java.io.IOException e) {
+            throw new com.google.protobuf.InvalidProtocolBufferException(e)
+                .setUnfinishedMessage(builder.buildPartial());
+          }
+          return builder.buildPartial();
         }
       };
 
@@ -5126,6 +5191,7 @@ public final class ProtoConfig {
         return PARSER;
       }
 
+      @java.lang.Override
       public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.InformationListConfig getDefaultInstanceForType() {
         return DEFAULT_INSTANCE;
       }
@@ -5143,9 +5209,11 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional .mozc.config.GeneralConfig general_config = 1;</code>
+     * @return Whether the generalConfig field is set.
      */
+    @java.lang.Override
     public boolean hasGeneralConfig() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
+      return ((bitField0_ & 0x00000001) != 0);
     }
     /**
      * <pre>
@@ -5154,7 +5222,9 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional .mozc.config.GeneralConfig general_config = 1;</code>
+     * @return The generalConfig.
      */
+    @java.lang.Override
     public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.GeneralConfig getGeneralConfig() {
       return generalConfig_ == null ? org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.GeneralConfig.getDefaultInstance() : generalConfig_;
     }
@@ -5166,21 +5236,24 @@ public final class ProtoConfig {
      *
      * <code>optional .mozc.config.GeneralConfig general_config = 1;</code>
      */
+    @java.lang.Override
     public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.GeneralConfigOrBuilder getGeneralConfigOrBuilder() {
       return generalConfig_ == null ? org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.GeneralConfig.getDefaultInstance() : generalConfig_;
     }
 
     public static final int VERBOSE_LEVEL_FIELD_NUMBER = 10;
-    private int verboseLevel_;
+    private int verboseLevel_ = 0;
     /**
      * <pre>
      * set verbose level of logging library (FLAGS_v)
      * </pre>
      *
      * <code>optional int32 verbose_level = 10 [default = 0];</code>
+     * @return Whether the verboseLevel field is set.
      */
+    @java.lang.Override
     public boolean hasVerboseLevel() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
+      return ((bitField0_ & 0x00000002) != 0);
     }
     /**
      * <pre>
@@ -5188,47 +5261,61 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional int32 verbose_level = 10 [default = 0];</code>
+     * @return The verboseLevel.
      */
+    @java.lang.Override
     public int getVerboseLevel() {
       return verboseLevel_;
     }
 
     public static final int INCOGNITO_MODE_FIELD_NUMBER = 20;
-    private boolean incognitoMode_;
+    private boolean incognitoMode_ = false;
     /**
      * <pre>
      * Incognito mode:
      * Disable all mutable operation if incognito_mode is true
+     * Clients needs to check ConversionRequest::incognito_mode() instead
+     * of Config::incognito_mode(), as the incoginto mode can also set
+     * via Options.
      * </pre>
      *
      * <code>optional bool incognito_mode = 20 [default = false];</code>
+     * @return Whether the incognitoMode field is set.
      */
+    @java.lang.Override
     public boolean hasIncognitoMode() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
+      return ((bitField0_ & 0x00000004) != 0);
     }
     /**
      * <pre>
      * Incognito mode:
      * Disable all mutable operation if incognito_mode is true
+     * Clients needs to check ConversionRequest::incognito_mode() instead
+     * of Config::incognito_mode(), as the incoginto mode can also set
+     * via Options.
      * </pre>
      *
      * <code>optional bool incognito_mode = 20 [default = false];</code>
+     * @return The incognitoMode.
      */
+    @java.lang.Override
     public boolean getIncognitoMode() {
       return incognitoMode_;
     }
 
     public static final int CHECK_DEFAULT_FIELD_NUMBER = 22;
-    private boolean checkDefault_;
+    private boolean checkDefault_ = true;
     /**
      * <pre>
      * whether to show the set default dialog on startup
      * </pre>
      *
      * <code>optional bool check_default = 22 [default = true];</code>
+     * @return Whether the checkDefault field is set.
      */
+    @java.lang.Override
     public boolean hasCheckDefault() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
+      return ((bitField0_ & 0x00000008) != 0);
     }
     /**
      * <pre>
@@ -5236,13 +5323,15 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional bool check_default = 22 [default = true];</code>
+     * @return The checkDefault.
      */
+    @java.lang.Override
     public boolean getCheckDefault() {
       return checkDefault_;
     }
 
     public static final int PRESENTATION_MODE_FIELD_NUMBER = 23;
-    private boolean presentationMode_;
+    private boolean presentationMode_ = false;
     /**
      * <pre>
      * Presentation mode:
@@ -5250,9 +5339,11 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional bool presentation_mode = 23 [default = false];</code>
+     * @return Whether the presentationMode field is set.
      */
+    @java.lang.Override
     public boolean hasPresentationMode() {
-      return ((bitField0_ & 0x00000010) == 0x00000010);
+      return ((bitField0_ & 0x00000010) != 0);
     }
     /**
      * <pre>
@@ -5261,22 +5352,25 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional bool presentation_mode = 23 [default = false];</code>
+     * @return The presentationMode.
      */
+    @java.lang.Override
     public boolean getPresentationMode() {
       return presentationMode_;
     }
 
     public static final int PREEDIT_METHOD_FIELD_NUMBER = 40;
-    private int preeditMethod_;
+    private int preeditMethod_ = 0;
     /**
      * <pre>
      * Roman/Kana
      * </pre>
      *
      * <code>optional .mozc.config.Config.PreeditMethod preedit_method = 40 [default = ROMAN];</code>
+     * @return Whether the preeditMethod field is set.
      */
-    public boolean hasPreeditMethod() {
-      return ((bitField0_ & 0x00000020) == 0x00000020);
+    @java.lang.Override public boolean hasPreeditMethod() {
+      return ((bitField0_ & 0x00000020) != 0);
     }
     /**
      * <pre>
@@ -5284,30 +5378,33 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional .mozc.config.Config.PreeditMethod preedit_method = 40 [default = ROMAN];</code>
+     * @return The preeditMethod.
      */
-    public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.PreeditMethod getPreeditMethod() {
-      org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.PreeditMethod result = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.PreeditMethod.valueOf(preeditMethod_);
+    @java.lang.Override public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.PreeditMethod getPreeditMethod() {
+      org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.PreeditMethod result = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.PreeditMethod.forNumber(preeditMethod_);
       return result == null ? org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.PreeditMethod.ROMAN : result;
     }
 
     public static final int SESSION_KEYMAP_FIELD_NUMBER = 41;
-    private int sessionKeymap_;
+    private int sessionKeymap_ = -1;
     /**
      * <code>optional .mozc.config.Config.SessionKeymap session_keymap = 41 [default = NONE];</code>
+     * @return Whether the sessionKeymap field is set.
      */
-    public boolean hasSessionKeymap() {
-      return ((bitField0_ & 0x00000040) == 0x00000040);
+    @java.lang.Override public boolean hasSessionKeymap() {
+      return ((bitField0_ & 0x00000040) != 0);
     }
     /**
      * <code>optional .mozc.config.Config.SessionKeymap session_keymap = 41 [default = NONE];</code>
+     * @return The sessionKeymap.
      */
-    public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SessionKeymap getSessionKeymap() {
-      org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SessionKeymap result = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SessionKeymap.valueOf(sessionKeymap_);
+    @java.lang.Override public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SessionKeymap getSessionKeymap() {
+      org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SessionKeymap result = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SessionKeymap.forNumber(sessionKeymap_);
       return result == null ? org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SessionKeymap.NONE : result;
     }
 
     public static final int CUSTOM_KEYMAP_TABLE_FIELD_NUMBER = 42;
-    private com.google.protobuf.ByteString customKeymapTable_;
+    private com.google.protobuf.ByteString customKeymapTable_ = com.google.protobuf.ByteString.EMPTY;
     /**
      * <pre>
      * custom keymap
@@ -5315,9 +5412,11 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional bytes custom_keymap_table = 42;</code>
+     * @return Whether the customKeymapTable field is set.
      */
+    @java.lang.Override
     public boolean hasCustomKeymapTable() {
-      return ((bitField0_ & 0x00000080) == 0x00000080);
+      return ((bitField0_ & 0x00000080) != 0);
     }
     /**
      * <pre>
@@ -5326,22 +5425,26 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional bytes custom_keymap_table = 42;</code>
+     * @return The customKeymapTable.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString getCustomKeymapTable() {
       return customKeymapTable_;
     }
 
     public static final int CUSTOM_ROMAN_TABLE_FIELD_NUMBER = 43;
-    private com.google.protobuf.ByteString customRomanTable_;
+    private com.google.protobuf.ByteString customRomanTable_ = com.google.protobuf.ByteString.EMPTY;
     /**
      * <pre>
      * custom roman table
      * </pre>
      *
      * <code>optional bytes custom_roman_table = 43;</code>
+     * @return Whether the customRomanTable field is set.
      */
+    @java.lang.Override
     public boolean hasCustomRomanTable() {
-      return ((bitField0_ & 0x00000100) == 0x00000100);
+      return ((bitField0_ & 0x00000100) != 0);
     }
     /**
      * <pre>
@@ -5349,61 +5452,69 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional bytes custom_roman_table = 43;</code>
+     * @return The customRomanTable.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString getCustomRomanTable() {
       return customRomanTable_;
     }
 
     public static final int PUNCTUATION_METHOD_FIELD_NUMBER = 45;
-    private int punctuationMethod_;
+    private int punctuationMethod_ = 0;
     /**
      * <code>optional .mozc.config.Config.PunctuationMethod punctuation_method = 45 [default = KUTEN_TOUTEN];</code>
+     * @return Whether the punctuationMethod field is set.
      */
-    public boolean hasPunctuationMethod() {
-      return ((bitField0_ & 0x00000200) == 0x00000200);
+    @java.lang.Override public boolean hasPunctuationMethod() {
+      return ((bitField0_ & 0x00000200) != 0);
     }
     /**
      * <code>optional .mozc.config.Config.PunctuationMethod punctuation_method = 45 [default = KUTEN_TOUTEN];</code>
+     * @return The punctuationMethod.
      */
-    public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.PunctuationMethod getPunctuationMethod() {
-      org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.PunctuationMethod result = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.PunctuationMethod.valueOf(punctuationMethod_);
+    @java.lang.Override public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.PunctuationMethod getPunctuationMethod() {
+      org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.PunctuationMethod result = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.PunctuationMethod.forNumber(punctuationMethod_);
       return result == null ? org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.PunctuationMethod.KUTEN_TOUTEN : result;
     }
 
     public static final int SYMBOL_METHOD_FIELD_NUMBER = 46;
-    private int symbolMethod_;
+    private int symbolMethod_ = 0;
     /**
      * <code>optional .mozc.config.Config.SymbolMethod symbol_method = 46 [default = CORNER_BRACKET_MIDDLE_DOT];</code>
+     * @return Whether the symbolMethod field is set.
      */
-    public boolean hasSymbolMethod() {
-      return ((bitField0_ & 0x00000400) == 0x00000400);
+    @java.lang.Override public boolean hasSymbolMethod() {
+      return ((bitField0_ & 0x00000400) != 0);
     }
     /**
      * <code>optional .mozc.config.Config.SymbolMethod symbol_method = 46 [default = CORNER_BRACKET_MIDDLE_DOT];</code>
+     * @return The symbolMethod.
      */
-    public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SymbolMethod getSymbolMethod() {
-      org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SymbolMethod result = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SymbolMethod.valueOf(symbolMethod_);
+    @java.lang.Override public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SymbolMethod getSymbolMethod() {
+      org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SymbolMethod result = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SymbolMethod.forNumber(symbolMethod_);
       return result == null ? org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SymbolMethod.CORNER_BRACKET_MIDDLE_DOT : result;
     }
 
     public static final int SPACE_CHARACTER_FORM_FIELD_NUMBER = 47;
-    private int spaceCharacterForm_;
+    private int spaceCharacterForm_ = 0;
     /**
      * <code>optional .mozc.config.Config.FundamentalCharacterForm space_character_form = 47 [default = FUNDAMENTAL_INPUT_MODE];</code>
+     * @return Whether the spaceCharacterForm field is set.
      */
-    public boolean hasSpaceCharacterForm() {
-      return ((bitField0_ & 0x00000800) == 0x00000800);
+    @java.lang.Override public boolean hasSpaceCharacterForm() {
+      return ((bitField0_ & 0x00000800) != 0);
     }
     /**
      * <code>optional .mozc.config.Config.FundamentalCharacterForm space_character_form = 47 [default = FUNDAMENTAL_INPUT_MODE];</code>
+     * @return The spaceCharacterForm.
      */
-    public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.FundamentalCharacterForm getSpaceCharacterForm() {
-      org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.FundamentalCharacterForm result = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.FundamentalCharacterForm.valueOf(spaceCharacterForm_);
+    @java.lang.Override public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.FundamentalCharacterForm getSpaceCharacterForm() {
+      org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.FundamentalCharacterForm result = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.FundamentalCharacterForm.forNumber(spaceCharacterForm_);
       return result == null ? org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.FundamentalCharacterForm.FUNDAMENTAL_INPUT_MODE : result;
     }
 
     public static final int USE_KEYBOARD_TO_CHANGE_PREEDIT_METHOD_FIELD_NUMBER = 48;
-    private boolean useKeyboardToChangePreeditMethod_;
+    private boolean useKeyboardToChangePreeditMethod_ = false;
     /**
      * <pre>
      * If this flag is true, Mozc toggles preedit method with some predefined
@@ -5423,9 +5534,11 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional bool use_keyboard_to_change_preedit_method = 48 [default = false];</code>
+     * @return Whether the useKeyboardToChangePreeditMethod field is set.
      */
+    @java.lang.Override
     public boolean hasUseKeyboardToChangePreeditMethod() {
-      return ((bitField0_ & 0x00001000) == 0x00001000);
+      return ((bitField0_ & 0x00001000) != 0);
     }
     /**
      * <pre>
@@ -5446,54 +5559,63 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional bool use_keyboard_to_change_preedit_method = 48 [default = false];</code>
+     * @return The useKeyboardToChangePreeditMethod.
      */
+    @java.lang.Override
     public boolean getUseKeyboardToChangePreeditMethod() {
       return useKeyboardToChangePreeditMethod_;
     }
 
     public static final int HISTORY_LEARNING_LEVEL_FIELD_NUMBER = 50;
-    private int historyLearningLevel_;
+    private int historyLearningLevel_ = 0;
     /**
      * <code>optional .mozc.config.Config.HistoryLearningLevel history_learning_level = 50 [default = DEFAULT_HISTORY];</code>
+     * @return Whether the historyLearningLevel field is set.
      */
-    public boolean hasHistoryLearningLevel() {
-      return ((bitField0_ & 0x00002000) == 0x00002000);
+    @java.lang.Override public boolean hasHistoryLearningLevel() {
+      return ((bitField0_ & 0x00002000) != 0);
     }
     /**
      * <code>optional .mozc.config.Config.HistoryLearningLevel history_learning_level = 50 [default = DEFAULT_HISTORY];</code>
+     * @return The historyLearningLevel.
      */
-    public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.HistoryLearningLevel getHistoryLearningLevel() {
-      org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.HistoryLearningLevel result = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.HistoryLearningLevel.valueOf(historyLearningLevel_);
+    @java.lang.Override public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.HistoryLearningLevel getHistoryLearningLevel() {
+      org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.HistoryLearningLevel result = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.HistoryLearningLevel.forNumber(historyLearningLevel_);
       return result == null ? org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.HistoryLearningLevel.DEFAULT_HISTORY : result;
     }
 
     public static final int SELECTION_SHORTCUT_FIELD_NUMBER = 52;
-    private int selectionShortcut_;
+    private int selectionShortcut_ = 1;
     /**
      * <code>optional .mozc.config.Config.SelectionShortcut selection_shortcut = 52 [default = SHORTCUT_123456789];</code>
+     * @return Whether the selectionShortcut field is set.
      */
-    public boolean hasSelectionShortcut() {
-      return ((bitField0_ & 0x00004000) == 0x00004000);
+    @java.lang.Override public boolean hasSelectionShortcut() {
+      return ((bitField0_ & 0x00004000) != 0);
     }
     /**
      * <code>optional .mozc.config.Config.SelectionShortcut selection_shortcut = 52 [default = SHORTCUT_123456789];</code>
+     * @return The selectionShortcut.
      */
-    public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SelectionShortcut getSelectionShortcut() {
-      org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SelectionShortcut result = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SelectionShortcut.valueOf(selectionShortcut_);
+    @java.lang.Override public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SelectionShortcut getSelectionShortcut() {
+      org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SelectionShortcut result = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SelectionShortcut.forNumber(selectionShortcut_);
       return result == null ? org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SelectionShortcut.SHORTCUT_123456789 : result;
     }
 
     public static final int CHARACTER_FORM_RULES_FIELD_NUMBER = 54;
+    @SuppressWarnings("serial")
     private java.util.List<org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterFormRule> characterFormRules_;
     /**
      * <code>repeated .mozc.config.Config.CharacterFormRule character_form_rules = 54;</code>
      */
+    @java.lang.Override
     public java.util.List<org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterFormRule> getCharacterFormRulesList() {
       return characterFormRules_;
     }
     /**
      * <code>repeated .mozc.config.Config.CharacterFormRule character_form_rules = 54;</code>
      */
+    @java.lang.Override
     public java.util.List<? extends org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterFormRuleOrBuilder> 
         getCharacterFormRulesOrBuilderList() {
       return characterFormRules_;
@@ -5501,34 +5623,39 @@ public final class ProtoConfig {
     /**
      * <code>repeated .mozc.config.Config.CharacterFormRule character_form_rules = 54;</code>
      */
+    @java.lang.Override
     public int getCharacterFormRulesCount() {
       return characterFormRules_.size();
     }
     /**
      * <code>repeated .mozc.config.Config.CharacterFormRule character_form_rules = 54;</code>
      */
+    @java.lang.Override
     public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterFormRule getCharacterFormRules(int index) {
       return characterFormRules_.get(index);
     }
     /**
      * <code>repeated .mozc.config.Config.CharacterFormRule character_form_rules = 54;</code>
      */
+    @java.lang.Override
     public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterFormRuleOrBuilder getCharacterFormRulesOrBuilder(
         int index) {
       return characterFormRules_.get(index);
     }
 
     public static final int USE_AUTO_IME_TURN_OFF_FIELD_NUMBER = 56;
-    private boolean useAutoImeTurnOff_;
+    private boolean useAutoImeTurnOff_ = true;
     /**
      * <pre>
      * auto IME turn off feature
      * </pre>
      *
      * <code>optional bool use_auto_ime_turn_off = 56 [default = true];</code>
+     * @return Whether the useAutoImeTurnOff field is set.
      */
+    @java.lang.Override
     public boolean hasUseAutoImeTurnOff() {
-      return ((bitField0_ & 0x00008000) == 0x00008000);
+      return ((bitField0_ & 0x00008000) != 0);
     }
     /**
      * <pre>
@@ -5536,83 +5663,97 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional bool use_auto_ime_turn_off = 56 [default = true];</code>
+     * @return The useAutoImeTurnOff.
      */
+    @java.lang.Override
     public boolean getUseAutoImeTurnOff() {
       return useAutoImeTurnOff_;
     }
 
     public static final int USE_CASCADING_WINDOW_FIELD_NUMBER = 58;
-    private boolean useCascadingWindow_;
+    private boolean useCascadingWindow_ = true;
     /**
      * <pre>
-     * Toggle to use cascanding window for debuging.
+     * Toggle to use cascanding window for debugging.
      * </pre>
      *
      * <code>optional bool use_cascading_window = 58 [default = true];</code>
+     * @return Whether the useCascadingWindow field is set.
      */
+    @java.lang.Override
     public boolean hasUseCascadingWindow() {
-      return ((bitField0_ & 0x00010000) == 0x00010000);
+      return ((bitField0_ & 0x00010000) != 0);
     }
     /**
      * <pre>
-     * Toggle to use cascanding window for debuging.
+     * Toggle to use cascanding window for debugging.
      * </pre>
      *
      * <code>optional bool use_cascading_window = 58 [default = true];</code>
+     * @return The useCascadingWindow.
      */
+    @java.lang.Override
     public boolean getUseCascadingWindow() {
       return useCascadingWindow_;
     }
 
     public static final int SHIFT_KEY_MODE_SWITCH_FIELD_NUMBER = 59;
-    private int shiftKeyModeSwitch_;
+    private int shiftKeyModeSwitch_ = 1;
     /**
      * <code>optional .mozc.config.Config.ShiftKeyModeSwitch shift_key_mode_switch = 59 [default = ASCII_INPUT_MODE];</code>
+     * @return Whether the shiftKeyModeSwitch field is set.
      */
-    public boolean hasShiftKeyModeSwitch() {
-      return ((bitField0_ & 0x00020000) == 0x00020000);
+    @java.lang.Override public boolean hasShiftKeyModeSwitch() {
+      return ((bitField0_ & 0x00020000) != 0);
     }
     /**
      * <code>optional .mozc.config.Config.ShiftKeyModeSwitch shift_key_mode_switch = 59 [default = ASCII_INPUT_MODE];</code>
+     * @return The shiftKeyModeSwitch.
      */
-    public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.ShiftKeyModeSwitch getShiftKeyModeSwitch() {
-      org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.ShiftKeyModeSwitch result = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.ShiftKeyModeSwitch.valueOf(shiftKeyModeSwitch_);
+    @java.lang.Override public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.ShiftKeyModeSwitch getShiftKeyModeSwitch() {
+      org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.ShiftKeyModeSwitch result = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.ShiftKeyModeSwitch.forNumber(shiftKeyModeSwitch_);
       return result == null ? org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.ShiftKeyModeSwitch.ASCII_INPUT_MODE : result;
     }
 
     public static final int NUMPAD_CHARACTER_FORM_FIELD_NUMBER = 60;
-    private int numpadCharacterForm_;
+    private int numpadCharacterForm_ = 2;
     /**
      * <code>optional .mozc.config.Config.NumpadCharacterForm numpad_character_form = 60 [default = NUMPAD_HALF_WIDTH];</code>
+     * @return Whether the numpadCharacterForm field is set.
      */
-    public boolean hasNumpadCharacterForm() {
-      return ((bitField0_ & 0x00040000) == 0x00040000);
+    @java.lang.Override public boolean hasNumpadCharacterForm() {
+      return ((bitField0_ & 0x00040000) != 0);
     }
     /**
      * <code>optional .mozc.config.Config.NumpadCharacterForm numpad_character_form = 60 [default = NUMPAD_HALF_WIDTH];</code>
+     * @return The numpadCharacterForm.
      */
-    public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.NumpadCharacterForm getNumpadCharacterForm() {
-      org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.NumpadCharacterForm result = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.NumpadCharacterForm.valueOf(numpadCharacterForm_);
+    @java.lang.Override public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.NumpadCharacterForm getNumpadCharacterForm() {
+      org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.NumpadCharacterForm result = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.NumpadCharacterForm.forNumber(numpadCharacterForm_);
       return result == null ? org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.NumpadCharacterForm.NUMPAD_HALF_WIDTH : result;
     }
 
     public static final int USE_AUTO_CONVERSION_FIELD_NUMBER = 61;
-    private boolean useAutoConversion_;
+    private boolean useAutoConversion_ = false;
     /**
      * <code>optional bool use_auto_conversion = 61 [default = false];</code>
+     * @return Whether the useAutoConversion field is set.
      */
+    @java.lang.Override
     public boolean hasUseAutoConversion() {
-      return ((bitField0_ & 0x00080000) == 0x00080000);
+      return ((bitField0_ & 0x00080000) != 0);
     }
     /**
      * <code>optional bool use_auto_conversion = 61 [default = false];</code>
+     * @return The useAutoConversion.
      */
+    @java.lang.Override
     public boolean getUseAutoConversion() {
       return useAutoConversion_;
     }
 
     public static final int AUTO_CONVERSION_KEY_FIELD_NUMBER = 62;
-    private int autoConversionKey_;
+    private int autoConversionKey_ = 13;
     /**
      * <pre>
      * can't use AutoConversionKey as a type since
@@ -5620,9 +5761,11 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional uint32 auto_conversion_key = 62 [default = 13];</code>
+     * @return Whether the autoConversionKey field is set.
      */
+    @java.lang.Override
     public boolean hasAutoConversionKey() {
-      return ((bitField0_ & 0x00100000) == 0x00100000);
+      return ((bitField0_ & 0x00100000) != 0);
     }
     /**
      * <pre>
@@ -5631,13 +5774,15 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional uint32 auto_conversion_key = 62 [default = 13];</code>
+     * @return The autoConversionKey.
      */
+    @java.lang.Override
     public int getAutoConversionKey() {
       return autoConversionKey_;
     }
 
     public static final int YEN_SIGN_CHARACTER_FIELD_NUMBER = 63;
-    private int yenSignCharacter_;
+    private int yenSignCharacter_ = 0;
     /**
      * <pre>
      * Mac-original JIS key layout has "yen-sign" key which generates
@@ -5648,9 +5793,10 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional .mozc.config.Config.YenSignCharacter yen_sign_character = 63 [default = YEN_SIGN];</code>
+     * @return Whether the yenSignCharacter field is set.
      */
-    public boolean hasYenSignCharacter() {
-      return ((bitField0_ & 0x00200000) == 0x00200000);
+    @java.lang.Override public boolean hasYenSignCharacter() {
+      return ((bitField0_ & 0x00200000) != 0);
     }
     /**
      * <pre>
@@ -5662,14 +5808,15 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional .mozc.config.Config.YenSignCharacter yen_sign_character = 63 [default = YEN_SIGN];</code>
+     * @return The yenSignCharacter.
      */
-    public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.YenSignCharacter getYenSignCharacter() {
-      org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.YenSignCharacter result = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.YenSignCharacter.valueOf(yenSignCharacter_);
+    @java.lang.Override public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.YenSignCharacter getYenSignCharacter() {
+      org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.YenSignCharacter result = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.YenSignCharacter.forNumber(yenSignCharacter_);
       return result == null ? org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.YenSignCharacter.YEN_SIGN : result;
     }
 
     public static final int USE_JAPANESE_LAYOUT_FIELD_NUMBER = 64;
-    private boolean useJapaneseLayout_;
+    private boolean useJapaneseLayout_ = false;
     /**
      * <pre>
      * Use Japanese keyboard layout even when the user uses other
@@ -5679,9 +5826,11 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional bool use_japanese_layout = 64 [default = false];</code>
+     * @return Whether the useJapaneseLayout field is set.
      */
+    @java.lang.Override
     public boolean hasUseJapaneseLayout() {
-      return ((bitField0_ & 0x00400000) == 0x00400000);
+      return ((bitField0_ & 0x00400000) != 0);
     }
     /**
      * <pre>
@@ -5692,13 +5841,15 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional bool use_japanese_layout = 64 [default = false];</code>
+     * @return The useJapaneseLayout.
      */
+    @java.lang.Override
     public boolean getUseJapaneseLayout() {
       return useJapaneseLayout_;
     }
 
     public static final int USE_KANA_MODIFIER_INSENSITIVE_CONVERSION_FIELD_NUMBER = 65;
-    private boolean useKanaModifierInsensitiveConversion_;
+    private boolean useKanaModifierInsensitiveConversion_ = false;
     /**
      * <pre>
      * Use kana modifier insensitive conversion.
@@ -5711,9 +5862,11 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional bool use_kana_modifier_insensitive_conversion = 65 [default = false];</code>
+     * @return Whether the useKanaModifierInsensitiveConversion field is set.
      */
+    @java.lang.Override
     public boolean hasUseKanaModifierInsensitiveConversion() {
-      return ((bitField0_ & 0x00800000) == 0x00800000);
+      return ((bitField0_ & 0x00800000) != 0);
     }
     /**
      * <pre>
@@ -5727,13 +5880,15 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional bool use_kana_modifier_insensitive_conversion = 65 [default = false];</code>
+     * @return The useKanaModifierInsensitiveConversion.
      */
+    @java.lang.Override
     public boolean getUseKanaModifierInsensitiveConversion() {
       return useKanaModifierInsensitiveConversion_;
     }
 
     public static final int USE_TYPING_CORRECTION_FIELD_NUMBER = 66;
-    private boolean useTypingCorrection_;
+    private boolean useTypingCorrection_ = false;
     /**
      * <pre>
      * Use typing correction feature.
@@ -5741,9 +5896,11 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional bool use_typing_correction = 66 [default = false];</code>
+     * @return Whether the useTypingCorrection field is set.
      */
+    @java.lang.Override
     public boolean hasUseTypingCorrection() {
-      return ((bitField0_ & 0x01000000) == 0x01000000);
+      return ((bitField0_ & 0x01000000) != 0);
     }
     /**
      * <pre>
@@ -5752,13 +5909,109 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional bool use_typing_correction = 66 [default = false];</code>
+     * @return The useTypingCorrection.
      */
+    @java.lang.Override
     public boolean getUseTypingCorrection() {
       return useTypingCorrection_;
     }
 
+    public static final int COMPOSING_TIMEOUT_THRESHOLD_MSEC_FIELD_NUMBER = 67;
+    private int composingTimeoutThresholdMsec_ = 0;
+    /**
+     * <pre>
+     * The duration in millisecond to determine the timeout.
+     * If the duration between key inputs is more than this value,
+     * a SessionCommand::STOP_KEY_TOGGLING is prepended to the next key input.
+     * If the value is 0, STOP_KEY_TOGGLING is not sent.
+     * </pre>
+     *
+     * <code>optional int32 composing_timeout_threshold_msec = 67 [default = 0];</code>
+     * @return Whether the composingTimeoutThresholdMsec field is set.
+     */
+    @java.lang.Override
+    public boolean hasComposingTimeoutThresholdMsec() {
+      return ((bitField0_ & 0x02000000) != 0);
+    }
+    /**
+     * <pre>
+     * The duration in millisecond to determine the timeout.
+     * If the duration between key inputs is more than this value,
+     * a SessionCommand::STOP_KEY_TOGGLING is prepended to the next key input.
+     * If the value is 0, STOP_KEY_TOGGLING is not sent.
+     * </pre>
+     *
+     * <code>optional int32 composing_timeout_threshold_msec = 67 [default = 0];</code>
+     * @return The composingTimeoutThresholdMsec.
+     */
+    @java.lang.Override
+    public int getComposingTimeoutThresholdMsec() {
+      return composingTimeoutThresholdMsec_;
+    }
+
+    public static final int OVERLAY_KEYMAPS_FIELD_NUMBER = 68;
+    @SuppressWarnings("serial")
+    private java.util.List<java.lang.Integer> overlayKeymaps_;
+    private static final com.google.protobuf.Internal.ListAdapter.Converter<
+        java.lang.Integer, org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SessionKeymap> overlayKeymaps_converter_ =
+            new com.google.protobuf.Internal.ListAdapter.Converter<
+                java.lang.Integer, org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SessionKeymap>() {
+              public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SessionKeymap convert(java.lang.Integer from) {
+                org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SessionKeymap result = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SessionKeymap.forNumber(from);
+                return result == null ? org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SessionKeymap.NONE : result;
+              }
+            };
+    /**
+     * <pre>
+     * The keymaps which are loaded on top of `session_keymap`.
+     * Overlay keymaps are prioritized over `session_keymap`.
+     * They are used to partially modify the session keymap, for example
+     * using Henkan key as IME_ON.
+     * </pre>
+     *
+     * <code>repeated .mozc.config.Config.SessionKeymap overlay_keymaps = 68 [packed = true];</code>
+     * @return A list containing the overlayKeymaps.
+     */
+    @java.lang.Override
+    public java.util.List<org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SessionKeymap> getOverlayKeymapsList() {
+      return new com.google.protobuf.Internal.ListAdapter<
+          java.lang.Integer, org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SessionKeymap>(overlayKeymaps_, overlayKeymaps_converter_);
+    }
+    /**
+     * <pre>
+     * The keymaps which are loaded on top of `session_keymap`.
+     * Overlay keymaps are prioritized over `session_keymap`.
+     * They are used to partially modify the session keymap, for example
+     * using Henkan key as IME_ON.
+     * </pre>
+     *
+     * <code>repeated .mozc.config.Config.SessionKeymap overlay_keymaps = 68 [packed = true];</code>
+     * @return The count of overlayKeymaps.
+     */
+    @java.lang.Override
+    public int getOverlayKeymapsCount() {
+      return overlayKeymaps_.size();
+    }
+    /**
+     * <pre>
+     * The keymaps which are loaded on top of `session_keymap`.
+     * Overlay keymaps are prioritized over `session_keymap`.
+     * They are used to partially modify the session keymap, for example
+     * using Henkan key as IME_ON.
+     * </pre>
+     *
+     * <code>repeated .mozc.config.Config.SessionKeymap overlay_keymaps = 68 [packed = true];</code>
+     * @param index The index of the element to return.
+     * @return The overlayKeymaps at the given index.
+     */
+    @java.lang.Override
+    public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SessionKeymap getOverlayKeymaps(int index) {
+      return overlayKeymaps_converter_.convert(overlayKeymaps_.get(index));
+    }
+    private int overlayKeymapsMemoizedSerializedSize;
+
     public static final int USE_DATE_CONVERSION_FIELD_NUMBER = 80;
-    private boolean useDateConversion_;
+    private boolean useDateConversion_ = true;
     /**
      * <pre>
      *&#47;///////////////////////////////////////////////////////////
@@ -5766,9 +6019,11 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional bool use_date_conversion = 80 [default = true];</code>
+     * @return Whether the useDateConversion field is set.
      */
+    @java.lang.Override
     public boolean hasUseDateConversion() {
-      return ((bitField0_ & 0x02000000) == 0x02000000);
+      return ((bitField0_ & 0x04000000) != 0);
     }
     /**
      * <pre>
@@ -5777,133 +6032,167 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional bool use_date_conversion = 80 [default = true];</code>
+     * @return The useDateConversion.
      */
+    @java.lang.Override
     public boolean getUseDateConversion() {
       return useDateConversion_;
     }
 
     public static final int USE_SINGLE_KANJI_CONVERSION_FIELD_NUMBER = 81;
-    private boolean useSingleKanjiConversion_;
+    private boolean useSingleKanjiConversion_ = true;
     /**
      * <code>optional bool use_single_kanji_conversion = 81 [default = true];</code>
+     * @return Whether the useSingleKanjiConversion field is set.
      */
+    @java.lang.Override
     public boolean hasUseSingleKanjiConversion() {
-      return ((bitField0_ & 0x04000000) == 0x04000000);
+      return ((bitField0_ & 0x08000000) != 0);
     }
     /**
      * <code>optional bool use_single_kanji_conversion = 81 [default = true];</code>
+     * @return The useSingleKanjiConversion.
      */
+    @java.lang.Override
     public boolean getUseSingleKanjiConversion() {
       return useSingleKanjiConversion_;
     }
 
     public static final int USE_SYMBOL_CONVERSION_FIELD_NUMBER = 82;
-    private boolean useSymbolConversion_;
+    private boolean useSymbolConversion_ = true;
     /**
      * <code>optional bool use_symbol_conversion = 82 [default = true];</code>
+     * @return Whether the useSymbolConversion field is set.
      */
+    @java.lang.Override
     public boolean hasUseSymbolConversion() {
-      return ((bitField0_ & 0x08000000) == 0x08000000);
+      return ((bitField0_ & 0x10000000) != 0);
     }
     /**
      * <code>optional bool use_symbol_conversion = 82 [default = true];</code>
+     * @return The useSymbolConversion.
      */
+    @java.lang.Override
     public boolean getUseSymbolConversion() {
       return useSymbolConversion_;
     }
 
     public static final int USE_NUMBER_CONVERSION_FIELD_NUMBER = 83;
-    private boolean useNumberConversion_;
+    private boolean useNumberConversion_ = true;
     /**
      * <code>optional bool use_number_conversion = 83 [default = true];</code>
+     * @return Whether the useNumberConversion field is set.
      */
+    @java.lang.Override
     public boolean hasUseNumberConversion() {
-      return ((bitField0_ & 0x10000000) == 0x10000000);
+      return ((bitField0_ & 0x20000000) != 0);
     }
     /**
      * <code>optional bool use_number_conversion = 83 [default = true];</code>
+     * @return The useNumberConversion.
      */
+    @java.lang.Override
     public boolean getUseNumberConversion() {
       return useNumberConversion_;
     }
 
     public static final int USE_EMOTICON_CONVERSION_FIELD_NUMBER = 84;
-    private boolean useEmoticonConversion_;
+    private boolean useEmoticonConversion_ = true;
     /**
      * <code>optional bool use_emoticon_conversion = 84 [default = true];</code>
+     * @return Whether the useEmoticonConversion field is set.
      */
+    @java.lang.Override
     public boolean hasUseEmoticonConversion() {
-      return ((bitField0_ & 0x20000000) == 0x20000000);
+      return ((bitField0_ & 0x40000000) != 0);
     }
     /**
      * <code>optional bool use_emoticon_conversion = 84 [default = true];</code>
+     * @return The useEmoticonConversion.
      */
+    @java.lang.Override
     public boolean getUseEmoticonConversion() {
       return useEmoticonConversion_;
     }
 
     public static final int USE_CALCULATOR_FIELD_NUMBER = 85;
-    private boolean useCalculator_;
+    private boolean useCalculator_ = true;
     /**
      * <code>optional bool use_calculator = 85 [default = true];</code>
+     * @return Whether the useCalculator field is set.
      */
+    @java.lang.Override
     public boolean hasUseCalculator() {
-      return ((bitField0_ & 0x40000000) == 0x40000000);
+      return ((bitField0_ & 0x80000000) != 0);
     }
     /**
      * <code>optional bool use_calculator = 85 [default = true];</code>
+     * @return The useCalculator.
      */
+    @java.lang.Override
     public boolean getUseCalculator() {
       return useCalculator_;
     }
 
     public static final int USE_T13N_CONVERSION_FIELD_NUMBER = 86;
-    private boolean useT13NConversion_;
+    private boolean useT13NConversion_ = true;
     /**
      * <code>optional bool use_t13n_conversion = 86 [default = true];</code>
+     * @return Whether the useT13nConversion field is set.
      */
+    @java.lang.Override
     public boolean hasUseT13NConversion() {
-      return ((bitField0_ & 0x80000000) == 0x80000000);
+      return ((bitField1_ & 0x00000001) != 0);
     }
     /**
      * <code>optional bool use_t13n_conversion = 86 [default = true];</code>
+     * @return The useT13nConversion.
      */
+    @java.lang.Override
     public boolean getUseT13NConversion() {
       return useT13NConversion_;
     }
 
     public static final int USE_ZIP_CODE_CONVERSION_FIELD_NUMBER = 87;
-    private boolean useZipCodeConversion_;
+    private boolean useZipCodeConversion_ = true;
     /**
      * <code>optional bool use_zip_code_conversion = 87 [default = true];</code>
+     * @return Whether the useZipCodeConversion field is set.
      */
+    @java.lang.Override
     public boolean hasUseZipCodeConversion() {
-      return ((bitField1_ & 0x00000001) == 0x00000001);
+      return ((bitField1_ & 0x00000002) != 0);
     }
     /**
      * <code>optional bool use_zip_code_conversion = 87 [default = true];</code>
+     * @return The useZipCodeConversion.
      */
+    @java.lang.Override
     public boolean getUseZipCodeConversion() {
       return useZipCodeConversion_;
     }
 
     public static final int USE_SPELLING_CORRECTION_FIELD_NUMBER = 88;
-    private boolean useSpellingCorrection_;
+    private boolean useSpellingCorrection_ = true;
     /**
      * <code>optional bool use_spelling_correction = 88 [default = true];</code>
+     * @return Whether the useSpellingCorrection field is set.
      */
+    @java.lang.Override
     public boolean hasUseSpellingCorrection() {
-      return ((bitField1_ & 0x00000002) == 0x00000002);
+      return ((bitField1_ & 0x00000004) != 0);
     }
     /**
      * <code>optional bool use_spelling_correction = 88 [default = true];</code>
+     * @return The useSpellingCorrection.
      */
+    @java.lang.Override
     public boolean getUseSpellingCorrection() {
       return useSpellingCorrection_;
     }
 
     public static final int USE_EMOJI_CONVERSION_FIELD_NUMBER = 89;
-    private boolean useEmojiConversion_;
+    private boolean useEmojiConversion_ = false;
     /**
      * <pre>
      * If use_emoji_conversion is true, the user can input emoji characters
@@ -5917,9 +6206,11 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional bool use_emoji_conversion = 89 [default = false];</code>
+     * @return Whether the useEmojiConversion field is set.
      */
+    @java.lang.Override
     public boolean hasUseEmojiConversion() {
-      return ((bitField1_ & 0x00000004) == 0x00000004);
+      return ((bitField1_ & 0x00000008) != 0);
     }
     /**
      * <pre>
@@ -5934,7 +6225,9 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional bool use_emoji_conversion = 89 [default = false];</code>
+     * @return The useEmojiConversion.
      */
+    @java.lang.Override
     public boolean getUseEmojiConversion() {
       return useEmojiConversion_;
     }
@@ -5943,84 +6236,111 @@ public final class ProtoConfig {
     private org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.InformationListConfig informationListConfig_;
     /**
      * <code>optional .mozc.config.Config.InformationListConfig information_list_config = 90;</code>
+     * @return Whether the informationListConfig field is set.
      */
+    @java.lang.Override
     public boolean hasInformationListConfig() {
-      return ((bitField1_ & 0x00000008) == 0x00000008);
+      return ((bitField1_ & 0x00000010) != 0);
     }
     /**
      * <code>optional .mozc.config.Config.InformationListConfig information_list_config = 90;</code>
+     * @return The informationListConfig.
      */
+    @java.lang.Override
     public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.InformationListConfig getInformationListConfig() {
       return informationListConfig_ == null ? org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.InformationListConfig.getDefaultInstance() : informationListConfig_;
     }
     /**
      * <code>optional .mozc.config.Config.InformationListConfig information_list_config = 90;</code>
      */
+    @java.lang.Override
     public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.InformationListConfigOrBuilder getInformationListConfigOrBuilder() {
       return informationListConfig_ == null ? org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.InformationListConfig.getDefaultInstance() : informationListConfig_;
     }
 
     public static final int USE_HISTORY_SUGGEST_FIELD_NUMBER = 100;
-    private boolean useHistorySuggest_;
+    private boolean useHistorySuggest_ = true;
     /**
      * <pre>
      *&#47;///////////////////////////////////////////////////////////
      * Suggest (100-119)
+     * Suggest is a feature of word suggestion with prefix search.
+     * When you type "あ", you may get "ありがとう", "朝" (あさ), "明日" (あした)
+     * as suggested words.
      * Use history-based suggest feature.
+     * If this is true, your previously typed words are prioritized.
      * </pre>
      *
      * <code>optional bool use_history_suggest = 100 [default = true];</code>
+     * @return Whether the useHistorySuggest field is set.
      */
+    @java.lang.Override
     public boolean hasUseHistorySuggest() {
-      return ((bitField1_ & 0x00000010) == 0x00000010);
+      return ((bitField1_ & 0x00000020) != 0);
     }
     /**
      * <pre>
      *&#47;///////////////////////////////////////////////////////////
      * Suggest (100-119)
+     * Suggest is a feature of word suggestion with prefix search.
+     * When you type "あ", you may get "ありがとう", "朝" (あさ), "明日" (あした)
+     * as suggested words.
      * Use history-based suggest feature.
+     * If this is true, your previously typed words are prioritized.
      * </pre>
      *
      * <code>optional bool use_history_suggest = 100 [default = true];</code>
+     * @return The useHistorySuggest.
      */
+    @java.lang.Override
     public boolean getUseHistorySuggest() {
       return useHistorySuggest_;
     }
 
     public static final int USE_DICTIONARY_SUGGEST_FIELD_NUMBER = 101;
-    private boolean useDictionarySuggest_;
+    private boolean useDictionarySuggest_ = true;
     /**
      * <pre>
      * Use dictionary-based suggest feature.
+     * If this is true, words in the word dictionary are suggested even if
+     * you haven't typed before.
      * </pre>
      *
      * <code>optional bool use_dictionary_suggest = 101 [default = true];</code>
+     * @return Whether the useDictionarySuggest field is set.
      */
+    @java.lang.Override
     public boolean hasUseDictionarySuggest() {
-      return ((bitField1_ & 0x00000020) == 0x00000020);
+      return ((bitField1_ & 0x00000040) != 0);
     }
     /**
      * <pre>
      * Use dictionary-based suggest feature.
+     * If this is true, words in the word dictionary are suggested even if
+     * you haven't typed before.
      * </pre>
      *
      * <code>optional bool use_dictionary_suggest = 101 [default = true];</code>
+     * @return The useDictionarySuggest.
      */
+    @java.lang.Override
     public boolean getUseDictionarySuggest() {
       return useDictionarySuggest_;
     }
 
     public static final int USE_REALTIME_CONVERSION_FIELD_NUMBER = 102;
-    private boolean useRealtimeConversion_;
+    private boolean useRealtimeConversion_ = true;
     /**
      * <pre>
      * Use realtime conversion feature.
      * </pre>
      *
      * <code>optional bool use_realtime_conversion = 102 [default = true];</code>
+     * @return Whether the useRealtimeConversion field is set.
      */
+    @java.lang.Override
     public boolean hasUseRealtimeConversion() {
-      return ((bitField1_ & 0x00000040) == 0x00000040);
+      return ((bitField1_ & 0x00000080) != 0);
     }
     /**
      * <pre>
@@ -6028,22 +6348,26 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional bool use_realtime_conversion = 102 [default = true];</code>
+     * @return The useRealtimeConversion.
      */
+    @java.lang.Override
     public boolean getUseRealtimeConversion() {
       return useRealtimeConversion_;
     }
 
     public static final int SUGGESTIONS_SIZE_FIELD_NUMBER = 110;
-    private int suggestionsSize_;
+    private int suggestionsSize_ = 3;
     /**
      * <pre>
      * Size of suggestions.
      * </pre>
      *
      * <code>optional uint32 suggestions_size = 110 [default = 3];</code>
+     * @return Whether the suggestionsSize field is set.
      */
+    @java.lang.Override
     public boolean hasSuggestionsSize() {
-      return ((bitField1_ & 0x00000080) == 0x00000080);
+      return ((bitField1_ & 0x00000100) != 0);
     }
     /**
      * <pre>
@@ -6051,13 +6375,15 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional uint32 suggestions_size = 110 [default = 3];</code>
+     * @return The suggestionsSize.
      */
+    @java.lang.Override
     public int getSuggestionsSize() {
       return suggestionsSize_;
     }
 
     public static final int USE_MODE_INDICATOR_FIELD_NUMBER = 120;
-    private boolean useModeIndicator_;
+    private boolean useModeIndicator_ = true;
     /**
      * <pre>
      *&#47;///////////////////////////////////////////////////////////
@@ -6066,9 +6392,11 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional bool use_mode_indicator = 120 [default = true];</code>
+     * @return Whether the useModeIndicator field is set.
      */
+    @java.lang.Override
     public boolean hasUseModeIndicator() {
-      return ((bitField1_ & 0x00000100) == 0x00000100);
+      return ((bitField1_ & 0x00000200) != 0);
     }
     /**
      * <pre>
@@ -6078,42 +6406,16 @@ public final class ProtoConfig {
      * </pre>
      *
      * <code>optional bool use_mode_indicator = 120 [default = true];</code>
+     * @return The useModeIndicator.
      */
+    @java.lang.Override
     public boolean getUseModeIndicator() {
       return useModeIndicator_;
     }
 
-    public static final int ALLOW_CLOUD_HANDWRITING_FIELD_NUMBER = 301;
-    private boolean allowCloudHandwriting_;
-    /**
-     * <pre>
-     * Allow the cloud handwriting.  The handwriting UI has to notice
-     * user before activating the feature, and set this field to true
-     * when the user permit.
-     * NOTE: OSS version does not handle this field.
-     * </pre>
-     *
-     * <code>optional bool allow_cloud_handwriting = 301 [default = false];</code>
-     */
-    public boolean hasAllowCloudHandwriting() {
-      return ((bitField1_ & 0x00000200) == 0x00000200);
-    }
-    /**
-     * <pre>
-     * Allow the cloud handwriting.  The handwriting UI has to notice
-     * user before activating the feature, and set this field to true
-     * when the user permit.
-     * NOTE: OSS version does not handle this field.
-     * </pre>
-     *
-     * <code>optional bool allow_cloud_handwriting = 301 [default = false];</code>
-     */
-    public boolean getAllowCloudHandwriting() {
-      return allowCloudHandwriting_;
-    }
-
     private byte memoizedIsInitialized = -1;
-    public boolean isInitialized() {
+    @java.lang.Override
+    public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
       if (isInitialized == 0) return false;
@@ -6122,202 +6424,212 @@ public final class ProtoConfig {
       return true;
     }
 
+    @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) != 0)) {
         output.writeMessage(1, getGeneralConfig());
       }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+      if (((bitField0_ & 0x00000002) != 0)) {
         output.writeInt32(10, verboseLevel_);
       }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+      if (((bitField0_ & 0x00000004) != 0)) {
         output.writeBool(20, incognitoMode_);
       }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+      if (((bitField0_ & 0x00000008) != 0)) {
         output.writeBool(22, checkDefault_);
       }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+      if (((bitField0_ & 0x00000010) != 0)) {
         output.writeBool(23, presentationMode_);
       }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+      if (((bitField0_ & 0x00000020) != 0)) {
         output.writeEnum(40, preeditMethod_);
       }
-      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+      if (((bitField0_ & 0x00000040) != 0)) {
         output.writeEnum(41, sessionKeymap_);
       }
-      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+      if (((bitField0_ & 0x00000080) != 0)) {
         output.writeBytes(42, customKeymapTable_);
       }
-      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+      if (((bitField0_ & 0x00000100) != 0)) {
         output.writeBytes(43, customRomanTable_);
       }
-      if (((bitField0_ & 0x00000200) == 0x00000200)) {
+      if (((bitField0_ & 0x00000200) != 0)) {
         output.writeEnum(45, punctuationMethod_);
       }
-      if (((bitField0_ & 0x00000400) == 0x00000400)) {
+      if (((bitField0_ & 0x00000400) != 0)) {
         output.writeEnum(46, symbolMethod_);
       }
-      if (((bitField0_ & 0x00000800) == 0x00000800)) {
+      if (((bitField0_ & 0x00000800) != 0)) {
         output.writeEnum(47, spaceCharacterForm_);
       }
-      if (((bitField0_ & 0x00001000) == 0x00001000)) {
+      if (((bitField0_ & 0x00001000) != 0)) {
         output.writeBool(48, useKeyboardToChangePreeditMethod_);
       }
-      if (((bitField0_ & 0x00002000) == 0x00002000)) {
+      if (((bitField0_ & 0x00002000) != 0)) {
         output.writeEnum(50, historyLearningLevel_);
       }
-      if (((bitField0_ & 0x00004000) == 0x00004000)) {
+      if (((bitField0_ & 0x00004000) != 0)) {
         output.writeEnum(52, selectionShortcut_);
       }
       for (int i = 0; i < characterFormRules_.size(); i++) {
         output.writeMessage(54, characterFormRules_.get(i));
       }
-      if (((bitField0_ & 0x00008000) == 0x00008000)) {
+      if (((bitField0_ & 0x00008000) != 0)) {
         output.writeBool(56, useAutoImeTurnOff_);
       }
-      if (((bitField0_ & 0x00010000) == 0x00010000)) {
+      if (((bitField0_ & 0x00010000) != 0)) {
         output.writeBool(58, useCascadingWindow_);
       }
-      if (((bitField0_ & 0x00020000) == 0x00020000)) {
+      if (((bitField0_ & 0x00020000) != 0)) {
         output.writeEnum(59, shiftKeyModeSwitch_);
       }
-      if (((bitField0_ & 0x00040000) == 0x00040000)) {
+      if (((bitField0_ & 0x00040000) != 0)) {
         output.writeEnum(60, numpadCharacterForm_);
       }
-      if (((bitField0_ & 0x00080000) == 0x00080000)) {
+      if (((bitField0_ & 0x00080000) != 0)) {
         output.writeBool(61, useAutoConversion_);
       }
-      if (((bitField0_ & 0x00100000) == 0x00100000)) {
+      if (((bitField0_ & 0x00100000) != 0)) {
         output.writeUInt32(62, autoConversionKey_);
       }
-      if (((bitField0_ & 0x00200000) == 0x00200000)) {
+      if (((bitField0_ & 0x00200000) != 0)) {
         output.writeEnum(63, yenSignCharacter_);
       }
-      if (((bitField0_ & 0x00400000) == 0x00400000)) {
+      if (((bitField0_ & 0x00400000) != 0)) {
         output.writeBool(64, useJapaneseLayout_);
       }
-      if (((bitField0_ & 0x00800000) == 0x00800000)) {
+      if (((bitField0_ & 0x00800000) != 0)) {
         output.writeBool(65, useKanaModifierInsensitiveConversion_);
       }
-      if (((bitField0_ & 0x01000000) == 0x01000000)) {
+      if (((bitField0_ & 0x01000000) != 0)) {
         output.writeBool(66, useTypingCorrection_);
       }
-      if (((bitField0_ & 0x02000000) == 0x02000000)) {
+      if (((bitField0_ & 0x02000000) != 0)) {
+        output.writeInt32(67, composingTimeoutThresholdMsec_);
+      }
+      if (getOverlayKeymapsList().size() > 0) {
+        output.writeUInt32NoTag(546);
+        output.writeUInt32NoTag(overlayKeymapsMemoizedSerializedSize);
+      }
+      for (int i = 0; i < overlayKeymaps_.size(); i++) {
+        output.writeEnumNoTag(overlayKeymaps_.get(i));
+      }
+      if (((bitField0_ & 0x04000000) != 0)) {
         output.writeBool(80, useDateConversion_);
       }
-      if (((bitField0_ & 0x04000000) == 0x04000000)) {
+      if (((bitField0_ & 0x08000000) != 0)) {
         output.writeBool(81, useSingleKanjiConversion_);
       }
-      if (((bitField0_ & 0x08000000) == 0x08000000)) {
+      if (((bitField0_ & 0x10000000) != 0)) {
         output.writeBool(82, useSymbolConversion_);
       }
-      if (((bitField0_ & 0x10000000) == 0x10000000)) {
+      if (((bitField0_ & 0x20000000) != 0)) {
         output.writeBool(83, useNumberConversion_);
       }
-      if (((bitField0_ & 0x20000000) == 0x20000000)) {
+      if (((bitField0_ & 0x40000000) != 0)) {
         output.writeBool(84, useEmoticonConversion_);
       }
-      if (((bitField0_ & 0x40000000) == 0x40000000)) {
+      if (((bitField0_ & 0x80000000) != 0)) {
         output.writeBool(85, useCalculator_);
       }
-      if (((bitField0_ & 0x80000000) == 0x80000000)) {
+      if (((bitField1_ & 0x00000001) != 0)) {
         output.writeBool(86, useT13NConversion_);
       }
-      if (((bitField1_ & 0x00000001) == 0x00000001)) {
+      if (((bitField1_ & 0x00000002) != 0)) {
         output.writeBool(87, useZipCodeConversion_);
       }
-      if (((bitField1_ & 0x00000002) == 0x00000002)) {
+      if (((bitField1_ & 0x00000004) != 0)) {
         output.writeBool(88, useSpellingCorrection_);
       }
-      if (((bitField1_ & 0x00000004) == 0x00000004)) {
+      if (((bitField1_ & 0x00000008) != 0)) {
         output.writeBool(89, useEmojiConversion_);
       }
-      if (((bitField1_ & 0x00000008) == 0x00000008)) {
+      if (((bitField1_ & 0x00000010) != 0)) {
         output.writeMessage(90, getInformationListConfig());
       }
-      if (((bitField1_ & 0x00000010) == 0x00000010)) {
+      if (((bitField1_ & 0x00000020) != 0)) {
         output.writeBool(100, useHistorySuggest_);
       }
-      if (((bitField1_ & 0x00000020) == 0x00000020)) {
+      if (((bitField1_ & 0x00000040) != 0)) {
         output.writeBool(101, useDictionarySuggest_);
       }
-      if (((bitField1_ & 0x00000040) == 0x00000040)) {
+      if (((bitField1_ & 0x00000080) != 0)) {
         output.writeBool(102, useRealtimeConversion_);
       }
-      if (((bitField1_ & 0x00000080) == 0x00000080)) {
+      if (((bitField1_ & 0x00000100) != 0)) {
         output.writeUInt32(110, suggestionsSize_);
       }
-      if (((bitField1_ & 0x00000100) == 0x00000100)) {
+      if (((bitField1_ & 0x00000200) != 0)) {
         output.writeBool(120, useModeIndicator_);
       }
-      if (((bitField1_ & 0x00000200) == 0x00000200)) {
-        output.writeBool(301, allowCloudHandwriting_);
-      }
-      unknownFields.writeTo(output);
+      getUnknownFields().writeTo(output);
     }
 
+    @java.lang.Override
     public int getSerializedSize() {
       int size = memoizedSize;
       if (size != -1) return size;
 
       size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+      if (((bitField0_ & 0x00000001) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(1, getGeneralConfig());
       }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+      if (((bitField0_ & 0x00000002) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(10, verboseLevel_);
       }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+      if (((bitField0_ & 0x00000004) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(20, incognitoMode_);
       }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+      if (((bitField0_ & 0x00000008) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(22, checkDefault_);
       }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+      if (((bitField0_ & 0x00000010) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(23, presentationMode_);
       }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+      if (((bitField0_ & 0x00000020) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(40, preeditMethod_);
       }
-      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+      if (((bitField0_ & 0x00000040) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(41, sessionKeymap_);
       }
-      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+      if (((bitField0_ & 0x00000080) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(42, customKeymapTable_);
       }
-      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+      if (((bitField0_ & 0x00000100) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(43, customRomanTable_);
       }
-      if (((bitField0_ & 0x00000200) == 0x00000200)) {
+      if (((bitField0_ & 0x00000200) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(45, punctuationMethod_);
       }
-      if (((bitField0_ & 0x00000400) == 0x00000400)) {
+      if (((bitField0_ & 0x00000400) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(46, symbolMethod_);
       }
-      if (((bitField0_ & 0x00000800) == 0x00000800)) {
+      if (((bitField0_ & 0x00000800) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(47, spaceCharacterForm_);
       }
-      if (((bitField0_ & 0x00001000) == 0x00001000)) {
+      if (((bitField0_ & 0x00001000) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(48, useKeyboardToChangePreeditMethod_);
       }
-      if (((bitField0_ & 0x00002000) == 0x00002000)) {
+      if (((bitField0_ & 0x00002000) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(50, historyLearningLevel_);
       }
-      if (((bitField0_ & 0x00004000) == 0x00004000)) {
+      if (((bitField0_ & 0x00004000) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(52, selectionShortcut_);
       }
@@ -6325,115 +6637,127 @@ public final class ProtoConfig {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(54, characterFormRules_.get(i));
       }
-      if (((bitField0_ & 0x00008000) == 0x00008000)) {
+      if (((bitField0_ & 0x00008000) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(56, useAutoImeTurnOff_);
       }
-      if (((bitField0_ & 0x00010000) == 0x00010000)) {
+      if (((bitField0_ & 0x00010000) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(58, useCascadingWindow_);
       }
-      if (((bitField0_ & 0x00020000) == 0x00020000)) {
+      if (((bitField0_ & 0x00020000) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(59, shiftKeyModeSwitch_);
       }
-      if (((bitField0_ & 0x00040000) == 0x00040000)) {
+      if (((bitField0_ & 0x00040000) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(60, numpadCharacterForm_);
       }
-      if (((bitField0_ & 0x00080000) == 0x00080000)) {
+      if (((bitField0_ & 0x00080000) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(61, useAutoConversion_);
       }
-      if (((bitField0_ & 0x00100000) == 0x00100000)) {
+      if (((bitField0_ & 0x00100000) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeUInt32Size(62, autoConversionKey_);
       }
-      if (((bitField0_ & 0x00200000) == 0x00200000)) {
+      if (((bitField0_ & 0x00200000) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(63, yenSignCharacter_);
       }
-      if (((bitField0_ & 0x00400000) == 0x00400000)) {
+      if (((bitField0_ & 0x00400000) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(64, useJapaneseLayout_);
       }
-      if (((bitField0_ & 0x00800000) == 0x00800000)) {
+      if (((bitField0_ & 0x00800000) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(65, useKanaModifierInsensitiveConversion_);
       }
-      if (((bitField0_ & 0x01000000) == 0x01000000)) {
+      if (((bitField0_ & 0x01000000) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(66, useTypingCorrection_);
       }
-      if (((bitField0_ & 0x02000000) == 0x02000000)) {
+      if (((bitField0_ & 0x02000000) != 0)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(67, composingTimeoutThresholdMsec_);
+      }
+      {
+        int dataSize = 0;
+        for (int i = 0; i < overlayKeymaps_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeEnumSizeNoTag(overlayKeymaps_.get(i));
+        }
+        size += dataSize;
+        if (!getOverlayKeymapsList().isEmpty()) {  size += 2;
+          size += com.google.protobuf.CodedOutputStream
+            .computeUInt32SizeNoTag(dataSize);
+        }overlayKeymapsMemoizedSerializedSize = dataSize;
+      }
+      if (((bitField0_ & 0x04000000) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(80, useDateConversion_);
       }
-      if (((bitField0_ & 0x04000000) == 0x04000000)) {
+      if (((bitField0_ & 0x08000000) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(81, useSingleKanjiConversion_);
       }
-      if (((bitField0_ & 0x08000000) == 0x08000000)) {
+      if (((bitField0_ & 0x10000000) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(82, useSymbolConversion_);
       }
-      if (((bitField0_ & 0x10000000) == 0x10000000)) {
+      if (((bitField0_ & 0x20000000) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(83, useNumberConversion_);
       }
-      if (((bitField0_ & 0x20000000) == 0x20000000)) {
+      if (((bitField0_ & 0x40000000) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(84, useEmoticonConversion_);
       }
-      if (((bitField0_ & 0x40000000) == 0x40000000)) {
+      if (((bitField0_ & 0x80000000) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(85, useCalculator_);
       }
-      if (((bitField0_ & 0x80000000) == 0x80000000)) {
+      if (((bitField1_ & 0x00000001) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(86, useT13NConversion_);
       }
-      if (((bitField1_ & 0x00000001) == 0x00000001)) {
+      if (((bitField1_ & 0x00000002) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(87, useZipCodeConversion_);
       }
-      if (((bitField1_ & 0x00000002) == 0x00000002)) {
+      if (((bitField1_ & 0x00000004) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(88, useSpellingCorrection_);
       }
-      if (((bitField1_ & 0x00000004) == 0x00000004)) {
+      if (((bitField1_ & 0x00000008) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(89, useEmojiConversion_);
       }
-      if (((bitField1_ & 0x00000008) == 0x00000008)) {
+      if (((bitField1_ & 0x00000010) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(90, getInformationListConfig());
       }
-      if (((bitField1_ & 0x00000010) == 0x00000010)) {
+      if (((bitField1_ & 0x00000020) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(100, useHistorySuggest_);
       }
-      if (((bitField1_ & 0x00000020) == 0x00000020)) {
+      if (((bitField1_ & 0x00000040) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(101, useDictionarySuggest_);
       }
-      if (((bitField1_ & 0x00000040) == 0x00000040)) {
+      if (((bitField1_ & 0x00000080) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(102, useRealtimeConversion_);
       }
-      if (((bitField1_ & 0x00000080) == 0x00000080)) {
+      if (((bitField1_ & 0x00000100) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeUInt32Size(110, suggestionsSize_);
       }
-      if (((bitField1_ & 0x00000100) == 0x00000100)) {
+      if (((bitField1_ & 0x00000200) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(120, useModeIndicator_);
       }
-      if (((bitField1_ & 0x00000200) == 0x00000200)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(301, allowCloudHandwriting_);
-      }
-      size += unknownFields.getSerializedSize();
+      size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
     }
@@ -6448,211 +6772,211 @@ public final class ProtoConfig {
       }
       org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config other = (org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config) obj;
 
-      boolean result = true;
-      result = result && (hasGeneralConfig() == other.hasGeneralConfig());
+      if (hasGeneralConfig() != other.hasGeneralConfig()) return false;
       if (hasGeneralConfig()) {
-        result = result && getGeneralConfig()
-            .equals(other.getGeneralConfig());
+        if (!getGeneralConfig()
+            .equals(other.getGeneralConfig())) return false;
       }
-      result = result && (hasVerboseLevel() == other.hasVerboseLevel());
+      if (hasVerboseLevel() != other.hasVerboseLevel()) return false;
       if (hasVerboseLevel()) {
-        result = result && (getVerboseLevel()
-            == other.getVerboseLevel());
+        if (getVerboseLevel()
+            != other.getVerboseLevel()) return false;
       }
-      result = result && (hasIncognitoMode() == other.hasIncognitoMode());
+      if (hasIncognitoMode() != other.hasIncognitoMode()) return false;
       if (hasIncognitoMode()) {
-        result = result && (getIncognitoMode()
-            == other.getIncognitoMode());
+        if (getIncognitoMode()
+            != other.getIncognitoMode()) return false;
       }
-      result = result && (hasCheckDefault() == other.hasCheckDefault());
+      if (hasCheckDefault() != other.hasCheckDefault()) return false;
       if (hasCheckDefault()) {
-        result = result && (getCheckDefault()
-            == other.getCheckDefault());
+        if (getCheckDefault()
+            != other.getCheckDefault()) return false;
       }
-      result = result && (hasPresentationMode() == other.hasPresentationMode());
+      if (hasPresentationMode() != other.hasPresentationMode()) return false;
       if (hasPresentationMode()) {
-        result = result && (getPresentationMode()
-            == other.getPresentationMode());
+        if (getPresentationMode()
+            != other.getPresentationMode()) return false;
       }
-      result = result && (hasPreeditMethod() == other.hasPreeditMethod());
+      if (hasPreeditMethod() != other.hasPreeditMethod()) return false;
       if (hasPreeditMethod()) {
-        result = result && preeditMethod_ == other.preeditMethod_;
+        if (preeditMethod_ != other.preeditMethod_) return false;
       }
-      result = result && (hasSessionKeymap() == other.hasSessionKeymap());
+      if (hasSessionKeymap() != other.hasSessionKeymap()) return false;
       if (hasSessionKeymap()) {
-        result = result && sessionKeymap_ == other.sessionKeymap_;
+        if (sessionKeymap_ != other.sessionKeymap_) return false;
       }
-      result = result && (hasCustomKeymapTable() == other.hasCustomKeymapTable());
+      if (hasCustomKeymapTable() != other.hasCustomKeymapTable()) return false;
       if (hasCustomKeymapTable()) {
-        result = result && getCustomKeymapTable()
-            .equals(other.getCustomKeymapTable());
+        if (!getCustomKeymapTable()
+            .equals(other.getCustomKeymapTable())) return false;
       }
-      result = result && (hasCustomRomanTable() == other.hasCustomRomanTable());
+      if (hasCustomRomanTable() != other.hasCustomRomanTable()) return false;
       if (hasCustomRomanTable()) {
-        result = result && getCustomRomanTable()
-            .equals(other.getCustomRomanTable());
+        if (!getCustomRomanTable()
+            .equals(other.getCustomRomanTable())) return false;
       }
-      result = result && (hasPunctuationMethod() == other.hasPunctuationMethod());
+      if (hasPunctuationMethod() != other.hasPunctuationMethod()) return false;
       if (hasPunctuationMethod()) {
-        result = result && punctuationMethod_ == other.punctuationMethod_;
+        if (punctuationMethod_ != other.punctuationMethod_) return false;
       }
-      result = result && (hasSymbolMethod() == other.hasSymbolMethod());
+      if (hasSymbolMethod() != other.hasSymbolMethod()) return false;
       if (hasSymbolMethod()) {
-        result = result && symbolMethod_ == other.symbolMethod_;
+        if (symbolMethod_ != other.symbolMethod_) return false;
       }
-      result = result && (hasSpaceCharacterForm() == other.hasSpaceCharacterForm());
+      if (hasSpaceCharacterForm() != other.hasSpaceCharacterForm()) return false;
       if (hasSpaceCharacterForm()) {
-        result = result && spaceCharacterForm_ == other.spaceCharacterForm_;
+        if (spaceCharacterForm_ != other.spaceCharacterForm_) return false;
       }
-      result = result && (hasUseKeyboardToChangePreeditMethod() == other.hasUseKeyboardToChangePreeditMethod());
+      if (hasUseKeyboardToChangePreeditMethod() != other.hasUseKeyboardToChangePreeditMethod()) return false;
       if (hasUseKeyboardToChangePreeditMethod()) {
-        result = result && (getUseKeyboardToChangePreeditMethod()
-            == other.getUseKeyboardToChangePreeditMethod());
+        if (getUseKeyboardToChangePreeditMethod()
+            != other.getUseKeyboardToChangePreeditMethod()) return false;
       }
-      result = result && (hasHistoryLearningLevel() == other.hasHistoryLearningLevel());
+      if (hasHistoryLearningLevel() != other.hasHistoryLearningLevel()) return false;
       if (hasHistoryLearningLevel()) {
-        result = result && historyLearningLevel_ == other.historyLearningLevel_;
+        if (historyLearningLevel_ != other.historyLearningLevel_) return false;
       }
-      result = result && (hasSelectionShortcut() == other.hasSelectionShortcut());
+      if (hasSelectionShortcut() != other.hasSelectionShortcut()) return false;
       if (hasSelectionShortcut()) {
-        result = result && selectionShortcut_ == other.selectionShortcut_;
+        if (selectionShortcut_ != other.selectionShortcut_) return false;
       }
-      result = result && getCharacterFormRulesList()
-          .equals(other.getCharacterFormRulesList());
-      result = result && (hasUseAutoImeTurnOff() == other.hasUseAutoImeTurnOff());
+      if (!getCharacterFormRulesList()
+          .equals(other.getCharacterFormRulesList())) return false;
+      if (hasUseAutoImeTurnOff() != other.hasUseAutoImeTurnOff()) return false;
       if (hasUseAutoImeTurnOff()) {
-        result = result && (getUseAutoImeTurnOff()
-            == other.getUseAutoImeTurnOff());
+        if (getUseAutoImeTurnOff()
+            != other.getUseAutoImeTurnOff()) return false;
       }
-      result = result && (hasUseCascadingWindow() == other.hasUseCascadingWindow());
+      if (hasUseCascadingWindow() != other.hasUseCascadingWindow()) return false;
       if (hasUseCascadingWindow()) {
-        result = result && (getUseCascadingWindow()
-            == other.getUseCascadingWindow());
+        if (getUseCascadingWindow()
+            != other.getUseCascadingWindow()) return false;
       }
-      result = result && (hasShiftKeyModeSwitch() == other.hasShiftKeyModeSwitch());
+      if (hasShiftKeyModeSwitch() != other.hasShiftKeyModeSwitch()) return false;
       if (hasShiftKeyModeSwitch()) {
-        result = result && shiftKeyModeSwitch_ == other.shiftKeyModeSwitch_;
+        if (shiftKeyModeSwitch_ != other.shiftKeyModeSwitch_) return false;
       }
-      result = result && (hasNumpadCharacterForm() == other.hasNumpadCharacterForm());
+      if (hasNumpadCharacterForm() != other.hasNumpadCharacterForm()) return false;
       if (hasNumpadCharacterForm()) {
-        result = result && numpadCharacterForm_ == other.numpadCharacterForm_;
+        if (numpadCharacterForm_ != other.numpadCharacterForm_) return false;
       }
-      result = result && (hasUseAutoConversion() == other.hasUseAutoConversion());
+      if (hasUseAutoConversion() != other.hasUseAutoConversion()) return false;
       if (hasUseAutoConversion()) {
-        result = result && (getUseAutoConversion()
-            == other.getUseAutoConversion());
+        if (getUseAutoConversion()
+            != other.getUseAutoConversion()) return false;
       }
-      result = result && (hasAutoConversionKey() == other.hasAutoConversionKey());
+      if (hasAutoConversionKey() != other.hasAutoConversionKey()) return false;
       if (hasAutoConversionKey()) {
-        result = result && (getAutoConversionKey()
-            == other.getAutoConversionKey());
+        if (getAutoConversionKey()
+            != other.getAutoConversionKey()) return false;
       }
-      result = result && (hasYenSignCharacter() == other.hasYenSignCharacter());
+      if (hasYenSignCharacter() != other.hasYenSignCharacter()) return false;
       if (hasYenSignCharacter()) {
-        result = result && yenSignCharacter_ == other.yenSignCharacter_;
+        if (yenSignCharacter_ != other.yenSignCharacter_) return false;
       }
-      result = result && (hasUseJapaneseLayout() == other.hasUseJapaneseLayout());
+      if (hasUseJapaneseLayout() != other.hasUseJapaneseLayout()) return false;
       if (hasUseJapaneseLayout()) {
-        result = result && (getUseJapaneseLayout()
-            == other.getUseJapaneseLayout());
+        if (getUseJapaneseLayout()
+            != other.getUseJapaneseLayout()) return false;
       }
-      result = result && (hasUseKanaModifierInsensitiveConversion() == other.hasUseKanaModifierInsensitiveConversion());
+      if (hasUseKanaModifierInsensitiveConversion() != other.hasUseKanaModifierInsensitiveConversion()) return false;
       if (hasUseKanaModifierInsensitiveConversion()) {
-        result = result && (getUseKanaModifierInsensitiveConversion()
-            == other.getUseKanaModifierInsensitiveConversion());
+        if (getUseKanaModifierInsensitiveConversion()
+            != other.getUseKanaModifierInsensitiveConversion()) return false;
       }
-      result = result && (hasUseTypingCorrection() == other.hasUseTypingCorrection());
+      if (hasUseTypingCorrection() != other.hasUseTypingCorrection()) return false;
       if (hasUseTypingCorrection()) {
-        result = result && (getUseTypingCorrection()
-            == other.getUseTypingCorrection());
+        if (getUseTypingCorrection()
+            != other.getUseTypingCorrection()) return false;
       }
-      result = result && (hasUseDateConversion() == other.hasUseDateConversion());
+      if (hasComposingTimeoutThresholdMsec() != other.hasComposingTimeoutThresholdMsec()) return false;
+      if (hasComposingTimeoutThresholdMsec()) {
+        if (getComposingTimeoutThresholdMsec()
+            != other.getComposingTimeoutThresholdMsec()) return false;
+      }
+      if (!overlayKeymaps_.equals(other.overlayKeymaps_)) return false;
+      if (hasUseDateConversion() != other.hasUseDateConversion()) return false;
       if (hasUseDateConversion()) {
-        result = result && (getUseDateConversion()
-            == other.getUseDateConversion());
+        if (getUseDateConversion()
+            != other.getUseDateConversion()) return false;
       }
-      result = result && (hasUseSingleKanjiConversion() == other.hasUseSingleKanjiConversion());
+      if (hasUseSingleKanjiConversion() != other.hasUseSingleKanjiConversion()) return false;
       if (hasUseSingleKanjiConversion()) {
-        result = result && (getUseSingleKanjiConversion()
-            == other.getUseSingleKanjiConversion());
+        if (getUseSingleKanjiConversion()
+            != other.getUseSingleKanjiConversion()) return false;
       }
-      result = result && (hasUseSymbolConversion() == other.hasUseSymbolConversion());
+      if (hasUseSymbolConversion() != other.hasUseSymbolConversion()) return false;
       if (hasUseSymbolConversion()) {
-        result = result && (getUseSymbolConversion()
-            == other.getUseSymbolConversion());
+        if (getUseSymbolConversion()
+            != other.getUseSymbolConversion()) return false;
       }
-      result = result && (hasUseNumberConversion() == other.hasUseNumberConversion());
+      if (hasUseNumberConversion() != other.hasUseNumberConversion()) return false;
       if (hasUseNumberConversion()) {
-        result = result && (getUseNumberConversion()
-            == other.getUseNumberConversion());
+        if (getUseNumberConversion()
+            != other.getUseNumberConversion()) return false;
       }
-      result = result && (hasUseEmoticonConversion() == other.hasUseEmoticonConversion());
+      if (hasUseEmoticonConversion() != other.hasUseEmoticonConversion()) return false;
       if (hasUseEmoticonConversion()) {
-        result = result && (getUseEmoticonConversion()
-            == other.getUseEmoticonConversion());
+        if (getUseEmoticonConversion()
+            != other.getUseEmoticonConversion()) return false;
       }
-      result = result && (hasUseCalculator() == other.hasUseCalculator());
+      if (hasUseCalculator() != other.hasUseCalculator()) return false;
       if (hasUseCalculator()) {
-        result = result && (getUseCalculator()
-            == other.getUseCalculator());
+        if (getUseCalculator()
+            != other.getUseCalculator()) return false;
       }
-      result = result && (hasUseT13NConversion() == other.hasUseT13NConversion());
+      if (hasUseT13NConversion() != other.hasUseT13NConversion()) return false;
       if (hasUseT13NConversion()) {
-        result = result && (getUseT13NConversion()
-            == other.getUseT13NConversion());
+        if (getUseT13NConversion()
+            != other.getUseT13NConversion()) return false;
       }
-      result = result && (hasUseZipCodeConversion() == other.hasUseZipCodeConversion());
+      if (hasUseZipCodeConversion() != other.hasUseZipCodeConversion()) return false;
       if (hasUseZipCodeConversion()) {
-        result = result && (getUseZipCodeConversion()
-            == other.getUseZipCodeConversion());
+        if (getUseZipCodeConversion()
+            != other.getUseZipCodeConversion()) return false;
       }
-      result = result && (hasUseSpellingCorrection() == other.hasUseSpellingCorrection());
+      if (hasUseSpellingCorrection() != other.hasUseSpellingCorrection()) return false;
       if (hasUseSpellingCorrection()) {
-        result = result && (getUseSpellingCorrection()
-            == other.getUseSpellingCorrection());
+        if (getUseSpellingCorrection()
+            != other.getUseSpellingCorrection()) return false;
       }
-      result = result && (hasUseEmojiConversion() == other.hasUseEmojiConversion());
+      if (hasUseEmojiConversion() != other.hasUseEmojiConversion()) return false;
       if (hasUseEmojiConversion()) {
-        result = result && (getUseEmojiConversion()
-            == other.getUseEmojiConversion());
+        if (getUseEmojiConversion()
+            != other.getUseEmojiConversion()) return false;
       }
-      result = result && (hasInformationListConfig() == other.hasInformationListConfig());
+      if (hasInformationListConfig() != other.hasInformationListConfig()) return false;
       if (hasInformationListConfig()) {
-        result = result && getInformationListConfig()
-            .equals(other.getInformationListConfig());
+        if (!getInformationListConfig()
+            .equals(other.getInformationListConfig())) return false;
       }
-      result = result && (hasUseHistorySuggest() == other.hasUseHistorySuggest());
+      if (hasUseHistorySuggest() != other.hasUseHistorySuggest()) return false;
       if (hasUseHistorySuggest()) {
-        result = result && (getUseHistorySuggest()
-            == other.getUseHistorySuggest());
+        if (getUseHistorySuggest()
+            != other.getUseHistorySuggest()) return false;
       }
-      result = result && (hasUseDictionarySuggest() == other.hasUseDictionarySuggest());
+      if (hasUseDictionarySuggest() != other.hasUseDictionarySuggest()) return false;
       if (hasUseDictionarySuggest()) {
-        result = result && (getUseDictionarySuggest()
-            == other.getUseDictionarySuggest());
+        if (getUseDictionarySuggest()
+            != other.getUseDictionarySuggest()) return false;
       }
-      result = result && (hasUseRealtimeConversion() == other.hasUseRealtimeConversion());
+      if (hasUseRealtimeConversion() != other.hasUseRealtimeConversion()) return false;
       if (hasUseRealtimeConversion()) {
-        result = result && (getUseRealtimeConversion()
-            == other.getUseRealtimeConversion());
+        if (getUseRealtimeConversion()
+            != other.getUseRealtimeConversion()) return false;
       }
-      result = result && (hasSuggestionsSize() == other.hasSuggestionsSize());
+      if (hasSuggestionsSize() != other.hasSuggestionsSize()) return false;
       if (hasSuggestionsSize()) {
-        result = result && (getSuggestionsSize()
-            == other.getSuggestionsSize());
+        if (getSuggestionsSize()
+            != other.getSuggestionsSize()) return false;
       }
-      result = result && (hasUseModeIndicator() == other.hasUseModeIndicator());
+      if (hasUseModeIndicator() != other.hasUseModeIndicator()) return false;
       if (hasUseModeIndicator()) {
-        result = result && (getUseModeIndicator()
-            == other.getUseModeIndicator());
+        if (getUseModeIndicator()
+            != other.getUseModeIndicator()) return false;
       }
-      result = result && (hasAllowCloudHandwriting() == other.hasAllowCloudHandwriting());
-      if (hasAllowCloudHandwriting()) {
-        result = result && (getAllowCloudHandwriting()
-            == other.getAllowCloudHandwriting());
-      }
-      result = result && unknownFields.equals(other.unknownFields);
-      return result;
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
+      return true;
     }
 
     @java.lang.Override
@@ -6776,6 +7100,14 @@ public final class ProtoConfig {
         hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
             getUseTypingCorrection());
       }
+      if (hasComposingTimeoutThresholdMsec()) {
+        hash = (37 * hash) + COMPOSING_TIMEOUT_THRESHOLD_MSEC_FIELD_NUMBER;
+        hash = (53 * hash) + getComposingTimeoutThresholdMsec();
+      }
+      if (getOverlayKeymapsCount() > 0) {
+        hash = (37 * hash) + OVERLAY_KEYMAPS_FIELD_NUMBER;
+        hash = (53 * hash) + overlayKeymaps_.hashCode();
+      }
       if (hasUseDateConversion()) {
         hash = (37 * hash) + USE_DATE_CONVERSION_FIELD_NUMBER;
         hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
@@ -6854,12 +7186,7 @@ public final class ProtoConfig {
         hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
             getUseModeIndicator());
       }
-      if (hasAllowCloudHandwriting()) {
-        hash = (37 * hash) + ALLOW_CLOUD_HANDWRITING_FIELD_NUMBER;
-        hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
-            getAllowCloudHandwriting());
-      }
-      hash = (29 * hash) + unknownFields.hashCode();
+      hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
     }
@@ -6934,6 +7261,7 @@ public final class ProtoConfig {
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
+    @java.lang.Override
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
@@ -6941,6 +7269,7 @@ public final class ProtoConfig {
     public static Builder newBuilder(org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
+    @java.lang.Override
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
@@ -6959,11 +7288,12 @@ public final class ProtoConfig {
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:mozc.config.Config)
         org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.ConfigOrBuilder {
-      public static com.google.protobuf.Descriptors.Descriptor
+      public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.internal_static_mozc_config_Config_descriptor;
       }
 
+      @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.internal_static_mozc_config_Config_fieldAccessorTable
@@ -6989,118 +7319,85 @@ public final class ProtoConfig {
           getInformationListConfigFieldBuilder();
         }
       }
+      @java.lang.Override
       public Builder clear() {
         super.clear();
-        if (generalConfigBuilder_ == null) {
-          generalConfig_ = null;
-        } else {
-          generalConfigBuilder_.clear();
+        bitField0_ = 0;
+        bitField1_ = 0;
+        generalConfig_ = null;
+        if (generalConfigBuilder_ != null) {
+          generalConfigBuilder_.dispose();
+          generalConfigBuilder_ = null;
         }
-        bitField0_ = (bitField0_ & ~0x00000001);
         verboseLevel_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000002);
         incognitoMode_ = false;
-        bitField0_ = (bitField0_ & ~0x00000004);
         checkDefault_ = true;
-        bitField0_ = (bitField0_ & ~0x00000008);
         presentationMode_ = false;
-        bitField0_ = (bitField0_ & ~0x00000010);
         preeditMethod_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000020);
         sessionKeymap_ = -1;
-        bitField0_ = (bitField0_ & ~0x00000040);
         customKeymapTable_ = com.google.protobuf.ByteString.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000080);
         customRomanTable_ = com.google.protobuf.ByteString.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000100);
         punctuationMethod_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000200);
         symbolMethod_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000400);
         spaceCharacterForm_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000800);
         useKeyboardToChangePreeditMethod_ = false;
-        bitField0_ = (bitField0_ & ~0x00001000);
         historyLearningLevel_ = 0;
-        bitField0_ = (bitField0_ & ~0x00002000);
         selectionShortcut_ = 1;
-        bitField0_ = (bitField0_ & ~0x00004000);
         if (characterFormRulesBuilder_ == null) {
           characterFormRules_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00008000);
         } else {
+          characterFormRules_ = null;
           characterFormRulesBuilder_.clear();
         }
+        bitField0_ = (bitField0_ & ~0x00008000);
         useAutoImeTurnOff_ = true;
-        bitField0_ = (bitField0_ & ~0x00010000);
         useCascadingWindow_ = true;
-        bitField0_ = (bitField0_ & ~0x00020000);
         shiftKeyModeSwitch_ = 1;
-        bitField0_ = (bitField0_ & ~0x00040000);
         numpadCharacterForm_ = 2;
-        bitField0_ = (bitField0_ & ~0x00080000);
         useAutoConversion_ = false;
-        bitField0_ = (bitField0_ & ~0x00100000);
         autoConversionKey_ = 13;
-        bitField0_ = (bitField0_ & ~0x00200000);
         yenSignCharacter_ = 0;
-        bitField0_ = (bitField0_ & ~0x00400000);
         useJapaneseLayout_ = false;
-        bitField0_ = (bitField0_ & ~0x00800000);
         useKanaModifierInsensitiveConversion_ = false;
-        bitField0_ = (bitField0_ & ~0x01000000);
         useTypingCorrection_ = false;
-        bitField0_ = (bitField0_ & ~0x02000000);
-        useDateConversion_ = true;
-        bitField0_ = (bitField0_ & ~0x04000000);
-        useSingleKanjiConversion_ = true;
+        composingTimeoutThresholdMsec_ = 0;
+        overlayKeymaps_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x08000000);
+        useDateConversion_ = true;
+        useSingleKanjiConversion_ = true;
         useSymbolConversion_ = true;
-        bitField0_ = (bitField0_ & ~0x10000000);
         useNumberConversion_ = true;
-        bitField0_ = (bitField0_ & ~0x20000000);
         useEmoticonConversion_ = true;
-        bitField0_ = (bitField0_ & ~0x40000000);
         useCalculator_ = true;
-        bitField0_ = (bitField0_ & ~0x80000000);
         useT13NConversion_ = true;
-        bitField1_ = (bitField1_ & ~0x00000001);
         useZipCodeConversion_ = true;
-        bitField1_ = (bitField1_ & ~0x00000002);
         useSpellingCorrection_ = true;
-        bitField1_ = (bitField1_ & ~0x00000004);
         useEmojiConversion_ = false;
-        bitField1_ = (bitField1_ & ~0x00000008);
-        if (informationListConfigBuilder_ == null) {
-          informationListConfig_ = null;
-        } else {
-          informationListConfigBuilder_.clear();
+        informationListConfig_ = null;
+        if (informationListConfigBuilder_ != null) {
+          informationListConfigBuilder_.dispose();
+          informationListConfigBuilder_ = null;
         }
-        bitField1_ = (bitField1_ & ~0x00000010);
         useHistorySuggest_ = true;
-        bitField1_ = (bitField1_ & ~0x00000020);
         useDictionarySuggest_ = true;
-        bitField1_ = (bitField1_ & ~0x00000040);
         useRealtimeConversion_ = true;
-        bitField1_ = (bitField1_ & ~0x00000080);
         suggestionsSize_ = 3;
-        bitField1_ = (bitField1_ & ~0x00000100);
         useModeIndicator_ = true;
-        bitField1_ = (bitField1_ & ~0x00000200);
-        allowCloudHandwriting_ = false;
-        bitField1_ = (bitField1_ & ~0x00000400);
         return this;
       }
 
+      @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
         return org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.internal_static_mozc_config_Config_descriptor;
       }
 
+      @java.lang.Override
       public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config getDefaultInstanceForType() {
         return org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.getDefaultInstance();
       }
 
+      @java.lang.Override
       public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config build() {
         org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config result = buildPartial();
         if (!result.isInitialized()) {
@@ -7109,78 +7406,19 @@ public final class ProtoConfig {
         return result;
       }
 
+      @java.lang.Override
       public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config buildPartial() {
         org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config result = new org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config(this);
-        int from_bitField0_ = bitField0_;
-        int from_bitField1_ = bitField1_;
-        int to_bitField0_ = 0;
-        int to_bitField1_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        if (generalConfigBuilder_ == null) {
-          result.generalConfig_ = generalConfig_;
-        } else {
-          result.generalConfig_ = generalConfigBuilder_.build();
-        }
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        result.verboseLevel_ = verboseLevel_;
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000004;
-        }
-        result.incognitoMode_ = incognitoMode_;
-        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
-          to_bitField0_ |= 0x00000008;
-        }
-        result.checkDefault_ = checkDefault_;
-        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
-          to_bitField0_ |= 0x00000010;
-        }
-        result.presentationMode_ = presentationMode_;
-        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
-          to_bitField0_ |= 0x00000020;
-        }
-        result.preeditMethod_ = preeditMethod_;
-        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
-          to_bitField0_ |= 0x00000040;
-        }
-        result.sessionKeymap_ = sessionKeymap_;
-        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
-          to_bitField0_ |= 0x00000080;
-        }
-        result.customKeymapTable_ = customKeymapTable_;
-        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
-          to_bitField0_ |= 0x00000100;
-        }
-        result.customRomanTable_ = customRomanTable_;
-        if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
-          to_bitField0_ |= 0x00000200;
-        }
-        result.punctuationMethod_ = punctuationMethod_;
-        if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
-          to_bitField0_ |= 0x00000400;
-        }
-        result.symbolMethod_ = symbolMethod_;
-        if (((from_bitField0_ & 0x00000800) == 0x00000800)) {
-          to_bitField0_ |= 0x00000800;
-        }
-        result.spaceCharacterForm_ = spaceCharacterForm_;
-        if (((from_bitField0_ & 0x00001000) == 0x00001000)) {
-          to_bitField0_ |= 0x00001000;
-        }
-        result.useKeyboardToChangePreeditMethod_ = useKeyboardToChangePreeditMethod_;
-        if (((from_bitField0_ & 0x00002000) == 0x00002000)) {
-          to_bitField0_ |= 0x00002000;
-        }
-        result.historyLearningLevel_ = historyLearningLevel_;
-        if (((from_bitField0_ & 0x00004000) == 0x00004000)) {
-          to_bitField0_ |= 0x00004000;
-        }
-        result.selectionShortcut_ = selectionShortcut_;
+        buildPartialRepeatedFields(result);
+        if (bitField0_ != 0) { buildPartial0(result); }
+        if (bitField1_ != 0) { buildPartial1(result); }
+        onBuilt();
+        return result;
+      }
+
+      private void buildPartialRepeatedFields(org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config result) {
         if (characterFormRulesBuilder_ == null) {
-          if (((bitField0_ & 0x00008000) == 0x00008000)) {
+          if (((bitField0_ & 0x00008000) != 0)) {
             characterFormRules_ = java.util.Collections.unmodifiableList(characterFormRules_);
             bitField0_ = (bitField0_ & ~0x00008000);
           }
@@ -7188,150 +7426,232 @@ public final class ProtoConfig {
         } else {
           result.characterFormRules_ = characterFormRulesBuilder_.build();
         }
-        if (((from_bitField0_ & 0x00010000) == 0x00010000)) {
-          to_bitField0_ |= 0x00008000;
+        if (((bitField0_ & 0x08000000) != 0)) {
+          overlayKeymaps_ = java.util.Collections.unmodifiableList(overlayKeymaps_);
+          bitField0_ = (bitField0_ & ~0x08000000);
         }
-        result.useAutoImeTurnOff_ = useAutoImeTurnOff_;
-        if (((from_bitField0_ & 0x00020000) == 0x00020000)) {
-          to_bitField0_ |= 0x00010000;
-        }
-        result.useCascadingWindow_ = useCascadingWindow_;
-        if (((from_bitField0_ & 0x00040000) == 0x00040000)) {
-          to_bitField0_ |= 0x00020000;
-        }
-        result.shiftKeyModeSwitch_ = shiftKeyModeSwitch_;
-        if (((from_bitField0_ & 0x00080000) == 0x00080000)) {
-          to_bitField0_ |= 0x00040000;
-        }
-        result.numpadCharacterForm_ = numpadCharacterForm_;
-        if (((from_bitField0_ & 0x00100000) == 0x00100000)) {
-          to_bitField0_ |= 0x00080000;
-        }
-        result.useAutoConversion_ = useAutoConversion_;
-        if (((from_bitField0_ & 0x00200000) == 0x00200000)) {
-          to_bitField0_ |= 0x00100000;
-        }
-        result.autoConversionKey_ = autoConversionKey_;
-        if (((from_bitField0_ & 0x00400000) == 0x00400000)) {
-          to_bitField0_ |= 0x00200000;
-        }
-        result.yenSignCharacter_ = yenSignCharacter_;
-        if (((from_bitField0_ & 0x00800000) == 0x00800000)) {
-          to_bitField0_ |= 0x00400000;
-        }
-        result.useJapaneseLayout_ = useJapaneseLayout_;
-        if (((from_bitField0_ & 0x01000000) == 0x01000000)) {
-          to_bitField0_ |= 0x00800000;
-        }
-        result.useKanaModifierInsensitiveConversion_ = useKanaModifierInsensitiveConversion_;
-        if (((from_bitField0_ & 0x02000000) == 0x02000000)) {
-          to_bitField0_ |= 0x01000000;
-        }
-        result.useTypingCorrection_ = useTypingCorrection_;
-        if (((from_bitField0_ & 0x04000000) == 0x04000000)) {
-          to_bitField0_ |= 0x02000000;
-        }
-        result.useDateConversion_ = useDateConversion_;
-        if (((from_bitField0_ & 0x08000000) == 0x08000000)) {
-          to_bitField0_ |= 0x04000000;
-        }
-        result.useSingleKanjiConversion_ = useSingleKanjiConversion_;
-        if (((from_bitField0_ & 0x10000000) == 0x10000000)) {
-          to_bitField0_ |= 0x08000000;
-        }
-        result.useSymbolConversion_ = useSymbolConversion_;
-        if (((from_bitField0_ & 0x20000000) == 0x20000000)) {
-          to_bitField0_ |= 0x10000000;
-        }
-        result.useNumberConversion_ = useNumberConversion_;
-        if (((from_bitField0_ & 0x40000000) == 0x40000000)) {
-          to_bitField0_ |= 0x20000000;
-        }
-        result.useEmoticonConversion_ = useEmoticonConversion_;
-        if (((from_bitField0_ & 0x80000000) == 0x80000000)) {
-          to_bitField0_ |= 0x40000000;
-        }
-        result.useCalculator_ = useCalculator_;
-        if (((from_bitField1_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x80000000;
-        }
-        result.useT13NConversion_ = useT13NConversion_;
-        if (((from_bitField1_ & 0x00000002) == 0x00000002)) {
-          to_bitField1_ |= 0x00000001;
-        }
-        result.useZipCodeConversion_ = useZipCodeConversion_;
-        if (((from_bitField1_ & 0x00000004) == 0x00000004)) {
-          to_bitField1_ |= 0x00000002;
-        }
-        result.useSpellingCorrection_ = useSpellingCorrection_;
-        if (((from_bitField1_ & 0x00000008) == 0x00000008)) {
-          to_bitField1_ |= 0x00000004;
-        }
-        result.useEmojiConversion_ = useEmojiConversion_;
-        if (((from_bitField1_ & 0x00000010) == 0x00000010)) {
-          to_bitField1_ |= 0x00000008;
-        }
-        if (informationListConfigBuilder_ == null) {
-          result.informationListConfig_ = informationListConfig_;
-        } else {
-          result.informationListConfig_ = informationListConfigBuilder_.build();
-        }
-        if (((from_bitField1_ & 0x00000020) == 0x00000020)) {
-          to_bitField1_ |= 0x00000010;
-        }
-        result.useHistorySuggest_ = useHistorySuggest_;
-        if (((from_bitField1_ & 0x00000040) == 0x00000040)) {
-          to_bitField1_ |= 0x00000020;
-        }
-        result.useDictionarySuggest_ = useDictionarySuggest_;
-        if (((from_bitField1_ & 0x00000080) == 0x00000080)) {
-          to_bitField1_ |= 0x00000040;
-        }
-        result.useRealtimeConversion_ = useRealtimeConversion_;
-        if (((from_bitField1_ & 0x00000100) == 0x00000100)) {
-          to_bitField1_ |= 0x00000080;
-        }
-        result.suggestionsSize_ = suggestionsSize_;
-        if (((from_bitField1_ & 0x00000200) == 0x00000200)) {
-          to_bitField1_ |= 0x00000100;
-        }
-        result.useModeIndicator_ = useModeIndicator_;
-        if (((from_bitField1_ & 0x00000400) == 0x00000400)) {
-          to_bitField1_ |= 0x00000200;
-        }
-        result.allowCloudHandwriting_ = allowCloudHandwriting_;
-        result.bitField0_ = to_bitField0_;
-        result.bitField1_ = to_bitField1_;
-        onBuilt();
-        return result;
+        result.overlayKeymaps_ = overlayKeymaps_;
       }
 
+      private void buildPartial0(org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config result) {
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          result.generalConfig_ = generalConfigBuilder_ == null
+              ? generalConfig_
+              : generalConfigBuilder_.build();
+          to_bitField0_ |= 0x00000001;
+        }
+        if (((from_bitField0_ & 0x00000002) != 0)) {
+          result.verboseLevel_ = verboseLevel_;
+          to_bitField0_ |= 0x00000002;
+        }
+        if (((from_bitField0_ & 0x00000004) != 0)) {
+          result.incognitoMode_ = incognitoMode_;
+          to_bitField0_ |= 0x00000004;
+        }
+        if (((from_bitField0_ & 0x00000008) != 0)) {
+          result.checkDefault_ = checkDefault_;
+          to_bitField0_ |= 0x00000008;
+        }
+        if (((from_bitField0_ & 0x00000010) != 0)) {
+          result.presentationMode_ = presentationMode_;
+          to_bitField0_ |= 0x00000010;
+        }
+        if (((from_bitField0_ & 0x00000020) != 0)) {
+          result.preeditMethod_ = preeditMethod_;
+          to_bitField0_ |= 0x00000020;
+        }
+        if (((from_bitField0_ & 0x00000040) != 0)) {
+          result.sessionKeymap_ = sessionKeymap_;
+          to_bitField0_ |= 0x00000040;
+        }
+        if (((from_bitField0_ & 0x00000080) != 0)) {
+          result.customKeymapTable_ = customKeymapTable_;
+          to_bitField0_ |= 0x00000080;
+        }
+        if (((from_bitField0_ & 0x00000100) != 0)) {
+          result.customRomanTable_ = customRomanTable_;
+          to_bitField0_ |= 0x00000100;
+        }
+        if (((from_bitField0_ & 0x00000200) != 0)) {
+          result.punctuationMethod_ = punctuationMethod_;
+          to_bitField0_ |= 0x00000200;
+        }
+        if (((from_bitField0_ & 0x00000400) != 0)) {
+          result.symbolMethod_ = symbolMethod_;
+          to_bitField0_ |= 0x00000400;
+        }
+        if (((from_bitField0_ & 0x00000800) != 0)) {
+          result.spaceCharacterForm_ = spaceCharacterForm_;
+          to_bitField0_ |= 0x00000800;
+        }
+        if (((from_bitField0_ & 0x00001000) != 0)) {
+          result.useKeyboardToChangePreeditMethod_ = useKeyboardToChangePreeditMethod_;
+          to_bitField0_ |= 0x00001000;
+        }
+        if (((from_bitField0_ & 0x00002000) != 0)) {
+          result.historyLearningLevel_ = historyLearningLevel_;
+          to_bitField0_ |= 0x00002000;
+        }
+        if (((from_bitField0_ & 0x00004000) != 0)) {
+          result.selectionShortcut_ = selectionShortcut_;
+          to_bitField0_ |= 0x00004000;
+        }
+        if (((from_bitField0_ & 0x00010000) != 0)) {
+          result.useAutoImeTurnOff_ = useAutoImeTurnOff_;
+          to_bitField0_ |= 0x00008000;
+        }
+        if (((from_bitField0_ & 0x00020000) != 0)) {
+          result.useCascadingWindow_ = useCascadingWindow_;
+          to_bitField0_ |= 0x00010000;
+        }
+        if (((from_bitField0_ & 0x00040000) != 0)) {
+          result.shiftKeyModeSwitch_ = shiftKeyModeSwitch_;
+          to_bitField0_ |= 0x00020000;
+        }
+        if (((from_bitField0_ & 0x00080000) != 0)) {
+          result.numpadCharacterForm_ = numpadCharacterForm_;
+          to_bitField0_ |= 0x00040000;
+        }
+        if (((from_bitField0_ & 0x00100000) != 0)) {
+          result.useAutoConversion_ = useAutoConversion_;
+          to_bitField0_ |= 0x00080000;
+        }
+        if (((from_bitField0_ & 0x00200000) != 0)) {
+          result.autoConversionKey_ = autoConversionKey_;
+          to_bitField0_ |= 0x00100000;
+        }
+        if (((from_bitField0_ & 0x00400000) != 0)) {
+          result.yenSignCharacter_ = yenSignCharacter_;
+          to_bitField0_ |= 0x00200000;
+        }
+        if (((from_bitField0_ & 0x00800000) != 0)) {
+          result.useJapaneseLayout_ = useJapaneseLayout_;
+          to_bitField0_ |= 0x00400000;
+        }
+        if (((from_bitField0_ & 0x01000000) != 0)) {
+          result.useKanaModifierInsensitiveConversion_ = useKanaModifierInsensitiveConversion_;
+          to_bitField0_ |= 0x00800000;
+        }
+        if (((from_bitField0_ & 0x02000000) != 0)) {
+          result.useTypingCorrection_ = useTypingCorrection_;
+          to_bitField0_ |= 0x01000000;
+        }
+        if (((from_bitField0_ & 0x04000000) != 0)) {
+          result.composingTimeoutThresholdMsec_ = composingTimeoutThresholdMsec_;
+          to_bitField0_ |= 0x02000000;
+        }
+        if (((from_bitField0_ & 0x10000000) != 0)) {
+          result.useDateConversion_ = useDateConversion_;
+          to_bitField0_ |= 0x04000000;
+        }
+        if (((from_bitField0_ & 0x20000000) != 0)) {
+          result.useSingleKanjiConversion_ = useSingleKanjiConversion_;
+          to_bitField0_ |= 0x08000000;
+        }
+        if (((from_bitField0_ & 0x40000000) != 0)) {
+          result.useSymbolConversion_ = useSymbolConversion_;
+          to_bitField0_ |= 0x10000000;
+        }
+        if (((from_bitField0_ & 0x80000000) != 0)) {
+          result.useNumberConversion_ = useNumberConversion_;
+          to_bitField0_ |= 0x20000000;
+        }
+        result.bitField0_ |= to_bitField0_;
+      }
+
+      private void buildPartial1(org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config result) {
+        int from_bitField1_ = bitField1_;
+        int to_bitField0_ = 0;
+        if (((from_bitField1_ & 0x00000001) != 0)) {
+          result.useEmoticonConversion_ = useEmoticonConversion_;
+          to_bitField0_ |= 0x40000000;
+        }
+        if (((from_bitField1_ & 0x00000002) != 0)) {
+          result.useCalculator_ = useCalculator_;
+          to_bitField0_ |= 0x80000000;
+        }
+        int to_bitField1_ = 0;
+        if (((from_bitField1_ & 0x00000004) != 0)) {
+          result.useT13NConversion_ = useT13NConversion_;
+          to_bitField1_ |= 0x00000001;
+        }
+        if (((from_bitField1_ & 0x00000008) != 0)) {
+          result.useZipCodeConversion_ = useZipCodeConversion_;
+          to_bitField1_ |= 0x00000002;
+        }
+        if (((from_bitField1_ & 0x00000010) != 0)) {
+          result.useSpellingCorrection_ = useSpellingCorrection_;
+          to_bitField1_ |= 0x00000004;
+        }
+        if (((from_bitField1_ & 0x00000020) != 0)) {
+          result.useEmojiConversion_ = useEmojiConversion_;
+          to_bitField1_ |= 0x00000008;
+        }
+        if (((from_bitField1_ & 0x00000040) != 0)) {
+          result.informationListConfig_ = informationListConfigBuilder_ == null
+              ? informationListConfig_
+              : informationListConfigBuilder_.build();
+          to_bitField1_ |= 0x00000010;
+        }
+        if (((from_bitField1_ & 0x00000080) != 0)) {
+          result.useHistorySuggest_ = useHistorySuggest_;
+          to_bitField1_ |= 0x00000020;
+        }
+        if (((from_bitField1_ & 0x00000100) != 0)) {
+          result.useDictionarySuggest_ = useDictionarySuggest_;
+          to_bitField1_ |= 0x00000040;
+        }
+        if (((from_bitField1_ & 0x00000200) != 0)) {
+          result.useRealtimeConversion_ = useRealtimeConversion_;
+          to_bitField1_ |= 0x00000080;
+        }
+        if (((from_bitField1_ & 0x00000400) != 0)) {
+          result.suggestionsSize_ = suggestionsSize_;
+          to_bitField1_ |= 0x00000100;
+        }
+        if (((from_bitField1_ & 0x00000800) != 0)) {
+          result.useModeIndicator_ = useModeIndicator_;
+          to_bitField1_ |= 0x00000200;
+        }
+        result.bitField0_ |= to_bitField0_;
+        result.bitField1_ |= to_bitField1_;
+      }
+
+      @java.lang.Override
       public Builder clone() {
         return super.clone();
       }
+      @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
         return super.setField(field, value);
       }
+      @java.lang.Override
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
         return super.clearField(field);
       }
+      @java.lang.Override
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return super.clearOneof(oneof);
       }
+      @java.lang.Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           int index, java.lang.Object value) {
         return super.setRepeatedField(field, index, value);
       }
+      @java.lang.Override
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
         return super.addRepeatedField(field, value);
       }
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config) {
           return mergeFrom((org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config)other);
@@ -7444,6 +7764,19 @@ public final class ProtoConfig {
         if (other.hasUseTypingCorrection()) {
           setUseTypingCorrection(other.getUseTypingCorrection());
         }
+        if (other.hasComposingTimeoutThresholdMsec()) {
+          setComposingTimeoutThresholdMsec(other.getComposingTimeoutThresholdMsec());
+        }
+        if (!other.overlayKeymaps_.isEmpty()) {
+          if (overlayKeymaps_.isEmpty()) {
+            overlayKeymaps_ = other.overlayKeymaps_;
+            bitField0_ = (bitField0_ & ~0x08000000);
+          } else {
+            ensureOverlayKeymapsIsMutable();
+            overlayKeymaps_.addAll(other.overlayKeymaps_);
+          }
+          onChanged();
+        }
         if (other.hasUseDateConversion()) {
           setUseDateConversion(other.getUseDateConversion());
         }
@@ -7492,39 +7825,377 @@ public final class ProtoConfig {
         if (other.hasUseModeIndicator()) {
           setUseModeIndicator(other.getUseModeIndicator());
         }
-        if (other.hasAllowCloudHandwriting()) {
-          setAllowCloudHandwriting(other.getAllowCloudHandwriting());
-        }
-        this.mergeUnknownFields(other.unknownFields);
+        this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
       }
 
-      public boolean isInitialized() {
+      @java.lang.Override
+      public final boolean isInitialized() {
         return true;
       }
 
+      @java.lang.Override
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config parsedMessage = null;
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
         try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 10: {
+                input.readMessage(
+                    getGeneralConfigFieldBuilder().getBuilder(),
+                    extensionRegistry);
+                bitField0_ |= 0x00000001;
+                break;
+              } // case 10
+              case 80: {
+                verboseLevel_ = input.readInt32();
+                bitField0_ |= 0x00000002;
+                break;
+              } // case 80
+              case 160: {
+                incognitoMode_ = input.readBool();
+                bitField0_ |= 0x00000004;
+                break;
+              } // case 160
+              case 176: {
+                checkDefault_ = input.readBool();
+                bitField0_ |= 0x00000008;
+                break;
+              } // case 176
+              case 184: {
+                presentationMode_ = input.readBool();
+                bitField0_ |= 0x00000010;
+                break;
+              } // case 184
+              case 320: {
+                int tmpRaw = input.readEnum();
+                org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.PreeditMethod tmpValue =
+                    org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.PreeditMethod.forNumber(tmpRaw);
+                if (tmpValue == null) {
+                  mergeUnknownVarintField(40, tmpRaw);
+                } else {
+                  preeditMethod_ = tmpRaw;
+                  bitField0_ |= 0x00000020;
+                }
+                break;
+              } // case 320
+              case 328: {
+                int tmpRaw = input.readEnum();
+                org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SessionKeymap tmpValue =
+                    org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SessionKeymap.forNumber(tmpRaw);
+                if (tmpValue == null) {
+                  mergeUnknownVarintField(41, tmpRaw);
+                } else {
+                  sessionKeymap_ = tmpRaw;
+                  bitField0_ |= 0x00000040;
+                }
+                break;
+              } // case 328
+              case 338: {
+                customKeymapTable_ = input.readBytes();
+                bitField0_ |= 0x00000080;
+                break;
+              } // case 338
+              case 346: {
+                customRomanTable_ = input.readBytes();
+                bitField0_ |= 0x00000100;
+                break;
+              } // case 346
+              case 360: {
+                int tmpRaw = input.readEnum();
+                org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.PunctuationMethod tmpValue =
+                    org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.PunctuationMethod.forNumber(tmpRaw);
+                if (tmpValue == null) {
+                  mergeUnknownVarintField(45, tmpRaw);
+                } else {
+                  punctuationMethod_ = tmpRaw;
+                  bitField0_ |= 0x00000200;
+                }
+                break;
+              } // case 360
+              case 368: {
+                int tmpRaw = input.readEnum();
+                org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SymbolMethod tmpValue =
+                    org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SymbolMethod.forNumber(tmpRaw);
+                if (tmpValue == null) {
+                  mergeUnknownVarintField(46, tmpRaw);
+                } else {
+                  symbolMethod_ = tmpRaw;
+                  bitField0_ |= 0x00000400;
+                }
+                break;
+              } // case 368
+              case 376: {
+                int tmpRaw = input.readEnum();
+                org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.FundamentalCharacterForm tmpValue =
+                    org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.FundamentalCharacterForm.forNumber(tmpRaw);
+                if (tmpValue == null) {
+                  mergeUnknownVarintField(47, tmpRaw);
+                } else {
+                  spaceCharacterForm_ = tmpRaw;
+                  bitField0_ |= 0x00000800;
+                }
+                break;
+              } // case 376
+              case 384: {
+                useKeyboardToChangePreeditMethod_ = input.readBool();
+                bitField0_ |= 0x00001000;
+                break;
+              } // case 384
+              case 400: {
+                int tmpRaw = input.readEnum();
+                org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.HistoryLearningLevel tmpValue =
+                    org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.HistoryLearningLevel.forNumber(tmpRaw);
+                if (tmpValue == null) {
+                  mergeUnknownVarintField(50, tmpRaw);
+                } else {
+                  historyLearningLevel_ = tmpRaw;
+                  bitField0_ |= 0x00002000;
+                }
+                break;
+              } // case 400
+              case 416: {
+                int tmpRaw = input.readEnum();
+                org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SelectionShortcut tmpValue =
+                    org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SelectionShortcut.forNumber(tmpRaw);
+                if (tmpValue == null) {
+                  mergeUnknownVarintField(52, tmpRaw);
+                } else {
+                  selectionShortcut_ = tmpRaw;
+                  bitField0_ |= 0x00004000;
+                }
+                break;
+              } // case 416
+              case 434: {
+                org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterFormRule m =
+                    input.readMessage(
+                        org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterFormRule.PARSER,
+                        extensionRegistry);
+                if (characterFormRulesBuilder_ == null) {
+                  ensureCharacterFormRulesIsMutable();
+                  characterFormRules_.add(m);
+                } else {
+                  characterFormRulesBuilder_.addMessage(m);
+                }
+                break;
+              } // case 434
+              case 448: {
+                useAutoImeTurnOff_ = input.readBool();
+                bitField0_ |= 0x00010000;
+                break;
+              } // case 448
+              case 464: {
+                useCascadingWindow_ = input.readBool();
+                bitField0_ |= 0x00020000;
+                break;
+              } // case 464
+              case 472: {
+                int tmpRaw = input.readEnum();
+                org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.ShiftKeyModeSwitch tmpValue =
+                    org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.ShiftKeyModeSwitch.forNumber(tmpRaw);
+                if (tmpValue == null) {
+                  mergeUnknownVarintField(59, tmpRaw);
+                } else {
+                  shiftKeyModeSwitch_ = tmpRaw;
+                  bitField0_ |= 0x00040000;
+                }
+                break;
+              } // case 472
+              case 480: {
+                int tmpRaw = input.readEnum();
+                org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.NumpadCharacterForm tmpValue =
+                    org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.NumpadCharacterForm.forNumber(tmpRaw);
+                if (tmpValue == null) {
+                  mergeUnknownVarintField(60, tmpRaw);
+                } else {
+                  numpadCharacterForm_ = tmpRaw;
+                  bitField0_ |= 0x00080000;
+                }
+                break;
+              } // case 480
+              case 488: {
+                useAutoConversion_ = input.readBool();
+                bitField0_ |= 0x00100000;
+                break;
+              } // case 488
+              case 496: {
+                autoConversionKey_ = input.readUInt32();
+                bitField0_ |= 0x00200000;
+                break;
+              } // case 496
+              case 504: {
+                int tmpRaw = input.readEnum();
+                org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.YenSignCharacter tmpValue =
+                    org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.YenSignCharacter.forNumber(tmpRaw);
+                if (tmpValue == null) {
+                  mergeUnknownVarintField(63, tmpRaw);
+                } else {
+                  yenSignCharacter_ = tmpRaw;
+                  bitField0_ |= 0x00400000;
+                }
+                break;
+              } // case 504
+              case 512: {
+                useJapaneseLayout_ = input.readBool();
+                bitField0_ |= 0x00800000;
+                break;
+              } // case 512
+              case 520: {
+                useKanaModifierInsensitiveConversion_ = input.readBool();
+                bitField0_ |= 0x01000000;
+                break;
+              } // case 520
+              case 528: {
+                useTypingCorrection_ = input.readBool();
+                bitField0_ |= 0x02000000;
+                break;
+              } // case 528
+              case 536: {
+                composingTimeoutThresholdMsec_ = input.readInt32();
+                bitField0_ |= 0x04000000;
+                break;
+              } // case 536
+              case 544: {
+                int tmpRaw = input.readEnum();
+                org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SessionKeymap tmpValue =
+                    org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SessionKeymap.forNumber(tmpRaw);
+                if (tmpValue == null) {
+                  mergeUnknownVarintField(68, tmpRaw);
+                } else {
+                  ensureOverlayKeymapsIsMutable();
+                  overlayKeymaps_.add(tmpRaw);
+                }
+                break;
+              } // case 544
+              case 546: {
+                int length = input.readRawVarint32();
+                int oldLimit = input.pushLimit(length);
+                while(input.getBytesUntilLimit() > 0) {
+                  int tmpRaw = input.readEnum();
+                  org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SessionKeymap tmpValue =
+                      org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SessionKeymap.forNumber(tmpRaw);
+                  if (tmpValue == null) {
+                    mergeUnknownVarintField(68, tmpRaw);
+                  } else {
+                    ensureOverlayKeymapsIsMutable();
+                    overlayKeymaps_.add(tmpRaw);
+                  }
+                }
+                input.popLimit(oldLimit);
+                break;
+              } // case 546
+              case 640: {
+                useDateConversion_ = input.readBool();
+                bitField0_ |= 0x10000000;
+                break;
+              } // case 640
+              case 648: {
+                useSingleKanjiConversion_ = input.readBool();
+                bitField0_ |= 0x20000000;
+                break;
+              } // case 648
+              case 656: {
+                useSymbolConversion_ = input.readBool();
+                bitField0_ |= 0x40000000;
+                break;
+              } // case 656
+              case 664: {
+                useNumberConversion_ = input.readBool();
+                bitField0_ |= 0x80000000;
+                break;
+              } // case 664
+              case 672: {
+                useEmoticonConversion_ = input.readBool();
+                bitField1_ |= 0x00000001;
+                break;
+              } // case 672
+              case 680: {
+                useCalculator_ = input.readBool();
+                bitField1_ |= 0x00000002;
+                break;
+              } // case 680
+              case 688: {
+                useT13NConversion_ = input.readBool();
+                bitField1_ |= 0x00000004;
+                break;
+              } // case 688
+              case 696: {
+                useZipCodeConversion_ = input.readBool();
+                bitField1_ |= 0x00000008;
+                break;
+              } // case 696
+              case 704: {
+                useSpellingCorrection_ = input.readBool();
+                bitField1_ |= 0x00000010;
+                break;
+              } // case 704
+              case 712: {
+                useEmojiConversion_ = input.readBool();
+                bitField1_ |= 0x00000020;
+                break;
+              } // case 712
+              case 722: {
+                input.readMessage(
+                    getInformationListConfigFieldBuilder().getBuilder(),
+                    extensionRegistry);
+                bitField1_ |= 0x00000040;
+                break;
+              } // case 722
+              case 800: {
+                useHistorySuggest_ = input.readBool();
+                bitField1_ |= 0x00000080;
+                break;
+              } // case 800
+              case 808: {
+                useDictionarySuggest_ = input.readBool();
+                bitField1_ |= 0x00000100;
+                break;
+              } // case 808
+              case 816: {
+                useRealtimeConversion_ = input.readBool();
+                bitField1_ |= 0x00000200;
+                break;
+              } // case 816
+              case 880: {
+                suggestionsSize_ = input.readUInt32();
+                bitField1_ |= 0x00000400;
+                break;
+              } // case 880
+              case 960: {
+                useModeIndicator_ = input.readBool();
+                bitField1_ |= 0x00000800;
+                break;
+              } // case 960
+              default: {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+            } // switch (tag)
+          } // while (!done)
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
+          onChanged();
+        } // finally
         return this;
       }
       private int bitField0_;
       private int bitField1_;
 
-      private org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.GeneralConfig generalConfig_ = null;
+      private org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.GeneralConfig generalConfig_;
       private com.google.protobuf.SingleFieldBuilderV3<
           org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.GeneralConfig, org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.GeneralConfig.Builder, org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.GeneralConfigOrBuilder> generalConfigBuilder_;
       /**
@@ -7534,9 +8205,10 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional .mozc.config.GeneralConfig general_config = 1;</code>
+       * @return Whether the generalConfig field is set.
        */
       public boolean hasGeneralConfig() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
+        return ((bitField0_ & 0x00000001) != 0);
       }
       /**
        * <pre>
@@ -7545,6 +8217,7 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional .mozc.config.GeneralConfig general_config = 1;</code>
+       * @return The generalConfig.
        */
       public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.GeneralConfig getGeneralConfig() {
         if (generalConfigBuilder_ == null) {
@@ -7567,11 +8240,11 @@ public final class ProtoConfig {
             throw new NullPointerException();
           }
           generalConfig_ = value;
-          onChanged();
         } else {
           generalConfigBuilder_.setMessage(value);
         }
         bitField0_ |= 0x00000001;
+        onChanged();
         return this;
       }
       /**
@@ -7586,11 +8259,11 @@ public final class ProtoConfig {
           org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.GeneralConfig.Builder builderForValue) {
         if (generalConfigBuilder_ == null) {
           generalConfig_ = builderForValue.build();
-          onChanged();
         } else {
           generalConfigBuilder_.setMessage(builderForValue.build());
         }
         bitField0_ |= 0x00000001;
+        onChanged();
         return this;
       }
       /**
@@ -7603,19 +8276,18 @@ public final class ProtoConfig {
        */
       public Builder mergeGeneralConfig(org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.GeneralConfig value) {
         if (generalConfigBuilder_ == null) {
-          if (((bitField0_ & 0x00000001) == 0x00000001) &&
-              generalConfig_ != null &&
-              generalConfig_ != org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.GeneralConfig.getDefaultInstance()) {
-            generalConfig_ =
-              org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.GeneralConfig.newBuilder(generalConfig_).mergeFrom(value).buildPartial();
+          if (((bitField0_ & 0x00000001) != 0) &&
+            generalConfig_ != null &&
+            generalConfig_ != org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.GeneralConfig.getDefaultInstance()) {
+            getGeneralConfigBuilder().mergeFrom(value);
           } else {
             generalConfig_ = value;
           }
-          onChanged();
         } else {
           generalConfigBuilder_.mergeFrom(value);
         }
         bitField0_ |= 0x00000001;
+        onChanged();
         return this;
       }
       /**
@@ -7627,13 +8299,13 @@ public final class ProtoConfig {
        * <code>optional .mozc.config.GeneralConfig general_config = 1;</code>
        */
       public Builder clearGeneralConfig() {
-        if (generalConfigBuilder_ == null) {
-          generalConfig_ = null;
-          onChanged();
-        } else {
-          generalConfigBuilder_.clear();
-        }
         bitField0_ = (bitField0_ & ~0x00000001);
+        generalConfig_ = null;
+        if (generalConfigBuilder_ != null) {
+          generalConfigBuilder_.dispose();
+          generalConfigBuilder_ = null;
+        }
+        onChanged();
         return this;
       }
       /**
@@ -7694,9 +8366,11 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional int32 verbose_level = 10 [default = 0];</code>
+       * @return Whether the verboseLevel field is set.
        */
+      @java.lang.Override
       public boolean hasVerboseLevel() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
+        return ((bitField0_ & 0x00000002) != 0);
       }
       /**
        * <pre>
@@ -7704,7 +8378,9 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional int32 verbose_level = 10 [default = 0];</code>
+       * @return The verboseLevel.
        */
+      @java.lang.Override
       public int getVerboseLevel() {
         return verboseLevel_;
       }
@@ -7714,10 +8390,13 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional int32 verbose_level = 10 [default = 0];</code>
+       * @param value The verboseLevel to set.
+       * @return This builder for chaining.
        */
       public Builder setVerboseLevel(int value) {
-        bitField0_ |= 0x00000002;
+        
         verboseLevel_ = value;
+        bitField0_ |= 0x00000002;
         onChanged();
         return this;
       }
@@ -7727,6 +8406,7 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional int32 verbose_level = 10 [default = 0];</code>
+       * @return This builder for chaining.
        */
       public Builder clearVerboseLevel() {
         bitField0_ = (bitField0_ & ~0x00000002);
@@ -7740,21 +8420,31 @@ public final class ProtoConfig {
        * <pre>
        * Incognito mode:
        * Disable all mutable operation if incognito_mode is true
+       * Clients needs to check ConversionRequest::incognito_mode() instead
+       * of Config::incognito_mode(), as the incoginto mode can also set
+       * via Options.
        * </pre>
        *
        * <code>optional bool incognito_mode = 20 [default = false];</code>
+       * @return Whether the incognitoMode field is set.
        */
+      @java.lang.Override
       public boolean hasIncognitoMode() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
+        return ((bitField0_ & 0x00000004) != 0);
       }
       /**
        * <pre>
        * Incognito mode:
        * Disable all mutable operation if incognito_mode is true
+       * Clients needs to check ConversionRequest::incognito_mode() instead
+       * of Config::incognito_mode(), as the incoginto mode can also set
+       * via Options.
        * </pre>
        *
        * <code>optional bool incognito_mode = 20 [default = false];</code>
+       * @return The incognitoMode.
        */
+      @java.lang.Override
       public boolean getIncognitoMode() {
         return incognitoMode_;
       }
@@ -7762,13 +8452,19 @@ public final class ProtoConfig {
        * <pre>
        * Incognito mode:
        * Disable all mutable operation if incognito_mode is true
+       * Clients needs to check ConversionRequest::incognito_mode() instead
+       * of Config::incognito_mode(), as the incoginto mode can also set
+       * via Options.
        * </pre>
        *
        * <code>optional bool incognito_mode = 20 [default = false];</code>
+       * @param value The incognitoMode to set.
+       * @return This builder for chaining.
        */
       public Builder setIncognitoMode(boolean value) {
-        bitField0_ |= 0x00000004;
+        
         incognitoMode_ = value;
+        bitField0_ |= 0x00000004;
         onChanged();
         return this;
       }
@@ -7776,9 +8472,13 @@ public final class ProtoConfig {
        * <pre>
        * Incognito mode:
        * Disable all mutable operation if incognito_mode is true
+       * Clients needs to check ConversionRequest::incognito_mode() instead
+       * of Config::incognito_mode(), as the incoginto mode can also set
+       * via Options.
        * </pre>
        *
        * <code>optional bool incognito_mode = 20 [default = false];</code>
+       * @return This builder for chaining.
        */
       public Builder clearIncognitoMode() {
         bitField0_ = (bitField0_ & ~0x00000004);
@@ -7794,9 +8494,11 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bool check_default = 22 [default = true];</code>
+       * @return Whether the checkDefault field is set.
        */
+      @java.lang.Override
       public boolean hasCheckDefault() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
+        return ((bitField0_ & 0x00000008) != 0);
       }
       /**
        * <pre>
@@ -7804,7 +8506,9 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bool check_default = 22 [default = true];</code>
+       * @return The checkDefault.
        */
+      @java.lang.Override
       public boolean getCheckDefault() {
         return checkDefault_;
       }
@@ -7814,10 +8518,13 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bool check_default = 22 [default = true];</code>
+       * @param value The checkDefault to set.
+       * @return This builder for chaining.
        */
       public Builder setCheckDefault(boolean value) {
-        bitField0_ |= 0x00000008;
+        
         checkDefault_ = value;
+        bitField0_ |= 0x00000008;
         onChanged();
         return this;
       }
@@ -7827,6 +8534,7 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bool check_default = 22 [default = true];</code>
+       * @return This builder for chaining.
        */
       public Builder clearCheckDefault() {
         bitField0_ = (bitField0_ & ~0x00000008);
@@ -7843,9 +8551,11 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bool presentation_mode = 23 [default = false];</code>
+       * @return Whether the presentationMode field is set.
        */
+      @java.lang.Override
       public boolean hasPresentationMode() {
-        return ((bitField0_ & 0x00000010) == 0x00000010);
+        return ((bitField0_ & 0x00000010) != 0);
       }
       /**
        * <pre>
@@ -7854,7 +8564,9 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bool presentation_mode = 23 [default = false];</code>
+       * @return The presentationMode.
        */
+      @java.lang.Override
       public boolean getPresentationMode() {
         return presentationMode_;
       }
@@ -7865,10 +8577,13 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bool presentation_mode = 23 [default = false];</code>
+       * @param value The presentationMode to set.
+       * @return This builder for chaining.
        */
       public Builder setPresentationMode(boolean value) {
-        bitField0_ |= 0x00000010;
+        
         presentationMode_ = value;
+        bitField0_ |= 0x00000010;
         onChanged();
         return this;
       }
@@ -7879,6 +8594,7 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bool presentation_mode = 23 [default = false];</code>
+       * @return This builder for chaining.
        */
       public Builder clearPresentationMode() {
         bitField0_ = (bitField0_ & ~0x00000010);
@@ -7894,9 +8610,10 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional .mozc.config.Config.PreeditMethod preedit_method = 40 [default = ROMAN];</code>
+       * @return Whether the preeditMethod field is set.
        */
-      public boolean hasPreeditMethod() {
-        return ((bitField0_ & 0x00000020) == 0x00000020);
+      @java.lang.Override public boolean hasPreeditMethod() {
+        return ((bitField0_ & 0x00000020) != 0);
       }
       /**
        * <pre>
@@ -7904,9 +8621,11 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional .mozc.config.Config.PreeditMethod preedit_method = 40 [default = ROMAN];</code>
+       * @return The preeditMethod.
        */
+      @java.lang.Override
       public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.PreeditMethod getPreeditMethod() {
-        org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.PreeditMethod result = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.PreeditMethod.valueOf(preeditMethod_);
+        org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.PreeditMethod result = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.PreeditMethod.forNumber(preeditMethod_);
         return result == null ? org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.PreeditMethod.ROMAN : result;
       }
       /**
@@ -7915,6 +8634,8 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional .mozc.config.Config.PreeditMethod preedit_method = 40 [default = ROMAN];</code>
+       * @param value The preeditMethod to set.
+       * @return This builder for chaining.
        */
       public Builder setPreeditMethod(org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.PreeditMethod value) {
         if (value == null) {
@@ -7931,6 +8652,7 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional .mozc.config.Config.PreeditMethod preedit_method = 40 [default = ROMAN];</code>
+       * @return This builder for chaining.
        */
       public Builder clearPreeditMethod() {
         bitField0_ = (bitField0_ & ~0x00000020);
@@ -7942,19 +8664,24 @@ public final class ProtoConfig {
       private int sessionKeymap_ = -1;
       /**
        * <code>optional .mozc.config.Config.SessionKeymap session_keymap = 41 [default = NONE];</code>
+       * @return Whether the sessionKeymap field is set.
        */
-      public boolean hasSessionKeymap() {
-        return ((bitField0_ & 0x00000040) == 0x00000040);
+      @java.lang.Override public boolean hasSessionKeymap() {
+        return ((bitField0_ & 0x00000040) != 0);
       }
       /**
        * <code>optional .mozc.config.Config.SessionKeymap session_keymap = 41 [default = NONE];</code>
+       * @return The sessionKeymap.
        */
+      @java.lang.Override
       public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SessionKeymap getSessionKeymap() {
-        org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SessionKeymap result = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SessionKeymap.valueOf(sessionKeymap_);
+        org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SessionKeymap result = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SessionKeymap.forNumber(sessionKeymap_);
         return result == null ? org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SessionKeymap.NONE : result;
       }
       /**
        * <code>optional .mozc.config.Config.SessionKeymap session_keymap = 41 [default = NONE];</code>
+       * @param value The sessionKeymap to set.
+       * @return This builder for chaining.
        */
       public Builder setSessionKeymap(org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SessionKeymap value) {
         if (value == null) {
@@ -7967,6 +8694,7 @@ public final class ProtoConfig {
       }
       /**
        * <code>optional .mozc.config.Config.SessionKeymap session_keymap = 41 [default = NONE];</code>
+       * @return This builder for chaining.
        */
       public Builder clearSessionKeymap() {
         bitField0_ = (bitField0_ & ~0x00000040);
@@ -7983,9 +8711,11 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bytes custom_keymap_table = 42;</code>
+       * @return Whether the customKeymapTable field is set.
        */
+      @java.lang.Override
       public boolean hasCustomKeymapTable() {
-        return ((bitField0_ & 0x00000080) == 0x00000080);
+        return ((bitField0_ & 0x00000080) != 0);
       }
       /**
        * <pre>
@@ -7994,7 +8724,9 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bytes custom_keymap_table = 42;</code>
+       * @return The customKeymapTable.
        */
+      @java.lang.Override
       public com.google.protobuf.ByteString getCustomKeymapTable() {
         return customKeymapTable_;
       }
@@ -8005,13 +8737,13 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bytes custom_keymap_table = 42;</code>
+       * @param value The customKeymapTable to set.
+       * @return This builder for chaining.
        */
       public Builder setCustomKeymapTable(com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000080;
+        if (value == null) { throw new NullPointerException(); }
         customKeymapTable_ = value;
+        bitField0_ |= 0x00000080;
         onChanged();
         return this;
       }
@@ -8022,6 +8754,7 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bytes custom_keymap_table = 42;</code>
+       * @return This builder for chaining.
        */
       public Builder clearCustomKeymapTable() {
         bitField0_ = (bitField0_ & ~0x00000080);
@@ -8037,9 +8770,11 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bytes custom_roman_table = 43;</code>
+       * @return Whether the customRomanTable field is set.
        */
+      @java.lang.Override
       public boolean hasCustomRomanTable() {
-        return ((bitField0_ & 0x00000100) == 0x00000100);
+        return ((bitField0_ & 0x00000100) != 0);
       }
       /**
        * <pre>
@@ -8047,7 +8782,9 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bytes custom_roman_table = 43;</code>
+       * @return The customRomanTable.
        */
+      @java.lang.Override
       public com.google.protobuf.ByteString getCustomRomanTable() {
         return customRomanTable_;
       }
@@ -8057,13 +8794,13 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bytes custom_roman_table = 43;</code>
+       * @param value The customRomanTable to set.
+       * @return This builder for chaining.
        */
       public Builder setCustomRomanTable(com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000100;
+        if (value == null) { throw new NullPointerException(); }
         customRomanTable_ = value;
+        bitField0_ |= 0x00000100;
         onChanged();
         return this;
       }
@@ -8073,6 +8810,7 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bytes custom_roman_table = 43;</code>
+       * @return This builder for chaining.
        */
       public Builder clearCustomRomanTable() {
         bitField0_ = (bitField0_ & ~0x00000100);
@@ -8084,19 +8822,24 @@ public final class ProtoConfig {
       private int punctuationMethod_ = 0;
       /**
        * <code>optional .mozc.config.Config.PunctuationMethod punctuation_method = 45 [default = KUTEN_TOUTEN];</code>
+       * @return Whether the punctuationMethod field is set.
        */
-      public boolean hasPunctuationMethod() {
-        return ((bitField0_ & 0x00000200) == 0x00000200);
+      @java.lang.Override public boolean hasPunctuationMethod() {
+        return ((bitField0_ & 0x00000200) != 0);
       }
       /**
        * <code>optional .mozc.config.Config.PunctuationMethod punctuation_method = 45 [default = KUTEN_TOUTEN];</code>
+       * @return The punctuationMethod.
        */
+      @java.lang.Override
       public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.PunctuationMethod getPunctuationMethod() {
-        org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.PunctuationMethod result = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.PunctuationMethod.valueOf(punctuationMethod_);
+        org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.PunctuationMethod result = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.PunctuationMethod.forNumber(punctuationMethod_);
         return result == null ? org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.PunctuationMethod.KUTEN_TOUTEN : result;
       }
       /**
        * <code>optional .mozc.config.Config.PunctuationMethod punctuation_method = 45 [default = KUTEN_TOUTEN];</code>
+       * @param value The punctuationMethod to set.
+       * @return This builder for chaining.
        */
       public Builder setPunctuationMethod(org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.PunctuationMethod value) {
         if (value == null) {
@@ -8109,6 +8852,7 @@ public final class ProtoConfig {
       }
       /**
        * <code>optional .mozc.config.Config.PunctuationMethod punctuation_method = 45 [default = KUTEN_TOUTEN];</code>
+       * @return This builder for chaining.
        */
       public Builder clearPunctuationMethod() {
         bitField0_ = (bitField0_ & ~0x00000200);
@@ -8120,19 +8864,24 @@ public final class ProtoConfig {
       private int symbolMethod_ = 0;
       /**
        * <code>optional .mozc.config.Config.SymbolMethod symbol_method = 46 [default = CORNER_BRACKET_MIDDLE_DOT];</code>
+       * @return Whether the symbolMethod field is set.
        */
-      public boolean hasSymbolMethod() {
-        return ((bitField0_ & 0x00000400) == 0x00000400);
+      @java.lang.Override public boolean hasSymbolMethod() {
+        return ((bitField0_ & 0x00000400) != 0);
       }
       /**
        * <code>optional .mozc.config.Config.SymbolMethod symbol_method = 46 [default = CORNER_BRACKET_MIDDLE_DOT];</code>
+       * @return The symbolMethod.
        */
+      @java.lang.Override
       public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SymbolMethod getSymbolMethod() {
-        org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SymbolMethod result = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SymbolMethod.valueOf(symbolMethod_);
+        org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SymbolMethod result = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SymbolMethod.forNumber(symbolMethod_);
         return result == null ? org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SymbolMethod.CORNER_BRACKET_MIDDLE_DOT : result;
       }
       /**
        * <code>optional .mozc.config.Config.SymbolMethod symbol_method = 46 [default = CORNER_BRACKET_MIDDLE_DOT];</code>
+       * @param value The symbolMethod to set.
+       * @return This builder for chaining.
        */
       public Builder setSymbolMethod(org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SymbolMethod value) {
         if (value == null) {
@@ -8145,6 +8894,7 @@ public final class ProtoConfig {
       }
       /**
        * <code>optional .mozc.config.Config.SymbolMethod symbol_method = 46 [default = CORNER_BRACKET_MIDDLE_DOT];</code>
+       * @return This builder for chaining.
        */
       public Builder clearSymbolMethod() {
         bitField0_ = (bitField0_ & ~0x00000400);
@@ -8156,19 +8906,24 @@ public final class ProtoConfig {
       private int spaceCharacterForm_ = 0;
       /**
        * <code>optional .mozc.config.Config.FundamentalCharacterForm space_character_form = 47 [default = FUNDAMENTAL_INPUT_MODE];</code>
+       * @return Whether the spaceCharacterForm field is set.
        */
-      public boolean hasSpaceCharacterForm() {
-        return ((bitField0_ & 0x00000800) == 0x00000800);
+      @java.lang.Override public boolean hasSpaceCharacterForm() {
+        return ((bitField0_ & 0x00000800) != 0);
       }
       /**
        * <code>optional .mozc.config.Config.FundamentalCharacterForm space_character_form = 47 [default = FUNDAMENTAL_INPUT_MODE];</code>
+       * @return The spaceCharacterForm.
        */
+      @java.lang.Override
       public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.FundamentalCharacterForm getSpaceCharacterForm() {
-        org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.FundamentalCharacterForm result = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.FundamentalCharacterForm.valueOf(spaceCharacterForm_);
+        org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.FundamentalCharacterForm result = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.FundamentalCharacterForm.forNumber(spaceCharacterForm_);
         return result == null ? org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.FundamentalCharacterForm.FUNDAMENTAL_INPUT_MODE : result;
       }
       /**
        * <code>optional .mozc.config.Config.FundamentalCharacterForm space_character_form = 47 [default = FUNDAMENTAL_INPUT_MODE];</code>
+       * @param value The spaceCharacterForm to set.
+       * @return This builder for chaining.
        */
       public Builder setSpaceCharacterForm(org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.FundamentalCharacterForm value) {
         if (value == null) {
@@ -8181,6 +8936,7 @@ public final class ProtoConfig {
       }
       /**
        * <code>optional .mozc.config.Config.FundamentalCharacterForm space_character_form = 47 [default = FUNDAMENTAL_INPUT_MODE];</code>
+       * @return This builder for chaining.
        */
       public Builder clearSpaceCharacterForm() {
         bitField0_ = (bitField0_ & ~0x00000800);
@@ -8209,9 +8965,11 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bool use_keyboard_to_change_preedit_method = 48 [default = false];</code>
+       * @return Whether the useKeyboardToChangePreeditMethod field is set.
        */
+      @java.lang.Override
       public boolean hasUseKeyboardToChangePreeditMethod() {
-        return ((bitField0_ & 0x00001000) == 0x00001000);
+        return ((bitField0_ & 0x00001000) != 0);
       }
       /**
        * <pre>
@@ -8232,7 +8990,9 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bool use_keyboard_to_change_preedit_method = 48 [default = false];</code>
+       * @return The useKeyboardToChangePreeditMethod.
        */
+      @java.lang.Override
       public boolean getUseKeyboardToChangePreeditMethod() {
         return useKeyboardToChangePreeditMethod_;
       }
@@ -8255,10 +9015,13 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bool use_keyboard_to_change_preedit_method = 48 [default = false];</code>
+       * @param value The useKeyboardToChangePreeditMethod to set.
+       * @return This builder for chaining.
        */
       public Builder setUseKeyboardToChangePreeditMethod(boolean value) {
-        bitField0_ |= 0x00001000;
+        
         useKeyboardToChangePreeditMethod_ = value;
+        bitField0_ |= 0x00001000;
         onChanged();
         return this;
       }
@@ -8281,6 +9044,7 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bool use_keyboard_to_change_preedit_method = 48 [default = false];</code>
+       * @return This builder for chaining.
        */
       public Builder clearUseKeyboardToChangePreeditMethod() {
         bitField0_ = (bitField0_ & ~0x00001000);
@@ -8292,19 +9056,24 @@ public final class ProtoConfig {
       private int historyLearningLevel_ = 0;
       /**
        * <code>optional .mozc.config.Config.HistoryLearningLevel history_learning_level = 50 [default = DEFAULT_HISTORY];</code>
+       * @return Whether the historyLearningLevel field is set.
        */
-      public boolean hasHistoryLearningLevel() {
-        return ((bitField0_ & 0x00002000) == 0x00002000);
+      @java.lang.Override public boolean hasHistoryLearningLevel() {
+        return ((bitField0_ & 0x00002000) != 0);
       }
       /**
        * <code>optional .mozc.config.Config.HistoryLearningLevel history_learning_level = 50 [default = DEFAULT_HISTORY];</code>
+       * @return The historyLearningLevel.
        */
+      @java.lang.Override
       public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.HistoryLearningLevel getHistoryLearningLevel() {
-        org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.HistoryLearningLevel result = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.HistoryLearningLevel.valueOf(historyLearningLevel_);
+        org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.HistoryLearningLevel result = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.HistoryLearningLevel.forNumber(historyLearningLevel_);
         return result == null ? org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.HistoryLearningLevel.DEFAULT_HISTORY : result;
       }
       /**
        * <code>optional .mozc.config.Config.HistoryLearningLevel history_learning_level = 50 [default = DEFAULT_HISTORY];</code>
+       * @param value The historyLearningLevel to set.
+       * @return This builder for chaining.
        */
       public Builder setHistoryLearningLevel(org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.HistoryLearningLevel value) {
         if (value == null) {
@@ -8317,6 +9086,7 @@ public final class ProtoConfig {
       }
       /**
        * <code>optional .mozc.config.Config.HistoryLearningLevel history_learning_level = 50 [default = DEFAULT_HISTORY];</code>
+       * @return This builder for chaining.
        */
       public Builder clearHistoryLearningLevel() {
         bitField0_ = (bitField0_ & ~0x00002000);
@@ -8328,19 +9098,24 @@ public final class ProtoConfig {
       private int selectionShortcut_ = 1;
       /**
        * <code>optional .mozc.config.Config.SelectionShortcut selection_shortcut = 52 [default = SHORTCUT_123456789];</code>
+       * @return Whether the selectionShortcut field is set.
        */
-      public boolean hasSelectionShortcut() {
-        return ((bitField0_ & 0x00004000) == 0x00004000);
+      @java.lang.Override public boolean hasSelectionShortcut() {
+        return ((bitField0_ & 0x00004000) != 0);
       }
       /**
        * <code>optional .mozc.config.Config.SelectionShortcut selection_shortcut = 52 [default = SHORTCUT_123456789];</code>
+       * @return The selectionShortcut.
        */
+      @java.lang.Override
       public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SelectionShortcut getSelectionShortcut() {
-        org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SelectionShortcut result = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SelectionShortcut.valueOf(selectionShortcut_);
+        org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SelectionShortcut result = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SelectionShortcut.forNumber(selectionShortcut_);
         return result == null ? org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SelectionShortcut.SHORTCUT_123456789 : result;
       }
       /**
        * <code>optional .mozc.config.Config.SelectionShortcut selection_shortcut = 52 [default = SHORTCUT_123456789];</code>
+       * @param value The selectionShortcut to set.
+       * @return This builder for chaining.
        */
       public Builder setSelectionShortcut(org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SelectionShortcut value) {
         if (value == null) {
@@ -8353,6 +9128,7 @@ public final class ProtoConfig {
       }
       /**
        * <code>optional .mozc.config.Config.SelectionShortcut selection_shortcut = 52 [default = SHORTCUT_123456789];</code>
+       * @return This builder for chaining.
        */
       public Builder clearSelectionShortcut() {
         bitField0_ = (bitField0_ & ~0x00004000);
@@ -8364,7 +9140,7 @@ public final class ProtoConfig {
       private java.util.List<org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterFormRule> characterFormRules_ =
         java.util.Collections.emptyList();
       private void ensureCharacterFormRulesIsMutable() {
-        if (!((bitField0_ & 0x00008000) == 0x00008000)) {
+        if (!((bitField0_ & 0x00008000) != 0)) {
           characterFormRules_ = new java.util.ArrayList<org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterFormRule>(characterFormRules_);
           bitField0_ |= 0x00008000;
          }
@@ -8593,7 +9369,7 @@ public final class ProtoConfig {
           characterFormRulesBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
               org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterFormRule, org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterFormRule.Builder, org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.CharacterFormRuleOrBuilder>(
                   characterFormRules_,
-                  ((bitField0_ & 0x00008000) == 0x00008000),
+                  ((bitField0_ & 0x00008000) != 0),
                   getParentForChildren(),
                   isClean());
           characterFormRules_ = null;
@@ -8608,9 +9384,11 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bool use_auto_ime_turn_off = 56 [default = true];</code>
+       * @return Whether the useAutoImeTurnOff field is set.
        */
+      @java.lang.Override
       public boolean hasUseAutoImeTurnOff() {
-        return ((bitField0_ & 0x00010000) == 0x00010000);
+        return ((bitField0_ & 0x00010000) != 0);
       }
       /**
        * <pre>
@@ -8618,7 +9396,9 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bool use_auto_ime_turn_off = 56 [default = true];</code>
+       * @return The useAutoImeTurnOff.
        */
+      @java.lang.Override
       public boolean getUseAutoImeTurnOff() {
         return useAutoImeTurnOff_;
       }
@@ -8628,10 +9408,13 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bool use_auto_ime_turn_off = 56 [default = true];</code>
+       * @param value The useAutoImeTurnOff to set.
+       * @return This builder for chaining.
        */
       public Builder setUseAutoImeTurnOff(boolean value) {
-        bitField0_ |= 0x00010000;
+        
         useAutoImeTurnOff_ = value;
+        bitField0_ |= 0x00010000;
         onChanged();
         return this;
       }
@@ -8641,6 +9424,7 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bool use_auto_ime_turn_off = 56 [default = true];</code>
+       * @return This builder for chaining.
        */
       public Builder clearUseAutoImeTurnOff() {
         bitField0_ = (bitField0_ & ~0x00010000);
@@ -8652,43 +9436,51 @@ public final class ProtoConfig {
       private boolean useCascadingWindow_ = true;
       /**
        * <pre>
-       * Toggle to use cascanding window for debuging.
+       * Toggle to use cascanding window for debugging.
        * </pre>
        *
        * <code>optional bool use_cascading_window = 58 [default = true];</code>
+       * @return Whether the useCascadingWindow field is set.
        */
+      @java.lang.Override
       public boolean hasUseCascadingWindow() {
-        return ((bitField0_ & 0x00020000) == 0x00020000);
+        return ((bitField0_ & 0x00020000) != 0);
       }
       /**
        * <pre>
-       * Toggle to use cascanding window for debuging.
+       * Toggle to use cascanding window for debugging.
        * </pre>
        *
        * <code>optional bool use_cascading_window = 58 [default = true];</code>
+       * @return The useCascadingWindow.
        */
+      @java.lang.Override
       public boolean getUseCascadingWindow() {
         return useCascadingWindow_;
       }
       /**
        * <pre>
-       * Toggle to use cascanding window for debuging.
+       * Toggle to use cascanding window for debugging.
        * </pre>
        *
        * <code>optional bool use_cascading_window = 58 [default = true];</code>
+       * @param value The useCascadingWindow to set.
+       * @return This builder for chaining.
        */
       public Builder setUseCascadingWindow(boolean value) {
-        bitField0_ |= 0x00020000;
+        
         useCascadingWindow_ = value;
+        bitField0_ |= 0x00020000;
         onChanged();
         return this;
       }
       /**
        * <pre>
-       * Toggle to use cascanding window for debuging.
+       * Toggle to use cascanding window for debugging.
        * </pre>
        *
        * <code>optional bool use_cascading_window = 58 [default = true];</code>
+       * @return This builder for chaining.
        */
       public Builder clearUseCascadingWindow() {
         bitField0_ = (bitField0_ & ~0x00020000);
@@ -8700,19 +9492,24 @@ public final class ProtoConfig {
       private int shiftKeyModeSwitch_ = 1;
       /**
        * <code>optional .mozc.config.Config.ShiftKeyModeSwitch shift_key_mode_switch = 59 [default = ASCII_INPUT_MODE];</code>
+       * @return Whether the shiftKeyModeSwitch field is set.
        */
-      public boolean hasShiftKeyModeSwitch() {
-        return ((bitField0_ & 0x00040000) == 0x00040000);
+      @java.lang.Override public boolean hasShiftKeyModeSwitch() {
+        return ((bitField0_ & 0x00040000) != 0);
       }
       /**
        * <code>optional .mozc.config.Config.ShiftKeyModeSwitch shift_key_mode_switch = 59 [default = ASCII_INPUT_MODE];</code>
+       * @return The shiftKeyModeSwitch.
        */
+      @java.lang.Override
       public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.ShiftKeyModeSwitch getShiftKeyModeSwitch() {
-        org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.ShiftKeyModeSwitch result = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.ShiftKeyModeSwitch.valueOf(shiftKeyModeSwitch_);
+        org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.ShiftKeyModeSwitch result = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.ShiftKeyModeSwitch.forNumber(shiftKeyModeSwitch_);
         return result == null ? org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.ShiftKeyModeSwitch.ASCII_INPUT_MODE : result;
       }
       /**
        * <code>optional .mozc.config.Config.ShiftKeyModeSwitch shift_key_mode_switch = 59 [default = ASCII_INPUT_MODE];</code>
+       * @param value The shiftKeyModeSwitch to set.
+       * @return This builder for chaining.
        */
       public Builder setShiftKeyModeSwitch(org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.ShiftKeyModeSwitch value) {
         if (value == null) {
@@ -8725,6 +9522,7 @@ public final class ProtoConfig {
       }
       /**
        * <code>optional .mozc.config.Config.ShiftKeyModeSwitch shift_key_mode_switch = 59 [default = ASCII_INPUT_MODE];</code>
+       * @return This builder for chaining.
        */
       public Builder clearShiftKeyModeSwitch() {
         bitField0_ = (bitField0_ & ~0x00040000);
@@ -8736,19 +9534,24 @@ public final class ProtoConfig {
       private int numpadCharacterForm_ = 2;
       /**
        * <code>optional .mozc.config.Config.NumpadCharacterForm numpad_character_form = 60 [default = NUMPAD_HALF_WIDTH];</code>
+       * @return Whether the numpadCharacterForm field is set.
        */
-      public boolean hasNumpadCharacterForm() {
-        return ((bitField0_ & 0x00080000) == 0x00080000);
+      @java.lang.Override public boolean hasNumpadCharacterForm() {
+        return ((bitField0_ & 0x00080000) != 0);
       }
       /**
        * <code>optional .mozc.config.Config.NumpadCharacterForm numpad_character_form = 60 [default = NUMPAD_HALF_WIDTH];</code>
+       * @return The numpadCharacterForm.
        */
+      @java.lang.Override
       public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.NumpadCharacterForm getNumpadCharacterForm() {
-        org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.NumpadCharacterForm result = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.NumpadCharacterForm.valueOf(numpadCharacterForm_);
+        org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.NumpadCharacterForm result = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.NumpadCharacterForm.forNumber(numpadCharacterForm_);
         return result == null ? org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.NumpadCharacterForm.NUMPAD_HALF_WIDTH : result;
       }
       /**
        * <code>optional .mozc.config.Config.NumpadCharacterForm numpad_character_form = 60 [default = NUMPAD_HALF_WIDTH];</code>
+       * @param value The numpadCharacterForm to set.
+       * @return This builder for chaining.
        */
       public Builder setNumpadCharacterForm(org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.NumpadCharacterForm value) {
         if (value == null) {
@@ -8761,6 +9564,7 @@ public final class ProtoConfig {
       }
       /**
        * <code>optional .mozc.config.Config.NumpadCharacterForm numpad_character_form = 60 [default = NUMPAD_HALF_WIDTH];</code>
+       * @return This builder for chaining.
        */
       public Builder clearNumpadCharacterForm() {
         bitField0_ = (bitField0_ & ~0x00080000);
@@ -8772,27 +9576,35 @@ public final class ProtoConfig {
       private boolean useAutoConversion_ ;
       /**
        * <code>optional bool use_auto_conversion = 61 [default = false];</code>
+       * @return Whether the useAutoConversion field is set.
        */
+      @java.lang.Override
       public boolean hasUseAutoConversion() {
-        return ((bitField0_ & 0x00100000) == 0x00100000);
+        return ((bitField0_ & 0x00100000) != 0);
       }
       /**
        * <code>optional bool use_auto_conversion = 61 [default = false];</code>
+       * @return The useAutoConversion.
        */
+      @java.lang.Override
       public boolean getUseAutoConversion() {
         return useAutoConversion_;
       }
       /**
        * <code>optional bool use_auto_conversion = 61 [default = false];</code>
+       * @param value The useAutoConversion to set.
+       * @return This builder for chaining.
        */
       public Builder setUseAutoConversion(boolean value) {
-        bitField0_ |= 0x00100000;
+        
         useAutoConversion_ = value;
+        bitField0_ |= 0x00100000;
         onChanged();
         return this;
       }
       /**
        * <code>optional bool use_auto_conversion = 61 [default = false];</code>
+       * @return This builder for chaining.
        */
       public Builder clearUseAutoConversion() {
         bitField0_ = (bitField0_ & ~0x00100000);
@@ -8809,9 +9621,11 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional uint32 auto_conversion_key = 62 [default = 13];</code>
+       * @return Whether the autoConversionKey field is set.
        */
+      @java.lang.Override
       public boolean hasAutoConversionKey() {
-        return ((bitField0_ & 0x00200000) == 0x00200000);
+        return ((bitField0_ & 0x00200000) != 0);
       }
       /**
        * <pre>
@@ -8820,7 +9634,9 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional uint32 auto_conversion_key = 62 [default = 13];</code>
+       * @return The autoConversionKey.
        */
+      @java.lang.Override
       public int getAutoConversionKey() {
         return autoConversionKey_;
       }
@@ -8831,10 +9647,13 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional uint32 auto_conversion_key = 62 [default = 13];</code>
+       * @param value The autoConversionKey to set.
+       * @return This builder for chaining.
        */
       public Builder setAutoConversionKey(int value) {
-        bitField0_ |= 0x00200000;
+        
         autoConversionKey_ = value;
+        bitField0_ |= 0x00200000;
         onChanged();
         return this;
       }
@@ -8845,6 +9664,7 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional uint32 auto_conversion_key = 62 [default = 13];</code>
+       * @return This builder for chaining.
        */
       public Builder clearAutoConversionKey() {
         bitField0_ = (bitField0_ & ~0x00200000);
@@ -8864,9 +9684,10 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional .mozc.config.Config.YenSignCharacter yen_sign_character = 63 [default = YEN_SIGN];</code>
+       * @return Whether the yenSignCharacter field is set.
        */
-      public boolean hasYenSignCharacter() {
-        return ((bitField0_ & 0x00400000) == 0x00400000);
+      @java.lang.Override public boolean hasYenSignCharacter() {
+        return ((bitField0_ & 0x00400000) != 0);
       }
       /**
        * <pre>
@@ -8878,9 +9699,11 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional .mozc.config.Config.YenSignCharacter yen_sign_character = 63 [default = YEN_SIGN];</code>
+       * @return The yenSignCharacter.
        */
+      @java.lang.Override
       public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.YenSignCharacter getYenSignCharacter() {
-        org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.YenSignCharacter result = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.YenSignCharacter.valueOf(yenSignCharacter_);
+        org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.YenSignCharacter result = org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.YenSignCharacter.forNumber(yenSignCharacter_);
         return result == null ? org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.YenSignCharacter.YEN_SIGN : result;
       }
       /**
@@ -8893,6 +9716,8 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional .mozc.config.Config.YenSignCharacter yen_sign_character = 63 [default = YEN_SIGN];</code>
+       * @param value The yenSignCharacter to set.
+       * @return This builder for chaining.
        */
       public Builder setYenSignCharacter(org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.YenSignCharacter value) {
         if (value == null) {
@@ -8913,6 +9738,7 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional .mozc.config.Config.YenSignCharacter yen_sign_character = 63 [default = YEN_SIGN];</code>
+       * @return This builder for chaining.
        */
       public Builder clearYenSignCharacter() {
         bitField0_ = (bitField0_ & ~0x00400000);
@@ -8931,9 +9757,11 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bool use_japanese_layout = 64 [default = false];</code>
+       * @return Whether the useJapaneseLayout field is set.
        */
+      @java.lang.Override
       public boolean hasUseJapaneseLayout() {
-        return ((bitField0_ & 0x00800000) == 0x00800000);
+        return ((bitField0_ & 0x00800000) != 0);
       }
       /**
        * <pre>
@@ -8944,7 +9772,9 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bool use_japanese_layout = 64 [default = false];</code>
+       * @return The useJapaneseLayout.
        */
+      @java.lang.Override
       public boolean getUseJapaneseLayout() {
         return useJapaneseLayout_;
       }
@@ -8957,10 +9787,13 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bool use_japanese_layout = 64 [default = false];</code>
+       * @param value The useJapaneseLayout to set.
+       * @return This builder for chaining.
        */
       public Builder setUseJapaneseLayout(boolean value) {
-        bitField0_ |= 0x00800000;
+        
         useJapaneseLayout_ = value;
+        bitField0_ |= 0x00800000;
         onChanged();
         return this;
       }
@@ -8973,6 +9806,7 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bool use_japanese_layout = 64 [default = false];</code>
+       * @return This builder for chaining.
        */
       public Builder clearUseJapaneseLayout() {
         bitField0_ = (bitField0_ & ~0x00800000);
@@ -8994,9 +9828,11 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bool use_kana_modifier_insensitive_conversion = 65 [default = false];</code>
+       * @return Whether the useKanaModifierInsensitiveConversion field is set.
        */
+      @java.lang.Override
       public boolean hasUseKanaModifierInsensitiveConversion() {
-        return ((bitField0_ & 0x01000000) == 0x01000000);
+        return ((bitField0_ & 0x01000000) != 0);
       }
       /**
        * <pre>
@@ -9010,7 +9846,9 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bool use_kana_modifier_insensitive_conversion = 65 [default = false];</code>
+       * @return The useKanaModifierInsensitiveConversion.
        */
+      @java.lang.Override
       public boolean getUseKanaModifierInsensitiveConversion() {
         return useKanaModifierInsensitiveConversion_;
       }
@@ -9026,10 +9864,13 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bool use_kana_modifier_insensitive_conversion = 65 [default = false];</code>
+       * @param value The useKanaModifierInsensitiveConversion to set.
+       * @return This builder for chaining.
        */
       public Builder setUseKanaModifierInsensitiveConversion(boolean value) {
-        bitField0_ |= 0x01000000;
+        
         useKanaModifierInsensitiveConversion_ = value;
+        bitField0_ |= 0x01000000;
         onChanged();
         return this;
       }
@@ -9045,6 +9886,7 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bool use_kana_modifier_insensitive_conversion = 65 [default = false];</code>
+       * @return This builder for chaining.
        */
       public Builder clearUseKanaModifierInsensitiveConversion() {
         bitField0_ = (bitField0_ & ~0x01000000);
@@ -9061,9 +9903,11 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bool use_typing_correction = 66 [default = false];</code>
+       * @return Whether the useTypingCorrection field is set.
        */
+      @java.lang.Override
       public boolean hasUseTypingCorrection() {
-        return ((bitField0_ & 0x02000000) == 0x02000000);
+        return ((bitField0_ & 0x02000000) != 0);
       }
       /**
        * <pre>
@@ -9072,7 +9916,9 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bool use_typing_correction = 66 [default = false];</code>
+       * @return The useTypingCorrection.
        */
+      @java.lang.Override
       public boolean getUseTypingCorrection() {
         return useTypingCorrection_;
       }
@@ -9083,10 +9929,13 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bool use_typing_correction = 66 [default = false];</code>
+       * @param value The useTypingCorrection to set.
+       * @return This builder for chaining.
        */
       public Builder setUseTypingCorrection(boolean value) {
-        bitField0_ |= 0x02000000;
+        
         useTypingCorrection_ = value;
+        bitField0_ |= 0x02000000;
         onChanged();
         return this;
       }
@@ -9097,10 +9946,214 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bool use_typing_correction = 66 [default = false];</code>
+       * @return This builder for chaining.
        */
       public Builder clearUseTypingCorrection() {
         bitField0_ = (bitField0_ & ~0x02000000);
         useTypingCorrection_ = false;
+        onChanged();
+        return this;
+      }
+
+      private int composingTimeoutThresholdMsec_ ;
+      /**
+       * <pre>
+       * The duration in millisecond to determine the timeout.
+       * If the duration between key inputs is more than this value,
+       * a SessionCommand::STOP_KEY_TOGGLING is prepended to the next key input.
+       * If the value is 0, STOP_KEY_TOGGLING is not sent.
+       * </pre>
+       *
+       * <code>optional int32 composing_timeout_threshold_msec = 67 [default = 0];</code>
+       * @return Whether the composingTimeoutThresholdMsec field is set.
+       */
+      @java.lang.Override
+      public boolean hasComposingTimeoutThresholdMsec() {
+        return ((bitField0_ & 0x04000000) != 0);
+      }
+      /**
+       * <pre>
+       * The duration in millisecond to determine the timeout.
+       * If the duration between key inputs is more than this value,
+       * a SessionCommand::STOP_KEY_TOGGLING is prepended to the next key input.
+       * If the value is 0, STOP_KEY_TOGGLING is not sent.
+       * </pre>
+       *
+       * <code>optional int32 composing_timeout_threshold_msec = 67 [default = 0];</code>
+       * @return The composingTimeoutThresholdMsec.
+       */
+      @java.lang.Override
+      public int getComposingTimeoutThresholdMsec() {
+        return composingTimeoutThresholdMsec_;
+      }
+      /**
+       * <pre>
+       * The duration in millisecond to determine the timeout.
+       * If the duration between key inputs is more than this value,
+       * a SessionCommand::STOP_KEY_TOGGLING is prepended to the next key input.
+       * If the value is 0, STOP_KEY_TOGGLING is not sent.
+       * </pre>
+       *
+       * <code>optional int32 composing_timeout_threshold_msec = 67 [default = 0];</code>
+       * @param value The composingTimeoutThresholdMsec to set.
+       * @return This builder for chaining.
+       */
+      public Builder setComposingTimeoutThresholdMsec(int value) {
+        
+        composingTimeoutThresholdMsec_ = value;
+        bitField0_ |= 0x04000000;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * The duration in millisecond to determine the timeout.
+       * If the duration between key inputs is more than this value,
+       * a SessionCommand::STOP_KEY_TOGGLING is prepended to the next key input.
+       * If the value is 0, STOP_KEY_TOGGLING is not sent.
+       * </pre>
+       *
+       * <code>optional int32 composing_timeout_threshold_msec = 67 [default = 0];</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearComposingTimeoutThresholdMsec() {
+        bitField0_ = (bitField0_ & ~0x04000000);
+        composingTimeoutThresholdMsec_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private java.util.List<java.lang.Integer> overlayKeymaps_ =
+        java.util.Collections.emptyList();
+      private void ensureOverlayKeymapsIsMutable() {
+        if (!((bitField0_ & 0x08000000) != 0)) {
+          overlayKeymaps_ = new java.util.ArrayList<java.lang.Integer>(overlayKeymaps_);
+          bitField0_ |= 0x08000000;
+        }
+      }
+      /**
+       * <pre>
+       * The keymaps which are loaded on top of `session_keymap`.
+       * Overlay keymaps are prioritized over `session_keymap`.
+       * They are used to partially modify the session keymap, for example
+       * using Henkan key as IME_ON.
+       * </pre>
+       *
+       * <code>repeated .mozc.config.Config.SessionKeymap overlay_keymaps = 68 [packed = true];</code>
+       * @return A list containing the overlayKeymaps.
+       */
+      public java.util.List<org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SessionKeymap> getOverlayKeymapsList() {
+        return new com.google.protobuf.Internal.ListAdapter<
+            java.lang.Integer, org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SessionKeymap>(overlayKeymaps_, overlayKeymaps_converter_);
+      }
+      /**
+       * <pre>
+       * The keymaps which are loaded on top of `session_keymap`.
+       * Overlay keymaps are prioritized over `session_keymap`.
+       * They are used to partially modify the session keymap, for example
+       * using Henkan key as IME_ON.
+       * </pre>
+       *
+       * <code>repeated .mozc.config.Config.SessionKeymap overlay_keymaps = 68 [packed = true];</code>
+       * @return The count of overlayKeymaps.
+       */
+      public int getOverlayKeymapsCount() {
+        return overlayKeymaps_.size();
+      }
+      /**
+       * <pre>
+       * The keymaps which are loaded on top of `session_keymap`.
+       * Overlay keymaps are prioritized over `session_keymap`.
+       * They are used to partially modify the session keymap, for example
+       * using Henkan key as IME_ON.
+       * </pre>
+       *
+       * <code>repeated .mozc.config.Config.SessionKeymap overlay_keymaps = 68 [packed = true];</code>
+       * @param index The index of the element to return.
+       * @return The overlayKeymaps at the given index.
+       */
+      public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SessionKeymap getOverlayKeymaps(int index) {
+        return overlayKeymaps_converter_.convert(overlayKeymaps_.get(index));
+      }
+      /**
+       * <pre>
+       * The keymaps which are loaded on top of `session_keymap`.
+       * Overlay keymaps are prioritized over `session_keymap`.
+       * They are used to partially modify the session keymap, for example
+       * using Henkan key as IME_ON.
+       * </pre>
+       *
+       * <code>repeated .mozc.config.Config.SessionKeymap overlay_keymaps = 68 [packed = true];</code>
+       * @param index The index to set the value at.
+       * @param value The overlayKeymaps to set.
+       * @return This builder for chaining.
+       */
+      public Builder setOverlayKeymaps(
+          int index, org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SessionKeymap value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        ensureOverlayKeymapsIsMutable();
+        overlayKeymaps_.set(index, value.getNumber());
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * The keymaps which are loaded on top of `session_keymap`.
+       * Overlay keymaps are prioritized over `session_keymap`.
+       * They are used to partially modify the session keymap, for example
+       * using Henkan key as IME_ON.
+       * </pre>
+       *
+       * <code>repeated .mozc.config.Config.SessionKeymap overlay_keymaps = 68 [packed = true];</code>
+       * @param value The overlayKeymaps to add.
+       * @return This builder for chaining.
+       */
+      public Builder addOverlayKeymaps(org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SessionKeymap value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        ensureOverlayKeymapsIsMutable();
+        overlayKeymaps_.add(value.getNumber());
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * The keymaps which are loaded on top of `session_keymap`.
+       * Overlay keymaps are prioritized over `session_keymap`.
+       * They are used to partially modify the session keymap, for example
+       * using Henkan key as IME_ON.
+       * </pre>
+       *
+       * <code>repeated .mozc.config.Config.SessionKeymap overlay_keymaps = 68 [packed = true];</code>
+       * @param values The overlayKeymaps to add.
+       * @return This builder for chaining.
+       */
+      public Builder addAllOverlayKeymaps(
+          java.lang.Iterable<? extends org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SessionKeymap> values) {
+        ensureOverlayKeymapsIsMutable();
+        for (org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SessionKeymap value : values) {
+          overlayKeymaps_.add(value.getNumber());
+        }
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * The keymaps which are loaded on top of `session_keymap`.
+       * Overlay keymaps are prioritized over `session_keymap`.
+       * They are used to partially modify the session keymap, for example
+       * using Henkan key as IME_ON.
+       * </pre>
+       *
+       * <code>repeated .mozc.config.Config.SessionKeymap overlay_keymaps = 68 [packed = true];</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearOverlayKeymaps() {
+        overlayKeymaps_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x08000000);
         onChanged();
         return this;
       }
@@ -9113,9 +10166,11 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bool use_date_conversion = 80 [default = true];</code>
+       * @return Whether the useDateConversion field is set.
        */
+      @java.lang.Override
       public boolean hasUseDateConversion() {
-        return ((bitField0_ & 0x04000000) == 0x04000000);
+        return ((bitField0_ & 0x10000000) != 0);
       }
       /**
        * <pre>
@@ -9124,7 +10179,9 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bool use_date_conversion = 80 [default = true];</code>
+       * @return The useDateConversion.
        */
+      @java.lang.Override
       public boolean getUseDateConversion() {
         return useDateConversion_;
       }
@@ -9135,10 +10192,13 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bool use_date_conversion = 80 [default = true];</code>
+       * @param value The useDateConversion to set.
+       * @return This builder for chaining.
        */
       public Builder setUseDateConversion(boolean value) {
-        bitField0_ |= 0x04000000;
+        
         useDateConversion_ = value;
+        bitField0_ |= 0x10000000;
         onChanged();
         return this;
       }
@@ -9149,9 +10209,10 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bool use_date_conversion = 80 [default = true];</code>
+       * @return This builder for chaining.
        */
       public Builder clearUseDateConversion() {
-        bitField0_ = (bitField0_ & ~0x04000000);
+        bitField0_ = (bitField0_ & ~0x10000000);
         useDateConversion_ = true;
         onChanged();
         return this;
@@ -9160,30 +10221,38 @@ public final class ProtoConfig {
       private boolean useSingleKanjiConversion_ = true;
       /**
        * <code>optional bool use_single_kanji_conversion = 81 [default = true];</code>
+       * @return Whether the useSingleKanjiConversion field is set.
        */
+      @java.lang.Override
       public boolean hasUseSingleKanjiConversion() {
-        return ((bitField0_ & 0x08000000) == 0x08000000);
+        return ((bitField0_ & 0x20000000) != 0);
       }
       /**
        * <code>optional bool use_single_kanji_conversion = 81 [default = true];</code>
+       * @return The useSingleKanjiConversion.
        */
+      @java.lang.Override
       public boolean getUseSingleKanjiConversion() {
         return useSingleKanjiConversion_;
       }
       /**
        * <code>optional bool use_single_kanji_conversion = 81 [default = true];</code>
+       * @param value The useSingleKanjiConversion to set.
+       * @return This builder for chaining.
        */
       public Builder setUseSingleKanjiConversion(boolean value) {
-        bitField0_ |= 0x08000000;
+        
         useSingleKanjiConversion_ = value;
+        bitField0_ |= 0x20000000;
         onChanged();
         return this;
       }
       /**
        * <code>optional bool use_single_kanji_conversion = 81 [default = true];</code>
+       * @return This builder for chaining.
        */
       public Builder clearUseSingleKanjiConversion() {
-        bitField0_ = (bitField0_ & ~0x08000000);
+        bitField0_ = (bitField0_ & ~0x20000000);
         useSingleKanjiConversion_ = true;
         onChanged();
         return this;
@@ -9192,30 +10261,38 @@ public final class ProtoConfig {
       private boolean useSymbolConversion_ = true;
       /**
        * <code>optional bool use_symbol_conversion = 82 [default = true];</code>
+       * @return Whether the useSymbolConversion field is set.
        */
+      @java.lang.Override
       public boolean hasUseSymbolConversion() {
-        return ((bitField0_ & 0x10000000) == 0x10000000);
+        return ((bitField0_ & 0x40000000) != 0);
       }
       /**
        * <code>optional bool use_symbol_conversion = 82 [default = true];</code>
+       * @return The useSymbolConversion.
        */
+      @java.lang.Override
       public boolean getUseSymbolConversion() {
         return useSymbolConversion_;
       }
       /**
        * <code>optional bool use_symbol_conversion = 82 [default = true];</code>
+       * @param value The useSymbolConversion to set.
+       * @return This builder for chaining.
        */
       public Builder setUseSymbolConversion(boolean value) {
-        bitField0_ |= 0x10000000;
+        
         useSymbolConversion_ = value;
+        bitField0_ |= 0x40000000;
         onChanged();
         return this;
       }
       /**
        * <code>optional bool use_symbol_conversion = 82 [default = true];</code>
+       * @return This builder for chaining.
        */
       public Builder clearUseSymbolConversion() {
-        bitField0_ = (bitField0_ & ~0x10000000);
+        bitField0_ = (bitField0_ & ~0x40000000);
         useSymbolConversion_ = true;
         onChanged();
         return this;
@@ -9224,30 +10301,38 @@ public final class ProtoConfig {
       private boolean useNumberConversion_ = true;
       /**
        * <code>optional bool use_number_conversion = 83 [default = true];</code>
+       * @return Whether the useNumberConversion field is set.
        */
+      @java.lang.Override
       public boolean hasUseNumberConversion() {
-        return ((bitField0_ & 0x20000000) == 0x20000000);
+        return ((bitField0_ & 0x80000000) != 0);
       }
       /**
        * <code>optional bool use_number_conversion = 83 [default = true];</code>
+       * @return The useNumberConversion.
        */
+      @java.lang.Override
       public boolean getUseNumberConversion() {
         return useNumberConversion_;
       }
       /**
        * <code>optional bool use_number_conversion = 83 [default = true];</code>
+       * @param value The useNumberConversion to set.
+       * @return This builder for chaining.
        */
       public Builder setUseNumberConversion(boolean value) {
-        bitField0_ |= 0x20000000;
+        
         useNumberConversion_ = value;
+        bitField0_ |= 0x80000000;
         onChanged();
         return this;
       }
       /**
        * <code>optional bool use_number_conversion = 83 [default = true];</code>
+       * @return This builder for chaining.
        */
       public Builder clearUseNumberConversion() {
-        bitField0_ = (bitField0_ & ~0x20000000);
+        bitField0_ = (bitField0_ & ~0x80000000);
         useNumberConversion_ = true;
         onChanged();
         return this;
@@ -9256,30 +10341,38 @@ public final class ProtoConfig {
       private boolean useEmoticonConversion_ = true;
       /**
        * <code>optional bool use_emoticon_conversion = 84 [default = true];</code>
+       * @return Whether the useEmoticonConversion field is set.
        */
+      @java.lang.Override
       public boolean hasUseEmoticonConversion() {
-        return ((bitField0_ & 0x40000000) == 0x40000000);
+        return ((bitField1_ & 0x00000001) != 0);
       }
       /**
        * <code>optional bool use_emoticon_conversion = 84 [default = true];</code>
+       * @return The useEmoticonConversion.
        */
+      @java.lang.Override
       public boolean getUseEmoticonConversion() {
         return useEmoticonConversion_;
       }
       /**
        * <code>optional bool use_emoticon_conversion = 84 [default = true];</code>
+       * @param value The useEmoticonConversion to set.
+       * @return This builder for chaining.
        */
       public Builder setUseEmoticonConversion(boolean value) {
-        bitField0_ |= 0x40000000;
+        
         useEmoticonConversion_ = value;
+        bitField1_ |= 0x00000001;
         onChanged();
         return this;
       }
       /**
        * <code>optional bool use_emoticon_conversion = 84 [default = true];</code>
+       * @return This builder for chaining.
        */
       public Builder clearUseEmoticonConversion() {
-        bitField0_ = (bitField0_ & ~0x40000000);
+        bitField1_ = (bitField1_ & ~0x00000001);
         useEmoticonConversion_ = true;
         onChanged();
         return this;
@@ -9288,30 +10381,38 @@ public final class ProtoConfig {
       private boolean useCalculator_ = true;
       /**
        * <code>optional bool use_calculator = 85 [default = true];</code>
+       * @return Whether the useCalculator field is set.
        */
+      @java.lang.Override
       public boolean hasUseCalculator() {
-        return ((bitField0_ & 0x80000000) == 0x80000000);
+        return ((bitField1_ & 0x00000002) != 0);
       }
       /**
        * <code>optional bool use_calculator = 85 [default = true];</code>
+       * @return The useCalculator.
        */
+      @java.lang.Override
       public boolean getUseCalculator() {
         return useCalculator_;
       }
       /**
        * <code>optional bool use_calculator = 85 [default = true];</code>
+       * @param value The useCalculator to set.
+       * @return This builder for chaining.
        */
       public Builder setUseCalculator(boolean value) {
-        bitField0_ |= 0x80000000;
+        
         useCalculator_ = value;
+        bitField1_ |= 0x00000002;
         onChanged();
         return this;
       }
       /**
        * <code>optional bool use_calculator = 85 [default = true];</code>
+       * @return This builder for chaining.
        */
       public Builder clearUseCalculator() {
-        bitField0_ = (bitField0_ & ~0x80000000);
+        bitField1_ = (bitField1_ & ~0x00000002);
         useCalculator_ = true;
         onChanged();
         return this;
@@ -9320,30 +10421,38 @@ public final class ProtoConfig {
       private boolean useT13NConversion_ = true;
       /**
        * <code>optional bool use_t13n_conversion = 86 [default = true];</code>
+       * @return Whether the useT13nConversion field is set.
        */
+      @java.lang.Override
       public boolean hasUseT13NConversion() {
-        return ((bitField1_ & 0x00000001) == 0x00000001);
+        return ((bitField1_ & 0x00000004) != 0);
       }
       /**
        * <code>optional bool use_t13n_conversion = 86 [default = true];</code>
+       * @return The useT13nConversion.
        */
+      @java.lang.Override
       public boolean getUseT13NConversion() {
         return useT13NConversion_;
       }
       /**
        * <code>optional bool use_t13n_conversion = 86 [default = true];</code>
+       * @param value The useT13nConversion to set.
+       * @return This builder for chaining.
        */
       public Builder setUseT13NConversion(boolean value) {
-        bitField1_ |= 0x00000001;
+        
         useT13NConversion_ = value;
+        bitField1_ |= 0x00000004;
         onChanged();
         return this;
       }
       /**
        * <code>optional bool use_t13n_conversion = 86 [default = true];</code>
+       * @return This builder for chaining.
        */
       public Builder clearUseT13NConversion() {
-        bitField1_ = (bitField1_ & ~0x00000001);
+        bitField1_ = (bitField1_ & ~0x00000004);
         useT13NConversion_ = true;
         onChanged();
         return this;
@@ -9352,30 +10461,38 @@ public final class ProtoConfig {
       private boolean useZipCodeConversion_ = true;
       /**
        * <code>optional bool use_zip_code_conversion = 87 [default = true];</code>
+       * @return Whether the useZipCodeConversion field is set.
        */
+      @java.lang.Override
       public boolean hasUseZipCodeConversion() {
-        return ((bitField1_ & 0x00000002) == 0x00000002);
+        return ((bitField1_ & 0x00000008) != 0);
       }
       /**
        * <code>optional bool use_zip_code_conversion = 87 [default = true];</code>
+       * @return The useZipCodeConversion.
        */
+      @java.lang.Override
       public boolean getUseZipCodeConversion() {
         return useZipCodeConversion_;
       }
       /**
        * <code>optional bool use_zip_code_conversion = 87 [default = true];</code>
+       * @param value The useZipCodeConversion to set.
+       * @return This builder for chaining.
        */
       public Builder setUseZipCodeConversion(boolean value) {
-        bitField1_ |= 0x00000002;
+        
         useZipCodeConversion_ = value;
+        bitField1_ |= 0x00000008;
         onChanged();
         return this;
       }
       /**
        * <code>optional bool use_zip_code_conversion = 87 [default = true];</code>
+       * @return This builder for chaining.
        */
       public Builder clearUseZipCodeConversion() {
-        bitField1_ = (bitField1_ & ~0x00000002);
+        bitField1_ = (bitField1_ & ~0x00000008);
         useZipCodeConversion_ = true;
         onChanged();
         return this;
@@ -9384,30 +10501,38 @@ public final class ProtoConfig {
       private boolean useSpellingCorrection_ = true;
       /**
        * <code>optional bool use_spelling_correction = 88 [default = true];</code>
+       * @return Whether the useSpellingCorrection field is set.
        */
+      @java.lang.Override
       public boolean hasUseSpellingCorrection() {
-        return ((bitField1_ & 0x00000004) == 0x00000004);
+        return ((bitField1_ & 0x00000010) != 0);
       }
       /**
        * <code>optional bool use_spelling_correction = 88 [default = true];</code>
+       * @return The useSpellingCorrection.
        */
+      @java.lang.Override
       public boolean getUseSpellingCorrection() {
         return useSpellingCorrection_;
       }
       /**
        * <code>optional bool use_spelling_correction = 88 [default = true];</code>
+       * @param value The useSpellingCorrection to set.
+       * @return This builder for chaining.
        */
       public Builder setUseSpellingCorrection(boolean value) {
-        bitField1_ |= 0x00000004;
+        
         useSpellingCorrection_ = value;
+        bitField1_ |= 0x00000010;
         onChanged();
         return this;
       }
       /**
        * <code>optional bool use_spelling_correction = 88 [default = true];</code>
+       * @return This builder for chaining.
        */
       public Builder clearUseSpellingCorrection() {
-        bitField1_ = (bitField1_ & ~0x00000004);
+        bitField1_ = (bitField1_ & ~0x00000010);
         useSpellingCorrection_ = true;
         onChanged();
         return this;
@@ -9427,9 +10552,11 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bool use_emoji_conversion = 89 [default = false];</code>
+       * @return Whether the useEmojiConversion field is set.
        */
+      @java.lang.Override
       public boolean hasUseEmojiConversion() {
-        return ((bitField1_ & 0x00000008) == 0x00000008);
+        return ((bitField1_ & 0x00000020) != 0);
       }
       /**
        * <pre>
@@ -9444,7 +10571,9 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bool use_emoji_conversion = 89 [default = false];</code>
+       * @return The useEmojiConversion.
        */
+      @java.lang.Override
       public boolean getUseEmojiConversion() {
         return useEmojiConversion_;
       }
@@ -9461,10 +10590,13 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bool use_emoji_conversion = 89 [default = false];</code>
+       * @param value The useEmojiConversion to set.
+       * @return This builder for chaining.
        */
       public Builder setUseEmojiConversion(boolean value) {
-        bitField1_ |= 0x00000008;
+        
         useEmojiConversion_ = value;
+        bitField1_ |= 0x00000020;
         onChanged();
         return this;
       }
@@ -9481,25 +10613,28 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bool use_emoji_conversion = 89 [default = false];</code>
+       * @return This builder for chaining.
        */
       public Builder clearUseEmojiConversion() {
-        bitField1_ = (bitField1_ & ~0x00000008);
+        bitField1_ = (bitField1_ & ~0x00000020);
         useEmojiConversion_ = false;
         onChanged();
         return this;
       }
 
-      private org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.InformationListConfig informationListConfig_ = null;
+      private org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.InformationListConfig informationListConfig_;
       private com.google.protobuf.SingleFieldBuilderV3<
           org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.InformationListConfig, org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.InformationListConfig.Builder, org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.InformationListConfigOrBuilder> informationListConfigBuilder_;
       /**
        * <code>optional .mozc.config.Config.InformationListConfig information_list_config = 90;</code>
+       * @return Whether the informationListConfig field is set.
        */
       public boolean hasInformationListConfig() {
-        return ((bitField1_ & 0x00000010) == 0x00000010);
+        return ((bitField1_ & 0x00000040) != 0);
       }
       /**
        * <code>optional .mozc.config.Config.InformationListConfig information_list_config = 90;</code>
+       * @return The informationListConfig.
        */
       public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.InformationListConfig getInformationListConfig() {
         if (informationListConfigBuilder_ == null) {
@@ -9517,11 +10652,11 @@ public final class ProtoConfig {
             throw new NullPointerException();
           }
           informationListConfig_ = value;
-          onChanged();
         } else {
           informationListConfigBuilder_.setMessage(value);
         }
-        bitField1_ |= 0x00000010;
+        bitField1_ |= 0x00000040;
+        onChanged();
         return this;
       }
       /**
@@ -9531,11 +10666,11 @@ public final class ProtoConfig {
           org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.InformationListConfig.Builder builderForValue) {
         if (informationListConfigBuilder_ == null) {
           informationListConfig_ = builderForValue.build();
-          onChanged();
         } else {
           informationListConfigBuilder_.setMessage(builderForValue.build());
         }
-        bitField1_ |= 0x00000010;
+        bitField1_ |= 0x00000040;
+        onChanged();
         return this;
       }
       /**
@@ -9543,39 +10678,38 @@ public final class ProtoConfig {
        */
       public Builder mergeInformationListConfig(org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.InformationListConfig value) {
         if (informationListConfigBuilder_ == null) {
-          if (((bitField1_ & 0x00000010) == 0x00000010) &&
-              informationListConfig_ != null &&
-              informationListConfig_ != org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.InformationListConfig.getDefaultInstance()) {
-            informationListConfig_ =
-              org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.InformationListConfig.newBuilder(informationListConfig_).mergeFrom(value).buildPartial();
+          if (((bitField1_ & 0x00000040) != 0) &&
+            informationListConfig_ != null &&
+            informationListConfig_ != org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.InformationListConfig.getDefaultInstance()) {
+            getInformationListConfigBuilder().mergeFrom(value);
           } else {
             informationListConfig_ = value;
           }
-          onChanged();
         } else {
           informationListConfigBuilder_.mergeFrom(value);
         }
-        bitField1_ |= 0x00000010;
+        bitField1_ |= 0x00000040;
+        onChanged();
         return this;
       }
       /**
        * <code>optional .mozc.config.Config.InformationListConfig information_list_config = 90;</code>
        */
       public Builder clearInformationListConfig() {
-        if (informationListConfigBuilder_ == null) {
-          informationListConfig_ = null;
-          onChanged();
-        } else {
-          informationListConfigBuilder_.clear();
+        bitField1_ = (bitField1_ & ~0x00000040);
+        informationListConfig_ = null;
+        if (informationListConfigBuilder_ != null) {
+          informationListConfigBuilder_.dispose();
+          informationListConfigBuilder_ = null;
         }
-        bitField1_ = (bitField1_ & ~0x00000010);
+        onChanged();
         return this;
       }
       /**
        * <code>optional .mozc.config.Config.InformationListConfig information_list_config = 90;</code>
        */
       public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.InformationListConfig.Builder getInformationListConfigBuilder() {
-        bitField1_ |= 0x00000010;
+        bitField1_ |= 0x00000040;
         onChanged();
         return getInformationListConfigFieldBuilder().getBuilder();
       }
@@ -9612,23 +10746,35 @@ public final class ProtoConfig {
        * <pre>
        *&#47;///////////////////////////////////////////////////////////
        * Suggest (100-119)
+       * Suggest is a feature of word suggestion with prefix search.
+       * When you type "あ", you may get "ありがとう", "朝" (あさ), "明日" (あした)
+       * as suggested words.
        * Use history-based suggest feature.
+       * If this is true, your previously typed words are prioritized.
        * </pre>
        *
        * <code>optional bool use_history_suggest = 100 [default = true];</code>
+       * @return Whether the useHistorySuggest field is set.
        */
+      @java.lang.Override
       public boolean hasUseHistorySuggest() {
-        return ((bitField1_ & 0x00000020) == 0x00000020);
+        return ((bitField1_ & 0x00000080) != 0);
       }
       /**
        * <pre>
        *&#47;///////////////////////////////////////////////////////////
        * Suggest (100-119)
+       * Suggest is a feature of word suggestion with prefix search.
+       * When you type "あ", you may get "ありがとう", "朝" (あさ), "明日" (あした)
+       * as suggested words.
        * Use history-based suggest feature.
+       * If this is true, your previously typed words are prioritized.
        * </pre>
        *
        * <code>optional bool use_history_suggest = 100 [default = true];</code>
+       * @return The useHistorySuggest.
        */
+      @java.lang.Override
       public boolean getUseHistorySuggest() {
         return useHistorySuggest_;
       }
@@ -9636,14 +10782,21 @@ public final class ProtoConfig {
        * <pre>
        *&#47;///////////////////////////////////////////////////////////
        * Suggest (100-119)
+       * Suggest is a feature of word suggestion with prefix search.
+       * When you type "あ", you may get "ありがとう", "朝" (あさ), "明日" (あした)
+       * as suggested words.
        * Use history-based suggest feature.
+       * If this is true, your previously typed words are prioritized.
        * </pre>
        *
        * <code>optional bool use_history_suggest = 100 [default = true];</code>
+       * @param value The useHistorySuggest to set.
+       * @return This builder for chaining.
        */
       public Builder setUseHistorySuggest(boolean value) {
-        bitField1_ |= 0x00000020;
+        
         useHistorySuggest_ = value;
+        bitField1_ |= 0x00000080;
         onChanged();
         return this;
       }
@@ -9651,13 +10804,18 @@ public final class ProtoConfig {
        * <pre>
        *&#47;///////////////////////////////////////////////////////////
        * Suggest (100-119)
+       * Suggest is a feature of word suggestion with prefix search.
+       * When you type "あ", you may get "ありがとう", "朝" (あさ), "明日" (あした)
+       * as suggested words.
        * Use history-based suggest feature.
+       * If this is true, your previously typed words are prioritized.
        * </pre>
        *
        * <code>optional bool use_history_suggest = 100 [default = true];</code>
+       * @return This builder for chaining.
        */
       public Builder clearUseHistorySuggest() {
-        bitField1_ = (bitField1_ & ~0x00000020);
+        bitField1_ = (bitField1_ & ~0x00000080);
         useHistorySuggest_ = true;
         onChanged();
         return this;
@@ -9667,45 +10825,61 @@ public final class ProtoConfig {
       /**
        * <pre>
        * Use dictionary-based suggest feature.
+       * If this is true, words in the word dictionary are suggested even if
+       * you haven't typed before.
        * </pre>
        *
        * <code>optional bool use_dictionary_suggest = 101 [default = true];</code>
+       * @return Whether the useDictionarySuggest field is set.
        */
+      @java.lang.Override
       public boolean hasUseDictionarySuggest() {
-        return ((bitField1_ & 0x00000040) == 0x00000040);
+        return ((bitField1_ & 0x00000100) != 0);
       }
       /**
        * <pre>
        * Use dictionary-based suggest feature.
+       * If this is true, words in the word dictionary are suggested even if
+       * you haven't typed before.
        * </pre>
        *
        * <code>optional bool use_dictionary_suggest = 101 [default = true];</code>
+       * @return The useDictionarySuggest.
        */
+      @java.lang.Override
       public boolean getUseDictionarySuggest() {
         return useDictionarySuggest_;
       }
       /**
        * <pre>
        * Use dictionary-based suggest feature.
+       * If this is true, words in the word dictionary are suggested even if
+       * you haven't typed before.
        * </pre>
        *
        * <code>optional bool use_dictionary_suggest = 101 [default = true];</code>
+       * @param value The useDictionarySuggest to set.
+       * @return This builder for chaining.
        */
       public Builder setUseDictionarySuggest(boolean value) {
-        bitField1_ |= 0x00000040;
+        
         useDictionarySuggest_ = value;
+        bitField1_ |= 0x00000100;
         onChanged();
         return this;
       }
       /**
        * <pre>
        * Use dictionary-based suggest feature.
+       * If this is true, words in the word dictionary are suggested even if
+       * you haven't typed before.
        * </pre>
        *
        * <code>optional bool use_dictionary_suggest = 101 [default = true];</code>
+       * @return This builder for chaining.
        */
       public Builder clearUseDictionarySuggest() {
-        bitField1_ = (bitField1_ & ~0x00000040);
+        bitField1_ = (bitField1_ & ~0x00000100);
         useDictionarySuggest_ = true;
         onChanged();
         return this;
@@ -9718,9 +10892,11 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bool use_realtime_conversion = 102 [default = true];</code>
+       * @return Whether the useRealtimeConversion field is set.
        */
+      @java.lang.Override
       public boolean hasUseRealtimeConversion() {
-        return ((bitField1_ & 0x00000080) == 0x00000080);
+        return ((bitField1_ & 0x00000200) != 0);
       }
       /**
        * <pre>
@@ -9728,7 +10904,9 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bool use_realtime_conversion = 102 [default = true];</code>
+       * @return The useRealtimeConversion.
        */
+      @java.lang.Override
       public boolean getUseRealtimeConversion() {
         return useRealtimeConversion_;
       }
@@ -9738,10 +10916,13 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bool use_realtime_conversion = 102 [default = true];</code>
+       * @param value The useRealtimeConversion to set.
+       * @return This builder for chaining.
        */
       public Builder setUseRealtimeConversion(boolean value) {
-        bitField1_ |= 0x00000080;
+        
         useRealtimeConversion_ = value;
+        bitField1_ |= 0x00000200;
         onChanged();
         return this;
       }
@@ -9751,9 +10932,10 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bool use_realtime_conversion = 102 [default = true];</code>
+       * @return This builder for chaining.
        */
       public Builder clearUseRealtimeConversion() {
-        bitField1_ = (bitField1_ & ~0x00000080);
+        bitField1_ = (bitField1_ & ~0x00000200);
         useRealtimeConversion_ = true;
         onChanged();
         return this;
@@ -9766,9 +10948,11 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional uint32 suggestions_size = 110 [default = 3];</code>
+       * @return Whether the suggestionsSize field is set.
        */
+      @java.lang.Override
       public boolean hasSuggestionsSize() {
-        return ((bitField1_ & 0x00000100) == 0x00000100);
+        return ((bitField1_ & 0x00000400) != 0);
       }
       /**
        * <pre>
@@ -9776,7 +10960,9 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional uint32 suggestions_size = 110 [default = 3];</code>
+       * @return The suggestionsSize.
        */
+      @java.lang.Override
       public int getSuggestionsSize() {
         return suggestionsSize_;
       }
@@ -9786,10 +10972,13 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional uint32 suggestions_size = 110 [default = 3];</code>
+       * @param value The suggestionsSize to set.
+       * @return This builder for chaining.
        */
       public Builder setSuggestionsSize(int value) {
-        bitField1_ |= 0x00000100;
+        
         suggestionsSize_ = value;
+        bitField1_ |= 0x00000400;
         onChanged();
         return this;
       }
@@ -9799,9 +10988,10 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional uint32 suggestions_size = 110 [default = 3];</code>
+       * @return This builder for chaining.
        */
       public Builder clearSuggestionsSize() {
-        bitField1_ = (bitField1_ & ~0x00000100);
+        bitField1_ = (bitField1_ & ~0x00000400);
         suggestionsSize_ = 3;
         onChanged();
         return this;
@@ -9816,9 +11006,11 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bool use_mode_indicator = 120 [default = true];</code>
+       * @return Whether the useModeIndicator field is set.
        */
+      @java.lang.Override
       public boolean hasUseModeIndicator() {
-        return ((bitField1_ & 0x00000200) == 0x00000200);
+        return ((bitField1_ & 0x00000800) != 0);
       }
       /**
        * <pre>
@@ -9828,7 +11020,9 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bool use_mode_indicator = 120 [default = true];</code>
+       * @return The useModeIndicator.
        */
+      @java.lang.Override
       public boolean getUseModeIndicator() {
         return useModeIndicator_;
       }
@@ -9840,10 +11034,13 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bool use_mode_indicator = 120 [default = true];</code>
+       * @param value The useModeIndicator to set.
+       * @return This builder for chaining.
        */
       public Builder setUseModeIndicator(boolean value) {
-        bitField1_ |= 0x00000200;
+        
         useModeIndicator_ = value;
+        bitField1_ |= 0x00000800;
         onChanged();
         return this;
       }
@@ -9855,80 +11052,23 @@ public final class ProtoConfig {
        * </pre>
        *
        * <code>optional bool use_mode_indicator = 120 [default = true];</code>
+       * @return This builder for chaining.
        */
       public Builder clearUseModeIndicator() {
-        bitField1_ = (bitField1_ & ~0x00000200);
+        bitField1_ = (bitField1_ & ~0x00000800);
         useModeIndicator_ = true;
         onChanged();
         return this;
       }
-
-      private boolean allowCloudHandwriting_ ;
-      /**
-       * <pre>
-       * Allow the cloud handwriting.  The handwriting UI has to notice
-       * user before activating the feature, and set this field to true
-       * when the user permit.
-       * NOTE: OSS version does not handle this field.
-       * </pre>
-       *
-       * <code>optional bool allow_cloud_handwriting = 301 [default = false];</code>
-       */
-      public boolean hasAllowCloudHandwriting() {
-        return ((bitField1_ & 0x00000400) == 0x00000400);
-      }
-      /**
-       * <pre>
-       * Allow the cloud handwriting.  The handwriting UI has to notice
-       * user before activating the feature, and set this field to true
-       * when the user permit.
-       * NOTE: OSS version does not handle this field.
-       * </pre>
-       *
-       * <code>optional bool allow_cloud_handwriting = 301 [default = false];</code>
-       */
-      public boolean getAllowCloudHandwriting() {
-        return allowCloudHandwriting_;
-      }
-      /**
-       * <pre>
-       * Allow the cloud handwriting.  The handwriting UI has to notice
-       * user before activating the feature, and set this field to true
-       * when the user permit.
-       * NOTE: OSS version does not handle this field.
-       * </pre>
-       *
-       * <code>optional bool allow_cloud_handwriting = 301 [default = false];</code>
-       */
-      public Builder setAllowCloudHandwriting(boolean value) {
-        bitField1_ |= 0x00000400;
-        allowCloudHandwriting_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       * Allow the cloud handwriting.  The handwriting UI has to notice
-       * user before activating the feature, and set this field to true
-       * when the user permit.
-       * NOTE: OSS version does not handle this field.
-       * </pre>
-       *
-       * <code>optional bool allow_cloud_handwriting = 301 [default = false];</code>
-       */
-      public Builder clearAllowCloudHandwriting() {
-        bitField1_ = (bitField1_ & ~0x00000400);
-        allowCloudHandwriting_ = false;
-        onChanged();
-        return this;
-      }
-      public Builder setUnknownFields(
-              final com.google.protobuf.UnknownFieldSet unknownFields) {
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFields(unknownFields);
       }
 
-      public Builder mergeUnknownFields(
-              final com.google.protobuf.UnknownFieldSet unknownFields) {
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
       }
 
@@ -9948,11 +11088,23 @@ public final class ProtoConfig {
 
     @java.lang.Deprecated public static final com.google.protobuf.Parser<Config>
         PARSER = new com.google.protobuf.AbstractParser<Config>() {
+      @java.lang.Override
       public Config parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new Config(input, extensionRegistry);
+        Builder builder = newBuilder();
+        try {
+          builder.mergeFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(builder.buildPartial());
+        } catch (com.google.protobuf.UninitializedMessageException e) {
+          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(e)
+              .setUnfinishedMessage(builder.buildPartial());
+        }
+        return builder.buildPartial();
       }
     };
 
@@ -9965,6 +11117,7 @@ public final class ProtoConfig {
       return PARSER;
     }
 
+    @java.lang.Override
     public org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
@@ -10000,117 +11153,117 @@ public final class ProtoConfig {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\025protocol/config.proto\022\013mozc.config\"\305\001\n" +
+      "\n\025protocol/config.proto\022\013mozc.config\"\311\001\n" +
       "\rGeneralConfig\022\031\n\016config_version\030\001 \001(\r:\001" +
       "0\022.\n\035last_modified_product_version\030\002 \001(\t" +
-      ":\0070.0.0.0\022\035\n\022last_modified_time\030\003 \001(\004:\0010" +
-      "\022\022\n\010platform\030\004 \001(\t:\000\022\023\n\tui_locale\030\005 \001(\t:" +
-      "\000\022!\n\022upload_usage_stats\030\006 \001(\010:\005false\"\217\034\n" +
-      "\006Config\0222\n\016general_config\030\001 \001(\0132\032.mozc.c" +
-      "onfig.GeneralConfig\022\030\n\rverbose_level\030\n \001" +
-      "(\005:\0010\022\035\n\016incognito_mode\030\024 \001(\010:\005false\022\033\n\r" +
-      "check_default\030\026 \001(\010:\004true\022 \n\021presentatio" +
-      "n_mode\030\027 \001(\010:\005false\022@\n\016preedit_method\030( " +
-      "\001(\0162!.mozc.config.Config.PreeditMethod:\005" +
-      "ROMAN\022?\n\016session_keymap\030) \001(\0162!.mozc.con" +
-      "fig.Config.SessionKeymap:\004NONE\022\033\n\023custom" +
-      "_keymap_table\030* \001(\014\022\032\n\022custom_roman_tabl" +
-      "e\030+ \001(\014\022O\n\022punctuation_method\030- \001(\0162%.mo" +
-      "zc.config.Config.PunctuationMethod:\014KUTE" +
-      "N_TOUTEN\022R\n\rsymbol_method\030. \001(\0162 .mozc.c" +
-      "onfig.Config.SymbolMethod:\031CORNER_BRACKE" +
-      "T_MIDDLE_DOT\022b\n\024space_character_form\030/ \001" +
-      "(\0162,.mozc.config.Config.FundamentalChara" +
-      "cterForm:\026FUNDAMENTAL_INPUT_MODE\0224\n%use_" +
-      "keyboard_to_change_preedit_method\0300 \001(\010:" +
-      "\005false\022Y\n\026history_learning_level\0302 \001(\0162(" +
-      ".mozc.config.Config.HistoryLearningLevel" +
-      ":\017DEFAULT_HISTORY\022U\n\022selection_shortcut\030" +
-      "4 \001(\0162%.mozc.config.Config.SelectionShor" +
-      "tcut:\022SHORTCUT_123456789\022C\n\024character_fo" +
-      "rm_rules\0306 \003(\0132%.mozc.config.Config.Char" +
-      "acterFormRule\022#\n\025use_auto_ime_turn_off\0308" +
-      " \001(\010:\004true\022\"\n\024use_cascading_window\030: \001(\010" +
-      ":\004true\022W\n\025shift_key_mode_switch\030; \001(\0162&." +
-      "mozc.config.Config.ShiftKeyModeSwitch:\020A" +
-      "SCII_INPUT_MODE\022Y\n\025numpad_character_form" +
-              "\030< \001(\0162'.mozc.config.Config.NumpadCharac" +
-      "terForm:\021NUMPAD_HALF_WIDTH\022\"\n\023use_auto_c" +
-      "onversion\030= \001(\010:\005false\022\037\n\023auto_conversio" +
-      "n_key\030> \001(\r:\00213\022J\n\022yen_sign_character\030? " +
-      "\001(\0162$.mozc.config.Config.YenSignCharacte" +
-      "r:\010YEN_SIGN\022\"\n\023use_japanese_layout\030@ \001(\010" +
-      ":\005false\0227\n(use_kana_modifier_insensitive" +
-      "_conversion\030A \001(\010:\005false\022$\n\025use_typing_c" +
-      "orrection\030B \001(\010:\005false\022!\n\023use_date_conve" +
-      "rsion\030P \001(\010:\004true\022)\n\033use_single_kanji_co" +
-      "nversion\030Q \001(\010:\004true\022#\n\025use_symbol_conve" +
-      "rsion\030R \001(\010:\004true\022#\n\025use_number_conversi" +
-      "on\030S \001(\010:\004true\022%\n\027use_emoticon_conversio" +
-      "n\030T \001(\010:\004true\022\034\n\016use_calculator\030U \001(\010:\004t" +
-      "rue\022!\n\023use_t13n_conversion\030V \001(\010:\004true\022%" +
-      "\n\027use_zip_code_conversion\030W \001(\010:\004true\022%\n" +
-      "\027use_spelling_correction\030X \001(\010:\004true\022#\n\024" +
-      "use_emoji_conversion\030Y \001(\010:\005false\022J\n\027inf" +
-      "ormation_list_config\030Z \001(\0132).mozc.config" +
-      ".Config.InformationListConfig\022!\n\023use_his" +
-      "tory_suggest\030d \001(\010:\004true\022$\n\026use_dictiona" +
-      "ry_suggest\030e \001(\010:\004true\022%\n\027use_realtime_c" +
-      "onversion\030f \001(\010:\004true\022\033\n\020suggestions_siz" +
-      "e\030n \001(\r:\0013\022 \n\022use_mode_indicator\030x \001(\010:\004" +
-              "true\022'\n\027allow_cloud_handwriting\030\255\002 \001(\010:\005" +
-      "false\032\303\001\n\021CharacterFormRule\022\r\n\005group\030\001 \001" +
-      "(\t\022M\n\026preedit_character_form\030\002 \001(\0162!.moz" +
-      "c.config.Config.CharacterForm:\nFULL_WIDT" +
-      "H\022P\n\031conversion_character_form\030\003 \001(\0162!.m" +
-      "ozc.config.Config.CharacterForm:\nFULL_WI" +
-      "DTH\032M\n\025InformationListConfig\022(\n\032use_loca" +
-      "l_usage_dictionary\030\001 \001(\010:\004trueJ\004\010\002\020\003J\004\010\n" +
-      "\020\013\"$\n\rPreeditMethod\022\t\n\005ROMAN\020\000\022\010\n\004KANA\020\001" +
-      "\"j\n\rSessionKeymap\022\021\n\004NONE\020\377\377\377\377\377\377\377\377\377\001\022\n\n\006" +
+      ":\0070.0.0.0\022!\n\022last_modified_time\030\003 \001(\004:\0010" +
+      "B\0020\001\022\022\n\010platform\030\004 \001(\t:\000\022\023\n\tui_locale\030\005 " +
+      "\001(\t:\000\022!\n\022upload_usage_stats\030\006 \001(\010:\005false" +
+      "\"\307\036\n\006Config\0222\n\016general_config\030\001 \001(\0132\032.mo" +
+      "zc.config.GeneralConfig\022\030\n\rverbose_level" +
+      "\030\n \001(\005:\0010\022\035\n\016incognito_mode\030\024 \001(\010:\005false" +
+      "\022\033\n\rcheck_default\030\026 \001(\010:\004true\022 \n\021present" +
+      "ation_mode\030\027 \001(\010:\005false\022@\n\016preedit_metho" +
+      "d\030( \001(\0162!.mozc.config.Config.PreeditMeth" +
+      "od:\005ROMAN\022?\n\016session_keymap\030) \001(\0162!.mozc" +
+      ".config.Config.SessionKeymap:\004NONE\022\033\n\023cu" +
+      "stom_keymap_table\030* \001(\014\022\032\n\022custom_roman_" +
+      "table\030+ \001(\014\022O\n\022punctuation_method\030- \001(\0162" +
+      "%.mozc.config.Config.PunctuationMethod:\014" +
+      "KUTEN_TOUTEN\022R\n\rsymbol_method\030. \001(\0162 .mo" +
+      "zc.config.Config.SymbolMethod:\031CORNER_BR" +
+      "ACKET_MIDDLE_DOT\022b\n\024space_character_form" +
+      "\030/ \001(\0162,.mozc.config.Config.FundamentalC" +
+      "haracterForm:\026FUNDAMENTAL_INPUT_MODE\0224\n%" +
+      "use_keyboard_to_change_preedit_method\0300 " +
+      "\001(\010:\005false\022Y\n\026history_learning_level\0302 \001" +
+      "(\0162(.mozc.config.Config.HistoryLearningL" +
+      "evel:\017DEFAULT_HISTORY\022U\n\022selection_short" +
+      "cut\0304 \001(\0162%.mozc.config.Config.Selection" +
+      "Shortcut:\022SHORTCUT_123456789\022C\n\024characte" +
+      "r_form_rules\0306 \003(\0132%.mozc.config.Config." +
+      "CharacterFormRule\022#\n\025use_auto_ime_turn_o" +
+      "ff\0308 \001(\010:\004true\022\"\n\024use_cascading_window\030:" +
+      " \001(\010:\004true\022W\n\025shift_key_mode_switch\030; \001(" +
+      "\0162&.mozc.config.Config.ShiftKeyModeSwitc" +
+      "h:\020ASCII_INPUT_MODE\022Y\n\025numpad_character_" +
+      "form\030< \001(\0162\'.mozc.config.Config.NumpadCh" +
+      "aracterForm:\021NUMPAD_HALF_WIDTH\022\"\n\023use_au" +
+      "to_conversion\030= \001(\010:\005false\022\037\n\023auto_conve" +
+      "rsion_key\030> \001(\r:\00213\022J\n\022yen_sign_characte" +
+      "r\030? \001(\0162$.mozc.config.Config.YenSignChar" +
+      "acter:\010YEN_SIGN\022\"\n\023use_japanese_layout\030@" +
+      " \001(\010:\005false\0227\n(use_kana_modifier_insensi" +
+      "tive_conversion\030A \001(\010:\005false\022$\n\025use_typi" +
+      "ng_correction\030B \001(\010:\005false\022+\n composing_" +
+      "timeout_threshold_msec\030C \001(\005:\0010\022>\n\017overl" +
+      "ay_keymaps\030D \003(\0162!.mozc.config.Config.Se" +
+      "ssionKeymapB\002\020\001\022!\n\023use_date_conversion\030P" +
+      " \001(\010:\004true\022)\n\033use_single_kanji_conversio" +
+      "n\030Q \001(\010:\004true\022#\n\025use_symbol_conversion\030R" +
+      " \001(\010:\004true\022#\n\025use_number_conversion\030S \001(" +
+      "\010:\004true\022%\n\027use_emoticon_conversion\030T \001(\010" +
+      ":\004true\022\034\n\016use_calculator\030U \001(\010:\004true\022!\n\023" +
+      "use_t13n_conversion\030V \001(\010:\004true\022%\n\027use_z" +
+      "ip_code_conversion\030W \001(\010:\004true\022%\n\027use_sp" +
+      "elling_correction\030X \001(\010:\004true\022#\n\024use_emo" +
+      "ji_conversion\030Y \001(\010:\005false\022J\n\027informatio" +
+      "n_list_config\030Z \001(\0132).mozc.config.Config" +
+      ".InformationListConfig\022!\n\023use_history_su" +
+      "ggest\030d \001(\010:\004true\022$\n\026use_dictionary_sugg" +
+      "est\030e \001(\010:\004true\022%\n\027use_realtime_conversi" +
+      "on\030f \001(\010:\004true\022\033\n\020suggestions_size\030n \001(\r" +
+      ":\0013\022 \n\022use_mode_indicator\030x \001(\010:\004true\032\303\001" +
+      "\n\021CharacterFormRule\022\r\n\005group\030\001 \001(\t\022M\n\026pr" +
+      "eedit_character_form\030\002 \001(\0162!.mozc.config" +
+      ".Config.CharacterForm:\nFULL_WIDTH\022P\n\031con" +
+      "version_character_form\030\003 \001(\0162!.mozc.conf" +
+      "ig.Config.CharacterForm:\nFULL_WIDTH\032|\n\025I" +
+      "nformationListConfig\022(\n\032use_local_usage_" +
+      "dictionary\030\001 \001(\010:\004trueJ\004\010\002\020\003J\004\010\n\020\013R\030use_" +
+      "web_usage_dictionaryR\023web_service_entrie" +
+      "s\"$\n\rPreeditMethod\022\t\n\005ROMAN\020\000\022\010\n\004KANA\020\001\"" +
+      "\254\001\n\rSessionKeymap\022\021\n\004NONE\020\377\377\377\377\377\377\377\377\377\001\022\n\n\006" +
       "CUSTOM\020\000\022\010\n\004ATOK\020\001\022\t\n\005MSIME\020\002\022\013\n\007KOTOERI" +
-      "\020\003\022\n\n\006MOBILE\020\004\022\014\n\010CHROMEOS\020\005\"[\n\021Punctuat" +
-      "ionMethod\022\020\n\014KUTEN_TOUTEN\020\000\022\020\n\014COMMA_PER" +
-      "IOD\020\001\022\020\n\014KUTEN_PERIOD\020\002\022\020\n\014COMMA_TOUTEN\020" +
-      "\003\"\200\001\n\014SymbolMethod\022\035\n\031CORNER_BRACKET_MID" +
-      "DLE_DOT\020\000\022\030\n\024SQUARE_BRACKET_SLASH\020\001\022\030\n\024C" +
-      "ORNER_BRACKET_SLASH\020\002\022\035\n\031SQUARE_BRACKET_" +
-      "MIDDLE_DOT\020\003\"n\n\030FundamentalCharacterForm" +
-      "\022\032\n\026FUNDAMENTAL_INPUT_MODE\020\000\022\032\n\026FUNDAMEN" +
-      "TAL_FULL_WIDTH\020\001\022\032\n\026FUNDAMENTAL_HALF_WID" +
-      "TH\020\002\"J\n\024HistoryLearningLevel\022\023\n\017DEFAULT_" +
-      "HISTORY\020\000\022\r\n\tREAD_ONLY\020\001\022\016\n\nNO_HISTORY\020\002" +
-      "\"T\n\021SelectionShortcut\022\017\n\013NO_SHORTCUT\020\000\022\026" +
-      "\n\022SHORTCUT_123456789\020\001\022\026\n\022SHORTCUT_ASDFG" +
-      "HJKL\020\002\"Q\n\rCharacterForm\022\016\n\nHALF_WIDTH\020\000\022" +
-      "\016\n\nFULL_WIDTH\020\001\022\r\n\tLAST_FORM\020\002\022\021\n\rNO_CON" +
-      "VERSION\020\003\"L\n\022ShiftKeyModeSwitch\022\007\n\003OFF\020\000" +
-      "\022\024\n\020ASCII_INPUT_MODE\020\001\022\027\n\023KATAKANA_INPUT" +
-      "_MODE\020\002\"s\n\023NumpadCharacterForm\022\025\n\021NUMPAD" +
-      "_INPUT_MODE\020\000\022\025\n\021NUMPAD_FULL_WIDTH\020\001\022\025\n\021" +
-      "NUMPAD_HALF_WIDTH\020\002\022\027\n\023NUMPAD_DIRECT_INP" +
-      "UT\020\003\"\254\001\n\021AutoConversionKey\022\027\n\023AUTO_CONVE" +
-      "RSION_OFF\020\000\022\031\n\025AUTO_CONVERSION_KUTEN\020\001\022\032" +
-      "\n\026AUTO_CONVERSION_TOUTEN\020\002\022!\n\035AUTO_CONVE" +
-      "RSION_QUESTION_MARK\020\004\022$\n AUTO_CONVERSION" +
-      "_EXCLAMATION_MARK\020\010\"/\n\020YenSignCharacter\022" +
-      "\014\n\010YEN_SIGN\020\000\022\r\n\tBACKSLASH\020\001J\004\010\002\020\nJ\004\010\013\020\014" +
-      "J\004\010\025\020\026J\006\010\254\002\020\255\002J\006\010\344\007\020\345\007J\006\010\346\007\020\347\007J\006\010\347\007\020\350\007B=" +
-      "\n.org.mozc.android.inputmethod.japanese." +
-      "protobufB\013ProtoConfig"
+      "\020\003\022\n\n\006MOBILE\020\004\022\014\n\010CHROMEOS\020\005\022)\n%OVERLAY_" +
+      "HENKAN_MUHENKAN_TO_IME_ON_OFF\020d\022\025\n\020OVERL" +
+      "AY_FOR_TEST\020\220N\"[\n\021PunctuationMethod\022\020\n\014K" +
+      "UTEN_TOUTEN\020\000\022\020\n\014COMMA_PERIOD\020\001\022\020\n\014KUTEN" +
+      "_PERIOD\020\002\022\020\n\014COMMA_TOUTEN\020\003\"\200\001\n\014SymbolMe" +
+      "thod\022\035\n\031CORNER_BRACKET_MIDDLE_DOT\020\000\022\030\n\024S" +
+      "QUARE_BRACKET_SLASH\020\001\022\030\n\024CORNER_BRACKET_" +
+      "SLASH\020\002\022\035\n\031SQUARE_BRACKET_MIDDLE_DOT\020\003\"n" +
+      "\n\030FundamentalCharacterForm\022\032\n\026FUNDAMENTA" +
+      "L_INPUT_MODE\020\000\022\032\n\026FUNDAMENTAL_FULL_WIDTH" +
+      "\020\001\022\032\n\026FUNDAMENTAL_HALF_WIDTH\020\002\"J\n\024Histor" +
+      "yLearningLevel\022\023\n\017DEFAULT_HISTORY\020\000\022\r\n\tR" +
+      "EAD_ONLY\020\001\022\016\n\nNO_HISTORY\020\002\"T\n\021SelectionS" +
+      "hortcut\022\017\n\013NO_SHORTCUT\020\000\022\026\n\022SHORTCUT_123" +
+      "456789\020\001\022\026\n\022SHORTCUT_ASDFGHJKL\020\002\"Q\n\rChar" +
+      "acterForm\022\016\n\nHALF_WIDTH\020\000\022\016\n\nFULL_WIDTH\020" +
+      "\001\022\r\n\tLAST_FORM\020\002\022\021\n\rNO_CONVERSION\020\003\"L\n\022S" +
+      "hiftKeyModeSwitch\022\007\n\003OFF\020\000\022\024\n\020ASCII_INPU" +
+      "T_MODE\020\001\022\027\n\023KATAKANA_INPUT_MODE\020\002\"s\n\023Num" +
+      "padCharacterForm\022\025\n\021NUMPAD_INPUT_MODE\020\000\022" +
+      "\025\n\021NUMPAD_FULL_WIDTH\020\001\022\025\n\021NUMPAD_HALF_WI" +
+      "DTH\020\002\022\027\n\023NUMPAD_DIRECT_INPUT\020\003\"\254\001\n\021AutoC" +
+      "onversionKey\022\027\n\023AUTO_CONVERSION_OFF\020\000\022\031\n" +
+      "\025AUTO_CONVERSION_KUTEN\020\001\022\032\n\026AUTO_CONVERS" +
+      "ION_TOUTEN\020\002\022!\n\035AUTO_CONVERSION_QUESTION" +
+      "_MARK\020\004\022$\n AUTO_CONVERSION_EXCLAMATION_M" +
+      "ARK\020\010\"/\n\020YenSignCharacter\022\014\n\010YEN_SIGN\020\000\022" +
+      "\r\n\tBACKSLASH\020\001J\004\010\002\020\nJ\004\010\013\020\014J\004\010\025\020\026J\006\010\254\002\020\255\002" +
+      "J\006\010\255\002\020\256\002J\006\010\344\007\020\345\007J\006\010\346\007\020\347\007J\006\010\347\007\020\350\007R\020log_al" +
+      "l_commandsR\022upload_usage_statsR\013sync_con" +
+      "figR\027allow_cloud_handwritingR\rpinyin_con" +
+      "figR\rhangul_configR\016chewing_configB=\n.or" +
+      "g.mozc.android.inputmethod.japanese.prot" +
+      "obufB\013ProtoConfig"
     };
-    com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
-        new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
-          public com.google.protobuf.ExtensionRegistry assignDescriptors(
-              com.google.protobuf.Descriptors.FileDescriptor root) {
-            descriptor = root;
-            return null;
-          }
-        };
-    com.google.protobuf.Descriptors.FileDescriptor
+    descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
-        }, assigner);
+        });
     internal_static_mozc_config_GeneralConfig_descriptor =
       getDescriptor().getMessageTypes().get(0);
     internal_static_mozc_config_GeneralConfig_fieldAccessorTable = new
@@ -10122,7 +11275,7 @@ public final class ProtoConfig {
     internal_static_mozc_config_Config_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_mozc_config_Config_descriptor,
-        new java.lang.String[] { "GeneralConfig", "VerboseLevel", "IncognitoMode", "CheckDefault", "PresentationMode", "PreeditMethod", "SessionKeymap", "CustomKeymapTable", "CustomRomanTable", "PunctuationMethod", "SymbolMethod", "SpaceCharacterForm", "UseKeyboardToChangePreeditMethod", "HistoryLearningLevel", "SelectionShortcut", "CharacterFormRules", "UseAutoImeTurnOff", "UseCascadingWindow", "ShiftKeyModeSwitch", "NumpadCharacterForm", "UseAutoConversion", "AutoConversionKey", "YenSignCharacter", "UseJapaneseLayout", "UseKanaModifierInsensitiveConversion", "UseTypingCorrection", "UseDateConversion", "UseSingleKanjiConversion", "UseSymbolConversion", "UseNumberConversion", "UseEmoticonConversion", "UseCalculator", "UseT13NConversion", "UseZipCodeConversion", "UseSpellingCorrection", "UseEmojiConversion", "InformationListConfig", "UseHistorySuggest", "UseDictionarySuggest", "UseRealtimeConversion", "SuggestionsSize", "UseModeIndicator", "AllowCloudHandwriting", });
+        new java.lang.String[] { "GeneralConfig", "VerboseLevel", "IncognitoMode", "CheckDefault", "PresentationMode", "PreeditMethod", "SessionKeymap", "CustomKeymapTable", "CustomRomanTable", "PunctuationMethod", "SymbolMethod", "SpaceCharacterForm", "UseKeyboardToChangePreeditMethod", "HistoryLearningLevel", "SelectionShortcut", "CharacterFormRules", "UseAutoImeTurnOff", "UseCascadingWindow", "ShiftKeyModeSwitch", "NumpadCharacterForm", "UseAutoConversion", "AutoConversionKey", "YenSignCharacter", "UseJapaneseLayout", "UseKanaModifierInsensitiveConversion", "UseTypingCorrection", "ComposingTimeoutThresholdMsec", "OverlayKeymaps", "UseDateConversion", "UseSingleKanjiConversion", "UseSymbolConversion", "UseNumberConversion", "UseEmoticonConversion", "UseCalculator", "UseT13NConversion", "UseZipCodeConversion", "UseSpellingCorrection", "UseEmojiConversion", "InformationListConfig", "UseHistorySuggest", "UseDictionarySuggest", "UseRealtimeConversion", "SuggestionsSize", "UseModeIndicator", });
     internal_static_mozc_config_Config_CharacterFormRule_descriptor =
       internal_static_mozc_config_Config_descriptor.getNestedTypes().get(0);
     internal_static_mozc_config_Config_CharacterFormRule_fieldAccessorTable = new

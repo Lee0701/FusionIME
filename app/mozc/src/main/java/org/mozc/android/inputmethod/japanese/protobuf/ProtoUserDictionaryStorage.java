@@ -20,41 +20,28 @@ public final class ProtoUserDictionaryStorage {
 
     /**
      * <pre>
+     * LINT.ThenChange(
+     *     dictionary/user_dictionary_util.cc
+     * )
      * ID of this dictionary
      * </pre>
      *
-     * <code>optional uint64 id = 1 [default = 0];</code>
+     * <code>optional uint64 id = 1 [default = 0, jstype = JS_STRING];</code>
+     * @return Whether the id field is set.
      */
     boolean hasId();
     /**
      * <pre>
+     * LINT.ThenChange(
+     *     dictionary/user_dictionary_util.cc
+     * )
      * ID of this dictionary
      * </pre>
      *
-     * <code>optional uint64 id = 1 [default = 0];</code>
+     * <code>optional uint64 id = 1 [default = 0, jstype = JS_STRING];</code>
+     * @return The id.
      */
     long getId();
-
-    /**
-     * <pre>
-     * set false if this dictionary is not used.
-     * Even if |enabled| is false, the dictionary
-     * it self is visible to user.
-     * </pre>
-     *
-     * <code>optional bool enabled = 2 [default = true];</code>
-     */
-    boolean hasEnabled();
-    /**
-     * <pre>
-     * set false if this dictionary is not used.
-     * Even if |enabled| is false, the dictionary
-     * it self is visible to user.
-     * </pre>
-     *
-     * <code>optional bool enabled = 2 [default = true];</code>
-     */
-    boolean getEnabled();
 
     /**
      * <pre>
@@ -62,6 +49,7 @@ public final class ProtoUserDictionaryStorage {
      * </pre>
      *
      * <code>optional string name = 3 [default = ""];</code>
+     * @return Whether the name field is set.
      */
     boolean hasName();
     /**
@@ -70,6 +58,7 @@ public final class ProtoUserDictionaryStorage {
      * </pre>
      *
      * <code>optional string name = 3 [default = ""];</code>
+     * @return The name.
      */
     java.lang.String getName();
     /**
@@ -78,6 +67,7 @@ public final class ProtoUserDictionaryStorage {
      * </pre>
      *
      * <code>optional string name = 3 [default = ""];</code>
+     * @return The bytes for name.
      */
     com.google.protobuf.ByteString
         getNameBytes();
@@ -105,55 +95,11 @@ public final class ProtoUserDictionaryStorage {
      */
     org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.EntryOrBuilder getEntriesOrBuilder(
         int index);
-
-    /**
-     * <pre>
-     * set true if this dictionary is removed.
-     * This flag is used for cloud sync feature.
-     * Cloud sync feature is already deprecated and this flag is only
-     * used to convert sync dictionary to normal dictionary.
-     * </pre>
-     *
-     * <code>optional bool removed = 5 [default = false];</code>
-     */
-    boolean hasRemoved();
-    /**
-     * <pre>
-     * set true if this dictionary is removed.
-     * This flag is used for cloud sync feature.
-     * Cloud sync feature is already deprecated and this flag is only
-     * used to convert sync dictionary to normal dictionary.
-     * </pre>
-     *
-     * <code>optional bool removed = 5 [default = false];</code>
-     */
-    boolean getRemoved();
-
-    /**
-     * <pre>
-     * This flag is used for cloud sync feature.
-     * Cloud sync feature is already deprecated and this flag is only
-     * used to convert sync dictionary to normal dictionary.
-     * </pre>
-     *
-     * <code>optional bool syncable = 6 [default = false];</code>
-     */
-    boolean hasSyncable();
-    /**
-     * <pre>
-     * This flag is used for cloud sync feature.
-     * Cloud sync feature is already deprecated and this flag is only
-     * used to convert sync dictionary to normal dictionary.
-     * </pre>
-     *
-     * <code>optional bool syncable = 6 [default = false];</code>
-     */
-    boolean getSyncable();
   }
   /**
    * Protobuf type {@code mozc.user_dictionary.UserDictionary}
    */
-  public  static final class UserDictionary extends
+  public static final class UserDictionary extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:mozc.user_dictionary.UserDictionary)
       UserDictionaryOrBuilder {
@@ -163,100 +109,28 @@ public final class ProtoUserDictionaryStorage {
       super(builder);
     }
     private UserDictionary() {
-      id_ = 0L;
-      enabled_ = true;
       name_ = "";
       entries_ = java.util.Collections.emptyList();
-      removed_ = false;
-      syncable_ = false;
     }
 
     @java.lang.Override
-    public com.google.protobuf.UnknownFieldSet
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new UserDictionary();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
       return this.unknownFields;
     }
-    private UserDictionary(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            case 8: {
-              bitField0_ |= 0x00000001;
-              id_ = input.readUInt64();
-              break;
-            }
-            case 16: {
-              bitField0_ |= 0x00000002;
-              enabled_ = input.readBool();
-              break;
-            }
-            case 26: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00000004;
-              name_ = bs;
-              break;
-            }
-            case 34: {
-              if (!((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
-                entries_ = new java.util.ArrayList<org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry>();
-                mutable_bitField0_ |= 0x00000008;
-              }
-              entries_.add(
-                  input.readMessage(org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry.PARSER, extensionRegistry));
-              break;
-            }
-            case 40: {
-              bitField0_ |= 0x00000008;
-              removed_ = input.readBool();
-              break;
-            }
-            case 48: {
-              bitField0_ |= 0x00000010;
-              syncable_ = input.readBool();
-              break;
-            }
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
-      } finally {
-        if (((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
-          entries_ = java.util.Collections.unmodifiableList(entries_);
-        }
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static com.google.protobuf.Descriptors.Descriptor
+    public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.internal_static_mozc_user_dictionary_UserDictionary_descriptor;
     }
 
+    @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
       return org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.internal_static_mozc_user_dictionary_UserDictionary_fieldAccessorTable
@@ -265,10 +139,22 @@ public final class ProtoUserDictionaryStorage {
     }
 
     /**
+     * <pre>
+     * LINT.IfChange
+     * </pre>
+     *
      * Protobuf enum {@code mozc.user_dictionary.UserDictionary.PosType}
      */
     public enum PosType
         implements com.google.protobuf.ProtocolMessageEnum {
+      /**
+       * <pre>
+       * Use this when the POS tag is not provided or unknown.
+       * </pre>
+       *
+       * <code>NO_POS = 0;</code>
+       */
+      NO_POS(0),
       /**
        * <pre>
        * "名詞"
@@ -623,6 +509,14 @@ public final class ProtoUserDictionaryStorage {
       SUPPRESSION_WORD(44),
       ;
 
+      /**
+       * <pre>
+       * Use this when the POS tag is not provided or unknown.
+       * </pre>
+       *
+       * <code>NO_POS = 0;</code>
+       */
+      public static final int NO_POS_VALUE = 0;
       /**
        * <pre>
        * "名詞"
@@ -982,6 +876,8 @@ public final class ProtoUserDictionaryStorage {
       }
 
       /**
+       * @param value The numeric wire value of the corresponding enum entry.
+       * @return The enum associated with the given numeric wire value.
        * @deprecated Use {@link #forNumber(int)} instead.
        */
       @java.lang.Deprecated
@@ -989,8 +885,13 @@ public final class ProtoUserDictionaryStorage {
         return forNumber(value);
       }
 
+      /**
+       * @param value The numeric wire value of the corresponding enum entry.
+       * @return The enum associated with the given numeric wire value.
+       */
       public static PosType forNumber(int value) {
         switch (value) {
+          case 0: return NO_POS;
           case 1: return NOUN;
           case 2: return ABBREVIATION;
           case 3: return SUGGESTION_ONLY;
@@ -1077,7 +978,7 @@ public final class ProtoUserDictionaryStorage {
 
       private final int value;
 
-      PosType(int value) {
+      private PosType(int value) {
         this.value = value;
       }
 
@@ -1090,42 +991,51 @@ public final class ProtoUserDictionaryStorage {
 
       /**
        * <code>optional string key = 1 [default = ""];</code>
+       * @return Whether the key field is set.
        */
       boolean hasKey();
       /**
        * <code>optional string key = 1 [default = ""];</code>
+       * @return The key.
        */
       java.lang.String getKey();
       /**
        * <code>optional string key = 1 [default = ""];</code>
+       * @return The bytes for key.
        */
       com.google.protobuf.ByteString
           getKeyBytes();
 
       /**
        * <code>optional string value = 2 [default = ""];</code>
+       * @return Whether the value field is set.
        */
       boolean hasValue();
       /**
        * <code>optional string value = 2 [default = ""];</code>
+       * @return The value.
        */
       java.lang.String getValue();
       /**
        * <code>optional string value = 2 [default = ""];</code>
+       * @return The bytes for value.
        */
       com.google.protobuf.ByteString
           getValueBytes();
 
       /**
        * <code>optional string comment = 4 [default = ""];</code>
+       * @return Whether the comment field is set.
        */
       boolean hasComment();
       /**
        * <code>optional string comment = 4 [default = ""];</code>
+       * @return The comment.
        */
       java.lang.String getComment();
       /**
        * <code>optional string comment = 4 [default = ""];</code>
+       * @return The bytes for comment.
        */
       com.google.protobuf.ByteString
           getCommentBytes();
@@ -1135,9 +1045,14 @@ public final class ProtoUserDictionaryStorage {
        * Historically we used to use tag number '3' for POS in string format.
        * In order to switch it to enum based POS, we removed (deprecated) the
        * tag number '3' field and created another field numbered '5'.
+       * Historically the default POS tag was NOUN, and "NO_POS" is added later.
+       * In order to preserve the original default behavior, default POS tag is
+       * explicitly specified as NOUN. However, this can be changed if there is no
+       * problem with "NO_POS".
        * </pre>
        *
-       * <code>optional .mozc.user_dictionary.UserDictionary.PosType pos = 5;</code>
+       * <code>optional .mozc.user_dictionary.UserDictionary.PosType pos = 5 [default = NOUN];</code>
+       * @return Whether the pos field is set.
        */
       boolean hasPos();
       /**
@@ -1145,53 +1060,57 @@ public final class ProtoUserDictionaryStorage {
        * Historically we used to use tag number '3' for POS in string format.
        * In order to switch it to enum based POS, we removed (deprecated) the
        * tag number '3' field and created another field numbered '5'.
+       * Historically the default POS tag was NOUN, and "NO_POS" is added later.
+       * In order to preserve the original default behavior, default POS tag is
+       * explicitly specified as NOUN. However, this can be changed if there is no
+       * problem with "NO_POS".
        * </pre>
        *
-       * <code>optional .mozc.user_dictionary.UserDictionary.PosType pos = 5;</code>
+       * <code>optional .mozc.user_dictionary.UserDictionary.PosType pos = 5 [default = NOUN];</code>
+       * @return The pos.
        */
       org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.PosType getPos();
 
       /**
        * <pre>
-       * set true if this entry is removed.
-       * This flag is used for cloud sync feature.
-       * Cloud sync feature is already deprecated and this flag is only
-       * used to convert sync dictionary to normal dictionary.
+       * In multilingual settings, Gboard's personal dictionary will feed entries
+       * with locale information. We can change the behavior (filter or demote)
+       * The locale is usually formatted in BCP47.
+       * In TSV format, the locale is encoded in the POS field as `pos:locale`
+       * "名詞:ja".
        * </pre>
        *
-       * <code>optional bool removed = 10 [default = false];</code>
+       * <code>optional string locale = 12 [default = ""];</code>
+       * @return Whether the locale field is set.
        */
-      boolean hasRemoved();
+      boolean hasLocale();
       /**
        * <pre>
-       * set true if this entry is removed.
-       * This flag is used for cloud sync feature.
-       * Cloud sync feature is already deprecated and this flag is only
-       * used to convert sync dictionary to normal dictionary.
+       * In multilingual settings, Gboard's personal dictionary will feed entries
+       * with locale information. We can change the behavior (filter or demote)
+       * The locale is usually formatted in BCP47.
+       * In TSV format, the locale is encoded in the POS field as `pos:locale`
+       * "名詞:ja".
        * </pre>
        *
-       * <code>optional bool removed = 10 [default = false];</code>
+       * <code>optional string locale = 12 [default = ""];</code>
+       * @return The locale.
        */
-      boolean getRemoved();
-
+      java.lang.String getLocale();
       /**
        * <pre>
-       * set true if this entry is automatically registered
-       * by converter.
+       * In multilingual settings, Gboard's personal dictionary will feed entries
+       * with locale information. We can change the behavior (filter or demote)
+       * The locale is usually formatted in BCP47.
+       * In TSV format, the locale is encoded in the POS field as `pos:locale`
+       * "名詞:ja".
        * </pre>
        *
-       * <code>optional bool auto_registered = 11 [default = false];</code>
+       * <code>optional string locale = 12 [default = ""];</code>
+       * @return The bytes for locale.
        */
-      boolean hasAutoRegistered();
-      /**
-       * <pre>
-       * set true if this entry is automatically registered
-       * by converter.
-       * </pre>
-       *
-       * <code>optional bool auto_registered = 11 [default = false];</code>
-       */
-      boolean getAutoRegistered();
+      com.google.protobuf.ByteString
+          getLocaleBytes();
     }
     /**
      * <pre>
@@ -1200,7 +1119,7 @@ public final class ProtoUserDictionaryStorage {
      *
      * Protobuf type {@code mozc.user_dictionary.UserDictionary.Entry}
      */
-    public  static final class Entry extends
+    public static final class Entry extends
         com.google.protobuf.GeneratedMessageV3 implements
         // @@protoc_insertion_point(message_implements:mozc.user_dictionary.UserDictionary.Entry)
         EntryOrBuilder {
@@ -1214,97 +1133,27 @@ public final class ProtoUserDictionaryStorage {
         value_ = "";
         comment_ = "";
         pos_ = 1;
-        removed_ = false;
-        autoRegistered_ = false;
+        locale_ = "";
       }
 
       @java.lang.Override
-      public com.google.protobuf.UnknownFieldSet
+      @SuppressWarnings({"unused"})
+      protected java.lang.Object newInstance(
+          UnusedPrivateParameter unused) {
+        return new Entry();
+      }
+
+      @java.lang.Override
+      public final com.google.protobuf.UnknownFieldSet
       getUnknownFields() {
         return this.unknownFields;
       }
-      private Entry(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        this();
-        if (extensionRegistry == null) {
-          throw new java.lang.NullPointerException();
-        }
-        int mutable_bitField0_ = 0;
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-            com.google.protobuf.UnknownFieldSet.newBuilder();
-        try {
-          boolean done = false;
-          while (!done) {
-            int tag = input.readTag();
-            switch (tag) {
-              case 0:
-                done = true;
-                break;
-              case 10: {
-                com.google.protobuf.ByteString bs = input.readBytes();
-                bitField0_ |= 0x00000001;
-                key_ = bs;
-                break;
-              }
-              case 18: {
-                com.google.protobuf.ByteString bs = input.readBytes();
-                bitField0_ |= 0x00000002;
-                value_ = bs;
-                break;
-              }
-              case 34: {
-                com.google.protobuf.ByteString bs = input.readBytes();
-                bitField0_ |= 0x00000004;
-                comment_ = bs;
-                break;
-              }
-              case 40: {
-                int rawValue = input.readEnum();
-                org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.PosType value = org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.PosType.valueOf(rawValue);
-                if (value == null) {
-                  unknownFields.mergeVarintField(5, rawValue);
-                } else {
-                  bitField0_ |= 0x00000008;
-                  pos_ = rawValue;
-                }
-                break;
-              }
-              case 80: {
-                bitField0_ |= 0x00000010;
-                removed_ = input.readBool();
-                break;
-              }
-              case 88: {
-                bitField0_ |= 0x00000020;
-                autoRegistered_ = input.readBool();
-                break;
-              }
-              default: {
-                if (!parseUnknownField(
-                    input, unknownFields, extensionRegistry, tag)) {
-                  done = true;
-                }
-                break;
-              }
-            }
-          }
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          throw e.setUnfinishedMessage(this);
-        } catch (java.io.IOException e) {
-          throw new com.google.protobuf.InvalidProtocolBufferException(
-              e).setUnfinishedMessage(this);
-        } finally {
-          this.unknownFields = unknownFields.build();
-          makeExtensionsImmutable();
-        }
-      }
-      public static com.google.protobuf.Descriptors.Descriptor
+      public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.internal_static_mozc_user_dictionary_UserDictionary_Entry_descriptor;
       }
 
+      @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.internal_static_mozc_user_dictionary_UserDictionary_Entry_fieldAccessorTable
@@ -1314,16 +1163,21 @@ public final class ProtoUserDictionaryStorage {
 
       private int bitField0_;
       public static final int KEY_FIELD_NUMBER = 1;
-      private volatile java.lang.Object key_;
+      @SuppressWarnings("serial")
+      private volatile java.lang.Object key_ = "";
       /**
        * <code>optional string key = 1 [default = ""];</code>
+       * @return Whether the key field is set.
        */
+      @java.lang.Override
       public boolean hasKey() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
+        return ((bitField0_ & 0x00000001) != 0);
       }
       /**
        * <code>optional string key = 1 [default = ""];</code>
+       * @return The key.
        */
+      @java.lang.Override
       public java.lang.String getKey() {
         java.lang.Object ref = key_;
         if (ref instanceof java.lang.String) {
@@ -1340,7 +1194,9 @@ public final class ProtoUserDictionaryStorage {
       }
       /**
        * <code>optional string key = 1 [default = ""];</code>
+       * @return The bytes for key.
        */
+      @java.lang.Override
       public com.google.protobuf.ByteString
           getKeyBytes() {
         java.lang.Object ref = key_;
@@ -1356,16 +1212,21 @@ public final class ProtoUserDictionaryStorage {
       }
 
       public static final int VALUE_FIELD_NUMBER = 2;
-      private volatile java.lang.Object value_;
+      @SuppressWarnings("serial")
+      private volatile java.lang.Object value_ = "";
       /**
        * <code>optional string value = 2 [default = ""];</code>
+       * @return Whether the value field is set.
        */
+      @java.lang.Override
       public boolean hasValue() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
+        return ((bitField0_ & 0x00000002) != 0);
       }
       /**
        * <code>optional string value = 2 [default = ""];</code>
+       * @return The value.
        */
+      @java.lang.Override
       public java.lang.String getValue() {
         java.lang.Object ref = value_;
         if (ref instanceof java.lang.String) {
@@ -1382,7 +1243,9 @@ public final class ProtoUserDictionaryStorage {
       }
       /**
        * <code>optional string value = 2 [default = ""];</code>
+       * @return The bytes for value.
        */
+      @java.lang.Override
       public com.google.protobuf.ByteString
           getValueBytes() {
         java.lang.Object ref = value_;
@@ -1398,16 +1261,21 @@ public final class ProtoUserDictionaryStorage {
       }
 
       public static final int COMMENT_FIELD_NUMBER = 4;
-      private volatile java.lang.Object comment_;
+      @SuppressWarnings("serial")
+      private volatile java.lang.Object comment_ = "";
       /**
        * <code>optional string comment = 4 [default = ""];</code>
+       * @return Whether the comment field is set.
        */
+      @java.lang.Override
       public boolean hasComment() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
+        return ((bitField0_ & 0x00000004) != 0);
       }
       /**
        * <code>optional string comment = 4 [default = ""];</code>
+       * @return The comment.
        */
+      @java.lang.Override
       public java.lang.String getComment() {
         java.lang.Object ref = comment_;
         if (ref instanceof java.lang.String) {
@@ -1424,7 +1292,9 @@ public final class ProtoUserDictionaryStorage {
       }
       /**
        * <code>optional string comment = 4 [default = ""];</code>
+       * @return The bytes for comment.
        */
+      @java.lang.Override
       public com.google.protobuf.ByteString
           getCommentBytes() {
         java.lang.Object ref = comment_;
@@ -1440,89 +1310,119 @@ public final class ProtoUserDictionaryStorage {
       }
 
       public static final int POS_FIELD_NUMBER = 5;
-      private int pos_;
+      private int pos_ = 1;
       /**
        * <pre>
        * Historically we used to use tag number '3' for POS in string format.
        * In order to switch it to enum based POS, we removed (deprecated) the
        * tag number '3' field and created another field numbered '5'.
+       * Historically the default POS tag was NOUN, and "NO_POS" is added later.
+       * In order to preserve the original default behavior, default POS tag is
+       * explicitly specified as NOUN. However, this can be changed if there is no
+       * problem with "NO_POS".
        * </pre>
        *
-       * <code>optional .mozc.user_dictionary.UserDictionary.PosType pos = 5;</code>
+       * <code>optional .mozc.user_dictionary.UserDictionary.PosType pos = 5 [default = NOUN];</code>
+       * @return Whether the pos field is set.
        */
-      public boolean hasPos() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
+      @java.lang.Override public boolean hasPos() {
+        return ((bitField0_ & 0x00000008) != 0);
       }
       /**
        * <pre>
        * Historically we used to use tag number '3' for POS in string format.
        * In order to switch it to enum based POS, we removed (deprecated) the
        * tag number '3' field and created another field numbered '5'.
+       * Historically the default POS tag was NOUN, and "NO_POS" is added later.
+       * In order to preserve the original default behavior, default POS tag is
+       * explicitly specified as NOUN. However, this can be changed if there is no
+       * problem with "NO_POS".
        * </pre>
        *
-       * <code>optional .mozc.user_dictionary.UserDictionary.PosType pos = 5;</code>
+       * <code>optional .mozc.user_dictionary.UserDictionary.PosType pos = 5 [default = NOUN];</code>
+       * @return The pos.
        */
-      public org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.PosType getPos() {
-        org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.PosType result = org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.PosType.valueOf(pos_);
+      @java.lang.Override public org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.PosType getPos() {
+        org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.PosType result = org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.PosType.forNumber(pos_);
         return result == null ? org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.PosType.NOUN : result;
       }
 
-      public static final int REMOVED_FIELD_NUMBER = 10;
-      private boolean removed_;
+      public static final int LOCALE_FIELD_NUMBER = 12;
+      @SuppressWarnings("serial")
+      private volatile java.lang.Object locale_ = "";
       /**
        * <pre>
-       * set true if this entry is removed.
-       * This flag is used for cloud sync feature.
-       * Cloud sync feature is already deprecated and this flag is only
-       * used to convert sync dictionary to normal dictionary.
+       * In multilingual settings, Gboard's personal dictionary will feed entries
+       * with locale information. We can change the behavior (filter or demote)
+       * The locale is usually formatted in BCP47.
+       * In TSV format, the locale is encoded in the POS field as `pos:locale`
+       * "名詞:ja".
        * </pre>
        *
-       * <code>optional bool removed = 10 [default = false];</code>
+       * <code>optional string locale = 12 [default = ""];</code>
+       * @return Whether the locale field is set.
        */
-      public boolean hasRemoved() {
-        return ((bitField0_ & 0x00000010) == 0x00000010);
+      @java.lang.Override
+      public boolean hasLocale() {
+        return ((bitField0_ & 0x00000010) != 0);
       }
       /**
        * <pre>
-       * set true if this entry is removed.
-       * This flag is used for cloud sync feature.
-       * Cloud sync feature is already deprecated and this flag is only
-       * used to convert sync dictionary to normal dictionary.
+       * In multilingual settings, Gboard's personal dictionary will feed entries
+       * with locale information. We can change the behavior (filter or demote)
+       * The locale is usually formatted in BCP47.
+       * In TSV format, the locale is encoded in the POS field as `pos:locale`
+       * "名詞:ja".
        * </pre>
        *
-       * <code>optional bool removed = 10 [default = false];</code>
+       * <code>optional string locale = 12 [default = ""];</code>
+       * @return The locale.
        */
-      public boolean getRemoved() {
-        return removed_;
+      @java.lang.Override
+      public java.lang.String getLocale() {
+        java.lang.Object ref = locale_;
+        if (ref instanceof java.lang.String) {
+          return (java.lang.String) ref;
+        } else {
+          com.google.protobuf.ByteString bs = 
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            locale_ = s;
+          }
+          return s;
+        }
       }
-
-      public static final int AUTO_REGISTERED_FIELD_NUMBER = 11;
-      private boolean autoRegistered_;
       /**
        * <pre>
-       * set true if this entry is automatically registered
-       * by converter.
+       * In multilingual settings, Gboard's personal dictionary will feed entries
+       * with locale information. We can change the behavior (filter or demote)
+       * The locale is usually formatted in BCP47.
+       * In TSV format, the locale is encoded in the POS field as `pos:locale`
+       * "名詞:ja".
        * </pre>
        *
-       * <code>optional bool auto_registered = 11 [default = false];</code>
+       * <code>optional string locale = 12 [default = ""];</code>
+       * @return The bytes for locale.
        */
-      public boolean hasAutoRegistered() {
-        return ((bitField0_ & 0x00000020) == 0x00000020);
-      }
-      /**
-       * <pre>
-       * set true if this entry is automatically registered
-       * by converter.
-       * </pre>
-       *
-       * <code>optional bool auto_registered = 11 [default = false];</code>
-       */
-      public boolean getAutoRegistered() {
-        return autoRegistered_;
+      @java.lang.Override
+      public com.google.protobuf.ByteString
+          getLocaleBytes() {
+        java.lang.Object ref = locale_;
+        if (ref instanceof java.lang.String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          locale_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
       }
 
       private byte memoizedIsInitialized = -1;
-      public boolean isInitialized() {
+      @java.lang.Override
+      public final boolean isInitialized() {
         byte isInitialized = memoizedIsInitialized;
         if (isInitialized == 1) return true;
         if (isInitialized == 0) return false;
@@ -1531,56 +1431,50 @@ public final class ProtoUserDictionaryStorage {
         return true;
       }
 
+      @java.lang.Override
       public void writeTo(com.google.protobuf.CodedOutputStream output)
                           throws java.io.IOException {
-        if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        if (((bitField0_ & 0x00000001) != 0)) {
           com.google.protobuf.GeneratedMessageV3.writeString(output, 1, key_);
         }
-        if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        if (((bitField0_ & 0x00000002) != 0)) {
           com.google.protobuf.GeneratedMessageV3.writeString(output, 2, value_);
         }
-        if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        if (((bitField0_ & 0x00000004) != 0)) {
           com.google.protobuf.GeneratedMessageV3.writeString(output, 4, comment_);
         }
-        if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        if (((bitField0_ & 0x00000008) != 0)) {
           output.writeEnum(5, pos_);
         }
-        if (((bitField0_ & 0x00000010) == 0x00000010)) {
-          output.writeBool(10, removed_);
+        if (((bitField0_ & 0x00000010) != 0)) {
+          com.google.protobuf.GeneratedMessageV3.writeString(output, 12, locale_);
         }
-        if (((bitField0_ & 0x00000020) == 0x00000020)) {
-          output.writeBool(11, autoRegistered_);
-        }
-        unknownFields.writeTo(output);
+        getUnknownFields().writeTo(output);
       }
 
+      @java.lang.Override
       public int getSerializedSize() {
         int size = memoizedSize;
         if (size != -1) return size;
 
         size = 0;
-        if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        if (((bitField0_ & 0x00000001) != 0)) {
           size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, key_);
         }
-        if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        if (((bitField0_ & 0x00000002) != 0)) {
           size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, value_);
         }
-        if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        if (((bitField0_ & 0x00000004) != 0)) {
           size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, comment_);
         }
-        if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        if (((bitField0_ & 0x00000008) != 0)) {
           size += com.google.protobuf.CodedOutputStream
             .computeEnumSize(5, pos_);
         }
-        if (((bitField0_ & 0x00000010) == 0x00000010)) {
-          size += com.google.protobuf.CodedOutputStream
-            .computeBoolSize(10, removed_);
+        if (((bitField0_ & 0x00000010) != 0)) {
+          size += com.google.protobuf.GeneratedMessageV3.computeStringSize(12, locale_);
         }
-        if (((bitField0_ & 0x00000020) == 0x00000020)) {
-          size += com.google.protobuf.CodedOutputStream
-            .computeBoolSize(11, autoRegistered_);
-        }
-        size += unknownFields.getSerializedSize();
+        size += getUnknownFields().getSerializedSize();
         memoizedSize = size;
         return size;
       }
@@ -1595,38 +1489,32 @@ public final class ProtoUserDictionaryStorage {
         }
         org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry other = (org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry) obj;
 
-        boolean result = true;
-        result = result && (hasKey() == other.hasKey());
+        if (hasKey() != other.hasKey()) return false;
         if (hasKey()) {
-          result = result && getKey()
-              .equals(other.getKey());
+          if (!getKey()
+              .equals(other.getKey())) return false;
         }
-        result = result && (hasValue() == other.hasValue());
+        if (hasValue() != other.hasValue()) return false;
         if (hasValue()) {
-          result = result && getValue()
-              .equals(other.getValue());
+          if (!getValue()
+              .equals(other.getValue())) return false;
         }
-        result = result && (hasComment() == other.hasComment());
+        if (hasComment() != other.hasComment()) return false;
         if (hasComment()) {
-          result = result && getComment()
-              .equals(other.getComment());
+          if (!getComment()
+              .equals(other.getComment())) return false;
         }
-        result = result && (hasPos() == other.hasPos());
+        if (hasPos() != other.hasPos()) return false;
         if (hasPos()) {
-          result = result && pos_ == other.pos_;
+          if (pos_ != other.pos_) return false;
         }
-        result = result && (hasRemoved() == other.hasRemoved());
-        if (hasRemoved()) {
-          result = result && (getRemoved()
-              == other.getRemoved());
+        if (hasLocale() != other.hasLocale()) return false;
+        if (hasLocale()) {
+          if (!getLocale()
+              .equals(other.getLocale())) return false;
         }
-        result = result && (hasAutoRegistered() == other.hasAutoRegistered());
-        if (hasAutoRegistered()) {
-          result = result && (getAutoRegistered()
-              == other.getAutoRegistered());
-        }
-        result = result && unknownFields.equals(other.unknownFields);
-        return result;
+        if (!getUnknownFields().equals(other.getUnknownFields())) return false;
+        return true;
       }
 
       @java.lang.Override
@@ -1652,17 +1540,11 @@ public final class ProtoUserDictionaryStorage {
           hash = (37 * hash) + POS_FIELD_NUMBER;
           hash = (53 * hash) + pos_;
         }
-        if (hasRemoved()) {
-          hash = (37 * hash) + REMOVED_FIELD_NUMBER;
-          hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
-              getRemoved());
+        if (hasLocale()) {
+          hash = (37 * hash) + LOCALE_FIELD_NUMBER;
+          hash = (53 * hash) + getLocale().hashCode();
         }
-        if (hasAutoRegistered()) {
-          hash = (37 * hash) + AUTO_REGISTERED_FIELD_NUMBER;
-          hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
-              getAutoRegistered());
-        }
-        hash = (29 * hash) + unknownFields.hashCode();
+        hash = (29 * hash) + getUnknownFields().hashCode();
         memoizedHashCode = hash;
         return hash;
       }
@@ -1737,6 +1619,7 @@ public final class ProtoUserDictionaryStorage {
             .parseWithIOException(PARSER, input, extensionRegistry);
       }
 
+      @java.lang.Override
       public Builder newBuilderForType() { return newBuilder(); }
       public static Builder newBuilder() {
         return DEFAULT_INSTANCE.toBuilder();
@@ -1744,6 +1627,7 @@ public final class ProtoUserDictionaryStorage {
       public static Builder newBuilder(org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry prototype) {
         return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
       }
+      @java.lang.Override
       public Builder toBuilder() {
         return this == DEFAULT_INSTANCE
             ? new Builder() : new Builder().mergeFrom(this);
@@ -1766,11 +1650,12 @@ public final class ProtoUserDictionaryStorage {
           com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
           // @@protoc_insertion_point(builder_implements:mozc.user_dictionary.UserDictionary.Entry)
           org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.EntryOrBuilder {
-        public static com.google.protobuf.Descriptors.Descriptor
+        public static final com.google.protobuf.Descriptors.Descriptor
             getDescriptor() {
           return org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.internal_static_mozc_user_dictionary_UserDictionary_Entry_descriptor;
         }
 
+        @java.lang.Override
         protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
             internalGetFieldAccessorTable() {
           return org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.internal_static_mozc_user_dictionary_UserDictionary_Entry_fieldAccessorTable
@@ -1780,45 +1665,38 @@ public final class ProtoUserDictionaryStorage {
 
         // Construct using org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry.newBuilder()
         private Builder() {
-          maybeForceBuilderInitialization();
+
         }
 
         private Builder(
             com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
           super(parent);
-          maybeForceBuilderInitialization();
+
         }
-        private void maybeForceBuilderInitialization() {
-          if (com.google.protobuf.GeneratedMessageV3
-                  .alwaysUseFieldBuilders) {
-          }
-        }
+        @java.lang.Override
         public Builder clear() {
           super.clear();
+          bitField0_ = 0;
           key_ = "";
-          bitField0_ = (bitField0_ & ~0x00000001);
           value_ = "";
-          bitField0_ = (bitField0_ & ~0x00000002);
           comment_ = "";
-          bitField0_ = (bitField0_ & ~0x00000004);
           pos_ = 1;
-          bitField0_ = (bitField0_ & ~0x00000008);
-          removed_ = false;
-          bitField0_ = (bitField0_ & ~0x00000010);
-          autoRegistered_ = false;
-          bitField0_ = (bitField0_ & ~0x00000020);
+          locale_ = "";
           return this;
         }
 
+        @java.lang.Override
         public com.google.protobuf.Descriptors.Descriptor
             getDescriptorForType() {
           return org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.internal_static_mozc_user_dictionary_UserDictionary_Entry_descriptor;
         }
 
+        @java.lang.Override
         public org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry getDefaultInstanceForType() {
           return org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry.getDefaultInstance();
         }
 
+        @java.lang.Override
         public org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry build() {
           org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry result = buildPartial();
           if (!result.isInitialized()) {
@@ -1827,65 +1705,73 @@ public final class ProtoUserDictionaryStorage {
           return result;
         }
 
+        @java.lang.Override
         public org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry buildPartial() {
           org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry result = new org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry(this);
-          int from_bitField0_ = bitField0_;
-          int to_bitField0_ = 0;
-          if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-            to_bitField0_ |= 0x00000001;
-          }
-          result.key_ = key_;
-          if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-            to_bitField0_ |= 0x00000002;
-          }
-          result.value_ = value_;
-          if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-            to_bitField0_ |= 0x00000004;
-          }
-          result.comment_ = comment_;
-          if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
-            to_bitField0_ |= 0x00000008;
-          }
-          result.pos_ = pos_;
-          if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
-            to_bitField0_ |= 0x00000010;
-          }
-          result.removed_ = removed_;
-          if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
-            to_bitField0_ |= 0x00000020;
-          }
-          result.autoRegistered_ = autoRegistered_;
-          result.bitField0_ = to_bitField0_;
+          if (bitField0_ != 0) { buildPartial0(result); }
           onBuilt();
           return result;
         }
 
+        private void buildPartial0(org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry result) {
+          int from_bitField0_ = bitField0_;
+          int to_bitField0_ = 0;
+          if (((from_bitField0_ & 0x00000001) != 0)) {
+            result.key_ = key_;
+            to_bitField0_ |= 0x00000001;
+          }
+          if (((from_bitField0_ & 0x00000002) != 0)) {
+            result.value_ = value_;
+            to_bitField0_ |= 0x00000002;
+          }
+          if (((from_bitField0_ & 0x00000004) != 0)) {
+            result.comment_ = comment_;
+            to_bitField0_ |= 0x00000004;
+          }
+          if (((from_bitField0_ & 0x00000008) != 0)) {
+            result.pos_ = pos_;
+            to_bitField0_ |= 0x00000008;
+          }
+          if (((from_bitField0_ & 0x00000010) != 0)) {
+            result.locale_ = locale_;
+            to_bitField0_ |= 0x00000010;
+          }
+          result.bitField0_ |= to_bitField0_;
+        }
+
+        @java.lang.Override
         public Builder clone() {
           return super.clone();
         }
+        @java.lang.Override
         public Builder setField(
             com.google.protobuf.Descriptors.FieldDescriptor field,
             java.lang.Object value) {
           return super.setField(field, value);
         }
+        @java.lang.Override
         public Builder clearField(
             com.google.protobuf.Descriptors.FieldDescriptor field) {
           return super.clearField(field);
         }
+        @java.lang.Override
         public Builder clearOneof(
             com.google.protobuf.Descriptors.OneofDescriptor oneof) {
           return super.clearOneof(oneof);
         }
+        @java.lang.Override
         public Builder setRepeatedField(
             com.google.protobuf.Descriptors.FieldDescriptor field,
             int index, java.lang.Object value) {
           return super.setRepeatedField(field, index, value);
         }
+        @java.lang.Override
         public Builder addRepeatedField(
             com.google.protobuf.Descriptors.FieldDescriptor field,
             java.lang.Object value) {
           return super.addRepeatedField(field, value);
         }
+        @java.lang.Override
         public Builder mergeFrom(com.google.protobuf.Message other) {
           if (other instanceof org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry) {
             return mergeFrom((org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry)other);
@@ -1898,53 +1784,99 @@ public final class ProtoUserDictionaryStorage {
         public Builder mergeFrom(org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry other) {
           if (other == org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry.getDefaultInstance()) return this;
           if (other.hasKey()) {
-            bitField0_ |= 0x00000001;
             key_ = other.key_;
+            bitField0_ |= 0x00000001;
             onChanged();
           }
           if (other.hasValue()) {
-            bitField0_ |= 0x00000002;
             value_ = other.value_;
+            bitField0_ |= 0x00000002;
             onChanged();
           }
           if (other.hasComment()) {
-            bitField0_ |= 0x00000004;
             comment_ = other.comment_;
+            bitField0_ |= 0x00000004;
             onChanged();
           }
           if (other.hasPos()) {
             setPos(other.getPos());
           }
-          if (other.hasRemoved()) {
-            setRemoved(other.getRemoved());
+          if (other.hasLocale()) {
+            locale_ = other.locale_;
+            bitField0_ |= 0x00000010;
+            onChanged();
           }
-          if (other.hasAutoRegistered()) {
-            setAutoRegistered(other.getAutoRegistered());
-          }
-          this.mergeUnknownFields(other.unknownFields);
+          this.mergeUnknownFields(other.getUnknownFields());
           onChanged();
           return this;
         }
 
-        public boolean isInitialized() {
+        @java.lang.Override
+        public final boolean isInitialized() {
           return true;
         }
 
+        @java.lang.Override
         public Builder mergeFrom(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws java.io.IOException {
-          org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry parsedMessage = null;
+          if (extensionRegistry == null) {
+            throw new java.lang.NullPointerException();
+          }
           try {
-            parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+            boolean done = false;
+            while (!done) {
+              int tag = input.readTag();
+              switch (tag) {
+                case 0:
+                  done = true;
+                  break;
+                case 10: {
+                  key_ = input.readBytes();
+                  bitField0_ |= 0x00000001;
+                  break;
+                } // case 10
+                case 18: {
+                  value_ = input.readBytes();
+                  bitField0_ |= 0x00000002;
+                  break;
+                } // case 18
+                case 34: {
+                  comment_ = input.readBytes();
+                  bitField0_ |= 0x00000004;
+                  break;
+                } // case 34
+                case 40: {
+                  int tmpRaw = input.readEnum();
+                  org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.PosType tmpValue =
+                      org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.PosType.forNumber(tmpRaw);
+                  if (tmpValue == null) {
+                    mergeUnknownVarintField(5, tmpRaw);
+                  } else {
+                    pos_ = tmpRaw;
+                    bitField0_ |= 0x00000008;
+                  }
+                  break;
+                } // case 40
+                case 98: {
+                  locale_ = input.readBytes();
+                  bitField0_ |= 0x00000010;
+                  break;
+                } // case 98
+                default: {
+                  if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                    done = true; // was an endgroup tag
+                  }
+                  break;
+                } // default:
+              } // switch (tag)
+            } // while (!done)
           } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-            parsedMessage = (org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry) e.getUnfinishedMessage();
             throw e.unwrapIOException();
           } finally {
-            if (parsedMessage != null) {
-              mergeFrom(parsedMessage);
-            }
-          }
+            onChanged();
+          } // finally
           return this;
         }
         private int bitField0_;
@@ -1952,12 +1884,14 @@ public final class ProtoUserDictionaryStorage {
         private java.lang.Object key_ = "";
         /**
          * <code>optional string key = 1 [default = ""];</code>
+         * @return Whether the key field is set.
          */
         public boolean hasKey() {
-          return ((bitField0_ & 0x00000001) == 0x00000001);
+          return ((bitField0_ & 0x00000001) != 0);
         }
         /**
          * <code>optional string key = 1 [default = ""];</code>
+         * @return The key.
          */
         public java.lang.String getKey() {
           java.lang.Object ref = key_;
@@ -1975,6 +1909,7 @@ public final class ProtoUserDictionaryStorage {
         }
         /**
          * <code>optional string key = 1 [default = ""];</code>
+         * @return The bytes for key.
          */
         public com.google.protobuf.ByteString
             getKeyBytes() {
@@ -1991,36 +1926,37 @@ public final class ProtoUserDictionaryStorage {
         }
         /**
          * <code>optional string key = 1 [default = ""];</code>
+         * @param value The key to set.
+         * @return This builder for chaining.
          */
         public Builder setKey(
             java.lang.String value) {
-          if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
+          if (value == null) { throw new NullPointerException(); }
           key_ = value;
+          bitField0_ |= 0x00000001;
           onChanged();
           return this;
         }
         /**
          * <code>optional string key = 1 [default = ""];</code>
+         * @return This builder for chaining.
          */
         public Builder clearKey() {
-          bitField0_ = (bitField0_ & ~0x00000001);
           key_ = getDefaultInstance().getKey();
+          bitField0_ = (bitField0_ & ~0x00000001);
           onChanged();
           return this;
         }
         /**
          * <code>optional string key = 1 [default = ""];</code>
+         * @param value The bytes for key to set.
+         * @return This builder for chaining.
          */
         public Builder setKeyBytes(
             com.google.protobuf.ByteString value) {
-          if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
+          if (value == null) { throw new NullPointerException(); }
           key_ = value;
+          bitField0_ |= 0x00000001;
           onChanged();
           return this;
         }
@@ -2028,12 +1964,14 @@ public final class ProtoUserDictionaryStorage {
         private java.lang.Object value_ = "";
         /**
          * <code>optional string value = 2 [default = ""];</code>
+         * @return Whether the value field is set.
          */
         public boolean hasValue() {
-          return ((bitField0_ & 0x00000002) == 0x00000002);
+          return ((bitField0_ & 0x00000002) != 0);
         }
         /**
          * <code>optional string value = 2 [default = ""];</code>
+         * @return The value.
          */
         public java.lang.String getValue() {
           java.lang.Object ref = value_;
@@ -2051,6 +1989,7 @@ public final class ProtoUserDictionaryStorage {
         }
         /**
          * <code>optional string value = 2 [default = ""];</code>
+         * @return The bytes for value.
          */
         public com.google.protobuf.ByteString
             getValueBytes() {
@@ -2067,36 +2006,37 @@ public final class ProtoUserDictionaryStorage {
         }
         /**
          * <code>optional string value = 2 [default = ""];</code>
+         * @param value The value to set.
+         * @return This builder for chaining.
          */
         public Builder setValue(
             java.lang.String value) {
-          if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000002;
+          if (value == null) { throw new NullPointerException(); }
           value_ = value;
+          bitField0_ |= 0x00000002;
           onChanged();
           return this;
         }
         /**
          * <code>optional string value = 2 [default = ""];</code>
+         * @return This builder for chaining.
          */
         public Builder clearValue() {
-          bitField0_ = (bitField0_ & ~0x00000002);
           value_ = getDefaultInstance().getValue();
+          bitField0_ = (bitField0_ & ~0x00000002);
           onChanged();
           return this;
         }
         /**
          * <code>optional string value = 2 [default = ""];</code>
+         * @param value The bytes for value to set.
+         * @return This builder for chaining.
          */
         public Builder setValueBytes(
             com.google.protobuf.ByteString value) {
-          if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000002;
+          if (value == null) { throw new NullPointerException(); }
           value_ = value;
+          bitField0_ |= 0x00000002;
           onChanged();
           return this;
         }
@@ -2104,12 +2044,14 @@ public final class ProtoUserDictionaryStorage {
         private java.lang.Object comment_ = "";
         /**
          * <code>optional string comment = 4 [default = ""];</code>
+         * @return Whether the comment field is set.
          */
         public boolean hasComment() {
-          return ((bitField0_ & 0x00000004) == 0x00000004);
+          return ((bitField0_ & 0x00000004) != 0);
         }
         /**
          * <code>optional string comment = 4 [default = ""];</code>
+         * @return The comment.
          */
         public java.lang.String getComment() {
           java.lang.Object ref = comment_;
@@ -2127,6 +2069,7 @@ public final class ProtoUserDictionaryStorage {
         }
         /**
          * <code>optional string comment = 4 [default = ""];</code>
+         * @return The bytes for comment.
          */
         public com.google.protobuf.ByteString
             getCommentBytes() {
@@ -2143,36 +2086,37 @@ public final class ProtoUserDictionaryStorage {
         }
         /**
          * <code>optional string comment = 4 [default = ""];</code>
+         * @param value The comment to set.
+         * @return This builder for chaining.
          */
         public Builder setComment(
             java.lang.String value) {
-          if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000004;
+          if (value == null) { throw new NullPointerException(); }
           comment_ = value;
+          bitField0_ |= 0x00000004;
           onChanged();
           return this;
         }
         /**
          * <code>optional string comment = 4 [default = ""];</code>
+         * @return This builder for chaining.
          */
         public Builder clearComment() {
-          bitField0_ = (bitField0_ & ~0x00000004);
           comment_ = getDefaultInstance().getComment();
+          bitField0_ = (bitField0_ & ~0x00000004);
           onChanged();
           return this;
         }
         /**
          * <code>optional string comment = 4 [default = ""];</code>
+         * @param value The bytes for comment to set.
+         * @return This builder for chaining.
          */
         public Builder setCommentBytes(
             com.google.protobuf.ByteString value) {
-          if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000004;
+          if (value == null) { throw new NullPointerException(); }
           comment_ = value;
+          bitField0_ |= 0x00000004;
           onChanged();
           return this;
         }
@@ -2183,24 +2127,35 @@ public final class ProtoUserDictionaryStorage {
          * Historically we used to use tag number '3' for POS in string format.
          * In order to switch it to enum based POS, we removed (deprecated) the
          * tag number '3' field and created another field numbered '5'.
+         * Historically the default POS tag was NOUN, and "NO_POS" is added later.
+         * In order to preserve the original default behavior, default POS tag is
+         * explicitly specified as NOUN. However, this can be changed if there is no
+         * problem with "NO_POS".
          * </pre>
          *
-         * <code>optional .mozc.user_dictionary.UserDictionary.PosType pos = 5;</code>
+         * <code>optional .mozc.user_dictionary.UserDictionary.PosType pos = 5 [default = NOUN];</code>
+         * @return Whether the pos field is set.
          */
-        public boolean hasPos() {
-          return ((bitField0_ & 0x00000008) == 0x00000008);
+        @java.lang.Override public boolean hasPos() {
+          return ((bitField0_ & 0x00000008) != 0);
         }
         /**
          * <pre>
          * Historically we used to use tag number '3' for POS in string format.
          * In order to switch it to enum based POS, we removed (deprecated) the
          * tag number '3' field and created another field numbered '5'.
+         * Historically the default POS tag was NOUN, and "NO_POS" is added later.
+         * In order to preserve the original default behavior, default POS tag is
+         * explicitly specified as NOUN. However, this can be changed if there is no
+         * problem with "NO_POS".
          * </pre>
          *
-         * <code>optional .mozc.user_dictionary.UserDictionary.PosType pos = 5;</code>
+         * <code>optional .mozc.user_dictionary.UserDictionary.PosType pos = 5 [default = NOUN];</code>
+         * @return The pos.
          */
+        @java.lang.Override
         public org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.PosType getPos() {
-          org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.PosType result = org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.PosType.valueOf(pos_);
+          org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.PosType result = org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.PosType.forNumber(pos_);
           return result == null ? org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.PosType.NOUN : result;
         }
         /**
@@ -2208,9 +2163,15 @@ public final class ProtoUserDictionaryStorage {
          * Historically we used to use tag number '3' for POS in string format.
          * In order to switch it to enum based POS, we removed (deprecated) the
          * tag number '3' field and created another field numbered '5'.
+         * Historically the default POS tag was NOUN, and "NO_POS" is added later.
+         * In order to preserve the original default behavior, default POS tag is
+         * explicitly specified as NOUN. However, this can be changed if there is no
+         * problem with "NO_POS".
          * </pre>
          *
-         * <code>optional .mozc.user_dictionary.UserDictionary.PosType pos = 5;</code>
+         * <code>optional .mozc.user_dictionary.UserDictionary.PosType pos = 5 [default = NOUN];</code>
+         * @param value The pos to set.
+         * @return This builder for chaining.
          */
         public Builder setPos(org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.PosType value) {
           if (value == null) {
@@ -2226,9 +2187,14 @@ public final class ProtoUserDictionaryStorage {
          * Historically we used to use tag number '3' for POS in string format.
          * In order to switch it to enum based POS, we removed (deprecated) the
          * tag number '3' field and created another field numbered '5'.
+         * Historically the default POS tag was NOUN, and "NO_POS" is added later.
+         * In order to preserve the original default behavior, default POS tag is
+         * explicitly specified as NOUN. However, this can be changed if there is no
+         * problem with "NO_POS".
          * </pre>
          *
-         * <code>optional .mozc.user_dictionary.UserDictionary.PosType pos = 5;</code>
+         * <code>optional .mozc.user_dictionary.UserDictionary.PosType pos = 5 [default = NOUN];</code>
+         * @return This builder for chaining.
          */
         public Builder clearPos() {
           bitField0_ = (bitField0_ & ~0x00000008);
@@ -2237,124 +2203,142 @@ public final class ProtoUserDictionaryStorage {
           return this;
         }
 
-        private boolean removed_ ;
+        private java.lang.Object locale_ = "";
         /**
          * <pre>
-         * set true if this entry is removed.
-         * This flag is used for cloud sync feature.
-         * Cloud sync feature is already deprecated and this flag is only
-         * used to convert sync dictionary to normal dictionary.
+         * In multilingual settings, Gboard's personal dictionary will feed entries
+         * with locale information. We can change the behavior (filter or demote)
+         * The locale is usually formatted in BCP47.
+         * In TSV format, the locale is encoded in the POS field as `pos:locale`
+         * "名詞:ja".
          * </pre>
          *
-         * <code>optional bool removed = 10 [default = false];</code>
+         * <code>optional string locale = 12 [default = ""];</code>
+         * @return Whether the locale field is set.
          */
-        public boolean hasRemoved() {
-          return ((bitField0_ & 0x00000010) == 0x00000010);
+        public boolean hasLocale() {
+          return ((bitField0_ & 0x00000010) != 0);
         }
         /**
          * <pre>
-         * set true if this entry is removed.
-         * This flag is used for cloud sync feature.
-         * Cloud sync feature is already deprecated and this flag is only
-         * used to convert sync dictionary to normal dictionary.
+         * In multilingual settings, Gboard's personal dictionary will feed entries
+         * with locale information. We can change the behavior (filter or demote)
+         * The locale is usually formatted in BCP47.
+         * In TSV format, the locale is encoded in the POS field as `pos:locale`
+         * "名詞:ja".
          * </pre>
          *
-         * <code>optional bool removed = 10 [default = false];</code>
+         * <code>optional string locale = 12 [default = ""];</code>
+         * @return The locale.
          */
-        public boolean getRemoved() {
-          return removed_;
+        public java.lang.String getLocale() {
+          java.lang.Object ref = locale_;
+          if (!(ref instanceof java.lang.String)) {
+            com.google.protobuf.ByteString bs =
+                (com.google.protobuf.ByteString) ref;
+            java.lang.String s = bs.toStringUtf8();
+            if (bs.isValidUtf8()) {
+              locale_ = s;
+            }
+            return s;
+          } else {
+            return (java.lang.String) ref;
+          }
         }
         /**
          * <pre>
-         * set true if this entry is removed.
-         * This flag is used for cloud sync feature.
-         * Cloud sync feature is already deprecated and this flag is only
-         * used to convert sync dictionary to normal dictionary.
+         * In multilingual settings, Gboard's personal dictionary will feed entries
+         * with locale information. We can change the behavior (filter or demote)
+         * The locale is usually formatted in BCP47.
+         * In TSV format, the locale is encoded in the POS field as `pos:locale`
+         * "名詞:ja".
          * </pre>
          *
-         * <code>optional bool removed = 10 [default = false];</code>
+         * <code>optional string locale = 12 [default = ""];</code>
+         * @return The bytes for locale.
          */
-        public Builder setRemoved(boolean value) {
+        public com.google.protobuf.ByteString
+            getLocaleBytes() {
+          java.lang.Object ref = locale_;
+          if (ref instanceof String) {
+            com.google.protobuf.ByteString b = 
+                com.google.protobuf.ByteString.copyFromUtf8(
+                    (java.lang.String) ref);
+            locale_ = b;
+            return b;
+          } else {
+            return (com.google.protobuf.ByteString) ref;
+          }
+        }
+        /**
+         * <pre>
+         * In multilingual settings, Gboard's personal dictionary will feed entries
+         * with locale information. We can change the behavior (filter or demote)
+         * The locale is usually formatted in BCP47.
+         * In TSV format, the locale is encoded in the POS field as `pos:locale`
+         * "名詞:ja".
+         * </pre>
+         *
+         * <code>optional string locale = 12 [default = ""];</code>
+         * @param value The locale to set.
+         * @return This builder for chaining.
+         */
+        public Builder setLocale(
+            java.lang.String value) {
+          if (value == null) { throw new NullPointerException(); }
+          locale_ = value;
           bitField0_ |= 0x00000010;
-          removed_ = value;
           onChanged();
           return this;
         }
         /**
          * <pre>
-         * set true if this entry is removed.
-         * This flag is used for cloud sync feature.
-         * Cloud sync feature is already deprecated and this flag is only
-         * used to convert sync dictionary to normal dictionary.
+         * In multilingual settings, Gboard's personal dictionary will feed entries
+         * with locale information. We can change the behavior (filter or demote)
+         * The locale is usually formatted in BCP47.
+         * In TSV format, the locale is encoded in the POS field as `pos:locale`
+         * "名詞:ja".
          * </pre>
          *
-         * <code>optional bool removed = 10 [default = false];</code>
+         * <code>optional string locale = 12 [default = ""];</code>
+         * @return This builder for chaining.
          */
-        public Builder clearRemoved() {
+        public Builder clearLocale() {
+          locale_ = getDefaultInstance().getLocale();
           bitField0_ = (bitField0_ & ~0x00000010);
-          removed_ = false;
-          onChanged();
-          return this;
-        }
-
-        private boolean autoRegistered_ ;
-        /**
-         * <pre>
-         * set true if this entry is automatically registered
-         * by converter.
-         * </pre>
-         *
-         * <code>optional bool auto_registered = 11 [default = false];</code>
-         */
-        public boolean hasAutoRegistered() {
-          return ((bitField0_ & 0x00000020) == 0x00000020);
-        }
-        /**
-         * <pre>
-         * set true if this entry is automatically registered
-         * by converter.
-         * </pre>
-         *
-         * <code>optional bool auto_registered = 11 [default = false];</code>
-         */
-        public boolean getAutoRegistered() {
-          return autoRegistered_;
-        }
-        /**
-         * <pre>
-         * set true if this entry is automatically registered
-         * by converter.
-         * </pre>
-         *
-         * <code>optional bool auto_registered = 11 [default = false];</code>
-         */
-        public Builder setAutoRegistered(boolean value) {
-          bitField0_ |= 0x00000020;
-          autoRegistered_ = value;
           onChanged();
           return this;
         }
         /**
          * <pre>
-         * set true if this entry is automatically registered
-         * by converter.
+         * In multilingual settings, Gboard's personal dictionary will feed entries
+         * with locale information. We can change the behavior (filter or demote)
+         * The locale is usually formatted in BCP47.
+         * In TSV format, the locale is encoded in the POS field as `pos:locale`
+         * "名詞:ja".
          * </pre>
          *
-         * <code>optional bool auto_registered = 11 [default = false];</code>
+         * <code>optional string locale = 12 [default = ""];</code>
+         * @param value The bytes for locale to set.
+         * @return This builder for chaining.
          */
-        public Builder clearAutoRegistered() {
-          bitField0_ = (bitField0_ & ~0x00000020);
-          autoRegistered_ = false;
+        public Builder setLocaleBytes(
+            com.google.protobuf.ByteString value) {
+          if (value == null) { throw new NullPointerException(); }
+          locale_ = value;
+          bitField0_ |= 0x00000010;
           onChanged();
           return this;
         }
-        public Builder setUnknownFields(
-                final com.google.protobuf.UnknownFieldSet unknownFields) {
+        @java.lang.Override
+        public final Builder setUnknownFields(
+            final com.google.protobuf.UnknownFieldSet unknownFields) {
           return super.setUnknownFields(unknownFields);
         }
 
-        public Builder mergeUnknownFields(
-                final com.google.protobuf.UnknownFieldSet unknownFields) {
+        @java.lang.Override
+        public final Builder mergeUnknownFields(
+            final com.google.protobuf.UnknownFieldSet unknownFields) {
           return super.mergeUnknownFields(unknownFields);
         }
 
@@ -2374,11 +2358,23 @@ public final class ProtoUserDictionaryStorage {
 
       @java.lang.Deprecated public static final com.google.protobuf.Parser<Entry>
           PARSER = new com.google.protobuf.AbstractParser<Entry>() {
+        @java.lang.Override
         public Entry parsePartialFrom(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
-          return new Entry(input, extensionRegistry);
+          Builder builder = newBuilder();
+          try {
+            builder.mergeFrom(input, extensionRegistry);
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            throw e.setUnfinishedMessage(builder.buildPartial());
+          } catch (com.google.protobuf.UninitializedMessageException e) {
+            throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+          } catch (java.io.IOException e) {
+            throw new com.google.protobuf.InvalidProtocolBufferException(e)
+                .setUnfinishedMessage(builder.buildPartial());
+          }
+          return builder.buildPartial();
         }
       };
 
@@ -2391,6 +2387,7 @@ public final class ProtoUserDictionaryStorage {
         return PARSER;
       }
 
+      @java.lang.Override
       public org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry getDefaultInstanceForType() {
         return DEFAULT_INSTANCE;
       }
@@ -2399,66 +2396,52 @@ public final class ProtoUserDictionaryStorage {
 
     private int bitField0_;
     public static final int ID_FIELD_NUMBER = 1;
-    private long id_;
+    private long id_ = 0L;
     /**
      * <pre>
+     * LINT.ThenChange(
+     *     dictionary/user_dictionary_util.cc
+     * )
      * ID of this dictionary
      * </pre>
      *
-     * <code>optional uint64 id = 1 [default = 0];</code>
+     * <code>optional uint64 id = 1 [default = 0, jstype = JS_STRING];</code>
+     * @return Whether the id field is set.
      */
+    @java.lang.Override
     public boolean hasId() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
+      return ((bitField0_ & 0x00000001) != 0);
     }
     /**
      * <pre>
+     * LINT.ThenChange(
+     *     dictionary/user_dictionary_util.cc
+     * )
      * ID of this dictionary
      * </pre>
      *
-     * <code>optional uint64 id = 1 [default = 0];</code>
+     * <code>optional uint64 id = 1 [default = 0, jstype = JS_STRING];</code>
+     * @return The id.
      */
+    @java.lang.Override
     public long getId() {
       return id_;
     }
 
-    public static final int ENABLED_FIELD_NUMBER = 2;
-    private boolean enabled_;
-    /**
-     * <pre>
-     * set false if this dictionary is not used.
-     * Even if |enabled| is false, the dictionary
-     * it self is visible to user.
-     * </pre>
-     *
-     * <code>optional bool enabled = 2 [default = true];</code>
-     */
-    public boolean hasEnabled() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    /**
-     * <pre>
-     * set false if this dictionary is not used.
-     * Even if |enabled| is false, the dictionary
-     * it self is visible to user.
-     * </pre>
-     *
-     * <code>optional bool enabled = 2 [default = true];</code>
-     */
-    public boolean getEnabled() {
-      return enabled_;
-    }
-
     public static final int NAME_FIELD_NUMBER = 3;
-    private volatile java.lang.Object name_;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object name_ = "";
     /**
      * <pre>
      * name of dictionary
      * </pre>
      *
      * <code>optional string name = 3 [default = ""];</code>
+     * @return Whether the name field is set.
      */
+    @java.lang.Override
     public boolean hasName() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
+      return ((bitField0_ & 0x00000002) != 0);
     }
     /**
      * <pre>
@@ -2466,7 +2449,9 @@ public final class ProtoUserDictionaryStorage {
      * </pre>
      *
      * <code>optional string name = 3 [default = ""];</code>
+     * @return The name.
      */
+    @java.lang.Override
     public java.lang.String getName() {
       java.lang.Object ref = name_;
       if (ref instanceof java.lang.String) {
@@ -2487,7 +2472,9 @@ public final class ProtoUserDictionaryStorage {
      * </pre>
      *
      * <code>optional string name = 3 [default = ""];</code>
+     * @return The bytes for name.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getNameBytes() {
       java.lang.Object ref = name_;
@@ -2503,16 +2490,19 @@ public final class ProtoUserDictionaryStorage {
     }
 
     public static final int ENTRIES_FIELD_NUMBER = 4;
+    @SuppressWarnings("serial")
     private java.util.List<org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry> entries_;
     /**
      * <code>repeated .mozc.user_dictionary.UserDictionary.Entry entries = 4;</code>
      */
+    @java.lang.Override
     public java.util.List<org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry> getEntriesList() {
       return entries_;
     }
     /**
      * <code>repeated .mozc.user_dictionary.UserDictionary.Entry entries = 4;</code>
      */
+    @java.lang.Override
     public java.util.List<? extends org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.EntryOrBuilder> 
         getEntriesOrBuilderList() {
       return entries_;
@@ -2520,81 +2510,29 @@ public final class ProtoUserDictionaryStorage {
     /**
      * <code>repeated .mozc.user_dictionary.UserDictionary.Entry entries = 4;</code>
      */
+    @java.lang.Override
     public int getEntriesCount() {
       return entries_.size();
     }
     /**
      * <code>repeated .mozc.user_dictionary.UserDictionary.Entry entries = 4;</code>
      */
+    @java.lang.Override
     public org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry getEntries(int index) {
       return entries_.get(index);
     }
     /**
      * <code>repeated .mozc.user_dictionary.UserDictionary.Entry entries = 4;</code>
      */
+    @java.lang.Override
     public org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.EntryOrBuilder getEntriesOrBuilder(
         int index) {
       return entries_.get(index);
     }
 
-    public static final int REMOVED_FIELD_NUMBER = 5;
-    private boolean removed_;
-    /**
-     * <pre>
-     * set true if this dictionary is removed.
-     * This flag is used for cloud sync feature.
-     * Cloud sync feature is already deprecated and this flag is only
-     * used to convert sync dictionary to normal dictionary.
-     * </pre>
-     *
-     * <code>optional bool removed = 5 [default = false];</code>
-     */
-    public boolean hasRemoved() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
-    }
-    /**
-     * <pre>
-     * set true if this dictionary is removed.
-     * This flag is used for cloud sync feature.
-     * Cloud sync feature is already deprecated and this flag is only
-     * used to convert sync dictionary to normal dictionary.
-     * </pre>
-     *
-     * <code>optional bool removed = 5 [default = false];</code>
-     */
-    public boolean getRemoved() {
-      return removed_;
-    }
-
-    public static final int SYNCABLE_FIELD_NUMBER = 6;
-    private boolean syncable_;
-    /**
-     * <pre>
-     * This flag is used for cloud sync feature.
-     * Cloud sync feature is already deprecated and this flag is only
-     * used to convert sync dictionary to normal dictionary.
-     * </pre>
-     *
-     * <code>optional bool syncable = 6 [default = false];</code>
-     */
-    public boolean hasSyncable() {
-      return ((bitField0_ & 0x00000010) == 0x00000010);
-    }
-    /**
-     * <pre>
-     * This flag is used for cloud sync feature.
-     * Cloud sync feature is already deprecated and this flag is only
-     * used to convert sync dictionary to normal dictionary.
-     * </pre>
-     *
-     * <code>optional bool syncable = 6 [default = false];</code>
-     */
-    public boolean getSyncable() {
-      return syncable_;
-    }
-
     private byte memoizedIsInitialized = -1;
-    public boolean isInitialized() {
+    @java.lang.Override
+    public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
       if (isInitialized == 0) return false;
@@ -2603,58 +2541,39 @@ public final class ProtoUserDictionaryStorage {
       return true;
     }
 
+    @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+      if (((bitField0_ & 0x00000001) != 0)) {
         output.writeUInt64(1, id_);
       }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeBool(2, enabled_);
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+      if (((bitField0_ & 0x00000002) != 0)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 3, name_);
       }
       for (int i = 0; i < entries_.size(); i++) {
         output.writeMessage(4, entries_.get(i));
       }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeBool(5, removed_);
-      }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        output.writeBool(6, syncable_);
-      }
-      unknownFields.writeTo(output);
+      getUnknownFields().writeTo(output);
     }
 
+    @java.lang.Override
     public int getSerializedSize() {
       int size = memoizedSize;
       if (size != -1) return size;
 
       size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+      if (((bitField0_ & 0x00000001) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeUInt64Size(1, id_);
       }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(2, enabled_);
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+      if (((bitField0_ & 0x00000002) != 0)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, name_);
       }
       for (int i = 0; i < entries_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(4, entries_.get(i));
       }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(5, removed_);
-      }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(6, syncable_);
-      }
-      size += unknownFields.getSerializedSize();
+      size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
     }
@@ -2669,36 +2588,20 @@ public final class ProtoUserDictionaryStorage {
       }
       org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary other = (org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary) obj;
 
-      boolean result = true;
-      result = result && (hasId() == other.hasId());
+      if (hasId() != other.hasId()) return false;
       if (hasId()) {
-        result = result && (getId()
-            == other.getId());
+        if (getId()
+            != other.getId()) return false;
       }
-      result = result && (hasEnabled() == other.hasEnabled());
-      if (hasEnabled()) {
-        result = result && (getEnabled()
-            == other.getEnabled());
-      }
-      result = result && (hasName() == other.hasName());
+      if (hasName() != other.hasName()) return false;
       if (hasName()) {
-        result = result && getName()
-            .equals(other.getName());
+        if (!getName()
+            .equals(other.getName())) return false;
       }
-      result = result && getEntriesList()
-          .equals(other.getEntriesList());
-      result = result && (hasRemoved() == other.hasRemoved());
-      if (hasRemoved()) {
-        result = result && (getRemoved()
-            == other.getRemoved());
-      }
-      result = result && (hasSyncable() == other.hasSyncable());
-      if (hasSyncable()) {
-        result = result && (getSyncable()
-            == other.getSyncable());
-      }
-      result = result && unknownFields.equals(other.unknownFields);
-      return result;
+      if (!getEntriesList()
+          .equals(other.getEntriesList())) return false;
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
+      return true;
     }
 
     @java.lang.Override
@@ -2713,11 +2616,6 @@ public final class ProtoUserDictionaryStorage {
         hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
             getId());
       }
-      if (hasEnabled()) {
-        hash = (37 * hash) + ENABLED_FIELD_NUMBER;
-        hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
-            getEnabled());
-      }
       if (hasName()) {
         hash = (37 * hash) + NAME_FIELD_NUMBER;
         hash = (53 * hash) + getName().hashCode();
@@ -2726,17 +2624,7 @@ public final class ProtoUserDictionaryStorage {
         hash = (37 * hash) + ENTRIES_FIELD_NUMBER;
         hash = (53 * hash) + getEntriesList().hashCode();
       }
-      if (hasRemoved()) {
-        hash = (37 * hash) + REMOVED_FIELD_NUMBER;
-        hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
-            getRemoved());
-      }
-      if (hasSyncable()) {
-        hash = (37 * hash) + SYNCABLE_FIELD_NUMBER;
-        hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
-            getSyncable());
-      }
-      hash = (29 * hash) + unknownFields.hashCode();
+      hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
     }
@@ -2811,6 +2699,7 @@ public final class ProtoUserDictionaryStorage {
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
+    @java.lang.Override
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
@@ -2818,6 +2707,7 @@ public final class ProtoUserDictionaryStorage {
     public static Builder newBuilder(org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
+    @java.lang.Override
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
@@ -2836,11 +2726,12 @@ public final class ProtoUserDictionaryStorage {
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:mozc.user_dictionary.UserDictionary)
         org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryOrBuilder {
-      public static com.google.protobuf.Descriptors.Descriptor
+      public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.internal_static_mozc_user_dictionary_UserDictionary_descriptor;
       }
 
+      @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.internal_static_mozc_user_dictionary_UserDictionary_fieldAccessorTable
@@ -2850,50 +2741,42 @@ public final class ProtoUserDictionaryStorage {
 
       // Construct using org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.newBuilder()
       private Builder() {
-        maybeForceBuilderInitialization();
+
       }
 
       private Builder(
           com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
-        maybeForceBuilderInitialization();
+
       }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-          getEntriesFieldBuilder();
-        }
-      }
+      @java.lang.Override
       public Builder clear() {
         super.clear();
+        bitField0_ = 0;
         id_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00000001);
-        enabled_ = true;
-        bitField0_ = (bitField0_ & ~0x00000002);
         name_ = "";
-        bitField0_ = (bitField0_ & ~0x00000004);
         if (entriesBuilder_ == null) {
           entries_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000008);
         } else {
+          entries_ = null;
           entriesBuilder_.clear();
         }
-        removed_ = false;
-        bitField0_ = (bitField0_ & ~0x00000010);
-        syncable_ = false;
-        bitField0_ = (bitField0_ & ~0x00000020);
+        bitField0_ = (bitField0_ & ~0x00000004);
         return this;
       }
 
+      @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
         return org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.internal_static_mozc_user_dictionary_UserDictionary_descriptor;
       }
 
+      @java.lang.Override
       public org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary getDefaultInstanceForType() {
         return org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.getDefaultInstance();
       }
 
+      @java.lang.Override
       public org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary build() {
         org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary result = buildPartial();
         if (!result.isInitialized()) {
@@ -2902,70 +2785,74 @@ public final class ProtoUserDictionaryStorage {
         return result;
       }
 
+      @java.lang.Override
       public org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary buildPartial() {
         org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary result = new org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.id_ = id_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        result.enabled_ = enabled_;
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000004;
-        }
-        result.name_ = name_;
+        buildPartialRepeatedFields(result);
+        if (bitField0_ != 0) { buildPartial0(result); }
+        onBuilt();
+        return result;
+      }
+
+      private void buildPartialRepeatedFields(org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary result) {
         if (entriesBuilder_ == null) {
-          if (((bitField0_ & 0x00000008) == 0x00000008)) {
+          if (((bitField0_ & 0x00000004) != 0)) {
             entries_ = java.util.Collections.unmodifiableList(entries_);
-            bitField0_ = (bitField0_ & ~0x00000008);
+            bitField0_ = (bitField0_ & ~0x00000004);
           }
           result.entries_ = entries_;
         } else {
           result.entries_ = entriesBuilder_.build();
         }
-        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
-          to_bitField0_ |= 0x00000008;
-        }
-        result.removed_ = removed_;
-        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
-          to_bitField0_ |= 0x00000010;
-        }
-        result.syncable_ = syncable_;
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
       }
 
+      private void buildPartial0(org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary result) {
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          result.id_ = id_;
+          to_bitField0_ |= 0x00000001;
+        }
+        if (((from_bitField0_ & 0x00000002) != 0)) {
+          result.name_ = name_;
+          to_bitField0_ |= 0x00000002;
+        }
+        result.bitField0_ |= to_bitField0_;
+      }
+
+      @java.lang.Override
       public Builder clone() {
         return super.clone();
       }
+      @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
         return super.setField(field, value);
       }
+      @java.lang.Override
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
         return super.clearField(field);
       }
+      @java.lang.Override
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return super.clearOneof(oneof);
       }
+      @java.lang.Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           int index, java.lang.Object value) {
         return super.setRepeatedField(field, index, value);
       }
+      @java.lang.Override
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
         return super.addRepeatedField(field, value);
       }
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary) {
           return mergeFrom((org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary)other);
@@ -2980,19 +2867,16 @@ public final class ProtoUserDictionaryStorage {
         if (other.hasId()) {
           setId(other.getId());
         }
-        if (other.hasEnabled()) {
-          setEnabled(other.getEnabled());
-        }
         if (other.hasName()) {
-          bitField0_ |= 0x00000004;
           name_ = other.name_;
+          bitField0_ |= 0x00000002;
           onChanged();
         }
         if (entriesBuilder_ == null) {
           if (!other.entries_.isEmpty()) {
             if (entries_.isEmpty()) {
               entries_ = other.entries_;
-              bitField0_ = (bitField0_ & ~0x00000008);
+              bitField0_ = (bitField0_ & ~0x00000004);
             } else {
               ensureEntriesIsMutable();
               entries_.addAll(other.entries_);
@@ -3005,7 +2889,7 @@ public final class ProtoUserDictionaryStorage {
               entriesBuilder_.dispose();
               entriesBuilder_ = null;
               entries_ = other.entries_;
-              bitField0_ = (bitField0_ & ~0x00000008);
+              bitField0_ = (bitField0_ & ~0x00000004);
               entriesBuilder_ = 
                 com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
                    getEntriesFieldBuilder() : null;
@@ -3014,36 +2898,68 @@ public final class ProtoUserDictionaryStorage {
             }
           }
         }
-        if (other.hasRemoved()) {
-          setRemoved(other.getRemoved());
-        }
-        if (other.hasSyncable()) {
-          setSyncable(other.getSyncable());
-        }
-        this.mergeUnknownFields(other.unknownFields);
+        this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
       }
 
-      public boolean isInitialized() {
+      @java.lang.Override
+      public final boolean isInitialized() {
         return true;
       }
 
+      @java.lang.Override
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary parsedMessage = null;
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
         try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 8: {
+                id_ = input.readUInt64();
+                bitField0_ |= 0x00000001;
+                break;
+              } // case 8
+              case 26: {
+                name_ = input.readBytes();
+                bitField0_ |= 0x00000002;
+                break;
+              } // case 26
+              case 34: {
+                org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry m =
+                    input.readMessage(
+                        org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry.PARSER,
+                        extensionRegistry);
+                if (entriesBuilder_ == null) {
+                  ensureEntriesIsMutable();
+                  entries_.add(m);
+                } else {
+                  entriesBuilder_.addMessage(m);
+                }
+                break;
+              } // case 34
+              default: {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+            } // switch (tag)
+          } // while (!done)
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
+          onChanged();
+        } // finally
         return this;
       }
       private int bitField0_;
@@ -3051,103 +2967,67 @@ public final class ProtoUserDictionaryStorage {
       private long id_ ;
       /**
        * <pre>
+       * LINT.ThenChange(
+       *     dictionary/user_dictionary_util.cc
+       * )
        * ID of this dictionary
        * </pre>
        *
-       * <code>optional uint64 id = 1 [default = 0];</code>
+       * <code>optional uint64 id = 1 [default = 0, jstype = JS_STRING];</code>
+       * @return Whether the id field is set.
        */
+      @java.lang.Override
       public boolean hasId() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
+        return ((bitField0_ & 0x00000001) != 0);
       }
       /**
        * <pre>
+       * LINT.ThenChange(
+       *     dictionary/user_dictionary_util.cc
+       * )
        * ID of this dictionary
        * </pre>
        *
-       * <code>optional uint64 id = 1 [default = 0];</code>
+       * <code>optional uint64 id = 1 [default = 0, jstype = JS_STRING];</code>
+       * @return The id.
        */
+      @java.lang.Override
       public long getId() {
         return id_;
       }
       /**
        * <pre>
+       * LINT.ThenChange(
+       *     dictionary/user_dictionary_util.cc
+       * )
        * ID of this dictionary
        * </pre>
        *
-       * <code>optional uint64 id = 1 [default = 0];</code>
+       * <code>optional uint64 id = 1 [default = 0, jstype = JS_STRING];</code>
+       * @param value The id to set.
+       * @return This builder for chaining.
        */
       public Builder setId(long value) {
-        bitField0_ |= 0x00000001;
+        
         id_ = value;
+        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
       /**
        * <pre>
+       * LINT.ThenChange(
+       *     dictionary/user_dictionary_util.cc
+       * )
        * ID of this dictionary
        * </pre>
        *
-       * <code>optional uint64 id = 1 [default = 0];</code>
+       * <code>optional uint64 id = 1 [default = 0, jstype = JS_STRING];</code>
+       * @return This builder for chaining.
        */
       public Builder clearId() {
         bitField0_ = (bitField0_ & ~0x00000001);
         id_ = 0L;
-        onChanged();
-        return this;
-      }
-
-      private boolean enabled_ = true;
-      /**
-       * <pre>
-       * set false if this dictionary is not used.
-       * Even if |enabled| is false, the dictionary
-       * it self is visible to user.
-       * </pre>
-       *
-       * <code>optional bool enabled = 2 [default = true];</code>
-       */
-      public boolean hasEnabled() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      /**
-       * <pre>
-       * set false if this dictionary is not used.
-       * Even if |enabled| is false, the dictionary
-       * it self is visible to user.
-       * </pre>
-       *
-       * <code>optional bool enabled = 2 [default = true];</code>
-       */
-      public boolean getEnabled() {
-        return enabled_;
-      }
-      /**
-       * <pre>
-       * set false if this dictionary is not used.
-       * Even if |enabled| is false, the dictionary
-       * it self is visible to user.
-       * </pre>
-       *
-       * <code>optional bool enabled = 2 [default = true];</code>
-       */
-      public Builder setEnabled(boolean value) {
-        bitField0_ |= 0x00000002;
-        enabled_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       * set false if this dictionary is not used.
-       * Even if |enabled| is false, the dictionary
-       * it self is visible to user.
-       * </pre>
-       *
-       * <code>optional bool enabled = 2 [default = true];</code>
-       */
-      public Builder clearEnabled() {
-        bitField0_ = (bitField0_ & ~0x00000002);
-        enabled_ = true;
         onChanged();
         return this;
       }
@@ -3159,9 +3039,10 @@ public final class ProtoUserDictionaryStorage {
        * </pre>
        *
        * <code>optional string name = 3 [default = ""];</code>
+       * @return Whether the name field is set.
        */
       public boolean hasName() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
+        return ((bitField0_ & 0x00000002) != 0);
       }
       /**
        * <pre>
@@ -3169,6 +3050,7 @@ public final class ProtoUserDictionaryStorage {
        * </pre>
        *
        * <code>optional string name = 3 [default = ""];</code>
+       * @return The name.
        */
       public java.lang.String getName() {
         java.lang.Object ref = name_;
@@ -3190,6 +3072,7 @@ public final class ProtoUserDictionaryStorage {
        * </pre>
        *
        * <code>optional string name = 3 [default = ""];</code>
+       * @return The bytes for name.
        */
       public com.google.protobuf.ByteString
           getNameBytes() {
@@ -3210,14 +3093,14 @@ public final class ProtoUserDictionaryStorage {
        * </pre>
        *
        * <code>optional string name = 3 [default = ""];</code>
+       * @param value The name to set.
+       * @return This builder for chaining.
        */
       public Builder setName(
           java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000004;
+        if (value == null) { throw new NullPointerException(); }
         name_ = value;
+        bitField0_ |= 0x00000002;
         onChanged();
         return this;
       }
@@ -3227,10 +3110,11 @@ public final class ProtoUserDictionaryStorage {
        * </pre>
        *
        * <code>optional string name = 3 [default = ""];</code>
+       * @return This builder for chaining.
        */
       public Builder clearName() {
-        bitField0_ = (bitField0_ & ~0x00000004);
         name_ = getDefaultInstance().getName();
+        bitField0_ = (bitField0_ & ~0x00000002);
         onChanged();
         return this;
       }
@@ -3240,14 +3124,14 @@ public final class ProtoUserDictionaryStorage {
        * </pre>
        *
        * <code>optional string name = 3 [default = ""];</code>
+       * @param value The bytes for name to set.
+       * @return This builder for chaining.
        */
       public Builder setNameBytes(
           com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000004;
+        if (value == null) { throw new NullPointerException(); }
         name_ = value;
+        bitField0_ |= 0x00000002;
         onChanged();
         return this;
       }
@@ -3255,9 +3139,9 @@ public final class ProtoUserDictionaryStorage {
       private java.util.List<org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry> entries_ =
         java.util.Collections.emptyList();
       private void ensureEntriesIsMutable() {
-        if (!((bitField0_ & 0x00000008) == 0x00000008)) {
+        if (!((bitField0_ & 0x00000004) != 0)) {
           entries_ = new java.util.ArrayList<org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry>(entries_);
-          bitField0_ |= 0x00000008;
+          bitField0_ |= 0x00000004;
          }
       }
 
@@ -3407,7 +3291,7 @@ public final class ProtoUserDictionaryStorage {
       public Builder clearEntries() {
         if (entriesBuilder_ == null) {
           entries_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000008);
+          bitField0_ = (bitField0_ & ~0x00000004);
           onChanged();
         } else {
           entriesBuilder_.clear();
@@ -3484,136 +3368,22 @@ public final class ProtoUserDictionaryStorage {
           entriesBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
               org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry, org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry.Builder, org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.EntryOrBuilder>(
                   entries_,
-                  ((bitField0_ & 0x00000008) == 0x00000008),
+                  ((bitField0_ & 0x00000004) != 0),
                   getParentForChildren(),
                   isClean());
           entries_ = null;
         }
         return entriesBuilder_;
       }
-
-      private boolean removed_ ;
-      /**
-       * <pre>
-       * set true if this dictionary is removed.
-       * This flag is used for cloud sync feature.
-       * Cloud sync feature is already deprecated and this flag is only
-       * used to convert sync dictionary to normal dictionary.
-       * </pre>
-       *
-       * <code>optional bool removed = 5 [default = false];</code>
-       */
-      public boolean hasRemoved() {
-        return ((bitField0_ & 0x00000010) == 0x00000010);
-      }
-      /**
-       * <pre>
-       * set true if this dictionary is removed.
-       * This flag is used for cloud sync feature.
-       * Cloud sync feature is already deprecated and this flag is only
-       * used to convert sync dictionary to normal dictionary.
-       * </pre>
-       *
-       * <code>optional bool removed = 5 [default = false];</code>
-       */
-      public boolean getRemoved() {
-        return removed_;
-      }
-      /**
-       * <pre>
-       * set true if this dictionary is removed.
-       * This flag is used for cloud sync feature.
-       * Cloud sync feature is already deprecated and this flag is only
-       * used to convert sync dictionary to normal dictionary.
-       * </pre>
-       *
-       * <code>optional bool removed = 5 [default = false];</code>
-       */
-      public Builder setRemoved(boolean value) {
-        bitField0_ |= 0x00000010;
-        removed_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       * set true if this dictionary is removed.
-       * This flag is used for cloud sync feature.
-       * Cloud sync feature is already deprecated and this flag is only
-       * used to convert sync dictionary to normal dictionary.
-       * </pre>
-       *
-       * <code>optional bool removed = 5 [default = false];</code>
-       */
-      public Builder clearRemoved() {
-        bitField0_ = (bitField0_ & ~0x00000010);
-        removed_ = false;
-        onChanged();
-        return this;
-      }
-
-      private boolean syncable_ ;
-      /**
-       * <pre>
-       * This flag is used for cloud sync feature.
-       * Cloud sync feature is already deprecated and this flag is only
-       * used to convert sync dictionary to normal dictionary.
-       * </pre>
-       *
-       * <code>optional bool syncable = 6 [default = false];</code>
-       */
-      public boolean hasSyncable() {
-        return ((bitField0_ & 0x00000020) == 0x00000020);
-      }
-      /**
-       * <pre>
-       * This flag is used for cloud sync feature.
-       * Cloud sync feature is already deprecated and this flag is only
-       * used to convert sync dictionary to normal dictionary.
-       * </pre>
-       *
-       * <code>optional bool syncable = 6 [default = false];</code>
-       */
-      public boolean getSyncable() {
-        return syncable_;
-      }
-      /**
-       * <pre>
-       * This flag is used for cloud sync feature.
-       * Cloud sync feature is already deprecated and this flag is only
-       * used to convert sync dictionary to normal dictionary.
-       * </pre>
-       *
-       * <code>optional bool syncable = 6 [default = false];</code>
-       */
-      public Builder setSyncable(boolean value) {
-        bitField0_ |= 0x00000020;
-        syncable_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       * This flag is used for cloud sync feature.
-       * Cloud sync feature is already deprecated and this flag is only
-       * used to convert sync dictionary to normal dictionary.
-       * </pre>
-       *
-       * <code>optional bool syncable = 6 [default = false];</code>
-       */
-      public Builder clearSyncable() {
-        bitField0_ = (bitField0_ & ~0x00000020);
-        syncable_ = false;
-        onChanged();
-        return this;
-      }
-      public Builder setUnknownFields(
-              final com.google.protobuf.UnknownFieldSet unknownFields) {
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFields(unknownFields);
       }
 
-      public Builder mergeUnknownFields(
-              final com.google.protobuf.UnknownFieldSet unknownFields) {
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
       }
 
@@ -3633,11 +3403,23 @@ public final class ProtoUserDictionaryStorage {
 
     @java.lang.Deprecated public static final com.google.protobuf.Parser<UserDictionary>
         PARSER = new com.google.protobuf.AbstractParser<UserDictionary>() {
+      @java.lang.Override
       public UserDictionary parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new UserDictionary(input, extensionRegistry);
+        Builder builder = newBuilder();
+        try {
+          builder.mergeFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(builder.buildPartial());
+        } catch (com.google.protobuf.UninitializedMessageException e) {
+          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(e)
+              .setUnfinishedMessage(builder.buildPartial());
+        }
+        return builder.buildPartial();
       }
     };
 
@@ -3650,6 +3432,7 @@ public final class ProtoUserDictionaryStorage {
       return PARSER;
     }
 
+    @java.lang.Override
     public org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
@@ -3666,6 +3449,7 @@ public final class ProtoUserDictionaryStorage {
      * </pre>
      *
      * <code>optional int32 version = 1 [default = 0];</code>
+     * @return Whether the version field is set.
      */
     boolean hasVersion();
     /**
@@ -3674,6 +3458,7 @@ public final class ProtoUserDictionaryStorage {
      * </pre>
      *
      * <code>optional int32 version = 1 [default = 0];</code>
+     * @return The version.
      */
     int getVersion();
 
@@ -3720,20 +3505,11 @@ public final class ProtoUserDictionaryStorage {
      */
     org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryOrBuilder getDictionariesOrBuilder(
         int index);
-
-    /**
-     * <code>optional .mozc.user_dictionary.UserDictionaryStorage.StorageType storage_type = 10 [default = SNAPSHOT];</code>
-     */
-    boolean hasStorageType();
-    /**
-     * <code>optional .mozc.user_dictionary.UserDictionaryStorage.StorageType storage_type = 10 [default = SNAPSHOT];</code>
-     */
-    org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorage.StorageType getStorageType();
   }
   /**
    * Protobuf type {@code mozc.user_dictionary.UserDictionaryStorage}
    */
-  public  static final class UserDictionaryStorage extends
+  public static final class UserDictionaryStorage extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:mozc.user_dictionary.UserDictionaryStorage)
       UserDictionaryStorageOrBuilder {
@@ -3743,87 +3519,27 @@ public final class ProtoUserDictionaryStorage {
       super(builder);
     }
     private UserDictionaryStorage() {
-      version_ = 0;
       dictionaries_ = java.util.Collections.emptyList();
-      storageType_ = 1;
     }
 
     @java.lang.Override
-    public com.google.protobuf.UnknownFieldSet
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new UserDictionaryStorage();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
       return this.unknownFields;
     }
-    private UserDictionaryStorage(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            case 8: {
-              bitField0_ |= 0x00000001;
-              version_ = input.readInt32();
-              break;
-            }
-            case 18: {
-              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
-                dictionaries_ = new java.util.ArrayList<org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary>();
-                mutable_bitField0_ |= 0x00000002;
-              }
-              dictionaries_.add(
-                  input.readMessage(org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.PARSER, extensionRegistry));
-              break;
-            }
-            case 80: {
-              int rawValue = input.readEnum();
-              org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorage.StorageType value = org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorage.StorageType.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(10, rawValue);
-              } else {
-                bitField0_ |= 0x00000002;
-                storageType_ = rawValue;
-              }
-              break;
-            }
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
-      } finally {
-        if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
-          dictionaries_ = java.util.Collections.unmodifiableList(dictionaries_);
-        }
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static com.google.protobuf.Descriptors.Descriptor
+    public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.internal_static_mozc_user_dictionary_UserDictionaryStorage_descriptor;
     }
 
+    @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
       return org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.internal_static_mozc_user_dictionary_UserDictionaryStorage_fieldAccessorTable
@@ -3831,124 +3547,20 @@ public final class ProtoUserDictionaryStorage {
               org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorage.class, org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorage.Builder.class);
     }
 
-    /**
-     * Protobuf enum {@code mozc.user_dictionary.UserDictionaryStorage.StorageType}
-     */
-    public enum StorageType
-        implements com.google.protobuf.ProtocolMessageEnum {
-      /**
-       * <pre>
-       * This storage is a snapshot.
-       * </pre>
-       *
-       * <code>SNAPSHOT = 1;</code>
-       */
-      SNAPSHOT(1),
-      /**
-       * <pre>
-       * This storage is a diff of some snapshots.
-       * </pre>
-       *
-       * <code>UPDATE = 2;</code>
-       */
-      UPDATE(2),
-      ;
-
-      /**
-       * <pre>
-       * This storage is a snapshot.
-       * </pre>
-       *
-       * <code>SNAPSHOT = 1;</code>
-       */
-      public static final int SNAPSHOT_VALUE = 1;
-      /**
-       * <pre>
-       * This storage is a diff of some snapshots.
-       * </pre>
-       *
-       * <code>UPDATE = 2;</code>
-       */
-      public static final int UPDATE_VALUE = 2;
-
-
-      public final int getNumber() {
-        return value;
-      }
-
-      /**
-       * @deprecated Use {@link #forNumber(int)} instead.
-       */
-      @java.lang.Deprecated
-      public static StorageType valueOf(int value) {
-        return forNumber(value);
-      }
-
-      public static StorageType forNumber(int value) {
-        switch (value) {
-          case 1: return SNAPSHOT;
-          case 2: return UPDATE;
-          default: return null;
-        }
-      }
-
-      public static com.google.protobuf.Internal.EnumLiteMap<StorageType>
-          internalGetValueMap() {
-        return internalValueMap;
-      }
-      private static final com.google.protobuf.Internal.EnumLiteMap<
-          StorageType> internalValueMap =
-            new com.google.protobuf.Internal.EnumLiteMap<StorageType>() {
-              public StorageType findValueByNumber(int number) {
-                return StorageType.forNumber(number);
-              }
-            };
-
-      public final com.google.protobuf.Descriptors.EnumValueDescriptor
-          getValueDescriptor() {
-        return getDescriptor().getValues().get(ordinal());
-      }
-      public final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptorForType() {
-        return getDescriptor();
-      }
-      public static final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptor() {
-        return org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorage.getDescriptor().getEnumTypes().get(0);
-      }
-
-      private static final StorageType[] VALUES = values();
-
-      public static StorageType valueOf(
-          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
-        if (desc.getType() != getDescriptor()) {
-          throw new java.lang.IllegalArgumentException(
-            "EnumValueDescriptor is not for this type.");
-        }
-        return VALUES[desc.getIndex()];
-      }
-
-      private final int value;
-
-      StorageType(int value) {
-        this.value = value;
-      }
-
-      // @@protoc_insertion_point(enum_scope:mozc.user_dictionary.UserDictionaryStorage.StorageType)
-    }
-
     private int bitField0_;
     public static final int VERSION_FIELD_NUMBER = 1;
-    private int version_;
+    private int version_ = 0;
     /**
      * <pre>
      * version of user dictionary
      * </pre>
      *
      * <code>optional int32 version = 1 [default = 0];</code>
+     * @return Whether the version field is set.
      */
+    @java.lang.Override
     public boolean hasVersion() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
+      return ((bitField0_ & 0x00000001) != 0);
     }
     /**
      * <pre>
@@ -3956,12 +3568,15 @@ public final class ProtoUserDictionaryStorage {
      * </pre>
      *
      * <code>optional int32 version = 1 [default = 0];</code>
+     * @return The version.
      */
+    @java.lang.Override
     public int getVersion() {
       return version_;
     }
 
     public static final int DICTIONARIES_FIELD_NUMBER = 2;
+    @SuppressWarnings("serial")
     private java.util.List<org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary> dictionaries_;
     /**
      * <pre>
@@ -3970,6 +3585,7 @@ public final class ProtoUserDictionaryStorage {
      *
      * <code>repeated .mozc.user_dictionary.UserDictionary dictionaries = 2;</code>
      */
+    @java.lang.Override
     public java.util.List<org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary> getDictionariesList() {
       return dictionaries_;
     }
@@ -3980,6 +3596,7 @@ public final class ProtoUserDictionaryStorage {
      *
      * <code>repeated .mozc.user_dictionary.UserDictionary dictionaries = 2;</code>
      */
+    @java.lang.Override
     public java.util.List<? extends org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryOrBuilder> 
         getDictionariesOrBuilderList() {
       return dictionaries_;
@@ -3991,6 +3608,7 @@ public final class ProtoUserDictionaryStorage {
      *
      * <code>repeated .mozc.user_dictionary.UserDictionary dictionaries = 2;</code>
      */
+    @java.lang.Override
     public int getDictionariesCount() {
       return dictionaries_.size();
     }
@@ -4001,6 +3619,7 @@ public final class ProtoUserDictionaryStorage {
      *
      * <code>repeated .mozc.user_dictionary.UserDictionary dictionaries = 2;</code>
      */
+    @java.lang.Override
     public org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary getDictionaries(int index) {
       return dictionaries_.get(index);
     }
@@ -4011,29 +3630,15 @@ public final class ProtoUserDictionaryStorage {
      *
      * <code>repeated .mozc.user_dictionary.UserDictionary dictionaries = 2;</code>
      */
+    @java.lang.Override
     public org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryOrBuilder getDictionariesOrBuilder(
         int index) {
       return dictionaries_.get(index);
     }
 
-    public static final int STORAGE_TYPE_FIELD_NUMBER = 10;
-    private int storageType_;
-    /**
-     * <code>optional .mozc.user_dictionary.UserDictionaryStorage.StorageType storage_type = 10 [default = SNAPSHOT];</code>
-     */
-    public boolean hasStorageType() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    /**
-     * <code>optional .mozc.user_dictionary.UserDictionaryStorage.StorageType storage_type = 10 [default = SNAPSHOT];</code>
-     */
-    public org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorage.StorageType getStorageType() {
-      org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorage.StorageType result = org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorage.StorageType.valueOf(storageType_);
-      return result == null ? org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorage.StorageType.SNAPSHOT : result;
-    }
-
     private byte memoizedIsInitialized = -1;
-    public boolean isInitialized() {
+    @java.lang.Override
+    public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
       if (isInitialized == 0) return false;
@@ -4042,26 +3647,25 @@ public final class ProtoUserDictionaryStorage {
       return true;
     }
 
+    @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+      if (((bitField0_ & 0x00000001) != 0)) {
         output.writeInt32(1, version_);
       }
       for (int i = 0; i < dictionaries_.size(); i++) {
         output.writeMessage(2, dictionaries_.get(i));
       }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeEnum(10, storageType_);
-      }
-      unknownFields.writeTo(output);
+      getUnknownFields().writeTo(output);
     }
 
+    @java.lang.Override
     public int getSerializedSize() {
       int size = memoizedSize;
       if (size != -1) return size;
 
       size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+      if (((bitField0_ & 0x00000001) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(1, version_);
       }
@@ -4069,11 +3673,7 @@ public final class ProtoUserDictionaryStorage {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(2, dictionaries_.get(i));
       }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(10, storageType_);
-      }
-      size += unknownFields.getSerializedSize();
+      size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
     }
@@ -4088,20 +3688,15 @@ public final class ProtoUserDictionaryStorage {
       }
       org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorage other = (org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorage) obj;
 
-      boolean result = true;
-      result = result && (hasVersion() == other.hasVersion());
+      if (hasVersion() != other.hasVersion()) return false;
       if (hasVersion()) {
-        result = result && (getVersion()
-            == other.getVersion());
+        if (getVersion()
+            != other.getVersion()) return false;
       }
-      result = result && getDictionariesList()
-          .equals(other.getDictionariesList());
-      result = result && (hasStorageType() == other.hasStorageType());
-      if (hasStorageType()) {
-        result = result && storageType_ == other.storageType_;
-      }
-      result = result && unknownFields.equals(other.unknownFields);
-      return result;
+      if (!getDictionariesList()
+          .equals(other.getDictionariesList())) return false;
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
+      return true;
     }
 
     @java.lang.Override
@@ -4119,11 +3714,7 @@ public final class ProtoUserDictionaryStorage {
         hash = (37 * hash) + DICTIONARIES_FIELD_NUMBER;
         hash = (53 * hash) + getDictionariesList().hashCode();
       }
-      if (hasStorageType()) {
-        hash = (37 * hash) + STORAGE_TYPE_FIELD_NUMBER;
-        hash = (53 * hash) + storageType_;
-      }
-      hash = (29 * hash) + unknownFields.hashCode();
+      hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
     }
@@ -4198,6 +3789,7 @@ public final class ProtoUserDictionaryStorage {
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
+    @java.lang.Override
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
@@ -4205,6 +3797,7 @@ public final class ProtoUserDictionaryStorage {
     public static Builder newBuilder(org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorage prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
+    @java.lang.Override
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
@@ -4223,11 +3816,12 @@ public final class ProtoUserDictionaryStorage {
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:mozc.user_dictionary.UserDictionaryStorage)
         org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorageOrBuilder {
-      public static com.google.protobuf.Descriptors.Descriptor
+      public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.internal_static_mozc_user_dictionary_UserDictionaryStorage_descriptor;
       }
 
+      @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.internal_static_mozc_user_dictionary_UserDictionaryStorage_fieldAccessorTable
@@ -4237,44 +3831,41 @@ public final class ProtoUserDictionaryStorage {
 
       // Construct using org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorage.newBuilder()
       private Builder() {
-        maybeForceBuilderInitialization();
+
       }
 
       private Builder(
           com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
-        maybeForceBuilderInitialization();
+
       }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-          getDictionariesFieldBuilder();
-        }
-      }
+      @java.lang.Override
       public Builder clear() {
         super.clear();
+        bitField0_ = 0;
         version_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000001);
         if (dictionariesBuilder_ == null) {
           dictionaries_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000002);
         } else {
+          dictionaries_ = null;
           dictionariesBuilder_.clear();
         }
-        storageType_ = 1;
-        bitField0_ = (bitField0_ & ~0x00000004);
+        bitField0_ = (bitField0_ & ~0x00000002);
         return this;
       }
 
+      @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
         return org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.internal_static_mozc_user_dictionary_UserDictionaryStorage_descriptor;
       }
 
+      @java.lang.Override
       public org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorage getDefaultInstanceForType() {
         return org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorage.getDefaultInstance();
       }
 
+      @java.lang.Override
       public org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorage build() {
         org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorage result = buildPartial();
         if (!result.isInitialized()) {
@@ -4283,16 +3874,18 @@ public final class ProtoUserDictionaryStorage {
         return result;
       }
 
+      @java.lang.Override
       public org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorage buildPartial() {
         org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorage result = new org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorage(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.version_ = version_;
+        buildPartialRepeatedFields(result);
+        if (bitField0_ != 0) { buildPartial0(result); }
+        onBuilt();
+        return result;
+      }
+
+      private void buildPartialRepeatedFields(org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorage result) {
         if (dictionariesBuilder_ == null) {
-          if (((bitField0_ & 0x00000002) == 0x00000002)) {
+          if (((bitField0_ & 0x00000002) != 0)) {
             dictionaries_ = java.util.Collections.unmodifiableList(dictionaries_);
             bitField0_ = (bitField0_ & ~0x00000002);
           }
@@ -4300,41 +3893,51 @@ public final class ProtoUserDictionaryStorage {
         } else {
           result.dictionaries_ = dictionariesBuilder_.build();
         }
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        result.storageType_ = storageType_;
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
       }
 
+      private void buildPartial0(org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorage result) {
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          result.version_ = version_;
+          to_bitField0_ |= 0x00000001;
+        }
+        result.bitField0_ |= to_bitField0_;
+      }
+
+      @java.lang.Override
       public Builder clone() {
         return super.clone();
       }
+      @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
         return super.setField(field, value);
       }
+      @java.lang.Override
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
         return super.clearField(field);
       }
+      @java.lang.Override
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return super.clearOneof(oneof);
       }
+      @java.lang.Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           int index, java.lang.Object value) {
         return super.setRepeatedField(field, index, value);
       }
+      @java.lang.Override
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
         return super.addRepeatedField(field, value);
       }
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorage) {
           return mergeFrom((org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorage)other);
@@ -4375,33 +3978,63 @@ public final class ProtoUserDictionaryStorage {
             }
           }
         }
-        if (other.hasStorageType()) {
-          setStorageType(other.getStorageType());
-        }
-        this.mergeUnknownFields(other.unknownFields);
+        this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
       }
 
-      public boolean isInitialized() {
+      @java.lang.Override
+      public final boolean isInitialized() {
         return true;
       }
 
+      @java.lang.Override
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorage parsedMessage = null;
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
         try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 8: {
+                version_ = input.readInt32();
+                bitField0_ |= 0x00000001;
+                break;
+              } // case 8
+              case 18: {
+                org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary m =
+                    input.readMessage(
+                        org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.PARSER,
+                        extensionRegistry);
+                if (dictionariesBuilder_ == null) {
+                  ensureDictionariesIsMutable();
+                  dictionaries_.add(m);
+                } else {
+                  dictionariesBuilder_.addMessage(m);
+                }
+                break;
+              } // case 18
+              default: {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+            } // switch (tag)
+          } // while (!done)
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorage) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
+          onChanged();
+        } // finally
         return this;
       }
       private int bitField0_;
@@ -4413,9 +4046,11 @@ public final class ProtoUserDictionaryStorage {
        * </pre>
        *
        * <code>optional int32 version = 1 [default = 0];</code>
+       * @return Whether the version field is set.
        */
+      @java.lang.Override
       public boolean hasVersion() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
+        return ((bitField0_ & 0x00000001) != 0);
       }
       /**
        * <pre>
@@ -4423,7 +4058,9 @@ public final class ProtoUserDictionaryStorage {
        * </pre>
        *
        * <code>optional int32 version = 1 [default = 0];</code>
+       * @return The version.
        */
+      @java.lang.Override
       public int getVersion() {
         return version_;
       }
@@ -4433,10 +4070,13 @@ public final class ProtoUserDictionaryStorage {
        * </pre>
        *
        * <code>optional int32 version = 1 [default = 0];</code>
+       * @param value The version to set.
+       * @return This builder for chaining.
        */
       public Builder setVersion(int value) {
-        bitField0_ |= 0x00000001;
+        
         version_ = value;
+        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -4446,6 +4086,7 @@ public final class ProtoUserDictionaryStorage {
        * </pre>
        *
        * <code>optional int32 version = 1 [default = 0];</code>
+       * @return This builder for chaining.
        */
       public Builder clearVersion() {
         bitField0_ = (bitField0_ & ~0x00000001);
@@ -4457,7 +4098,7 @@ public final class ProtoUserDictionaryStorage {
       private java.util.List<org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary> dictionaries_ =
         java.util.Collections.emptyList();
       private void ensureDictionariesIsMutable() {
-        if (!((bitField0_ & 0x00000002) == 0x00000002)) {
+        if (!((bitField0_ & 0x00000002) != 0)) {
           dictionaries_ = new java.util.ArrayList<org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary>(dictionaries_);
           bitField0_ |= 0x00000002;
          }
@@ -4758,56 +4399,22 @@ public final class ProtoUserDictionaryStorage {
           dictionariesBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
               org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary, org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Builder, org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryOrBuilder>(
                   dictionaries_,
-                  ((bitField0_ & 0x00000002) == 0x00000002),
+                  ((bitField0_ & 0x00000002) != 0),
                   getParentForChildren(),
                   isClean());
           dictionaries_ = null;
         }
         return dictionariesBuilder_;
       }
-
-      private int storageType_ = 1;
-      /**
-       * <code>optional .mozc.user_dictionary.UserDictionaryStorage.StorageType storage_type = 10 [default = SNAPSHOT];</code>
-       */
-      public boolean hasStorageType() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
-      }
-      /**
-       * <code>optional .mozc.user_dictionary.UserDictionaryStorage.StorageType storage_type = 10 [default = SNAPSHOT];</code>
-       */
-      public org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorage.StorageType getStorageType() {
-        org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorage.StorageType result = org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorage.StorageType.valueOf(storageType_);
-        return result == null ? org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorage.StorageType.SNAPSHOT : result;
-      }
-      /**
-       * <code>optional .mozc.user_dictionary.UserDictionaryStorage.StorageType storage_type = 10 [default = SNAPSHOT];</code>
-       */
-      public Builder setStorageType(org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorage.StorageType value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        bitField0_ |= 0x00000004;
-        storageType_ = value.getNumber();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional .mozc.user_dictionary.UserDictionaryStorage.StorageType storage_type = 10 [default = SNAPSHOT];</code>
-       */
-      public Builder clearStorageType() {
-        bitField0_ = (bitField0_ & ~0x00000004);
-        storageType_ = 1;
-        onChanged();
-        return this;
-      }
-      public Builder setUnknownFields(
-              final com.google.protobuf.UnknownFieldSet unknownFields) {
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFields(unknownFields);
       }
 
-      public Builder mergeUnknownFields(
-              final com.google.protobuf.UnknownFieldSet unknownFields) {
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
       }
 
@@ -4827,11 +4434,23 @@ public final class ProtoUserDictionaryStorage {
 
     @java.lang.Deprecated public static final com.google.protobuf.Parser<UserDictionaryStorage>
         PARSER = new com.google.protobuf.AbstractParser<UserDictionaryStorage>() {
+      @java.lang.Override
       public UserDictionaryStorage parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new UserDictionaryStorage(input, extensionRegistry);
+        Builder builder = newBuilder();
+        try {
+          builder.mergeFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(builder.buildPartial());
+        } catch (com.google.protobuf.UninitializedMessageException e) {
+          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(e)
+              .setUnfinishedMessage(builder.buildPartial());
+        }
+        return builder.buildPartial();
       }
     };
 
@@ -4844,6 +4463,7 @@ public final class ProtoUserDictionaryStorage {
       return PARSER;
     }
 
+    @java.lang.Override
     public org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorage getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
@@ -4856,64 +4476,79 @@ public final class ProtoUserDictionaryStorage {
 
     /**
      * <code>required .mozc.user_dictionary.UserDictionaryCommand.CommandType type = 1;</code>
+     * @return Whether the type field is set.
      */
     boolean hasType();
     /**
      * <code>required .mozc.user_dictionary.UserDictionaryCommand.CommandType type = 1;</code>
+     * @return The type.
      */
     org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommand.CommandType getType();
 
     /**
-     * <code>optional uint64 session_id = 2;</code>
+     * <code>optional uint64 session_id = 2 [jstype = JS_STRING];</code>
+     * @return Whether the sessionId field is set.
      */
     boolean hasSessionId();
     /**
-     * <code>optional uint64 session_id = 2;</code>
+     * <code>optional uint64 session_id = 2 [jstype = JS_STRING];</code>
+     * @return The sessionId.
      */
     long getSessionId();
 
     /**
-     * <code>optional uint64 dictionary_id = 3;</code>
+     * <code>optional uint64 dictionary_id = 3 [jstype = JS_STRING];</code>
+     * @return Whether the dictionaryId field is set.
      */
     boolean hasDictionaryId();
     /**
-     * <code>optional uint64 dictionary_id = 3;</code>
+     * <code>optional uint64 dictionary_id = 3 [jstype = JS_STRING];</code>
+     * @return The dictionaryId.
      */
     long getDictionaryId();
 
     /**
      * <code>optional string dictionary_name = 4;</code>
+     * @return Whether the dictionaryName field is set.
      */
     boolean hasDictionaryName();
     /**
      * <code>optional string dictionary_name = 4;</code>
+     * @return The dictionaryName.
      */
     java.lang.String getDictionaryName();
     /**
      * <code>optional string dictionary_name = 4;</code>
+     * @return The bytes for dictionaryName.
      */
     com.google.protobuf.ByteString
         getDictionaryNameBytes();
 
     /**
      * <code>repeated int32 entry_index = 5;</code>
+     * @return A list containing the entryIndex.
      */
     java.util.List<java.lang.Integer> getEntryIndexList();
     /**
      * <code>repeated int32 entry_index = 5;</code>
+     * @return The count of entryIndex.
      */
     int getEntryIndexCount();
     /**
      * <code>repeated int32 entry_index = 5;</code>
+     * @param index The index of the element to return.
+     * @return The entryIndex at the given index.
      */
     int getEntryIndex(int index);
 
     /**
      * <code>optional .mozc.user_dictionary.UserDictionary.Entry entry = 6;</code>
+     * @return Whether the entry field is set.
      */
     boolean hasEntry();
     /**
      * <code>optional .mozc.user_dictionary.UserDictionary.Entry entry = 6;</code>
+     * @return The entry.
      */
     org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry getEntry();
     /**
@@ -4923,40 +4558,47 @@ public final class ProtoUserDictionaryStorage {
 
     /**
      * <code>optional string data = 7;</code>
+     * @return Whether the data field is set.
      */
     boolean hasData();
     /**
      * <code>optional string data = 7;</code>
+     * @return The data.
      */
     java.lang.String getData();
     /**
      * <code>optional string data = 7;</code>
+     * @return The bytes for data.
      */
     com.google.protobuf.ByteString
         getDataBytes();
 
     /**
      * <code>optional bool ensure_non_empty_storage = 8;</code>
+     * @return Whether the ensureNonEmptyStorage field is set.
      */
     boolean hasEnsureNonEmptyStorage();
     /**
      * <code>optional bool ensure_non_empty_storage = 8;</code>
+     * @return The ensureNonEmptyStorage.
      */
     boolean getEnsureNonEmptyStorage();
 
     /**
      * <code>optional bool ignore_invalid_entries = 9;</code>
+     * @return Whether the ignoreInvalidEntries field is set.
      */
     boolean hasIgnoreInvalidEntries();
     /**
      * <code>optional bool ignore_invalid_entries = 9;</code>
+     * @return The ignoreInvalidEntries.
      */
     boolean getIgnoreInvalidEntries();
   }
   /**
    * Protobuf type {@code mozc.user_dictionary.UserDictionaryCommand}
    */
-  public  static final class UserDictionaryCommand extends
+  public static final class UserDictionaryCommand extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:mozc.user_dictionary.UserDictionaryCommand)
       UserDictionaryCommandOrBuilder {
@@ -4967,143 +4609,29 @@ public final class ProtoUserDictionaryStorage {
     }
     private UserDictionaryCommand() {
       type_ = 0;
-      sessionId_ = 0L;
-      dictionaryId_ = 0L;
       dictionaryName_ = "";
-      entryIndex_ = java.util.Collections.emptyList();
+      entryIndex_ = emptyIntList();
       data_ = "";
-      ensureNonEmptyStorage_ = false;
-      ignoreInvalidEntries_ = false;
     }
 
     @java.lang.Override
-    public com.google.protobuf.UnknownFieldSet
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new UserDictionaryCommand();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
       return this.unknownFields;
     }
-    private UserDictionaryCommand(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            case 8: {
-              int rawValue = input.readEnum();
-              org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommand.CommandType value = org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommand.CommandType.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(1, rawValue);
-              } else {
-                bitField0_ |= 0x00000001;
-                type_ = rawValue;
-              }
-              break;
-            }
-            case 16: {
-              bitField0_ |= 0x00000002;
-              sessionId_ = input.readUInt64();
-              break;
-            }
-            case 24: {
-              bitField0_ |= 0x00000004;
-              dictionaryId_ = input.readUInt64();
-              break;
-            }
-            case 34: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00000008;
-              dictionaryName_ = bs;
-              break;
-            }
-            case 40: {
-              if (!((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
-                entryIndex_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00000010;
-              }
-              entryIndex_.add(input.readInt32());
-              break;
-            }
-            case 42: {
-              int length = input.readRawVarint32();
-              int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x00000010) == 0x00000010) && input.getBytesUntilLimit() > 0) {
-                entryIndex_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00000010;
-              }
-              while (input.getBytesUntilLimit() > 0) {
-                entryIndex_.add(input.readInt32());
-              }
-              input.popLimit(limit);
-              break;
-            }
-            case 50: {
-              org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000010) == 0x00000010)) {
-                subBuilder = entry_.toBuilder();
-              }
-              entry_ = input.readMessage(org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry.PARSER, extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(entry_);
-                entry_ = subBuilder.buildPartial();
-              }
-              bitField0_ |= 0x00000010;
-              break;
-            }
-            case 58: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00000020;
-              data_ = bs;
-              break;
-            }
-            case 64: {
-              bitField0_ |= 0x00000040;
-              ensureNonEmptyStorage_ = input.readBool();
-              break;
-            }
-            case 72: {
-              bitField0_ |= 0x00000080;
-              ignoreInvalidEntries_ = input.readBool();
-              break;
-            }
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
-      } finally {
-        if (((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
-          entryIndex_ = java.util.Collections.unmodifiableList(entryIndex_);
-        }
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static com.google.protobuf.Descriptors.Descriptor
+    public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.internal_static_mozc_user_dictionary_UserDictionaryCommand_descriptor;
     }
 
+    @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
       return org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.internal_static_mozc_user_dictionary_UserDictionaryCommand_fieldAccessorTable
@@ -5214,14 +4742,6 @@ public final class ProtoUserDictionaryStorage {
        * <code>GET_ENTRY_SIZE = 10;</code>
        */
       GET_ENTRY_SIZE(10),
-      /**
-       * <pre>
-       * Use GET_ENTRIES instead.
-       * </pre>
-       *
-       * <code>OBSOLETE_GET_ENTRY = 11;</code>
-       */
-      OBSOLETE_GET_ENTRY(11),
       /**
        * <pre>
        * Returns if it is possible to add new dictionary or not.
@@ -5425,14 +4945,6 @@ public final class ProtoUserDictionaryStorage {
       public static final int GET_ENTRY_SIZE_VALUE = 10;
       /**
        * <pre>
-       * Use GET_ENTRIES instead.
-       * </pre>
-       *
-       * <code>OBSOLETE_GET_ENTRY = 11;</code>
-       */
-      public static final int OBSOLETE_GET_ENTRY_VALUE = 11;
-      /**
-       * <pre>
        * Returns if it is possible to add new dictionary or not.
        * The result is returned by using status code.
        * </pre>
@@ -5539,6 +5051,8 @@ public final class ProtoUserDictionaryStorage {
       }
 
       /**
+       * @param value The numeric wire value of the corresponding enum entry.
+       * @return The enum associated with the given numeric wire value.
        * @deprecated Use {@link #forNumber(int)} instead.
        */
       @java.lang.Deprecated
@@ -5546,6 +5060,10 @@ public final class ProtoUserDictionaryStorage {
         return forNumber(value);
       }
 
+      /**
+       * @param value The numeric wire value of the corresponding enum entry.
+       * @return The enum associated with the given numeric wire value.
+       */
       public static CommandType forNumber(int value) {
         switch (value) {
           case 0: return NO_OPERATION;
@@ -5559,7 +5077,6 @@ public final class ProtoUserDictionaryStorage {
           case 8: return SAVE;
           case 9: return GET_USER_DICTIONARY_NAME_LIST;
           case 10: return GET_ENTRY_SIZE;
-          case 11: return OBSOLETE_GET_ENTRY;
           case 12: return CHECK_NEW_DICTIONARY_AVAILABILITY;
           case 13: return CREATE_DICTIONARY;
           case 14: return DELETE_DICTIONARY;
@@ -5613,7 +5130,7 @@ public final class ProtoUserDictionaryStorage {
 
       private final int value;
 
-      CommandType(int value) {
+      private CommandType(int value) {
         this.value = value;
       }
 
@@ -5622,62 +5139,77 @@ public final class ProtoUserDictionaryStorage {
 
     private int bitField0_;
     public static final int TYPE_FIELD_NUMBER = 1;
-    private int type_;
+    private int type_ = 0;
     /**
      * <code>required .mozc.user_dictionary.UserDictionaryCommand.CommandType type = 1;</code>
+     * @return Whether the type field is set.
      */
-    public boolean hasType() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
+    @java.lang.Override public boolean hasType() {
+      return ((bitField0_ & 0x00000001) != 0);
     }
     /**
      * <code>required .mozc.user_dictionary.UserDictionaryCommand.CommandType type = 1;</code>
+     * @return The type.
      */
-    public org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommand.CommandType getType() {
-      org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommand.CommandType result = org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommand.CommandType.valueOf(type_);
+    @java.lang.Override public org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommand.CommandType getType() {
+      org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommand.CommandType result = org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommand.CommandType.forNumber(type_);
       return result == null ? org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommand.CommandType.NO_OPERATION : result;
     }
 
     public static final int SESSION_ID_FIELD_NUMBER = 2;
-    private long sessionId_;
+    private long sessionId_ = 0L;
     /**
-     * <code>optional uint64 session_id = 2;</code>
+     * <code>optional uint64 session_id = 2 [jstype = JS_STRING];</code>
+     * @return Whether the sessionId field is set.
      */
+    @java.lang.Override
     public boolean hasSessionId() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
+      return ((bitField0_ & 0x00000002) != 0);
     }
     /**
-     * <code>optional uint64 session_id = 2;</code>
+     * <code>optional uint64 session_id = 2 [jstype = JS_STRING];</code>
+     * @return The sessionId.
      */
+    @java.lang.Override
     public long getSessionId() {
       return sessionId_;
     }
 
     public static final int DICTIONARY_ID_FIELD_NUMBER = 3;
-    private long dictionaryId_;
+    private long dictionaryId_ = 0L;
     /**
-     * <code>optional uint64 dictionary_id = 3;</code>
+     * <code>optional uint64 dictionary_id = 3 [jstype = JS_STRING];</code>
+     * @return Whether the dictionaryId field is set.
      */
+    @java.lang.Override
     public boolean hasDictionaryId() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
+      return ((bitField0_ & 0x00000004) != 0);
     }
     /**
-     * <code>optional uint64 dictionary_id = 3;</code>
+     * <code>optional uint64 dictionary_id = 3 [jstype = JS_STRING];</code>
+     * @return The dictionaryId.
      */
+    @java.lang.Override
     public long getDictionaryId() {
       return dictionaryId_;
     }
 
     public static final int DICTIONARY_NAME_FIELD_NUMBER = 4;
-    private volatile java.lang.Object dictionaryName_;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object dictionaryName_ = "";
     /**
      * <code>optional string dictionary_name = 4;</code>
+     * @return Whether the dictionaryName field is set.
      */
+    @java.lang.Override
     public boolean hasDictionaryName() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
+      return ((bitField0_ & 0x00000008) != 0);
     }
     /**
      * <code>optional string dictionary_name = 4;</code>
+     * @return The dictionaryName.
      */
+    @java.lang.Override
     public java.lang.String getDictionaryName() {
       java.lang.Object ref = dictionaryName_;
       if (ref instanceof java.lang.String) {
@@ -5694,7 +5226,9 @@ public final class ProtoUserDictionaryStorage {
     }
     /**
      * <code>optional string dictionary_name = 4;</code>
+     * @return The bytes for dictionaryName.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getDictionaryNameBytes() {
       java.lang.Object ref = dictionaryName_;
@@ -5710,59 +5244,75 @@ public final class ProtoUserDictionaryStorage {
     }
 
     public static final int ENTRY_INDEX_FIELD_NUMBER = 5;
-    private java.util.List<java.lang.Integer> entryIndex_;
+    @SuppressWarnings("serial")
+    private com.google.protobuf.Internal.IntList entryIndex_;
     /**
      * <code>repeated int32 entry_index = 5;</code>
+     * @return A list containing the entryIndex.
      */
+    @java.lang.Override
     public java.util.List<java.lang.Integer>
         getEntryIndexList() {
       return entryIndex_;
     }
     /**
      * <code>repeated int32 entry_index = 5;</code>
+     * @return The count of entryIndex.
      */
     public int getEntryIndexCount() {
       return entryIndex_.size();
     }
     /**
      * <code>repeated int32 entry_index = 5;</code>
+     * @param index The index of the element to return.
+     * @return The entryIndex at the given index.
      */
     public int getEntryIndex(int index) {
-      return entryIndex_.get(index);
+      return entryIndex_.getInt(index);
     }
 
     public static final int ENTRY_FIELD_NUMBER = 6;
     private org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry entry_;
     /**
      * <code>optional .mozc.user_dictionary.UserDictionary.Entry entry = 6;</code>
+     * @return Whether the entry field is set.
      */
+    @java.lang.Override
     public boolean hasEntry() {
-      return ((bitField0_ & 0x00000010) == 0x00000010);
+      return ((bitField0_ & 0x00000010) != 0);
     }
     /**
      * <code>optional .mozc.user_dictionary.UserDictionary.Entry entry = 6;</code>
+     * @return The entry.
      */
+    @java.lang.Override
     public org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry getEntry() {
       return entry_ == null ? org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry.getDefaultInstance() : entry_;
     }
     /**
      * <code>optional .mozc.user_dictionary.UserDictionary.Entry entry = 6;</code>
      */
+    @java.lang.Override
     public org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.EntryOrBuilder getEntryOrBuilder() {
       return entry_ == null ? org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry.getDefaultInstance() : entry_;
     }
 
     public static final int DATA_FIELD_NUMBER = 7;
-    private volatile java.lang.Object data_;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object data_ = "";
     /**
      * <code>optional string data = 7;</code>
+     * @return Whether the data field is set.
      */
+    @java.lang.Override
     public boolean hasData() {
-      return ((bitField0_ & 0x00000020) == 0x00000020);
+      return ((bitField0_ & 0x00000020) != 0);
     }
     /**
      * <code>optional string data = 7;</code>
+     * @return The data.
      */
+    @java.lang.Override
     public java.lang.String getData() {
       java.lang.Object ref = data_;
       if (ref instanceof java.lang.String) {
@@ -5779,7 +5329,9 @@ public final class ProtoUserDictionaryStorage {
     }
     /**
      * <code>optional string data = 7;</code>
+     * @return The bytes for data.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getDataBytes() {
       java.lang.Object ref = data_;
@@ -5795,37 +5347,46 @@ public final class ProtoUserDictionaryStorage {
     }
 
     public static final int ENSURE_NON_EMPTY_STORAGE_FIELD_NUMBER = 8;
-    private boolean ensureNonEmptyStorage_;
+    private boolean ensureNonEmptyStorage_ = false;
     /**
      * <code>optional bool ensure_non_empty_storage = 8;</code>
+     * @return Whether the ensureNonEmptyStorage field is set.
      */
+    @java.lang.Override
     public boolean hasEnsureNonEmptyStorage() {
-      return ((bitField0_ & 0x00000040) == 0x00000040);
+      return ((bitField0_ & 0x00000040) != 0);
     }
     /**
      * <code>optional bool ensure_non_empty_storage = 8;</code>
+     * @return The ensureNonEmptyStorage.
      */
+    @java.lang.Override
     public boolean getEnsureNonEmptyStorage() {
       return ensureNonEmptyStorage_;
     }
 
     public static final int IGNORE_INVALID_ENTRIES_FIELD_NUMBER = 9;
-    private boolean ignoreInvalidEntries_;
+    private boolean ignoreInvalidEntries_ = false;
     /**
      * <code>optional bool ignore_invalid_entries = 9;</code>
+     * @return Whether the ignoreInvalidEntries field is set.
      */
+    @java.lang.Override
     public boolean hasIgnoreInvalidEntries() {
-      return ((bitField0_ & 0x00000080) == 0x00000080);
+      return ((bitField0_ & 0x00000080) != 0);
     }
     /**
      * <code>optional bool ignore_invalid_entries = 9;</code>
+     * @return The ignoreInvalidEntries.
      */
+    @java.lang.Override
     public boolean getIgnoreInvalidEntries() {
       return ignoreInvalidEntries_;
     }
 
     private byte memoizedIsInitialized = -1;
-    public boolean isInitialized() {
+    @java.lang.Override
+    public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
       if (isInitialized == 0) return false;
@@ -5838,83 +5399,85 @@ public final class ProtoUserDictionaryStorage {
       return true;
     }
 
+    @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+      if (((bitField0_ & 0x00000001) != 0)) {
         output.writeEnum(1, type_);
       }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+      if (((bitField0_ & 0x00000002) != 0)) {
         output.writeUInt64(2, sessionId_);
       }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+      if (((bitField0_ & 0x00000004) != 0)) {
         output.writeUInt64(3, dictionaryId_);
       }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+      if (((bitField0_ & 0x00000008) != 0)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 4, dictionaryName_);
       }
       for (int i = 0; i < entryIndex_.size(); i++) {
-        output.writeInt32(5, entryIndex_.get(i));
+        output.writeInt32(5, entryIndex_.getInt(i));
       }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+      if (((bitField0_ & 0x00000010) != 0)) {
         output.writeMessage(6, getEntry());
       }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+      if (((bitField0_ & 0x00000020) != 0)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 7, data_);
       }
-      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+      if (((bitField0_ & 0x00000040) != 0)) {
         output.writeBool(8, ensureNonEmptyStorage_);
       }
-      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+      if (((bitField0_ & 0x00000080) != 0)) {
         output.writeBool(9, ignoreInvalidEntries_);
       }
-      unknownFields.writeTo(output);
+      getUnknownFields().writeTo(output);
     }
 
+    @java.lang.Override
     public int getSerializedSize() {
       int size = memoizedSize;
       if (size != -1) return size;
 
       size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+      if (((bitField0_ & 0x00000001) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(1, type_);
       }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+      if (((bitField0_ & 0x00000002) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeUInt64Size(2, sessionId_);
       }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+      if (((bitField0_ & 0x00000004) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeUInt64Size(3, dictionaryId_);
       }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+      if (((bitField0_ & 0x00000008) != 0)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, dictionaryName_);
       }
       {
         int dataSize = 0;
         for (int i = 0; i < entryIndex_.size(); i++) {
           dataSize += com.google.protobuf.CodedOutputStream
-            .computeInt32SizeNoTag(entryIndex_.get(i));
+            .computeInt32SizeNoTag(entryIndex_.getInt(i));
         }
         size += dataSize;
-        size += getEntryIndexList().size();
+        size += 1 * getEntryIndexList().size();
       }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+      if (((bitField0_ & 0x00000010) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(6, getEntry());
       }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+      if (((bitField0_ & 0x00000020) != 0)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(7, data_);
       }
-      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+      if (((bitField0_ & 0x00000040) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(8, ensureNonEmptyStorage_);
       }
-      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+      if (((bitField0_ & 0x00000080) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(9, ignoreInvalidEntries_);
       }
-      size += unknownFields.getSerializedSize();
+      size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
     }
@@ -5929,50 +5492,49 @@ public final class ProtoUserDictionaryStorage {
       }
       org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommand other = (org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommand) obj;
 
-      boolean result = true;
-      result = result && (hasType() == other.hasType());
+      if (hasType() != other.hasType()) return false;
       if (hasType()) {
-        result = result && type_ == other.type_;
+        if (type_ != other.type_) return false;
       }
-      result = result && (hasSessionId() == other.hasSessionId());
+      if (hasSessionId() != other.hasSessionId()) return false;
       if (hasSessionId()) {
-        result = result && (getSessionId()
-            == other.getSessionId());
+        if (getSessionId()
+            != other.getSessionId()) return false;
       }
-      result = result && (hasDictionaryId() == other.hasDictionaryId());
+      if (hasDictionaryId() != other.hasDictionaryId()) return false;
       if (hasDictionaryId()) {
-        result = result && (getDictionaryId()
-            == other.getDictionaryId());
+        if (getDictionaryId()
+            != other.getDictionaryId()) return false;
       }
-      result = result && (hasDictionaryName() == other.hasDictionaryName());
+      if (hasDictionaryName() != other.hasDictionaryName()) return false;
       if (hasDictionaryName()) {
-        result = result && getDictionaryName()
-            .equals(other.getDictionaryName());
+        if (!getDictionaryName()
+            .equals(other.getDictionaryName())) return false;
       }
-      result = result && getEntryIndexList()
-          .equals(other.getEntryIndexList());
-      result = result && (hasEntry() == other.hasEntry());
+      if (!getEntryIndexList()
+          .equals(other.getEntryIndexList())) return false;
+      if (hasEntry() != other.hasEntry()) return false;
       if (hasEntry()) {
-        result = result && getEntry()
-            .equals(other.getEntry());
+        if (!getEntry()
+            .equals(other.getEntry())) return false;
       }
-      result = result && (hasData() == other.hasData());
+      if (hasData() != other.hasData()) return false;
       if (hasData()) {
-        result = result && getData()
-            .equals(other.getData());
+        if (!getData()
+            .equals(other.getData())) return false;
       }
-      result = result && (hasEnsureNonEmptyStorage() == other.hasEnsureNonEmptyStorage());
+      if (hasEnsureNonEmptyStorage() != other.hasEnsureNonEmptyStorage()) return false;
       if (hasEnsureNonEmptyStorage()) {
-        result = result && (getEnsureNonEmptyStorage()
-            == other.getEnsureNonEmptyStorage());
+        if (getEnsureNonEmptyStorage()
+            != other.getEnsureNonEmptyStorage()) return false;
       }
-      result = result && (hasIgnoreInvalidEntries() == other.hasIgnoreInvalidEntries());
+      if (hasIgnoreInvalidEntries() != other.hasIgnoreInvalidEntries()) return false;
       if (hasIgnoreInvalidEntries()) {
-        result = result && (getIgnoreInvalidEntries()
-            == other.getIgnoreInvalidEntries());
+        if (getIgnoreInvalidEntries()
+            != other.getIgnoreInvalidEntries()) return false;
       }
-      result = result && unknownFields.equals(other.unknownFields);
-      return result;
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
+      return true;
     }
 
     @java.lang.Override
@@ -6022,7 +5584,7 @@ public final class ProtoUserDictionaryStorage {
         hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
             getIgnoreInvalidEntries());
       }
-      hash = (29 * hash) + unknownFields.hashCode();
+      hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
     }
@@ -6097,6 +5659,7 @@ public final class ProtoUserDictionaryStorage {
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
+    @java.lang.Override
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
@@ -6104,6 +5667,7 @@ public final class ProtoUserDictionaryStorage {
     public static Builder newBuilder(org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommand prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
+    @java.lang.Override
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
@@ -6122,11 +5686,12 @@ public final class ProtoUserDictionaryStorage {
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:mozc.user_dictionary.UserDictionaryCommand)
         org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommandOrBuilder {
-      public static com.google.protobuf.Descriptors.Descriptor
+      public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.internal_static_mozc_user_dictionary_UserDictionaryCommand_descriptor;
       }
 
+      @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.internal_static_mozc_user_dictionary_UserDictionaryCommand_fieldAccessorTable
@@ -6150,42 +5715,38 @@ public final class ProtoUserDictionaryStorage {
           getEntryFieldBuilder();
         }
       }
+      @java.lang.Override
       public Builder clear() {
         super.clear();
+        bitField0_ = 0;
         type_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000001);
         sessionId_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00000002);
         dictionaryId_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00000004);
         dictionaryName_ = "";
-        bitField0_ = (bitField0_ & ~0x00000008);
-        entryIndex_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000010);
-        if (entryBuilder_ == null) {
-          entry_ = null;
-        } else {
-          entryBuilder_.clear();
+        entryIndex_ = emptyIntList();
+        entry_ = null;
+        if (entryBuilder_ != null) {
+          entryBuilder_.dispose();
+          entryBuilder_ = null;
         }
-        bitField0_ = (bitField0_ & ~0x00000020);
         data_ = "";
-        bitField0_ = (bitField0_ & ~0x00000040);
         ensureNonEmptyStorage_ = false;
-        bitField0_ = (bitField0_ & ~0x00000080);
         ignoreInvalidEntries_ = false;
-        bitField0_ = (bitField0_ & ~0x00000100);
         return this;
       }
 
+      @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
         return org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.internal_static_mozc_user_dictionary_UserDictionaryCommand_descriptor;
       }
 
+      @java.lang.Override
       public org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommand getDefaultInstanceForType() {
         return org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommand.getDefaultInstance();
       }
 
+      @java.lang.Override
       public org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommand build() {
         org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommand result = buildPartial();
         if (!result.isInitialized()) {
@@ -6194,82 +5755,96 @@ public final class ProtoUserDictionaryStorage {
         return result;
       }
 
+      @java.lang.Override
       public org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommand buildPartial() {
         org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommand result = new org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommand(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.type_ = type_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        result.sessionId_ = sessionId_;
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000004;
-        }
-        result.dictionaryId_ = dictionaryId_;
-        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
-          to_bitField0_ |= 0x00000008;
-        }
-        result.dictionaryName_ = dictionaryName_;
-        if (((bitField0_ & 0x00000010) == 0x00000010)) {
-          entryIndex_ = java.util.Collections.unmodifiableList(entryIndex_);
-          bitField0_ = (bitField0_ & ~0x00000010);
-        }
-        result.entryIndex_ = entryIndex_;
-        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
-          to_bitField0_ |= 0x00000010;
-        }
-        if (entryBuilder_ == null) {
-          result.entry_ = entry_;
-        } else {
-          result.entry_ = entryBuilder_.build();
-        }
-        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
-          to_bitField0_ |= 0x00000020;
-        }
-        result.data_ = data_;
-        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
-          to_bitField0_ |= 0x00000040;
-        }
-        result.ensureNonEmptyStorage_ = ensureNonEmptyStorage_;
-        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
-          to_bitField0_ |= 0x00000080;
-        }
-        result.ignoreInvalidEntries_ = ignoreInvalidEntries_;
-        result.bitField0_ = to_bitField0_;
+        buildPartialRepeatedFields(result);
+        if (bitField0_ != 0) { buildPartial0(result); }
         onBuilt();
         return result;
       }
 
+      private void buildPartialRepeatedFields(org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommand result) {
+        if (((bitField0_ & 0x00000010) != 0)) {
+          entryIndex_.makeImmutable();
+          bitField0_ = (bitField0_ & ~0x00000010);
+        }
+        result.entryIndex_ = entryIndex_;
+      }
+
+      private void buildPartial0(org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommand result) {
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          result.type_ = type_;
+          to_bitField0_ |= 0x00000001;
+        }
+        if (((from_bitField0_ & 0x00000002) != 0)) {
+          result.sessionId_ = sessionId_;
+          to_bitField0_ |= 0x00000002;
+        }
+        if (((from_bitField0_ & 0x00000004) != 0)) {
+          result.dictionaryId_ = dictionaryId_;
+          to_bitField0_ |= 0x00000004;
+        }
+        if (((from_bitField0_ & 0x00000008) != 0)) {
+          result.dictionaryName_ = dictionaryName_;
+          to_bitField0_ |= 0x00000008;
+        }
+        if (((from_bitField0_ & 0x00000020) != 0)) {
+          result.entry_ = entryBuilder_ == null
+              ? entry_
+              : entryBuilder_.build();
+          to_bitField0_ |= 0x00000010;
+        }
+        if (((from_bitField0_ & 0x00000040) != 0)) {
+          result.data_ = data_;
+          to_bitField0_ |= 0x00000020;
+        }
+        if (((from_bitField0_ & 0x00000080) != 0)) {
+          result.ensureNonEmptyStorage_ = ensureNonEmptyStorage_;
+          to_bitField0_ |= 0x00000040;
+        }
+        if (((from_bitField0_ & 0x00000100) != 0)) {
+          result.ignoreInvalidEntries_ = ignoreInvalidEntries_;
+          to_bitField0_ |= 0x00000080;
+        }
+        result.bitField0_ |= to_bitField0_;
+      }
+
+      @java.lang.Override
       public Builder clone() {
         return super.clone();
       }
+      @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
         return super.setField(field, value);
       }
+      @java.lang.Override
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
         return super.clearField(field);
       }
+      @java.lang.Override
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return super.clearOneof(oneof);
       }
+      @java.lang.Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           int index, java.lang.Object value) {
         return super.setRepeatedField(field, index, value);
       }
+      @java.lang.Override
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
         return super.addRepeatedField(field, value);
       }
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommand) {
           return mergeFrom((org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommand)other);
@@ -6291,8 +5866,8 @@ public final class ProtoUserDictionaryStorage {
           setDictionaryId(other.getDictionaryId());
         }
         if (other.hasDictionaryName()) {
-          bitField0_ |= 0x00000008;
           dictionaryName_ = other.dictionaryName_;
+          bitField0_ |= 0x00000008;
           onChanged();
         }
         if (!other.entryIndex_.isEmpty()) {
@@ -6309,8 +5884,8 @@ public final class ProtoUserDictionaryStorage {
           mergeEntry(other.getEntry());
         }
         if (other.hasData()) {
-          bitField0_ |= 0x00000040;
           data_ = other.data_;
+          bitField0_ |= 0x00000040;
           onChanged();
         }
         if (other.hasEnsureNonEmptyStorage()) {
@@ -6319,30 +5894,113 @@ public final class ProtoUserDictionaryStorage {
         if (other.hasIgnoreInvalidEntries()) {
           setIgnoreInvalidEntries(other.getIgnoreInvalidEntries());
         }
-        this.mergeUnknownFields(other.unknownFields);
+        this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
       }
 
-      public boolean isInitialized() {
-          return hasType();
+      @java.lang.Override
+      public final boolean isInitialized() {
+        if (!hasType()) {
+          return false;
+        }
+        return true;
       }
 
+      @java.lang.Override
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommand parsedMessage = null;
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
         try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 8: {
+                int tmpRaw = input.readEnum();
+                org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommand.CommandType tmpValue =
+                    org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommand.CommandType.forNumber(tmpRaw);
+                if (tmpValue == null) {
+                  mergeUnknownVarintField(1, tmpRaw);
+                } else {
+                  type_ = tmpRaw;
+                  bitField0_ |= 0x00000001;
+                }
+                break;
+              } // case 8
+              case 16: {
+                sessionId_ = input.readUInt64();
+                bitField0_ |= 0x00000002;
+                break;
+              } // case 16
+              case 24: {
+                dictionaryId_ = input.readUInt64();
+                bitField0_ |= 0x00000004;
+                break;
+              } // case 24
+              case 34: {
+                dictionaryName_ = input.readBytes();
+                bitField0_ |= 0x00000008;
+                break;
+              } // case 34
+              case 40: {
+                int v = input.readInt32();
+                ensureEntryIndexIsMutable();
+                entryIndex_.addInt(v);
+                break;
+              } // case 40
+              case 42: {
+                int length = input.readRawVarint32();
+                int limit = input.pushLimit(length);
+                ensureEntryIndexIsMutable();
+                while (input.getBytesUntilLimit() > 0) {
+                  entryIndex_.addInt(input.readInt32());
+                }
+                input.popLimit(limit);
+                break;
+              } // case 42
+              case 50: {
+                input.readMessage(
+                    getEntryFieldBuilder().getBuilder(),
+                    extensionRegistry);
+                bitField0_ |= 0x00000020;
+                break;
+              } // case 50
+              case 58: {
+                data_ = input.readBytes();
+                bitField0_ |= 0x00000040;
+                break;
+              } // case 58
+              case 64: {
+                ensureNonEmptyStorage_ = input.readBool();
+                bitField0_ |= 0x00000080;
+                break;
+              } // case 64
+              case 72: {
+                ignoreInvalidEntries_ = input.readBool();
+                bitField0_ |= 0x00000100;
+                break;
+              } // case 72
+              default: {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+            } // switch (tag)
+          } // while (!done)
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommand) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
+          onChanged();
+        } // finally
         return this;
       }
       private int bitField0_;
@@ -6350,19 +6008,24 @@ public final class ProtoUserDictionaryStorage {
       private int type_ = 0;
       /**
        * <code>required .mozc.user_dictionary.UserDictionaryCommand.CommandType type = 1;</code>
+       * @return Whether the type field is set.
        */
-      public boolean hasType() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
+      @java.lang.Override public boolean hasType() {
+        return ((bitField0_ & 0x00000001) != 0);
       }
       /**
        * <code>required .mozc.user_dictionary.UserDictionaryCommand.CommandType type = 1;</code>
+       * @return The type.
        */
+      @java.lang.Override
       public org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommand.CommandType getType() {
-        org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommand.CommandType result = org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommand.CommandType.valueOf(type_);
+        org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommand.CommandType result = org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommand.CommandType.forNumber(type_);
         return result == null ? org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommand.CommandType.NO_OPERATION : result;
       }
       /**
        * <code>required .mozc.user_dictionary.UserDictionaryCommand.CommandType type = 1;</code>
+       * @param value The type to set.
+       * @return This builder for chaining.
        */
       public Builder setType(org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommand.CommandType value) {
         if (value == null) {
@@ -6375,6 +6038,7 @@ public final class ProtoUserDictionaryStorage {
       }
       /**
        * <code>required .mozc.user_dictionary.UserDictionaryCommand.CommandType type = 1;</code>
+       * @return This builder for chaining.
        */
       public Builder clearType() {
         bitField0_ = (bitField0_ & ~0x00000001);
@@ -6385,28 +6049,36 @@ public final class ProtoUserDictionaryStorage {
 
       private long sessionId_ ;
       /**
-       * <code>optional uint64 session_id = 2;</code>
+       * <code>optional uint64 session_id = 2 [jstype = JS_STRING];</code>
+       * @return Whether the sessionId field is set.
        */
+      @java.lang.Override
       public boolean hasSessionId() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
+        return ((bitField0_ & 0x00000002) != 0);
       }
       /**
-       * <code>optional uint64 session_id = 2;</code>
+       * <code>optional uint64 session_id = 2 [jstype = JS_STRING];</code>
+       * @return The sessionId.
        */
+      @java.lang.Override
       public long getSessionId() {
         return sessionId_;
       }
       /**
-       * <code>optional uint64 session_id = 2;</code>
+       * <code>optional uint64 session_id = 2 [jstype = JS_STRING];</code>
+       * @param value The sessionId to set.
+       * @return This builder for chaining.
        */
       public Builder setSessionId(long value) {
-        bitField0_ |= 0x00000002;
+        
         sessionId_ = value;
+        bitField0_ |= 0x00000002;
         onChanged();
         return this;
       }
       /**
-       * <code>optional uint64 session_id = 2;</code>
+       * <code>optional uint64 session_id = 2 [jstype = JS_STRING];</code>
+       * @return This builder for chaining.
        */
       public Builder clearSessionId() {
         bitField0_ = (bitField0_ & ~0x00000002);
@@ -6417,28 +6089,36 @@ public final class ProtoUserDictionaryStorage {
 
       private long dictionaryId_ ;
       /**
-       * <code>optional uint64 dictionary_id = 3;</code>
+       * <code>optional uint64 dictionary_id = 3 [jstype = JS_STRING];</code>
+       * @return Whether the dictionaryId field is set.
        */
+      @java.lang.Override
       public boolean hasDictionaryId() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
+        return ((bitField0_ & 0x00000004) != 0);
       }
       /**
-       * <code>optional uint64 dictionary_id = 3;</code>
+       * <code>optional uint64 dictionary_id = 3 [jstype = JS_STRING];</code>
+       * @return The dictionaryId.
        */
+      @java.lang.Override
       public long getDictionaryId() {
         return dictionaryId_;
       }
       /**
-       * <code>optional uint64 dictionary_id = 3;</code>
+       * <code>optional uint64 dictionary_id = 3 [jstype = JS_STRING];</code>
+       * @param value The dictionaryId to set.
+       * @return This builder for chaining.
        */
       public Builder setDictionaryId(long value) {
-        bitField0_ |= 0x00000004;
+        
         dictionaryId_ = value;
+        bitField0_ |= 0x00000004;
         onChanged();
         return this;
       }
       /**
-       * <code>optional uint64 dictionary_id = 3;</code>
+       * <code>optional uint64 dictionary_id = 3 [jstype = JS_STRING];</code>
+       * @return This builder for chaining.
        */
       public Builder clearDictionaryId() {
         bitField0_ = (bitField0_ & ~0x00000004);
@@ -6450,12 +6130,14 @@ public final class ProtoUserDictionaryStorage {
       private java.lang.Object dictionaryName_ = "";
       /**
        * <code>optional string dictionary_name = 4;</code>
+       * @return Whether the dictionaryName field is set.
        */
       public boolean hasDictionaryName() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
+        return ((bitField0_ & 0x00000008) != 0);
       }
       /**
        * <code>optional string dictionary_name = 4;</code>
+       * @return The dictionaryName.
        */
       public java.lang.String getDictionaryName() {
         java.lang.Object ref = dictionaryName_;
@@ -6473,6 +6155,7 @@ public final class ProtoUserDictionaryStorage {
       }
       /**
        * <code>optional string dictionary_name = 4;</code>
+       * @return The bytes for dictionaryName.
        */
       public com.google.protobuf.ByteString
           getDictionaryNameBytes() {
@@ -6489,87 +6172,102 @@ public final class ProtoUserDictionaryStorage {
       }
       /**
        * <code>optional string dictionary_name = 4;</code>
+       * @param value The dictionaryName to set.
+       * @return This builder for chaining.
        */
       public Builder setDictionaryName(
           java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000008;
+        if (value == null) { throw new NullPointerException(); }
         dictionaryName_ = value;
+        bitField0_ |= 0x00000008;
         onChanged();
         return this;
       }
       /**
        * <code>optional string dictionary_name = 4;</code>
+       * @return This builder for chaining.
        */
       public Builder clearDictionaryName() {
-        bitField0_ = (bitField0_ & ~0x00000008);
         dictionaryName_ = getDefaultInstance().getDictionaryName();
+        bitField0_ = (bitField0_ & ~0x00000008);
         onChanged();
         return this;
       }
       /**
        * <code>optional string dictionary_name = 4;</code>
+       * @param value The bytes for dictionaryName to set.
+       * @return This builder for chaining.
        */
       public Builder setDictionaryNameBytes(
           com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000008;
+        if (value == null) { throw new NullPointerException(); }
         dictionaryName_ = value;
+        bitField0_ |= 0x00000008;
         onChanged();
         return this;
       }
 
-      private java.util.List<java.lang.Integer> entryIndex_ = java.util.Collections.emptyList();
+      private com.google.protobuf.Internal.IntList entryIndex_ = emptyIntList();
       private void ensureEntryIndexIsMutable() {
-        if (!((bitField0_ & 0x00000010) == 0x00000010)) {
-          entryIndex_ = new java.util.ArrayList<java.lang.Integer>(entryIndex_);
+        if (!((bitField0_ & 0x00000010) != 0)) {
+          entryIndex_ = mutableCopy(entryIndex_);
           bitField0_ |= 0x00000010;
-         }
+        }
       }
       /**
        * <code>repeated int32 entry_index = 5;</code>
+       * @return A list containing the entryIndex.
        */
       public java.util.List<java.lang.Integer>
           getEntryIndexList() {
-        return java.util.Collections.unmodifiableList(entryIndex_);
+        return ((bitField0_ & 0x00000010) != 0) ?
+                 java.util.Collections.unmodifiableList(entryIndex_) : entryIndex_;
       }
       /**
        * <code>repeated int32 entry_index = 5;</code>
+       * @return The count of entryIndex.
        */
       public int getEntryIndexCount() {
         return entryIndex_.size();
       }
       /**
        * <code>repeated int32 entry_index = 5;</code>
+       * @param index The index of the element to return.
+       * @return The entryIndex at the given index.
        */
       public int getEntryIndex(int index) {
-        return entryIndex_.get(index);
+        return entryIndex_.getInt(index);
       }
       /**
        * <code>repeated int32 entry_index = 5;</code>
+       * @param index The index to set the value at.
+       * @param value The entryIndex to set.
+       * @return This builder for chaining.
        */
       public Builder setEntryIndex(
           int index, int value) {
+        
         ensureEntryIndexIsMutable();
-        entryIndex_.set(index, value);
+        entryIndex_.setInt(index, value);
         onChanged();
         return this;
       }
       /**
        * <code>repeated int32 entry_index = 5;</code>
+       * @param value The entryIndex to add.
+       * @return This builder for chaining.
        */
       public Builder addEntryIndex(int value) {
+        
         ensureEntryIndexIsMutable();
-        entryIndex_.add(value);
+        entryIndex_.addInt(value);
         onChanged();
         return this;
       }
       /**
        * <code>repeated int32 entry_index = 5;</code>
+       * @param values The entryIndex to add.
+       * @return This builder for chaining.
        */
       public Builder addAllEntryIndex(
           java.lang.Iterable<? extends java.lang.Integer> values) {
@@ -6581,25 +6279,28 @@ public final class ProtoUserDictionaryStorage {
       }
       /**
        * <code>repeated int32 entry_index = 5;</code>
+       * @return This builder for chaining.
        */
       public Builder clearEntryIndex() {
-        entryIndex_ = java.util.Collections.emptyList();
+        entryIndex_ = emptyIntList();
         bitField0_ = (bitField0_ & ~0x00000010);
         onChanged();
         return this;
       }
 
-      private org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry entry_ = null;
+      private org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry entry_;
       private com.google.protobuf.SingleFieldBuilderV3<
           org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry, org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry.Builder, org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.EntryOrBuilder> entryBuilder_;
       /**
        * <code>optional .mozc.user_dictionary.UserDictionary.Entry entry = 6;</code>
+       * @return Whether the entry field is set.
        */
       public boolean hasEntry() {
-        return ((bitField0_ & 0x00000020) == 0x00000020);
+        return ((bitField0_ & 0x00000020) != 0);
       }
       /**
        * <code>optional .mozc.user_dictionary.UserDictionary.Entry entry = 6;</code>
+       * @return The entry.
        */
       public org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry getEntry() {
         if (entryBuilder_ == null) {
@@ -6617,11 +6318,11 @@ public final class ProtoUserDictionaryStorage {
             throw new NullPointerException();
           }
           entry_ = value;
-          onChanged();
         } else {
           entryBuilder_.setMessage(value);
         }
         bitField0_ |= 0x00000020;
+        onChanged();
         return this;
       }
       /**
@@ -6631,11 +6332,11 @@ public final class ProtoUserDictionaryStorage {
           org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry.Builder builderForValue) {
         if (entryBuilder_ == null) {
           entry_ = builderForValue.build();
-          onChanged();
         } else {
           entryBuilder_.setMessage(builderForValue.build());
         }
         bitField0_ |= 0x00000020;
+        onChanged();
         return this;
       }
       /**
@@ -6643,32 +6344,31 @@ public final class ProtoUserDictionaryStorage {
        */
       public Builder mergeEntry(org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry value) {
         if (entryBuilder_ == null) {
-          if (((bitField0_ & 0x00000020) == 0x00000020) &&
-              entry_ != null &&
-              entry_ != org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry.getDefaultInstance()) {
-            entry_ =
-              org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry.newBuilder(entry_).mergeFrom(value).buildPartial();
+          if (((bitField0_ & 0x00000020) != 0) &&
+            entry_ != null &&
+            entry_ != org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry.getDefaultInstance()) {
+            getEntryBuilder().mergeFrom(value);
           } else {
             entry_ = value;
           }
-          onChanged();
         } else {
           entryBuilder_.mergeFrom(value);
         }
         bitField0_ |= 0x00000020;
+        onChanged();
         return this;
       }
       /**
        * <code>optional .mozc.user_dictionary.UserDictionary.Entry entry = 6;</code>
        */
       public Builder clearEntry() {
-        if (entryBuilder_ == null) {
-          entry_ = null;
-          onChanged();
-        } else {
-          entryBuilder_.clear();
-        }
         bitField0_ = (bitField0_ & ~0x00000020);
+        entry_ = null;
+        if (entryBuilder_ != null) {
+          entryBuilder_.dispose();
+          entryBuilder_ = null;
+        }
+        onChanged();
         return this;
       }
       /**
@@ -6710,12 +6410,14 @@ public final class ProtoUserDictionaryStorage {
       private java.lang.Object data_ = "";
       /**
        * <code>optional string data = 7;</code>
+       * @return Whether the data field is set.
        */
       public boolean hasData() {
-        return ((bitField0_ & 0x00000040) == 0x00000040);
+        return ((bitField0_ & 0x00000040) != 0);
       }
       /**
        * <code>optional string data = 7;</code>
+       * @return The data.
        */
       public java.lang.String getData() {
         java.lang.Object ref = data_;
@@ -6733,6 +6435,7 @@ public final class ProtoUserDictionaryStorage {
       }
       /**
        * <code>optional string data = 7;</code>
+       * @return The bytes for data.
        */
       public com.google.protobuf.ByteString
           getDataBytes() {
@@ -6749,36 +6452,37 @@ public final class ProtoUserDictionaryStorage {
       }
       /**
        * <code>optional string data = 7;</code>
+       * @param value The data to set.
+       * @return This builder for chaining.
        */
       public Builder setData(
           java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000040;
+        if (value == null) { throw new NullPointerException(); }
         data_ = value;
+        bitField0_ |= 0x00000040;
         onChanged();
         return this;
       }
       /**
        * <code>optional string data = 7;</code>
+       * @return This builder for chaining.
        */
       public Builder clearData() {
-        bitField0_ = (bitField0_ & ~0x00000040);
         data_ = getDefaultInstance().getData();
+        bitField0_ = (bitField0_ & ~0x00000040);
         onChanged();
         return this;
       }
       /**
        * <code>optional string data = 7;</code>
+       * @param value The bytes for data to set.
+       * @return This builder for chaining.
        */
       public Builder setDataBytes(
           com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000040;
+        if (value == null) { throw new NullPointerException(); }
         data_ = value;
+        bitField0_ |= 0x00000040;
         onChanged();
         return this;
       }
@@ -6786,27 +6490,35 @@ public final class ProtoUserDictionaryStorage {
       private boolean ensureNonEmptyStorage_ ;
       /**
        * <code>optional bool ensure_non_empty_storage = 8;</code>
+       * @return Whether the ensureNonEmptyStorage field is set.
        */
+      @java.lang.Override
       public boolean hasEnsureNonEmptyStorage() {
-        return ((bitField0_ & 0x00000080) == 0x00000080);
+        return ((bitField0_ & 0x00000080) != 0);
       }
       /**
        * <code>optional bool ensure_non_empty_storage = 8;</code>
+       * @return The ensureNonEmptyStorage.
        */
+      @java.lang.Override
       public boolean getEnsureNonEmptyStorage() {
         return ensureNonEmptyStorage_;
       }
       /**
        * <code>optional bool ensure_non_empty_storage = 8;</code>
+       * @param value The ensureNonEmptyStorage to set.
+       * @return This builder for chaining.
        */
       public Builder setEnsureNonEmptyStorage(boolean value) {
-        bitField0_ |= 0x00000080;
+        
         ensureNonEmptyStorage_ = value;
+        bitField0_ |= 0x00000080;
         onChanged();
         return this;
       }
       /**
        * <code>optional bool ensure_non_empty_storage = 8;</code>
+       * @return This builder for chaining.
        */
       public Builder clearEnsureNonEmptyStorage() {
         bitField0_ = (bitField0_ & ~0x00000080);
@@ -6818,27 +6530,35 @@ public final class ProtoUserDictionaryStorage {
       private boolean ignoreInvalidEntries_ ;
       /**
        * <code>optional bool ignore_invalid_entries = 9;</code>
+       * @return Whether the ignoreInvalidEntries field is set.
        */
+      @java.lang.Override
       public boolean hasIgnoreInvalidEntries() {
-        return ((bitField0_ & 0x00000100) == 0x00000100);
+        return ((bitField0_ & 0x00000100) != 0);
       }
       /**
        * <code>optional bool ignore_invalid_entries = 9;</code>
+       * @return The ignoreInvalidEntries.
        */
+      @java.lang.Override
       public boolean getIgnoreInvalidEntries() {
         return ignoreInvalidEntries_;
       }
       /**
        * <code>optional bool ignore_invalid_entries = 9;</code>
+       * @param value The ignoreInvalidEntries to set.
+       * @return This builder for chaining.
        */
       public Builder setIgnoreInvalidEntries(boolean value) {
-        bitField0_ |= 0x00000100;
+        
         ignoreInvalidEntries_ = value;
+        bitField0_ |= 0x00000100;
         onChanged();
         return this;
       }
       /**
        * <code>optional bool ignore_invalid_entries = 9;</code>
+       * @return This builder for chaining.
        */
       public Builder clearIgnoreInvalidEntries() {
         bitField0_ = (bitField0_ & ~0x00000100);
@@ -6846,13 +6566,15 @@ public final class ProtoUserDictionaryStorage {
         onChanged();
         return this;
       }
-      public Builder setUnknownFields(
-              final com.google.protobuf.UnknownFieldSet unknownFields) {
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFields(unknownFields);
       }
 
-      public Builder mergeUnknownFields(
-              final com.google.protobuf.UnknownFieldSet unknownFields) {
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
       }
 
@@ -6872,11 +6594,23 @@ public final class ProtoUserDictionaryStorage {
 
     @java.lang.Deprecated public static final com.google.protobuf.Parser<UserDictionaryCommand>
         PARSER = new com.google.protobuf.AbstractParser<UserDictionaryCommand>() {
+      @java.lang.Override
       public UserDictionaryCommand parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new UserDictionaryCommand(input, extensionRegistry);
+        Builder builder = newBuilder();
+        try {
+          builder.mergeFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(builder.buildPartial());
+        } catch (com.google.protobuf.UninitializedMessageException e) {
+          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(e)
+              .setUnfinishedMessage(builder.buildPartial());
+        }
+        return builder.buildPartial();
       }
     };
 
@@ -6889,6 +6623,7 @@ public final class ProtoUserDictionaryStorage {
       return PARSER;
     }
 
+    @java.lang.Override
     public org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommand getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
@@ -6901,28 +6636,34 @@ public final class ProtoUserDictionaryStorage {
 
     /**
      * <code>required .mozc.user_dictionary.UserDictionaryCommandStatus.Status status = 1;</code>
+     * @return Whether the status field is set.
      */
     boolean hasStatus();
     /**
      * <code>required .mozc.user_dictionary.UserDictionaryCommandStatus.Status status = 1;</code>
+     * @return The status.
      */
     org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommandStatus.Status getStatus();
 
     /**
-     * <code>optional uint64 session_id = 2;</code>
+     * <code>optional uint64 session_id = 2 [jstype = JS_STRING];</code>
+     * @return Whether the sessionId field is set.
      */
     boolean hasSessionId();
     /**
-     * <code>optional uint64 session_id = 2;</code>
+     * <code>optional uint64 session_id = 2 [jstype = JS_STRING];</code>
+     * @return The sessionId.
      */
     long getSessionId();
 
     /**
      * <code>optional .mozc.user_dictionary.UserDictionaryStorage storage = 3;</code>
+     * @return Whether the storage field is set.
      */
     boolean hasStorage();
     /**
      * <code>optional .mozc.user_dictionary.UserDictionaryStorage storage = 3;</code>
+     * @return The storage.
      */
     org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorage getStorage();
     /**
@@ -6931,20 +6672,24 @@ public final class ProtoUserDictionaryStorage {
     org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorageOrBuilder getStorageOrBuilder();
 
     /**
-     * <code>optional uint64 dictionary_id = 5;</code>
+     * <code>optional uint64 dictionary_id = 5 [jstype = JS_STRING];</code>
+     * @return Whether the dictionaryId field is set.
      */
     boolean hasDictionaryId();
     /**
-     * <code>optional uint64 dictionary_id = 5;</code>
+     * <code>optional uint64 dictionary_id = 5 [jstype = JS_STRING];</code>
+     * @return The dictionaryId.
      */
     long getDictionaryId();
 
     /**
      * <code>optional uint32 entry_size = 6;</code>
+     * @return Whether the entrySize field is set.
      */
     boolean hasEntrySize();
     /**
      * <code>optional uint32 entry_size = 6;</code>
+     * @return The entrySize.
      */
     int getEntrySize();
 
@@ -6975,7 +6720,7 @@ public final class ProtoUserDictionaryStorage {
   /**
    * Protobuf type {@code mozc.user_dictionary.UserDictionaryCommandStatus}
    */
-  public  static final class UserDictionaryCommandStatus extends
+  public static final class UserDictionaryCommandStatus extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:mozc.user_dictionary.UserDictionaryCommandStatus)
       UserDictionaryCommandStatusOrBuilder {
@@ -6986,111 +6731,27 @@ public final class ProtoUserDictionaryStorage {
     }
     private UserDictionaryCommandStatus() {
       status_ = 1;
-      sessionId_ = 0L;
-      dictionaryId_ = 0L;
-      entrySize_ = 0;
       entries_ = java.util.Collections.emptyList();
     }
 
     @java.lang.Override
-    public com.google.protobuf.UnknownFieldSet
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new UserDictionaryCommandStatus();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
       return this.unknownFields;
     }
-    private UserDictionaryCommandStatus(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            case 8: {
-              int rawValue = input.readEnum();
-              org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommandStatus.Status value = org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommandStatus.Status.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(1, rawValue);
-              } else {
-                bitField0_ |= 0x00000001;
-                status_ = rawValue;
-              }
-              break;
-            }
-            case 16: {
-              bitField0_ |= 0x00000002;
-              sessionId_ = input.readUInt64();
-              break;
-            }
-            case 26: {
-              org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorage.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000004) == 0x00000004)) {
-                subBuilder = storage_.toBuilder();
-              }
-              storage_ = input.readMessage(org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorage.PARSER, extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(storage_);
-                storage_ = subBuilder.buildPartial();
-              }
-              bitField0_ |= 0x00000004;
-              break;
-            }
-            case 40: {
-              bitField0_ |= 0x00000008;
-              dictionaryId_ = input.readUInt64();
-              break;
-            }
-            case 48: {
-              bitField0_ |= 0x00000010;
-              entrySize_ = input.readUInt32();
-              break;
-            }
-            case 58: {
-              if (!((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
-                entries_ = new java.util.ArrayList<org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry>();
-                mutable_bitField0_ |= 0x00000020;
-              }
-              entries_.add(
-                  input.readMessage(org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry.PARSER, extensionRegistry));
-              break;
-            }
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
-      } finally {
-        if (((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
-          entries_ = java.util.Collections.unmodifiableList(entries_);
-        }
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static com.google.protobuf.Descriptors.Descriptor
+    public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.internal_static_mozc_user_dictionary_UserDictionaryCommandStatus_descriptor;
     }
 
+    @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
       return org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.internal_static_mozc_user_dictionary_UserDictionaryCommandStatus_fieldAccessorTable
@@ -7145,7 +6806,7 @@ public final class ProtoUserDictionaryStorage {
       INVALID_FILE_FORMAT(7),
       /**
        * <pre>
-       * Note: currently if we recieve this error status,
+       * Note: currently if we receive this error status,
        * the file is actually saved.
        * </pre>
        *
@@ -7280,7 +6941,7 @@ public final class ProtoUserDictionaryStorage {
       public static final int INVALID_FILE_FORMAT_VALUE = 7;
       /**
        * <pre>
-       * Note: currently if we recieve this error status,
+       * Note: currently if we receive this error status,
        * the file is actually saved.
        * </pre>
        *
@@ -7386,6 +7047,8 @@ public final class ProtoUserDictionaryStorage {
       }
 
       /**
+       * @param value The numeric wire value of the corresponding enum entry.
+       * @return The enum associated with the given numeric wire value.
        * @deprecated Use {@link #forNumber(int)} instead.
        */
       @java.lang.Deprecated
@@ -7393,6 +7056,10 @@ public final class ProtoUserDictionaryStorage {
         return forNumber(value);
       }
 
+      /**
+       * @param value The numeric wire value of the corresponding enum entry.
+       * @return The enum associated with the given numeric wire value.
+       */
       public static Status forNumber(int value) {
         switch (value) {
           case 1: return USER_DICTIONARY_COMMAND_SUCCESS;
@@ -7465,7 +7132,7 @@ public final class ProtoUserDictionaryStorage {
 
       private final int value;
 
-      Status(int value) {
+      private Status(int value) {
         this.value = value;
       }
 
@@ -7474,32 +7141,38 @@ public final class ProtoUserDictionaryStorage {
 
     private int bitField0_;
     public static final int STATUS_FIELD_NUMBER = 1;
-    private int status_;
+    private int status_ = 1;
     /**
      * <code>required .mozc.user_dictionary.UserDictionaryCommandStatus.Status status = 1;</code>
+     * @return Whether the status field is set.
      */
-    public boolean hasStatus() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
+    @java.lang.Override public boolean hasStatus() {
+      return ((bitField0_ & 0x00000001) != 0);
     }
     /**
      * <code>required .mozc.user_dictionary.UserDictionaryCommandStatus.Status status = 1;</code>
+     * @return The status.
      */
-    public org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommandStatus.Status getStatus() {
-      org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommandStatus.Status result = org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommandStatus.Status.valueOf(status_);
+    @java.lang.Override public org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommandStatus.Status getStatus() {
+      org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommandStatus.Status result = org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommandStatus.Status.forNumber(status_);
       return result == null ? org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommandStatus.Status.USER_DICTIONARY_COMMAND_SUCCESS : result;
     }
 
     public static final int SESSION_ID_FIELD_NUMBER = 2;
-    private long sessionId_;
+    private long sessionId_ = 0L;
     /**
-     * <code>optional uint64 session_id = 2;</code>
+     * <code>optional uint64 session_id = 2 [jstype = JS_STRING];</code>
+     * @return Whether the sessionId field is set.
      */
+    @java.lang.Override
     public boolean hasSessionId() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
+      return ((bitField0_ & 0x00000002) != 0);
     }
     /**
-     * <code>optional uint64 session_id = 2;</code>
+     * <code>optional uint64 session_id = 2 [jstype = JS_STRING];</code>
+     * @return The sessionId.
      */
+    @java.lang.Override
     public long getSessionId() {
       return sessionId_;
     }
@@ -7508,64 +7181,80 @@ public final class ProtoUserDictionaryStorage {
     private org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorage storage_;
     /**
      * <code>optional .mozc.user_dictionary.UserDictionaryStorage storage = 3;</code>
+     * @return Whether the storage field is set.
      */
+    @java.lang.Override
     public boolean hasStorage() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
+      return ((bitField0_ & 0x00000004) != 0);
     }
     /**
      * <code>optional .mozc.user_dictionary.UserDictionaryStorage storage = 3;</code>
+     * @return The storage.
      */
+    @java.lang.Override
     public org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorage getStorage() {
       return storage_ == null ? org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorage.getDefaultInstance() : storage_;
     }
     /**
      * <code>optional .mozc.user_dictionary.UserDictionaryStorage storage = 3;</code>
      */
+    @java.lang.Override
     public org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorageOrBuilder getStorageOrBuilder() {
       return storage_ == null ? org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorage.getDefaultInstance() : storage_;
     }
 
     public static final int DICTIONARY_ID_FIELD_NUMBER = 5;
-    private long dictionaryId_;
+    private long dictionaryId_ = 0L;
     /**
-     * <code>optional uint64 dictionary_id = 5;</code>
+     * <code>optional uint64 dictionary_id = 5 [jstype = JS_STRING];</code>
+     * @return Whether the dictionaryId field is set.
      */
+    @java.lang.Override
     public boolean hasDictionaryId() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
+      return ((bitField0_ & 0x00000008) != 0);
     }
     /**
-     * <code>optional uint64 dictionary_id = 5;</code>
+     * <code>optional uint64 dictionary_id = 5 [jstype = JS_STRING];</code>
+     * @return The dictionaryId.
      */
+    @java.lang.Override
     public long getDictionaryId() {
       return dictionaryId_;
     }
 
     public static final int ENTRY_SIZE_FIELD_NUMBER = 6;
-    private int entrySize_;
+    private int entrySize_ = 0;
     /**
      * <code>optional uint32 entry_size = 6;</code>
+     * @return Whether the entrySize field is set.
      */
+    @java.lang.Override
     public boolean hasEntrySize() {
-      return ((bitField0_ & 0x00000010) == 0x00000010);
+      return ((bitField0_ & 0x00000010) != 0);
     }
     /**
      * <code>optional uint32 entry_size = 6;</code>
+     * @return The entrySize.
      */
+    @java.lang.Override
     public int getEntrySize() {
       return entrySize_;
     }
 
     public static final int ENTRIES_FIELD_NUMBER = 7;
+    @SuppressWarnings("serial")
     private java.util.List<org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry> entries_;
     /**
      * <code>repeated .mozc.user_dictionary.UserDictionary.Entry entries = 7;</code>
      */
+    @java.lang.Override
     public java.util.List<org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry> getEntriesList() {
       return entries_;
     }
     /**
      * <code>repeated .mozc.user_dictionary.UserDictionary.Entry entries = 7;</code>
      */
+    @java.lang.Override
     public java.util.List<? extends org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.EntryOrBuilder> 
         getEntriesOrBuilderList() {
       return entries_;
@@ -7573,25 +7262,29 @@ public final class ProtoUserDictionaryStorage {
     /**
      * <code>repeated .mozc.user_dictionary.UserDictionary.Entry entries = 7;</code>
      */
+    @java.lang.Override
     public int getEntriesCount() {
       return entries_.size();
     }
     /**
      * <code>repeated .mozc.user_dictionary.UserDictionary.Entry entries = 7;</code>
      */
+    @java.lang.Override
     public org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry getEntries(int index) {
       return entries_.get(index);
     }
     /**
      * <code>repeated .mozc.user_dictionary.UserDictionary.Entry entries = 7;</code>
      */
+    @java.lang.Override
     public org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.EntryOrBuilder getEntriesOrBuilder(
         int index) {
       return entries_.get(index);
     }
 
     private byte memoizedIsInitialized = -1;
-    public boolean isInitialized() {
+    @java.lang.Override
+    public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
       if (isInitialized == 0) return false;
@@ -7604,51 +7297,53 @@ public final class ProtoUserDictionaryStorage {
       return true;
     }
 
+    @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+      if (((bitField0_ & 0x00000001) != 0)) {
         output.writeEnum(1, status_);
       }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+      if (((bitField0_ & 0x00000002) != 0)) {
         output.writeUInt64(2, sessionId_);
       }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+      if (((bitField0_ & 0x00000004) != 0)) {
         output.writeMessage(3, getStorage());
       }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+      if (((bitField0_ & 0x00000008) != 0)) {
         output.writeUInt64(5, dictionaryId_);
       }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+      if (((bitField0_ & 0x00000010) != 0)) {
         output.writeUInt32(6, entrySize_);
       }
       for (int i = 0; i < entries_.size(); i++) {
         output.writeMessage(7, entries_.get(i));
       }
-      unknownFields.writeTo(output);
+      getUnknownFields().writeTo(output);
     }
 
+    @java.lang.Override
     public int getSerializedSize() {
       int size = memoizedSize;
       if (size != -1) return size;
 
       size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+      if (((bitField0_ & 0x00000001) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(1, status_);
       }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+      if (((bitField0_ & 0x00000002) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeUInt64Size(2, sessionId_);
       }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+      if (((bitField0_ & 0x00000004) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(3, getStorage());
       }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+      if (((bitField0_ & 0x00000008) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeUInt64Size(5, dictionaryId_);
       }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+      if (((bitField0_ & 0x00000010) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeUInt32Size(6, entrySize_);
       }
@@ -7656,7 +7351,7 @@ public final class ProtoUserDictionaryStorage {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(7, entries_.get(i));
       }
-      size += unknownFields.getSerializedSize();
+      size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
     }
@@ -7671,35 +7366,34 @@ public final class ProtoUserDictionaryStorage {
       }
       org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommandStatus other = (org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommandStatus) obj;
 
-      boolean result = true;
-      result = result && (hasStatus() == other.hasStatus());
+      if (hasStatus() != other.hasStatus()) return false;
       if (hasStatus()) {
-        result = result && status_ == other.status_;
+        if (status_ != other.status_) return false;
       }
-      result = result && (hasSessionId() == other.hasSessionId());
+      if (hasSessionId() != other.hasSessionId()) return false;
       if (hasSessionId()) {
-        result = result && (getSessionId()
-            == other.getSessionId());
+        if (getSessionId()
+            != other.getSessionId()) return false;
       }
-      result = result && (hasStorage() == other.hasStorage());
+      if (hasStorage() != other.hasStorage()) return false;
       if (hasStorage()) {
-        result = result && getStorage()
-            .equals(other.getStorage());
+        if (!getStorage()
+            .equals(other.getStorage())) return false;
       }
-      result = result && (hasDictionaryId() == other.hasDictionaryId());
+      if (hasDictionaryId() != other.hasDictionaryId()) return false;
       if (hasDictionaryId()) {
-        result = result && (getDictionaryId()
-            == other.getDictionaryId());
+        if (getDictionaryId()
+            != other.getDictionaryId()) return false;
       }
-      result = result && (hasEntrySize() == other.hasEntrySize());
+      if (hasEntrySize() != other.hasEntrySize()) return false;
       if (hasEntrySize()) {
-        result = result && (getEntrySize()
-            == other.getEntrySize());
+        if (getEntrySize()
+            != other.getEntrySize()) return false;
       }
-      result = result && getEntriesList()
-          .equals(other.getEntriesList());
-      result = result && unknownFields.equals(other.unknownFields);
-      return result;
+      if (!getEntriesList()
+          .equals(other.getEntriesList())) return false;
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
+      return true;
     }
 
     @java.lang.Override
@@ -7735,7 +7429,7 @@ public final class ProtoUserDictionaryStorage {
         hash = (37 * hash) + ENTRIES_FIELD_NUMBER;
         hash = (53 * hash) + getEntriesList().hashCode();
       }
-      hash = (29 * hash) + unknownFields.hashCode();
+      hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
     }
@@ -7810,6 +7504,7 @@ public final class ProtoUserDictionaryStorage {
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
+    @java.lang.Override
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
@@ -7817,6 +7512,7 @@ public final class ProtoUserDictionaryStorage {
     public static Builder newBuilder(org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommandStatus prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
+    @java.lang.Override
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
@@ -7835,11 +7531,12 @@ public final class ProtoUserDictionaryStorage {
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:mozc.user_dictionary.UserDictionaryCommandStatus)
         org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommandStatusOrBuilder {
-      public static com.google.protobuf.Descriptors.Descriptor
+      public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.internal_static_mozc_user_dictionary_UserDictionaryCommandStatus_descriptor;
       }
 
+      @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.internal_static_mozc_user_dictionary_UserDictionaryCommandStatus_fieldAccessorTable
@@ -7864,40 +7561,41 @@ public final class ProtoUserDictionaryStorage {
           getEntriesFieldBuilder();
         }
       }
+      @java.lang.Override
       public Builder clear() {
         super.clear();
+        bitField0_ = 0;
         status_ = 1;
-        bitField0_ = (bitField0_ & ~0x00000001);
         sessionId_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00000002);
-        if (storageBuilder_ == null) {
-          storage_ = null;
-        } else {
-          storageBuilder_.clear();
+        storage_ = null;
+        if (storageBuilder_ != null) {
+          storageBuilder_.dispose();
+          storageBuilder_ = null;
         }
-        bitField0_ = (bitField0_ & ~0x00000004);
         dictionaryId_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00000008);
         entrySize_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000010);
         if (entriesBuilder_ == null) {
           entries_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000020);
         } else {
+          entries_ = null;
           entriesBuilder_.clear();
         }
+        bitField0_ = (bitField0_ & ~0x00000020);
         return this;
       }
 
+      @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
         return org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.internal_static_mozc_user_dictionary_UserDictionaryCommandStatus_descriptor;
       }
 
+      @java.lang.Override
       public org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommandStatus getDefaultInstanceForType() {
         return org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommandStatus.getDefaultInstance();
       }
 
+      @java.lang.Override
       public org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommandStatus build() {
         org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommandStatus result = buildPartial();
         if (!result.isInitialized()) {
@@ -7906,36 +7604,18 @@ public final class ProtoUserDictionaryStorage {
         return result;
       }
 
+      @java.lang.Override
       public org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommandStatus buildPartial() {
         org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommandStatus result = new org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommandStatus(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.status_ = status_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        result.sessionId_ = sessionId_;
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000004;
-        }
-        if (storageBuilder_ == null) {
-          result.storage_ = storage_;
-        } else {
-          result.storage_ = storageBuilder_.build();
-        }
-        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
-          to_bitField0_ |= 0x00000008;
-        }
-        result.dictionaryId_ = dictionaryId_;
-        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
-          to_bitField0_ |= 0x00000010;
-        }
-        result.entrySize_ = entrySize_;
+        buildPartialRepeatedFields(result);
+        if (bitField0_ != 0) { buildPartial0(result); }
+        onBuilt();
+        return result;
+      }
+
+      private void buildPartialRepeatedFields(org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommandStatus result) {
         if (entriesBuilder_ == null) {
-          if (((bitField0_ & 0x00000020) == 0x00000020)) {
+          if (((bitField0_ & 0x00000020) != 0)) {
             entries_ = java.util.Collections.unmodifiableList(entries_);
             bitField0_ = (bitField0_ & ~0x00000020);
           }
@@ -7943,37 +7623,69 @@ public final class ProtoUserDictionaryStorage {
         } else {
           result.entries_ = entriesBuilder_.build();
         }
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
       }
 
+      private void buildPartial0(org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommandStatus result) {
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          result.status_ = status_;
+          to_bitField0_ |= 0x00000001;
+        }
+        if (((from_bitField0_ & 0x00000002) != 0)) {
+          result.sessionId_ = sessionId_;
+          to_bitField0_ |= 0x00000002;
+        }
+        if (((from_bitField0_ & 0x00000004) != 0)) {
+          result.storage_ = storageBuilder_ == null
+              ? storage_
+              : storageBuilder_.build();
+          to_bitField0_ |= 0x00000004;
+        }
+        if (((from_bitField0_ & 0x00000008) != 0)) {
+          result.dictionaryId_ = dictionaryId_;
+          to_bitField0_ |= 0x00000008;
+        }
+        if (((from_bitField0_ & 0x00000010) != 0)) {
+          result.entrySize_ = entrySize_;
+          to_bitField0_ |= 0x00000010;
+        }
+        result.bitField0_ |= to_bitField0_;
+      }
+
+      @java.lang.Override
       public Builder clone() {
         return super.clone();
       }
+      @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
         return super.setField(field, value);
       }
+      @java.lang.Override
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
         return super.clearField(field);
       }
+      @java.lang.Override
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return super.clearOneof(oneof);
       }
+      @java.lang.Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           int index, java.lang.Object value) {
         return super.setRepeatedField(field, index, value);
       }
+      @java.lang.Override
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
         return super.addRepeatedField(field, value);
       }
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommandStatus) {
           return mergeFrom((org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommandStatus)other);
@@ -8026,30 +7738,95 @@ public final class ProtoUserDictionaryStorage {
             }
           }
         }
-        this.mergeUnknownFields(other.unknownFields);
+        this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
       }
 
-      public boolean isInitialized() {
-          return hasStatus();
+      @java.lang.Override
+      public final boolean isInitialized() {
+        if (!hasStatus()) {
+          return false;
+        }
+        return true;
       }
 
+      @java.lang.Override
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommandStatus parsedMessage = null;
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
         try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 8: {
+                int tmpRaw = input.readEnum();
+                org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommandStatus.Status tmpValue =
+                    org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommandStatus.Status.forNumber(tmpRaw);
+                if (tmpValue == null) {
+                  mergeUnknownVarintField(1, tmpRaw);
+                } else {
+                  status_ = tmpRaw;
+                  bitField0_ |= 0x00000001;
+                }
+                break;
+              } // case 8
+              case 16: {
+                sessionId_ = input.readUInt64();
+                bitField0_ |= 0x00000002;
+                break;
+              } // case 16
+              case 26: {
+                input.readMessage(
+                    getStorageFieldBuilder().getBuilder(),
+                    extensionRegistry);
+                bitField0_ |= 0x00000004;
+                break;
+              } // case 26
+              case 40: {
+                dictionaryId_ = input.readUInt64();
+                bitField0_ |= 0x00000008;
+                break;
+              } // case 40
+              case 48: {
+                entrySize_ = input.readUInt32();
+                bitField0_ |= 0x00000010;
+                break;
+              } // case 48
+              case 58: {
+                org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry m =
+                    input.readMessage(
+                        org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry.PARSER,
+                        extensionRegistry);
+                if (entriesBuilder_ == null) {
+                  ensureEntriesIsMutable();
+                  entries_.add(m);
+                } else {
+                  entriesBuilder_.addMessage(m);
+                }
+                break;
+              } // case 58
+              default: {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+            } // switch (tag)
+          } // while (!done)
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommandStatus) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
+          onChanged();
+        } // finally
         return this;
       }
       private int bitField0_;
@@ -8057,19 +7834,24 @@ public final class ProtoUserDictionaryStorage {
       private int status_ = 1;
       /**
        * <code>required .mozc.user_dictionary.UserDictionaryCommandStatus.Status status = 1;</code>
+       * @return Whether the status field is set.
        */
-      public boolean hasStatus() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
+      @java.lang.Override public boolean hasStatus() {
+        return ((bitField0_ & 0x00000001) != 0);
       }
       /**
        * <code>required .mozc.user_dictionary.UserDictionaryCommandStatus.Status status = 1;</code>
+       * @return The status.
        */
+      @java.lang.Override
       public org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommandStatus.Status getStatus() {
-        org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommandStatus.Status result = org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommandStatus.Status.valueOf(status_);
+        org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommandStatus.Status result = org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommandStatus.Status.forNumber(status_);
         return result == null ? org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommandStatus.Status.USER_DICTIONARY_COMMAND_SUCCESS : result;
       }
       /**
        * <code>required .mozc.user_dictionary.UserDictionaryCommandStatus.Status status = 1;</code>
+       * @param value The status to set.
+       * @return This builder for chaining.
        */
       public Builder setStatus(org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommandStatus.Status value) {
         if (value == null) {
@@ -8082,6 +7864,7 @@ public final class ProtoUserDictionaryStorage {
       }
       /**
        * <code>required .mozc.user_dictionary.UserDictionaryCommandStatus.Status status = 1;</code>
+       * @return This builder for chaining.
        */
       public Builder clearStatus() {
         bitField0_ = (bitField0_ & ~0x00000001);
@@ -8092,28 +7875,36 @@ public final class ProtoUserDictionaryStorage {
 
       private long sessionId_ ;
       /**
-       * <code>optional uint64 session_id = 2;</code>
+       * <code>optional uint64 session_id = 2 [jstype = JS_STRING];</code>
+       * @return Whether the sessionId field is set.
        */
+      @java.lang.Override
       public boolean hasSessionId() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
+        return ((bitField0_ & 0x00000002) != 0);
       }
       /**
-       * <code>optional uint64 session_id = 2;</code>
+       * <code>optional uint64 session_id = 2 [jstype = JS_STRING];</code>
+       * @return The sessionId.
        */
+      @java.lang.Override
       public long getSessionId() {
         return sessionId_;
       }
       /**
-       * <code>optional uint64 session_id = 2;</code>
+       * <code>optional uint64 session_id = 2 [jstype = JS_STRING];</code>
+       * @param value The sessionId to set.
+       * @return This builder for chaining.
        */
       public Builder setSessionId(long value) {
-        bitField0_ |= 0x00000002;
+        
         sessionId_ = value;
+        bitField0_ |= 0x00000002;
         onChanged();
         return this;
       }
       /**
-       * <code>optional uint64 session_id = 2;</code>
+       * <code>optional uint64 session_id = 2 [jstype = JS_STRING];</code>
+       * @return This builder for chaining.
        */
       public Builder clearSessionId() {
         bitField0_ = (bitField0_ & ~0x00000002);
@@ -8122,17 +7913,19 @@ public final class ProtoUserDictionaryStorage {
         return this;
       }
 
-      private org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorage storage_ = null;
+      private org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorage storage_;
       private com.google.protobuf.SingleFieldBuilderV3<
           org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorage, org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorage.Builder, org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorageOrBuilder> storageBuilder_;
       /**
        * <code>optional .mozc.user_dictionary.UserDictionaryStorage storage = 3;</code>
+       * @return Whether the storage field is set.
        */
       public boolean hasStorage() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
+        return ((bitField0_ & 0x00000004) != 0);
       }
       /**
        * <code>optional .mozc.user_dictionary.UserDictionaryStorage storage = 3;</code>
+       * @return The storage.
        */
       public org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorage getStorage() {
         if (storageBuilder_ == null) {
@@ -8150,11 +7943,11 @@ public final class ProtoUserDictionaryStorage {
             throw new NullPointerException();
           }
           storage_ = value;
-          onChanged();
         } else {
           storageBuilder_.setMessage(value);
         }
         bitField0_ |= 0x00000004;
+        onChanged();
         return this;
       }
       /**
@@ -8164,11 +7957,11 @@ public final class ProtoUserDictionaryStorage {
           org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorage.Builder builderForValue) {
         if (storageBuilder_ == null) {
           storage_ = builderForValue.build();
-          onChanged();
         } else {
           storageBuilder_.setMessage(builderForValue.build());
         }
         bitField0_ |= 0x00000004;
+        onChanged();
         return this;
       }
       /**
@@ -8176,32 +7969,31 @@ public final class ProtoUserDictionaryStorage {
        */
       public Builder mergeStorage(org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorage value) {
         if (storageBuilder_ == null) {
-          if (((bitField0_ & 0x00000004) == 0x00000004) &&
-              storage_ != null &&
-              storage_ != org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorage.getDefaultInstance()) {
-            storage_ =
-              org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorage.newBuilder(storage_).mergeFrom(value).buildPartial();
+          if (((bitField0_ & 0x00000004) != 0) &&
+            storage_ != null &&
+            storage_ != org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryStorage.getDefaultInstance()) {
+            getStorageBuilder().mergeFrom(value);
           } else {
             storage_ = value;
           }
-          onChanged();
         } else {
           storageBuilder_.mergeFrom(value);
         }
         bitField0_ |= 0x00000004;
+        onChanged();
         return this;
       }
       /**
        * <code>optional .mozc.user_dictionary.UserDictionaryStorage storage = 3;</code>
        */
       public Builder clearStorage() {
-        if (storageBuilder_ == null) {
-          storage_ = null;
-          onChanged();
-        } else {
-          storageBuilder_.clear();
-        }
         bitField0_ = (bitField0_ & ~0x00000004);
+        storage_ = null;
+        if (storageBuilder_ != null) {
+          storageBuilder_.dispose();
+          storageBuilder_ = null;
+        }
+        onChanged();
         return this;
       }
       /**
@@ -8242,28 +8034,36 @@ public final class ProtoUserDictionaryStorage {
 
       private long dictionaryId_ ;
       /**
-       * <code>optional uint64 dictionary_id = 5;</code>
+       * <code>optional uint64 dictionary_id = 5 [jstype = JS_STRING];</code>
+       * @return Whether the dictionaryId field is set.
        */
+      @java.lang.Override
       public boolean hasDictionaryId() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
+        return ((bitField0_ & 0x00000008) != 0);
       }
       /**
-       * <code>optional uint64 dictionary_id = 5;</code>
+       * <code>optional uint64 dictionary_id = 5 [jstype = JS_STRING];</code>
+       * @return The dictionaryId.
        */
+      @java.lang.Override
       public long getDictionaryId() {
         return dictionaryId_;
       }
       /**
-       * <code>optional uint64 dictionary_id = 5;</code>
+       * <code>optional uint64 dictionary_id = 5 [jstype = JS_STRING];</code>
+       * @param value The dictionaryId to set.
+       * @return This builder for chaining.
        */
       public Builder setDictionaryId(long value) {
-        bitField0_ |= 0x00000008;
+        
         dictionaryId_ = value;
+        bitField0_ |= 0x00000008;
         onChanged();
         return this;
       }
       /**
-       * <code>optional uint64 dictionary_id = 5;</code>
+       * <code>optional uint64 dictionary_id = 5 [jstype = JS_STRING];</code>
+       * @return This builder for chaining.
        */
       public Builder clearDictionaryId() {
         bitField0_ = (bitField0_ & ~0x00000008);
@@ -8275,27 +8075,35 @@ public final class ProtoUserDictionaryStorage {
       private int entrySize_ ;
       /**
        * <code>optional uint32 entry_size = 6;</code>
+       * @return Whether the entrySize field is set.
        */
+      @java.lang.Override
       public boolean hasEntrySize() {
-        return ((bitField0_ & 0x00000010) == 0x00000010);
+        return ((bitField0_ & 0x00000010) != 0);
       }
       /**
        * <code>optional uint32 entry_size = 6;</code>
+       * @return The entrySize.
        */
+      @java.lang.Override
       public int getEntrySize() {
         return entrySize_;
       }
       /**
        * <code>optional uint32 entry_size = 6;</code>
+       * @param value The entrySize to set.
+       * @return This builder for chaining.
        */
       public Builder setEntrySize(int value) {
-        bitField0_ |= 0x00000010;
+        
         entrySize_ = value;
+        bitField0_ |= 0x00000010;
         onChanged();
         return this;
       }
       /**
        * <code>optional uint32 entry_size = 6;</code>
+       * @return This builder for chaining.
        */
       public Builder clearEntrySize() {
         bitField0_ = (bitField0_ & ~0x00000010);
@@ -8307,7 +8115,7 @@ public final class ProtoUserDictionaryStorage {
       private java.util.List<org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry> entries_ =
         java.util.Collections.emptyList();
       private void ensureEntriesIsMutable() {
-        if (!((bitField0_ & 0x00000020) == 0x00000020)) {
+        if (!((bitField0_ & 0x00000020) != 0)) {
           entries_ = new java.util.ArrayList<org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry>(entries_);
           bitField0_ |= 0x00000020;
          }
@@ -8536,20 +8344,22 @@ public final class ProtoUserDictionaryStorage {
           entriesBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
               org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry, org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry.Builder, org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.EntryOrBuilder>(
                   entries_,
-                  ((bitField0_ & 0x00000020) == 0x00000020),
+                  ((bitField0_ & 0x00000020) != 0),
                   getParentForChildren(),
                   isClean());
           entries_ = null;
         }
         return entriesBuilder_;
       }
-      public Builder setUnknownFields(
-              final com.google.protobuf.UnknownFieldSet unknownFields) {
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFields(unknownFields);
       }
 
-      public Builder mergeUnknownFields(
-              final com.google.protobuf.UnknownFieldSet unknownFields) {
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
       }
 
@@ -8569,11 +8379,23 @@ public final class ProtoUserDictionaryStorage {
 
     @java.lang.Deprecated public static final com.google.protobuf.Parser<UserDictionaryCommandStatus>
         PARSER = new com.google.protobuf.AbstractParser<UserDictionaryCommandStatus>() {
+      @java.lang.Override
       public UserDictionaryCommandStatus parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new UserDictionaryCommandStatus(input, extensionRegistry);
+        Builder builder = newBuilder();
+        try {
+          builder.mergeFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(builder.buildPartial());
+        } catch (com.google.protobuf.UninitializedMessageException e) {
+          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(e)
+              .setUnfinishedMessage(builder.buildPartial());
+        }
+        return builder.buildPartial();
       }
     };
 
@@ -8586,6 +8408,7 @@ public final class ProtoUserDictionaryStorage {
       return PARSER;
     }
 
+    @java.lang.Override
     public org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommandStatus getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
@@ -8627,124 +8450,112 @@ public final class ProtoUserDictionaryStorage {
   static {
     java.lang.String[] descriptorData = {
       "\n&protocol/user_dictionary_storage.proto" +
-      "\022\024mozc.user_dictionary\"\312\t\n\016UserDictionar" +
-      "y\022\r\n\002id\030\001 \001(\004:\0010\022\025\n\007enabled\030\002 \001(\010:\004true\022" +
-      "\016\n\004name\030\003 \001(\t:\000\022;\n\007entries\030\004 \003(\0132*.mozc." +
-      "user_dictionary.UserDictionary.Entry\022\026\n\007" +
-      "removed\030\005 \001(\010:\005false\022\027\n\010syncable\030\006 \001(\010:\005" +
-      "false\032\263\001\n\005Entry\022\r\n\003key\030\001 \001(\t:\000\022\017\n\005value\030" +
-      "\002 \001(\t:\000\022\021\n\007comment\030\004 \001(\t:\000\0229\n\003pos\030\005 \001(\0162" +
-      ",.mozc.user_dictionary.UserDictionary.Po" +
-      "sType\022\026\n\007removed\030\n \001(\010:\005false\022\036\n\017auto_re" +
-      "gistered\030\013 \001(\010:\005falseJ\004\010\003\020\004\"\335\006\n\007PosType\022" +
-      "\010\n\004NOUN\020\001\022\020\n\014ABBREVIATION\020\002\022\023\n\017SUGGESTIO" +
-      "N_ONLY\020\003\022\017\n\013PROPER_NOUN\020\004\022\021\n\rPERSONAL_NA" +
-      "ME\020\005\022\017\n\013FAMILY_NAME\020\006\022\016\n\nFIRST_NAME\020\007\022\025\n" +
-      "\021ORGANIZATION_NAME\020\010\022\016\n\nPLACE_NAME\020\t\022!\n\035" +
-      "SA_IRREGULAR_CONJUGATION_NOUN\020\n\022\031\n\025ADJEC" +
-      "TIVE_VERBAL_NOUN\020\013\022\n\n\006NUMBER\020\014\022\014\n\010ALPHAB" +
-      "ET\020\r\022\n\n\006SYMBOL\020\016\022\014\n\010EMOTICON\020\017\022\n\n\006ADVERB" +
-      "\020\020\022\026\n\022PRENOUN_ADJECTIVAL\020\021\022\017\n\013CONJUNCTIO" +
-      "N\020\022\022\020\n\014INTERJECTION\020\023\022\n\n\006PREFIX\020\024\022\022\n\016COU" +
-      "NTER_SUFFIX\020\025\022\022\n\016GENERIC_SUFFIX\020\026\022\026\n\022PER" +
-      "SON_NAME_SUFFIX\020\027\022\025\n\021PLACE_NAME_SUFFIX\020\030" +
-      "\022\022\n\016WA_GROUP1_VERB\020\031\022\022\n\016KA_GROUP1_VERB\020\032" +
-      "\022\022\n\016SA_GROUP1_VERB\020\033\022\022\n\016TA_GROUP1_VERB\020\034" +
-      "\022\022\n\016NA_GROUP1_VERB\020\035\022\022\n\016MA_GROUP1_VERB\020\036" +
-      "\022\022\n\016RA_GROUP1_VERB\020\037\022\022\n\016GA_GROUP1_VERB\020 " +
-      "\022\022\n\016BA_GROUP1_VERB\020!\022\022\n\016HA_GROUP1_VERB\020\"" +
-      "\022\017\n\013GROUP2_VERB\020#\022\024\n\020KURU_GROUP3_VERB\020$\022" +
-      "\024\n\020SURU_GROUP3_VERB\020%\022\024\n\020ZURU_GROUP3_VER" +
-              "B\020&\022\022\n\016RU_GROUP3_VERB\020'\022\r\n\tADJECTIVE\020(\022\034" +
-      "\n\030SENTENCE_ENDING_PARTICLE\020)\022\017\n\013PUNCTUAT" +
-      "ION\020*\022\026\n\022FREE_STANDING_WORD\020+\022\024\n\020SUPPRES" +
-      "SION_WORD\020,\"\351\001\n\025UserDictionaryStorage\022\022\n" +
-      "\007version\030\001 \001(\005:\0010\022:\n\014dictionaries\030\002 \003(\0132" +
-      "$.mozc.user_dictionary.UserDictionary\022W\n" +
-      "\014storage_type\030\n \001(\01627.mozc.user_dictiona" +
-      "ry.UserDictionaryStorage.StorageType:\010SN" +
-              "APSHOT\"'\n\013StorageType\022\014\n\010SNAPSHOT\020\001\022\n\n\006U" +
-      "PDATE\020\002\"\266\006\n\025UserDictionaryCommand\022E\n\004typ" +
-      "e\030\001 \002(\01627.mozc.user_dictionary.UserDicti" +
-      "onaryCommand.CommandType\022\022\n\nsession_id\030\002" +
-      " \001(\004\022\025\n\rdictionary_id\030\003 \001(\004\022\027\n\017dictionar" +
-      "y_name\030\004 \001(\t\022\023\n\013entry_index\030\005 \003(\005\0229\n\005ent" +
-      "ry\030\006 \001(\0132*.mozc.user_dictionary.UserDict" +
-      "ionary.Entry\022\014\n\004data\030\007 \001(\t\022 \n\030ensure_non" +
-      "_empty_storage\030\010 \001(\010\022\036\n\026ignore_invalid_e" +
-      "ntries\030\t \001(\010\"\361\003\n\013CommandType\022\020\n\014NO_OPERA" +
-      "TION\020\000\022\021\n\rCLEAR_STORAGE\020\001\022\022\n\016CREATE_SESS" +
-      "ION\020\002\022\022\n\016DELETE_SESSION\020\003\022\037\n\033SET_DEFAULT" +
-      "_DICTIONARY_NAME\020\004\022\025\n\021CHECK_UNDOABILITY\020" +
-      "\005\022\010\n\004UNDO\020\006\022\010\n\004LOAD\020\007\022\010\n\004SAVE\020\010\022!\n\035GET_U" +
-      "SER_DICTIONARY_NAME_LIST\020\t\022\022\n\016GET_ENTRY_" +
-      "SIZE\020\n\022\026\n\022OBSOLETE_GET_ENTRY\020\013\022%\n!CHECK_" +
-      "NEW_DICTIONARY_AVAILABILITY\020\014\022\025\n\021CREATE_" +
-      "DICTIONARY\020\r\022\025\n\021DELETE_DICTIONARY\020\016\022\025\n\021R" +
-      "ENAME_DICTIONARY\020\017\022 \n\034CHECK_NEW_ENTRY_AV" +
-      "AILABILITY\020\020\022\r\n\tADD_ENTRY\020\021\022\016\n\nEDIT_ENTR" +
-      "Y\020\022\022\020\n\014DELETE_ENTRY\020\023\022\017\n\013IMPORT_DATA\020\024\022\017" +
-      "\n\013GET_STORAGE\020\025\022\017\n\013GET_ENTRIES\020\026\"\266\010\n\033Use" +
-      "rDictionaryCommandStatus\022H\n\006status\030\001 \002(\016" +
-      "28.mozc.user_dictionary.UserDictionaryCo" +
-      "mmandStatus.Status\022\022\n\nsession_id\030\002 \001(\004\022<" +
-      "\n\007storage\030\003 \001(\0132+.mozc.user_dictionary.U" +
-      "serDictionaryStorage\022\025\n\rdictionary_id\030\005 " +
-      "\001(\004\022\022\n\nentry_size\030\006 \001(\r\022;\n\007entries\030\007 \003(\013" +
-      "2*.mozc.user_dictionary.UserDictionary.E" +
-      "ntry\"\214\006\n\006Status\022#\n\037USER_DICTIONARY_COMMA" +
-      "ND_SUCCESS\020\001\022\021\n\rUNKNOWN_ERROR\020\002\022\023\n\017UNKNO" +
-      "WN_COMMAND\020\003\022\024\n\020INVALID_ARGUMENT\020\004\022\026\n\022UN" +
-      "KNOWN_SESSION_ID\020\005\022\022\n\016FILE_NOT_FOUND\020\006\022\027" +
-      "\n\023INVALID_FILE_FORMAT\020\007\022\034\n\030FILE_SIZE_LIM" +
-      "IT_EXCEEDED\020\010\022\"\n\036DICTIONARY_SIZE_LIMIT_E" +
-      "XCEEDED\020\t\022\035\n\031ENTRY_SIZE_LIMIT_EXCEEDED\020\n" +
-      "\022\031\n\025UNKNOWN_DICTIONARY_ID\020\013\022\034\n\030ENTRY_IND" +
-      "EX_OUT_OF_RANGE\020\014\022\031\n\025DICTIONARY_NAME_EMP" +
-      "TY\020\r\022\034\n\030DICTIONARY_NAME_TOO_LONG\020\016\022.\n*DI" +
-      "CTIONARY_NAME_CONTAINS_INVALID_CHARACTER" +
-      "\020\017\022\036\n\032DICTIONARY_NAME_DUPLICATED\020\020\022\021\n\rRE" +
-      "ADING_EMPTY\020\021\022\024\n\020READING_TOO_LONG\020\022\022&\n\"R" +
-      "EADING_CONTAINS_INVALID_CHARACTER\020\023\022\016\n\nW" +
-      "ORD_EMPTY\020\024\022\021\n\rWORD_TOO_LONG\020\025\022#\n\037WORD_C" +
-      "ONTAINS_INVALID_CHARACTER\020\026\022\024\n\020INVALID_P" +
-      "OS_TYPE\020\027\022\024\n\020COMMENT_TOO_LONG\020\030\022&\n\"COMME" +
-      "NT_CONTAINS_INVALID_CHARACTER\020\031\022\031\n\025IMPOR" +
-      "T_TOO_MANY_WORDS\020\032\022\032\n\026IMPORT_INVALID_ENT" +
-      "RIES\020\033\022\023\n\017NO_UNDO_HISTORY\020\034J\004\010\004\020\005BL\n.org" +
-      ".mozc.android.inputmethod.japanese.proto" +
-      "bufB\032ProtoUserDictionaryStorage"
+      "\022\024mozc.user_dictionary\"\220\t\n\016UserDictionar" +
+      "y\022\021\n\002id\030\001 \001(\004:\0010B\0020\001\022\016\n\004name\030\003 \001(\t:\000\022;\n\007" +
+      "entries\030\004 \003(\0132*.mozc.user_dictionary.Use" +
+      "rDictionary.Entry\032\237\001\n\005Entry\022\r\n\003key\030\001 \001(\t" +
+      ":\000\022\017\n\005value\030\002 \001(\t:\000\022\021\n\007comment\030\004 \001(\t:\000\022?" +
+      "\n\003pos\030\005 \001(\0162,.mozc.user_dictionary.UserD" +
+      "ictionary.PosType:\004NOUN\022\020\n\006locale\030\014 \001(\t:" +
+      "\000J\004\010\003\020\004J\004\010\n\020\013J\004\010\013\020\014\"\351\006\n\007PosType\022\n\n\006NO_PO" +
+      "S\020\000\022\010\n\004NOUN\020\001\022\020\n\014ABBREVIATION\020\002\022\023\n\017SUGGE" +
+      "STION_ONLY\020\003\022\017\n\013PROPER_NOUN\020\004\022\021\n\rPERSONA" +
+      "L_NAME\020\005\022\017\n\013FAMILY_NAME\020\006\022\016\n\nFIRST_NAME\020" +
+      "\007\022\025\n\021ORGANIZATION_NAME\020\010\022\016\n\nPLACE_NAME\020\t" +
+      "\022!\n\035SA_IRREGULAR_CONJUGATION_NOUN\020\n\022\031\n\025A" +
+      "DJECTIVE_VERBAL_NOUN\020\013\022\n\n\006NUMBER\020\014\022\014\n\010AL" +
+      "PHABET\020\r\022\n\n\006SYMBOL\020\016\022\014\n\010EMOTICON\020\017\022\n\n\006AD" +
+      "VERB\020\020\022\026\n\022PRENOUN_ADJECTIVAL\020\021\022\017\n\013CONJUN" +
+      "CTION\020\022\022\020\n\014INTERJECTION\020\023\022\n\n\006PREFIX\020\024\022\022\n" +
+      "\016COUNTER_SUFFIX\020\025\022\022\n\016GENERIC_SUFFIX\020\026\022\026\n" +
+      "\022PERSON_NAME_SUFFIX\020\027\022\025\n\021PLACE_NAME_SUFF" +
+      "IX\020\030\022\022\n\016WA_GROUP1_VERB\020\031\022\022\n\016KA_GROUP1_VE" +
+      "RB\020\032\022\022\n\016SA_GROUP1_VERB\020\033\022\022\n\016TA_GROUP1_VE" +
+      "RB\020\034\022\022\n\016NA_GROUP1_VERB\020\035\022\022\n\016MA_GROUP1_VE" +
+      "RB\020\036\022\022\n\016RA_GROUP1_VERB\020\037\022\022\n\016GA_GROUP1_VE" +
+      "RB\020 \022\022\n\016BA_GROUP1_VERB\020!\022\022\n\016HA_GROUP1_VE" +
+      "RB\020\"\022\017\n\013GROUP2_VERB\020#\022\024\n\020KURU_GROUP3_VER" +
+      "B\020$\022\024\n\020SURU_GROUP3_VERB\020%\022\024\n\020ZURU_GROUP3" +
+      "_VERB\020&\022\022\n\016RU_GROUP3_VERB\020\'\022\r\n\tADJECTIVE" +
+      "\020(\022\034\n\030SENTENCE_ENDING_PARTICLE\020)\022\017\n\013PUNC" +
+      "TUATION\020*\022\026\n\022FREE_STANDING_WORD\020+\022\024\n\020SUP" +
+      "PRESSION_WORD\020,J\004\010\002\020\003J\004\010\005\020\006J\004\010\006\020\007\"m\n\025Use" +
+      "rDictionaryStorage\022\022\n\007version\030\001 \001(\005:\0010\022:" +
+      "\n\014dictionaries\030\002 \003(\0132$.mozc.user_diction" +
+      "ary.UserDictionaryJ\004\010\n\020\013\"\300\006\n\025UserDiction" +
+      "aryCommand\022E\n\004type\030\001 \002(\01627.mozc.user_dic" +
+      "tionary.UserDictionaryCommand.CommandTyp" +
+      "e\022\026\n\nsession_id\030\002 \001(\004B\0020\001\022\031\n\rdictionary_" +
+      "id\030\003 \001(\004B\0020\001\022\027\n\017dictionary_name\030\004 \001(\t\022\023\n" +
+      "\013entry_index\030\005 \003(\005\0229\n\005entry\030\006 \001(\0132*.mozc" +
+      ".user_dictionary.UserDictionary.Entry\022\014\n" +
+      "\004data\030\007 \001(\t\022 \n\030ensure_non_empty_storage\030" +
+      "\010 \001(\010\022\036\n\026ignore_invalid_entries\030\t \001(\010\"\363\003" +
+      "\n\013CommandType\022\020\n\014NO_OPERATION\020\000\022\021\n\rCLEAR" +
+      "_STORAGE\020\001\022\022\n\016CREATE_SESSION\020\002\022\022\n\016DELETE" +
+      "_SESSION\020\003\022\037\n\033SET_DEFAULT_DICTIONARY_NAM" +
+      "E\020\004\022\025\n\021CHECK_UNDOABILITY\020\005\022\010\n\004UNDO\020\006\022\010\n\004" +
+      "LOAD\020\007\022\010\n\004SAVE\020\010\022!\n\035GET_USER_DICTIONARY_" +
+      "NAME_LIST\020\t\022\022\n\016GET_ENTRY_SIZE\020\n\022%\n!CHECK" +
+      "_NEW_DICTIONARY_AVAILABILITY\020\014\022\025\n\021CREATE" +
+      "_DICTIONARY\020\r\022\025\n\021DELETE_DICTIONARY\020\016\022\025\n\021" +
+      "RENAME_DICTIONARY\020\017\022 \n\034CHECK_NEW_ENTRY_A" +
+      "VAILABILITY\020\020\022\r\n\tADD_ENTRY\020\021\022\016\n\nEDIT_ENT" +
+      "RY\020\022\022\020\n\014DELETE_ENTRY\020\023\022\017\n\013IMPORT_DATA\020\024\022" +
+      "\017\n\013GET_STORAGE\020\025\022\017\n\013GET_ENTRIES\020\026\"\004\010\013\020\013*" +
+      "\022OBSOLETE_GET_ENTRY\"\276\010\n\033UserDictionaryCo" +
+      "mmandStatus\022H\n\006status\030\001 \002(\01628.mozc.user_" +
+      "dictionary.UserDictionaryCommandStatus.S" +
+      "tatus\022\026\n\nsession_id\030\002 \001(\004B\0020\001\022<\n\007storage" +
+      "\030\003 \001(\0132+.mozc.user_dictionary.UserDictio" +
+      "naryStorage\022\031\n\rdictionary_id\030\005 \001(\004B\0020\001\022\022" +
+      "\n\nentry_size\030\006 \001(\r\022;\n\007entries\030\007 \003(\0132*.mo" +
+      "zc.user_dictionary.UserDictionary.Entry\"" +
+      "\214\006\n\006Status\022#\n\037USER_DICTIONARY_COMMAND_SU" +
+      "CCESS\020\001\022\021\n\rUNKNOWN_ERROR\020\002\022\023\n\017UNKNOWN_CO" +
+      "MMAND\020\003\022\024\n\020INVALID_ARGUMENT\020\004\022\026\n\022UNKNOWN" +
+      "_SESSION_ID\020\005\022\022\n\016FILE_NOT_FOUND\020\006\022\027\n\023INV" +
+      "ALID_FILE_FORMAT\020\007\022\034\n\030FILE_SIZE_LIMIT_EX" +
+      "CEEDED\020\010\022\"\n\036DICTIONARY_SIZE_LIMIT_EXCEED" +
+      "ED\020\t\022\035\n\031ENTRY_SIZE_LIMIT_EXCEEDED\020\n\022\031\n\025U" +
+      "NKNOWN_DICTIONARY_ID\020\013\022\034\n\030ENTRY_INDEX_OU" +
+      "T_OF_RANGE\020\014\022\031\n\025DICTIONARY_NAME_EMPTY\020\r\022" +
+      "\034\n\030DICTIONARY_NAME_TOO_LONG\020\016\022.\n*DICTION" +
+      "ARY_NAME_CONTAINS_INVALID_CHARACTER\020\017\022\036\n" +
+      "\032DICTIONARY_NAME_DUPLICATED\020\020\022\021\n\rREADING" +
+      "_EMPTY\020\021\022\024\n\020READING_TOO_LONG\020\022\022&\n\"READIN" +
+      "G_CONTAINS_INVALID_CHARACTER\020\023\022\016\n\nWORD_E" +
+      "MPTY\020\024\022\021\n\rWORD_TOO_LONG\020\025\022#\n\037WORD_CONTAI" +
+      "NS_INVALID_CHARACTER\020\026\022\024\n\020INVALID_POS_TY" +
+      "PE\020\027\022\024\n\020COMMENT_TOO_LONG\020\030\022&\n\"COMMENT_CO" +
+      "NTAINS_INVALID_CHARACTER\020\031\022\031\n\025IMPORT_TOO" +
+      "_MANY_WORDS\020\032\022\032\n\026IMPORT_INVALID_ENTRIES\020" +
+      "\033\022\023\n\017NO_UNDO_HISTORY\020\034J\004\010\004\020\005BL\n.org.mozc" +
+      ".android.inputmethod.japanese.protobufB\032" +
+      "ProtoUserDictionaryStorage"
     };
-    com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
-        new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
-          public com.google.protobuf.ExtensionRegistry assignDescriptors(
-              com.google.protobuf.Descriptors.FileDescriptor root) {
-            descriptor = root;
-            return null;
-          }
-        };
-    com.google.protobuf.Descriptors.FileDescriptor
+    descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
-        }, assigner);
+        });
     internal_static_mozc_user_dictionary_UserDictionary_descriptor =
       getDescriptor().getMessageTypes().get(0);
     internal_static_mozc_user_dictionary_UserDictionary_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_mozc_user_dictionary_UserDictionary_descriptor,
-        new java.lang.String[] { "Id", "Enabled", "Name", "Entries", "Removed", "Syncable", });
+        new java.lang.String[] { "Id", "Name", "Entries", });
     internal_static_mozc_user_dictionary_UserDictionary_Entry_descriptor =
       internal_static_mozc_user_dictionary_UserDictionary_descriptor.getNestedTypes().get(0);
     internal_static_mozc_user_dictionary_UserDictionary_Entry_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_mozc_user_dictionary_UserDictionary_Entry_descriptor,
-        new java.lang.String[] { "Key", "Value", "Comment", "Pos", "Removed", "AutoRegistered", });
+        new java.lang.String[] { "Key", "Value", "Comment", "Pos", "Locale", });
     internal_static_mozc_user_dictionary_UserDictionaryStorage_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_mozc_user_dictionary_UserDictionaryStorage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_mozc_user_dictionary_UserDictionaryStorage_descriptor,
-        new java.lang.String[] { "Version", "Dictionaries", "StorageType", });
+        new java.lang.String[] { "Version", "Dictionaries", });
     internal_static_mozc_user_dictionary_UserDictionaryCommand_descriptor =
       getDescriptor().getMessageTypes().get(2);
     internal_static_mozc_user_dictionary_UserDictionaryCommand_fieldAccessorTable = new

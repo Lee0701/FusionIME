@@ -19,20 +19,12 @@ public final class ProtoEngineBuilder {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>required .mozc.EngineReloadRequest.EngineType engine_type = 1;</code>
-     */
-    boolean hasEngineType();
-    /**
-     * <code>required .mozc.EngineReloadRequest.EngineType engine_type = 1;</code>
-     */
-    org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequest.EngineType getEngineType();
-
-    /**
      * <pre>
      * Path to the data file to be loaded in a new engine.
      * </pre>
      *
      * <code>required string file_path = 2;</code>
+     * @return Whether the filePath field is set.
      */
     boolean hasFilePath();
     /**
@@ -41,6 +33,7 @@ public final class ProtoEngineBuilder {
      * </pre>
      *
      * <code>required string file_path = 2;</code>
+     * @return The filePath.
      */
     java.lang.String getFilePath();
     /**
@@ -49,47 +42,10 @@ public final class ProtoEngineBuilder {
      * </pre>
      *
      * <code>required string file_path = 2;</code>
+     * @return The bytes for filePath.
      */
     com.google.protobuf.ByteString
         getFilePathBytes();
-
-    /**
-     * <pre>
-     * If provided, also atomically renames |file_path| to this location.  Since
-     * EngineBuilder validates the data file content before creating a new engine
-     * instance, this option is useful when you want to perform i) data
-     * verification, ii) install (file rename), and iii) engine reload at the same
-     * time in Mozc server side.
-     * </pre>
-     *
-     * <code>optional string install_location = 3;</code>
-     */
-    boolean hasInstallLocation();
-    /**
-     * <pre>
-     * If provided, also atomically renames |file_path| to this location.  Since
-     * EngineBuilder validates the data file content before creating a new engine
-     * instance, this option is useful when you want to perform i) data
-     * verification, ii) install (file rename), and iii) engine reload at the same
-     * time in Mozc server side.
-     * </pre>
-     *
-     * <code>optional string install_location = 3;</code>
-     */
-    java.lang.String getInstallLocation();
-    /**
-     * <pre>
-     * If provided, also atomically renames |file_path| to this location.  Since
-     * EngineBuilder validates the data file content before creating a new engine
-     * instance, this option is useful when you want to perform i) data
-     * verification, ii) install (file rename), and iii) engine reload at the same
-     * time in Mozc server side.
-     * </pre>
-     *
-     * <code>optional string install_location = 3;</code>
-     */
-    com.google.protobuf.ByteString
-        getInstallLocationBytes();
 
     /**
      * <pre>
@@ -100,6 +56,7 @@ public final class ProtoEngineBuilder {
      * </pre>
      *
      * <code>optional string magic_number = 4;</code>
+     * @return Whether the magicNumber field is set.
      */
     boolean hasMagicNumber();
     /**
@@ -111,6 +68,7 @@ public final class ProtoEngineBuilder {
      * </pre>
      *
      * <code>optional string magic_number = 4;</code>
+     * @return The magicNumber.
      */
     java.lang.String getMagicNumber();
     /**
@@ -122,14 +80,40 @@ public final class ProtoEngineBuilder {
      * </pre>
      *
      * <code>optional string magic_number = 4;</code>
+     * @return The bytes for magicNumber.
      */
     com.google.protobuf.ByteString
         getMagicNumberBytes();
+
+    /**
+     * <pre>
+     * Priority of the request (smaller is more prioritized).
+     * The decoder keeps all the requests, and uses the most prioritized one.
+     * For the same priority request, later one overrides existing one.
+     * Effective only with CommandType.SEND_ENGINE_RELOAD_REQUEST.
+     * </pre>
+     *
+     * <code>optional int32 priority = 5;</code>
+     * @return Whether the priority field is set.
+     */
+    boolean hasPriority();
+    /**
+     * <pre>
+     * Priority of the request (smaller is more prioritized).
+     * The decoder keeps all the requests, and uses the most prioritized one.
+     * For the same priority request, later one overrides existing one.
+     * Effective only with CommandType.SEND_ENGINE_RELOAD_REQUEST.
+     * </pre>
+     *
+     * <code>optional int32 priority = 5;</code>
+     * @return The priority.
+     */
+    int getPriority();
   }
   /**
    * Protobuf type {@code mozc.EngineReloadRequest}
    */
-  public  static final class EngineReloadRequest extends
+  public static final class EngineReloadRequest extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:mozc.EngineReloadRequest)
       EngineReloadRequestOrBuilder {
@@ -139,89 +123,28 @@ public final class ProtoEngineBuilder {
       super(builder);
     }
     private EngineReloadRequest() {
-      engineType_ = 0;
       filePath_ = "";
-      installLocation_ = "";
       magicNumber_ = "";
     }
 
     @java.lang.Override
-    public com.google.protobuf.UnknownFieldSet
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new EngineReloadRequest();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
       return this.unknownFields;
     }
-    private EngineReloadRequest(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            case 8: {
-              int rawValue = input.readEnum();
-              org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequest.EngineType value = org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequest.EngineType.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(1, rawValue);
-              } else {
-                bitField0_ |= 0x00000001;
-                engineType_ = rawValue;
-              }
-              break;
-            }
-            case 18: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00000002;
-              filePath_ = bs;
-              break;
-            }
-            case 26: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00000004;
-              installLocation_ = bs;
-              break;
-            }
-            case 34: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00000008;
-              magicNumber_ = bs;
-              break;
-            }
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static com.google.protobuf.Descriptors.Descriptor
+    public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.internal_static_mozc_EngineReloadRequest_descriptor;
     }
 
+    @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
       return org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.internal_static_mozc_EngineReloadRequest_fieldAccessorTable
@@ -229,128 +152,21 @@ public final class ProtoEngineBuilder {
               org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequest.class, org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequest.Builder.class);
     }
 
-    /**
-     * <pre>
-     * Specify the type of engine to build.
-     * </pre>
-     *
-     * Protobuf enum {@code mozc.EngineReloadRequest.EngineType}
-     */
-    public enum EngineType
-        implements com.google.protobuf.ProtocolMessageEnum {
-      /**
-       * <code>DESKTOP = 0;</code>
-       */
-      DESKTOP(0),
-      /**
-       * <code>MOBILE = 1;</code>
-       */
-      MOBILE(1),
-      ;
-
-      /**
-       * <code>DESKTOP = 0;</code>
-       */
-      public static final int DESKTOP_VALUE = 0;
-      /**
-       * <code>MOBILE = 1;</code>
-       */
-      public static final int MOBILE_VALUE = 1;
-
-
-      public final int getNumber() {
-        return value;
-      }
-
-      /**
-       * @deprecated Use {@link #forNumber(int)} instead.
-       */
-      @java.lang.Deprecated
-      public static EngineType valueOf(int value) {
-        return forNumber(value);
-      }
-
-      public static EngineType forNumber(int value) {
-        switch (value) {
-          case 0: return DESKTOP;
-          case 1: return MOBILE;
-          default: return null;
-        }
-      }
-
-      public static com.google.protobuf.Internal.EnumLiteMap<EngineType>
-          internalGetValueMap() {
-        return internalValueMap;
-      }
-      private static final com.google.protobuf.Internal.EnumLiteMap<
-          EngineType> internalValueMap =
-            new com.google.protobuf.Internal.EnumLiteMap<EngineType>() {
-              public EngineType findValueByNumber(int number) {
-                return EngineType.forNumber(number);
-              }
-            };
-
-      public final com.google.protobuf.Descriptors.EnumValueDescriptor
-          getValueDescriptor() {
-        return getDescriptor().getValues().get(ordinal());
-      }
-      public final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptorForType() {
-        return getDescriptor();
-      }
-      public static final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptor() {
-        return org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequest.getDescriptor().getEnumTypes().get(0);
-      }
-
-      private static final EngineType[] VALUES = values();
-
-      public static EngineType valueOf(
-          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
-        if (desc.getType() != getDescriptor()) {
-          throw new java.lang.IllegalArgumentException(
-            "EnumValueDescriptor is not for this type.");
-        }
-        return VALUES[desc.getIndex()];
-      }
-
-      private final int value;
-
-      EngineType(int value) {
-        this.value = value;
-      }
-
-      // @@protoc_insertion_point(enum_scope:mozc.EngineReloadRequest.EngineType)
-    }
-
     private int bitField0_;
-    public static final int ENGINE_TYPE_FIELD_NUMBER = 1;
-    private int engineType_;
-    /**
-     * <code>required .mozc.EngineReloadRequest.EngineType engine_type = 1;</code>
-     */
-    public boolean hasEngineType() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    /**
-     * <code>required .mozc.EngineReloadRequest.EngineType engine_type = 1;</code>
-     */
-    public org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequest.EngineType getEngineType() {
-      org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequest.EngineType result = org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequest.EngineType.valueOf(engineType_);
-      return result == null ? org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequest.EngineType.DESKTOP : result;
-    }
-
     public static final int FILE_PATH_FIELD_NUMBER = 2;
-    private volatile java.lang.Object filePath_;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object filePath_ = "";
     /**
      * <pre>
      * Path to the data file to be loaded in a new engine.
      * </pre>
      *
      * <code>required string file_path = 2;</code>
+     * @return Whether the filePath field is set.
      */
+    @java.lang.Override
     public boolean hasFilePath() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
+      return ((bitField0_ & 0x00000001) != 0);
     }
     /**
      * <pre>
@@ -358,7 +174,9 @@ public final class ProtoEngineBuilder {
      * </pre>
      *
      * <code>required string file_path = 2;</code>
+     * @return The filePath.
      */
+    @java.lang.Override
     public java.lang.String getFilePath() {
       java.lang.Object ref = filePath_;
       if (ref instanceof java.lang.String) {
@@ -379,7 +197,9 @@ public final class ProtoEngineBuilder {
      * </pre>
      *
      * <code>required string file_path = 2;</code>
+     * @return The bytes for filePath.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getFilePathBytes() {
       java.lang.Object ref = filePath_;
@@ -394,74 +214,9 @@ public final class ProtoEngineBuilder {
       }
     }
 
-    public static final int INSTALL_LOCATION_FIELD_NUMBER = 3;
-    private volatile java.lang.Object installLocation_;
-    /**
-     * <pre>
-     * If provided, also atomically renames |file_path| to this location.  Since
-     * EngineBuilder validates the data file content before creating a new engine
-     * instance, this option is useful when you want to perform i) data
-     * verification, ii) install (file rename), and iii) engine reload at the same
-     * time in Mozc server side.
-     * </pre>
-     *
-     * <code>optional string install_location = 3;</code>
-     */
-    public boolean hasInstallLocation() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
-    }
-    /**
-     * <pre>
-     * If provided, also atomically renames |file_path| to this location.  Since
-     * EngineBuilder validates the data file content before creating a new engine
-     * instance, this option is useful when you want to perform i) data
-     * verification, ii) install (file rename), and iii) engine reload at the same
-     * time in Mozc server side.
-     * </pre>
-     *
-     * <code>optional string install_location = 3;</code>
-     */
-    public java.lang.String getInstallLocation() {
-      java.lang.Object ref = installLocation_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          installLocation_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <pre>
-     * If provided, also atomically renames |file_path| to this location.  Since
-     * EngineBuilder validates the data file content before creating a new engine
-     * instance, this option is useful when you want to perform i) data
-     * verification, ii) install (file rename), and iii) engine reload at the same
-     * time in Mozc server side.
-     * </pre>
-     *
-     * <code>optional string install_location = 3;</code>
-     */
-    public com.google.protobuf.ByteString
-        getInstallLocationBytes() {
-      java.lang.Object ref = installLocation_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        installLocation_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
     public static final int MAGIC_NUMBER_FIELD_NUMBER = 4;
-    private volatile java.lang.Object magicNumber_;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object magicNumber_ = "";
     /**
      * <pre>
      * Explicitly specifies the magic number to be used for data validation.
@@ -471,9 +226,11 @@ public final class ProtoEngineBuilder {
      * </pre>
      *
      * <code>optional string magic_number = 4;</code>
+     * @return Whether the magicNumber field is set.
      */
+    @java.lang.Override
     public boolean hasMagicNumber() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
+      return ((bitField0_ & 0x00000002) != 0);
     }
     /**
      * <pre>
@@ -484,7 +241,9 @@ public final class ProtoEngineBuilder {
      * </pre>
      *
      * <code>optional string magic_number = 4;</code>
+     * @return The magicNumber.
      */
+    @java.lang.Override
     public java.lang.String getMagicNumber() {
       java.lang.Object ref = magicNumber_;
       if (ref instanceof java.lang.String) {
@@ -508,7 +267,9 @@ public final class ProtoEngineBuilder {
      * </pre>
      *
      * <code>optional string magic_number = 4;</code>
+     * @return The bytes for magicNumber.
      */
+    @java.lang.Override
     public com.google.protobuf.ByteString
         getMagicNumberBytes() {
       java.lang.Object ref = magicNumber_;
@@ -523,16 +284,46 @@ public final class ProtoEngineBuilder {
       }
     }
 
+    public static final int PRIORITY_FIELD_NUMBER = 5;
+    private int priority_ = 0;
+    /**
+     * <pre>
+     * Priority of the request (smaller is more prioritized).
+     * The decoder keeps all the requests, and uses the most prioritized one.
+     * For the same priority request, later one overrides existing one.
+     * Effective only with CommandType.SEND_ENGINE_RELOAD_REQUEST.
+     * </pre>
+     *
+     * <code>optional int32 priority = 5;</code>
+     * @return Whether the priority field is set.
+     */
+    @java.lang.Override
+    public boolean hasPriority() {
+      return ((bitField0_ & 0x00000004) != 0);
+    }
+    /**
+     * <pre>
+     * Priority of the request (smaller is more prioritized).
+     * The decoder keeps all the requests, and uses the most prioritized one.
+     * For the same priority request, later one overrides existing one.
+     * Effective only with CommandType.SEND_ENGINE_RELOAD_REQUEST.
+     * </pre>
+     *
+     * <code>optional int32 priority = 5;</code>
+     * @return The priority.
+     */
+    @java.lang.Override
+    public int getPriority() {
+      return priority_;
+    }
+
     private byte memoizedIsInitialized = -1;
-    public boolean isInitialized() {
+    @java.lang.Override
+    public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
       if (isInitialized == 0) return false;
 
-      if (!hasEngineType()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
       if (!hasFilePath()) {
         memoizedIsInitialized = 0;
         return false;
@@ -541,42 +332,38 @@ public final class ProtoEngineBuilder {
       return true;
     }
 
+    @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeEnum(1, engineType_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+      if (((bitField0_ & 0x00000001) != 0)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 2, filePath_);
       }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, installLocation_);
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+      if (((bitField0_ & 0x00000002) != 0)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 4, magicNumber_);
       }
-      unknownFields.writeTo(output);
+      if (((bitField0_ & 0x00000004) != 0)) {
+        output.writeInt32(5, priority_);
+      }
+      getUnknownFields().writeTo(output);
     }
 
+    @java.lang.Override
     public int getSerializedSize() {
       int size = memoizedSize;
       if (size != -1) return size;
 
       size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(1, engineType_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+      if (((bitField0_ & 0x00000001) != 0)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, filePath_);
       }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, installLocation_);
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+      if (((bitField0_ & 0x00000002) != 0)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, magicNumber_);
       }
-      size += unknownFields.getSerializedSize();
+      if (((bitField0_ & 0x00000004) != 0)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(5, priority_);
+      }
+      size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
     }
@@ -591,28 +378,23 @@ public final class ProtoEngineBuilder {
       }
       org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequest other = (org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequest) obj;
 
-      boolean result = true;
-      result = result && (hasEngineType() == other.hasEngineType());
-      if (hasEngineType()) {
-        result = result && engineType_ == other.engineType_;
-      }
-      result = result && (hasFilePath() == other.hasFilePath());
+      if (hasFilePath() != other.hasFilePath()) return false;
       if (hasFilePath()) {
-        result = result && getFilePath()
-            .equals(other.getFilePath());
+        if (!getFilePath()
+            .equals(other.getFilePath())) return false;
       }
-      result = result && (hasInstallLocation() == other.hasInstallLocation());
-      if (hasInstallLocation()) {
-        result = result && getInstallLocation()
-            .equals(other.getInstallLocation());
-      }
-      result = result && (hasMagicNumber() == other.hasMagicNumber());
+      if (hasMagicNumber() != other.hasMagicNumber()) return false;
       if (hasMagicNumber()) {
-        result = result && getMagicNumber()
-            .equals(other.getMagicNumber());
+        if (!getMagicNumber()
+            .equals(other.getMagicNumber())) return false;
       }
-      result = result && unknownFields.equals(other.unknownFields);
-      return result;
+      if (hasPriority() != other.hasPriority()) return false;
+      if (hasPriority()) {
+        if (getPriority()
+            != other.getPriority()) return false;
+      }
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
+      return true;
     }
 
     @java.lang.Override
@@ -622,23 +404,19 @@ public final class ProtoEngineBuilder {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
-      if (hasEngineType()) {
-        hash = (37 * hash) + ENGINE_TYPE_FIELD_NUMBER;
-        hash = (53 * hash) + engineType_;
-      }
       if (hasFilePath()) {
         hash = (37 * hash) + FILE_PATH_FIELD_NUMBER;
         hash = (53 * hash) + getFilePath().hashCode();
-      }
-      if (hasInstallLocation()) {
-        hash = (37 * hash) + INSTALL_LOCATION_FIELD_NUMBER;
-        hash = (53 * hash) + getInstallLocation().hashCode();
       }
       if (hasMagicNumber()) {
         hash = (37 * hash) + MAGIC_NUMBER_FIELD_NUMBER;
         hash = (53 * hash) + getMagicNumber().hashCode();
       }
-      hash = (29 * hash) + unknownFields.hashCode();
+      if (hasPriority()) {
+        hash = (37 * hash) + PRIORITY_FIELD_NUMBER;
+        hash = (53 * hash) + getPriority();
+      }
+      hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
     }
@@ -713,6 +491,7 @@ public final class ProtoEngineBuilder {
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
+    @java.lang.Override
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
@@ -720,6 +499,7 @@ public final class ProtoEngineBuilder {
     public static Builder newBuilder(org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequest prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
+    @java.lang.Override
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
@@ -738,11 +518,12 @@ public final class ProtoEngineBuilder {
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:mozc.EngineReloadRequest)
         org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequestOrBuilder {
-      public static com.google.protobuf.Descriptors.Descriptor
+      public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.internal_static_mozc_EngineReloadRequest_descriptor;
       }
 
+      @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.internal_static_mozc_EngineReloadRequest_fieldAccessorTable
@@ -752,41 +533,36 @@ public final class ProtoEngineBuilder {
 
       // Construct using org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequest.newBuilder()
       private Builder() {
-        maybeForceBuilderInitialization();
+
       }
 
       private Builder(
           com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
-        maybeForceBuilderInitialization();
+
       }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
-      }
+      @java.lang.Override
       public Builder clear() {
         super.clear();
-        engineType_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000001);
+        bitField0_ = 0;
         filePath_ = "";
-        bitField0_ = (bitField0_ & ~0x00000002);
-        installLocation_ = "";
-        bitField0_ = (bitField0_ & ~0x00000004);
         magicNumber_ = "";
-        bitField0_ = (bitField0_ & ~0x00000008);
+        priority_ = 0;
         return this;
       }
 
+      @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
         return org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.internal_static_mozc_EngineReloadRequest_descriptor;
       }
 
+      @java.lang.Override
       public org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequest getDefaultInstanceForType() {
         return org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequest.getDefaultInstance();
       }
 
+      @java.lang.Override
       public org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequest build() {
         org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequest result = buildPartial();
         if (!result.isInitialized()) {
@@ -795,57 +571,65 @@ public final class ProtoEngineBuilder {
         return result;
       }
 
+      @java.lang.Override
       public org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequest buildPartial() {
         org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequest result = new org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequest(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.engineType_ = engineType_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        result.filePath_ = filePath_;
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000004;
-        }
-        result.installLocation_ = installLocation_;
-        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
-          to_bitField0_ |= 0x00000008;
-        }
-        result.magicNumber_ = magicNumber_;
-        result.bitField0_ = to_bitField0_;
+        if (bitField0_ != 0) { buildPartial0(result); }
         onBuilt();
         return result;
       }
 
+      private void buildPartial0(org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequest result) {
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          result.filePath_ = filePath_;
+          to_bitField0_ |= 0x00000001;
+        }
+        if (((from_bitField0_ & 0x00000002) != 0)) {
+          result.magicNumber_ = magicNumber_;
+          to_bitField0_ |= 0x00000002;
+        }
+        if (((from_bitField0_ & 0x00000004) != 0)) {
+          result.priority_ = priority_;
+          to_bitField0_ |= 0x00000004;
+        }
+        result.bitField0_ |= to_bitField0_;
+      }
+
+      @java.lang.Override
       public Builder clone() {
         return super.clone();
       }
+      @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
         return super.setField(field, value);
       }
+      @java.lang.Override
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
         return super.clearField(field);
       }
+      @java.lang.Override
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return super.clearOneof(oneof);
       }
+      @java.lang.Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           int index, java.lang.Object value) {
         return super.setRepeatedField(field, index, value);
       }
+      @java.lang.Override
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
         return super.addRepeatedField(field, value);
       }
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequest) {
           return mergeFrom((org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequest)other);
@@ -857,90 +641,79 @@ public final class ProtoEngineBuilder {
 
       public Builder mergeFrom(org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequest other) {
         if (other == org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequest.getDefaultInstance()) return this;
-        if (other.hasEngineType()) {
-          setEngineType(other.getEngineType());
-        }
         if (other.hasFilePath()) {
-          bitField0_ |= 0x00000002;
           filePath_ = other.filePath_;
-          onChanged();
-        }
-        if (other.hasInstallLocation()) {
-          bitField0_ |= 0x00000004;
-          installLocation_ = other.installLocation_;
+          bitField0_ |= 0x00000001;
           onChanged();
         }
         if (other.hasMagicNumber()) {
-          bitField0_ |= 0x00000008;
           magicNumber_ = other.magicNumber_;
+          bitField0_ |= 0x00000002;
           onChanged();
         }
-        this.mergeUnknownFields(other.unknownFields);
+        if (other.hasPriority()) {
+          setPriority(other.getPriority());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
       }
 
-      public boolean isInitialized() {
-        if (!hasEngineType()) {
+      @java.lang.Override
+      public final boolean isInitialized() {
+        if (!hasFilePath()) {
           return false;
         }
-          return hasFilePath();
+        return true;
       }
 
+      @java.lang.Override
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequest parsedMessage = null;
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
         try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 18: {
+                filePath_ = input.readBytes();
+                bitField0_ |= 0x00000001;
+                break;
+              } // case 18
+              case 34: {
+                magicNumber_ = input.readBytes();
+                bitField0_ |= 0x00000002;
+                break;
+              } // case 34
+              case 40: {
+                priority_ = input.readInt32();
+                bitField0_ |= 0x00000004;
+                break;
+              } // case 40
+              default: {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+            } // switch (tag)
+          } // while (!done)
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequest) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
+          onChanged();
+        } // finally
         return this;
       }
       private int bitField0_;
-
-      private int engineType_ = 0;
-      /**
-       * <code>required .mozc.EngineReloadRequest.EngineType engine_type = 1;</code>
-       */
-      public boolean hasEngineType() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
-      }
-      /**
-       * <code>required .mozc.EngineReloadRequest.EngineType engine_type = 1;</code>
-       */
-      public org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequest.EngineType getEngineType() {
-        org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequest.EngineType result = org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequest.EngineType.valueOf(engineType_);
-        return result == null ? org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequest.EngineType.DESKTOP : result;
-      }
-      /**
-       * <code>required .mozc.EngineReloadRequest.EngineType engine_type = 1;</code>
-       */
-      public Builder setEngineType(org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequest.EngineType value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        bitField0_ |= 0x00000001;
-        engineType_ = value.getNumber();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required .mozc.EngineReloadRequest.EngineType engine_type = 1;</code>
-       */
-      public Builder clearEngineType() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        engineType_ = 0;
-        onChanged();
-        return this;
-      }
 
       private java.lang.Object filePath_ = "";
       /**
@@ -949,9 +722,10 @@ public final class ProtoEngineBuilder {
        * </pre>
        *
        * <code>required string file_path = 2;</code>
+       * @return Whether the filePath field is set.
        */
       public boolean hasFilePath() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
+        return ((bitField0_ & 0x00000001) != 0);
       }
       /**
        * <pre>
@@ -959,6 +733,7 @@ public final class ProtoEngineBuilder {
        * </pre>
        *
        * <code>required string file_path = 2;</code>
+       * @return The filePath.
        */
       public java.lang.String getFilePath() {
         java.lang.Object ref = filePath_;
@@ -980,6 +755,7 @@ public final class ProtoEngineBuilder {
        * </pre>
        *
        * <code>required string file_path = 2;</code>
+       * @return The bytes for filePath.
        */
       public com.google.protobuf.ByteString
           getFilePathBytes() {
@@ -1000,14 +776,14 @@ public final class ProtoEngineBuilder {
        * </pre>
        *
        * <code>required string file_path = 2;</code>
+       * @param value The filePath to set.
+       * @return This builder for chaining.
        */
       public Builder setFilePath(
           java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000002;
+        if (value == null) { throw new NullPointerException(); }
         filePath_ = value;
+        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -1017,10 +793,11 @@ public final class ProtoEngineBuilder {
        * </pre>
        *
        * <code>required string file_path = 2;</code>
+       * @return This builder for chaining.
        */
       public Builder clearFilePath() {
-        bitField0_ = (bitField0_ & ~0x00000002);
         filePath_ = getDefaultInstance().getFilePath();
+        bitField0_ = (bitField0_ & ~0x00000001);
         onChanged();
         return this;
       }
@@ -1030,138 +807,14 @@ public final class ProtoEngineBuilder {
        * </pre>
        *
        * <code>required string file_path = 2;</code>
+       * @param value The bytes for filePath to set.
+       * @return This builder for chaining.
        */
       public Builder setFilePathBytes(
           com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000002;
+        if (value == null) { throw new NullPointerException(); }
         filePath_ = value;
-        onChanged();
-        return this;
-      }
-
-      private java.lang.Object installLocation_ = "";
-      /**
-       * <pre>
-       * If provided, also atomically renames |file_path| to this location.  Since
-       * EngineBuilder validates the data file content before creating a new engine
-       * instance, this option is useful when you want to perform i) data
-       * verification, ii) install (file rename), and iii) engine reload at the same
-       * time in Mozc server side.
-       * </pre>
-       *
-       * <code>optional string install_location = 3;</code>
-       */
-      public boolean hasInstallLocation() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
-      }
-      /**
-       * <pre>
-       * If provided, also atomically renames |file_path| to this location.  Since
-       * EngineBuilder validates the data file content before creating a new engine
-       * instance, this option is useful when you want to perform i) data
-       * verification, ii) install (file rename), and iii) engine reload at the same
-       * time in Mozc server side.
-       * </pre>
-       *
-       * <code>optional string install_location = 3;</code>
-       */
-      public java.lang.String getInstallLocation() {
-        java.lang.Object ref = installLocation_;
-        if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          if (bs.isValidUtf8()) {
-            installLocation_ = s;
-          }
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <pre>
-       * If provided, also atomically renames |file_path| to this location.  Since
-       * EngineBuilder validates the data file content before creating a new engine
-       * instance, this option is useful when you want to perform i) data
-       * verification, ii) install (file rename), and iii) engine reload at the same
-       * time in Mozc server side.
-       * </pre>
-       *
-       * <code>optional string install_location = 3;</code>
-       */
-      public com.google.protobuf.ByteString
-          getInstallLocationBytes() {
-        java.lang.Object ref = installLocation_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          installLocation_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <pre>
-       * If provided, also atomically renames |file_path| to this location.  Since
-       * EngineBuilder validates the data file content before creating a new engine
-       * instance, this option is useful when you want to perform i) data
-       * verification, ii) install (file rename), and iii) engine reload at the same
-       * time in Mozc server side.
-       * </pre>
-       *
-       * <code>optional string install_location = 3;</code>
-       */
-      public Builder setInstallLocation(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000004;
-        installLocation_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       * If provided, also atomically renames |file_path| to this location.  Since
-       * EngineBuilder validates the data file content before creating a new engine
-       * instance, this option is useful when you want to perform i) data
-       * verification, ii) install (file rename), and iii) engine reload at the same
-       * time in Mozc server side.
-       * </pre>
-       *
-       * <code>optional string install_location = 3;</code>
-       */
-      public Builder clearInstallLocation() {
-        bitField0_ = (bitField0_ & ~0x00000004);
-        installLocation_ = getDefaultInstance().getInstallLocation();
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       * If provided, also atomically renames |file_path| to this location.  Since
-       * EngineBuilder validates the data file content before creating a new engine
-       * instance, this option is useful when you want to perform i) data
-       * verification, ii) install (file rename), and iii) engine reload at the same
-       * time in Mozc server side.
-       * </pre>
-       *
-       * <code>optional string install_location = 3;</code>
-       */
-      public Builder setInstallLocationBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000004;
-        installLocation_ = value;
+        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -1176,9 +829,10 @@ public final class ProtoEngineBuilder {
        * </pre>
        *
        * <code>optional string magic_number = 4;</code>
+       * @return Whether the magicNumber field is set.
        */
       public boolean hasMagicNumber() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
+        return ((bitField0_ & 0x00000002) != 0);
       }
       /**
        * <pre>
@@ -1189,6 +843,7 @@ public final class ProtoEngineBuilder {
        * </pre>
        *
        * <code>optional string magic_number = 4;</code>
+       * @return The magicNumber.
        */
       public java.lang.String getMagicNumber() {
         java.lang.Object ref = magicNumber_;
@@ -1213,6 +868,7 @@ public final class ProtoEngineBuilder {
        * </pre>
        *
        * <code>optional string magic_number = 4;</code>
+       * @return The bytes for magicNumber.
        */
       public com.google.protobuf.ByteString
           getMagicNumberBytes() {
@@ -1236,14 +892,14 @@ public final class ProtoEngineBuilder {
        * </pre>
        *
        * <code>optional string magic_number = 4;</code>
+       * @param value The magicNumber to set.
+       * @return This builder for chaining.
        */
       public Builder setMagicNumber(
           java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000008;
+        if (value == null) { throw new NullPointerException(); }
         magicNumber_ = value;
+        bitField0_ |= 0x00000002;
         onChanged();
         return this;
       }
@@ -1256,10 +912,11 @@ public final class ProtoEngineBuilder {
        * </pre>
        *
        * <code>optional string magic_number = 4;</code>
+       * @return This builder for chaining.
        */
       public Builder clearMagicNumber() {
-        bitField0_ = (bitField0_ & ~0x00000008);
         magicNumber_ = getDefaultInstance().getMagicNumber();
+        bitField0_ = (bitField0_ & ~0x00000002);
         onChanged();
         return this;
       }
@@ -1272,24 +929,94 @@ public final class ProtoEngineBuilder {
        * </pre>
        *
        * <code>optional string magic_number = 4;</code>
+       * @param value The bytes for magicNumber to set.
+       * @return This builder for chaining.
        */
       public Builder setMagicNumberBytes(
           com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000008;
+        if (value == null) { throw new NullPointerException(); }
         magicNumber_ = value;
+        bitField0_ |= 0x00000002;
         onChanged();
         return this;
       }
-      public Builder setUnknownFields(
-              final com.google.protobuf.UnknownFieldSet unknownFields) {
+
+      private int priority_ ;
+      /**
+       * <pre>
+       * Priority of the request (smaller is more prioritized).
+       * The decoder keeps all the requests, and uses the most prioritized one.
+       * For the same priority request, later one overrides existing one.
+       * Effective only with CommandType.SEND_ENGINE_RELOAD_REQUEST.
+       * </pre>
+       *
+       * <code>optional int32 priority = 5;</code>
+       * @return Whether the priority field is set.
+       */
+      @java.lang.Override
+      public boolean hasPriority() {
+        return ((bitField0_ & 0x00000004) != 0);
+      }
+      /**
+       * <pre>
+       * Priority of the request (smaller is more prioritized).
+       * The decoder keeps all the requests, and uses the most prioritized one.
+       * For the same priority request, later one overrides existing one.
+       * Effective only with CommandType.SEND_ENGINE_RELOAD_REQUEST.
+       * </pre>
+       *
+       * <code>optional int32 priority = 5;</code>
+       * @return The priority.
+       */
+      @java.lang.Override
+      public int getPriority() {
+        return priority_;
+      }
+      /**
+       * <pre>
+       * Priority of the request (smaller is more prioritized).
+       * The decoder keeps all the requests, and uses the most prioritized one.
+       * For the same priority request, later one overrides existing one.
+       * Effective only with CommandType.SEND_ENGINE_RELOAD_REQUEST.
+       * </pre>
+       *
+       * <code>optional int32 priority = 5;</code>
+       * @param value The priority to set.
+       * @return This builder for chaining.
+       */
+      public Builder setPriority(int value) {
+        
+        priority_ = value;
+        bitField0_ |= 0x00000004;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * Priority of the request (smaller is more prioritized).
+       * The decoder keeps all the requests, and uses the most prioritized one.
+       * For the same priority request, later one overrides existing one.
+       * Effective only with CommandType.SEND_ENGINE_RELOAD_REQUEST.
+       * </pre>
+       *
+       * <code>optional int32 priority = 5;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearPriority() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        priority_ = 0;
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFields(unknownFields);
       }
 
-      public Builder mergeUnknownFields(
-              final com.google.protobuf.UnknownFieldSet unknownFields) {
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
       }
 
@@ -1309,11 +1036,23 @@ public final class ProtoEngineBuilder {
 
     @java.lang.Deprecated public static final com.google.protobuf.Parser<EngineReloadRequest>
         PARSER = new com.google.protobuf.AbstractParser<EngineReloadRequest>() {
+      @java.lang.Override
       public EngineReloadRequest parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new EngineReloadRequest(input, extensionRegistry);
+        Builder builder = newBuilder();
+        try {
+          builder.mergeFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(builder.buildPartial());
+        } catch (com.google.protobuf.UninitializedMessageException e) {
+          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(e)
+              .setUnfinishedMessage(builder.buildPartial());
+        }
+        return builder.buildPartial();
       }
     };
 
@@ -1326,6 +1065,7 @@ public final class ProtoEngineBuilder {
       return PARSER;
     }
 
+    @java.lang.Override
     public org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequest getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
@@ -1338,10 +1078,12 @@ public final class ProtoEngineBuilder {
 
     /**
      * <code>required .mozc.EngineReloadResponse.Status status = 1;</code>
+     * @return Whether the status field is set.
      */
     boolean hasStatus();
     /**
      * <code>required .mozc.EngineReloadResponse.Status status = 1;</code>
+     * @return The status.
      */
     org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadResponse.Status getStatus();
 
@@ -1353,6 +1095,7 @@ public final class ProtoEngineBuilder {
      * </pre>
      *
      * <code>optional .mozc.EngineReloadRequest request = 2;</code>
+     * @return Whether the request field is set.
      */
     boolean hasRequest();
     /**
@@ -1363,6 +1106,7 @@ public final class ProtoEngineBuilder {
      * </pre>
      *
      * <code>optional .mozc.EngineReloadRequest request = 2;</code>
+     * @return The request.
      */
     org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequest getRequest();
     /**
@@ -1379,7 +1123,7 @@ public final class ProtoEngineBuilder {
   /**
    * Protobuf type {@code mozc.EngineReloadResponse}
    */
-  public  static final class EngineReloadResponse extends
+  public static final class EngineReloadResponse extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:mozc.EngineReloadResponse)
       EngineReloadResponseOrBuilder {
@@ -1393,77 +1137,23 @@ public final class ProtoEngineBuilder {
     }
 
     @java.lang.Override
-    public com.google.protobuf.UnknownFieldSet
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new EngineReloadResponse();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
       return this.unknownFields;
     }
-    private EngineReloadResponse(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            case 8: {
-              int rawValue = input.readEnum();
-              org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadResponse.Status value = org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadResponse.Status.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(1, rawValue);
-              } else {
-                bitField0_ |= 0x00000001;
-                status_ = rawValue;
-              }
-              break;
-            }
-            case 18: {
-              org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequest.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000002) == 0x00000002)) {
-                subBuilder = request_.toBuilder();
-              }
-              request_ = input.readMessage(org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequest.PARSER, extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(request_);
-                request_ = subBuilder.buildPartial();
-              }
-              bitField0_ |= 0x00000002;
-              break;
-            }
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static com.google.protobuf.Descriptors.Descriptor
+    public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.internal_static_mozc_EngineReloadResponse_descriptor;
     }
 
+    @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
       return org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.internal_static_mozc_EngineReloadResponse_fieldAccessorTable
@@ -1502,7 +1192,7 @@ public final class ProtoEngineBuilder {
       RELOADED(2),
       /**
        * <pre>
-       * Failed to start reload becuase another reload job is currently running.
+       * Failed to start reload because another reload job is currently running.
        * </pre>
        *
        * <code>ALREADY_RUNNING = 3;</code>
@@ -1510,7 +1200,7 @@ public final class ProtoEngineBuilder {
       ALREADY_RUNNING(3),
       /**
        * <pre>
-       * Erros in data file.
+       * Errors in data file.
        * </pre>
        *
        * <code>ENGINE_VERSION_MISMATCH = 4;</code>
@@ -1532,14 +1222,6 @@ public final class ProtoEngineBuilder {
        * <code>MMAP_FAILURE = 7;</code>
        */
       MMAP_FAILURE(7),
-      /**
-       * <pre>
-       * File rename is failed.
-       * </pre>
-       *
-       * <code>INSTALL_FAILURE = 8;</code>
-       */
-      INSTALL_FAILURE(8),
       /**
        * <code>UNKNOWN_ERROR = 9;</code>
        */
@@ -1572,7 +1254,7 @@ public final class ProtoEngineBuilder {
       public static final int RELOADED_VALUE = 2;
       /**
        * <pre>
-       * Failed to start reload becuase another reload job is currently running.
+       * Failed to start reload because another reload job is currently running.
        * </pre>
        *
        * <code>ALREADY_RUNNING = 3;</code>
@@ -1580,7 +1262,7 @@ public final class ProtoEngineBuilder {
       public static final int ALREADY_RUNNING_VALUE = 3;
       /**
        * <pre>
-       * Erros in data file.
+       * Errors in data file.
        * </pre>
        *
        * <code>ENGINE_VERSION_MISMATCH = 4;</code>
@@ -1603,14 +1285,6 @@ public final class ProtoEngineBuilder {
        */
       public static final int MMAP_FAILURE_VALUE = 7;
       /**
-       * <pre>
-       * File rename is failed.
-       * </pre>
-       *
-       * <code>INSTALL_FAILURE = 8;</code>
-       */
-      public static final int INSTALL_FAILURE_VALUE = 8;
-      /**
        * <code>UNKNOWN_ERROR = 9;</code>
        */
       public static final int UNKNOWN_ERROR_VALUE = 9;
@@ -1621,6 +1295,8 @@ public final class ProtoEngineBuilder {
       }
 
       /**
+       * @param value The numeric wire value of the corresponding enum entry.
+       * @return The enum associated with the given numeric wire value.
        * @deprecated Use {@link #forNumber(int)} instead.
        */
       @java.lang.Deprecated
@@ -1628,6 +1304,10 @@ public final class ProtoEngineBuilder {
         return forNumber(value);
       }
 
+      /**
+       * @param value The numeric wire value of the corresponding enum entry.
+       * @return The enum associated with the given numeric wire value.
+       */
       public static Status forNumber(int value) {
         switch (value) {
           case 0: return ACCEPTED;
@@ -1638,7 +1318,6 @@ public final class ProtoEngineBuilder {
           case 5: return DATA_MISSING;
           case 6: return DATA_BROKEN;
           case 7: return MMAP_FAILURE;
-          case 8: return INSTALL_FAILURE;
           case 9: return UNKNOWN_ERROR;
           default: return null;
         }
@@ -1682,7 +1361,7 @@ public final class ProtoEngineBuilder {
 
       private final int value;
 
-      Status(int value) {
+      private Status(int value) {
         this.value = value;
       }
 
@@ -1691,18 +1370,20 @@ public final class ProtoEngineBuilder {
 
     private int bitField0_;
     public static final int STATUS_FIELD_NUMBER = 1;
-    private int status_;
+    private int status_ = 0;
     /**
      * <code>required .mozc.EngineReloadResponse.Status status = 1;</code>
+     * @return Whether the status field is set.
      */
-    public boolean hasStatus() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
+    @java.lang.Override public boolean hasStatus() {
+      return ((bitField0_ & 0x00000001) != 0);
     }
     /**
      * <code>required .mozc.EngineReloadResponse.Status status = 1;</code>
+     * @return The status.
      */
-    public org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadResponse.Status getStatus() {
-      org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadResponse.Status result = org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadResponse.Status.valueOf(status_);
+    @java.lang.Override public org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadResponse.Status getStatus() {
+      org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadResponse.Status result = org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadResponse.Status.forNumber(status_);
       return result == null ? org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadResponse.Status.ACCEPTED : result;
     }
 
@@ -1716,9 +1397,11 @@ public final class ProtoEngineBuilder {
      * </pre>
      *
      * <code>optional .mozc.EngineReloadRequest request = 2;</code>
+     * @return Whether the request field is set.
      */
+    @java.lang.Override
     public boolean hasRequest() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
+      return ((bitField0_ & 0x00000002) != 0);
     }
     /**
      * <pre>
@@ -1728,7 +1411,9 @@ public final class ProtoEngineBuilder {
      * </pre>
      *
      * <code>optional .mozc.EngineReloadRequest request = 2;</code>
+     * @return The request.
      */
+    @java.lang.Override
     public org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequest getRequest() {
       return request_ == null ? org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequest.getDefaultInstance() : request_;
     }
@@ -1741,12 +1426,14 @@ public final class ProtoEngineBuilder {
      *
      * <code>optional .mozc.EngineReloadRequest request = 2;</code>
      */
+    @java.lang.Override
     public org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequestOrBuilder getRequestOrBuilder() {
       return request_ == null ? org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequest.getDefaultInstance() : request_;
     }
 
     private byte memoizedIsInitialized = -1;
-    public boolean isInitialized() {
+    @java.lang.Override
+    public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized == 1) return true;
       if (isInitialized == 0) return false;
@@ -1765,31 +1452,33 @@ public final class ProtoEngineBuilder {
       return true;
     }
 
+    @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+      if (((bitField0_ & 0x00000001) != 0)) {
         output.writeEnum(1, status_);
       }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+      if (((bitField0_ & 0x00000002) != 0)) {
         output.writeMessage(2, getRequest());
       }
-      unknownFields.writeTo(output);
+      getUnknownFields().writeTo(output);
     }
 
+    @java.lang.Override
     public int getSerializedSize() {
       int size = memoizedSize;
       if (size != -1) return size;
 
       size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+      if (((bitField0_ & 0x00000001) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(1, status_);
       }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+      if (((bitField0_ & 0x00000002) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(2, getRequest());
       }
-      size += unknownFields.getSerializedSize();
+      size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
     }
@@ -1804,18 +1493,17 @@ public final class ProtoEngineBuilder {
       }
       org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadResponse other = (org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadResponse) obj;
 
-      boolean result = true;
-      result = result && (hasStatus() == other.hasStatus());
+      if (hasStatus() != other.hasStatus()) return false;
       if (hasStatus()) {
-        result = result && status_ == other.status_;
+        if (status_ != other.status_) return false;
       }
-      result = result && (hasRequest() == other.hasRequest());
+      if (hasRequest() != other.hasRequest()) return false;
       if (hasRequest()) {
-        result = result && getRequest()
-            .equals(other.getRequest());
+        if (!getRequest()
+            .equals(other.getRequest())) return false;
       }
-      result = result && unknownFields.equals(other.unknownFields);
-      return result;
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
+      return true;
     }
 
     @java.lang.Override
@@ -1833,7 +1521,7 @@ public final class ProtoEngineBuilder {
         hash = (37 * hash) + REQUEST_FIELD_NUMBER;
         hash = (53 * hash) + getRequest().hashCode();
       }
-      hash = (29 * hash) + unknownFields.hashCode();
+      hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
     }
@@ -1908,6 +1596,7 @@ public final class ProtoEngineBuilder {
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
+    @java.lang.Override
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
@@ -1915,6 +1604,7 @@ public final class ProtoEngineBuilder {
     public static Builder newBuilder(org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
+    @java.lang.Override
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
           ? new Builder() : new Builder().mergeFrom(this);
@@ -1933,11 +1623,12 @@ public final class ProtoEngineBuilder {
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:mozc.EngineReloadResponse)
         org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadResponseOrBuilder {
-      public static com.google.protobuf.Descriptors.Descriptor
+      public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.internal_static_mozc_EngineReloadResponse_descriptor;
       }
 
+      @java.lang.Override
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.internal_static_mozc_EngineReloadResponse_fieldAccessorTable
@@ -1961,28 +1652,31 @@ public final class ProtoEngineBuilder {
           getRequestFieldBuilder();
         }
       }
+      @java.lang.Override
       public Builder clear() {
         super.clear();
+        bitField0_ = 0;
         status_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000001);
-        if (requestBuilder_ == null) {
-          request_ = null;
-        } else {
-          requestBuilder_.clear();
+        request_ = null;
+        if (requestBuilder_ != null) {
+          requestBuilder_.dispose();
+          requestBuilder_ = null;
         }
-        bitField0_ = (bitField0_ & ~0x00000002);
         return this;
       }
 
+      @java.lang.Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
         return org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.internal_static_mozc_EngineReloadResponse_descriptor;
       }
 
+      @java.lang.Override
       public org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadResponse getDefaultInstanceForType() {
         return org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadResponse.getDefaultInstance();
       }
 
+      @java.lang.Override
       public org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadResponse build() {
         org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadResponse result = buildPartial();
         if (!result.isInitialized()) {
@@ -1991,53 +1685,63 @@ public final class ProtoEngineBuilder {
         return result;
       }
 
+      @java.lang.Override
       public org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadResponse buildPartial() {
         org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadResponse result = new org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadResponse(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.status_ = status_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        if (requestBuilder_ == null) {
-          result.request_ = request_;
-        } else {
-          result.request_ = requestBuilder_.build();
-        }
-        result.bitField0_ = to_bitField0_;
+        if (bitField0_ != 0) { buildPartial0(result); }
         onBuilt();
         return result;
       }
 
+      private void buildPartial0(org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadResponse result) {
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          result.status_ = status_;
+          to_bitField0_ |= 0x00000001;
+        }
+        if (((from_bitField0_ & 0x00000002) != 0)) {
+          result.request_ = requestBuilder_ == null
+              ? request_
+              : requestBuilder_.build();
+          to_bitField0_ |= 0x00000002;
+        }
+        result.bitField0_ |= to_bitField0_;
+      }
+
+      @java.lang.Override
       public Builder clone() {
         return super.clone();
       }
+      @java.lang.Override
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
         return super.setField(field, value);
       }
+      @java.lang.Override
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
         return super.clearField(field);
       }
+      @java.lang.Override
       public Builder clearOneof(
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return super.clearOneof(oneof);
       }
+      @java.lang.Override
       public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           int index, java.lang.Object value) {
         return super.setRepeatedField(field, index, value);
       }
+      @java.lang.Override
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
         return super.addRepeatedField(field, value);
       }
+      @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadResponse) {
           return mergeFrom((org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadResponse)other);
@@ -2055,36 +1759,72 @@ public final class ProtoEngineBuilder {
         if (other.hasRequest()) {
           mergeRequest(other.getRequest());
         }
-        this.mergeUnknownFields(other.unknownFields);
+        this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
       }
 
-      public boolean isInitialized() {
+      @java.lang.Override
+      public final boolean isInitialized() {
         if (!hasStatus()) {
           return false;
         }
         if (hasRequest()) {
-            return getRequest().isInitialized();
+          if (!getRequest().isInitialized()) {
+            return false;
+          }
         }
         return true;
       }
 
+      @java.lang.Override
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadResponse parsedMessage = null;
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
         try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 8: {
+                int tmpRaw = input.readEnum();
+                org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadResponse.Status tmpValue =
+                    org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadResponse.Status.forNumber(tmpRaw);
+                if (tmpValue == null) {
+                  mergeUnknownVarintField(1, tmpRaw);
+                } else {
+                  status_ = tmpRaw;
+                  bitField0_ |= 0x00000001;
+                }
+                break;
+              } // case 8
+              case 18: {
+                input.readMessage(
+                    getRequestFieldBuilder().getBuilder(),
+                    extensionRegistry);
+                bitField0_ |= 0x00000002;
+                break;
+              } // case 18
+              default: {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+            } // switch (tag)
+          } // while (!done)
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadResponse) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
+          onChanged();
+        } // finally
         return this;
       }
       private int bitField0_;
@@ -2092,19 +1832,24 @@ public final class ProtoEngineBuilder {
       private int status_ = 0;
       /**
        * <code>required .mozc.EngineReloadResponse.Status status = 1;</code>
+       * @return Whether the status field is set.
        */
-      public boolean hasStatus() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
+      @java.lang.Override public boolean hasStatus() {
+        return ((bitField0_ & 0x00000001) != 0);
       }
       /**
        * <code>required .mozc.EngineReloadResponse.Status status = 1;</code>
+       * @return The status.
        */
+      @java.lang.Override
       public org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadResponse.Status getStatus() {
-        org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadResponse.Status result = org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadResponse.Status.valueOf(status_);
+        org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadResponse.Status result = org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadResponse.Status.forNumber(status_);
         return result == null ? org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadResponse.Status.ACCEPTED : result;
       }
       /**
        * <code>required .mozc.EngineReloadResponse.Status status = 1;</code>
+       * @param value The status to set.
+       * @return This builder for chaining.
        */
       public Builder setStatus(org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadResponse.Status value) {
         if (value == null) {
@@ -2117,6 +1862,7 @@ public final class ProtoEngineBuilder {
       }
       /**
        * <code>required .mozc.EngineReloadResponse.Status status = 1;</code>
+       * @return This builder for chaining.
        */
       public Builder clearStatus() {
         bitField0_ = (bitField0_ & ~0x00000001);
@@ -2125,7 +1871,7 @@ public final class ProtoEngineBuilder {
         return this;
       }
 
-      private org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequest request_ = null;
+      private org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequest request_;
       private com.google.protobuf.SingleFieldBuilderV3<
           org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequest, org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequest.Builder, org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequestOrBuilder> requestBuilder_;
       /**
@@ -2136,9 +1882,10 @@ public final class ProtoEngineBuilder {
        * </pre>
        *
        * <code>optional .mozc.EngineReloadRequest request = 2;</code>
+       * @return Whether the request field is set.
        */
       public boolean hasRequest() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
+        return ((bitField0_ & 0x00000002) != 0);
       }
       /**
        * <pre>
@@ -2148,6 +1895,7 @@ public final class ProtoEngineBuilder {
        * </pre>
        *
        * <code>optional .mozc.EngineReloadRequest request = 2;</code>
+       * @return The request.
        */
       public org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequest getRequest() {
         if (requestBuilder_ == null) {
@@ -2171,11 +1919,11 @@ public final class ProtoEngineBuilder {
             throw new NullPointerException();
           }
           request_ = value;
-          onChanged();
         } else {
           requestBuilder_.setMessage(value);
         }
         bitField0_ |= 0x00000002;
+        onChanged();
         return this;
       }
       /**
@@ -2191,11 +1939,11 @@ public final class ProtoEngineBuilder {
           org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequest.Builder builderForValue) {
         if (requestBuilder_ == null) {
           request_ = builderForValue.build();
-          onChanged();
         } else {
           requestBuilder_.setMessage(builderForValue.build());
         }
         bitField0_ |= 0x00000002;
+        onChanged();
         return this;
       }
       /**
@@ -2209,19 +1957,18 @@ public final class ProtoEngineBuilder {
        */
       public Builder mergeRequest(org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequest value) {
         if (requestBuilder_ == null) {
-          if (((bitField0_ & 0x00000002) == 0x00000002) &&
-              request_ != null &&
-              request_ != org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequest.getDefaultInstance()) {
-            request_ =
-              org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequest.newBuilder(request_).mergeFrom(value).buildPartial();
+          if (((bitField0_ & 0x00000002) != 0) &&
+            request_ != null &&
+            request_ != org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadRequest.getDefaultInstance()) {
+            getRequestBuilder().mergeFrom(value);
           } else {
             request_ = value;
           }
-          onChanged();
         } else {
           requestBuilder_.mergeFrom(value);
         }
         bitField0_ |= 0x00000002;
+        onChanged();
         return this;
       }
       /**
@@ -2234,13 +1981,13 @@ public final class ProtoEngineBuilder {
        * <code>optional .mozc.EngineReloadRequest request = 2;</code>
        */
       public Builder clearRequest() {
-        if (requestBuilder_ == null) {
-          request_ = null;
-          onChanged();
-        } else {
-          requestBuilder_.clear();
-        }
         bitField0_ = (bitField0_ & ~0x00000002);
+        request_ = null;
+        if (requestBuilder_ != null) {
+          requestBuilder_.dispose();
+          requestBuilder_ = null;
+        }
+        onChanged();
         return this;
       }
       /**
@@ -2296,13 +2043,15 @@ public final class ProtoEngineBuilder {
         }
         return requestBuilder_;
       }
-      public Builder setUnknownFields(
-              final com.google.protobuf.UnknownFieldSet unknownFields) {
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFields(unknownFields);
       }
 
-      public Builder mergeUnknownFields(
-              final com.google.protobuf.UnknownFieldSet unknownFields) {
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
       }
 
@@ -2322,11 +2071,23 @@ public final class ProtoEngineBuilder {
 
     @java.lang.Deprecated public static final com.google.protobuf.Parser<EngineReloadResponse>
         PARSER = new com.google.protobuf.AbstractParser<EngineReloadResponse>() {
+      @java.lang.Override
       public EngineReloadResponse parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new EngineReloadResponse(input, extensionRegistry);
+        Builder builder = newBuilder();
+        try {
+          builder.mergeFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(builder.buildPartial());
+        } catch (com.google.protobuf.UninitializedMessageException e) {
+          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(e)
+              .setUnfinishedMessage(builder.buildPartial());
+        }
+        return builder.buildPartial();
       }
     };
 
@@ -2339,6 +2100,7 @@ public final class ProtoEngineBuilder {
       return PARSER;
     }
 
+    @java.lang.Override
     public org.mozc.android.inputmethod.japanese.protobuf.ProtoEngineBuilder.EngineReloadResponse getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
@@ -2364,41 +2126,30 @@ public final class ProtoEngineBuilder {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\035protocol/engine_builder.proto\022\004mozc\"\272\001" +
-      "\n\023EngineReloadRequest\0229\n\013engine_type\030\001 \002" +
-      "(\0162$.mozc.EngineReloadRequest.EngineType" +
-      "\022\021\n\tfile_path\030\002 \002(\t\022\030\n\020install_location\030" +
-      "\003 \001(\t\022\024\n\014magic_number\030\004 \001(\t\"%\n\nEngineTyp" +
-      "e\022\013\n\007DESKTOP\020\000\022\n\n\006MOBILE\020\001\"\275\002\n\024EngineRel" +
-      "oadResponse\0221\n\006status\030\001 \002(\0162!.mozc.Engin" +
-      "eReloadResponse.Status\022*\n\007request\030\002 \001(\0132" +
-      "\031.mozc.EngineReloadRequest\"\305\001\n\006Status\022\014\n" +
-      "\010ACCEPTED\020\000\022\020\n\014RELOAD_READY\020\001\022\014\n\010RELOADE" +
-      "D\020\002\022\023\n\017ALREADY_RUNNING\020\003\022\033\n\027ENGINE_VERSI" +
-      "ON_MISMATCH\020\004\022\020\n\014DATA_MISSING\020\005\022\017\n\013DATA_" +
-      "BROKEN\020\006\022\020\n\014MMAP_FAILURE\020\007\022\023\n\017INSTALL_FA" +
-      "ILURE\020\010\022\021\n\rUNKNOWN_ERROR\020\tBD\n.org.mozc.a" +
-      "ndroid.inputmethod.japanese.protobufB\022Pr" +
-      "otoEngineBuilder"
+      "\n\035protocol/engine_builder.proto\022\004mozc\"\\\n" +
+      "\023EngineReloadRequest\022\021\n\tfile_path\030\002 \002(\t\022" +
+      "\024\n\014magic_number\030\004 \001(\t\022\020\n\010priority\030\005 \001(\005J" +
+      "\004\010\001\020\002J\004\010\003\020\004\"\271\002\n\024EngineReloadResponse\0221\n\006" +
+      "status\030\001 \002(\0162!.mozc.EngineReloadResponse" +
+      ".Status\022*\n\007request\030\002 \001(\0132\031.mozc.EngineRe" +
+      "loadRequest\"\301\001\n\006Status\022\014\n\010ACCEPTED\020\000\022\020\n\014" +
+      "RELOAD_READY\020\001\022\014\n\010RELOADED\020\002\022\023\n\017ALREADY_" +
+      "RUNNING\020\003\022\033\n\027ENGINE_VERSION_MISMATCH\020\004\022\020" +
+      "\n\014DATA_MISSING\020\005\022\017\n\013DATA_BROKEN\020\006\022\020\n\014MMA" +
+      "P_FAILURE\020\007\022\021\n\rUNKNOWN_ERROR\020\t*\017INSTALL_" +
+      "FAILUREBD\n.org.mozc.android.inputmethod." +
+      "japanese.protobufB\022ProtoEngineBuilder"
     };
-    com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
-        new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
-          public com.google.protobuf.ExtensionRegistry assignDescriptors(
-              com.google.protobuf.Descriptors.FileDescriptor root) {
-            descriptor = root;
-            return null;
-          }
-        };
-    com.google.protobuf.Descriptors.FileDescriptor
+    descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
-        }, assigner);
+        });
     internal_static_mozc_EngineReloadRequest_descriptor =
       getDescriptor().getMessageTypes().get(0);
     internal_static_mozc_EngineReloadRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_mozc_EngineReloadRequest_descriptor,
-        new java.lang.String[] { "EngineType", "FilePath", "InstallLocation", "MagicNumber", });
+        new java.lang.String[] { "FilePath", "MagicNumber", "Priority", });
     internal_static_mozc_EngineReloadResponse_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_mozc_EngineReloadResponse_fieldAccessorTable = new
