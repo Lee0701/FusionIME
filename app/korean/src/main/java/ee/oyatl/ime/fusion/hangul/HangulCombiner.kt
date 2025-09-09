@@ -6,13 +6,13 @@ class HangulCombiner(
 ) {
     fun combine(state: Combiner.State, input: Int): Combiner.Result {
         if(state !is State) {
-            return Combiner.Result("", State())
+            return Combiner.Result(emptyList(), State())
         }
         // The unicode codepoint of input, without any extended parts
         // TODO: Add support for non-BMP codepoints
         val inputCodepoint = input and 0xffff
         var newState: State = state
-        var textToCommit = ""
+        var textToCommit = mutableListOf<String>()
 
         if(Hangul.isCho(inputCodepoint)) {
             if(newState.cho != null) {
@@ -20,19 +20,19 @@ class HangulCombiner(
                 if(combination != null) {
                     val newStateLast = newState.lastInput
                     if(newStateLast != null && !Hangul.isCho(newStateLast)) {
-                        textToCommit += newState.combined
+                        textToCommit += newState.combined.toString()
                         newState = State(cho = input)
                     } else {
                         newState = newState.copy(cho = combination, previous = newState)
                     }
                 } else {
-                    textToCommit += newState.combined
+                    textToCommit += newState.combined.toString()
                     newState = State(cho = input)
                 }
             } else if(correctOrders) {
                 newState = newState.copy(cho = input, previous = newState)
             } else {
-                textToCommit += newState.combined
+                textToCommit += newState.combined.toString()
                 newState = State(cho = input)
             }
         } else if(Hangul.isJung(inputCodepoint)) {
@@ -41,13 +41,13 @@ class HangulCombiner(
                 val combination = jamoCombinationTable[newState.jung to input]
                 if(combination != null) newState = newState.copy(jung = combination, previous = newState)
                 else {
-                    textToCommit += newState.combined
+                    textToCommit += newState.combined.toString()
                     newState = State(jung = input)
                 }
             } else if(correctOrders || newStateLast == null || Hangul.isCho(newStateLast)) {
                 newState = newState.copy(jung = input, previous = newState)
             } else {
-                textToCommit += newState.combined
+                textToCommit += newState.combined.toString()
                 newState = State(jung = input)
             }
         } else if(Hangul.isJong(inputCodepoint)) {
@@ -61,13 +61,13 @@ class HangulCombiner(
                     previous = newState
                 )
                 else {
-                    textToCommit += newState.combined
+                    textToCommit += newState.combined.toString()
                     newState = State(jong = input)
                 }
             } else if(correctOrders || newStateLast == null || Hangul.isJung(newStateLast) && newState.cho != null) {
                 newState = newState.copy(jong = input, previous = newState)
             } else {
-                textToCommit += newState.combined
+                textToCommit += newState.combined.toString()
                 newState = State(jong = input)
             }
         } else if(Hangul.isConsonant(inputCodepoint)) {
@@ -83,32 +83,32 @@ class HangulCombiner(
                         previous = newState
                     )
                     else {
-                        textToCommit += newState.combined
+                        textToCommit += newState.combined.toString()
                         newState = State(cho = cho)
                     }
                 } else if(jong != 0) {
                     newState = newState.copy(jong = jong, previous = newState)
                 } else {
-                    textToCommit += newState.combined
+                    textToCommit += newState.combined.toString()
                     newState = State(cho = cho)
                 }
             } else if(newState.cho != null) {
                 val newStateLast = newState.lastInput
                 if(newStateLast != null && !Hangul.isConsonant(newStateLast)) {
-                    textToCommit += newState.combined
+                    textToCommit += newState.combined.toString()
                     newState = State(cho = cho, previous = newState)
                 } else {
                     val combination = jamoCombinationTable[newState.cho to cho]
                     if(combination != null) newState = newState.copy(cho = combination, previous = newState)
                     else {
-                        textToCommit += newState.combined
+                        textToCommit += newState.combined.toString()
                         newState = State(cho = cho)
                     }
                 }
             } else if(correctOrders) {
                 newState = newState.copy(cho = cho, previous = newState)
             } else {
-                textToCommit += newState.combined
+                textToCommit += newState.combined.toString()
                 newState = State(cho = cho)
             }
         } else if(Hangul.isVowel(inputCodepoint)) {
@@ -118,12 +118,12 @@ class HangulCombiner(
             if(newStateJong != null) {
                 if(jongCombination != null) {
                     val promotedCho = Hangul.ghostLight(jongCombination.second)
-                    textToCommit += newState.copy(jong = jongCombination.first).combined
+                    textToCommit += newState.copy(jong = jongCombination.first).combined.toString()
                     newState = State(cho = promotedCho)
                     newState = State(cho = promotedCho, jung = jung, previous = newState)
                 } else {
                     val promotedCho = Hangul.ghostLight(newStateJong)
-                    textToCommit += newState.copy(jong = null).combined
+                    textToCommit += newState.copy(jong = null).combined.toString()
                     newState = State(cho = promotedCho)
                     newState = State(cho = promotedCho, jung = jung, previous = newState)
                 }
@@ -131,15 +131,15 @@ class HangulCombiner(
                 val combination = jamoCombinationTable[newState.jung to jung]
                 if(combination != null) newState = newState.copy(jung = combination, previous = newState)
                 else {
-                    textToCommit += newState.combined
+                    textToCommit += newState.combined.toString()
                     newState = State(jung = jung)
                 }
             } else {
                 newState = newState.copy(jung = jung, previous = newState)
             }
         } else {
-            textToCommit += newState.combined
-            textToCommit += inputCodepoint.toChar()
+            textToCommit += newState.combined.toString()
+            textToCommit += inputCodepoint.toChar().toString()
             newState = State.Initial
         }
         return Combiner.Result(textToCommit, newState.copy(lastInput = inputCodepoint))
