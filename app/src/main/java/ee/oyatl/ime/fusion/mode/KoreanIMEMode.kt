@@ -11,6 +11,7 @@ import ee.oyatl.ime.fusion.korean.layout.Hangul2Set
 import ee.oyatl.ime.fusion.korean.layout.Hangul3Set
 import ee.oyatl.ime.fusion.hangul.Combiner
 import ee.oyatl.ime.fusion.hangul.HangulCombiner
+import ee.oyatl.ime.fusion.korean.layout.HangulOld
 import ee.oyatl.ime.keyboard.DefaultBottomRowKeyboard
 import ee.oyatl.ime.keyboard.DefaultMobileKeyboard
 import ee.oyatl.ime.keyboard.Keyboard
@@ -92,6 +93,19 @@ abstract class KoreanIMEMode(
                 DefaultBottomRowKeyboard(extraKeys = listOf('.'.code, layoutTable[KeyEvent.KEYCODE_SLASH]!![0])),
                 DefaultBottomRowKeyboard(extraKeys = listOf('.'.code, layoutTable[KeyEvent.KEYCODE_SLASH]!![1]))
             )
+        )
+    }
+
+    class HangulOld2Set(listener: IMEMode.Listener): KoreanIMEMode(listener) {
+        override val hangulCombiner: HangulCombiner = HangulCombiner(HangulOld.COMB_FULL, false)
+        override val layoutTable: Map<Int, List<Int>> = HangulOld.TABLE_OLD_2SET
+        private val layers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE, layoutTable)
+        override val textKeyboard: Keyboard = StackedKeyboard(
+            ShiftStateKeyboard(
+                DefaultMobileKeyboard(layers[0]),
+                DefaultMobileKeyboard(layers[1])
+            ),
+            DefaultBottomRowKeyboard()
         )
     }
 

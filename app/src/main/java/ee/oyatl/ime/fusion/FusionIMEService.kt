@@ -72,6 +72,8 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
             entries += IMEModeSwitcher.Entry("한3", KoreanIMEMode.Hangul3Set390(this))
         if("ko_391" in list)
             entries += IMEModeSwitcher.Entry("한3", KoreanIMEMode.Hangul3Set391(this))
+        if("ko_old_2set" in list)
+            entries += IMEModeSwitcher.Entry("ᄒᆞ", KoreanIMEMode.HangulOld2Set(this))
         if("ja_qwerty" in list)
             entries += IMEModeSwitcher.Entry("あQ", MozcIMEMode.RomajiQwerty(this))
         if("ja_50onzu" in list)

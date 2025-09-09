@@ -4,6 +4,7 @@
         <item>Korean 2-Set KS</item>
         <item>Korean 3-Set 390</item>
         <item>Korean 3-Set 391</item>
+        <item>Old Korean 2-Set</item>
         <item>Japanese Romaji QWERTY</item>
         <item>Japanese Kana Syllables</item>
         <item>Japanese Kana JIS</item>
@@ -19,6 +20,7 @@
         <item>ko_ks</item>
         <item>ko_390</item>
         <item>ko_391</item>
+        <item>ko_old_2set</item>
         <item>ja_qwerty</item>
         <item>ja_50onzu</item>
         <item>ja_jis</item>
