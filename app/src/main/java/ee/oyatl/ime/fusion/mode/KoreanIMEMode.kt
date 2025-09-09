@@ -102,7 +102,7 @@ abstract class KoreanIMEMode(
         val result = hangulCombiner.combine(currentState, code)
         if(result.textToCommit.isNotEmpty()) currentState = HangulCombiner.State.Initial
         if(result.newState.combined.isNotEmpty()) currentState = result.newState as HangulCombiner.State
-        wordComposer.commit(result.textToCommit.toString())
+        result.textToCommit.toString().forEach { c -> wordComposer.commit(c.toString()) }
         wordComposer.compose(currentState.combined.toString())
         renderInputView()
     }
