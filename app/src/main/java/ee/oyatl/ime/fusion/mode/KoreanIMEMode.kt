@@ -53,13 +53,30 @@ abstract class KoreanIMEMode(
         override val textKeyboard: Keyboard = StackedKeyboard(
             ShiftStateKeyboard(
                 DefaultMobileKeyboard(layers[0]),
-                DefaultMobileKeyboard(layers[1])
+                DefaultMobileKeyboard(modifyShiftedLayout(layers[1]))
             ),
             ShiftStateKeyboard(
                 DefaultBottomRowKeyboard(extraKeys = listOf('.'.code, layoutTable[KeyEvent.KEYCODE_SLASH]!![0])),
                 DefaultBottomRowKeyboard(extraKeys = listOf('.'.code, layoutTable[KeyEvent.KEYCODE_SLASH]!![1]))
             )
         )
+
+        /*
+         * Modify shifted bottom row for number entry.
+         */
+        private fun modifyShiftedLayout(shifted: List<List<Int>>): List<List<Int>> {
+            val bottom = shifted[3].toMutableList()
+            bottom.remove('!'.code)
+            bottom.remove('"'.code)
+            bottom += '2'.code
+            bottom += '3'.code
+            return listOf(
+                shifted[0],
+                shifted[1],
+                shifted[2],
+                bottom
+            )
+        }
     }
 
     class Hangul3Set391(listener: IMEMode.Listener): KoreanIMEMode(listener) {
