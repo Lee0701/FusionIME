@@ -6,10 +6,10 @@ class TrieDictionary
     : MutableDictionary<String, List<Int>>, WritableDictionary<String, List<Int>> {
     private val root = Node()
 
-    override fun get(key: String): List<Int>? {
+    override fun get(key: String): List<Int> {
         var p = root
         for(c in key) {
-            p = p.children.get(c) ?: return null
+            p = p.children.get(c) ?: return emptyList()
         }
         return p.entries
     }

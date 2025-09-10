@@ -1,6 +1,7 @@
 package ee.oyatl.ime.fusion.host
 
 import ee.oyatl.ime.newdict.HanjaDictionary
+import ee.oyatl.ime.newdict.NGramDictionary
 import ee.oyatl.ime.newdict.StringDictionary
 import ee.oyatl.ime.newdict.TrieDictionary
 import java.io.DataOutputStream
@@ -24,9 +25,26 @@ fun main(args: Array<String>) {
             i += 1
         }
     }
+
+    val bigramDict = NGramDictionary()
+    File("").forEachLine { line ->
+        val tokens = line.split('\t')
+        if(tokens.size == 2) {
+            val (s, f) = tokens
+            val sequence = s.split(' ')
+            val freq = f.toInt()
+            if(sequence.any { revIndexDict.get(it).isEmpty() }) return@forEachLine
+            val ids = sequence.map { revIndexDict.get(it).first() }
+            val key = ids.dropLast(1)
+            val value = mapOf(ids.last() to freq)
+            bigramDict.insert(key, value)
+        }
+    }
+
     val outDirFile = File(outDir)
     indexDict.write(DataOutputStream(File(outDirFile, "hanja_index.bin").outputStream()))
 //    revIndexDict.write(DataOutputStream(File(outDirFile, "hanja_rev_index.bin").outputStream()))
     contentDict.write(DataOutputStream(File(outDirFile, "hanja_content.bin").outputStream()))
 //    definitionDict.write(DataOutputStream(File(outDirFile, "hanja_definition.bin").outputStream()))
+    bigramDict.write(DataOutputStream(File(outDirFile, "hanja_bigram.bin").outputStream()))
 }
