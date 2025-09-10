@@ -19,8 +19,8 @@ fun main(args: Array<String>) {
             val (hangul, hanja, freq, extra, definition) = tokens
             indexDict.insert(hangul, i)
             revIndexDict.insert(hanja, i)
-            contentDict.insert(hangul, hanja, freq.toInt(), extra)
-            definitionDict.insert(definition)
+            contentDict.insert(i, HanjaDictionary.Entry(hangul, hanja, freq.toInt(), extra))
+            definitionDict.insert(i, definition)
             i += 1
         }
     }
