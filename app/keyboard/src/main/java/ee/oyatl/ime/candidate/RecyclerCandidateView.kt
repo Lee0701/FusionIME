@@ -6,7 +6,6 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.view.ContextThemeWrapper
-import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -54,6 +53,12 @@ abstract class RecyclerCandidateView(
     ): RecyclerView.ViewHolder(view.root) {
         fun onBind(candidate: Candidate, onClick: () -> Unit) {
             view.text.text = candidate.text
+            if(candidate is CandidateView.ExtraCandidate) {
+                view.extra.text = candidate.extra
+                view.extra.visibility = VISIBLE
+            } else {
+                view.extra.visibility = GONE
+            }
             view.root.setOnClickListener { onClick() }
             if(candidate is CandidateView.FocusableCandidate) {
                 view.root.isHovered = candidate.focused

@@ -7,4 +7,5 @@
 
     <dimen name="candidate_view_width">40dp</dimen>
     <dimen name="candidate_view_height">40dp</dimen>
+    <dimen name="candidate_extra_width">60dp</dimen>
 </resources>

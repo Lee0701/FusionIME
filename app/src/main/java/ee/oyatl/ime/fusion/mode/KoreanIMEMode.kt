@@ -5,12 +5,11 @@ import android.os.Handler
 import android.os.Looper
 import android.view.KeyEvent
 import ee.oyatl.ime.candidate.CandidateView
+import ee.oyatl.ime.fusion.hangul.HangulCombiner
 import ee.oyatl.ime.fusion.korean.HanjaConverter
 import ee.oyatl.ime.fusion.korean.WordComposer
 import ee.oyatl.ime.fusion.korean.layout.Hangul2Set
 import ee.oyatl.ime.fusion.korean.layout.Hangul3Set
-import ee.oyatl.ime.fusion.hangul.Combiner
-import ee.oyatl.ime.fusion.hangul.HangulCombiner
 import ee.oyatl.ime.keyboard.DefaultBottomRowKeyboard
 import ee.oyatl.ime.keyboard.DefaultMobileKeyboard
 import ee.oyatl.ime.keyboard.Keyboard
