@@ -18,11 +18,21 @@ fun main(args: Array<String>) {
         val tokens = line.split('\t')
         if(tokens.size == 5) {
             val (hangul, hanja, freq, extra, definition) = tokens
-            indexDict.insert(hangul, listOf(i))
-            revIndexDict.insert(hanja, listOf(i))
-            contentDict.insert(i, HanjaDictionary.Entry(hangul, hanja, freq.toInt(), extra))
-            definitionDict.insert(i, definition)
-            i += 1
+            if(revIndexDict.get(hanja).isEmpty()) {
+                revIndexDict.insert(hanja, listOf(i))
+                contentDict.insert(i, HanjaDictionary.Entry(hangul, hanja, freq.toInt(), extra))
+                definitionDict.insert(i, definition)
+                i += 1
+            }
+            val id = revIndexDict.get(hanja).first()
+            val content = contentDict.get(id)
+            if(content != null) {
+                if(freq.toInt() > content.frequency) {
+                    contentDict.insert(id, HanjaDictionary.Entry(hangul, hanja, freq.toInt(), extra))
+                    definitionDict.insert(id, definition)
+                }
+            }
+            indexDict.insert(hangul, listOf(id))
         }
     }
 
