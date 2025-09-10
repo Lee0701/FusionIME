@@ -10,6 +10,7 @@ import ee.oyatl.ime.fusion.korean.HanjaConverter
 import ee.oyatl.ime.fusion.korean.WordComposer
 import ee.oyatl.ime.fusion.korean.layout.Hangul2Set
 import ee.oyatl.ime.fusion.korean.layout.Hangul3Set
+import ee.oyatl.ime.fusion.korean.layout.HangulOld
 import ee.oyatl.ime.keyboard.DefaultBottomRowKeyboard
 import ee.oyatl.ime.keyboard.DefaultMobileKeyboard
 import ee.oyatl.ime.keyboard.Keyboard
@@ -45,6 +46,39 @@ abstract class KoreanIMEMode(
         )
     }
 
+    class Hangul3Set390(listener: IMEMode.Listener): KoreanIMEMode(listener) {
+        override val hangulCombiner: HangulCombiner = HangulCombiner(Hangul3Set.COMBINATION_390, true)
+        override val layoutTable: Map<Int, List<Int>> = Hangul3Set.TABLE_390
+        private val layers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE_WITH_QUOTE, layoutTable)
+        override val textKeyboard: Keyboard = StackedKeyboard(
+            ShiftStateKeyboard(
+                DefaultMobileKeyboard(layers[0]),
+                DefaultMobileKeyboard(modifyShiftedLayout(layers[1]))
+            ),
+            ShiftStateKeyboard(
+                DefaultBottomRowKeyboard(extraKeys = listOf('.'.code, layoutTable[KeyEvent.KEYCODE_SLASH]!![0])),
+                DefaultBottomRowKeyboard(extraKeys = listOf('.'.code, layoutTable[KeyEvent.KEYCODE_SLASH]!![1]))
+            )
+        )
+
+        /*
+         * Modify shifted bottom row for number entry.
+         */
+        private fun modifyShiftedLayout(shifted: List<List<Int>>): List<List<Int>> {
+            val bottom = shifted[3].toMutableList()
+            bottom.remove('!'.code)
+            bottom.remove('"'.code)
+            bottom += '2'.code
+            bottom += '3'.code
+            return listOf(
+                shifted[0],
+                shifted[1],
+                shifted[2],
+                bottom
+            )
+        }
+    }
+
     class Hangul3Set391(listener: IMEMode.Listener): KoreanIMEMode(listener) {
         override val hangulCombiner: HangulCombiner = HangulCombiner(Hangul3Set.COMBINATION_391, true)
         override val layoutTable: Map<Int, List<Int>> = Hangul3Set.TABLE_391
@@ -54,7 +88,23 @@ abstract class KoreanIMEMode(
                 DefaultMobileKeyboard(layers[0]),
                 DefaultMobileKeyboard(layers[1])
             ),
-            DefaultBottomRowKeyboard(extraKeys = listOf('.'.code, 0x1001169))
+            ShiftStateKeyboard(
+                DefaultBottomRowKeyboard(extraKeys = listOf('.'.code, layoutTable[KeyEvent.KEYCODE_SLASH]!![0])),
+                DefaultBottomRowKeyboard(extraKeys = listOf('.'.code, layoutTable[KeyEvent.KEYCODE_SLASH]!![1]))
+            )
+        )
+    }
+
+    class HangulOld2Set(listener: IMEMode.Listener): KoreanIMEMode(listener) {
+        override val hangulCombiner: HangulCombiner = HangulCombiner(HangulOld.COMB_FULL, false)
+        override val layoutTable: Map<Int, List<Int>> = HangulOld.TABLE_OLD_2SET
+        private val layers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE, layoutTable)
+        override val textKeyboard: Keyboard = StackedKeyboard(
+            ShiftStateKeyboard(
+                DefaultMobileKeyboard(layers[0]),
+                DefaultMobileKeyboard(layers[1])
+            ),
+            DefaultBottomRowKeyboard()
         )
     }
 
