@@ -1,5 +1,6 @@
-package ee.oyatl.ime.dictionary
+package ee.oyatl.ime.fusion.host
 
+import ee.oyatl.ime.dictionary.Dictionary
 import java.io.DataOutputStream
 import java.io.File
 

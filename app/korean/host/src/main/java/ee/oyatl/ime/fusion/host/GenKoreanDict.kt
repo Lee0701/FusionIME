@@ -1,5 +1,8 @@
-package ee.oyatl.ime.newdict
+package ee.oyatl.ime.fusion.host
 
+import ee.oyatl.ime.newdict.HanjaDictionary
+import ee.oyatl.ime.newdict.StringDictionary
+import ee.oyatl.ime.newdict.TrieDictionary
 import java.io.DataOutputStream
 import java.io.File
 

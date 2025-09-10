@@ -15,6 +15,10 @@ interface CandidateView {
         val focused: Boolean
     }
 
+    interface VarLengthCandidate: Candidate {
+        val inputLength: Int
+    }
+
     interface ExtraCandidate: Candidate {
         val extra: CharSequence
     }

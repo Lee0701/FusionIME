@@ -59,6 +59,7 @@ dependencies {
     implementation(project(":app:zhuyin"))
     implementation(project(":app:cangjie"))
     implementation(project(":app:korean"))
+    implementation(project(":app:korean:hangul"))
     implementation(project(":app:latin"))
     implementation(project(":app:viet"))
     implementation(libs.androidx.preference)
