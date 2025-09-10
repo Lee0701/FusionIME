@@ -132,7 +132,10 @@ abstract class KoreanIMEMode(
 
     override fun onCandidateSelected(candidate: CandidateView.Candidate) {
         val inputConnection = currentInputConnection ?: return
-        wordComposer.consume(candidate.text.length)
+        val length =
+            if(candidate is CandidateView.VarLengthCandidate) candidate.inputLength
+            else candidate.text.length
+        wordComposer.consume(length)
         currentState = HangulCombiner.State.Initial
         inputConnection.commitText(candidate.text, 1)
         renderInputView()

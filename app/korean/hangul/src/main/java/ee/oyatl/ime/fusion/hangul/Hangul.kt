@@ -77,6 +77,8 @@ object Hangul {
         return (0xac00 + 21*28*cho + 28*jung + (jong?:0)).toChar()
     }
     fun combineNFD(cho: Char?, jung: Char?, jong: Char?): CharSequence {
+        if(cho != null && jung != null && isModernJamo(cho.code) && isModernJamo(jung.code))
+            return combineNFC(cho.code - 0x1100, jung.code - 0x1161, 0).toString() + (jong?.toString() ?: "")
         return "${(cho ?: 0x115f.toChar())}${(jung ?: 0x1160.toChar())}${jong?.toString().orEmpty()}"
     }
 }

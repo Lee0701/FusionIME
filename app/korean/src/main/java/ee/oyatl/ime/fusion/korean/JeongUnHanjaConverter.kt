@@ -10,13 +10,17 @@ class JeongUnHanjaConverter(
     private val dict: DiskDictionary =
         DiskDictionary(context.resources.openRawResource(R.raw.jeongun))
     override fun convert(text: String): List<CandidateView.Candidate> {
-        return (1 .. text.length).asSequence()
-            .map { l -> dict.search(text.take(l)) }
-            .flatten()
-            .map { Candidate(it.result) }
+        val result = (1 .. text.length).asSequence()
+            .flatMap { l ->
+                dict.search(text.take(l))
+                    .map { Candidate(it.result, l) }
+            }
             .toList()
+        val maxLength = result.maxOfOrNull { it.inputLength } ?: 0
+        return result.filter { it.inputLength == maxLength }
     }
     data class Candidate(
-        override val text: CharSequence
-    ): CandidateView.Candidate
+        override val text: CharSequence,
+        override val inputLength: Int
+    ): CandidateView.Candidate, CandidateView.VarLengthCandidate
 }
