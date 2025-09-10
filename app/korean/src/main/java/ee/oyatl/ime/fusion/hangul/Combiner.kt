@@ -10,7 +10,7 @@ interface Combiner {
     }
 
     data class Result(
-        val textToCommit: CharSequence,
+        val textToCommit: List<CharSequence>,
         val newState: State
     )
 }
