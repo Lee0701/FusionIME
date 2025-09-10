@@ -3,10 +3,11 @@ package ee.oyatl.ime.newdict
 import java.io.InputStream
 import java.nio.ByteBuffer
 
-class DiskTrieDictionary(input: InputStream) {
-    private val data = ByteBuffer.wrap(input.readBytes())
+class DiskTrieDictionary(input: InputStream)
+    : DiskDictionary<String, List<Int>> {
+    override val data: ByteBuffer = ByteBuffer.wrap(input.readBytes())
 
-    fun search(key: String): List<Int> {
+    override fun get(key: String): List<Int> {
         // root
         var p = data.getInt(data.capacity() - 4)
         for(c in key) {
@@ -33,5 +34,4 @@ class DiskTrieDictionary(input: InputStream) {
             index
         }
     }
-
 }

@@ -17,8 +17,8 @@ fun main(args: Array<String>) {
         val tokens = line.split('\t')
         if(tokens.size == 5) {
             val (hangul, hanja, freq, extra, definition) = tokens
-            indexDict.insert(hangul, i)
-            revIndexDict.insert(hanja, i)
+            indexDict.insert(hangul, listOf(i))
+            revIndexDict.insert(hanja, listOf(i))
             contentDict.insert(i, HanjaDictionary.Entry(hangul, hanja, freq.toInt(), extra))
             definitionDict.insert(i, definition)
             i += 1

@@ -3,14 +3,19 @@ package ee.oyatl.ime.newdict
 import java.io.ByteArrayOutputStream
 import java.io.DataOutputStream
 
-class StringDictionary {
+class StringDictionary
+    : MutableDictionary<Int, String>, WritableDictionary<Int, String> {
     val entries: MutableMap<Int, String> = mutableMapOf()
 
-    fun insert(index: Int, text: String) {
-        entries += index to text
+    override fun get(key: Int): String? {
+        return entries[key]
     }
 
-    fun write(os: DataOutputStream) {
+    override fun insert(key: Int, value: String) {
+        entries += key to value
+    }
+
+    override fun write(os: DataOutputStream) {
         val bytes = ByteArrayOutputStream()
         val content = DataOutputStream(bytes)
         val length = entries.keys.max() + 1

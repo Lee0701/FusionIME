@@ -3,14 +3,19 @@ package ee.oyatl.ime.newdict
 import java.io.ByteArrayOutputStream
 import java.io.DataOutputStream
 
-class HanjaDictionary {
+class HanjaDictionary
+    : MutableDictionary<Int, HanjaDictionary.Entry>, WritableDictionary<Int, HanjaDictionary.Entry> {
     val entries: MutableMap<Int, Entry> = mutableMapOf()
 
-    fun insert(index: Int, content: Entry) {
-        entries += index to content
+    override fun get(key: Int): Entry? {
+        return entries[key]
     }
 
-    fun write(os: DataOutputStream) {
+    override fun insert(key: Int, value: Entry) {
+        entries += key to value
+    }
+
+    override fun write(os: DataOutputStream) {
         val bytes = ByteArrayOutputStream()
         val content = DataOutputStream(bytes)
         val length = entries.keys.max() + 1

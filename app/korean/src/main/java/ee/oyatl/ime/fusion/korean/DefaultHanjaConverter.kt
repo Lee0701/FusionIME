@@ -18,7 +18,7 @@ class DefaultHanjaConverter(
 
     override fun convert(text: String): List<CandidateView.Candidate> {
         val hanjaResult = (1 .. text.length).map { l ->
-            indexDict.search(text.take(l))
+            indexDict.get(text.take(l))
                 .map { vocabDict.get(it) }
                 .filter { it.hanja.length == l }
                 .map { Candidate(it.hanja, it.frequency.toFloat(), it.extra) }
