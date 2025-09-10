@@ -12,11 +12,11 @@ fun main(args: Array<String>) {
     var i = 0
     File(input).forEachLine { line ->
         val tokens = line.split('\t')
-        if(tokens.size == 4) {
-            val (hangul, hanja, freq, definition) = tokens
+        if(tokens.size == 5) {
+            val (hangul, hanja, freq, extra, definition) = tokens
             indexDict.insert(hangul, i)
             revIndexDict.insert(hanja, i)
-            contentDict.insert(hangul, hanja, freq.toInt(), "")
+            contentDict.insert(hangul, hanja, freq.toInt(), extra)
             definitionDict.insert(definition)
             i += 1
         }

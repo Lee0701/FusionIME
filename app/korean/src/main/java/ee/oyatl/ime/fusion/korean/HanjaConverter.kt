@@ -3,7 +3,6 @@ package ee.oyatl.ime.fusion.korean
 import android.content.Context
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.dictionary.DiskDictionary
-import ee.oyatl.ime.dictionary.DiskIndexDictionary
 import ee.oyatl.ime.newdict.DiskHanjaDictionary
 import ee.oyatl.ime.newdict.DiskTrieDictionary
 
@@ -22,7 +21,7 @@ class HanjaConverter(
             indexDict.search(text.take(l))
                 .map { vocabDict.get(it) }
                 .filter { it.hanja.length == l }
-                .map { Candidate(it.hanja, it.frequency.toFloat()) }
+                .map { Candidate(it.hanja, it.frequency.toFloat(), it.extra) }
         }.flatten()
         val unigramResult = (1 .. text.length).asSequence()
             .map { l -> unigramsDict.search(text.take(l)) }
@@ -37,6 +36,7 @@ class HanjaConverter(
 
     data class Candidate(
         override val text: CharSequence,
-        val score: Float
-    ): CandidateView.Candidate
+        val score: Float,
+        override val extra: CharSequence = ""
+    ): CandidateView.Candidate, CandidateView.ExtraCandidate
 }

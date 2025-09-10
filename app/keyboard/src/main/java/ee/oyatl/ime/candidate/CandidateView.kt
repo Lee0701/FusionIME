@@ -15,6 +15,10 @@ interface CandidateView {
         val focused: Boolean
     }
 
+    interface ExtraCandidate: Candidate {
+        val extra: CharSequence
+    }
+
     interface Listener {
         fun onCandidateSelected(candidate: Candidate)
     }
