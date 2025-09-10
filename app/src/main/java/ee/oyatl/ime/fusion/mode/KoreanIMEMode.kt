@@ -6,7 +6,9 @@ import android.os.Looper
 import android.view.KeyEvent
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.fusion.hangul.HangulCombiner
+import ee.oyatl.ime.fusion.korean.DefaultHanjaConverter
 import ee.oyatl.ime.fusion.korean.HanjaConverter
+import ee.oyatl.ime.fusion.korean.JeongUnHanjaConverter
 import ee.oyatl.ime.fusion.korean.WordComposer
 import ee.oyatl.ime.fusion.korean.layout.Hangul2Set
 import ee.oyatl.ime.fusion.korean.layout.Hangul3Set
@@ -106,16 +108,20 @@ abstract class KoreanIMEMode(
             ),
             DefaultBottomRowKeyboard()
         )
+
+        override suspend fun onLoad(context: Context) {
+            hanjaConverter = JeongUnHanjaConverter(context)
+        }
     }
 
     protected abstract val hangulCombiner: HangulCombiner
     private var currentState = HangulCombiner.State.Initial
 
     private val wordComposer: WordComposer = WordComposer()
-    private var hanjaConverter: HanjaConverter? = null
+    protected var hanjaConverter: HanjaConverter? = null
 
     override suspend fun onLoad(context: Context) {
-        hanjaConverter = HanjaConverter(context)
+        hanjaConverter = DefaultHanjaConverter(context)
     }
 
     override fun onReset() {
