@@ -1,5 +1,6 @@
 package ee.oyatl.ime.keyboard
 
 data class KeyboardViewParams(
-    val keyHeight: Int
+    val keyHeight: Int,
+    val showPreviewPopup: Boolean
 )

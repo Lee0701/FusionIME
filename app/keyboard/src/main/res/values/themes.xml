@@ -7,6 +7,11 @@
         <item name="backgroundColor">@color/keyboard_bg_light</item>
     </style>
 
+    <style name="Theme.FusionIME.Keyboard.Popup">
+        <item name="backgroundColor">@color/key_bg_light_pressed</item>
+        <item name="foregroundColor">@color/black</item>
+    </style>
+
     <style name="Theme.FusionIME.Keyboard.Key">
         <item name="backgroundColor">@color/key_bg_static_light</item>
         <item name="foregroundColor">@color/black</item>
