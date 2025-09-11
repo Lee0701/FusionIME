@@ -32,7 +32,7 @@ class DefaultHanjaConverter(
         val current = (1 .. text.length)
             .flatMap { l -> indexDict.get(text.take(l)) }
             .map { it to vocabDict.get(it) }
-            .map { (id, vocab) -> SingleCandidate(id, vocab.hanja, vocab.frequency.toFloat()) }
+            .map { (id, vocab) -> SingleCandidate(id, vocab.hanja, vocab.frequency.toFloat(), vocab.extra) }
         val available = if(depth == 0) {
             current
         } else {
@@ -48,20 +48,16 @@ class DefaultHanjaConverter(
 
     data class CompoundCandidate(
         val candidates: List<SingleCandidate>
-    ): CandidateView.Candidate {
+    ): CandidateView.Candidate, CandidateView.ExtraCandidate {
         override val text: CharSequence = candidates.joinToString("") { it.text }
-        val score: Float = candidates.map { it.score }.sum() / 2f.pow(candidates.size)
+        val score: Float = candidates.map { it.score }.sum() / candidates.size
+        override val extra: CharSequence = if(candidates.size == 1) candidates.first().extra else ""
     }
 
     data class SingleCandidate(
         val id: Int,
         override val text: CharSequence,
         val score: Float,
-    ): CandidateView.Candidate
-
-    data class Candidate(
-        override val text: CharSequence,
-        val score: Float,
-        override val extra: CharSequence = ""
+        override val extra: String
     ): CandidateView.Candidate, CandidateView.ExtraCandidate
 }
