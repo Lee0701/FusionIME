@@ -39,7 +39,7 @@ class NGramDictionary: MutableDictionary<List<Int>, Map<Int, Int>>, WritableDict
             }
             val start = os.size()
             os.writeInt(frequency)
-            os.writeShort(children.size)
+            os.writeInt(children.size)
             childrenMap.forEach { (i, address) ->
                 os.writeInt(i)
                 os.writeInt(address)

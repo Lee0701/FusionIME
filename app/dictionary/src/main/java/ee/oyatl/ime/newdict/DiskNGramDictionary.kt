@@ -12,8 +12,8 @@ class DiskNGramDictionary(
         var p = data.getInt(data.capacity() - 4)
         for(ind in key) {
             p += 4
-            val children = data.getShort(p)
-            p += 2
+            val children = data.getInt(p)
+            p += 4
             for(i in 0 until children) {
                 val index = data.getInt(p + i*8)
                 val addr = data.getInt(p + i*8 + 4)
@@ -27,8 +27,8 @@ class DiskNGramDictionary(
         }
         val result = mutableMapOf<Int, Int>()
         p += 4
-        val children = data.getShort(p)
-        p += 2
+        val children = data.getInt(p)
+        p += 4
         for(i in 0 until children) {
             val index = data.getInt(p + i*8)
             val addr = data.getInt(p + i*8 + 4)
