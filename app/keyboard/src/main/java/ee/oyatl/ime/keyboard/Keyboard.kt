@@ -7,7 +7,7 @@ import ee.oyatl.ime.keyboard.listener.KeyboardListener
 interface Keyboard {
     val numRows: Int
 
-    fun createView(context: Context, listener: KeyboardListener, height: Int): View
+    fun createView(context: Context, listener: KeyboardListener, params: KeyboardViewParams): View
     fun setShiftState(state: KeyboardState.Shift)
 
     enum class SpecialKey(

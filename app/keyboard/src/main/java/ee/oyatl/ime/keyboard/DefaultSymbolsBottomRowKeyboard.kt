@@ -9,8 +9,8 @@ class DefaultSymbolsBottomRowKeyboard(
 ): DefaultKeyboard() {
     override val numRows: Int = 1
 
-    override fun buildRows(context: Context, listener: KeyboardListener, height: Int): List<KbdRowBinding> {
-        val row = buildRow(context, listener, listOf(), height)
+    override fun buildRows(context: Context, listener: KeyboardListener): List<KbdRowBinding> {
+        val row = buildRow(context, listener, listOf())
         row.root.addView(buildSpecialKey(
             context,
             listener,
@@ -20,7 +20,7 @@ class DefaultSymbolsBottomRowKeyboard(
             1.5f
         ))
         val left = extraKeys[0]
-        row.root.addView(buildKey(context, listener, left, left.toChar().toString(), height).root)
+        row.root.addView(buildKey(context, listener, left, left.toChar().toString()).root)
         row.root.addView(buildSpecialKey(
             context,
             listener,
@@ -38,7 +38,7 @@ class DefaultSymbolsBottomRowKeyboard(
             4.0f
         ))
         val right = extraKeys[1]
-        row.root.addView(buildKey(context, listener, right, right.toChar().toString(), height).root)
+        row.root.addView(buildKey(context, listener, right, right.toChar().toString()).root)
         row.root.addView(buildSpecialKey(
             context,
             listener,

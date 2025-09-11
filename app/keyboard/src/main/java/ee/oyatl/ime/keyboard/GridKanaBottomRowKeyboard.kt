@@ -14,11 +14,11 @@ class GridKanaBottomRowKeyboard(
 ): DefaultKeyboard() {
     override val numRows: Int = 1
 
-    override fun buildRows(context: Context, listener: KeyboardListener, height: Int): List<KbdRowBinding> {
-        val row = buildRow(context, listener, listOf(), height)
+    override fun buildRows(context: Context, listener: KeyboardListener): List<KbdRowBinding> {
+        val row = buildRow(context, listener, listOf())
 
         leftExtraRow.forEach { c ->
-            val key = buildKey(context, listener, c, c.toChar().toString(), height)
+            val key = buildKey(context, listener, c, c.toChar().toString())
             row.root.addView(key.root)
         }
 
@@ -64,7 +64,7 @@ class GridKanaBottomRowKeyboard(
         ))
 
         rightExtraRow.forEach { c ->
-            val key = buildKey(context, listener, c, c.toChar().toString(), height)
+            val key = buildKey(context, listener, c, c.toChar().toString())
             row.root.addView(key.root)
         }
 

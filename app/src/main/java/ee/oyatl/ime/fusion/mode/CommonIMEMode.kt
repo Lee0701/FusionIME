@@ -20,6 +20,7 @@ import ee.oyatl.ime.keyboard.DefaultSymbolsBottomRowKeyboard
 import ee.oyatl.ime.keyboard.Keyboard
 import ee.oyatl.ime.keyboard.KeyboardInflater
 import ee.oyatl.ime.keyboard.KeyboardState
+import ee.oyatl.ime.keyboard.KeyboardViewParams
 import ee.oyatl.ime.keyboard.ShiftStateKeyboard
 import ee.oyatl.ime.keyboard.StackedKeyboard
 import ee.oyatl.ime.keyboard.layout.KeyboardTemplates
@@ -116,9 +117,10 @@ abstract class CommonIMEMode(
         val rowHeightDefault = if(landscape) 45f else 55f
         val rowHeightDIP = preference.getFloat(rowHeightKey, rowHeightDefault)
         val height = (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, rowHeightDIP, context.resources.displayMetrics) * 4).roundToInt()
-        textKeyboardView = textKeyboard.createView(context, textKeyboardListener, height / textKeyboard.numRows)
-        symbolKeyboardView = symbolKeyboard.createView(context, symbolKeyboardListener, height / symbolKeyboard.numRows)
-        numpadKeyboardView = numpadKeyboard.createView(context, directKeyboardListener, height / numpadKeyboard.numRows)
+        val params = KeyboardViewParams(height / 4)
+        textKeyboardView = textKeyboard.createView(context, textKeyboardListener, params.copy(keyHeight = height / textKeyboard.numRows))
+        symbolKeyboardView = symbolKeyboard.createView(context, symbolKeyboardListener, params.copy(keyHeight = height / symbolKeyboard.numRows))
+        numpadKeyboardView = numpadKeyboard.createView(context, directKeyboardListener, params.copy(keyHeight = height / numpadKeyboard.numRows))
         switcherView.addView(textKeyboardView)
         switcherView.addView(symbolKeyboardView)
         switcherView.addView(numpadKeyboardView)

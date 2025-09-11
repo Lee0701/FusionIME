@@ -16,15 +16,16 @@ import ee.oyatl.ime.keyboard.databinding.KbdRowBinding
 import ee.oyatl.ime.keyboard.listener.KeyboardListener
 
 abstract class DefaultKeyboard: Keyboard {
-
+    private lateinit var keyboardViewParams: KeyboardViewParams
     protected val shiftKeys: MutableList<KbdKeyBinding> = mutableListOf()
 
-    abstract fun buildRows(context: Context, listener: KeyboardListener, height: Int): List<KbdRowBinding>
+    abstract fun buildRows(context: Context, listener: KeyboardListener): List<KbdRowBinding>
 
-    override fun createView(context: Context, listener: KeyboardListener, height: Int): View {
+    override fun createView(context: Context, listener: KeyboardListener, params: KeyboardViewParams): View {
+        keyboardViewParams = params
         val inflater = LayoutInflater.from(ContextThemeWrapper(context, R.style.Theme_FusionIME_Keyboard))
         val keyboard = KbdKeyboardBinding.inflate(inflater)
-        buildRows(context, listener, height).forEach { keyboard.root.addView(it.root) }
+        buildRows(context, listener).forEach { keyboard.root.addView(it.root) }
         return keyboard.root
     }
 
@@ -37,18 +38,18 @@ abstract class DefaultKeyboard: Keyboard {
         shiftKeys.forEach { it.icon.setImageResource(icon) }
     }
 
-    protected open fun buildRow(context: Context, listener: KeyboardListener, codes: List<Int>, height: Int): KbdRowBinding {
+    protected open fun buildRow(context: Context, listener: KeyboardListener, codes: List<Int>): KbdRowBinding {
         val inflater = LayoutInflater.from(context)
         val row = KbdRowBinding.inflate(inflater)
         codes.forEach { code ->
-            val key = buildKey(context, listener, code, code.toChar().toString(), height)
+            val key = buildKey(context, listener, code, code.toChar().toString())
             row.root.addView(key.root)
         }
         return row
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    protected open fun buildKey(context: Context, listener: KeyboardListener, code: Int, label: String, height: Int): KbdKeyBinding {
+    protected open fun buildKey(context: Context, listener: KeyboardListener, code: Int, label: String): KbdKeyBinding {
         val inflater = LayoutInflater.from(ContextThemeWrapper(context, R.style.Theme_FusionIME_Keyboard_Key))
         val key = KbdKeyBinding.inflate(inflater)
         key.label.text = label
@@ -65,7 +66,7 @@ abstract class DefaultKeyboard: Keyboard {
             }
             true
         }
-        key.root.layoutParams = LayoutParams(0, height).apply {
+        key.root.layoutParams = LayoutParams(0, keyboardViewParams.keyHeight).apply {
             weight = 1.0f
         }
         return key

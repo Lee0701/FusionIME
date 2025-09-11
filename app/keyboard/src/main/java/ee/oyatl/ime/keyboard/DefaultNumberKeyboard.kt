@@ -12,7 +12,7 @@ class DefaultNumberKeyboard(
 ): DefaultKeyboard() {
     override val numRows: Int = rows.size
 
-    override fun buildRows(context: Context, listener: KeyboardListener, height: Int): List<KbdRowBinding> {
+    override fun buildRows(context: Context, listener: KeyboardListener): List<KbdRowBinding> {
         val delete = buildSpecialKey(
             context,
             RepeatableKeyListener(listener),
@@ -53,8 +53,7 @@ class DefaultNumberKeyboard(
             context,
             listener,
             KeyEvent.KEYCODE_COMMA,
-            ",",
-            height
+            ","
         ).apply {
             (root.layoutParams as LinearLayout.LayoutParams).weight = 0.5f
         }
@@ -63,13 +62,12 @@ class DefaultNumberKeyboard(
             context,
             listener,
             KeyEvent.KEYCODE_PERIOD,
-            ".",
-            height
+            "."
         ).apply {
             (root.layoutParams as LinearLayout.LayoutParams).weight = 0.5f
         }
 
-        val builtRows = rows.map { buildRow(context, listener, it, height) }
+        val builtRows = rows.map { buildRow(context, listener, it) }
         builtRows[0].root.addView(buildSpacer(context, listener, 1.0f))
         builtRows[1].root.addView(delete)
         builtRows[2].root.addView(space)
