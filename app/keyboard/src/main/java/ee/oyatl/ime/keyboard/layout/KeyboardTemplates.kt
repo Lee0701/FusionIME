@@ -26,4 +26,16 @@ object KeyboardTemplates {
         "asdfghjkl;",
         "zxcvbnm,./",
     )
+
+    val MOBILE_DVORAK: List<String> = listOf(
+        "',.pyfgcrl",
+        "aoeuidhtns",
+        "jkxbmwv",
+    )
+
+    val MOBILE_COLEMAK: List<String> = listOf(
+        "qwfpgjluy;",
+        "arstdhneio",
+        "zxcvbkm",
+    )
 }

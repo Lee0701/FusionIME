@@ -1,6 +1,8 @@
 <resources>
     <string-array name="settings_input_mode_entries">
         <item>Latin QWERTY</item>
+        <item>Latin Dvorak</item>
+        <item>Latin Colemak</item>
         <item>Korean 2-Set KS</item>
         <item>Korean 3-Set 390</item>
         <item>Korean 3-Set 391</item>
@@ -17,6 +19,8 @@
 
     <string-array name="settings_input_mode_values">
         <item>qwerty</item>
+        <item>dvorak</item>
+        <item>colemak</item>
         <item>ko_ks</item>
         <item>ko_390</item>
         <item>ko_391</item>
