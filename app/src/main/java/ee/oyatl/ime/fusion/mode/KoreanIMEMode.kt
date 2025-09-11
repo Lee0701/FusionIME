@@ -35,6 +35,84 @@ abstract class KoreanIMEMode(
         }
     }
 
+    protected abstract val hangulCombiner: HangulCombiner
+    private var currentState = HangulCombiner.State.Initial
+
+    private val wordComposer: WordComposer = WordComposer()
+    protected var hanjaConverter: HanjaConverter? = null
+
+    override suspend fun onLoad(context: Context) {
+        hanjaConverter = DefaultHanjaConverter(context)
+    }
+
+    override fun onReset() {
+        super.onReset()
+        wordComposer.reset()
+        currentState = HangulCombiner.State.Initial
+    }
+
+    override fun onCandidateSelected(candidate: CandidateView.Candidate) {
+        val inputConnection = currentInputConnection ?: return
+        val length =
+            if(candidate is CandidateView.VarLengthCandidate) candidate.inputLength
+            else candidate.text.length
+        wordComposer.consume(length)
+        currentState = HangulCombiner.State.Initial
+        inputConnection.commitText(candidate.text, 1)
+        renderInputView()
+    }
+
+    private fun convert() {
+        val candidates = hanjaConverter?.convert(wordComposer.word)
+        if(candidates != null) submitCandidates(candidates)
+    }
+
+    private fun postConvert() {
+        handler.removeMessages(MSG_CONVERT)
+        handler.sendMessageDelayed(handler.obtainMessage(MSG_CONVERT), 100)
+    }
+
+    private fun renderInputView() {
+        currentInputConnection?.setComposingText(wordComposer.word, 1)
+        postConvert()
+    }
+
+    override fun onChar(code: Int) {
+        val result = hangulCombiner.combine(currentState, code)
+        if(result.textToCommit.isNotEmpty()) currentState = HangulCombiner.State.Initial
+        if(result.newState.combined.isNotEmpty()) currentState = result.newState as HangulCombiner.State
+        result.textToCommit.forEach { text -> wordComposer.commit(text.toString()) }
+        wordComposer.compose(currentState.combined.toString())
+        renderInputView()
+    }
+
+    override fun onSpecial(type: Keyboard.SpecialKey) {
+        when(type) {
+            Keyboard.SpecialKey.Delete -> {
+                if(currentState != HangulCombiner.State.Initial) {
+                    currentState = currentState.previous as HangulCombiner.State
+                    wordComposer.compose(currentState.combined.toString())
+                } else if(!wordComposer.delete(1)) {
+                    util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_DEL)
+                }
+                renderInputView()
+            }
+            Keyboard.SpecialKey.Space -> {
+                onReset()
+                util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_SPACE)
+            }
+            Keyboard.SpecialKey.Return -> {
+                onReset()
+                util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_ENTER)
+            }
+            else -> {}
+        }
+    }
+
+    companion object {
+        const val MSG_CONVERT = 0
+    }
+
     class Hangul2SetKS(listener: IMEMode.Listener): KoreanIMEMode(listener) {
         override val hangulCombiner: HangulCombiner = HangulCombiner(Hangul2Set.COMB_KS, true)
         override val layoutTable: Map<Int, List<Int>> = Hangul2Set.TABLE_KS
@@ -114,81 +192,4 @@ abstract class KoreanIMEMode(
         }
     }
 
-    protected abstract val hangulCombiner: HangulCombiner
-    private var currentState = HangulCombiner.State.Initial
-
-    private val wordComposer: WordComposer = WordComposer()
-    protected var hanjaConverter: HanjaConverter? = null
-
-    override suspend fun onLoad(context: Context) {
-        hanjaConverter = DefaultHanjaConverter(context)
-    }
-
-    override fun onReset() {
-        super.onReset()
-        wordComposer.reset()
-        currentState = HangulCombiner.State.Initial
-    }
-
-    override fun onCandidateSelected(candidate: CandidateView.Candidate) {
-        val inputConnection = currentInputConnection ?: return
-        val length =
-            if(candidate is CandidateView.VarLengthCandidate) candidate.inputLength
-            else candidate.text.length
-        wordComposer.consume(length)
-        currentState = HangulCombiner.State.Initial
-        inputConnection.commitText(candidate.text, 1)
-        renderInputView()
-    }
-
-    private fun convert() {
-        val candidates = hanjaConverter?.convert(wordComposer.word)
-        if(candidates != null) submitCandidates(candidates)
-    }
-
-    private fun postConvert() {
-        handler.removeMessages(MSG_CONVERT)
-        handler.sendMessageDelayed(handler.obtainMessage(MSG_CONVERT), 100)
-    }
-
-    private fun renderInputView() {
-        currentInputConnection?.setComposingText(wordComposer.word, 1)
-        postConvert()
-    }
-
-    override fun onChar(code: Int) {
-        val result = hangulCombiner.combine(currentState, code)
-        if(result.textToCommit.isNotEmpty()) currentState = HangulCombiner.State.Initial
-        if(result.newState.combined.isNotEmpty()) currentState = result.newState as HangulCombiner.State
-        result.textToCommit.forEach { text -> wordComposer.commit(text.toString()) }
-        wordComposer.compose(currentState.combined.toString())
-        renderInputView()
-    }
-
-    override fun onSpecial(type: Keyboard.SpecialKey) {
-        when(type) {
-            Keyboard.SpecialKey.Delete -> {
-                if(currentState != HangulCombiner.State.Initial) {
-                    currentState = currentState.previous as HangulCombiner.State
-                    wordComposer.compose(currentState.combined.toString())
-                } else if(!wordComposer.delete(1)) {
-                    util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_DEL)
-                }
-                renderInputView()
-            }
-            Keyboard.SpecialKey.Space -> {
-                onReset()
-                util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_SPACE)
-            }
-            Keyboard.SpecialKey.Return -> {
-                onReset()
-                util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_ENTER)
-            }
-            else -> {}
-        }
-    }
-
-    companion object {
-        const val MSG_CONVERT = 0
-    }
 }
