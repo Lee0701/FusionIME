@@ -10,6 +10,7 @@ import android.os.VibratorManager
 import android.view.KeyEvent
 import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresPermission
+import kotlin.math.min
 
 open class FeedbackListener(
     context: Context,
@@ -25,6 +26,8 @@ open class FeedbackListener(
         else context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
     private val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+
+    private var downTime: Long = 0
 
     @RequiresPermission(Manifest.permission.VIBRATE)
     fun vibrate(duration: Long) {
@@ -50,11 +53,17 @@ open class FeedbackListener(
             }
             audioManager.playSoundEffect(fx, soundVolume)
         }
+        downTime = System.currentTimeMillis()
         listener.onKeyDown(code)
     }
 
     override fun onKeyUp(code: Int) {
         listener.onKeyUp(code)
+        val diff = System.currentTimeMillis() - downTime
+        if(vibrationDuration > 0) {
+            val duration = vibrationDuration / 5f * min(diff / 100f, 1f)
+            vibrate(duration.toLong())
+        }
     }
 
     class Repeatable(
