@@ -15,6 +15,8 @@
 
     <string name="settings_appearance_keyboard_height_portrait_title">Keyboard Height (Portrait)</string>
     <string name="settings_appearance_keyboard_height_landscape_title">Keyboard Height (Landscape)</string>
+    <string name="settings_appearance_preview_popup_title">Preview Popups</string>
+    <string name="settings_appearance_preview_popup_summary">Show preview popups on key press.</string>
 
     <string name="settings_behaviour_sound_feedback_title">Sound Feedback</string>
     <string name="settings_behaviour_sound_feedback_summary">Play sound effect on key press.</string>

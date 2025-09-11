@@ -117,9 +117,10 @@ abstract class CommonIMEMode(
         val rowHeightDefault = if(landscape) 45f else 55f
         val rowHeightDIP = preference.getFloat(rowHeightKey, rowHeightDefault)
         val height = (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, rowHeightDIP, context.resources.displayMetrics) * 4).roundToInt()
+        val showPreviewPopup = preference.getBoolean("keyboard_preview_popup", true)
         val params = KeyboardViewParams(
             keyHeight = height / 4,
-            true
+            showPreviewPopup = showPreviewPopup
         )
         textKeyboardView = textKeyboard.createView(context, textKeyboardListener, params.copy(keyHeight = height / textKeyboard.numRows))
         symbolKeyboardView = symbolKeyboard.createView(context, symbolKeyboardListener, params.copy(keyHeight = height / symbolKeyboard.numRows))
