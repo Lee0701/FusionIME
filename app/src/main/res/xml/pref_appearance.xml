@@ -19,4 +19,10 @@
         app:title="@string/settings_appearance_keyboard_height_landscape_title"
         app:useSimpleSummaryProvider="true" />
 
+    <SwitchPreferenceCompat
+        app:key="preview_popup"
+        app:defaultValue="true"
+        app:title="@string/settings_appearance_preview_popup_title"
+        app:summary="@string/settings_appearance_preview_popup_summary" />
+
 </PreferenceScreen>

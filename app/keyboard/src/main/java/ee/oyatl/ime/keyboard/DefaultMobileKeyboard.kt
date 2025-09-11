@@ -11,8 +11,8 @@ class DefaultMobileKeyboard(
 ): DefaultKeyboard() {
     override val numRows: Int = rows.size
 
-    override fun buildRows(context: Context, listener: KeyboardListener, height: Int): List<KbdRowBinding> {
-        val builtRows = rows.map { buildRow(context, listener, it, height) }
+    override fun buildRows(context: Context, listener: KeyboardListener): List<KbdRowBinding> {
+        val builtRows = rows.map { buildRow(context, listener, it) }
 
         if(rows[rows.size - 2].size != 10) {
             val space = (10 - rows[1].size) / 2f

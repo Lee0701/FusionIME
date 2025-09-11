@@ -13,14 +13,13 @@ class DefaultGridKeyboard(
 
     override fun buildRows(
         context: Context,
-        listener: KeyboardListener,
-        height: Int
+        listener: KeyboardListener
     ): List<KbdRowBinding> {
-        val builtRows = rows.map { buildRow(context, listener, it, height) }
+        val builtRows = rows.map { buildRow(context, listener, it) }
         return builtRows
     }
 
-    override fun buildRow(context: Context, listener: KeyboardListener, codes: List<Int>, height: Int): KbdRowBinding {
+    override fun buildRow(context: Context, listener: KeyboardListener, codes: List<Int>): KbdRowBinding {
         val inflater = LayoutInflater.from(context)
         val row = KbdRowBinding.inflate(inflater)
         codes.forEach { code ->
@@ -37,7 +36,7 @@ class DefaultGridKeyboard(
                     1.0f
                 ))
             } else {
-                val key = buildKey(context, listener, code, code.toChar().toString(), height)
+                val key = buildKey(context, listener, code, code.toChar().toString())
                 row.root.addView(key.root)
             }
         }

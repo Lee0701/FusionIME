@@ -13,12 +13,12 @@ class ShiftStateKeyboard(
 
     override val numRows: Int = listOf(normal, shifted, locked).maxOf { it.numRows }
 
-    override fun createView(context: Context, listener: KeyboardListener, height: Int): View {
+    override fun createView(context: Context, listener: KeyboardListener, params: KeyboardViewParams): View {
         val keyboardSwitcher = ShiftKeyboardSwitcher(
             context,
-            normal.createView(context, listener, height),
-            shifted.createView(context, listener, height),
-            locked.createView(context, listener, height)
+            normal.createView(context, listener, params),
+            shifted.createView(context, listener, params),
+            locked.createView(context, listener, params)
         )
         this.keyboardSwitcher = keyboardSwitcher
         return keyboardSwitcher.view
