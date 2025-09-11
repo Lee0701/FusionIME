@@ -117,7 +117,7 @@ abstract class CommonIMEMode(
         val rowHeightDefault = if(landscape) 45f else 55f
         val rowHeightDIP = preference.getFloat(rowHeightKey, rowHeightDefault)
         val height = (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, rowHeightDIP, context.resources.displayMetrics) * 4).roundToInt()
-        val showPreviewPopup = preference.getBoolean("keyboard_preview_popup", true)
+        val showPreviewPopup = preference.getBoolean("preview_popup", true)
         val params = KeyboardViewParams(
             keyHeight = height / 4,
             showPreviewPopup = showPreviewPopup
@@ -261,8 +261,9 @@ abstract class CommonIMEMode(
         val pref = PreferenceManager.getDefaultSharedPreferences(context)
         val sound = pref.getBoolean("sound_feedback", true)
         val haptic = pref.getBoolean("haptic_feedback", true)
+        val duration = pref.getFloat("vibration_duration", 10f).toLong()
         val soundVolume = if(sound) 1f else 0f
-        val vibrationDuration = if(haptic) 10L else 0L
+        val vibrationDuration = if(haptic) duration else 0L
         return FeedbackListener.Repeatable(
             context,
             RepeatableKeyListener.RepeatToKeyDownUp(

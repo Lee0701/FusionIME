@@ -13,4 +13,12 @@
         app:title="@string/settings_behaviour_haptic_feedback_title"
         app:summary="@string/settings_behaviour_haptic_feedback_summary" />
 
+    <ee.oyatl.ime.fusion.preference.SliderPreference
+        app:key="vibration_duration"
+        app:valueFrom="5.0"
+        app:valueTo="50.0"
+        app:stepSize="5.0"
+        app:defaultValue="10.0"
+        app:title="@string/settings_behaviour_vibration_duration_title" />
+
 </PreferenceScreen>

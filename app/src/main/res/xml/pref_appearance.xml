@@ -20,7 +20,7 @@
         app:useSimpleSummaryProvider="true" />
 
     <SwitchPreferenceCompat
-        app:key="keyboard_preview_popup"
+        app:key="preview_popup"
         app:defaultValue="true"
         app:title="@string/settings_appearance_preview_popup_title"
         app:summary="@string/settings_appearance_preview_popup_summary" />
