@@ -8,7 +8,7 @@ import java.io.DataOutputStream
 import java.io.File
 
 fun main(args: Array<String>) {
-    val (input, outDir) = args
+    val (input, bigramInput, outDir) = args
     val indexDict = TrieDictionary()
     val revIndexDict = TrieDictionary()
     val contentDict = HanjaDictionary()
@@ -37,7 +37,7 @@ fun main(args: Array<String>) {
     }
 
     val bigramDict = NGramDictionary()
-    File("").forEachLine { line ->
+    File(bigramInput).forEachLine { line ->
         val tokens = line.split('\t')
         if(tokens.size == 2) {
             val (s, f) = tokens
