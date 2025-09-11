@@ -20,10 +20,12 @@ import ee.oyatl.ime.keyboard.KeyboardInflater
 import ee.oyatl.ime.keyboard.ShiftStateKeyboard
 import ee.oyatl.ime.keyboard.StackedKeyboard
 import ee.oyatl.ime.keyboard.layout.KeyboardTemplates
+import java.util.concurrent.Executors
 
 abstract class KoreanIMEMode(
     listener: IMEMode.Listener
 ): CommonIMEMode(listener) {
+    private val executor = Executors.newSingleThreadExecutor()
 
     private val handler: Handler = Handler(Looper.getMainLooper()) { msg ->
         when(msg.what) {
@@ -63,8 +65,10 @@ abstract class KoreanIMEMode(
     }
 
     private fun convert() {
-        val candidates = hanjaConverter?.convert(wordComposer.word)
-        if(candidates != null) submitCandidates(candidates)
+        executor.execute {
+            val candidates = hanjaConverter?.convert(wordComposer.word)
+            if(candidates != null) handler.post { submitCandidates(candidates) }
+        }
     }
 
     private fun postConvert() {
@@ -191,5 +195,4 @@ abstract class KoreanIMEMode(
             hanjaConverter = JeongUnHanjaConverter(context)
         }
     }
-
 }

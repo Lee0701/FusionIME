@@ -3,22 +3,27 @@ package ee.oyatl.ime.newdict
 import java.io.ByteArrayOutputStream
 import java.io.DataOutputStream
 
-class StringDictionary {
-    val entries: MutableList<String> = mutableListOf()
+class StringDictionary
+    : MutableDictionary<Int, String>, WritableDictionary<Int, String> {
+    val entries: MutableMap<Int, String> = mutableMapOf()
 
-    fun insert(text: String) {
-        entries += text
+    override fun get(key: Int): String? {
+        return entries[key]
     }
 
-    fun write(os: DataOutputStream) {
+    override fun insert(key: Int, value: String) {
+        entries += key to value
+    }
+
+    override fun write(os: DataOutputStream) {
         val bytes = ByteArrayOutputStream()
         val content = DataOutputStream(bytes)
-        entries.forEach { text ->
-            os.writeInt(entries.size*4 + content.size())
-            content.writeChars(text)
+        val length = entries.keys.max() + 1
+        (0 until length).forEach { index ->
+            os.writeInt(length * 4 + content.size())
+            content.writeChars(entries[index] ?: "")
             content.writeShort(0)
         }
         os.write(bytes.toByteArray())
     }
-
 }
