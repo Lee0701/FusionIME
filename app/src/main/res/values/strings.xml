@@ -32,6 +32,7 @@
     <string name="input_mode_pinyin">Pinyin (Simplified Chinese)</string>
     <string name="input_mode_zhuyin">Bopomofo (Traditional Chinese)</string>
     <string name="input_mode_cangjie">Cangjie</string>
+    <string name="input_mode_viet">Vietnamese</string>
 
     <string name="latin_locale_en">English</string>
     <string name="latin_locale_de">German</string>

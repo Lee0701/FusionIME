@@ -6,6 +6,8 @@ import androidx.preference.PreferenceFragmentCompat
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.mode.KoreanIMEMode
 import ee.oyatl.ime.fusion.mode.LatinIMEMode
+import ee.oyatl.ime.fusion.mode.MozcIMEMode
+import ee.oyatl.ime.fusion.mode.VietIMEMode
 
 abstract class InputModeDetailsFragment(
     private val map: MutableMap<String, String>
@@ -44,6 +46,24 @@ abstract class InputModeDetailsFragment(
         }
     }
 
+    class Mozc(
+        map: MutableMap<String, String>
+    ): InputModeDetailsFragment(map) {
+        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+            super.onCreatePreferences(savedInstanceState, rootKey)
+            setPreferencesFromResource(R.xml.pref_input_mode_mozc, rootKey)
+        }
+    }
+
+    class Viet(
+        map: MutableMap<String, String>
+    ): InputModeDetailsFragment(map) {
+        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+            super.onCreatePreferences(savedInstanceState, rootKey)
+            setPreferencesFromResource(R.xml.pref_input_mode_viet, rootKey)
+        }
+    }
+
     companion object {
         const val KEY_INPUT_MODE_DETAILS: String = "inputModeDetails"
         const val KEY_MAP: String = "map"
@@ -53,6 +73,8 @@ abstract class InputModeDetailsFragment(
             return when(type) {
                 LatinIMEMode.TYPE -> Latin(map)
                 KoreanIMEMode.TYPE -> Korean(map)
+                MozcIMEMode.TYPE -> Mozc(map)
+                VietIMEMode.TYPE -> Viet(map)
                 else -> null
             }
         }

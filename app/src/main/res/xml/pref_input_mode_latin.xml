@@ -11,7 +11,6 @@
 
     <ListPreference
         android:key="layout"
-        android:defaultValue="qwerty"
         android:entries="@array/settings_input_mode_latin_layout_entries"
         android:entryValues="@array/settings_input_mode_latin_layout_values"
         android:title="Layout" />

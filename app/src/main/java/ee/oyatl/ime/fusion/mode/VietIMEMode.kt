@@ -117,12 +117,13 @@ abstract class VietIMEMode(
 
         override fun getLabel(context: Context): String {
             val localeName = Locale("vi").displayName
-            return "$localeName"
+            val layoutName = layout.name
+            return "$localeName $layoutName"
         }
 
         override fun getShortLabel(context: Context): String {
             val layoutHead = layout.name.first()
-            return "越 $layoutHead"
+            return "越$layoutHead"
         }
 
         companion object {

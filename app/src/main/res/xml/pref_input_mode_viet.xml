@@ -4,8 +4,8 @@
 
     <ListPreference
         android:key="layout"
-        android:entries="@array/settings_input_mode_korean_layout_entries"
-        android:entryValues="@array/settings_input_mode_korean_layout_values"
+        android:entries="@array/settings_input_mode_viet_layout_entries"
+        android:entryValues="@array/settings_input_mode_viet_layout_values"
         android:title="Layout" />
 
 </androidx.preference.PreferenceScreen>

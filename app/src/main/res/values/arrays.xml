@@ -50,6 +50,7 @@
         <item>@string/input_mode_pinyin</item>
         <item>@string/input_mode_zhuyin</item>
         <item>@string/input_mode_cangjie</item>
+        <item>@string/input_mode_viet</item>
     </string-array>
 
     <string-array name="settings_input_mode_type_values">
@@ -59,6 +60,7 @@
         <item>pinyin</item>
         <item>zhuyin</item>
         <item>cangjie</item>
+        <item>viet</item>
     </string-array>
 
     <string-array name="settings_input_mode_latin_locale_entries">
@@ -107,5 +109,15 @@
         <item>RomajiQwerty</item>
         <item>KanaJIS</item>
         <item>KanaSyllables</item>
+    </string-array>
+
+    <string-array name="settings_input_mode_viet_layout_entries">
+        <item>@string/viet_layout_qwerty</item>
+        <item>@string/viet_layout_telex</item>
+    </string-array>
+
+    <string-array name="settings_input_mode_viet_layout_values">
+        <item>Qwerty</item>
+        <item>Telex</item>
     </string-array>
 </resources>
