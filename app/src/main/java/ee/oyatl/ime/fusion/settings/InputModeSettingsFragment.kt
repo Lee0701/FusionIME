@@ -133,7 +133,7 @@ class InputModeSettingsFragment: Fragment() {
 
     inner class ItemTouchHelperCallback: ItemTouchHelper.SimpleCallback(
         ItemTouchHelper.UP or ItemTouchHelper.DOWN,
-        ItemTouchHelper.LEFT
+        ItemTouchHelper.RIGHT
     ) {
         override fun onMove(
             recyclerView: RecyclerView,
