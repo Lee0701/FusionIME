@@ -1,4 +1,4 @@
-package ee.oyatl.ime.keyboard
+package ee.oyatl.ime.keyboard.switcher
 
 import android.view.View
 

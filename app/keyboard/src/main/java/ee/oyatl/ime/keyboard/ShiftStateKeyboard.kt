@@ -3,6 +3,7 @@ package ee.oyatl.ime.keyboard
 import android.content.Context
 import android.view.View
 import ee.oyatl.ime.keyboard.listener.KeyboardListener
+import ee.oyatl.ime.keyboard.switcher.ShiftKeyboardSwitcher
 
 class ShiftStateKeyboard(
     private val normal: Keyboard,

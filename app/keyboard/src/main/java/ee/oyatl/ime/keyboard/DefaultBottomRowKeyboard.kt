@@ -5,7 +5,8 @@ import ee.oyatl.ime.keyboard.databinding.KbdRowBinding
 import ee.oyatl.ime.keyboard.listener.KeyboardListener
 
 class DefaultBottomRowKeyboard(
-    private val extraKeys: List<Int> = listOf(','.code, '.'.code)
+    private val extraKeys: List<Int> = listOf(','.code, '.'.code),
+    private val isSymbols: Boolean = false
 ): DefaultKeyboard() {
     override val numRows: Int = 1
 
@@ -21,14 +22,25 @@ class DefaultBottomRowKeyboard(
         ))
         val left = extraKeys[0]
         row.root.addView(buildKey(context, listener, left, left.toChar().toString()).root)
-        row.root.addView(buildSpecialKey(
-            context,
-            listener,
-            Keyboard.SpecialKey.Language,
-            R.style.Theme_FusionIME_Keyboard_Key_Modifier,
-            R.drawable.keyic_language,
-            1.0f
-        ))
+        if(isSymbols) {
+            row.root.addView(buildSpecialKey(
+                context,
+                listener,
+                Keyboard.SpecialKey.Numbers,
+                R.style.Theme_FusionIME_Keyboard_Key_Modifier,
+                R.drawable.keyic_numbers,
+                1.0f
+            ))
+        } else {
+            row.root.addView(buildSpecialKey(
+                context,
+                listener,
+                Keyboard.SpecialKey.Language,
+                R.style.Theme_FusionIME_Keyboard_Key_Modifier,
+                R.drawable.keyic_language,
+                1.0f
+            ))
+        }
         row.root.addView(buildSpecialKey(
             context,
             listener,

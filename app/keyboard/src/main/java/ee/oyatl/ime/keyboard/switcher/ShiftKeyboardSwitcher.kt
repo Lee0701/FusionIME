@@ -1,8 +1,9 @@
-package ee.oyatl.ime.keyboard
+package ee.oyatl.ime.keyboard.switcher
 
 import android.content.Context
 import android.view.View
 import android.widget.FrameLayout
+import ee.oyatl.ime.keyboard.KeyboardState
 
 class ShiftKeyboardSwitcher(
     context: Context,

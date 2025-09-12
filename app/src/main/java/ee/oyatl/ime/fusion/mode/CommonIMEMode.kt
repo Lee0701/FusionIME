@@ -16,7 +16,6 @@ import ee.oyatl.ime.fusion.KeyEventUtil
 import ee.oyatl.ime.keyboard.DefaultBottomRowKeyboard
 import ee.oyatl.ime.keyboard.DefaultMobileKeyboard
 import ee.oyatl.ime.keyboard.DefaultNumberKeyboard
-import ee.oyatl.ime.keyboard.DefaultSymbolsBottomRowKeyboard
 import ee.oyatl.ime.keyboard.Keyboard
 import ee.oyatl.ime.keyboard.KeyboardInflater
 import ee.oyatl.ime.keyboard.KeyboardState
@@ -55,8 +54,8 @@ abstract class CommonIMEMode(
             DefaultMobileKeyboard(KeyboardInflater.inflate(LayoutSymbol.ROWS_UPPER, mapOf())[0])
         ),
         ShiftStateKeyboard(
-            DefaultSymbolsBottomRowKeyboard(),
-            DefaultSymbolsBottomRowKeyboard(listOf('<'.code, '>'.code))
+            DefaultBottomRowKeyboard(isSymbols = true),
+            DefaultBottomRowKeyboard(extraKeys = listOf('<'.code, '>'.code), isSymbols = true)
         )
     )
 
