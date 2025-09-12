@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ListPreference
+        android:key="locale"
+        android:defaultValue="en"
+        android:entries="@array/settings_input_mode_latin_locale_entries"
+        android:entryValues="@array/settings_input_mode_latin_locale_values"
+        android:title="Locale" />
+
+    <ListPreference
+        android:key="layout"
+        android:defaultValue="qwerty"
+        android:entries="@array/settings_input_mode_latin_layout_entries"
+        android:entryValues="@array/settings_input_mode_latin_layout_values"
+        android:title="Layout" />
+
+</androidx.preference.PreferenceScreen>

@@ -113,10 +113,6 @@ abstract class KoreanIMEMode(
         }
     }
 
-    companion object {
-        const val MSG_CONVERT = 0
-    }
-
     class Hangul2SetKS(listener: IMEMode.Listener): KoreanIMEMode(listener) {
         override val hangulCombiner: HangulCombiner = HangulCombiner(Hangul2Set.COMB_KS, true)
         override val layoutTable: Map<Int, List<Int>> = Hangul2Set.TABLE_KS
@@ -194,5 +190,56 @@ abstract class KoreanIMEMode(
         override suspend fun onLoad(context: Context) {
             hanjaConverter = JeongUnHanjaConverter(context)
         }
+    }
+
+    data class Params(
+        val layout: Layout
+    ): IMEMode.Params {
+        override val type: String = TYPE
+
+        override fun create(listener: IMEMode.Listener): IMEMode {
+            return when(layout) {
+                Layout.Set2KS -> Hangul2SetKS(listener)
+                Layout.Set3390 -> Hangul3Set390(listener)
+                Layout.Set3391 -> Hangul3Set391(listener)
+                Layout.Set2Old -> HangulOld2Set(listener)
+            }
+        }
+
+        override fun getLabel(context: Context): String {
+            return when(layout) {
+                Layout.Set2KS -> "Hangul 2-Set KS"
+                Layout.Set3390 -> "Hangul 3-Set 390"
+                Layout.Set3391 -> "Hangul 3-Set 391"
+                Layout.Set2Old -> "Old Hangul 2-Set"
+            }
+        }
+
+        override fun getShortLabel(context: Context): String {
+            return when(layout) {
+                Layout.Set2KS -> "한2"
+                Layout.Set3390, Layout.Set3391 -> "한3"
+                Layout.Set2Old -> "ᄒᆞ"
+                else -> "한"
+            }
+        }
+
+        companion object {
+            fun parse(map: Map<String, String>): Params {
+                val layout = Layout.valueOf(map["layout"] ?: Layout.Set2KS.name)
+                return Params(
+                    layout = layout
+                )
+            }
+        }
+    }
+
+    enum class Layout {
+        Set2KS, Set3390, Set3391, Set2Old
+    }
+
+    companion object {
+        const val MSG_CONVERT = 0
+        const val TYPE: String = "korean"
     }
 }

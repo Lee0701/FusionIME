@@ -23,9 +23,12 @@ import ee.oyatl.ime.fusion.mode.MozcIMEMode
 import ee.oyatl.ime.fusion.mode.PinyinIMEMode
 import ee.oyatl.ime.fusion.mode.VietIMEMode
 import ee.oyatl.ime.fusion.mode.ZhuyinIMEMode
+import ee.oyatl.ime.fusion.settings.InputModeSettingsFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.json.JSONArray
+import java.util.Locale
 
 class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.Callback, SharedPreferences.OnSharedPreferenceChangeListener {
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
@@ -61,39 +64,15 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
     }
 
     fun onInit() {
-        val defaults = resources.getStringArray(R.array.settings_input_mode_defaults).toSet()
-        val list = preference.getStringSet("input_modes", defaults).orEmpty()
+        val jsonArray = preference.getString(InputModeSettingsFragment.PREF_KEY, null) ?: "[]"
+        val list = JSONArray(jsonArray).let { array -> (0 until array.length()).map { array.getString(it) } }
         val entries = mutableListOf<IMEModeSwitcher.Entry>()
-        if("qwerty" in list || list.isEmpty())
-            entries += IMEModeSwitcher.Entry("ABC", LatinIMEMode.Qwerty(this, this))
-        if("dvorak" in list)
-            entries += IMEModeSwitcher.Entry("Dv", LatinIMEMode.Dvorak(this, this))
-        if("colemak" in list)
-            entries += IMEModeSwitcher.Entry("CM", LatinIMEMode.Colemak(this, this))
-        if("ko_ks" in list)
-            entries += IMEModeSwitcher.Entry("한2", KoreanIMEMode.Hangul2SetKS(this))
-        if("ko_390" in list)
-            entries += IMEModeSwitcher.Entry("한3", KoreanIMEMode.Hangul3Set390(this))
-        if("ko_391" in list)
-            entries += IMEModeSwitcher.Entry("한3", KoreanIMEMode.Hangul3Set391(this))
-        if("ko_old_2set" in list)
-            entries += IMEModeSwitcher.Entry("ᄒᆞ", KoreanIMEMode.HangulOld2Set(this))
-        if("ja_qwerty" in list)
-            entries += IMEModeSwitcher.Entry("あQ", MozcIMEMode.RomajiQwerty(this))
-        if("ja_50onzu" in list)
-            entries += IMEModeSwitcher.Entry("あいう", MozcIMEMode.Kana50OnZu(this))
-        if("ja_jis" in list)
-            entries += IMEModeSwitcher.Entry("JIS", MozcIMEMode.KanaJIS(this))
-        if("zh_pinyin" in list)
-            entries += IMEModeSwitcher.Entry("拼音", PinyinIMEMode(this))
-        if("zh_zhuyin" in list)
-            entries += IMEModeSwitcher.Entry("注音", ZhuyinIMEMode(this))
-        if("zh_cangjie" in list)
-            entries += IMEModeSwitcher.Entry("倉頡", CangjieIMEMode(this))
-        if("vi_qwerty" in list)
-            entries += IMEModeSwitcher.Entry("越Q", VietIMEMode.Qwerty(this))
-        if("vi_telex" in list)
-            entries += IMEModeSwitcher.Entry("越T", VietIMEMode.Telex(this))
+        val params = list.mapNotNull { item ->
+            IMEMode.Params.parse(item)
+        }.toMutableList()
+        params.forEach { params ->
+            entries += IMEModeSwitcher.Entry(params.getShortLabel(this), params.create(this))
+        }
         imeModeSwitcher = IMEModeSwitcher(this, entries, this)
     }
 

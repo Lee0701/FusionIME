@@ -42,4 +42,40 @@
         <item>zh_pinyin</item>
         <item>vi_telex</item>
     </string-array>
+
+    <string-array name="settings_input_mode_latin_locale_entries">
+        <item>English</item>
+        <item>German</item>
+    </string-array>
+
+    <string-array name="settings_input_mode_latin_locale_values">
+        <item>en</item>
+        <item>de</item>
+    </string-array>
+
+    <string-array name="settings_input_mode_latin_layout_entries">
+        <item>Qwerty</item>
+        <item>Dvorak</item>
+        <item>Colemak</item>
+    </string-array>
+
+    <string-array name="settings_input_mode_latin_layout_values">
+        <item>Qwerty</item>
+        <item>Dvorak</item>
+        <item>Colemak</item>
+    </string-array>
+
+    <string-array name="settings_input_mode_korean_layout_entries">
+        <item>2-Set KS</item>
+        <item>3-Set 390</item>
+        <item>3-Set Final</item>
+        <item>Old Korean 2-Set</item>
+    </string-array>
+
+    <string-array name="settings_input_mode_korean_layout_values">
+        <item>Set2KS</item>
+        <item>Set3390</item>
+        <item>Set3391</item>
+        <item>Set2Old</item>
+    </string-array>
 </resources>

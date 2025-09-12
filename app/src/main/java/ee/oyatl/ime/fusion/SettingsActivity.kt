@@ -108,10 +108,4 @@ class SettingsActivity : AppCompatActivity(),
             setPreferencesFromResource(R.xml.pref_behaviour, rootKey)
         }
     }
-
-    class InputModeFragment : PreferenceFragmentCompat() {
-        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-            setPreferencesFromResource(R.xml.pref_input_mode, rootKey)
-        }
-    }
 }

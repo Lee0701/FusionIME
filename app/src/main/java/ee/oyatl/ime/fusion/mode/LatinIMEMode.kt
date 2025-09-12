@@ -31,9 +31,9 @@ import ee.oyatl.ime.keyboard.layout.KeyboardTemplates
 import java.util.Locale
 
 abstract class LatinIMEMode(
-    context: Context,
     listener: IMEMode.Listener
 ): CommonIMEMode(listener), DictionaryFacilitator.DictionaryInitializationListener, OnGetSuggestedWordsCallback {
+    abstract val locale: Locale
 
     private var dictionaryFacilitator: DictionaryFacilitator? = null
     private var suggest: Suggest? = null
@@ -46,13 +46,14 @@ abstract class LatinIMEMode(
         mOccupiedWidth = 1
         mOccupiedHeight = 1
     }
-    private val dummyKeyboard: Keyboard = KeyboardBuilder(context, keyboardParams).build()
+    private lateinit var dummyKeyboard: Keyboard
 
     override suspend fun onLoad(context: Context) {
+        dummyKeyboard = KeyboardBuilder(context, keyboardParams).build()
         val dictionaryFacilitator = DictionaryFacilitatorProvider.getDictionaryFacilitator(false)
         dictionaryFacilitator.resetDictionaries(
             context,
-            Locale.ENGLISH,
+            locale,
             false,
             false,
             true,
@@ -182,7 +183,7 @@ abstract class LatinIMEMode(
         override val text: CharSequence
     ): CandidateView.Candidate
 
-    class Qwerty(context: Context, listener: IMEMode.Listener): LatinIMEMode(context, listener) {
+    class Qwerty(override val locale: Locale, listener: IMEMode.Listener): LatinIMEMode(listener) {
         private val layers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE, layoutTable)
         override val textKeyboard: ee.oyatl.ime.keyboard.Keyboard = StackedKeyboard(
             ShiftStateKeyboard(
@@ -193,7 +194,7 @@ abstract class LatinIMEMode(
         )
     }
 
-    class Dvorak(context: Context, listener: IMEMode.Listener): LatinIMEMode(context, listener) {
+    class Dvorak(override val locale: Locale, listener: IMEMode.Listener): LatinIMEMode(listener) {
         private val layers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE_DVORAK, layoutTable)
         override val textKeyboard: ee.oyatl.ime.keyboard.Keyboard = StackedKeyboard(
             ShiftStateKeyboard(
@@ -207,7 +208,7 @@ abstract class LatinIMEMode(
         )
     }
 
-    class Colemak(context: Context, listener: IMEMode.Listener): LatinIMEMode(context, listener) {
+    class Colemak(override val locale: Locale, listener: IMEMode.Listener): LatinIMEMode(listener) {
         private val layers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE_COLEMAK, layoutTable)
         override val textKeyboard: ee.oyatl.ime.keyboard.Keyboard = StackedKeyboard(
             ShiftStateKeyboard(
@@ -216,5 +217,47 @@ abstract class LatinIMEMode(
             ),
             DefaultBottomRowKeyboard()
         )
+    }
+
+    data class Params(
+        val locale: Locale = Locale.ENGLISH,
+        val layout: Layout = Layout.Qwerty
+    ): IMEMode.Params {
+        override val type: String = TYPE
+
+        override fun create(listener: IMEMode.Listener): LatinIMEMode {
+            return when(layout) {
+                Layout.Qwerty -> Qwerty(locale, listener)
+                Layout.Dvorak -> Dvorak(locale, listener)
+                Layout.Colemak -> Colemak(locale, listener)
+            }
+        }
+
+        override fun getLabel(context: Context): String {
+            return "${locale.displayName} ${layout.name}"
+        }
+
+        override fun getShortLabel(context: Context): String {
+            return locale.language.replaceFirstChar { it.uppercase() }
+        }
+
+        companion object {
+            fun parse(map: Map<String, String>): Params {
+                val locale = Locale(map["locale"] ?: Locale.ENGLISH.language)
+                val layout = Layout.valueOf(map["layout"] ?: Layout.Qwerty.name)
+                return Params(
+                    locale = locale,
+                    layout = layout
+                )
+            }
+        }
+    }
+
+    enum class Layout {
+        Qwerty, Dvorak, Colemak
+    }
+
+    companion object {
+        const val TYPE: String = "latin"
     }
 }
