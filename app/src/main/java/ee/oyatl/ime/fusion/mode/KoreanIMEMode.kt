@@ -4,7 +4,9 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.view.KeyEvent
+import androidx.annotation.StringRes
 import ee.oyatl.ime.candidate.CandidateView
+import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.hangul.HangulCombiner
 import ee.oyatl.ime.fusion.korean.DefaultHanjaConverter
 import ee.oyatl.ime.fusion.korean.HanjaConverter
@@ -20,6 +22,7 @@ import ee.oyatl.ime.keyboard.KeyboardInflater
 import ee.oyatl.ime.keyboard.ShiftStateKeyboard
 import ee.oyatl.ime.keyboard.StackedKeyboard
 import ee.oyatl.ime.keyboard.layout.KeyboardTemplates
+import java.util.Locale
 import java.util.concurrent.Executors
 
 abstract class KoreanIMEMode(
@@ -207,12 +210,9 @@ abstract class KoreanIMEMode(
         }
 
         override fun getLabel(context: Context): String {
-            return when(layout) {
-                Layout.Set2KS -> "Hangul 2-Set KS"
-                Layout.Set3390 -> "Hangul 3-Set 390"
-                Layout.Set3391 -> "Hangul 3-Set 391"
-                Layout.Set2Old -> "Old Hangul 2-Set"
-            }
+            val localeName = Locale.KOREAN.displayName
+            val layoutName = context.resources.getString(layout.nameKey)
+            return "$localeName $layoutName"
         }
 
         override fun getShortLabel(context: Context): String {
@@ -234,8 +234,13 @@ abstract class KoreanIMEMode(
         }
     }
 
-    enum class Layout {
-        Set2KS, Set3390, Set3391, Set2Old
+    enum class Layout(
+        @StringRes val nameKey: Int
+    ) {
+        Set2KS(R.string.korean_layout_hangul_2set_ks),
+        Set3390(R.string.korean_layout_hangul_3set_390),
+        Set3391(R.string.korean_layout_hangul_3set_391),
+        Set2Old(R.string.korean_layout_old_hangul_2set_ks)
     }
 
     companion object {

@@ -5,6 +5,7 @@ import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
+import androidx.annotation.StringRes
 import com.android.inputmethod.event.Event
 import com.android.inputmethod.keyboard.Keyboard
 import com.android.inputmethod.keyboard.internal.KeyboardBuilder
@@ -21,6 +22,7 @@ import com.android.inputmethod.latin.common.Constants
 import com.android.inputmethod.latin.settings.SettingsValuesForSuggestion
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.TripleCandidateView
+import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.keyboard.DefaultBottomRowKeyboard
 import ee.oyatl.ime.keyboard.DefaultMobileKeyboard
 import ee.oyatl.ime.keyboard.Keyboard.SpecialKey
@@ -234,7 +236,9 @@ abstract class LatinIMEMode(
         }
 
         override fun getLabel(context: Context): String {
-            return "${locale.displayName} ${layout.name}"
+            val localeName = locale.displayName
+            val layoutName = context.resources.getString(layout.nameKey)
+            return "$localeName $layoutName"
         }
 
         override fun getShortLabel(context: Context): String {
@@ -253,8 +257,12 @@ abstract class LatinIMEMode(
         }
     }
 
-    enum class Layout {
-        Qwerty, Dvorak, Colemak
+    enum class Layout(
+        @StringRes val nameKey: Int
+    ) {
+        Qwerty(R.string.latin_layout_qwerty),
+        Dvorak(R.string.latin_layout_dvorak),
+        Colemak(R.string.latin_layout_colemak)
     }
 
     companion object {
