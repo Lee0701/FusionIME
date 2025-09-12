@@ -24,6 +24,8 @@
     <string name="settings_behaviour_haptic_feedback_summary">Vibrate on key press.</string>
     <string name="settings_behaviour_vibration_duration_title">Vibration Duration</string>
 
+    <string name="settings_input_mode_select_type_title">Select Type</string>
+
     <string name="settings_input_mode_choose_title">Choose Input Modes</string>
     <string name="settings_input_mode_choose_summary">Select languages and input modes to use.</string>
 
