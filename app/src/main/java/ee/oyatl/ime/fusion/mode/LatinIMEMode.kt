@@ -247,7 +247,10 @@ abstract class LatinIMEMode(
 
         companion object {
             fun parse(map: Map<String, String>): Params {
-                val locale = Locale(map["locale"] ?: Locale.ENGLISH.language)
+                val localeName = (map["locale"] ?: Locale.ENGLISH.language).split('_')
+                val locale =
+                    if(localeName.size == 2) Locale(localeName[0], localeName[1])
+                    else Locale(localeName[0])
                 val layout = Layout.valueOf(map["layout"] ?: Layout.Qwerty.name)
                 return Params(
                     locale = locale,

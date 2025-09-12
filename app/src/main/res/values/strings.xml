@@ -34,8 +34,12 @@
     <string name="input_mode_cangjie">Cangjie</string>
     <string name="input_mode_viet">Vietnamese</string>
 
-    <string name="latin_locale_en">English</string>
     <string name="latin_locale_de">German</string>
+    <string name="latin_locale_en">English</string>
+    <string name="latin_locale_es">Spanish</string>
+    <string name="latin_locale_fr">French</string>
+    <string name="latin_locale_it">Italian</string>
+    <string name="latin_locale_pt_br">Portuguese (Brazil)</string>
 
     <string name="latin_layout_qwerty">QWERTY</string>
     <string name="latin_layout_dvorak">Dvorak</string>
