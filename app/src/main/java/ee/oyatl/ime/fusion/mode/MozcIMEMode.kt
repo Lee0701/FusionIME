@@ -5,9 +5,11 @@ import android.content.res.Resources
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
+import androidx.annotation.StringRes
 import com.google.common.base.Optional
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.VerticalScrollingCandidateView
+import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.mozc.InputConnectionRenderer
 import ee.oyatl.ime.keyboard.DefaultBottomRowKeyboard
 import ee.oyatl.ime.keyboard.DefaultGridKeyboard
@@ -30,53 +32,11 @@ import org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config
 import org.mozc.android.inputmethod.japanese.session.SessionExecutor
 import org.mozc.android.inputmethod.japanese.session.SessionExecutor.EvaluationCallback
 import org.mozc.android.inputmethod.japanese.session.SessionHandlerFactory
+import java.util.Locale
 
 abstract class MozcIMEMode(
     listener: IMEMode.Listener
 ): CommonIMEMode(listener) {
-
-    class RomajiQwerty(listener: IMEMode.Listener): MozcIMEMode(listener) {
-        override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.QWERTY_KANA
-        override val layoutTable: Map<Int, List<Int>> = LayoutRomaji.TABLE_QWERTY
-        private val layers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE_MINUS, layoutTable)
-        override val textKeyboard: Keyboard = StackedKeyboard(
-            ShiftStateKeyboard(
-                DefaultMobileKeyboard(layers[0]),
-                DefaultMobileKeyboard(layers[1])
-            ),
-            DefaultBottomRowKeyboard()
-        )
-    }
-
-    class KanaJIS(listener: IMEMode.Listener): MozcIMEMode(listener) {
-        override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.QWERTY_KANA_JIS
-        override val layoutTable: Map<Int, List<Int>> = LayoutKana.TABLE_JIS
-        private val lower = KeyboardInflater.inflate(LayoutKana.ROWS_JIS_LOWER)
-        private val upper = KeyboardInflater.inflate(LayoutKana.ROWS_JIS_UPPER)
-        private val bottomRight = KeyboardInflater.inflate(listOf(LayoutKana.BOTTOM_RIGHT_JIS), layoutTable)
-        override val textKeyboard: Keyboard = StackedKeyboard(
-            ShiftStateKeyboard(
-                DefaultGridKeyboard(lower[0]),
-                DefaultGridKeyboard(upper[0])
-            ),
-            ShiftStateKeyboard(
-                GridKanaBottomRowKeyboard(listOf(), bottomRight[0][0]),
-                GridKanaBottomRowKeyboard(listOf(), bottomRight[1][0])
-            )
-        )
-    }
-
-    class Kana50OnZu(listener: IMEMode.Listener): MozcIMEMode(listener) {
-        override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.TWELVE_KEY_FLICK_KANA
-        private val layers = KeyboardInflater.inflate(LayoutKana.ROWS_50ONZU)
-        override val textKeyboard: Keyboard = StackedKeyboard(
-            DefaultGridKeyboard(layers[0]),
-            GridKanaBottomRowKeyboard(
-                KeyboardInflater.inflate(listOf(LayoutKana.BOTTOM_LEFT_50ONZU))[0][0],
-                KeyboardInflater.inflate(listOf(LayoutKana.BOTTOM_RIGHT_50ONZU))[0][0]
-            )
-        )
-    }
 
     private lateinit var resources: Resources
     protected abstract val keyboardSpecification: KeyboardSpecification
@@ -197,5 +157,96 @@ abstract class MozcIMEMode(
             text = mozcCandidate.value,
             focused = focused
         )
+    }
+
+    class RomajiQwerty(listener: IMEMode.Listener): MozcIMEMode(listener) {
+        override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.QWERTY_KANA
+        override val layoutTable: Map<Int, List<Int>> = LayoutRomaji.TABLE_QWERTY
+        private val layers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE_MINUS, layoutTable)
+        override val textKeyboard: Keyboard = StackedKeyboard(
+            ShiftStateKeyboard(
+                DefaultMobileKeyboard(layers[0]),
+                DefaultMobileKeyboard(layers[1])
+            ),
+            DefaultBottomRowKeyboard()
+        )
+    }
+
+    class KanaJIS(listener: IMEMode.Listener): MozcIMEMode(listener) {
+        override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.QWERTY_KANA_JIS
+        override val layoutTable: Map<Int, List<Int>> = LayoutKana.TABLE_JIS
+        private val lower = KeyboardInflater.inflate(LayoutKana.ROWS_JIS_LOWER)
+        private val upper = KeyboardInflater.inflate(LayoutKana.ROWS_JIS_UPPER)
+        private val bottomRight = KeyboardInflater.inflate(listOf(LayoutKana.BOTTOM_RIGHT_JIS), layoutTable)
+        override val textKeyboard: Keyboard = StackedKeyboard(
+            ShiftStateKeyboard(
+                DefaultGridKeyboard(lower[0]),
+                DefaultGridKeyboard(upper[0])
+            ),
+            ShiftStateKeyboard(
+                GridKanaBottomRowKeyboard(listOf(), bottomRight[0][0]),
+                GridKanaBottomRowKeyboard(listOf(), bottomRight[1][0])
+            )
+        )
+    }
+
+    class KanaSyllables(listener: IMEMode.Listener): MozcIMEMode(listener) {
+        override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.TWELVE_KEY_FLICK_KANA
+        private val layers = KeyboardInflater.inflate(LayoutKana.ROWS_50ONZU)
+        override val textKeyboard: Keyboard = StackedKeyboard(
+            DefaultGridKeyboard(layers[0]),
+            GridKanaBottomRowKeyboard(
+                KeyboardInflater.inflate(listOf(LayoutKana.BOTTOM_LEFT_50ONZU))[0][0],
+                KeyboardInflater.inflate(listOf(LayoutKana.BOTTOM_RIGHT_50ONZU))[0][0]
+            )
+        )
+    }
+
+    data class Params(
+        val layout: Layout = Layout.RomajiQwerty
+    ): IMEMode.Params {
+        override val type: String = TYPE
+        override fun create(listener: IMEMode.Listener): IMEMode {
+            return when(layout) {
+                Layout.RomajiQwerty -> RomajiQwerty(listener)
+                Layout.KanaJIS -> KanaJIS(listener)
+                Layout.KanaSyllables -> KanaSyllables(listener)
+            }
+        }
+
+        override fun getLabel(context: Context): String {
+            val localeName = Locale.JAPANESE.displayName
+            val layoutName = context.resources.getString(layout.nameKey)
+            return "$localeName $layoutName"
+        }
+
+        override fun getShortLabel(context: Context): String {
+            return when(layout) {
+                Layout.RomajiQwerty -> "あQ"
+                Layout.KanaJIS -> "JIS"
+                Layout.KanaSyllables -> "あいう"
+            }
+        }
+
+        companion object {
+            fun parse(map: Map<String, String>): Params {
+                val layout = Layout.valueOf(map["layout"] ?: Layout.RomajiQwerty.name)
+                return Params(
+                    layout = layout
+                )
+            }
+        }
+    }
+
+    enum class Layout(
+        @StringRes val nameKey: Int
+    ) {
+        RomajiQwerty(R.string.mozc_layout_romaji_qwerty),
+        KanaJIS(R.string.mozc_layout_kana_jis),
+        KanaSyllables(R.string.mozc_layout_kana_syllables)
+    }
+
+    companion object {
+        const val TYPE: String = "mozc"
     }
 }

@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.databinding.FragmentInputModeTypeBinding
 import ee.oyatl.ime.fusion.databinding.InputModeTypeListItemBinding
 
@@ -33,10 +34,9 @@ class ChooseInputModeTypeBottomSheet: BottomSheetDialogFragment() {
             dismiss()
         }
         binding.recyclerView.adapter = adapter
-        val list = listOf(
-            Item("Latin", "latin"),
-            Item("Korean", "korean")
-        )
+        val entries = requireContext().resources.getStringArray(R.array.settings_input_mode_type_entries)
+        val values = requireContext().resources.getStringArray(R.array.settings_input_mode_type_values)
+        val list = entries.zip(values).map { (entry, value) -> Item(entry, value) }
         adapter.submitList(list)
     }
 

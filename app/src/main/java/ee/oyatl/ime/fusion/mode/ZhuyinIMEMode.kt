@@ -18,11 +18,11 @@ import ee.oyatl.ime.keyboard.layout.KeyboardTemplates
 import ee.oyatl.ime.keyboard.layout.LayoutZhuyin
 import tw.cheyingwu.zhuyin.ZhuYinDictionary
 import tw.cheyingwu.zhuyin.ZhuYinIMESettings
+import java.util.Locale
 
 class ZhuyinIMEMode(
     listener: IMEMode.Listener
 ): CommonIMEMode(listener) {
-
     private val handler: Handler = Handler(Looper.getMainLooper()) { msg ->
         when(msg.what) {
             MSG_UPDATE_SUGGESTIONS -> {
@@ -162,7 +162,32 @@ class ZhuyinIMEMode(
         override val text: CharSequence
     ): CandidateView.Candidate
 
+    class Params: IMEMode.Params {
+        override val type: String = TYPE
+
+        override fun create(listener: IMEMode.Listener): IMEMode {
+            return ZhuyinIMEMode(listener)
+        }
+
+        override fun getLabel(context: Context): String {
+            val localeName = Locale.TRADITIONAL_CHINESE.displayName
+            val layoutName = context.resources.getString(R.string.zhuyin_layout_zhuyin)
+            return "$localeName $layoutName"
+        }
+
+        override fun getShortLabel(context: Context): String {
+            return "注音"
+        }
+
+        companion object {
+            fun parse(map: Map<String, String>): Params {
+                return Params()
+            }
+        }
+    }
+
     companion object {
+        const val TYPE: String = "zhuyin"
         const val MSG_UPDATE_SUGGESTIONS = 0
     }
 }

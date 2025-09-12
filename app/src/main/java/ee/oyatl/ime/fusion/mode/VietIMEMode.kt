@@ -2,11 +2,14 @@ package ee.oyatl.ime.fusion.mode
 
 import android.content.Context
 import android.view.KeyEvent
+import androidx.annotation.StringRes
 import ee.oyatl.ime.candidate.CandidateView
+import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.korean.WordComposer
 import ee.oyatl.ime.keyboard.Keyboard
 import ee.oyatl.ime.viet.ChuQuocNguTableConverter
 import ee.oyatl.ime.viet.HanNomConverter
+import java.util.Locale
 
 abstract class VietIMEMode(
     listener: IMEMode.Listener
@@ -98,5 +101,48 @@ abstract class VietIMEMode(
             }
             else -> {}
         }
+    }
+
+    data class Params(
+        val layout: Layout
+    ): IMEMode.Params {
+        override val type: String = TYPE
+
+        override fun create(listener: IMEMode.Listener): IMEMode {
+            return when(layout) {
+                Layout.Qwerty -> Qwerty(listener)
+                Layout.Telex -> Telex(listener)
+            }
+        }
+
+        override fun getLabel(context: Context): String {
+            val localeName = Locale("vi").displayName
+            return "$localeName"
+        }
+
+        override fun getShortLabel(context: Context): String {
+            val layoutHead = layout.name.first()
+            return "越 $layoutHead"
+        }
+
+        companion object {
+            fun parse(map: Map<String, String>): Params {
+                val layout = Layout.valueOf(map["layout"] ?: Layout.Qwerty.name)
+                return Params(
+                    layout = layout
+                )
+            }
+        }
+    }
+
+    enum class Layout(
+        @StringRes val nameKey: Int
+    ) {
+        Qwerty(R.string.viet_layout_qwerty),
+        Telex(R.string.viet_layout_telex)
+    }
+
+    companion object {
+        const val TYPE: String = "viet"
     }
 }

@@ -41,6 +41,11 @@ interface IMEMode {
                 return when(map["type"]) {
                     LatinIMEMode.TYPE -> LatinIMEMode.Params.parse(map)
                     KoreanIMEMode.TYPE -> KoreanIMEMode.Params.parse(map)
+                    MozcIMEMode.TYPE -> MozcIMEMode.Params.parse(map)
+                    PinyinIMEMode.TYPE -> PinyinIMEMode.Params.parse(map)
+                    ZhuyinIMEMode.TYPE -> ZhuyinIMEMode.Params.parse(map)
+                    CangjieIMEMode.TYPE -> CangjieIMEMode.Params.parse(map)
+                    VietIMEMode.TYPE -> VietIMEMode.Params.parse(map)
                     else -> null
                 }
             }

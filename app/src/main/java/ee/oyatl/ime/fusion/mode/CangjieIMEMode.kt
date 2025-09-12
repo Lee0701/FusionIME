@@ -7,6 +7,7 @@ import android.view.KeyEvent
 import com.android.inputmethod.zhuyin.WordComposer
 import com.diycircuits.cangjie.TableLoader
 import ee.oyatl.ime.candidate.CandidateView
+import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.keyboard.DefaultBottomRowKeyboard
 import ee.oyatl.ime.keyboard.DefaultMobileKeyboard
 import ee.oyatl.ime.keyboard.Keyboard
@@ -15,6 +16,7 @@ import ee.oyatl.ime.keyboard.ShiftStateKeyboard
 import ee.oyatl.ime.keyboard.StackedKeyboard
 import ee.oyatl.ime.keyboard.layout.KeyboardTemplates
 import ee.oyatl.ime.keyboard.layout.LayoutCangjie
+import java.util.Locale
 
 class CangjieIMEMode(
     listener: IMEMode.Listener
@@ -129,7 +131,32 @@ class CangjieIMEMode(
         override val text: CharSequence
     ): CandidateView.Candidate
 
+    class Params: IMEMode.Params {
+        override val type: String = TYPE
+
+        override fun create(listener: IMEMode.Listener): IMEMode {
+            return CangjieIMEMode(listener)
+        }
+
+        override fun getLabel(context: Context): String {
+            val localeName = Locale.TRADITIONAL_CHINESE.displayName
+            val layoutName = context.resources.getString(R.string.cangjie_layout_cangjie)
+            return "$localeName $layoutName"
+        }
+
+        override fun getShortLabel(context: Context): String {
+            return "倉頡"
+        }
+
+        companion object {
+            fun parse(map: Map<String, String>): Params {
+                return Params()
+            }
+        }
+    }
+
     companion object {
+        const val TYPE: String = "cangjie"
         const val MSG_UPDATE_SUGGESTIONS = 0
     }
 }

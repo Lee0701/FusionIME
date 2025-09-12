@@ -43,9 +43,27 @@
         <item>vi_telex</item>
     </string-array>
 
+    <string-array name="settings_input_mode_type_entries">
+        <item>@string/input_mode_latin</item>
+        <item>@string/input_mode_korean</item>
+        <item>@string/input_mode_mozc</item>
+        <item>@string/input_mode_pinyin</item>
+        <item>@string/input_mode_zhuyin</item>
+        <item>@string/input_mode_cangjie</item>
+    </string-array>
+
+    <string-array name="settings_input_mode_type_values">
+        <item>latin</item>
+        <item>korean</item>
+        <item>mozc</item>
+        <item>pinyin</item>
+        <item>zhuyin</item>
+        <item>cangjie</item>
+    </string-array>
+
     <string-array name="settings_input_mode_latin_locale_entries">
-        <item>English</item>
-        <item>German</item>
+        <item>@string/latin_locale_en</item>
+        <item>@string/latin_locale_de</item>
     </string-array>
 
     <string-array name="settings_input_mode_latin_locale_values">
@@ -77,5 +95,17 @@
         <item>Set3390</item>
         <item>Set3391</item>
         <item>Set2Old</item>
+    </string-array>
+
+    <string-array name="settings_input_mode_mozc_layout_entries">
+        <item>@string/mozc_layout_romaji_qwerty</item>
+        <item>@string/mozc_layout_kana_jis</item>
+        <item>@string/mozc_layout_kana_syllables</item>
+    </string-array>
+
+    <string-array name="settings_input_mode_mozc_layout_values">
+        <item>RomajiQwerty</item>
+        <item>KanaJIS</item>
+        <item>KanaSyllables</item>
     </string-array>
 </resources>
