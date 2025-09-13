@@ -18,6 +18,7 @@ class SettingsActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         val binding = SettingsActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
             val bars = insets.getInsets(
                 WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()

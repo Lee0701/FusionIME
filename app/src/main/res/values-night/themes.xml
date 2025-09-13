@@ -1,13 +1,14 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="Theme.FusionIME" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.FusionIME" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_200</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorOnBackground">@color/brand_color_dark_bg</item>
+        <item name="colorPrimary">@color/brand_color_dark_fg</item>
+        <item name="colorPrimaryVariant">@color/brand_color_dark_fg_var</item>
         <item name="colorOnPrimary">@color/black</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_200</item>
+        <item name="colorSecondary">@color/brand_color_dark_fg_alt</item>
+        <item name="colorSecondaryVariant">@color/brand_color_dark_fg_alt_var</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
