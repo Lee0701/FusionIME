@@ -18,8 +18,7 @@
         <activity
             android:name=".SettingsActivity"
             android:exported="true"
-            android:label="@string/settings_activity_name"
-            android:theme="@style/Theme.MaterialComponents.DayNight">
+            android:label="@string/settings_activity_name">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
