@@ -31,14 +31,16 @@ void Java_com_diycircuits_cangjie_TableLoader_setPath(JNIEnv *env, jobject thiz,
 
 void Java_com_diycircuits_cangjie_TableLoader_initialize(JNIEnv* env, jobject thiz)
 {
-  input_method[QUICK]->init(quick_data);  
-  input_method[CANGJIE]->init(quick_data);  
+  input_method[QUICK]->init(quick_data);
+  input_method[CANGJIE]->init(quick_data);
+  input_method[DAYI3]->init(quick_data);
 }
 
 void Java_com_diycircuits_cangjie_TableLoader_reset(JNIEnv* env, jobject thiz)
 {
   input_method[QUICK]->reset();
   input_method[CANGJIE]->reset();
+  input_method[DAYI3]->reset();
 }
  
 jchar Java_com_diycircuits_cangjie_TableLoader_getChar(JNIEnv* env, jobject thiz)
@@ -108,11 +110,13 @@ void Java_com_diycircuits_cangjie_TableLoader_saveMatch(JNIEnv* env, jobject thi
 {
   input_method[QUICK]->saveMatch();
   input_method[CANGJIE]->saveMatch();
+  input_method[DAYI3]->saveMatch();
 }
 
 void Java_com_diycircuits_cangjie_TableLoader_clearAllFrequency(JNIEnv *env, jobject thiz)
 {
   input_method[QUICK]->clearFrequency();
   input_method[CANGJIE]->clearFrequency();
+  input_method[DAYI3]->clearFrequency();
 }
 
