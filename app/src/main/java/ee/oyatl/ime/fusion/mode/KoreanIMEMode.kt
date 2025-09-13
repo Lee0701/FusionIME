@@ -47,7 +47,7 @@ abstract class KoreanIMEMode(
 
     override suspend fun onLoad(context: Context) {
         hanjaConverter =
-            if(Feature.BigramHanjaConverter.availableInPaidVersion) BigramHanjaConverter(context)
+            if(Feature.BigramHanjaConverter.availableInCurrentVersion) BigramHanjaConverter(context)
             else UnigramHanjaConverter(context)
     }
 

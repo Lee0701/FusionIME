@@ -27,6 +27,21 @@ android {
             signingConfig = signingConfigs.getByName("debug")
         }
     }
+
+    flavorDimensions += "edition"
+    productFlavors {
+        create("free") {
+            dimension = "edition"
+            applicationIdSuffix = ".free"
+            buildConfigField("boolean", "IS_PAID", "false")
+        }
+        create("paid") {
+            dimension = "edition"
+            applicationIdSuffix = ""
+            buildConfigField("boolean", "IS_PAID", "true")
+        }
+    }
+
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_11
@@ -44,6 +59,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 }
 
