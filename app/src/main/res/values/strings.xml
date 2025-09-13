@@ -26,6 +26,9 @@
 
     <string name="settings_input_mode_select_type_title">Select Type</string>
 
+    <string name="settings_input_mode_locale_title">Language</string>
+    <string name="settings_input_mode_layout_title">Keyboard Layout</string>
+
     <string name="input_mode_latin">Latin</string>
     <string name="input_mode_korean">Korean</string>
     <string name="input_mode_mozc">Mozc (Japanese)</string>
@@ -60,8 +63,5 @@
 
     <string name="viet_layout_qwerty">QWERTY</string>
     <string name="viet_layout_telex">Telex</string>
-
-    <string name="settings_input_mode_choose_title">Choose Input Modes</string>
-    <string name="settings_input_mode_choose_summary">Select languages and input modes to use.</string>
 
 </resources>

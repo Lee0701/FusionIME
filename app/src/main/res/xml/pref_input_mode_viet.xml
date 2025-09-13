@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.preference.PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ListPreference
         android:key="layout"
         android:entries="@array/settings_input_mode_viet_layout_entries"
         android:entryValues="@array/settings_input_mode_viet_layout_values"
-        android:title="Layout" />
+        android:title="@string/settings_input_mode_layout_title"
+        app:useSimpleSummaryProvider="true" />
 
 </androidx.preference.PreferenceScreen>
