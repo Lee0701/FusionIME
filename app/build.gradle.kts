@@ -28,6 +28,7 @@ android {
         }
     }
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
@@ -53,6 +54,8 @@ dependencies {
     implementation(libs.material)
     implementation(libs.guava)
     implementation(libs.protobuf.java)
+    implementation(libs.androidx.preference)
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
     implementation(project(":app:keyboard"))
     implementation(project(":app:mozc"))
     implementation(project(":app:pinyin"))
@@ -62,7 +65,6 @@ dependencies {
     implementation(project(":app:korean:hangul"))
     implementation(project(":app:latin"))
     implementation(project(":app:viet"))
-    implementation(libs.androidx.preference)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

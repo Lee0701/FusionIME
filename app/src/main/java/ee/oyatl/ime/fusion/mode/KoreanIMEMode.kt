@@ -5,10 +5,12 @@ import android.os.Handler
 import android.os.Looper
 import android.view.KeyEvent
 import ee.oyatl.ime.candidate.CandidateView
+import ee.oyatl.ime.fusion.Feature
 import ee.oyatl.ime.fusion.hangul.HangulCombiner
-import ee.oyatl.ime.fusion.korean.DefaultHanjaConverter
+import ee.oyatl.ime.fusion.korean.BigramHanjaConverter
 import ee.oyatl.ime.fusion.korean.HanjaConverter
 import ee.oyatl.ime.fusion.korean.JeongUnHanjaConverter
+import ee.oyatl.ime.fusion.korean.UnigramHanjaConverter
 import ee.oyatl.ime.fusion.korean.WordComposer
 import ee.oyatl.ime.fusion.korean.layout.Hangul2Set
 import ee.oyatl.ime.fusion.korean.layout.Hangul3Set
@@ -44,7 +46,9 @@ abstract class KoreanIMEMode(
     protected var hanjaConverter: HanjaConverter? = null
 
     override suspend fun onLoad(context: Context) {
-        hanjaConverter = DefaultHanjaConverter(context)
+        hanjaConverter =
+            if(Feature.BigramHanjaConverter.availableInPaidVersion) BigramHanjaConverter(context)
+            else UnigramHanjaConverter(context)
     }
 
     override fun onReset() {
