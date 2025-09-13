@@ -30,15 +30,15 @@ android {
 
     flavorDimensions += "edition"
     productFlavors {
-        create("free") {
-            dimension = "edition"
-            applicationIdSuffix = ".free"
-            buildConfigField("boolean", "IS_PAID", "false")
-        }
         create("paid") {
             dimension = "edition"
             applicationIdSuffix = ""
             buildConfigField("boolean", "IS_PAID", "true")
+        }
+        create("free") {
+            dimension = "edition"
+            applicationIdSuffix = ".free"
+            buildConfigField("boolean", "IS_PAID", "false")
         }
     }
 

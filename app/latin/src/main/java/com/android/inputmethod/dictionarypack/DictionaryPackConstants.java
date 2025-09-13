@@ -16,6 +16,8 @@
 
 package com.android.inputmethod.dictionarypack;
 
+import com.android.inputmethod.latin.BuildConfig;
+
 /**
  * A class to group constants for dictionary pack usage.
  *
@@ -28,7 +30,7 @@ public class DictionaryPackConstants {
      * The root domain for the dictionary pack, upon which authorities and actions will append
      * their own distinctive strings.
      */
-    private static final String DICTIONARY_DOMAIN = "ee.oyatl.ime.fusion.latin.dictionarypack.aosp";
+    private static final String DICTIONARY_DOMAIN = BuildConfig.DICTIONARY_DOMAIN;
 
     /**
      * Authority for the ContentProvider protocol.
