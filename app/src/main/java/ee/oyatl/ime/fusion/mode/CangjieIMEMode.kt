@@ -162,21 +162,13 @@ abstract class CangjieIMEMode(
         override val inputMode: Int = TableLoader.DAYI3
         override val keyboardTemplate: List<String> = KeyboardTemplates.MOBILE
         override val textKeyboard: Keyboard = StackedKeyboard(
-            DefaultGridKeyboard(listOf(
-                LayoutCangjie.ROWS_DAYI3[0].map { it.code },
-                LayoutCangjie.ROWS_DAYI3[1].map { it.code },
-                LayoutCangjie.ROWS_DAYI3[2].map { it.code },
-            )),
-            CustomRowKeyboard(
-                LayoutCangjie.ROWS_DAYI3[3]
-                    .map { CustomRowKeyboard.KeyType.Extra(it.code) }
-                        + CustomRowKeyboard.KeyType.Delete(width = 2f)
-            ),
+            DefaultGridKeyboard(LayoutCangjie.ROWS_DAYI3.map { row -> row.map { it.code } }),
             CustomRowKeyboard(listOf(
-                CustomRowKeyboard.KeyType.Symbols(width = 2f),
-                CustomRowKeyboard.KeyType.Language(width = 2f),
-                CustomRowKeyboard.KeyType.Space(width = 6f),
-                CustomRowKeyboard.KeyType.Return(width = 2f),
+                CustomRowKeyboard.KeyType.Symbols(width = 1.5f),
+                CustomRowKeyboard.KeyType.Language(width = 1.5f),
+                CustomRowKeyboard.KeyType.Space(width = 4f),
+                CustomRowKeyboard.KeyType.Return(width = 1.5f),
+                CustomRowKeyboard.KeyType.Delete(width = 1.5f)
             ))
         )
         override val keyMap: Map<Char, Char> = LayoutCangjie.KEY_MAP_DAYI3
