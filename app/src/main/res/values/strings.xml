@@ -57,6 +57,8 @@
     <string name="mozc_layout_kana_jis">Kana JIS</string>
     <string name="mozc_layout_kana_syllables">Kana Syllables</string>
 
+    <string name="pinyin_layout_pinyin">Pinyin</string>
+
     <string name="zhuyin_layout_zhuyin">Bopomofo</string>
 
     <string name="cangjie_layout_cangjie">Cangjie</string>

@@ -883,7 +883,8 @@ class PinyinIMEMode(
 
         override fun getLabel(context: Context): String {
             val localeName = Locale.SIMPLIFIED_CHINESE.displayName
-            return "$localeName"
+            val layoutName = context.resources.getString(ee.oyatl.ime.fusion.R.string.pinyin_layout_pinyin)
+            return "$localeName $layoutName"
         }
 
         override fun getShortLabel(context: Context): String {
