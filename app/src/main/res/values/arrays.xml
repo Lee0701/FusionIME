@@ -88,10 +88,12 @@
     <string-array name="settings_input_mode_cangjie_layout_entries">
         <item>@string/cangjie_layout_cangjie</item>
         <item>@string/cangjie_layout_quick</item>
+        <item>@string/cangjie_layout_dayi3</item>
     </string-array>
 
     <string-array name="settings_input_mode_cangjie_layout_values">
         <item>Cangjie</item>
         <item>Quick</item>
+        <item>Dayi3</item>
     </string-array>
 </resources>

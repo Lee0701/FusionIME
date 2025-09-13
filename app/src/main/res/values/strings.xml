@@ -59,6 +59,7 @@
 
     <string name="cangjie_layout_cangjie">Cangjie</string>
     <string name="cangjie_layout_quick">Quick</string>
+    <string name="cangjie_layout_dayi3">Dayi</string>
 
     <string name="viet_layout_qwerty">QWERTY</string>
     <string name="viet_layout_telex">Telex</string>

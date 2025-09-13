@@ -9,7 +9,9 @@ import com.android.inputmethod.zhuyin.WordComposer
 import com.diycircuits.cangjie.TableLoader
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.fusion.R
+import ee.oyatl.ime.keyboard.CustomRowKeyboard
 import ee.oyatl.ime.keyboard.DefaultBottomRowKeyboard
+import ee.oyatl.ime.keyboard.DefaultGridKeyboard
 import ee.oyatl.ime.keyboard.DefaultMobileKeyboard
 import ee.oyatl.ime.keyboard.Keyboard
 import ee.oyatl.ime.keyboard.KeyboardInflater
@@ -35,14 +37,8 @@ abstract class CangjieIMEMode(
     }
 
     override val layoutTable: Map<Int, List<Int>> = LayoutCangjie.TABLE_QWERTY
-    private val textKeyboardTemplate = KeyboardInflater.inflate(KeyboardTemplates.MOBILE, layoutTable)
-    override val textKeyboard: Keyboard = StackedKeyboard(
-        ShiftStateKeyboard(
-            DefaultMobileKeyboard(textKeyboardTemplate[0]),
-            DefaultMobileKeyboard(textKeyboardTemplate[1])
-        ),
-        DefaultBottomRowKeyboard()
-    )
+    abstract val keyboardTemplate: List<String>
+    abstract val keyMap: Map<Char, Char>
 
     private var table: TableLoader? = null
     private val wordComposer = WordComposer()
@@ -73,7 +69,7 @@ abstract class CangjieIMEMode(
         val table = table ?: return
         table.setInputMethod(inputMode)
         val chars = (wordComposer.typedWord?.toString().orEmpty()
-            .map { LayoutCangjie.KEY_MAP[it] ?: it }.toCharArray() +
+            .map { keyMap[it] ?: it }.toCharArray() +
                 (0 until 5).map { 0.toChar() }).take(5)
         val (c0, c1, c2, c3, c4) = chars
         table.searchCangjie(c0, c1, c2, c3, c4)
@@ -136,10 +132,54 @@ abstract class CangjieIMEMode(
 
     class Cangjie(listener: IMEMode.Listener): CangjieIMEMode(listener) {
         override val inputMode: Int = TableLoader.CANGJIE
+        override val keyboardTemplate: List<String> = KeyboardTemplates.MOBILE
+        private val textKeyboardLayers = KeyboardInflater.inflate(keyboardTemplate, layoutTable)
+        override val textKeyboard: Keyboard = StackedKeyboard(
+            ShiftStateKeyboard(
+                DefaultMobileKeyboard(textKeyboardLayers[0]),
+                DefaultMobileKeyboard(textKeyboardLayers[1])
+            ),
+            DefaultBottomRowKeyboard()
+        )
+        override val keyMap: Map<Char, Char> = LayoutCangjie.KEY_MAP_CANGJIE
     }
 
     class Quick(listener: IMEMode.Listener): CangjieIMEMode(listener) {
         override val inputMode: Int = TableLoader.QUICK
+        override val keyboardTemplate: List<String> = KeyboardTemplates.MOBILE
+        private val textKeyboardLayers = KeyboardInflater.inflate(keyboardTemplate, layoutTable)
+        override val textKeyboard: Keyboard = StackedKeyboard(
+            ShiftStateKeyboard(
+                DefaultMobileKeyboard(textKeyboardLayers[0]),
+                DefaultMobileKeyboard(textKeyboardLayers[1])
+            ),
+            DefaultBottomRowKeyboard()
+        )
+        override val keyMap: Map<Char, Char> = LayoutCangjie.KEY_MAP_CANGJIE
+    }
+
+    class Dayi3(listener: IMEMode.Listener): CangjieIMEMode(listener) {
+        override val inputMode: Int = TableLoader.DAYI3
+        override val keyboardTemplate: List<String> = KeyboardTemplates.MOBILE
+        override val textKeyboard: Keyboard = StackedKeyboard(
+            DefaultGridKeyboard(listOf(
+                LayoutCangjie.ROWS_DAYI3[0].map { it.code },
+                LayoutCangjie.ROWS_DAYI3[1].map { it.code },
+                LayoutCangjie.ROWS_DAYI3[2].map { it.code },
+            )),
+            CustomRowKeyboard(
+                LayoutCangjie.ROWS_DAYI3[3]
+                    .map { CustomRowKeyboard.KeyType.Extra(it.code) }
+                        + CustomRowKeyboard.KeyType.Delete(width = 2f)
+            ),
+            CustomRowKeyboard(listOf(
+                CustomRowKeyboard.KeyType.Symbols(width = 2f),
+                CustomRowKeyboard.KeyType.Language(width = 2f),
+                CustomRowKeyboard.KeyType.Space(width = 6f),
+                CustomRowKeyboard.KeyType.Return(width = 2f),
+            ))
+        )
+        override val keyMap: Map<Char, Char> = LayoutCangjie.KEY_MAP_DAYI3
     }
 
     data class Params(
@@ -151,6 +191,7 @@ abstract class CangjieIMEMode(
             return when(layout) {
                 Layout.Cangjie -> Cangjie(listener)
                 Layout.Quick -> Quick(listener)
+                Layout.Dayi3 -> Dayi3(listener)
             }
         }
 
@@ -164,6 +205,7 @@ abstract class CangjieIMEMode(
             return when(layout) {
                 Layout.Cangjie -> "倉頡"
                 Layout.Quick -> "速成"
+                Layout.Dayi3 -> "大易"
             }
         }
 
@@ -181,7 +223,8 @@ abstract class CangjieIMEMode(
         @StringRes val nameKey: Int
     ) {
         Cangjie(R.string.cangjie_layout_cangjie),
-        Quick(R.string.cangjie_layout_quick)
+        Quick(R.string.cangjie_layout_quick),
+        Dayi3(R.string.cangjie_layout_dayi3)
     }
 
     companion object {

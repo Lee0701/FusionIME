@@ -35,7 +35,7 @@ object LayoutCangjie {
         KeyEvent.KEYCODE_M to listOf('一'.code, 'M'.code)
     )
 
-    val KEY_MAP = mapOf(
+    val KEY_MAP_CANGJIE = mapOf(
         '日' to 'a',
         '月' to 'b',
         '金' to 'c',
@@ -63,4 +63,61 @@ object LayoutCangjie {
         '卜' to 'y',
         '重' to 'z'
     )
+
+    val ROWS_DAYI3: List<String> = listOf(
+        "言牛目四王門田米足金郷巷",
+        "石山一工糸火艸木口耳路街",
+        "人革日土手鳥月立女虫號鎮",
+        "心水鹿禾馬魚雨力舟竹",
+    )
+
+    val KEY_MAP_DAYI3 = mapOf(
+        '巷' to '`',
+        '言' to '1',
+        '牛' to '2',
+        '目' to '3',
+        '四' to '4',
+        '王' to '5',
+        '門' to '6',
+        '田' to '7',
+        '米' to '8',
+        '足' to '9',
+        '金' to '0',
+        '郷' to '-',
+        '石' to 'Q',
+        '山' to 'W',
+        '一' to 'E',
+        '工' to 'R',
+        '糸' to 'T',
+        '火' to 'Y',
+        '艸' to 'U',
+        '木' to 'I',
+        '口' to 'O',
+        '耳' to 'P',
+        '路' to '[',
+        '街' to ']',
+        '鎮' to '\\',
+        '人' to 'A',
+        '革' to 'S',
+        '日' to 'D',
+        '土' to 'F',
+        '手' to 'G',
+        '鳥' to 'H',
+        '月' to 'J',
+        '立' to 'K',
+        '女' to 'L',
+        '虫' to ';',
+        '號' to '\'',
+        '心' to 'Z',
+        '水' to 'X',
+        '鹿' to 'C',
+        '禾' to 'V',
+        '馬' to 'B',
+        '魚' to 'N',
+        '雨' to 'M',
+        '力' to ',',
+        '舟' to '.',
+        '竹' to '/'
+    )
+
 }

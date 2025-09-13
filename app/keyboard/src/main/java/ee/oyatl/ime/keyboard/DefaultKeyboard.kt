@@ -120,7 +120,7 @@ abstract class DefaultKeyboard: Keyboard {
             }
             true
         }
-        key.root.layoutParams = LayoutParams(0, LayoutParams.MATCH_PARENT).apply {
+        key.root.layoutParams = LayoutParams(0, keyboardViewParams.keyHeight).apply {
             weight = width
         }
         return key.root

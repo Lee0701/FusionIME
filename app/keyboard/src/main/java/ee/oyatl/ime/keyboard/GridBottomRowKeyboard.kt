@@ -1,8 +1,6 @@
 package ee.oyatl.ime.keyboard
 
 import android.content.Context
-import android.os.Handler
-import android.os.Looper
 import ee.oyatl.ime.keyboard.databinding.KbdKeyBinding
 import ee.oyatl.ime.keyboard.databinding.KbdRowBinding
 import ee.oyatl.ime.keyboard.listener.KeyboardListener
