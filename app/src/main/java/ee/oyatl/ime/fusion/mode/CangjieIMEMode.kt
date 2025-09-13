@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.view.KeyEvent
+import androidx.annotation.StringRes
 import com.android.inputmethod.zhuyin.WordComposer
 import com.diycircuits.cangjie.TableLoader
 import ee.oyatl.ime.candidate.CandidateView
@@ -18,9 +19,10 @@ import ee.oyatl.ime.keyboard.layout.KeyboardTemplates
 import ee.oyatl.ime.keyboard.layout.LayoutCangjie
 import java.util.Locale
 
-class CangjieIMEMode(
+abstract class CangjieIMEMode(
     listener: IMEMode.Listener
 ): CommonIMEMode(listener) {
+    abstract val inputMode: Int
 
     private val handler: Handler = Handler(Looper.getMainLooper()) { msg ->
         when(msg.what) {
@@ -69,6 +71,7 @@ class CangjieIMEMode(
 
     private fun updateSuggestions() {
         val table = table ?: return
+        table.setInputMethod(inputMode)
         val chars = (wordComposer.typedWord?.toString().orEmpty()
             .map { LayoutCangjie.KEY_MAP[it] ?: it }.toCharArray() +
                 (0 until 5).map { 0.toChar() }).take(5)
@@ -131,28 +134,54 @@ class CangjieIMEMode(
         override val text: CharSequence
     ): CandidateView.Candidate
 
-    class Params: IMEMode.Params {
+    class Cangjie(listener: IMEMode.Listener): CangjieIMEMode(listener) {
+        override val inputMode: Int = TableLoader.CANGJIE
+    }
+
+    class Quick(listener: IMEMode.Listener): CangjieIMEMode(listener) {
+        override val inputMode: Int = TableLoader.QUICK
+    }
+
+    data class Params(
+        val layout: Layout
+    ): IMEMode.Params {
         override val type: String = TYPE
 
         override fun create(listener: IMEMode.Listener): IMEMode {
-            return CangjieIMEMode(listener)
+            return when(layout) {
+                Layout.Cangjie -> Cangjie(listener)
+                Layout.Quick -> Quick(listener)
+            }
         }
 
         override fun getLabel(context: Context): String {
             val localeName = Locale.TRADITIONAL_CHINESE.displayName
-            val layoutName = context.resources.getString(R.string.cangjie_layout_cangjie)
+            val layoutName = context.resources.getString(layout.nameKey)
             return "$localeName $layoutName"
         }
 
         override fun getShortLabel(context: Context): String {
-            return "倉頡"
+            return when(layout) {
+                Layout.Cangjie -> "倉頡"
+                Layout.Quick -> "速成"
+            }
         }
 
         companion object {
             fun parse(map: Map<String, String>): Params {
-                return Params()
+                val layout = Layout.valueOf(map["layout"] ?: Layout.Cangjie.name)
+                return Params(
+                    layout = layout
+                )
             }
         }
+    }
+
+    enum class Layout(
+        @StringRes val nameKey: Int
+    ) {
+        Cangjie(R.string.cangjie_layout_cangjie),
+        Quick(R.string.cangjie_layout_quick)
     }
 
     companion object {

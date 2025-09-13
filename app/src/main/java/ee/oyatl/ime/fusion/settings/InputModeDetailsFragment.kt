@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.fragment.app.setFragmentResult
 import androidx.preference.PreferenceFragmentCompat
 import ee.oyatl.ime.fusion.R
+import ee.oyatl.ime.fusion.mode.CangjieIMEMode
 import ee.oyatl.ime.fusion.mode.KoreanIMEMode
 import ee.oyatl.ime.fusion.mode.LatinIMEMode
 import ee.oyatl.ime.fusion.mode.MozcIMEMode
@@ -64,6 +65,15 @@ abstract class InputModeDetailsFragment(
         }
     }
 
+    class Cangjie(
+        map: MutableMap<String, String>
+    ): InputModeDetailsFragment(map) {
+        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+            super.onCreatePreferences(savedInstanceState, rootKey)
+            setPreferencesFromResource(R.xml.pref_input_mode_cangjie, rootKey)
+        }
+    }
+
     companion object {
         const val KEY_INPUT_MODE_DETAILS: String = "inputModeDetails"
         const val KEY_MAP: String = "map"
@@ -75,6 +85,7 @@ abstract class InputModeDetailsFragment(
                 KoreanIMEMode.TYPE -> Korean(map)
                 MozcIMEMode.TYPE -> Mozc(map)
                 VietIMEMode.TYPE -> Viet(map)
+                CangjieIMEMode.TYPE -> Cangjie(map)
                 else -> null
             }
         }

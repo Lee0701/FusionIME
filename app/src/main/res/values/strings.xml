@@ -58,6 +58,7 @@
     <string name="zhuyin_layout_zhuyin">Bopomofo</string>
 
     <string name="cangjie_layout_cangjie">Cangjie</string>
+    <string name="cangjie_layout_quick">Quick</string>
 
     <string name="viet_layout_qwerty">QWERTY</string>
     <string name="viet_layout_telex">Telex</string>
