@@ -22,11 +22,15 @@ abstract class InputModeDetailsFragment(
     }
 
     override fun onDetach() {
+        save()
+        super.onDetach()
+    }
+
+    fun save() {
         val stringifiedMap = map.map { (key, value) -> "$key=$value" }.joinToString(";")
         val bundle = Bundle()
         bundle.putString(KEY_MAP, stringifiedMap)
         setFragmentResult(KEY_INPUT_MODE_DETAILS, bundle)
-        super.onDetach()
     }
 
     class Latin(
