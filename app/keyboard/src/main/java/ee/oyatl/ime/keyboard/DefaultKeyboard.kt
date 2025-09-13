@@ -25,7 +25,6 @@ abstract class DefaultKeyboard: Keyboard {
     abstract fun buildRows(context: Context, listener: KeyboardListener): List<KbdRowBinding>
 
     override fun createView(context: Context, listener: KeyboardListener, params: KeyboardViewParams): View {
-        shiftKeys.clear()
         keyboardViewParams = params
         if(params.showPreviewPopup) previewPopup = PreviewPopup(context)
         val inflater = LayoutInflater.from(ContextThemeWrapper(context, R.style.Theme_FusionIME_Keyboard))
