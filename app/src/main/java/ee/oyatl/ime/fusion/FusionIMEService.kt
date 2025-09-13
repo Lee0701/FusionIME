@@ -70,6 +70,7 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
         val params = list.mapNotNull { item ->
             IMEMode.Params.parse(item)
         }.toMutableList()
+        if(params.isEmpty()) params += LatinIMEMode.Params()
         params.forEach { params ->
             entries += IMEModeSwitcher.Entry(params.getShortLabel(this), params.create(this))
         }
