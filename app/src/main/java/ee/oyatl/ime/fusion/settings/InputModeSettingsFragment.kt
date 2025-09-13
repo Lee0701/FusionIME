@@ -51,31 +51,7 @@ class InputModeSettingsFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = Adapter { position ->
-            val map = items[position]
-                .split(';').map { it.split('=') }
-                .associate { (key, value) -> key to value }.toMutableMap()
-            val fragment = InputModeDetailsFragment.create(map)
-            if(fragment != null) {
-                parentFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.settings, fragment)
-                    .addToBackStack(null)
-                    .commit()
-                parentFragmentManager.setFragmentResultListener(
-                    InputModeDetailsFragment.KEY_INPUT_MODE_DETAILS, this
-                ) { requestKey, result ->
-                    val resultMap = result.getString(InputModeDetailsFragment.KEY_MAP)
-                    if(resultMap != null) {
-                        val mutableList = items.toMutableList()
-                        mutableList[position] = resultMap
-                        items = mutableList
-                        adapter.submitList(items)
-                        save()
-                    }
-                }
-            }
-        }
+        adapter = Adapter { onItemClicked(it) }
         binding.recyclerView.adapter = adapter
         adapter.submitList(items)
         val itemTouchHelper = ItemTouchHelper(ItemTouchHelperCallback())
@@ -91,6 +67,34 @@ class InputModeSettingsFragment: Fragment() {
                 items += "type=$type"
                 adapter.submitList(items)
                 save()
+            }
+        }
+    }
+
+    fun onItemClicked(position: Int) {
+        val map = items[position]
+            .split(';').map { it.split('=') }
+            .associate { (key, value) -> key to value }.toMutableMap()
+        val fragment = InputModeDetailsFragment.create(map)
+        if(fragment != null) {
+            parentFragmentManager
+                .beginTransaction()
+                .replace(R.id.settings, fragment)
+                .addToBackStack(null)
+                .commit()
+            activity?.title = IMEMode.Params.parse(items[position])?.getLabel(requireContext())
+            parentFragmentManager.setFragmentResultListener(
+                InputModeDetailsFragment.KEY_INPUT_MODE_DETAILS, this
+            ) { requestKey, result ->
+                activity?.setTitle(R.string.settings_input_mode_header)
+                val resultMap = result.getString(InputModeDetailsFragment.KEY_MAP)
+                if(resultMap != null) {
+                    val mutableList = items.toMutableList()
+                    mutableList[position] = resultMap
+                    items = mutableList
+                    adapter.submitList(items)
+                    save()
+                }
             }
         }
     }
