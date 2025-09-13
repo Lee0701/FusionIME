@@ -119,8 +119,12 @@ abstract class KoreanIMEMode(
         }
     }
 
-    class Hangul2SetKS(converterType: ConverterType, listener: IMEMode.Listener): KoreanIMEMode(listener) {
-        override val hangulCombiner: HangulCombiner = HangulCombiner(Hangul2Set.COMB_KS, true)
+    class Hangul2SetKS(
+        correctOrders: Boolean,
+        converterType: ConverterType,
+        listener: IMEMode.Listener
+    ): KoreanIMEMode(listener) {
+        override val hangulCombiner: HangulCombiner = HangulCombiner(Hangul2Set.COMB_KS, correctOrders)
         override val hanjaConverter: HanjaConverter = converterType.create()
         override val layoutTable: Map<Int, List<Int>> = Hangul2Set.TABLE_KS
         private val layers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE, layoutTable)
@@ -133,8 +137,12 @@ abstract class KoreanIMEMode(
         )
     }
 
-    class Hangul3Set390(converterType: ConverterType, listener: IMEMode.Listener): KoreanIMEMode(listener) {
-        override val hangulCombiner: HangulCombiner = HangulCombiner(Hangul3Set.COMBINATION_390, true)
+    class Hangul3Set390(
+        correctOrders: Boolean,
+        converterType: ConverterType,
+        listener: IMEMode.Listener
+    ): KoreanIMEMode(listener) {
+        override val hangulCombiner: HangulCombiner = HangulCombiner(Hangul3Set.COMBINATION_390, correctOrders)
         override val hanjaConverter: HanjaConverter = converterType.create()
         override val layoutTable: Map<Int, List<Int>> = Hangul3Set.TABLE_390
         private val layers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE_WITH_QUOTE, layoutTable)
@@ -167,8 +175,12 @@ abstract class KoreanIMEMode(
         }
     }
 
-    class Hangul3Set391(converterType: ConverterType, listener: IMEMode.Listener): KoreanIMEMode(listener) {
-        override val hangulCombiner: HangulCombiner = HangulCombiner(Hangul3Set.COMBINATION_391, true)
+    class Hangul3Set391(
+        correctOrders: Boolean,
+        converterType: ConverterType,
+        listener: IMEMode.Listener
+    ): KoreanIMEMode(listener) {
+        override val hangulCombiner: HangulCombiner = HangulCombiner(Hangul3Set.COMBINATION_391, correctOrders)
         override val hanjaConverter: HanjaConverter = converterType.create()
         override val layoutTable: Map<Int, List<Int>> = Hangul3Set.TABLE_391
         private val layers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE_WITH_QUOTE, layoutTable)
@@ -184,8 +196,12 @@ abstract class KoreanIMEMode(
         )
     }
 
-    class HangulOld2Set(converterType: ConverterType, listener: IMEMode.Listener): KoreanIMEMode(listener) {
-        override val hangulCombiner: HangulCombiner = HangulCombiner(HangulOld.COMB_FULL, false)
+    class HangulOld2Set(
+        correctOrders: Boolean,
+        converterType: ConverterType,
+        listener: IMEMode.Listener
+    ): KoreanIMEMode(listener) {
+        override val hangulCombiner: HangulCombiner = HangulCombiner(HangulOld.COMB_FULL, correctOrders)
         override val hanjaConverter: HanjaConverter = converterType.create()
         override val layoutTable: Map<Int, List<Int>> = HangulOld.TABLE_OLD_2SET
         private val layers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE, layoutTable)
@@ -200,16 +216,17 @@ abstract class KoreanIMEMode(
 
     data class Params(
         val layout: Layout,
+        val correctOrders: Boolean,
         val converterType: ConverterType
     ): IMEMode.Params {
         override val type: String = TYPE
 
         override fun create(listener: IMEMode.Listener): IMEMode {
             return when(layout) {
-                Layout.Set2KS -> Hangul2SetKS(converterType, listener)
-                Layout.Set3390 -> Hangul3Set390(converterType, listener)
-                Layout.Set3391 -> Hangul3Set391(converterType, listener)
-                Layout.Set2Old -> HangulOld2Set(converterType, listener)
+                Layout.Set2KS -> Hangul2SetKS(correctOrders, converterType, listener)
+                Layout.Set3390 -> Hangul3Set390(correctOrders, converterType, listener)
+                Layout.Set3391 -> Hangul3Set391(correctOrders, converterType, listener)
+                Layout.Set2Old -> HangulOld2Set(correctOrders, converterType, listener)
             }
         }
 
@@ -231,9 +248,11 @@ abstract class KoreanIMEMode(
             fun parse(map: Map<String, String>): Params {
                 val layout = Layout.valueOf(map["layout"] ?: Layout.Set2KS.name)
                 val converterType = ConverterType.valueOf(map["converter"] ?: ConverterType.Word.name)
+                val correctOrders = (map["correct_orders"] ?: "false").toBoolean()
                 return Params(
                     layout = layout,
-                    converterType = converterType
+                    converterType = converterType,
+                    correctOrders = correctOrders
                 )
             }
         }

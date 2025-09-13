@@ -24,6 +24,7 @@
 
     <string name="settings_input_mode_locale_title">Language</string>
     <string name="settings_input_mode_layout_title">Keyboard Layout</string>
+    <string name="settings_input_mode_correct_orders_title">Correct Jamo Orders</string>
     <string name="settings_input_mode_converter_title">Converter</string>
 
     <string name="input_mode_latin">Latin</string>
