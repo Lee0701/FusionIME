@@ -67,10 +67,6 @@ abstract class CommonIMEMode(
     private var numpadKeyboardView: View? = null
     protected var candidateView: CandidateView? = null
 
-    private lateinit var textKeyboardListener: KeyboardListener
-    private lateinit var symbolKeyboardListener: KeyboardListener
-    private lateinit var directKeyboardListener: KeyboardListener
-
     private var symbolState: KeyboardState.Symbol = KeyboardState.Symbol.Text
     override var shiftState: KeyboardState.Shift = KeyboardState.Shift.Released
         set(value) {
@@ -107,10 +103,13 @@ abstract class CommonIMEMode(
 
     override fun createInputView(context: Context): View {
         val preference = PreferenceManager.getDefaultSharedPreferences(context)
-        textKeyboardListener = createKeyboardListener(context, KeyListener())
-        symbolKeyboardListener = createKeyboardListener(context, KeyListener(), false)
-        directKeyboardListener = createKeyboardListener(context, DirectKeyListener())
         val switcherView = FrameLayout(context)
+        this.switcherView = switcherView
+
+        val textKeyboardListener = createKeyboardListener(context, KeyListener())
+        val symbolKeyboardListener = createKeyboardListener(context, KeyListener(), false)
+        val directKeyboardListener = createKeyboardListener(context, DirectKeyListener())
+
         val landscape = context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
         val rowHeightKey = if(landscape) "keyboard_height_landscape" else "keyboard_height_portrait"
         val rowHeightDefault = if(landscape) 45f else 55f
@@ -121,13 +120,14 @@ abstract class CommonIMEMode(
             keyHeight = height / 4,
             showPreviewPopup = showPreviewPopup
         )
+
         textKeyboardView = textKeyboard.createView(context, textKeyboardListener, params.copy(keyHeight = height / textKeyboard.numRows))
         symbolKeyboardView = symbolKeyboard.createView(context, symbolKeyboardListener, params.copy(keyHeight = height / symbolKeyboard.numRows))
         numpadKeyboardView = numpadKeyboard.createView(context, directKeyboardListener, params.copy(keyHeight = height / numpadKeyboard.numRows))
         switcherView.addView(textKeyboardView)
         switcherView.addView(symbolKeyboardView)
         switcherView.addView(numpadKeyboardView)
-        this.switcherView = switcherView
+
         updateInputView()
         return switcherView
     }
