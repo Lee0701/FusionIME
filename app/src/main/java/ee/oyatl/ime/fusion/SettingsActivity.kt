@@ -78,6 +78,10 @@ class SettingsActivity : AppCompatActivity(),
         }
         // Replace the existing Fragment with the new Fragment
         supportFragmentManager.beginTransaction()
+            .setCustomAnimations(
+                R.anim.slide_in_right, R.anim.slide_out_left,
+                R.anim.slide_in_left, R.anim.slide_out_right
+            )
             .replace(R.id.settings, fragment)
             .addToBackStack(null)
             .commit()
@@ -106,12 +110,6 @@ class SettingsActivity : AppCompatActivity(),
     class BehaviourFragment : PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.pref_behaviour, rootKey)
-        }
-    }
-
-    class InputModeFragment : PreferenceFragmentCompat() {
-        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-            setPreferencesFromResource(R.xml.pref_input_mode, rootKey)
         }
     }
 }

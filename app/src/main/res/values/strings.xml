@@ -24,7 +24,46 @@
     <string name="settings_behaviour_haptic_feedback_summary">Vibrate on key press.</string>
     <string name="settings_behaviour_vibration_duration_title">Vibration Duration</string>
 
-    <string name="settings_input_mode_choose_title">Choose Input Modes</string>
-    <string name="settings_input_mode_choose_summary">Select languages and input modes to use.</string>
+    <string name="settings_input_mode_select_type_title">Select Type</string>
+
+    <string name="settings_input_mode_locale_title">Language</string>
+    <string name="settings_input_mode_layout_title">Keyboard Layout</string>
+
+    <string name="input_mode_latin">Latin</string>
+    <string name="input_mode_korean">Korean</string>
+    <string name="input_mode_mozc">Mozc (Japanese)</string>
+    <string name="input_mode_pinyin">Pinyin (Simplified Chinese)</string>
+    <string name="input_mode_zhuyin">Bopomofo (Traditional Chinese)</string>
+    <string name="input_mode_cangjie">Cangjie</string>
+    <string name="input_mode_viet">Vietnamese</string>
+
+    <string name="latin_locale_de">German</string>
+    <string name="latin_locale_en">English</string>
+    <string name="latin_locale_es">Spanish</string>
+    <string name="latin_locale_fr">French</string>
+    <string name="latin_locale_it">Italian</string>
+    <string name="latin_locale_pt_br">Portuguese (Brazil)</string>
+
+    <string name="latin_layout_qwerty">QWERTY</string>
+    <string name="latin_layout_dvorak">Dvorak</string>
+    <string name="latin_layout_colemak">Colemak</string>
+
+    <string name="korean_layout_hangul_2set_ks">Hangul 2-Set KS</string>
+    <string name="korean_layout_hangul_3set_390">Hangul 3-Set 390</string>
+    <string name="korean_layout_hangul_3set_391">Hangul 3-Set Final</string>
+    <string name="korean_layout_old_hangul_2set_ks">Old Hangul 2-Set</string>
+
+    <string name="mozc_layout_romaji_qwerty">Romaji QWERTY</string>
+    <string name="mozc_layout_kana_jis">Kana JIS</string>
+    <string name="mozc_layout_kana_syllables">Kana Syllables</string>
+
+    <string name="pinyin_layout_pinyin">Pinyin</string>
+
+    <string name="zhuyin_layout_zhuyin">Bopomofo</string>
+
+    <string name="cangjie_layout_cangjie">Cangjie</string>
+
+    <string name="viet_layout_qwerty">QWERTY</string>
+    <string name="viet_layout_telex">Telex</string>
 
 </resources>

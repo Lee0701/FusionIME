@@ -42,4 +42,90 @@
         <item>zh_pinyin</item>
         <item>vi_telex</item>
     </string-array>
+
+    <string-array name="settings_input_mode_type_entries">
+        <item>@string/input_mode_latin</item>
+        <item>@string/input_mode_korean</item>
+        <item>@string/input_mode_mozc</item>
+        <item>@string/input_mode_pinyin</item>
+        <item>@string/input_mode_zhuyin</item>
+        <item>@string/input_mode_cangjie</item>
+        <item>@string/input_mode_viet</item>
+    </string-array>
+
+    <string-array name="settings_input_mode_type_values">
+        <item>latin</item>
+        <item>korean</item>
+        <item>mozc</item>
+        <item>pinyin</item>
+        <item>zhuyin</item>
+        <item>cangjie</item>
+        <item>viet</item>
+    </string-array>
+
+    <string-array name="settings_input_mode_latin_locale_entries">
+        <item>@string/latin_locale_de</item>
+        <item>@string/latin_locale_en</item>
+        <item>@string/latin_locale_es</item>
+        <item>@string/latin_locale_fr</item>
+        <item>@string/latin_locale_it</item>
+        <item>@string/latin_locale_pt_br</item>
+    </string-array>
+
+    <string-array name="settings_input_mode_latin_locale_values">
+        <item>de</item>
+        <item>en</item>
+        <item>es</item>
+        <item>fr</item>
+        <item>it</item>
+        <item>pt_br</item>
+    </string-array>
+
+    <string-array name="settings_input_mode_latin_layout_entries">
+        <item>@string/latin_layout_qwerty</item>
+        <item>@string/latin_layout_dvorak</item>
+        <item>@string/latin_layout_colemak</item>
+    </string-array>
+
+    <string-array name="settings_input_mode_latin_layout_values">
+        <item>Qwerty</item>
+        <item>Dvorak</item>
+        <item>Colemak</item>
+    </string-array>
+
+    <string-array name="settings_input_mode_korean_layout_entries">
+        <item>@string/korean_layout_hangul_2set_ks</item>
+        <item>@string/korean_layout_hangul_3set_390</item>
+        <item>@string/korean_layout_hangul_3set_391</item>
+        <item>@string/korean_layout_old_hangul_2set_ks</item>
+    </string-array>
+
+    <string-array name="settings_input_mode_korean_layout_values">
+        <item>Set2KS</item>
+        <item>Set3390</item>
+        <item>Set3391</item>
+        <item>Set2Old</item>
+    </string-array>
+
+    <string-array name="settings_input_mode_mozc_layout_entries">
+        <item>@string/mozc_layout_romaji_qwerty</item>
+        <item>@string/mozc_layout_kana_jis</item>
+        <item>@string/mozc_layout_kana_syllables</item>
+    </string-array>
+
+    <string-array name="settings_input_mode_mozc_layout_values">
+        <item>RomajiQwerty</item>
+        <item>KanaJIS</item>
+        <item>KanaSyllables</item>
+    </string-array>
+
+    <string-array name="settings_input_mode_viet_layout_entries">
+        <item>@string/viet_layout_qwerty</item>
+        <item>@string/viet_layout_telex</item>
+    </string-array>
+
+    <string-array name="settings_input_mode_viet_layout_values">
+        <item>Qwerty</item>
+        <item>Telex</item>
+    </string-array>
 </resources>

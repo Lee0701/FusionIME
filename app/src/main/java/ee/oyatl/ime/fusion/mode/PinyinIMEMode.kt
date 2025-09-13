@@ -13,17 +13,17 @@ import android.view.View.MeasureSpec
 import android.widget.LinearLayout
 import com.android.inputmethod.pinyin.BalloonHint
 import com.android.inputmethod.pinyin.CandidateViewListener
-import ee.oyatl.ime.fusion.pinyin.CandidatesContainer
-import ee.oyatl.ime.fusion.pinyin.ComposingView
-import ee.oyatl.ime.fusion.pinyin.ComposingView.ComposingStatus
 import com.android.inputmethod.pinyin.IPinyinDecoderService.Stub
 import com.android.inputmethod.pinyin.KeyMapDream
-import ee.oyatl.ime.fusion.pinyin.OnGestureListener
 import com.android.inputmethod.pinyin.PinyinIME.ImeState
 import com.android.inputmethod.pinyin.R
 import com.android.inputmethod.pinyin.Settings
 import ee.oyatl.ime.candidate.CandidateView
+import ee.oyatl.ime.fusion.pinyin.CandidatesContainer
+import ee.oyatl.ime.fusion.pinyin.ComposingView
+import ee.oyatl.ime.fusion.pinyin.ComposingView.ComposingStatus
 import ee.oyatl.ime.fusion.pinyin.DecodingInfo
+import ee.oyatl.ime.fusion.pinyin.OnGestureListener
 import ee.oyatl.ime.keyboard.DefaultBottomRowKeyboard
 import ee.oyatl.ime.keyboard.DefaultMobileKeyboard
 import ee.oyatl.ime.keyboard.Keyboard
@@ -31,6 +31,7 @@ import ee.oyatl.ime.keyboard.KeyboardInflater
 import ee.oyatl.ime.keyboard.ShiftStateKeyboard
 import ee.oyatl.ime.keyboard.StackedKeyboard
 import ee.oyatl.ime.keyboard.layout.LayoutPinyin
+import java.util.Locale
 
 class PinyinIMEMode(
     listener: IMEMode.Listener
@@ -873,7 +874,32 @@ class PinyinIMEMode(
         override val text: CharSequence
     ): CandidateView.Candidate
 
+    class Params: IMEMode.Params {
+        override val type: String = TYPE
+
+        override fun create(listener: IMEMode.Listener): IMEMode {
+            return PinyinIMEMode(listener)
+        }
+
+        override fun getLabel(context: Context): String {
+            val localeName = Locale.SIMPLIFIED_CHINESE.displayName
+            val layoutName = context.resources.getString(ee.oyatl.ime.fusion.R.string.pinyin_layout_pinyin)
+            return "$localeName $layoutName"
+        }
+
+        override fun getShortLabel(context: Context): String {
+            return "拼音"
+        }
+
+        companion object {
+            fun parse(map: Map<String, String>): Params {
+                return Params()
+            }
+        }
+    }
+
     companion object {
+        const val TYPE: String = "pinyin"
         private const val SIMULATE_KEY_DELETE = true
     }
 }

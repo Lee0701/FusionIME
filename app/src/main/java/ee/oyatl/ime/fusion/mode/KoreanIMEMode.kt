@@ -4,7 +4,9 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.view.KeyEvent
+import androidx.annotation.StringRes
 import ee.oyatl.ime.candidate.CandidateView
+import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.hangul.HangulCombiner
 import ee.oyatl.ime.fusion.korean.DefaultHanjaConverter
 import ee.oyatl.ime.fusion.korean.HanjaConverter
@@ -20,6 +22,7 @@ import ee.oyatl.ime.keyboard.KeyboardInflater
 import ee.oyatl.ime.keyboard.ShiftStateKeyboard
 import ee.oyatl.ime.keyboard.StackedKeyboard
 import ee.oyatl.ime.keyboard.layout.KeyboardTemplates
+import java.util.Locale
 import java.util.concurrent.Executors
 
 abstract class KoreanIMEMode(
@@ -113,10 +116,6 @@ abstract class KoreanIMEMode(
         }
     }
 
-    companion object {
-        const val MSG_CONVERT = 0
-    }
-
     class Hangul2SetKS(listener: IMEMode.Listener): KoreanIMEMode(listener) {
         override val hangulCombiner: HangulCombiner = HangulCombiner(Hangul2Set.COMB_KS, true)
         override val layoutTable: Map<Int, List<Int>> = Hangul2Set.TABLE_KS
@@ -194,5 +193,58 @@ abstract class KoreanIMEMode(
         override suspend fun onLoad(context: Context) {
             hanjaConverter = JeongUnHanjaConverter(context)
         }
+    }
+
+    data class Params(
+        val layout: Layout
+    ): IMEMode.Params {
+        override val type: String = TYPE
+
+        override fun create(listener: IMEMode.Listener): IMEMode {
+            return when(layout) {
+                Layout.Set2KS -> Hangul2SetKS(listener)
+                Layout.Set3390 -> Hangul3Set390(listener)
+                Layout.Set3391 -> Hangul3Set391(listener)
+                Layout.Set2Old -> HangulOld2Set(listener)
+            }
+        }
+
+        override fun getLabel(context: Context): String {
+            val localeName = Locale.KOREAN.displayName
+            val layoutName = context.resources.getString(layout.nameKey)
+            return "$localeName $layoutName"
+        }
+
+        override fun getShortLabel(context: Context): String {
+            return when(layout) {
+                Layout.Set2KS -> "한2"
+                Layout.Set3390, Layout.Set3391 -> "한3"
+                Layout.Set2Old -> "ᄒᆞ"
+                else -> "한"
+            }
+        }
+
+        companion object {
+            fun parse(map: Map<String, String>): Params {
+                val layout = Layout.valueOf(map["layout"] ?: Layout.Set2KS.name)
+                return Params(
+                    layout = layout
+                )
+            }
+        }
+    }
+
+    enum class Layout(
+        @StringRes val nameKey: Int
+    ) {
+        Set2KS(R.string.korean_layout_hangul_2set_ks),
+        Set3390(R.string.korean_layout_hangul_3set_390),
+        Set3391(R.string.korean_layout_hangul_3set_391),
+        Set2Old(R.string.korean_layout_old_hangul_2set_ks)
+    }
+
+    companion object {
+        const val MSG_CONVERT = 0
+        const val TYPE: String = "korean"
     }
 }
