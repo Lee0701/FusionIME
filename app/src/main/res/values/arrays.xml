@@ -107,6 +107,18 @@
         <item>Set2Old</item>
     </string-array>
 
+    <string-array name="settings_input_mode_korean_converter_entries">
+        <item>@string/korean_converter_word</item>
+        <item>@string/korean_converter_phrase</item>
+        <item>@string/korean_converter_jeongun</item>
+    </string-array>
+
+    <string-array name="settings_input_mode_korean_converter_values">
+        <item>Word</item>
+        <item>Phrase</item>
+        <item>JeongUn</item>
+    </string-array>
+
     <string-array name="settings_input_mode_mozc_layout_entries">
         <item>@string/mozc_layout_romaji_qwerty</item>
         <item>@string/mozc_layout_kana_jis</item>

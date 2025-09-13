@@ -24,6 +24,7 @@
 
     <string name="settings_input_mode_locale_title">Language</string>
     <string name="settings_input_mode_layout_title">Keyboard Layout</string>
+    <string name="settings_input_mode_converter_title">Converter</string>
 
     <string name="input_mode_latin">Latin</string>
     <string name="input_mode_korean">Korean</string>
@@ -48,6 +49,10 @@
     <string name="korean_layout_hangul_3set_390">Hangul 3-Set 390</string>
     <string name="korean_layout_hangul_3set_391">Hangul 3-Set Final</string>
     <string name="korean_layout_old_hangul_2set_ks">Old Hangul 2-Set</string>
+
+    <string name="korean_converter_word">Word Converter</string>
+    <string name="korean_converter_phrase">Phrase Converter</string>
+    <string name="korean_converter_jeongun">Jeong-Un Converter</string>
 
     <string name="mozc_layout_romaji_qwerty">Romaji QWERTY</string>
     <string name="mozc_layout_kana_jis">Kana JIS</string>

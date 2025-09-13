@@ -3,6 +3,7 @@ package ee.oyatl.ime.fusion.settings
 import android.os.Bundle
 import androidx.fragment.app.setFragmentResult
 import androidx.preference.PreferenceFragmentCompat
+import ee.oyatl.ime.fusion.Feature
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.mode.KoreanIMEMode
 import ee.oyatl.ime.fusion.mode.LatinIMEMode
@@ -33,7 +34,7 @@ abstract class InputModeDetailsFragment(
     ): InputModeDetailsFragment(map) {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             super.onCreatePreferences(savedInstanceState, rootKey)
-            setPreferencesFromResource(R.xml.pref_input_mode_latin, rootKey)
+            addPreferencesFromResource(R.xml.pref_input_mode_latin)
         }
     }
 
@@ -42,7 +43,9 @@ abstract class InputModeDetailsFragment(
     ): InputModeDetailsFragment(map) {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             super.onCreatePreferences(savedInstanceState, rootKey)
-            setPreferencesFromResource(R.xml.pref_input_mode_korean, rootKey)
+            addPreferencesFromResource(R.xml.pref_input_mode_korean_layout)
+            if(Feature.BigramHanjaConverter.availableInCurrentVersion)
+                addPreferencesFromResource(R.xml.pref_input_mode_korean_converter)
         }
     }
 
@@ -51,7 +54,7 @@ abstract class InputModeDetailsFragment(
     ): InputModeDetailsFragment(map) {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             super.onCreatePreferences(savedInstanceState, rootKey)
-            setPreferencesFromResource(R.xml.pref_input_mode_mozc, rootKey)
+            addPreferencesFromResource(R.xml.pref_input_mode_mozc)
         }
     }
 
@@ -60,7 +63,7 @@ abstract class InputModeDetailsFragment(
     ): InputModeDetailsFragment(map) {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             super.onCreatePreferences(savedInstanceState, rootKey)
-            setPreferencesFromResource(R.xml.pref_input_mode_viet, rootKey)
+            addPreferencesFromResource(R.xml.pref_input_mode_viet)
         }
     }
 

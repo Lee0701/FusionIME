@@ -5,13 +5,14 @@ import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.newdict.DiskHanjaDictionary
 import ee.oyatl.ime.newdict.DiskTrieDictionary
 
-class UnigramHanjaConverter(
-    context: Context
-): HanjaConverter {
-    private val indexDict: DiskTrieDictionary =
-        DiskTrieDictionary(context.resources.openRawResource(R.raw.hanja_index))
-    private val vocabDict: DiskHanjaDictionary =
-        DiskHanjaDictionary(context.resources.openRawResource(R.raw.hanja_content))
+class UnigramHanjaConverter: HanjaConverter {
+    private lateinit var indexDict: DiskTrieDictionary
+    private lateinit var vocabDict: DiskHanjaDictionary
+
+    override fun load(context: Context) {
+        indexDict = DiskTrieDictionary(context.resources.openRawResource(R.raw.hanja_index))
+        vocabDict = DiskHanjaDictionary(context.resources.openRawResource(R.raw.hanja_content))
+    }
 
     override fun convert(text: String): List<CandidateView.Candidate> {
         val hanjaResult = (1 .. text.length).map { l ->

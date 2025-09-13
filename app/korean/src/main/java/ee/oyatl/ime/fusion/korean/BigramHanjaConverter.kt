@@ -6,15 +6,16 @@ import ee.oyatl.ime.newdict.DiskHanjaDictionary
 import ee.oyatl.ime.newdict.DiskNGramDictionary
 import ee.oyatl.ime.newdict.DiskTrieDictionary
 
-class BigramHanjaConverter(
-    context: Context
-): HanjaConverter {
-    private val indexDict: DiskTrieDictionary =
-        DiskTrieDictionary(context.resources.openRawResource(R.raw.hanja_index))
-    private val vocabDict: DiskHanjaDictionary =
-        DiskHanjaDictionary(context.resources.openRawResource(R.raw.hanja_content))
-    private val bigramDict: DiskNGramDictionary =
-        DiskNGramDictionary(context.resources.openRawResource(R.raw.hanja_bigram))
+class BigramHanjaConverter: HanjaConverter {
+    private lateinit var indexDict: DiskTrieDictionary
+    private lateinit var vocabDict: DiskHanjaDictionary
+    private lateinit var bigramDict: DiskNGramDictionary
+
+    override fun load(context: Context) {
+        indexDict = DiskTrieDictionary(context.resources.openRawResource(R.raw.hanja_index))
+        vocabDict = DiskHanjaDictionary(context.resources.openRawResource(R.raw.hanja_content))
+        bigramDict = DiskNGramDictionary(context.resources.openRawResource(R.raw.hanja_bigram))
+    }
 
     override fun convert(text: String): List<CandidateView.Candidate> {
         return convert(CompoundCandidate(listOf()), text, 0)
