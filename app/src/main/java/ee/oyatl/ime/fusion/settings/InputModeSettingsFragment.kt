@@ -67,6 +67,7 @@ class InputModeSettingsFragment: Fragment() {
                 items += "type=$type"
                 adapter.submitList(items)
                 save()
+                onItemClicked(items.lastIndex)
             }
         }
     }
