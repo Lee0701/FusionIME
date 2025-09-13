@@ -28,6 +28,21 @@ android {
             )
         }
     }
+
+    flavorDimensions += "edition"
+    productFlavors {
+        register("paid") {
+            // Need to match with @string/authority
+            buildConfigField("String", "DICTIONARY_DOMAIN", "\"ee.oyatl.ime.fusion.latin.dictionarypack.aosp\"")
+            buildConfigField("String", "RESOURCE_PACKAGE_NAME", "\"ee.oyatl.ime.fusion\"")
+        }
+        register("free") {
+            // Need to match with @string/authority
+            buildConfigField("String", "DICTIONARY_DOMAIN", "\"ee.oyatl.ime.fusion.free.latin.dictionarypack.aosp\"")
+            buildConfigField("String", "RESOURCE_PACKAGE_NAME", "\"ee.oyatl.ime.fusion.free\"")
+        }
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -42,6 +57,9 @@ android {
         ndkBuild {
             path = file("src/main/jni/Android.mk")
         }
+    }
+    buildFeatures {
+        buildConfig = true
     }
     ndkVersion = "29.0.14033849 rc4"
 }

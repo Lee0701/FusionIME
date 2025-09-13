@@ -1,8 +1,4 @@
 <resources>
-    <string name="fusion_app_name">FusionIME</string>
-
-    <string name="settings_activity_name">FusionIME Settings</string>
-
     <string name="settings_method_header">Input Method</string>
     <string name="settings_appearance_header">Appearance</string>
     <string name="settings_behaviour_header">Behaviour</string>

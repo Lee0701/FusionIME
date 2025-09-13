@@ -27,7 +27,23 @@ android {
             signingConfig = signingConfigs.getByName("debug")
         }
     }
+
+    flavorDimensions += "edition"
+    productFlavors {
+        create("paid") {
+            dimension = "edition"
+            applicationIdSuffix = ""
+            buildConfigField("boolean", "IS_PAID", "true")
+        }
+        create("free") {
+            dimension = "edition"
+            applicationIdSuffix = ".free"
+            buildConfigField("boolean", "IS_PAID", "false")
+        }
+    }
+
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
@@ -43,6 +59,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 }
 
@@ -53,6 +70,8 @@ dependencies {
     implementation(libs.material)
     implementation(libs.guava)
     implementation(libs.protobuf.java)
+    implementation(libs.androidx.preference)
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
     implementation(project(":app:keyboard"))
     implementation(project(":app:mozc"))
     implementation(project(":app:pinyin"))
@@ -62,7 +81,6 @@ dependencies {
     implementation(project(":app:korean:hangul"))
     implementation(project(":app:latin"))
     implementation(project(":app:viet"))
-    implementation(libs.androidx.preference)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

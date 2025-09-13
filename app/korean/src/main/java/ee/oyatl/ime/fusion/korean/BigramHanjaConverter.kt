@@ -5,9 +5,8 @@ import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.newdict.DiskHanjaDictionary
 import ee.oyatl.ime.newdict.DiskNGramDictionary
 import ee.oyatl.ime.newdict.DiskTrieDictionary
-import kotlin.math.pow
 
-class DefaultHanjaConverter(
+class BigramHanjaConverter(
     context: Context
 ): HanjaConverter {
     private val indexDict: DiskTrieDictionary =
