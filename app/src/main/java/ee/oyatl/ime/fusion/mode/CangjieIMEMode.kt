@@ -19,12 +19,14 @@ import ee.oyatl.ime.keyboard.ShiftStateKeyboard
 import ee.oyatl.ime.keyboard.StackedKeyboard
 import ee.oyatl.ime.keyboard.layout.KeyboardTemplates
 import ee.oyatl.ime.keyboard.layout.LayoutCangjie
+import ee.oyatl.ime.keyboard.listener.OnKeyClickListener
 import java.util.Locale
 
 abstract class CangjieIMEMode(
     listener: IMEMode.Listener
 ): CommonIMEMode(listener) {
     abstract val inputMode: Int
+    abstract val fullWidth: Boolean
 
     private val handler: Handler = Handler(Looper.getMainLooper()) { msg ->
         when(msg.what) {
@@ -35,6 +37,8 @@ abstract class CangjieIMEMode(
             else -> false
         }
     }
+
+    override val symbolKeyListener: OnKeyClickListener = DirectKeyListener()
 
     override val layoutTable: Map<Int, List<Int>> = LayoutCangjie.TABLE_QWERTY
     abstract val keyboardTemplate: List<String>
@@ -102,7 +106,8 @@ abstract class CangjieIMEMode(
                     val bestCandidate = bestCandidate
                     if(bestCandidate != null) onCandidateSelected(bestCandidate)
                 } else {
-                    util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_SPACE)
+                    if(fullWidth) util?.sendKeyChar(0x3000.toChar())
+                    else util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_SPACE)
                 }
                 onReset()
             }
@@ -130,7 +135,27 @@ abstract class CangjieIMEMode(
         override val text: CharSequence
     ): CandidateView.Candidate
 
-    class Cangjie(listener: IMEMode.Listener): CangjieIMEMode(listener) {
+    inner class DirectKeyListener: OnKeyClickListener {
+        override fun onKeyClick(code: Int) {
+            val special = Keyboard.SpecialKey.ofCode(code)
+            if(special != null) handleSpecialKey(special)
+            else {
+                onReset()
+                val fullWidthChar = when(code) {
+                    in 0x21 .. 0x7e -> (code - 0x20 + 0xff00).toChar()
+                    else -> code.toChar()
+                }
+                val halfWidthChar = code.toChar()
+                util?.sendKeyChar(if(fullWidth) fullWidthChar else halfWidthChar)
+            }
+            updateInputView()
+        }
+    }
+
+    class Cangjie(
+        override val fullWidth: Boolean,
+        listener: IMEMode.Listener
+    ): CangjieIMEMode(listener) {
         override val inputMode: Int = TableLoader.CANGJIE
         override val keyboardTemplate: List<String> = KeyboardTemplates.MOBILE
         private val textKeyboardLayers = KeyboardInflater.inflate(keyboardTemplate, layoutTable)
@@ -139,12 +164,15 @@ abstract class CangjieIMEMode(
                 DefaultMobileKeyboard(textKeyboardLayers[0]),
                 DefaultMobileKeyboard(textKeyboardLayers[1])
             ),
-            DefaultBottomRowKeyboard()
+            DefaultBottomRowKeyboard(listOf('，'.code, '。'.code))
         )
         override val keyMap: Map<Char, Char> = LayoutCangjie.KEY_MAP_CANGJIE
     }
 
-    class Quick(listener: IMEMode.Listener): CangjieIMEMode(listener) {
+    class Quick(
+        override val fullWidth: Boolean,
+        listener: IMEMode.Listener
+    ): CangjieIMEMode(listener) {
         override val inputMode: Int = TableLoader.QUICK
         override val keyboardTemplate: List<String> = KeyboardTemplates.MOBILE
         private val textKeyboardLayers = KeyboardInflater.inflate(keyboardTemplate, layoutTable)
@@ -153,37 +181,43 @@ abstract class CangjieIMEMode(
                 DefaultMobileKeyboard(textKeyboardLayers[0]),
                 DefaultMobileKeyboard(textKeyboardLayers[1])
             ),
-            DefaultBottomRowKeyboard()
+            DefaultBottomRowKeyboard(listOf('，'.code, '。'.code))
         )
         override val keyMap: Map<Char, Char> = LayoutCangjie.KEY_MAP_CANGJIE
     }
 
-    class Dayi3(listener: IMEMode.Listener): CangjieIMEMode(listener) {
+    class Dayi3(
+        override val fullWidth: Boolean,
+        listener: IMEMode.Listener
+    ): CangjieIMEMode(listener) {
         override val inputMode: Int = TableLoader.DAYI3
         override val keyboardTemplate: List<String> = KeyboardTemplates.MOBILE
         override val textKeyboard: Keyboard = StackedKeyboard(
             DefaultGridKeyboard(LayoutCangjie.ROWS_DAYI3.map { row -> row.map { it.code } }),
             CustomRowKeyboard(listOf(
                 CustomRowKeyboard.KeyType.Symbols(width = 1.5f),
-                CustomRowKeyboard.KeyType.Language(width = 1.5f),
-                CustomRowKeyboard.KeyType.Space(width = 4f),
+                CustomRowKeyboard.KeyType.Extra('，'.code),
+                CustomRowKeyboard.KeyType.Language(width = 1f),
+                CustomRowKeyboard.KeyType.Space(width = 3f),
+                CustomRowKeyboard.KeyType.Extra('。'.code),
                 CustomRowKeyboard.KeyType.Return(width = 1.5f),
-                CustomRowKeyboard.KeyType.Delete(width = 1.5f)
+                CustomRowKeyboard.KeyType.Delete(width = 1f)
             ))
         )
         override val keyMap: Map<Char, Char> = LayoutCangjie.KEY_MAP_DAYI3
     }
 
     data class Params(
-        val layout: Layout
+        val layout: Layout,
+        val fullWidth: Boolean
     ): IMEMode.Params {
         override val type: String = TYPE
 
         override fun create(listener: IMEMode.Listener): IMEMode {
             return when(layout) {
-                Layout.Cangjie -> Cangjie(listener)
-                Layout.Quick -> Quick(listener)
-                Layout.Dayi3 -> Dayi3(listener)
+                Layout.Cangjie -> Cangjie(fullWidth, listener)
+                Layout.Quick -> Quick(fullWidth, listener)
+                Layout.Dayi3 -> Dayi3(fullWidth, listener)
             }
         }
 
@@ -204,8 +238,10 @@ abstract class CangjieIMEMode(
         companion object {
             fun parse(map: Map<String, String>): Params {
                 val layout = Layout.valueOf(map["layout"] ?: Layout.Cangjie.name)
+                val fullWidth = map["full_width"].toBoolean()
                 return Params(
-                    layout = layout
+                    layout = layout,
+                    fullWidth = fullWidth
                 )
             }
         }

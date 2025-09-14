@@ -10,4 +10,8 @@
         android:title="@string/settings_input_mode_layout_title"
         app:useSimpleSummaryProvider="true" />
 
+    <SwitchPreferenceCompat
+        android:key="full_width"
+        android:title="@string/settings_input_mode_fullwidth_symbols_title" />
+
 </androidx.preference.PreferenceScreen>

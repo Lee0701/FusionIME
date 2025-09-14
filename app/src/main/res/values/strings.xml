@@ -24,6 +24,7 @@
 
     <string name="settings_input_mode_locale_title">Language</string>
     <string name="settings_input_mode_layout_title">Keyboard Layout</string>
+    <string name="settings_input_mode_fullwidth_symbols_title">Full Width Symbols</string>
 
     <string name="input_mode_latin">Latin</string>
     <string name="input_mode_korean">Korean</string>

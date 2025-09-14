@@ -61,6 +61,10 @@ abstract class CommonIMEMode(
 
     open val numpadKeyboard: Keyboard = DefaultNumberKeyboard()
 
+    open val textKeyListener: OnKeyClickListener = KeyListener()
+    open val symbolKeyListener: OnKeyClickListener = KeyListener()
+    open val directKeyListener: OnKeyClickListener = this@CommonIMEMode.DirectKeyListener()
+
     private var switcherView: FrameLayout? = null
     private var textKeyboardView: View? = null
     private var symbolKeyboardView: View? = null
@@ -106,9 +110,9 @@ abstract class CommonIMEMode(
         val switcherView = FrameLayout(context)
         this.switcherView = switcherView
 
-        val textKeyboardListener = createKeyboardListener(context, KeyListener())
-        val symbolKeyboardListener = createKeyboardListener(context, KeyListener(), false)
-        val directKeyboardListener = createKeyboardListener(context, DirectKeyListener())
+        val textKeyboardListener = createKeyboardListener(context, textKeyListener)
+        val symbolKeyboardListener = createKeyboardListener(context, symbolKeyListener, false)
+        val directKeyboardListener = createKeyboardListener(context, directKeyListener)
 
         val landscape = context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
         val rowHeightKey = if(landscape) "keyboard_height_landscape" else "keyboard_height_portrait"
@@ -144,7 +148,7 @@ abstract class CommonIMEMode(
         return switcherView
     }
 
-    private fun updateInputView() {
+    protected fun updateInputView() {
         when (symbolState) {
             KeyboardState.Symbol.Text -> {
                 textKeyboardView?.bringToFront()
@@ -161,7 +165,7 @@ abstract class CommonIMEMode(
         }
     }
 
-    private fun setPreferredKeyboard(editorInfo: EditorInfo) {
+    protected fun setPreferredKeyboard(editorInfo: EditorInfo) {
         when(editorInfo.inputType and EditorInfo.TYPE_MASK_CLASS) {
             EditorInfo.TYPE_CLASS_NUMBER -> {
                 if(symbolState != KeyboardState.Symbol.Number) {
@@ -207,7 +211,7 @@ abstract class CommonIMEMode(
     override fun onKeyUp(keyCode: Int, metaState: Int) {
     }
 
-    private fun handleSpecialKey(type: Keyboard.SpecialKey) {
+    protected fun handleSpecialKey(type: Keyboard.SpecialKey) {
         when(type) {
             Keyboard.SpecialKey.Language -> listener.onLanguageSwitch()
             Keyboard.SpecialKey.Symbols -> {
@@ -226,7 +230,7 @@ abstract class CommonIMEMode(
         }
     }
 
-    private fun getSpecialKeyType(keyCode: Int): Keyboard.SpecialKey? {
+    protected fun getSpecialKeyType(keyCode: Int): Keyboard.SpecialKey? {
         return when(keyCode) {
             KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.KEYCODE_SHIFT_RIGHT -> Keyboard.SpecialKey.Shift
             KeyEvent.KEYCODE_CAPS_LOCK -> Keyboard.SpecialKey.Caps
