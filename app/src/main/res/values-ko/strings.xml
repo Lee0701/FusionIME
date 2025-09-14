@@ -16,9 +16,5 @@
     <string name="settings_behaviour_haptic_feedback_title">키 진동</string>
     <string name="settings_behaviour_haptic_feedback_summary">키를 누르면 진동합니다.</string>
     <string name="settings_behaviour_vibration_duration_title">진동 세기</string>
-    <string name="settings_input_mode_choose_title">입력 모드 선택</string>
-    <string name="settings_input_mode_choose_summary">사용할 언어와 입력 모드를 선택합니다.</string>
-    <string name="fusion_app_name">FusionIME</string>
-    <string name="settings_activity_name">FusionIME 설정</string>
     <string name="settings_method_choose_method_summary">\'FusionIME\'를 선택해 주세요.</string>
 </resources>
