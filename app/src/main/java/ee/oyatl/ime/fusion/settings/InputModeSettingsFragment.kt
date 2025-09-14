@@ -5,22 +5,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
+import ee.oyatl.ime.fusion.Feature
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.databinding.FragmentInputModeSettingsBinding
 import ee.oyatl.ime.fusion.databinding.InputModeListItemBinding
+import ee.oyatl.ime.fusion.mode.IMEMode
 import org.json.JSONArray
 import java.util.Collections
-import kotlin.collections.component1
-import kotlin.collections.component2
-import kotlin.text.split
-import androidx.core.content.edit
-import ee.oyatl.ime.fusion.mode.IMEMode
 
 class InputModeSettingsFragment: Fragment() {
     private lateinit var pref: SharedPreferences
@@ -58,8 +57,13 @@ class InputModeSettingsFragment: Fragment() {
         itemTouchHelper.attachToRecyclerView(binding.recyclerView)
 
         binding.fab.setOnClickListener {
-            val bottomSheet = ChooseInputModeTypeBottomSheet()
-            bottomSheet.show(parentFragmentManager, ChooseInputModeTypeBottomSheet.TAG)
+            val enabled = Feature.paidVersion || items.size < FREE_INPUT_MODES_LIMIT
+            if(enabled) {
+                val bottomSheet = ChooseInputModeTypeBottomSheet()
+                bottomSheet.show(parentFragmentManager, ChooseInputModeTypeBottomSheet.TAG)
+            } else {
+                Snackbar.make(binding.root, R.string.msg_input_modes_limit_reached, Snackbar.LENGTH_LONG).show()
+            }
         }
         parentFragmentManager.setFragmentResultListener(ChooseInputModeTypeBottomSheet.KEY_INPUT_MODE_TYPE, this) { resultKey, result ->
             val type = result.getString(ChooseInputModeTypeBottomSheet.FIELD_TYPE)
@@ -73,6 +77,7 @@ class InputModeSettingsFragment: Fragment() {
     }
 
     fun onItemClicked(position: Int) {
+        if(position < 0) return
         val map = items[position]
             .split(';').map { it.split('=') }
             .associate { (key, value) -> key to value }.toMutableMap()
@@ -186,5 +191,6 @@ class InputModeSettingsFragment: Fragment() {
 
     companion object {
         const val PREF_KEY: String = "input_modes"
+        const val FREE_INPUT_MODES_LIMIT = 3
     }
 }

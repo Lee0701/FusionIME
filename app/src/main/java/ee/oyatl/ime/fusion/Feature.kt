@@ -13,7 +13,11 @@ enum class Feature(
     val availableInFreeVersion: Boolean get() =
         LocalDate.now().isAfter(availableFrom.plusMonths(1))
     val availableInCurrentVersion: Boolean get() =
-        @Suppress("SENSELESS_COMPARISON")
-        if(BuildConfig.IS_PAID) availableInPaidVersion
+        if(paidVersion) availableInPaidVersion
         else availableInFreeVersion
+
+    companion object {
+        @Suppress("SENSELESS_COMPARISON")
+        val paidVersion: Boolean = BuildConfig.IS_PAID
+    }
 }
