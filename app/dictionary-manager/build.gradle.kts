@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "ee.oyatl.ime.fusion.korean"
+    namespace = "ee.oyatl.ime.fusion.dictionary.manager"
     compileSdk = 36
 
     defaultConfig {
@@ -37,10 +37,7 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
-    implementation(project(":app:korean:hangul"))
     implementation(project(":app:dictionary"))
-    implementation(project(":app:dictionary-manager"))
-    implementation(project(":app:keyboard"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
