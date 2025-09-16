@@ -7,4 +7,7 @@ sealed interface KeyboardState {
     enum class Symbol: KeyboardState {
         Text, Symbol, Number
     }
+    enum class ScreenType: KeyboardState {
+        Mobile, Tablet, Full
+    }
 }

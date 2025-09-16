@@ -24,8 +24,10 @@ import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.TripleCandidateView
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.keyboard.DefaultBottomRowKeyboard
+import ee.oyatl.ime.keyboard.DefaultTabletBottomRowKeyboard
 import ee.oyatl.ime.keyboard.Keyboard.SpecialKey
 import ee.oyatl.ime.keyboard.KeyboardInflater
+import ee.oyatl.ime.keyboard.ScreenTypeKeyboard
 import ee.oyatl.ime.keyboard.ShiftStateKeyboard
 import ee.oyatl.ime.keyboard.StackedKeyboard
 import ee.oyatl.ime.keyboard.layout.KeyboardTemplates
@@ -192,7 +194,10 @@ abstract class LatinIMEMode(
                     createDefaultKeyboard(layers[0]),
                     createDefaultKeyboard(layers[1])
                 ),
-                DefaultBottomRowKeyboard()
+                ShiftStateKeyboard(
+                    createBottomRowKeyboard(shift = false, symbol = false),
+                    createBottomRowKeyboard(shift = true, symbol = false)
+                )
             )
         }
     }
@@ -206,9 +211,23 @@ abstract class LatinIMEMode(
                     createDefaultKeyboard(layers[1])
                 ),
                 ShiftStateKeyboard(
-                    DefaultBottomRowKeyboard(extraKeys = listOf('q'.code, 'z'.code)),
-                    DefaultBottomRowKeyboard(extraKeys = listOf('Q'.code, 'Z'.code))
+                    createBottomRowKeyboard(shift = false, symbol = false),
+                    createBottomRowKeyboard(shift = true, symbol = false)
                 )
+            )
+        }
+
+        override fun createBottomRowKeyboard(
+            shift: Boolean,
+            symbol: Boolean
+        ): ee.oyatl.ime.keyboard.Keyboard {
+            if(symbol) return super.createBottomRowKeyboard(shift, true)
+            val extraKeys =
+                if(!shift) listOf('q'.code, 'z'.code)
+                else listOf('Q'.code, 'Z'.code)
+            return ScreenTypeKeyboard(
+                mobile = DefaultBottomRowKeyboard(extraKeys = extraKeys, isSymbols = false),
+                tablet = DefaultTabletBottomRowKeyboard(extraKeys = extraKeys, isSymbols = false)
             )
         }
     }
@@ -221,7 +240,10 @@ abstract class LatinIMEMode(
                     createDefaultKeyboard(layers[0]),
                     createDefaultKeyboard(layers[1])
                 ),
-                DefaultBottomRowKeyboard()
+                ShiftStateKeyboard(
+                    createBottomRowKeyboard(shift = false, symbol = false),
+                    createBottomRowKeyboard(shift = true, symbol = false)
+                )
             )
         }
     }

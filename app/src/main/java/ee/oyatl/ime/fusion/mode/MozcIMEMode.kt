@@ -16,6 +16,7 @@ import ee.oyatl.ime.keyboard.DefaultGridKeyboard
 import ee.oyatl.ime.keyboard.GridKanaBottomRowKeyboard
 import ee.oyatl.ime.keyboard.Keyboard
 import ee.oyatl.ime.keyboard.KeyboardInflater
+import ee.oyatl.ime.keyboard.ScreenTypeKeyboard
 import ee.oyatl.ime.keyboard.ShiftStateKeyboard
 import ee.oyatl.ime.keyboard.StackedKeyboard
 import ee.oyatl.ime.keyboard.layout.KeyboardTemplates
@@ -168,7 +169,10 @@ abstract class MozcIMEMode(
                     createDefaultKeyboard(layers[0]),
                     createDefaultKeyboard(layers[1])
                 ),
-                DefaultBottomRowKeyboard()
+                ShiftStateKeyboard(
+                    createBottomRowKeyboard(shift = false, symbol = false),
+                    createBottomRowKeyboard(shift = true, symbol = false)
+                )
             )
         }
     }
@@ -179,16 +183,27 @@ abstract class MozcIMEMode(
         override fun createTextKeyboard(): Keyboard {
             val lower = KeyboardInflater.inflate(LayoutKana.ROWS_JIS_LOWER)
             val upper = KeyboardInflater.inflate(LayoutKana.ROWS_JIS_UPPER)
-            val bottomRight = KeyboardInflater.inflate(listOf(LayoutKana.BOTTOM_RIGHT_JIS), layoutTable)
             return StackedKeyboard(
                 ShiftStateKeyboard(
                     DefaultGridKeyboard(lower[0]),
                     DefaultGridKeyboard(upper[0])
                 ),
                 ShiftStateKeyboard(
-                    GridKanaBottomRowKeyboard(listOf(), bottomRight[0][0]),
-                    GridKanaBottomRowKeyboard(listOf(), bottomRight[1][0])
+                    createBottomRowKeyboard(shift = false, symbol = false),
+                    createBottomRowKeyboard(shift = true, symbol = false)
                 )
+            )
+        }
+
+        override fun createBottomRowKeyboard(shift: Boolean, symbol: Boolean): Keyboard {
+            if(symbol) return super.createBottomRowKeyboard(shift, symbol)
+            val bottomRight = KeyboardInflater.inflate(listOf(LayoutKana.BOTTOM_RIGHT_JIS), layoutTable)
+            val rightExtraRow =
+                if(!shift) bottomRight[0][0]
+                else bottomRight[1][0]
+            return ScreenTypeKeyboard(
+                mobile = GridKanaBottomRowKeyboard(listOf(), rightExtraRow),
+                tablet = GridKanaBottomRowKeyboard(listOf(), rightExtraRow)
             )
         }
     }

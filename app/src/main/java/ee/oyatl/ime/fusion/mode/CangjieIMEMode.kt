@@ -8,12 +8,7 @@ import com.android.inputmethod.zhuyin.WordComposer
 import com.diycircuits.cangjie.TableLoader
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.fusion.R
-import ee.oyatl.ime.keyboard.DefaultBottomRowKeyboard
 import ee.oyatl.ime.keyboard.Keyboard
-import ee.oyatl.ime.keyboard.KeyboardInflater
-import ee.oyatl.ime.keyboard.ShiftStateKeyboard
-import ee.oyatl.ime.keyboard.StackedKeyboard
-import ee.oyatl.ime.keyboard.layout.KeyboardTemplates
 import ee.oyatl.ime.keyboard.layout.LayoutCangjie
 import java.util.Locale
 
@@ -49,17 +44,6 @@ class CangjieIMEMode(
         super.onReset()
         wordComposer.reset()
         bestCandidate = null
-    }
-
-    override fun createTextKeyboard(): Keyboard {
-        val template = KeyboardInflater.inflate(KeyboardTemplates.MOBILE, layoutTable)
-        return StackedKeyboard(
-            ShiftStateKeyboard(
-                createDefaultKeyboard(template[0]),
-                createDefaultKeyboard(template[1])
-            ),
-            DefaultBottomRowKeyboard()
-        )
     }
 
     override fun onCandidateSelected(candidate: CandidateView.Candidate) {
