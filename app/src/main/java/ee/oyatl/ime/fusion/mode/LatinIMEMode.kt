@@ -24,7 +24,6 @@ import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.TripleCandidateView
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.keyboard.DefaultBottomRowKeyboard
-import ee.oyatl.ime.keyboard.DefaultMobileKeyboard
 import ee.oyatl.ime.keyboard.Keyboard.SpecialKey
 import ee.oyatl.ime.keyboard.KeyboardInflater
 import ee.oyatl.ime.keyboard.ShiftStateKeyboard
@@ -186,39 +185,45 @@ abstract class LatinIMEMode(
     ): CandidateView.Candidate
 
     class Qwerty(override val locale: Locale, listener: IMEMode.Listener): LatinIMEMode(listener) {
-        private val layers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE, layoutTable)
-        override val textKeyboard: ee.oyatl.ime.keyboard.Keyboard = StackedKeyboard(
-            ShiftStateKeyboard(
-                DefaultMobileKeyboard(layers[0]),
-                DefaultMobileKeyboard(layers[1])
-            ),
-            DefaultBottomRowKeyboard()
-        )
+        override fun createTextKeyboard(): ee.oyatl.ime.keyboard.Keyboard {
+            val layers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE, layoutTable)
+            return StackedKeyboard(
+                ShiftStateKeyboard(
+                    createDefaultKeyboard(layers[0]),
+                    createDefaultKeyboard(layers[1])
+                ),
+                DefaultBottomRowKeyboard()
+            )
+        }
     }
 
     class Dvorak(override val locale: Locale, listener: IMEMode.Listener): LatinIMEMode(listener) {
-        private val layers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE_DVORAK, layoutTable)
-        override val textKeyboard: ee.oyatl.ime.keyboard.Keyboard = StackedKeyboard(
-            ShiftStateKeyboard(
-                DefaultMobileKeyboard(layers[0]),
-                DefaultMobileKeyboard(layers[1])
-            ),
-            ShiftStateKeyboard(
-                DefaultBottomRowKeyboard(extraKeys = listOf('q'.code, 'z'.code)),
-                DefaultBottomRowKeyboard(extraKeys = listOf('Q'.code, 'Z'.code))
+        override fun createTextKeyboard(): ee.oyatl.ime.keyboard.Keyboard {
+            val layers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE_DVORAK, layoutTable)
+            return StackedKeyboard(
+                ShiftStateKeyboard(
+                    createDefaultKeyboard(layers[0]),
+                    createDefaultKeyboard(layers[1])
+                ),
+                ShiftStateKeyboard(
+                    DefaultBottomRowKeyboard(extraKeys = listOf('q'.code, 'z'.code)),
+                    DefaultBottomRowKeyboard(extraKeys = listOf('Q'.code, 'Z'.code))
+                )
             )
-        )
+        }
     }
 
     class Colemak(override val locale: Locale, listener: IMEMode.Listener): LatinIMEMode(listener) {
-        private val layers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE_COLEMAK, layoutTable)
-        override val textKeyboard: ee.oyatl.ime.keyboard.Keyboard = StackedKeyboard(
-            ShiftStateKeyboard(
-                DefaultMobileKeyboard(layers[0]),
-                DefaultMobileKeyboard(layers[1])
-            ),
-            DefaultBottomRowKeyboard()
-        )
+        override fun createTextKeyboard(): ee.oyatl.ime.keyboard.Keyboard {
+            val layers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE_COLEMAK, layoutTable)
+            return StackedKeyboard(
+                ShiftStateKeyboard(
+                    createDefaultKeyboard(layers[0]),
+                    createDefaultKeyboard(layers[1])
+                ),
+                DefaultBottomRowKeyboard()
+            )
+        }
     }
 
     data class Params(

@@ -25,7 +25,6 @@ import ee.oyatl.ime.fusion.pinyin.ComposingView.ComposingStatus
 import ee.oyatl.ime.fusion.pinyin.DecodingInfo
 import ee.oyatl.ime.fusion.pinyin.OnGestureListener
 import ee.oyatl.ime.keyboard.DefaultBottomRowKeyboard
-import ee.oyatl.ime.keyboard.DefaultMobileKeyboard
 import ee.oyatl.ime.keyboard.Keyboard
 import ee.oyatl.ime.keyboard.KeyboardInflater
 import ee.oyatl.ime.keyboard.ShiftStateKeyboard
@@ -72,14 +71,6 @@ class PinyinIMEMode(
 
     private var isEnterNormalState = true
 
-    override val textKeyboard: Keyboard = StackedKeyboard(
-        ShiftStateKeyboard(
-            DefaultMobileKeyboard(KeyboardInflater.inflate(LayoutPinyin.ROWS_LOWER)[0]),
-            DefaultMobileKeyboard(KeyboardInflater.inflate(LayoutPinyin.ROWS_UPPER)[0])
-        ),
-        DefaultBottomRowKeyboard()
-    )
-
     override suspend fun onLoad(context: Context) {
         startPinyinDecoderService(context)
     }
@@ -87,6 +78,16 @@ class PinyinIMEMode(
     override fun onReset() {
         super.onReset()
         resetToIdleState(true)
+    }
+
+    override fun createTextKeyboard(): Keyboard {
+        return StackedKeyboard(
+            ShiftStateKeyboard(
+                createDefaultKeyboard(KeyboardInflater.inflate(LayoutPinyin.ROWS_LOWER)[0]),
+                createDefaultKeyboard(KeyboardInflater.inflate(LayoutPinyin.ROWS_UPPER)[0])
+            ),
+            DefaultBottomRowKeyboard()
+        )
     }
 
     override fun createCandidateView(context: Context): View {

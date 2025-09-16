@@ -33,7 +33,8 @@ abstract class DefaultKeyboard: Keyboard {
         return keyboard.root
     }
 
-    override fun setShiftState(state: KeyboardState.Shift) {
+    override fun setState(state: KeyboardState) {
+        if(state !is KeyboardState.Shift) return
         val icon = when(state) {
             KeyboardState.Shift.Released -> R.drawable.keyic_shift
             KeyboardState.Shift.Pressed -> R.drawable.keyic_shift_pressed

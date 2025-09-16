@@ -8,7 +8,7 @@ interface Keyboard {
     val numRows: Int
 
     fun createView(context: Context, listener: KeyboardListener, params: KeyboardViewParams): View
-    fun setShiftState(state: KeyboardState.Shift)
+    fun setState(state: KeyboardState)
 
     enum class SpecialKey(
         val code: Int

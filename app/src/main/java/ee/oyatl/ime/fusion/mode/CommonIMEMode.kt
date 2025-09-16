@@ -8,7 +8,6 @@ import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
-import android.widget.FrameLayout
 import androidx.preference.PreferenceManager
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.ScrollingCandidateView
@@ -22,6 +21,7 @@ import ee.oyatl.ime.keyboard.KeyboardState
 import ee.oyatl.ime.keyboard.KeyboardViewParams
 import ee.oyatl.ime.keyboard.ShiftStateKeyboard
 import ee.oyatl.ime.keyboard.StackedKeyboard
+import ee.oyatl.ime.keyboard.SymbolStateKeyboard
 import ee.oyatl.ime.keyboard.layout.KeyboardTemplates
 import ee.oyatl.ime.keyboard.layout.LayoutQwerty
 import ee.oyatl.ime.keyboard.layout.LayoutSymbol
@@ -31,6 +31,7 @@ import ee.oyatl.ime.keyboard.listener.FeedbackListener
 import ee.oyatl.ime.keyboard.listener.KeyboardListener
 import ee.oyatl.ime.keyboard.listener.OnKeyClickListener
 import ee.oyatl.ime.keyboard.listener.RepeatableKeyListener
+import ee.oyatl.ime.keyboard.listener.SymbolStateKeyboardListener
 import kotlin.math.roundToInt
 
 abstract class CommonIMEMode(
@@ -40,39 +41,13 @@ abstract class CommonIMEMode(
 
     open val layoutTable: Map<Int, List<Int>> = LayoutQwerty.TABLE_QWERTY
     private val textKeyboardLayers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE, LayoutQwerty.TABLE_QWERTY)
-    open val textKeyboard: Keyboard = StackedKeyboard(
-        ShiftStateKeyboard(
-            DefaultMobileKeyboard(textKeyboardLayers[0]),
-            DefaultMobileKeyboard(textKeyboardLayers[1])
-        ),
-        DefaultBottomRowKeyboard()
-    )
 
-    open val symbolKeyboard: Keyboard = StackedKeyboard(
-        ShiftStateKeyboard(
-            DefaultMobileKeyboard(KeyboardInflater.inflate(LayoutSymbol.ROWS_LOWER, mapOf())[0]),
-            DefaultMobileKeyboard(KeyboardInflater.inflate(LayoutSymbol.ROWS_UPPER, mapOf())[0])
-        ),
-        ShiftStateKeyboard(
-            DefaultBottomRowKeyboard(isSymbols = true),
-            DefaultBottomRowKeyboard(extraKeys = listOf('<'.code, '>'.code), isSymbols = true)
-        )
-    )
-
-    open val numpadKeyboard: Keyboard = DefaultNumberKeyboard()
-
-    private var switcherView: FrameLayout? = null
-    private var textKeyboardView: View? = null
-    private var symbolKeyboardView: View? = null
-    private var numpadKeyboardView: View? = null
+    protected var keyboard: Keyboard? = null
+    protected var keyboardView: View? = null
     protected var candidateView: CandidateView? = null
 
-    private var symbolState: KeyboardState.Symbol = KeyboardState.Symbol.Text
+    override var symbolState: KeyboardState.Symbol = KeyboardState.Symbol.Text
     override var shiftState: KeyboardState.Shift = KeyboardState.Shift.Released
-        set(value) {
-            field = value
-            updateInputView()
-        }
 
     protected var util: KeyEventUtil? = null
         private set
@@ -103,12 +78,6 @@ abstract class CommonIMEMode(
 
     override fun createInputView(context: Context): View {
         val preference = PreferenceManager.getDefaultSharedPreferences(context)
-        val switcherView = FrameLayout(context)
-        this.switcherView = switcherView
-
-        val textKeyboardListener = createKeyboardListener(context, KeyListener())
-        val symbolKeyboardListener = createKeyboardListener(context, KeyListener(), false)
-        val directKeyboardListener = createKeyboardListener(context, DirectKeyListener())
 
         val landscape = context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
         val rowHeightKey = if(landscape) "keyboard_height_landscape" else "keyboard_height_portrait"
@@ -121,15 +90,21 @@ abstract class CommonIMEMode(
             showPreviewPopup = showPreviewPopup
         )
 
-        textKeyboardView = textKeyboard.createView(context, textKeyboardListener, params.copy(keyHeight = height / textKeyboard.numRows))
-        symbolKeyboardView = symbolKeyboard.createView(context, symbolKeyboardListener, params.copy(keyHeight = height / symbolKeyboard.numRows))
-        numpadKeyboardView = numpadKeyboard.createView(context, directKeyboardListener, params.copy(keyHeight = height / numpadKeyboard.numRows))
-        switcherView.addView(textKeyboardView)
-        switcherView.addView(symbolKeyboardView)
-        switcherView.addView(numpadKeyboardView)
+        val textKeyboardListener = createKeyboardListener(context, KeyListener())
+        val symbolKeyboardListener = createKeyboardListener(context, KeyListener(), false)
+        val directKeyboardListener = createKeyboardListener(context, DirectKeyListener())
+        val keyboardListener = SymbolStateKeyboardListener(textKeyboardListener, symbolKeyboardListener, directKeyboardListener)
 
+        val textKeyboard = createTextKeyboard()
+        val symbolKeyboard = createSymbolKeyboard()
+        val numpadKeyboard = createNumberKeyboard()
+        val keyboard = SymbolStateKeyboard(textKeyboard, symbolKeyboard, numpadKeyboard)
+
+        val keyboardView = keyboard.createView(context, keyboardListener, params)
         updateInputView()
-        return switcherView
+        this.keyboard = keyboard
+        this.keyboardView = keyboardView
+        return keyboardView
     }
 
     override fun createCandidateView(context: Context): View {
@@ -141,24 +116,43 @@ abstract class CommonIMEMode(
 
     override fun getInputView(): View? {
         updateInputView()
-        return switcherView
+        return keyboardView
     }
 
     private fun updateInputView() {
-        when (symbolState) {
-            KeyboardState.Symbol.Text -> {
-                textKeyboardView?.bringToFront()
-                textKeyboard.setShiftState(shiftState)
-            }
-            KeyboardState.Symbol.Symbol -> {
-                symbolKeyboardView?.bringToFront()
-                symbolKeyboard.setShiftState(shiftState)
-            }
-            KeyboardState.Symbol.Number -> {
-                numpadKeyboardView?.bringToFront()
-                numpadKeyboard.setShiftState(shiftState)
-            }
-        }
+        keyboard?.setState(symbolState)
+        keyboard?.setState(shiftState)
+    }
+
+    open fun createTextKeyboard(): Keyboard {
+        return StackedKeyboard(
+            ShiftStateKeyboard(
+                createDefaultKeyboard(textKeyboardLayers[0]),
+                createDefaultKeyboard(textKeyboardLayers[1])
+            ),
+            DefaultBottomRowKeyboard()
+        )
+    }
+
+    open fun createSymbolKeyboard(): Keyboard {
+        return StackedKeyboard(
+            ShiftStateKeyboard(
+                createDefaultKeyboard(KeyboardInflater.inflate(LayoutSymbol.ROWS_LOWER, mapOf())[0]),
+                createDefaultKeyboard(KeyboardInflater.inflate(LayoutSymbol.ROWS_UPPER, mapOf())[0])
+            ),
+            ShiftStateKeyboard(
+                DefaultBottomRowKeyboard(isSymbols = true),
+                DefaultBottomRowKeyboard(extraKeys = listOf('<'.code, '>'.code), isSymbols = true)
+            )
+        )
+    }
+
+    open fun createNumberKeyboard(): Keyboard {
+        return DefaultNumberKeyboard()
+    }
+
+    open fun createDefaultKeyboard(layer: List<List<Int>>): Keyboard {
+        return DefaultMobileKeyboard(layer)
     }
 
     private fun setPreferredKeyboard(editorInfo: EditorInfo) {
@@ -215,12 +209,14 @@ abstract class CommonIMEMode(
                     if(symbolState != KeyboardState.Symbol.Symbol) KeyboardState.Symbol.Symbol
                     else KeyboardState.Symbol.Text
                 shiftState = KeyboardState.Shift.Released
+                updateInputView()
             }
             Keyboard.SpecialKey.Numbers -> {
                 symbolState =
                     if(symbolState != KeyboardState.Symbol.Number) KeyboardState.Symbol.Number
                     else KeyboardState.Symbol.Text
                 shiftState = KeyboardState.Shift.Released
+                updateInputView()
             }
             else -> onSpecial(type)
         }

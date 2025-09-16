@@ -34,11 +34,6 @@ class ZhuyinIMEMode(
     }
 
     override val layoutTable: Map<Int, List<Int>> = LayoutZhuyin.TABLE
-    private val layers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE_GRID, layoutTable)
-    override val textKeyboard: Keyboard = StackedKeyboard(
-        DefaultGridKeyboard(layers[0]),
-        GridBottomRowKeyboard(KeyboardInflater.inflate(LayoutZhuyin.EXTRA_KEYS, layoutTable)[0][0])
-    )
 
     private val wordComposer = WordComposer()
     private var mSuggest: Suggest? = null
@@ -61,6 +56,14 @@ class ZhuyinIMEMode(
         super.onReset()
         bestCandidate = null
         wordComposer.reset()
+    }
+
+    override fun createTextKeyboard(): Keyboard {
+        val layers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE_GRID, layoutTable)
+        return StackedKeyboard(
+            DefaultGridKeyboard(layers[0]),
+            GridBottomRowKeyboard(KeyboardInflater.inflate(LayoutZhuyin.EXTRA_KEYS, layoutTable)[0][0])
+        )
     }
 
     override fun onCandidateSelected(candidate: CandidateView.Candidate) {

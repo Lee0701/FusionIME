@@ -9,7 +9,6 @@ import com.diycircuits.cangjie.TableLoader
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.keyboard.DefaultBottomRowKeyboard
-import ee.oyatl.ime.keyboard.DefaultMobileKeyboard
 import ee.oyatl.ime.keyboard.Keyboard
 import ee.oyatl.ime.keyboard.KeyboardInflater
 import ee.oyatl.ime.keyboard.ShiftStateKeyboard
@@ -33,14 +32,6 @@ class CangjieIMEMode(
     }
 
     override val layoutTable: Map<Int, List<Int>> = LayoutCangjie.TABLE_QWERTY
-    private val textKeyboardTemplate = KeyboardInflater.inflate(KeyboardTemplates.MOBILE, layoutTable)
-    override val textKeyboard: Keyboard = StackedKeyboard(
-        ShiftStateKeyboard(
-            DefaultMobileKeyboard(textKeyboardTemplate[0]),
-            DefaultMobileKeyboard(textKeyboardTemplate[1])
-        ),
-        DefaultBottomRowKeyboard()
-    )
 
     private var table: TableLoader? = null
     private val wordComposer = WordComposer()
@@ -58,6 +49,17 @@ class CangjieIMEMode(
         super.onReset()
         wordComposer.reset()
         bestCandidate = null
+    }
+
+    override fun createTextKeyboard(): Keyboard {
+        val template = KeyboardInflater.inflate(KeyboardTemplates.MOBILE, layoutTable)
+        return StackedKeyboard(
+            ShiftStateKeyboard(
+                createDefaultKeyboard(template[0]),
+                createDefaultKeyboard(template[1])
+            ),
+            DefaultBottomRowKeyboard()
+        )
     }
 
     override fun onCandidateSelected(candidate: CandidateView.Candidate) {
