@@ -6,7 +6,10 @@ import androidx.annotation.StringRes
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.korean.WordComposer
+import ee.oyatl.ime.keyboard.DefaultMobileKeyboard
+import ee.oyatl.ime.keyboard.DefaultTabletKeyboard
 import ee.oyatl.ime.keyboard.Keyboard
+import ee.oyatl.ime.keyboard.ScreenTypeKeyboard
 import ee.oyatl.ime.viet.ChuQuocNguTableConverter
 import ee.oyatl.ime.viet.HanNomConverter
 import java.util.Locale
@@ -43,6 +46,13 @@ abstract class VietIMEMode(
         super.onReset()
         wordComposer.reset()
         bestCandidate = null
+    }
+
+    override fun createDefaultKeyboard(layer: List<List<Int>>): Keyboard {
+        return ScreenTypeKeyboard(
+            mobile = DefaultMobileKeyboard(layer),
+            tablet = DefaultTabletKeyboard(layer, extraKeys = listOf('，'.code, '。'.code))
+        )
     }
 
     override fun onCandidateSelected(candidate: CandidateView.Candidate) {

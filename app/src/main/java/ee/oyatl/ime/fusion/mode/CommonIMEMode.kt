@@ -167,10 +167,11 @@ abstract class CommonIMEMode(
     }
 
     open fun createBottomRowKeyboard(shift: Boolean, symbol: Boolean): Keyboard {
-        val extraKeys = if(shift) listOf('<'.code, '>'.code) else listOf(','.code, '.'.code)
+        val extraKeys = if(!shift) listOf(','.code, '.'.code) else listOf('<'.code, '>'.code)
+        val tabletExtraKeys = if(!symbol) listOf('!'.code, '?'.code) else listOf('<'.code, '>'.code)
         return ScreenTypeKeyboard(
             mobile = DefaultBottomRowKeyboard(extraKeys = extraKeys, isSymbols = symbol),
-            tablet = DefaultTabletBottomRowKeyboard(isSymbols = symbol)
+            tablet = DefaultTabletBottomRowKeyboard(extraKeys = tabletExtraKeys, isSymbols = symbol)
         )
     }
 

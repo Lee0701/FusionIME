@@ -8,7 +8,12 @@ import com.android.inputmethod.zhuyin.WordComposer
 import com.diycircuits.cangjie.TableLoader
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.fusion.R
+import ee.oyatl.ime.keyboard.DefaultBottomRowKeyboard
+import ee.oyatl.ime.keyboard.DefaultMobileKeyboard
+import ee.oyatl.ime.keyboard.DefaultTabletBottomRowKeyboard
+import ee.oyatl.ime.keyboard.DefaultTabletKeyboard
 import ee.oyatl.ime.keyboard.Keyboard
+import ee.oyatl.ime.keyboard.ScreenTypeKeyboard
 import ee.oyatl.ime.keyboard.layout.LayoutCangjie
 import java.util.Locale
 
@@ -44,6 +49,22 @@ class CangjieIMEMode(
         super.onReset()
         wordComposer.reset()
         bestCandidate = null
+    }
+
+    override fun createDefaultKeyboard(layer: List<List<Int>>): Keyboard {
+        return ScreenTypeKeyboard(
+            mobile = DefaultMobileKeyboard(layer),
+            tablet = DefaultTabletKeyboard(layer, extraKeys = listOf('，'.code, '。'.code))
+        )
+    }
+
+    override fun createBottomRowKeyboard(shift: Boolean, symbol: Boolean): Keyboard {
+        val extraKeys = if(!shift) listOf('，'.code, '。'.code) else listOf('《'.code, '》'.code)
+        val tabletExtraKeys = if(!symbol) listOf('！'.code, '？'.code) else listOf('<'.code, '>'.code)
+        return ScreenTypeKeyboard(
+            mobile = DefaultBottomRowKeyboard(extraKeys = extraKeys, isSymbols = symbol),
+            tablet = DefaultTabletBottomRowKeyboard(extraKeys = tabletExtraKeys, isSymbols = symbol)
+        )
     }
 
     override fun onCandidateSelected(candidate: CandidateView.Candidate) {
