@@ -62,6 +62,17 @@ abstract class CangjieIMEMode(
         bestCandidate = null
     }
 
+    override fun createTextKeyboard(): Keyboard {
+        val textKeyboardLayers = KeyboardInflater.inflate(keyboardTemplate, layoutTable)
+        return StackedKeyboard(
+            ShiftStateKeyboard(
+                DefaultMobileKeyboard(textKeyboardLayers[0]),
+                DefaultMobileKeyboard(textKeyboardLayers[1])
+            ),
+            DefaultBottomRowKeyboard(listOf('，'.code, '。'.code))
+        )
+    }
+
     override fun onCandidateSelected(candidate: CandidateView.Candidate) {
         val inputConnection = currentInputConnection ?: return
         inputConnection.commitText(candidate.text, 1)
@@ -148,7 +159,6 @@ abstract class CangjieIMEMode(
                 val halfWidthChar = code.toChar()
                 util?.sendKeyChar(if(fullWidth) fullWidthChar else halfWidthChar)
             }
-            updateInputView()
         }
     }
 
@@ -158,14 +168,6 @@ abstract class CangjieIMEMode(
     ): CangjieIMEMode(listener) {
         override val inputMode: Int = TableLoader.CANGJIE
         override val keyboardTemplate: List<String> = KeyboardTemplates.MOBILE
-        private val textKeyboardLayers = KeyboardInflater.inflate(keyboardTemplate, layoutTable)
-        override val textKeyboard: Keyboard = StackedKeyboard(
-            ShiftStateKeyboard(
-                DefaultMobileKeyboard(textKeyboardLayers[0]),
-                DefaultMobileKeyboard(textKeyboardLayers[1])
-            ),
-            DefaultBottomRowKeyboard(listOf('，'.code, '。'.code))
-        )
         override val keyMap: Map<Char, Char> = LayoutCangjie.KEY_MAP_CANGJIE
     }
 
@@ -175,14 +177,6 @@ abstract class CangjieIMEMode(
     ): CangjieIMEMode(listener) {
         override val inputMode: Int = TableLoader.QUICK
         override val keyboardTemplate: List<String> = KeyboardTemplates.MOBILE
-        private val textKeyboardLayers = KeyboardInflater.inflate(keyboardTemplate, layoutTable)
-        override val textKeyboard: Keyboard = StackedKeyboard(
-            ShiftStateKeyboard(
-                DefaultMobileKeyboard(textKeyboardLayers[0]),
-                DefaultMobileKeyboard(textKeyboardLayers[1])
-            ),
-            DefaultBottomRowKeyboard(listOf('，'.code, '。'.code))
-        )
         override val keyMap: Map<Char, Char> = LayoutCangjie.KEY_MAP_CANGJIE
     }
 
@@ -192,19 +186,21 @@ abstract class CangjieIMEMode(
     ): CangjieIMEMode(listener) {
         override val inputMode: Int = TableLoader.DAYI3
         override val keyboardTemplate: List<String> = KeyboardTemplates.MOBILE
-        override val textKeyboard: Keyboard = StackedKeyboard(
-            DefaultGridKeyboard(LayoutCangjie.ROWS_DAYI3.map { row -> row.map { it.code } }),
-            CustomRowKeyboard(listOf(
-                CustomRowKeyboard.KeyType.Symbols(width = 1.5f),
-                CustomRowKeyboard.KeyType.Extra('，'.code),
-                CustomRowKeyboard.KeyType.Language(width = 1f),
-                CustomRowKeyboard.KeyType.Space(width = 3f),
-                CustomRowKeyboard.KeyType.Extra('。'.code),
-                CustomRowKeyboard.KeyType.Return(width = 1.5f),
-                CustomRowKeyboard.KeyType.Delete(width = 1f)
-            ))
-        )
         override val keyMap: Map<Char, Char> = LayoutCangjie.KEY_MAP_DAYI3
+        override fun createTextKeyboard(): Keyboard {
+            return StackedKeyboard(
+                DefaultGridKeyboard(LayoutCangjie.ROWS_DAYI3.map { row -> row.map { it.code } }),
+                CustomRowKeyboard(listOf(
+                    CustomRowKeyboard.KeyType.Symbols(width = 1.5f),
+                    CustomRowKeyboard.KeyType.Extra('，'.code),
+                    CustomRowKeyboard.KeyType.Language(width = 1f),
+                    CustomRowKeyboard.KeyType.Space(width = 3f),
+                    CustomRowKeyboard.KeyType.Extra('。'.code),
+                    CustomRowKeyboard.KeyType.Return(width = 1.5f),
+                    CustomRowKeyboard.KeyType.Delete(width = 1f)
+                ))
+            )
+        }
     }
 
     data class Params(

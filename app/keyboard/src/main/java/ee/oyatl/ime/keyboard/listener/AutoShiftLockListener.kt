@@ -82,5 +82,6 @@ class AutoShiftLockListener(
 
     interface StateContainer {
         var shiftState: KeyboardState.Shift
+        var symbolState: KeyboardState.Symbol
     }
 }

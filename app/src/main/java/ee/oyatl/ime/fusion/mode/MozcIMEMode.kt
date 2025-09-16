@@ -13,7 +13,6 @@ import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.mozc.InputConnectionRenderer
 import ee.oyatl.ime.keyboard.DefaultBottomRowKeyboard
 import ee.oyatl.ime.keyboard.DefaultGridKeyboard
-import ee.oyatl.ime.keyboard.DefaultMobileKeyboard
 import ee.oyatl.ime.keyboard.GridKanaBottomRowKeyboard
 import ee.oyatl.ime.keyboard.Keyboard
 import ee.oyatl.ime.keyboard.KeyboardInflater
@@ -162,44 +161,50 @@ abstract class MozcIMEMode(
     class RomajiQwerty(listener: IMEMode.Listener): MozcIMEMode(listener) {
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.QWERTY_KANA
         override val layoutTable: Map<Int, List<Int>> = LayoutRomaji.TABLE_QWERTY
-        private val layers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE_MINUS, layoutTable)
-        override val textKeyboard: Keyboard = StackedKeyboard(
-            ShiftStateKeyboard(
-                DefaultMobileKeyboard(layers[0]),
-                DefaultMobileKeyboard(layers[1])
-            ),
-            DefaultBottomRowKeyboard()
-        )
+        override fun createTextKeyboard(): Keyboard {
+            val layers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE_MINUS, layoutTable)
+            return StackedKeyboard(
+                ShiftStateKeyboard(
+                    createDefaultKeyboard(layers[0]),
+                    createDefaultKeyboard(layers[1])
+                ),
+                DefaultBottomRowKeyboard()
+            )
+        }
     }
 
     class KanaJIS(listener: IMEMode.Listener): MozcIMEMode(listener) {
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.QWERTY_KANA_JIS
         override val layoutTable: Map<Int, List<Int>> = LayoutKana.TABLE_JIS
-        private val lower = KeyboardInflater.inflate(LayoutKana.ROWS_JIS_LOWER)
-        private val upper = KeyboardInflater.inflate(LayoutKana.ROWS_JIS_UPPER)
-        private val bottomRight = KeyboardInflater.inflate(listOf(LayoutKana.BOTTOM_RIGHT_JIS), layoutTable)
-        override val textKeyboard: Keyboard = StackedKeyboard(
-            ShiftStateKeyboard(
-                DefaultGridKeyboard(lower[0]),
-                DefaultGridKeyboard(upper[0])
-            ),
-            ShiftStateKeyboard(
-                GridKanaBottomRowKeyboard(listOf(), bottomRight[0][0]),
-                GridKanaBottomRowKeyboard(listOf(), bottomRight[1][0])
+        override fun createTextKeyboard(): Keyboard {
+            val lower = KeyboardInflater.inflate(LayoutKana.ROWS_JIS_LOWER)
+            val upper = KeyboardInflater.inflate(LayoutKana.ROWS_JIS_UPPER)
+            val bottomRight = KeyboardInflater.inflate(listOf(LayoutKana.BOTTOM_RIGHT_JIS), layoutTable)
+            return StackedKeyboard(
+                ShiftStateKeyboard(
+                    DefaultGridKeyboard(lower[0]),
+                    DefaultGridKeyboard(upper[0])
+                ),
+                ShiftStateKeyboard(
+                    GridKanaBottomRowKeyboard(listOf(), bottomRight[0][0]),
+                    GridKanaBottomRowKeyboard(listOf(), bottomRight[1][0])
+                )
             )
-        )
+        }
     }
 
     class KanaSyllables(listener: IMEMode.Listener): MozcIMEMode(listener) {
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.TWELVE_KEY_FLICK_KANA
-        private val layers = KeyboardInflater.inflate(LayoutKana.ROWS_50ONZU)
-        override val textKeyboard: Keyboard = StackedKeyboard(
-            DefaultGridKeyboard(layers[0]),
-            GridKanaBottomRowKeyboard(
-                KeyboardInflater.inflate(listOf(LayoutKana.BOTTOM_LEFT_50ONZU))[0][0],
-                KeyboardInflater.inflate(listOf(LayoutKana.BOTTOM_RIGHT_50ONZU))[0][0]
+        override fun createTextKeyboard(): Keyboard {
+            val layers = KeyboardInflater.inflate(LayoutKana.ROWS_50ONZU)
+            return StackedKeyboard(
+                DefaultGridKeyboard(layers[0]),
+                GridKanaBottomRowKeyboard(
+                    KeyboardInflater.inflate(listOf(LayoutKana.BOTTOM_LEFT_50ONZU))[0][0],
+                    KeyboardInflater.inflate(listOf(LayoutKana.BOTTOM_RIGHT_50ONZU))[0][0]
+                )
             )
-        )
+        }
     }
 
     data class Params(
