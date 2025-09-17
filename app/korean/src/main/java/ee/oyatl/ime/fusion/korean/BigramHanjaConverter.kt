@@ -7,20 +7,24 @@ import ee.oyatl.ime.newdict.DiskHanjaDictionary
 import ee.oyatl.ime.newdict.DiskNGramDictionary
 import ee.oyatl.ime.newdict.DiskTrieDictionary
 
-class BigramHanjaConverter(
-    context: Context
-): HanjaConverter {
-    private val indexDictId = R.raw.hanja_index
-    private val vocabDictId = R.raw.hanja_content
-    private val bigramDictId = R.raw.hanja_bigram
-    private val indexDict: DiskTrieDictionary = DictionaryCache.get(indexDictId) {
-        DiskTrieDictionary(context.resources.openRawResource(indexDictId))
-    }
-    private val vocabDict: DiskHanjaDictionary = DictionaryCache.get(vocabDictId) {
-        DiskHanjaDictionary(context.resources.openRawResource(vocabDictId))
-    }
-    private val bigramDict: DiskNGramDictionary = DictionaryCache.get(bigramDictId) {
-        DiskNGramDictionary(context.resources.openRawResource(bigramDictId))
+class BigramHanjaConverter: HanjaConverter {
+    private lateinit var indexDict: DiskTrieDictionary
+    private lateinit var vocabDict: DiskHanjaDictionary
+    private lateinit var bigramDict: DiskNGramDictionary
+
+    override fun load(context: Context) {
+        val indexDictId = R.raw.hanja_index
+        val vocabDictId = R.raw.hanja_content
+        val bigramDictId = R.raw.hanja_bigram
+        indexDict = DictionaryCache.get(indexDictId) {
+            DiskTrieDictionary(context.resources.openRawResource(indexDictId))
+        }
+        vocabDict = DictionaryCache.get(vocabDictId) {
+            DiskHanjaDictionary(context.resources.openRawResource(vocabDictId))
+        }
+        bigramDict = DictionaryCache.get(bigramDictId) {
+            DiskNGramDictionary(context.resources.openRawResource(bigramDictId))
+        }
     }
 
     override fun convert(text: String): List<CandidateView.Candidate> {

@@ -61,7 +61,9 @@ class InputModeSettingsFragment: Fragment() {
             val bottomSheet = ChooseInputModeTypeBottomSheet()
             bottomSheet.show(parentFragmentManager, ChooseInputModeTypeBottomSheet.TAG)
         }
-        parentFragmentManager.setFragmentResultListener(ChooseInputModeTypeBottomSheet.KEY_INPUT_MODE_TYPE, this) { resultKey, result ->
+        parentFragmentManager.setFragmentResultListener(
+            ChooseInputModeTypeBottomSheet.KEY_INPUT_MODE_TYPE, this
+        ) { resultKey, result ->
             val type = result.getString(ChooseInputModeTypeBottomSheet.FIELD_TYPE)
             if(type != null) {
                 items += "type=$type"

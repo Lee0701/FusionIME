@@ -10,4 +10,8 @@
         android:title="@string/settings_input_mode_layout_title"
         app:useSimpleSummaryProvider="true" />
 
+    <SwitchPreferenceCompat
+        android:key="correct_orders"
+        android:title="@string/settings_input_mode_correct_orders_title" />
+
 </androidx.preference.PreferenceScreen>

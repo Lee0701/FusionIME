@@ -45,12 +45,11 @@ abstract class KoreanIMEMode(
     private var currentState = HangulCombiner.State.Initial
 
     private val wordComposer: WordComposer = WordComposer()
-    protected var hanjaConverter: HanjaConverter? = null
+    protected abstract val hanjaConverter: HanjaConverter
 
     override suspend fun onLoad(context: Context) {
-        hanjaConverter =
-            if(Feature.BigramHanjaConverter.availableInCurrentVersion) BigramHanjaConverter(context)
-            else UnigramHanjaConverter(context)
+        super.onLoad(context)
+        hanjaConverter.load(context)
     }
 
     override fun onReset() {
@@ -119,8 +118,13 @@ abstract class KoreanIMEMode(
         }
     }
 
-    class Hangul2SetKS(listener: IMEMode.Listener): KoreanIMEMode(listener) {
-        override val hangulCombiner: HangulCombiner = HangulCombiner(Hangul2Set.COMB_KS, true)
+    class Hangul2SetKS(
+        correctOrders: Boolean,
+        converterType: ConverterType,
+        listener: IMEMode.Listener
+    ): KoreanIMEMode(listener) {
+        override val hangulCombiner: HangulCombiner = HangulCombiner(Hangul2Set.COMB_KS, correctOrders)
+        override val hanjaConverter: HanjaConverter = converterType.create()
         override val layoutTable: Map<Int, List<Int>> = Hangul2Set.TABLE_KS
         override fun createTextKeyboard(): Keyboard {
             val layers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE, layoutTable)
@@ -134,8 +138,13 @@ abstract class KoreanIMEMode(
         }
     }
 
-    class Hangul3Set390(listener: IMEMode.Listener): KoreanIMEMode(listener) {
-        override val hangulCombiner: HangulCombiner = HangulCombiner(Hangul3Set.COMBINATION_390, true)
+    class Hangul3Set390(
+        correctOrders: Boolean,
+        converterType: ConverterType,
+        listener: IMEMode.Listener
+    ): KoreanIMEMode(listener) {
+        override val hangulCombiner: HangulCombiner = HangulCombiner(Hangul3Set.COMBINATION_390, correctOrders)
+        override val hanjaConverter: HanjaConverter = converterType.create()
         override val layoutTable: Map<Int, List<Int>> = Hangul3Set.TABLE_390
         override fun createTextKeyboard(): Keyboard {
             val layers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE_WITH_QUOTE, layoutTable)
@@ -169,8 +178,13 @@ abstract class KoreanIMEMode(
         }
     }
 
-    class Hangul3Set391(listener: IMEMode.Listener): KoreanIMEMode(listener) {
-        override val hangulCombiner: HangulCombiner = HangulCombiner(Hangul3Set.COMBINATION_391, true)
+    class Hangul3Set391(
+        correctOrders: Boolean,
+        converterType: ConverterType,
+        listener: IMEMode.Listener
+    ): KoreanIMEMode(listener) {
+        override val hangulCombiner: HangulCombiner = HangulCombiner(Hangul3Set.COMBINATION_391, correctOrders)
+        override val hanjaConverter: HanjaConverter = converterType.create()
         override val layoutTable: Map<Int, List<Int>> = Hangul3Set.TABLE_391
         override fun createTextKeyboard(): Keyboard {
             val layers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE_WITH_QUOTE, layoutTable)
@@ -187,11 +201,16 @@ abstract class KoreanIMEMode(
         }
     }
 
-    class HangulOld2Set(listener: IMEMode.Listener): KoreanIMEMode(listener) {
-        override val hangulCombiner: HangulCombiner = HangulCombiner(HangulOld.COMB_FULL, false)
+    class HangulOld2Set(
+        correctOrders: Boolean,
+        converterType: ConverterType,
+        listener: IMEMode.Listener
+    ): KoreanIMEMode(listener) {
+        override val hangulCombiner: HangulCombiner = HangulCombiner(HangulOld.COMB_FULL, correctOrders)
+        override val hanjaConverter: HanjaConverter = converterType.create()
         override val layoutTable: Map<Int, List<Int>> = HangulOld.TABLE_OLD_2SET
+        private val layers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE, layoutTable)
         override fun createTextKeyboard(): Keyboard {
-            val layers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE, layoutTable)
             return StackedKeyboard(
                 ShiftStateKeyboard(
                     createDefaultKeyboard(layers[0]),
@@ -200,23 +219,21 @@ abstract class KoreanIMEMode(
                 DefaultBottomRowKeyboard()
             )
         }
-
-        override suspend fun onLoad(context: Context) {
-            hanjaConverter = JeongUnHanjaConverter(context)
-        }
     }
 
     data class Params(
-        val layout: Layout
+        val layout: Layout,
+        val correctOrders: Boolean,
+        val converterType: ConverterType
     ): IMEMode.Params {
         override val type: String = TYPE
 
         override fun create(listener: IMEMode.Listener): IMEMode {
             return when(layout) {
-                Layout.Set2KS -> Hangul2SetKS(listener)
-                Layout.Set3390 -> Hangul3Set390(listener)
-                Layout.Set3391 -> Hangul3Set391(listener)
-                Layout.Set2Old -> HangulOld2Set(listener)
+                Layout.Set2KS -> Hangul2SetKS(correctOrders, converterType, listener)
+                Layout.Set3390 -> Hangul3Set390(correctOrders, converterType, listener)
+                Layout.Set3391 -> Hangul3Set391(correctOrders, converterType, listener)
+                Layout.Set2Old -> HangulOld2Set(correctOrders, converterType, listener)
             }
         }
 
@@ -231,15 +248,18 @@ abstract class KoreanIMEMode(
                 Layout.Set2KS -> "한2"
                 Layout.Set3390, Layout.Set3391 -> "한3"
                 Layout.Set2Old -> "ᄒᆞ"
-                else -> "한"
             }
         }
 
         companion object {
             fun parse(map: Map<String, String>): Params {
                 val layout = Layout.valueOf(map["layout"] ?: Layout.Set2KS.name)
+                val converterType = ConverterType.valueOf(map["converter"] ?: ConverterType.Word.name)
+                val correctOrders = (map["correct_orders"] ?: "false").toBoolean()
                 return Params(
-                    layout = layout
+                    layout = layout,
+                    converterType = converterType,
+                    correctOrders = correctOrders
                 )
             }
         }
@@ -252,6 +272,18 @@ abstract class KoreanIMEMode(
         Set3390(R.string.korean_layout_hangul_3set_390),
         Set3391(R.string.korean_layout_hangul_3set_391),
         Set2Old(R.string.korean_layout_old_hangul_2set_ks)
+    }
+
+    enum class ConverterType {
+        Word, Phrase, JeongUn;
+
+        fun create(): HanjaConverter {
+            return when(this) {
+                Word -> UnigramHanjaConverter()
+                Phrase -> BigramHanjaConverter()
+                JeongUn -> JeongUnHanjaConverter()
+            }
+        }
     }
 
     companion object {
