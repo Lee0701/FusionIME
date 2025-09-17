@@ -1,4 +1,6 @@
 <resources>
+    <string name="msg_input_modes_limit_reached">Please consider using paid version to add more input modes.</string>
+
     <string name="settings_method_header">Input Method</string>
     <string name="settings_appearance_header">Appearance</string>
     <string name="settings_behaviour_header">Behaviour</string>
