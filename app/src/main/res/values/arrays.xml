@@ -1,4 +1,16 @@
 <resources>
+    <string-array name="settings_appearance_screen_mode_entries">
+        <item>@string/screen_mode_mobile</item>
+        <item>@string/screen_mode_tablet</item>
+<!--        <item>@string/screen_mode_full</item>-->
+    </string-array>
+
+    <string-array name="settings_appearance_screen_mode_values">
+        <item>Mobile</item>
+        <item>Tablet</item>
+<!--        <item>Full</item>-->
+    </string-array>
+
     <string-array name="settings_input_mode_type_entries">
         <item>@string/input_mode_latin</item>
         <item>@string/input_mode_korean</item>

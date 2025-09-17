@@ -6,7 +6,6 @@ import android.os.Looper
 import android.view.KeyEvent
 import androidx.annotation.StringRes
 import ee.oyatl.ime.candidate.CandidateView
-import ee.oyatl.ime.fusion.Feature
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.hangul.HangulCombiner
 import ee.oyatl.ime.fusion.korean.BigramHanjaConverter
@@ -18,11 +17,16 @@ import ee.oyatl.ime.fusion.korean.layout.Hangul2Set
 import ee.oyatl.ime.fusion.korean.layout.Hangul3Set
 import ee.oyatl.ime.fusion.korean.layout.HangulOld
 import ee.oyatl.ime.keyboard.DefaultBottomRowKeyboard
+import ee.oyatl.ime.keyboard.DefaultMobileKeyboard
+import ee.oyatl.ime.keyboard.DefaultTabletBottomRowKeyboard
+import ee.oyatl.ime.keyboard.DefaultTabletKeyboard
 import ee.oyatl.ime.keyboard.Keyboard
 import ee.oyatl.ime.keyboard.KeyboardInflater
+import ee.oyatl.ime.keyboard.ScreenModeKeyboard
 import ee.oyatl.ime.keyboard.ShiftStateKeyboard
 import ee.oyatl.ime.keyboard.StackedKeyboard
 import ee.oyatl.ime.keyboard.layout.KeyboardTemplates
+import ee.oyatl.ime.keyboard.layout.LayoutSymbol
 import java.util.Locale
 import java.util.concurrent.Executors
 
@@ -71,8 +75,8 @@ abstract class KoreanIMEMode(
 
     private fun convert() {
         executor.execute {
-            val candidates = hanjaConverter?.convert(wordComposer.word)
-            if(candidates != null) handler.post { submitCandidates(candidates) }
+            val candidates = hanjaConverter.convert(wordComposer.word)
+            handler.post { submitCandidates(candidates) }
         }
     }
 
@@ -126,14 +130,44 @@ abstract class KoreanIMEMode(
         override val hangulCombiner: HangulCombiner = HangulCombiner(Hangul2Set.COMB_KS, correctOrders)
         override val hanjaConverter: HanjaConverter = converterType.create()
         override val layoutTable: Map<Int, List<Int>> = Hangul2Set.TABLE_KS
-        override fun createTextKeyboard(): Keyboard {
-            val layers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE, layoutTable)
+    }
+
+    /*
+     * Common part for 390 and 391
+     */
+    abstract class Hangul3Set390391(listener: IMEMode.Listener): KoreanIMEMode(listener) {
+        override fun createSymbolKeyboard(): Keyboard {
             return StackedKeyboard(
                 ShiftStateKeyboard(
-                    createDefaultKeyboard(layers[0]),
-                    createDefaultKeyboard(layers[1])
+                    super.createDefaultKeyboard(KeyboardInflater.inflate(LayoutSymbol.ROWS_LOWER, mapOf())[0]),
+                    super.createDefaultKeyboard(KeyboardInflater.inflate(LayoutSymbol.ROWS_UPPER, mapOf())[0])
                 ),
-                DefaultBottomRowKeyboard()
+                ShiftStateKeyboard(
+                    createSymbolBottomRowKeyboard(shift = false),
+                    createSymbolBottomRowKeyboard(shift = true)
+                )
+            )
+        }
+
+        private fun createSymbolBottomRowKeyboard(shift: Boolean): Keyboard {
+            return super.createBottomRowKeyboard(shift, true)
+        }
+
+        override fun createDefaultKeyboard(layer: List<List<Int>>): Keyboard {
+            return ScreenModeKeyboard(
+                mobile = DefaultMobileKeyboard(layer),
+                tablet = DefaultTabletKeyboard(layer, listOf())
+            )
+        }
+
+        override fun createBottomRowKeyboard(shift: Boolean, symbol: Boolean): Keyboard {
+            if(symbol) return super.createBottomRowKeyboard(shift, true)
+            val extraKeys =
+                if(!shift) listOf('.'.code, layoutTable[KeyEvent.KEYCODE_SLASH]!![0])
+                else listOf('.'.code, layoutTable[KeyEvent.KEYCODE_SLASH]!![1])
+            return ScreenModeKeyboard(
+                mobile = DefaultBottomRowKeyboard(extraKeys = extraKeys, isSymbols = false),
+                tablet = DefaultTabletBottomRowKeyboard(extraKeys = extraKeys, isSymbols = false)
             )
         }
     }
@@ -142,7 +176,7 @@ abstract class KoreanIMEMode(
         correctOrders: Boolean,
         converterType: ConverterType,
         listener: IMEMode.Listener
-    ): KoreanIMEMode(listener) {
+    ): Hangul3Set390391(listener) {
         override val hangulCombiner: HangulCombiner = HangulCombiner(Hangul3Set.COMBINATION_390, correctOrders)
         override val hanjaConverter: HanjaConverter = converterType.create()
         override val layoutTable: Map<Int, List<Int>> = Hangul3Set.TABLE_390
@@ -154,8 +188,8 @@ abstract class KoreanIMEMode(
                     createDefaultKeyboard(modifyShiftedLayout(layers[1]))
                 ),
                 ShiftStateKeyboard(
-                    DefaultBottomRowKeyboard(extraKeys = listOf('.'.code, layoutTable[KeyEvent.KEYCODE_SLASH]!![0])),
-                    DefaultBottomRowKeyboard(extraKeys = listOf('.'.code, layoutTable[KeyEvent.KEYCODE_SLASH]!![1]))
+                    createBottomRowKeyboard(shift = false, symbol = false),
+                    createBottomRowKeyboard(shift = true, symbol = false)
                 )
             )
         }
@@ -182,7 +216,7 @@ abstract class KoreanIMEMode(
         correctOrders: Boolean,
         converterType: ConverterType,
         listener: IMEMode.Listener
-    ): KoreanIMEMode(listener) {
+    ): Hangul3Set390391(listener) {
         override val hangulCombiner: HangulCombiner = HangulCombiner(Hangul3Set.COMBINATION_391, correctOrders)
         override val hanjaConverter: HanjaConverter = converterType.create()
         override val layoutTable: Map<Int, List<Int>> = Hangul3Set.TABLE_391
@@ -194,8 +228,8 @@ abstract class KoreanIMEMode(
                     createDefaultKeyboard(layers[1])
                 ),
                 ShiftStateKeyboard(
-                    DefaultBottomRowKeyboard(extraKeys = listOf('.'.code, layoutTable[KeyEvent.KEYCODE_SLASH]!![0])),
-                    DefaultBottomRowKeyboard(extraKeys = listOf('.'.code, layoutTable[KeyEvent.KEYCODE_SLASH]!![1]))
+                    createBottomRowKeyboard(shift = false, symbol = false),
+                    createBottomRowKeyboard(shift = true, symbol = false)
                 )
             )
         }
@@ -209,14 +243,17 @@ abstract class KoreanIMEMode(
         override val hangulCombiner: HangulCombiner = HangulCombiner(HangulOld.COMB_FULL, correctOrders)
         override val hanjaConverter: HanjaConverter = converterType.create()
         override val layoutTable: Map<Int, List<Int>> = HangulOld.TABLE_OLD_2SET
-        private val layers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE, layoutTable)
         override fun createTextKeyboard(): Keyboard {
+            val layers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE, layoutTable)
             return StackedKeyboard(
                 ShiftStateKeyboard(
                     createDefaultKeyboard(layers[0]),
                     createDefaultKeyboard(layers[1])
                 ),
-                DefaultBottomRowKeyboard()
+                ShiftStateKeyboard(
+                    createBottomRowKeyboard(shift = false, symbol = false),
+                    createBottomRowKeyboard(shift = true, symbol = false)
+                )
             )
         }
     }

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string translatable="false" name="screen_mode_default">Mobile</string>
+    <integer name="keyboard_height_portrait_default">55</integer>
+    <integer name="keyboard_height_landscape_default">45</integer>
+</resources>

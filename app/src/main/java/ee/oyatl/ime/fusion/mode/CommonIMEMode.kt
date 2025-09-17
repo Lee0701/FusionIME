@@ -12,13 +12,17 @@ import androidx.preference.PreferenceManager
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.ScrollingCandidateView
 import ee.oyatl.ime.fusion.KeyEventUtil
+import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.keyboard.DefaultBottomRowKeyboard
 import ee.oyatl.ime.keyboard.DefaultMobileKeyboard
 import ee.oyatl.ime.keyboard.DefaultNumberKeyboard
+import ee.oyatl.ime.keyboard.DefaultTabletBottomRowKeyboard
+import ee.oyatl.ime.keyboard.DefaultTabletKeyboard
 import ee.oyatl.ime.keyboard.Keyboard
 import ee.oyatl.ime.keyboard.KeyboardInflater
 import ee.oyatl.ime.keyboard.KeyboardState
 import ee.oyatl.ime.keyboard.KeyboardViewParams
+import ee.oyatl.ime.keyboard.ScreenModeKeyboard
 import ee.oyatl.ime.keyboard.ShiftStateKeyboard
 import ee.oyatl.ime.keyboard.StackedKeyboard
 import ee.oyatl.ime.keyboard.SymbolStateKeyboard
@@ -44,7 +48,6 @@ abstract class CommonIMEMode(
     open val directKeyListener: OnKeyClickListener = this@CommonIMEMode.DirectKeyListener()
 
     open val layoutTable: Map<Int, List<Int>> = LayoutQwerty.TABLE_QWERTY
-    private val textKeyboardLayers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE, LayoutQwerty.TABLE_QWERTY)
 
     protected var keyboard: Keyboard? = null
     protected var keyboardView: View? = null
@@ -85,7 +88,8 @@ abstract class CommonIMEMode(
 
         val landscape = context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
         val rowHeightKey = if(landscape) "keyboard_height_landscape" else "keyboard_height_portrait"
-        val rowHeightDefault = if(landscape) 45f else 55f
+        val rowHeightDefaultKey = if(landscape) R.integer.keyboard_height_landscape_default else R.integer.keyboard_height_portrait_default
+        val rowHeightDefault = context.resources.getInteger(rowHeightDefaultKey).toFloat()
         val rowHeightDIP = preference.getFloat(rowHeightKey, rowHeightDefault)
         val height = (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, rowHeightDIP, context.resources.displayMetrics) * 4).roundToInt()
         val showPreviewPopup = preference.getBoolean("preview_popup", true)
@@ -93,6 +97,8 @@ abstract class CommonIMEMode(
             keyHeight = height / 4,
             showPreviewPopup = showPreviewPopup
         )
+        val defaultScreenMode = context.resources.getString(R.string.screen_mode_default)
+        val screenMode = KeyboardState.ScreenMode.valueOf(preference.getString("screen_mode", null) ?: defaultScreenMode)
 
         val textKeyboardListener = createKeyboardListener(context, textKeyListener)
         val symbolKeyboardListener = createKeyboardListener(context, symbolKeyListener, false)
@@ -102,7 +108,8 @@ abstract class CommonIMEMode(
         val textKeyboard = createTextKeyboard()
         val symbolKeyboard = createSymbolKeyboard()
         val numpadKeyboard = createNumberKeyboard()
-        val keyboard = SymbolStateKeyboard(textKeyboard, symbolKeyboard, numpadKeyboard)
+        val keyboard: Keyboard = SymbolStateKeyboard(textKeyboard, symbolKeyboard, numpadKeyboard)
+        keyboard.setState(screenMode) // Set screen type before creating view.
 
         val keyboardView = keyboard.createView(context, keyboardListener, params)
         updateInputView()
@@ -129,12 +136,16 @@ abstract class CommonIMEMode(
     }
 
     open fun createTextKeyboard(): Keyboard {
+        val layers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE, layoutTable)
         return StackedKeyboard(
             ShiftStateKeyboard(
-                createDefaultKeyboard(textKeyboardLayers[0]),
-                createDefaultKeyboard(textKeyboardLayers[1])
+                createDefaultKeyboard(layers[0]),
+                createDefaultKeyboard(layers[1])
             ),
-            DefaultBottomRowKeyboard()
+            ShiftStateKeyboard(
+                createBottomRowKeyboard(shift = false, symbol = false),
+                createBottomRowKeyboard(shift = true, symbol = false)
+            )
         )
     }
 
@@ -145,8 +156,8 @@ abstract class CommonIMEMode(
                 createDefaultKeyboard(KeyboardInflater.inflate(LayoutSymbol.ROWS_UPPER, mapOf())[0])
             ),
             ShiftStateKeyboard(
-                DefaultBottomRowKeyboard(isSymbols = true),
-                DefaultBottomRowKeyboard(extraKeys = listOf('<'.code, '>'.code), isSymbols = true)
+                createBottomRowKeyboard(shift = false, symbol = true),
+                createBottomRowKeyboard(shift = true, symbol = true)
             )
         )
     }
@@ -156,7 +167,19 @@ abstract class CommonIMEMode(
     }
 
     open fun createDefaultKeyboard(layer: List<List<Int>>): Keyboard {
-        return DefaultMobileKeyboard(layer)
+        return ScreenModeKeyboard(
+            mobile = DefaultMobileKeyboard(layer),
+            tablet = DefaultTabletKeyboard(layer)
+        )
+    }
+
+    open fun createBottomRowKeyboard(shift: Boolean, symbol: Boolean): Keyboard {
+        val extraKeys = if(!shift) listOf(','.code, '.'.code) else listOf('<'.code, '>'.code)
+        val tabletExtraKeys = if(!symbol) listOf('!'.code, '?'.code) else listOf('<'.code, '>'.code)
+        return ScreenModeKeyboard(
+            mobile = DefaultBottomRowKeyboard(extraKeys = extraKeys, isSymbols = symbol),
+            tablet = DefaultTabletBottomRowKeyboard(extraKeys = tabletExtraKeys, isSymbols = symbol)
+        )
     }
 
     protected fun setPreferredKeyboard(editorInfo: EditorInfo) {

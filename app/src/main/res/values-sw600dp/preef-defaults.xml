@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string translatable="false" name="screen_mode_default">Tablet</string>
+    <integer name="keyboard_height_portrait_default">75</integer>
+    <integer name="keyboard_height_landscape_default">65</integer>
+</resources>

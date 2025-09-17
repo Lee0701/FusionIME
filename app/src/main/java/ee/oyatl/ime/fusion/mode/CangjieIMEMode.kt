@@ -11,10 +11,13 @@ import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.keyboard.CustomRowKeyboard
 import ee.oyatl.ime.keyboard.DefaultBottomRowKeyboard
+import ee.oyatl.ime.keyboard.KeyboardInflater
 import ee.oyatl.ime.keyboard.DefaultGridKeyboard
 import ee.oyatl.ime.keyboard.DefaultMobileKeyboard
+import ee.oyatl.ime.keyboard.DefaultTabletBottomRowKeyboard
+import ee.oyatl.ime.keyboard.DefaultTabletKeyboard
 import ee.oyatl.ime.keyboard.Keyboard
-import ee.oyatl.ime.keyboard.KeyboardInflater
+import ee.oyatl.ime.keyboard.ScreenModeKeyboard
 import ee.oyatl.ime.keyboard.ShiftStateKeyboard
 import ee.oyatl.ime.keyboard.StackedKeyboard
 import ee.oyatl.ime.keyboard.layout.KeyboardTemplates
@@ -66,10 +69,29 @@ abstract class CangjieIMEMode(
         val textKeyboardLayers = KeyboardInflater.inflate(keyboardTemplate, layoutTable)
         return StackedKeyboard(
             ShiftStateKeyboard(
-                DefaultMobileKeyboard(textKeyboardLayers[0]),
-                DefaultMobileKeyboard(textKeyboardLayers[1])
+                createDefaultKeyboard(textKeyboardLayers[0]),
+                createDefaultKeyboard(textKeyboardLayers[1])
             ),
-            DefaultBottomRowKeyboard(listOf('，'.code, '。'.code))
+            ShiftStateKeyboard(
+                createBottomRowKeyboard(shift = false, symbol = false),
+                createBottomRowKeyboard(shift = true, symbol = false)
+            )
+        )
+    }
+
+    override fun createDefaultKeyboard(layer: List<List<Int>>): Keyboard {
+        return ScreenModeKeyboard(
+            mobile = DefaultMobileKeyboard(layer),
+            tablet = DefaultTabletKeyboard(layer, extraKeys = listOf('，'.code, '。'.code))
+        )
+    }
+
+    override fun createBottomRowKeyboard(shift: Boolean, symbol: Boolean): Keyboard {
+        val extraKeys = if(!shift) listOf('，'.code, '。'.code) else listOf('《'.code, '》'.code)
+        val tabletExtraKeys = if(!symbol) listOf('！'.code, '？'.code) else listOf('<'.code, '>'.code)
+        return ScreenModeKeyboard(
+            mobile = DefaultBottomRowKeyboard(extraKeys = extraKeys, isSymbols = symbol),
+            tablet = DefaultTabletBottomRowKeyboard(extraKeys = tabletExtraKeys, isSymbols = symbol)
         )
     }
 

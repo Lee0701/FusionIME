@@ -24,9 +24,11 @@ import ee.oyatl.ime.fusion.pinyin.ComposingView
 import ee.oyatl.ime.fusion.pinyin.ComposingView.ComposingStatus
 import ee.oyatl.ime.fusion.pinyin.DecodingInfo
 import ee.oyatl.ime.fusion.pinyin.OnGestureListener
-import ee.oyatl.ime.keyboard.DefaultBottomRowKeyboard
+import ee.oyatl.ime.keyboard.DefaultMobileKeyboard
+import ee.oyatl.ime.keyboard.DefaultTabletKeyboard
 import ee.oyatl.ime.keyboard.Keyboard
 import ee.oyatl.ime.keyboard.KeyboardInflater
+import ee.oyatl.ime.keyboard.ScreenModeKeyboard
 import ee.oyatl.ime.keyboard.ShiftStateKeyboard
 import ee.oyatl.ime.keyboard.StackedKeyboard
 import ee.oyatl.ime.keyboard.layout.LayoutPinyin
@@ -86,7 +88,17 @@ class PinyinIMEMode(
                 createDefaultKeyboard(KeyboardInflater.inflate(LayoutPinyin.ROWS_LOWER)[0]),
                 createDefaultKeyboard(KeyboardInflater.inflate(LayoutPinyin.ROWS_UPPER)[0])
             ),
-            DefaultBottomRowKeyboard()
+            ShiftStateKeyboard(
+                createBottomRowKeyboard(shift = false, symbol = false),
+                createBottomRowKeyboard(shift = true, symbol = false)
+            )
+        )
+    }
+
+    override fun createDefaultKeyboard(layer: List<List<Int>>): Keyboard {
+        return ScreenModeKeyboard(
+            mobile = DefaultMobileKeyboard(layer),
+            tablet = DefaultTabletKeyboard(layer, extraKeys = listOf('，'.code, '。'.code))
         )
     }
 

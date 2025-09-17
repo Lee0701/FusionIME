@@ -11,6 +11,7 @@
     <string name="settings_method_choose_method_title">Choose Input Method</string>
     <string name="settings_method_choose_method_summary">Please choose \'FusionIME\'.</string>
 
+    <string name="settings_appearance_screen_mode_title">Screen Mode</string>
     <string name="settings_appearance_keyboard_height_portrait_title">Keyboard Height (Portrait)</string>
     <string name="settings_appearance_keyboard_height_landscape_title">Keyboard Height (Landscape)</string>
     <string name="settings_appearance_preview_popup_title">Preview Popups</string>
@@ -29,6 +30,10 @@
     <string name="settings_input_mode_fullwidth_symbols_title">Full Width Symbols</string>
     <string name="settings_input_mode_correct_orders_title">Correct Jamo Orders</string>
     <string name="settings_input_mode_converter_title">Converter</string>
+
+    <string name="screen_mode_mobile">Mobile</string>
+    <string name="screen_mode_tablet">Tablet</string>
+    <string name="screen_mode_full">Full</string>
 
     <string name="input_mode_latin">Latin</string>
     <string name="input_mode_korean">Korean</string>
