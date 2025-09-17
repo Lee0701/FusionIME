@@ -5,7 +5,9 @@
     <dimen name="key_margin_vertical">6dp</dimen>
     <dimen name="key_margin_horizontal">2dp</dimen>
 
-    <dimen name="candidate_view_width">40dp</dimen>
     <dimen name="candidate_view_height">40dp</dimen>
+    <dimen name="candidate_item_width">40dp</dimen>
     <dimen name="candidate_extra_width">60dp</dimen>
+
+    <dimen name="mode_tab_width">64dp</dimen>
 </resources>

@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:gravity="center"
-    android:minWidth="@dimen/candidate_view_width"
+    android:minWidth="@dimen/candidate_item_width"
     android:minHeight="@dimen/candidate_view_height"
     android:background="?android:selectableItemBackground">
 
