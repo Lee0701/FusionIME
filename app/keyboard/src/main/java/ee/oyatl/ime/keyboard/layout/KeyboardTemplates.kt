@@ -33,6 +33,16 @@ object KeyboardTemplates {
         "jkxbmwv",
     )
 
+    val TABLET_DVORAK: List<String> = listOf(
+        "',.pyfgcrl",
+        "aoeuidhtns",
+        "qjkxbmw",
+    )
+
+    val TABLET_DVORAK_EXTRA: List<String> = listOf(
+        "vz",
+    )
+
     val MOBILE_COLEMAK: List<String> = listOf(
         "qwfpgjluy;",
         "arstdhneio",

@@ -25,6 +25,7 @@ import ee.oyatl.ime.candidate.TripleCandidateView
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.keyboard.DefaultBottomRowKeyboard
 import ee.oyatl.ime.keyboard.DefaultTabletBottomRowKeyboard
+import ee.oyatl.ime.keyboard.DefaultTabletKeyboard
 import ee.oyatl.ime.keyboard.Keyboard.SpecialKey
 import ee.oyatl.ime.keyboard.KeyboardInflater
 import ee.oyatl.ime.keyboard.ScreenModeKeyboard
@@ -204,11 +205,19 @@ abstract class LatinIMEMode(
 
     class Dvorak(override val locale: Locale, listener: IMEMode.Listener): LatinIMEMode(listener) {
         override fun createTextKeyboard(): ee.oyatl.ime.keyboard.Keyboard {
-            val layers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE_DVORAK, layoutTable)
+            val mobileLayers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE_DVORAK, layoutTable)
+            val tabletLayers = KeyboardInflater.inflate(KeyboardTemplates.TABLET_DVORAK, layoutTable)
+            val tabletExtra = KeyboardInflater.inflate(KeyboardTemplates.TABLET_DVORAK_EXTRA, layoutTable)
             return StackedKeyboard(
-                ShiftStateKeyboard(
-                    createDefaultKeyboard(layers[0]),
-                    createDefaultKeyboard(layers[1])
+                ScreenModeKeyboard(
+                    ShiftStateKeyboard(
+                        createDefaultKeyboard(mobileLayers[0]),
+                        createDefaultKeyboard(mobileLayers[1])
+                    ),
+                    ShiftStateKeyboard(
+                        DefaultTabletKeyboard(tabletLayers[0], tabletExtra[0][0]),
+                        DefaultTabletKeyboard(tabletLayers[1], tabletExtra[1][0])
+                    )
                 ),
                 ShiftStateKeyboard(
                     createBottomRowKeyboard(shift = false, symbol = false),
@@ -227,7 +236,7 @@ abstract class LatinIMEMode(
                 else listOf('Q'.code, 'Z'.code)
             return ScreenModeKeyboard(
                 mobile = DefaultBottomRowKeyboard(extraKeys = extraKeys, isSymbols = false),
-                tablet = DefaultTabletBottomRowKeyboard(extraKeys = extraKeys, isSymbols = false)
+                tablet = DefaultTabletBottomRowKeyboard(isSymbols = false)
             )
         }
     }
