@@ -19,7 +19,7 @@ import ee.oyatl.ime.keyboard.DefaultTabletKeyboard
 import ee.oyatl.ime.keyboard.GridKanaBottomRowKeyboard
 import ee.oyatl.ime.keyboard.Keyboard
 import ee.oyatl.ime.keyboard.KeyboardInflater
-import ee.oyatl.ime.keyboard.ScreenTypeKeyboard
+import ee.oyatl.ime.keyboard.ScreenModeKeyboard
 import ee.oyatl.ime.keyboard.ShiftStateKeyboard
 import ee.oyatl.ime.keyboard.StackedKeyboard
 import ee.oyatl.ime.keyboard.layout.KeyboardTemplates
@@ -180,7 +180,7 @@ abstract class MozcIMEMode(
         }
 
         override fun createDefaultKeyboard(layer: List<List<Int>>): Keyboard {
-            return ScreenTypeKeyboard(
+            return ScreenModeKeyboard(
                 mobile = DefaultMobileKeyboard(layer),
                 tablet = DefaultTabletKeyboard(layer, extraKeys = listOf('、'.code, '。'.code))
             )
@@ -188,7 +188,7 @@ abstract class MozcIMEMode(
 
         override fun createBottomRowKeyboard(shift: Boolean, symbol: Boolean): Keyboard {
             val tabletExtraKeys = if(!symbol) listOf('！'.code, '？'.code) else listOf('<'.code, '>'.code)
-            return ScreenTypeKeyboard(
+            return ScreenModeKeyboard(
                 mobile = DefaultBottomRowKeyboard(extraKeys = listOf('、'.code, '。'.code), isSymbols = symbol),
                 tablet = DefaultTabletBottomRowKeyboard(extraKeys = tabletExtraKeys, isSymbols = symbol)
             )
@@ -219,7 +219,7 @@ abstract class MozcIMEMode(
             val rightExtraRow =
                 if(!shift) bottomRight[0][0]
                 else bottomRight[1][0]
-            return ScreenTypeKeyboard(
+            return ScreenModeKeyboard(
                 mobile = GridKanaBottomRowKeyboard(listOf(), rightExtraRow),
                 tablet = GridKanaBottomRowKeyboard(listOf(), rightExtraRow)
             )

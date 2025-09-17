@@ -4,16 +4,16 @@ import android.content.Context
 import android.view.View
 import ee.oyatl.ime.keyboard.listener.KeyboardListener
 
-class ScreenTypeKeyboard(
+class ScreenModeKeyboard(
     val mobile: Keyboard,
     val tablet: Keyboard = mobile,
     val full: Keyboard = tablet
 ): Keyboard {
-    private var screenType: KeyboardState.ScreenType = KeyboardState.ScreenType.Mobile
-    private val currentKeyboard: Keyboard get() = when(screenType) {
-        KeyboardState.ScreenType.Mobile -> mobile
-        KeyboardState.ScreenType.Tablet -> tablet
-        KeyboardState.ScreenType.Full -> full
+    private var screenMode: KeyboardState.ScreenMode = KeyboardState.ScreenMode.Mobile
+    private val currentKeyboard: Keyboard get() = when(screenMode) {
+        KeyboardState.ScreenMode.Mobile -> mobile
+        KeyboardState.ScreenMode.Tablet -> tablet
+        KeyboardState.ScreenMode.Full -> full
     }
     override val numRows: Int get() = currentKeyboard.numRows
 
@@ -26,7 +26,7 @@ class ScreenTypeKeyboard(
     }
 
     override fun setState(state: KeyboardState) {
-        if(state is KeyboardState.ScreenType) screenType = state
+        if(state is KeyboardState.ScreenMode) screenMode = state
         currentKeyboard.setState(state)
     }
 }

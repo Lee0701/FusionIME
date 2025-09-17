@@ -23,7 +23,7 @@ import ee.oyatl.ime.keyboard.DefaultTabletBottomRowKeyboard
 import ee.oyatl.ime.keyboard.DefaultTabletKeyboard
 import ee.oyatl.ime.keyboard.Keyboard
 import ee.oyatl.ime.keyboard.KeyboardInflater
-import ee.oyatl.ime.keyboard.ScreenTypeKeyboard
+import ee.oyatl.ime.keyboard.ScreenModeKeyboard
 import ee.oyatl.ime.keyboard.ShiftStateKeyboard
 import ee.oyatl.ime.keyboard.StackedKeyboard
 import ee.oyatl.ime.keyboard.layout.KeyboardTemplates
@@ -151,7 +151,7 @@ abstract class KoreanIMEMode(
         }
 
         override fun createDefaultKeyboard(layer: List<List<Int>>): Keyboard {
-            return ScreenTypeKeyboard(
+            return ScreenModeKeyboard(
                 mobile = DefaultMobileKeyboard(layer),
                 tablet = DefaultTabletKeyboard(layer, listOf())
             )
@@ -162,7 +162,7 @@ abstract class KoreanIMEMode(
             val extraKeys =
                 if(!shift) listOf('.'.code, layoutTable[KeyEvent.KEYCODE_SLASH]!![0])
                 else listOf('.'.code, layoutTable[KeyEvent.KEYCODE_SLASH]!![1])
-            return ScreenTypeKeyboard(
+            return ScreenModeKeyboard(
                 mobile = DefaultBottomRowKeyboard(extraKeys = extraKeys, isSymbols = false),
                 tablet = DefaultTabletBottomRowKeyboard(extraKeys = extraKeys, isSymbols = false)
             )

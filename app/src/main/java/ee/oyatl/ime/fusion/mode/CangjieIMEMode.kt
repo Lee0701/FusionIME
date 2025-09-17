@@ -13,7 +13,7 @@ import ee.oyatl.ime.keyboard.DefaultMobileKeyboard
 import ee.oyatl.ime.keyboard.DefaultTabletBottomRowKeyboard
 import ee.oyatl.ime.keyboard.DefaultTabletKeyboard
 import ee.oyatl.ime.keyboard.Keyboard
-import ee.oyatl.ime.keyboard.ScreenTypeKeyboard
+import ee.oyatl.ime.keyboard.ScreenModeKeyboard
 import ee.oyatl.ime.keyboard.layout.LayoutCangjie
 import java.util.Locale
 
@@ -52,7 +52,7 @@ class CangjieIMEMode(
     }
 
     override fun createDefaultKeyboard(layer: List<List<Int>>): Keyboard {
-        return ScreenTypeKeyboard(
+        return ScreenModeKeyboard(
             mobile = DefaultMobileKeyboard(layer),
             tablet = DefaultTabletKeyboard(layer, extraKeys = listOf('，'.code, '。'.code))
         )
@@ -61,7 +61,7 @@ class CangjieIMEMode(
     override fun createBottomRowKeyboard(shift: Boolean, symbol: Boolean): Keyboard {
         val extraKeys = if(!shift) listOf('，'.code, '。'.code) else listOf('《'.code, '》'.code)
         val tabletExtraKeys = if(!symbol) listOf('！'.code, '？'.code) else listOf('<'.code, '>'.code)
-        return ScreenTypeKeyboard(
+        return ScreenModeKeyboard(
             mobile = DefaultBottomRowKeyboard(extraKeys = extraKeys, isSymbols = symbol),
             tablet = DefaultTabletBottomRowKeyboard(extraKeys = tabletExtraKeys, isSymbols = symbol)
         )

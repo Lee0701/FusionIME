@@ -27,7 +27,7 @@ import ee.oyatl.ime.keyboard.DefaultBottomRowKeyboard
 import ee.oyatl.ime.keyboard.DefaultTabletBottomRowKeyboard
 import ee.oyatl.ime.keyboard.Keyboard.SpecialKey
 import ee.oyatl.ime.keyboard.KeyboardInflater
-import ee.oyatl.ime.keyboard.ScreenTypeKeyboard
+import ee.oyatl.ime.keyboard.ScreenModeKeyboard
 import ee.oyatl.ime.keyboard.ShiftStateKeyboard
 import ee.oyatl.ime.keyboard.StackedKeyboard
 import ee.oyatl.ime.keyboard.layout.KeyboardTemplates
@@ -225,7 +225,7 @@ abstract class LatinIMEMode(
             val extraKeys =
                 if(!shift) listOf('q'.code, 'z'.code)
                 else listOf('Q'.code, 'Z'.code)
-            return ScreenTypeKeyboard(
+            return ScreenModeKeyboard(
                 mobile = DefaultBottomRowKeyboard(extraKeys = extraKeys, isSymbols = false),
                 tablet = DefaultTabletBottomRowKeyboard(extraKeys = extraKeys, isSymbols = false)
             )
