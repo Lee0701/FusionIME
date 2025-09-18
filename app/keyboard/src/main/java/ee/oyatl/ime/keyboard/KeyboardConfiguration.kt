@@ -1,4 +1,4 @@
-package ee.oyatl.ime.keyboard.rewrite
+package ee.oyatl.ime.keyboard
 
 data class KeyboardConfiguration(
     val rows: List<List<Item>>

@@ -1,8 +1,8 @@
 package ee.oyatl.ime.keyboard.layout
 
 import android.view.KeyEvent
-import ee.oyatl.ime.keyboard.rewrite.Keyboard
-import ee.oyatl.ime.keyboard.rewrite.KeyboardConfiguration
+import ee.oyatl.ime.keyboard.Keyboard
+import ee.oyatl.ime.keyboard.KeyboardConfiguration
 
 object KeyboardConfigurations {
     val MOBILE: KeyboardConfiguration = KeyboardConfiguration(listOf(

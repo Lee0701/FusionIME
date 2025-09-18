@@ -1,6 +1,4 @@
-package ee.oyatl.ime.keyboard.rewrite
-
-import ee.oyatl.ime.keyboard.KeyboardState
+package ee.oyatl.ime.keyboard
 
 data class LayoutTable(
     val map: Map<Int, Item>

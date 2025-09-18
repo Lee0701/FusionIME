@@ -17,13 +17,12 @@ import ee.oyatl.ime.keyboard.KeyboardState
 import ee.oyatl.ime.keyboard.layout.KeyboardConfigurations
 import ee.oyatl.ime.keyboard.layout.KeyboardTemplates
 import ee.oyatl.ime.keyboard.layout.LayoutQwerty
-import ee.oyatl.ime.keyboard.listener.KeyboardListener
-import ee.oyatl.ime.keyboard.listener.OnKeyClickListener
-import ee.oyatl.ime.keyboard.rewrite.DefaultKeyboardInflater
-import ee.oyatl.ime.keyboard.rewrite.Keyboard
-import ee.oyatl.ime.keyboard.rewrite.KeyboardParams
-import ee.oyatl.ime.keyboard.rewrite.KeyboardViewManager
-import ee.oyatl.ime.keyboard.rewrite.LayoutTable
+import ee.oyatl.ime.keyboard.KeyboardListener
+import ee.oyatl.ime.keyboard.DefaultKeyboardInflater
+import ee.oyatl.ime.keyboard.Keyboard
+import ee.oyatl.ime.keyboard.KeyboardParams
+import ee.oyatl.ime.keyboard.KeyboardViewManager
+import ee.oyatl.ime.keyboard.LayoutTable
 import kotlin.math.roundToInt
 
 abstract class CommonIMEMode(
@@ -178,14 +177,6 @@ abstract class CommonIMEMode(
         }
     }
 
-    override fun onKeyDown(code: Int) {
-        onKeyDown(code, metaState)
-    }
-
-    override fun onKeyUp(code: Int) {
-        onKeyUp(code, metaState)
-    }
-
     override fun onKeyDown(keyCode: Int, metaState: Int) {
         if(keyCode == KeyEvent.KEYCODE_SHIFT_LEFT || keyCode == KeyEvent.KEYCODE_SHIFT_RIGHT) {
             shiftState = KeyboardState.Shift.Pressed
@@ -237,29 +228,5 @@ abstract class CommonIMEMode(
 
     protected fun requestHideSelf(flags: Int) {
         listener.onRequestHideSelf(flags)
-    }
-
-    inner class KeyListener: OnKeyClickListener {
-        override fun onKeyClick(code: Int) {
-            if(!keyCharacterMap.isPrintingKey(code)) handleSpecialKey(code)
-            else onChar(
-                layoutTable[code]?.forShiftState(shiftState)
-                    ?: keyCharacterMap.get(code, metaState)
-            )
-            updateInputView()
-        }
-    }
-
-    inner class DirectKeyListener: OnKeyClickListener {
-        override fun onKeyClick(code: Int) {
-            if(!keyCharacterMap.isPrintingKey(code)) handleSpecialKey(code)
-            else {
-                onReset()
-                val char = layoutTable[code]?.forShiftState(shiftState)
-                    ?: keyCharacterMap.get(code, metaState)
-                util?.sendKeyChar(char.toChar())
-            }
-            updateInputView()
-        }
     }
 }

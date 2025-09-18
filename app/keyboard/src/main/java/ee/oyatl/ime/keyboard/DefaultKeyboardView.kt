@@ -1,4 +1,4 @@
-package ee.oyatl.ime.keyboard.rewrite
+package ee.oyatl.ime.keyboard
 
 import android.Manifest
 import android.content.Context
@@ -11,11 +11,10 @@ import android.os.Vibrator
 import android.os.VibratorManager
 import android.view.KeyEvent
 import android.view.View
+import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresPermission
-import ee.oyatl.ime.keyboard.KeyboardState
 import ee.oyatl.ime.keyboard.databinding.KbdKeyBinding
 import ee.oyatl.ime.keyboard.databinding.KbdKeyboardBinding
-import ee.oyatl.ime.keyboard.listener.KeyboardListener
 import kotlin.math.min
 
 class DefaultKeyboardView(
@@ -42,12 +41,13 @@ class DefaultKeyboardView(
         context: Context,
         val listener: KeyboardListener,
         val params: KeyboardParams
-    ): KeyboardListener {    private val vibratorManager = context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
+    ): KeyboardListener {
+        @RequiresApi(Build.VERSION_CODES.S)
+        private val vibratorManager = context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
         private val vibrator =
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) vibratorManager.defaultVibrator
             else context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         private val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-
         private val handler = Handler(Looper.getMainLooper())
 
         private var shiftState: KeyboardState.Shift = KeyboardState.Shift.Released
@@ -55,14 +55,14 @@ class DefaultKeyboardView(
                 field = value
                 when(value) {
                     KeyboardState.Shift.Released -> {
-                        listener.onKeyUp(KeyEvent.KEYCODE_CAPS_LOCK)
-                        listener.onKeyUp(KeyEvent.KEYCODE_SHIFT_LEFT)
+                        listener.onKeyUp(KeyEvent.KEYCODE_CAPS_LOCK, metaState)
+                        listener.onKeyUp(KeyEvent.KEYCODE_SHIFT_LEFT, metaState)
                     }
                     KeyboardState.Shift.Pressed -> {
-                        listener.onKeyDown(KeyEvent.KEYCODE_SHIFT_LEFT)
+                        listener.onKeyDown(KeyEvent.KEYCODE_SHIFT_LEFT, metaState)
                     }
                     KeyboardState.Shift.Locked -> {
-                        listener.onKeyDown(KeyEvent.KEYCODE_CAPS_LOCK)
+                        listener.onKeyDown(KeyEvent.KEYCODE_CAPS_LOCK, metaState)
                     }
                 }
             }
@@ -71,12 +71,18 @@ class DefaultKeyboardView(
         private var inputWhileShifted: Boolean = false
         private var downTime: Long = 0
 
-        override fun onKeyDown(code: Int) {
+        private val metaState: Int get() = when(shiftState) {
+            KeyboardState.Shift.Released -> 0
+            KeyboardState.Shift.Pressed -> KeyEvent.META_SHIFT_ON
+            KeyboardState.Shift.Locked -> KeyEvent.META_CAPS_LOCK_ON
+        }
+
+        override fun onKeyDown(keyCode: Int, metaState: Int) {
             if(params.vibrationDuration > 0) {
                 vibrate(params.vibrationDuration)
             }
             if(params.soundVolume > 0f) {
-                val fx = when(code) {
+                val fx = when(keyCode) {
                     KeyEvent.KEYCODE_DEL -> AudioManager.FX_KEYPRESS_DELETE
                     KeyEvent.KEYCODE_ENTER -> AudioManager.FX_KEYPRESS_RETURN
                     KeyEvent.KEYCODE_SPACE -> AudioManager.FX_KEYPRESS_SPACEBAR
@@ -85,19 +91,19 @@ class DefaultKeyboardView(
                 audioManager.playSoundEffect(fx, params.soundVolume)
             }
             downTime = System.currentTimeMillis()
-            when(code) {
-                KeyEvent.KEYCODE_DEL -> onDeletePressed(code)
-                KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.KEYCODE_SHIFT_RIGHT -> onShiftPressed(code)
+            when(keyCode) {
+                KeyEvent.KEYCODE_DEL -> onDeletePressed(keyCode)
+                KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.KEYCODE_SHIFT_RIGHT -> onShiftPressed(keyCode)
             }
         }
 
-        override fun onKeyUp(code: Int) {
-            when(code) {
-                KeyEvent.KEYCODE_DEL -> onDeleteReleased(code)
-                KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.KEYCODE_SHIFT_RIGHT -> onShiftReleased(code)
+        override fun onKeyUp(keyCode: Int, metaState: Int) {
+            when(keyCode) {
+                KeyEvent.KEYCODE_DEL -> onDeleteReleased(keyCode)
+                KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.KEYCODE_SHIFT_RIGHT -> onShiftReleased(keyCode)
                 else -> {
-                    listener.onKeyDown(code)
-                    listener.onKeyUp(code)
+                    listener.onKeyDown(keyCode, metaState)
+                    listener.onKeyUp(keyCode, metaState)
                     autoReleaseShift()
                 }
             }
@@ -109,18 +115,18 @@ class DefaultKeyboardView(
         }
 
         private fun repeat(code: Int) {
-            listener.onKeyDown(code)
-            listener.onKeyUp(code)
+            listener.onKeyDown(code, metaState)
+            listener.onKeyUp(code, metaState)
             handler.postDelayed({ repeat(code) }, params.repeatInterval.toLong())
         }
 
         private fun onDeletePressed(code: Int) {
-            listener.onKeyDown(code)
+            listener.onKeyDown(code, metaState)
             handler.postDelayed({ repeat(code) }, params.repeatDelay.toLong())
         }
 
         private fun onDeleteReleased(code: Int) {
-            listener.onKeyUp(code)
+            listener.onKeyUp(code, metaState)
             handler.removeCallbacksAndMessages(null)
         }
 

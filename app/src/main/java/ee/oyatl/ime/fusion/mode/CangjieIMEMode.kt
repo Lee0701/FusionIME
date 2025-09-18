@@ -11,8 +11,7 @@ import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.keyboard.layout.KeyboardTemplates
 import ee.oyatl.ime.keyboard.layout.LayoutCangjie
-import ee.oyatl.ime.keyboard.listener.OnKeyClickListener
-import ee.oyatl.ime.keyboard.rewrite.LayoutTable
+import ee.oyatl.ime.keyboard.LayoutTable
 import java.util.Locale
 
 abstract class CangjieIMEMode(
@@ -125,22 +124,6 @@ abstract class CangjieIMEMode(
     data class CangjieCandidate(
         override val text: CharSequence
     ): CandidateView.Candidate
-
-    inner class DirectKeyListener: OnKeyClickListener {
-        override fun onKeyClick(code: Int) {
-            if(!keyCharacterMap.isPrintingKey(code)) handleSpecialKey(code)
-            else {
-                onReset()
-                val char = layoutTable[code]?.forShiftState(shiftState) ?: return
-                val fullWidthChar = when(char) {
-                    in 0x21 .. 0x7e -> (char - 0x20 + 0xff00).toChar()
-                    else -> char.toChar()
-                }
-                val halfWidthChar = char.toChar()
-                util?.sendKeyChar(if(fullWidth) fullWidthChar else halfWidthChar)
-            }
-        }
-    }
 
     class Cangjie(
         override val fullWidth: Boolean,

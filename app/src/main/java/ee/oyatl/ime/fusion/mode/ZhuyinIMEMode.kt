@@ -10,7 +10,7 @@ import com.android.inputmethod.zhuyin.WordComposer
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.keyboard.layout.LayoutZhuyin
-import ee.oyatl.ime.keyboard.rewrite.LayoutTable
+import ee.oyatl.ime.keyboard.LayoutTable
 import tw.cheyingwu.zhuyin.ZhuYinDictionary
 import tw.cheyingwu.zhuyin.ZhuYinIMESettings
 import java.util.Locale

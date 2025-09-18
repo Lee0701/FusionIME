@@ -1,26 +1,26 @@
 package ee.oyatl.ime.keyboard
 
 import android.content.Context
-import android.view.View
-import ee.oyatl.ime.keyboard.listener.KeyboardListener
+import ee.oyatl.ime.keyboard.KeyboardListener
 
 interface Keyboard {
-    val numRows: Int
+    fun createView(context: Context, listener: KeyboardListener): KeyboardViewManager
 
-    fun createView(context: Context, listener: KeyboardListener, params: KeyboardViewParams): View
-    fun setState(state: KeyboardState)
-
-    enum class SpecialKey(
-        val code: Int
-    ) {
-        Shift(-1), Caps(-2),
-        Space(' '.code), Return('\n'.code), Delete('\b'.code),
-        Language(-10), Symbols(-3), Numbers(-13);
-
-        companion object {
-            fun ofCode(code: Int): SpecialKey? {
-                return entries.find { it.code == code }
-            }
+    sealed interface KeyItem {
+        val width: Float
+        data class Spacer(
+            override val width: Float
+        ): KeyItem
+        data class NormalKey(
+            override val keyCode: Int,
+            override val width: Float = 1f
+        ): Key
+        data class SpecialKey(
+            override val keyCode: Int,
+            override val width: Float = 1f
+        ): Key
+        interface Key: KeyItem {
+            val keyCode: Int
         }
     }
 }

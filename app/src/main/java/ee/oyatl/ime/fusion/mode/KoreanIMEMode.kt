@@ -16,7 +16,7 @@ import ee.oyatl.ime.fusion.korean.WordComposer
 import ee.oyatl.ime.fusion.korean.layout.Hangul2Set
 import ee.oyatl.ime.fusion.korean.layout.Hangul3Set
 import ee.oyatl.ime.fusion.korean.layout.HangulOld
-import ee.oyatl.ime.keyboard.rewrite.LayoutTable
+import ee.oyatl.ime.keyboard.LayoutTable
 import java.util.Locale
 import java.util.concurrent.Executors
 

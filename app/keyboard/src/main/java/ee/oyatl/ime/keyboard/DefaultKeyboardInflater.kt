@@ -1,4 +1,4 @@
-package ee.oyatl.ime.keyboard.rewrite
+package ee.oyatl.ime.keyboard
 
 class DefaultKeyboardInflater: KeyboardInflater {
     override fun inflate(
