@@ -9,20 +9,10 @@ import com.android.inputmethod.zhuyin.WordComposer
 import com.diycircuits.cangjie.TableLoader
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.fusion.R
-import ee.oyatl.ime.keyboard.CustomRowKeyboard
-import ee.oyatl.ime.keyboard.DefaultBottomRowKeyboard
-import ee.oyatl.ime.keyboard.KeyboardInflater
-import ee.oyatl.ime.keyboard.DefaultGridKeyboard
-import ee.oyatl.ime.keyboard.DefaultMobileKeyboard
-import ee.oyatl.ime.keyboard.DefaultTabletBottomRowKeyboard
-import ee.oyatl.ime.keyboard.DefaultTabletKeyboard
-import ee.oyatl.ime.keyboard.Keyboard
-import ee.oyatl.ime.keyboard.ScreenModeKeyboard
-import ee.oyatl.ime.keyboard.ShiftStateKeyboard
-import ee.oyatl.ime.keyboard.StackedKeyboard
 import ee.oyatl.ime.keyboard.layout.KeyboardTemplates
 import ee.oyatl.ime.keyboard.layout.LayoutCangjie
 import ee.oyatl.ime.keyboard.listener.OnKeyClickListener
+import ee.oyatl.ime.keyboard.rewrite.LayoutTable
 import java.util.Locale
 
 abstract class CangjieIMEMode(
@@ -41,9 +31,7 @@ abstract class CangjieIMEMode(
         }
     }
 
-    override val symbolKeyListener: OnKeyClickListener = DirectKeyListener()
-
-    override val layoutTable: Map<Int, List<Int>> = LayoutCangjie.TABLE_QWERTY
+    override val layoutTable: LayoutTable = LayoutTable.from(LayoutCangjie.TABLE_QWERTY)
     abstract val keyboardTemplate: List<String>
     abstract val keyMap: Map<Char, Char>
 
@@ -63,36 +51,6 @@ abstract class CangjieIMEMode(
         super.onReset()
         wordComposer.reset()
         bestCandidate = null
-    }
-
-    override fun createTextKeyboard(): Keyboard {
-        val textKeyboardLayers = KeyboardInflater.inflate(keyboardTemplate, layoutTable)
-        return StackedKeyboard(
-            ShiftStateKeyboard(
-                createDefaultKeyboard(textKeyboardLayers[0]),
-                createDefaultKeyboard(textKeyboardLayers[1])
-            ),
-            ShiftStateKeyboard(
-                createBottomRowKeyboard(shift = false, symbol = false),
-                createBottomRowKeyboard(shift = true, symbol = false)
-            )
-        )
-    }
-
-    override fun createDefaultKeyboard(layer: List<List<Int>>): Keyboard {
-        return ScreenModeKeyboard(
-            mobile = DefaultMobileKeyboard(layer),
-            tablet = DefaultTabletKeyboard(layer, extraKeys = listOf('，'.code, '。'.code))
-        )
-    }
-
-    override fun createBottomRowKeyboard(shift: Boolean, symbol: Boolean): Keyboard {
-        val extraKeys = if(!shift) listOf('，'.code, '。'.code) else listOf('《'.code, '》'.code)
-        val tabletExtraKeys = if(!symbol) listOf('！'.code, '？'.code) else listOf('<'.code, '>'.code)
-        return ScreenModeKeyboard(
-            mobile = DefaultBottomRowKeyboard(extraKeys = extraKeys, isSymbols = symbol),
-            tablet = DefaultTabletBottomRowKeyboard(extraKeys = tabletExtraKeys, isSymbols = symbol)
-        )
     }
 
     override fun onCandidateSelected(candidate: CandidateView.Candidate) {
@@ -126,15 +84,15 @@ abstract class CangjieIMEMode(
         postUpdateSuggestions()
     }
 
-    override fun onChar(code: Int) {
-        wordComposer.add(code, intArrayOf(code))
+    override fun onChar(codePoint: Int) {
+        wordComposer.add(codePoint, intArrayOf(codePoint))
         table?.setInputMethod(TableLoader.CANGJIE)
         renderInput()
     }
 
-    override fun onSpecial(type: Keyboard.SpecialKey) {
-        when(type) {
-            Keyboard.SpecialKey.Space -> {
+    override fun onSpecial(keyCode: Int) {
+        when(keyCode) {
+            KeyEvent.KEYCODE_SPACE -> {
                 if(wordComposer.typedWord?.isNotEmpty() == true) {
                     val bestCandidate = bestCandidate
                     if(bestCandidate != null) onCandidateSelected(bestCandidate)
@@ -144,7 +102,7 @@ abstract class CangjieIMEMode(
                 }
                 onReset()
             }
-            Keyboard.SpecialKey.Return -> {
+            KeyEvent.KEYCODE_ENTER -> {
                 if(wordComposer.typedWord?.isNotEmpty() == true) onReset()
                 else {
                     if (util?.sendDefaultEditorAction(true) != true)
@@ -152,7 +110,7 @@ abstract class CangjieIMEMode(
                     onReset()
                 }
             }
-            Keyboard.SpecialKey.Delete -> {
+            KeyEvent.KEYCODE_DEL -> {
                 if(wordComposer.typedWord?.isNotEmpty() == true) {
                     wordComposer.deleteLast()
                 } else {
@@ -170,15 +128,15 @@ abstract class CangjieIMEMode(
 
     inner class DirectKeyListener: OnKeyClickListener {
         override fun onKeyClick(code: Int) {
-            val special = Keyboard.SpecialKey.ofCode(code)
-            if(special != null) handleSpecialKey(special)
+            if(!keyCharacterMap.isPrintingKey(code)) handleSpecialKey(code)
             else {
                 onReset()
-                val fullWidthChar = when(code) {
-                    in 0x21 .. 0x7e -> (code - 0x20 + 0xff00).toChar()
-                    else -> code.toChar()
+                val char = layoutTable[code]?.forShiftState(shiftState) ?: return
+                val fullWidthChar = when(char) {
+                    in 0x21 .. 0x7e -> (char - 0x20 + 0xff00).toChar()
+                    else -> char.toChar()
                 }
-                val halfWidthChar = code.toChar()
+                val halfWidthChar = char.toChar()
                 util?.sendKeyChar(if(fullWidth) fullWidthChar else halfWidthChar)
             }
         }
@@ -209,20 +167,6 @@ abstract class CangjieIMEMode(
         override val inputMode: Int = TableLoader.DAYI3
         override val keyboardTemplate: List<String> = KeyboardTemplates.MOBILE
         override val keyMap: Map<Char, Char> = LayoutCangjie.KEY_MAP_DAYI3
-        override fun createTextKeyboard(): Keyboard {
-            return StackedKeyboard(
-                DefaultGridKeyboard(LayoutCangjie.ROWS_DAYI3.map { row -> row.map { it.code } }),
-                CustomRowKeyboard(listOf(
-                    CustomRowKeyboard.KeyType.Symbols(width = 1.5f),
-                    CustomRowKeyboard.KeyType.Extra('，'.code),
-                    CustomRowKeyboard.KeyType.Language(width = 1f),
-                    CustomRowKeyboard.KeyType.Space(width = 3f),
-                    CustomRowKeyboard.KeyType.Extra('。'.code),
-                    CustomRowKeyboard.KeyType.Return(width = 1.5f),
-                    CustomRowKeyboard.KeyType.Delete(width = 1f)
-                ))
-            )
-        }
     }
 
     data class Params(

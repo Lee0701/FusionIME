@@ -1,6 +1,6 @@
 package ee.oyatl.ime.keyboard.listener
 
-import ee.oyatl.ime.keyboard.Keyboard
+import android.view.KeyEvent
 import ee.oyatl.ime.keyboard.KeyboardState
 
 class AutoShiftLockListener(
@@ -9,7 +9,12 @@ class AutoShiftLockListener(
     private val lockDelay: Int = 300,
     private val autoReleaseOnInput: Boolean = true
 ): KeyboardListener {
-    private var state: KeyboardState.Shift
+    private val shiftCodes: Set<Int> = setOf(
+        KeyEvent.KEYCODE_SHIFT_LEFT,
+        KeyEvent.KEYCODE_SHIFT_RIGHT
+    )
+
+    private var shiftState: KeyboardState.Shift
         get() = stateContainer.shiftState
         set(value) { stateContainer.shiftState = value }
 
@@ -18,7 +23,7 @@ class AutoShiftLockListener(
     private var inputWhileShifted: Boolean = false
 
     override fun onKeyDown(code: Int) {
-        if(code == Keyboard.SpecialKey.Shift.code) onShiftPressed()
+        if(code in shiftCodes) onShiftPressed(code)
         else {
             listener.onKeyDown(code)
             autoReleaseShift()
@@ -26,41 +31,41 @@ class AutoShiftLockListener(
     }
 
     override fun onKeyUp(code: Int) {
-        if(code == Keyboard.SpecialKey.Shift.code) onShiftReleased()
-        else listener.onKeyUp(code)
+        if(code in shiftCodes) onShiftReleased(code)
+        else {
+            listener.onKeyUp(code)
+        }
     }
 
-    private fun onShiftPressed() {
-        listener.onKeyDown(Keyboard.SpecialKey.Shift.code)
+    private fun onShiftPressed(code: Int) {
         shiftPressing = true
-        when(state) {
+        when(shiftState) {
             KeyboardState.Shift.Released -> {
-                state = KeyboardState.Shift.Pressed
+                shiftState = KeyboardState.Shift.Pressed
             }
             KeyboardState.Shift.Pressed -> {
                 if(autoReleaseOnInput) {
                     val diff = System.currentTimeMillis() - shiftTime
-                    if(diff < lockDelay) state = KeyboardState.Shift.Locked
-                    else state = KeyboardState.Shift.Released
+                    if(diff < lockDelay) shiftState = KeyboardState.Shift.Locked
+                    else shiftState = KeyboardState.Shift.Released
                 } else {
-                    state = KeyboardState.Shift.Released
+                    shiftState = KeyboardState.Shift.Released
                 }
             }
             KeyboardState.Shift.Locked -> {
-                state = KeyboardState.Shift.Released
+                shiftState = KeyboardState.Shift.Released
             }
         }
     }
 
-    private fun onShiftReleased() {
-        listener.onKeyUp(Keyboard.SpecialKey.Shift.code)
+    private fun onShiftReleased(code: Int) {
         shiftPressing = false
-        when(state) {
+        when(shiftState) {
             KeyboardState.Shift.Released -> {
             }
             KeyboardState.Shift.Pressed -> {
-                if(inputWhileShifted) state = KeyboardState.Shift.Released
-                else state = KeyboardState.Shift.Pressed
+                if(inputWhileShifted) shiftState = KeyboardState.Shift.Released
+                else shiftState = KeyboardState.Shift.Pressed
             }
             KeyboardState.Shift.Locked -> {
             }
@@ -71,9 +76,9 @@ class AutoShiftLockListener(
 
     private fun autoReleaseShift() {
         if(!autoReleaseOnInput) return
-        if(state == KeyboardState.Shift.Pressed) {
+        if(shiftState == KeyboardState.Shift.Pressed) {
             if(!shiftPressing) {
-                state = KeyboardState.Shift.Released
+                shiftState = KeyboardState.Shift.Released
             } else {
                 inputWhileShifted = true
             }

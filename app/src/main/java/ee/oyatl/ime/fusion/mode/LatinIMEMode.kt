@@ -23,15 +23,6 @@ import com.android.inputmethod.latin.settings.SettingsValuesForSuggestion
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.TripleCandidateView
 import ee.oyatl.ime.fusion.R
-import ee.oyatl.ime.keyboard.DefaultBottomRowKeyboard
-import ee.oyatl.ime.keyboard.DefaultTabletBottomRowKeyboard
-import ee.oyatl.ime.keyboard.DefaultTabletKeyboard
-import ee.oyatl.ime.keyboard.Keyboard.SpecialKey
-import ee.oyatl.ime.keyboard.KeyboardInflater
-import ee.oyatl.ime.keyboard.ScreenModeKeyboard
-import ee.oyatl.ime.keyboard.ShiftStateKeyboard
-import ee.oyatl.ime.keyboard.StackedKeyboard
-import ee.oyatl.ime.keyboard.layout.KeyboardTemplates
 import java.util.Locale
 
 abstract class LatinIMEMode(
@@ -141,8 +132,8 @@ abstract class LatinIMEMode(
         }
     }
 
-    override fun onChar(code: Int) {
-        val event = Event.createEventForCodePointFromUnknownSource(code)
+    override fun onChar(codePoint: Int) {
+        val event = Event.createEventForCodePointFromUnknownSource(codePoint)
         val processedEvent = wordComposer.processEvent(event)
         wordComposer.applyProcessedEvent(processedEvent)
         if(ghostSpace) currentInputConnection?.commitText(" ", 1)
@@ -151,9 +142,9 @@ abstract class LatinIMEMode(
         updateSuggestions()
     }
 
-    override fun onSpecial(type: SpecialKey) {
-        when(type) {
-            SpecialKey.Delete -> {
+    override fun onSpecial(keyCode: Int) {
+        when(keyCode) {
+            KeyEvent.KEYCODE_DEL -> {
                 val event = Event.createSoftwareKeypressEvent(Event.NOT_A_CODE_POINT, Constants.CODE_DELETE, 0, 0, false)
                 val processedEvent = wordComposer.processEvent(event)
                 if(wordComposer.isComposingWord) {
@@ -164,11 +155,11 @@ abstract class LatinIMEMode(
                 }
                 updateSuggestions()
             }
-            SpecialKey.Space -> {
+            KeyEvent.KEYCODE_SPACE -> {
                 onReset()
                 util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_SPACE)
             }
-            SpecialKey.Return -> {
+            KeyEvent.KEYCODE_ENTER -> {
                 onReset()
                 if (util?.sendDefaultEditorAction(true) != true)
                     util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_ENTER)
@@ -188,73 +179,12 @@ abstract class LatinIMEMode(
     ): CandidateView.Candidate
 
     class Qwerty(override val locale: Locale, listener: IMEMode.Listener): LatinIMEMode(listener) {
-        override fun createTextKeyboard(): ee.oyatl.ime.keyboard.Keyboard {
-            val layers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE, layoutTable)
-            return StackedKeyboard(
-                ShiftStateKeyboard(
-                    createDefaultKeyboard(layers[0]),
-                    createDefaultKeyboard(layers[1])
-                ),
-                ShiftStateKeyboard(
-                    createBottomRowKeyboard(shift = false, symbol = false),
-                    createBottomRowKeyboard(shift = true, symbol = false)
-                )
-            )
-        }
     }
 
     class Dvorak(override val locale: Locale, listener: IMEMode.Listener): LatinIMEMode(listener) {
-        override fun createTextKeyboard(): ee.oyatl.ime.keyboard.Keyboard {
-            val mobileLayers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE_DVORAK, layoutTable)
-            val tabletLayers = KeyboardInflater.inflate(KeyboardTemplates.TABLET_DVORAK, layoutTable)
-            val tabletExtra = KeyboardInflater.inflate(KeyboardTemplates.TABLET_DVORAK_EXTRA, layoutTable)
-            return StackedKeyboard(
-                ScreenModeKeyboard(
-                    ShiftStateKeyboard(
-                        createDefaultKeyboard(mobileLayers[0]),
-                        createDefaultKeyboard(mobileLayers[1])
-                    ),
-                    ShiftStateKeyboard(
-                        DefaultTabletKeyboard(tabletLayers[0], tabletExtra[0][0]),
-                        DefaultTabletKeyboard(tabletLayers[1], tabletExtra[1][0])
-                    )
-                ),
-                ShiftStateKeyboard(
-                    createBottomRowKeyboard(shift = false, symbol = false),
-                    createBottomRowKeyboard(shift = true, symbol = false)
-                )
-            )
-        }
-
-        override fun createBottomRowKeyboard(
-            shift: Boolean,
-            symbol: Boolean
-        ): ee.oyatl.ime.keyboard.Keyboard {
-            if(symbol) return super.createBottomRowKeyboard(shift, true)
-            val extraKeys =
-                if(!shift) listOf('q'.code, 'z'.code)
-                else listOf('Q'.code, 'Z'.code)
-            return ScreenModeKeyboard(
-                mobile = DefaultBottomRowKeyboard(extraKeys = extraKeys, isSymbols = false),
-                tablet = DefaultTabletBottomRowKeyboard(isSymbols = false)
-            )
-        }
     }
 
     class Colemak(override val locale: Locale, listener: IMEMode.Listener): LatinIMEMode(listener) {
-        override fun createTextKeyboard(): ee.oyatl.ime.keyboard.Keyboard {
-            val layers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE_COLEMAK, layoutTable)
-            return StackedKeyboard(
-                ShiftStateKeyboard(
-                    createDefaultKeyboard(layers[0]),
-                    createDefaultKeyboard(layers[1])
-                ),
-                ShiftStateKeyboard(
-                    createBottomRowKeyboard(shift = false, symbol = false),
-                    createBottomRowKeyboard(shift = true, symbol = false)
-                )
-            )
-        }
     }
 
     data class Params(

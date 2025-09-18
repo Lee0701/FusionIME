@@ -20,11 +20,9 @@ open class FeedbackListener(
 ): KeyboardListener {
     @RequiresApi(Build.VERSION_CODES.S)
     private val vibratorManager = context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
-
     private val vibrator =
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) vibratorManager.defaultVibrator
         else context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-
     private val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
     private var downTime: Long = 0

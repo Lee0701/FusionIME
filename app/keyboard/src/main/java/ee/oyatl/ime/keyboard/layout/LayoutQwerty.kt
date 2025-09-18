@@ -14,8 +14,8 @@ object LayoutQwerty {
         KeyEvent.KEYCODE_I to listOf('i'.code, 'I'.code),
         KeyEvent.KEYCODE_O to listOf('o'.code, 'O'.code),
         KeyEvent.KEYCODE_P to listOf('p'.code, 'P'.code),
-        KeyEvent.KEYCODE_LEFT_BRACKET to listOf('['.code, '}'.code),
-        KeyEvent.KEYCODE_RIGHT_BRACKET to listOf('['.code, '}'.code),
+        KeyEvent.KEYCODE_LEFT_BRACKET to listOf('['.code, '}'.code, '['.code),
+        KeyEvent.KEYCODE_RIGHT_BRACKET to listOf('['.code, '}'.code, ']'.code),
 
         KeyEvent.KEYCODE_A to listOf('a'.code, 'A'.code),
         KeyEvent.KEYCODE_S to listOf('s'.code, 'S'.code),
@@ -26,8 +26,8 @@ object LayoutQwerty {
         KeyEvent.KEYCODE_J to listOf('j'.code, 'J'.code),
         KeyEvent.KEYCODE_K to listOf('k'.code, 'K'.code),
         KeyEvent.KEYCODE_L to listOf('l'.code, 'L'.code),
-        KeyEvent.KEYCODE_SEMICOLON to listOf(';'.code, ':'.code),
-        KeyEvent.KEYCODE_APOSTROPHE to listOf('\''.code, '"'.code),
+        KeyEvent.KEYCODE_SEMICOLON to listOf(';'.code, ':'.code, ':'.code),
+        KeyEvent.KEYCODE_APOSTROPHE to listOf('\''.code, '"'.code, '\''.code),
 
         KeyEvent.KEYCODE_Z to listOf('z'.code, 'Z'.code),
         KeyEvent.KEYCODE_X to listOf('x'.code, 'X'.code),
@@ -36,8 +36,8 @@ object LayoutQwerty {
         KeyEvent.KEYCODE_B to listOf('b'.code, 'B'.code),
         KeyEvent.KEYCODE_N to listOf('n'.code, 'N'.code),
         KeyEvent.KEYCODE_M to listOf('m'.code, 'M'.code),
-        KeyEvent.KEYCODE_COMMA to listOf(','.code, '<'.code),
-        KeyEvent.KEYCODE_PERIOD to listOf('.'.code, '>'.code),
-        KeyEvent.KEYCODE_SLASH to listOf('/'.code, '?'.code)
+        KeyEvent.KEYCODE_COMMA to listOf(','.code, '<'.code, ','.code),
+        KeyEvent.KEYCODE_PERIOD to listOf('.'.code, '>'.code, '.'.code),
+        KeyEvent.KEYCODE_SLASH to listOf('/'.code, '?'.code, '/'.code)
     )
 }
