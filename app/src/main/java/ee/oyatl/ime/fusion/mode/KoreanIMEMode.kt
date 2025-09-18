@@ -13,10 +13,11 @@ import ee.oyatl.ime.fusion.korean.HanjaConverter
 import ee.oyatl.ime.fusion.korean.JeongUnHanjaConverter
 import ee.oyatl.ime.fusion.korean.UnigramHanjaConverter
 import ee.oyatl.ime.fusion.korean.WordComposer
-import ee.oyatl.ime.fusion.korean.layout.Hangul2Set
-import ee.oyatl.ime.fusion.korean.layout.Hangul3Set
-import ee.oyatl.ime.fusion.korean.layout.HangulOld
+import ee.oyatl.ime.keyboard.layout.Hangul2Set
+import ee.oyatl.ime.keyboard.layout.Hangul3Set
+import ee.oyatl.ime.keyboard.layout.HangulOld
 import ee.oyatl.ime.keyboard.LayoutTable
+import ee.oyatl.ime.keyboard.layout.LayoutQwerty
 import java.util.Locale
 import java.util.concurrent.Executors
 
@@ -119,7 +120,7 @@ abstract class KoreanIMEMode(
     ): KoreanIMEMode(listener) {
         override val hangulCombiner: HangulCombiner = HangulCombiner(Hangul2Set.COMB_KS, correctOrders)
         override val hanjaConverter: HanjaConverter = converterType.create()
-        override val layoutTable: LayoutTable = LayoutTable.from(Hangul2Set.TABLE_KS)
+        override val layoutTable: LayoutTable = LayoutTable.from(LayoutQwerty.TABLE_QWERTY + Hangul2Set.TABLE_KS)
     }
 
     /*
@@ -135,7 +136,7 @@ abstract class KoreanIMEMode(
     ): Hangul3Set390391(listener) {
         override val hangulCombiner: HangulCombiner = HangulCombiner(Hangul3Set.COMBINATION_390, correctOrders)
         override val hanjaConverter: HanjaConverter = converterType.create()
-        override val layoutTable: LayoutTable = LayoutTable.from(Hangul3Set.TABLE_390)
+        override val layoutTable: LayoutTable = LayoutTable.from(LayoutQwerty.TABLE_QWERTY + Hangul3Set.TABLE_390)
 
         /*
          * Modify shifted bottom row for number entry.
@@ -162,7 +163,7 @@ abstract class KoreanIMEMode(
     ): Hangul3Set390391(listener) {
         override val hangulCombiner: HangulCombiner = HangulCombiner(Hangul3Set.COMBINATION_391, correctOrders)
         override val hanjaConverter: HanjaConverter = converterType.create()
-        override val layoutTable: LayoutTable = LayoutTable.from(Hangul3Set.TABLE_391)
+        override val layoutTable: LayoutTable = LayoutTable.from(LayoutQwerty.TABLE_QWERTY + Hangul3Set.TABLE_391)
     }
 
     class HangulOld2Set(
@@ -172,7 +173,7 @@ abstract class KoreanIMEMode(
     ): KoreanIMEMode(listener) {
         override val hangulCombiner: HangulCombiner = HangulCombiner(HangulOld.COMB_FULL, correctOrders)
         override val hanjaConverter: HanjaConverter = converterType.create()
-        override val layoutTable: LayoutTable = LayoutTable.from(HangulOld.TABLE_OLD_2SET)
+        override val layoutTable: LayoutTable = LayoutTable.from(LayoutQwerty.TABLE_QWERTY + HangulOld.TABLE_OLD_2SET)
     }
 
     data class Params(

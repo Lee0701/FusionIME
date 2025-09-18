@@ -12,9 +12,12 @@ import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.VerticalScrollingCandidateView
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.mozc.InputConnectionRenderer
+import ee.oyatl.ime.keyboard.KeyboardConfiguration
 import ee.oyatl.ime.keyboard.layout.LayoutKana
 import ee.oyatl.ime.keyboard.layout.LayoutRomaji
 import ee.oyatl.ime.keyboard.LayoutTable
+import ee.oyatl.ime.keyboard.layout.KeyboardConfigurations
+import ee.oyatl.ime.keyboard.layout.KeyboardTemplates
 import org.mozc.android.inputmethod.japanese.MozcUtil
 import org.mozc.android.inputmethod.japanese.PrimaryKeyCodeConverter
 import org.mozc.android.inputmethod.japanese.keyboard.Keyboard.KeyboardSpecification
@@ -155,6 +158,8 @@ abstract class MozcIMEMode(
     class RomajiQwerty(listener: IMEMode.Listener): MozcIMEMode(listener) {
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.QWERTY_KANA
         override val layoutTable: LayoutTable = LayoutTable.from(LayoutRomaji.TABLE_QWERTY)
+        override val keyboardConfiguration: KeyboardConfiguration = KeyboardConfigurations.MOBILE_EXT1
+        override val keyboardTemplate: List<String> = KeyboardTemplates.MOBILE_MINUS
     }
 
     class KanaJIS(listener: IMEMode.Listener): MozcIMEMode(listener) {

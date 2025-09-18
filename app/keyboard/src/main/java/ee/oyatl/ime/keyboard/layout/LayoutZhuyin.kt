@@ -4,8 +4,6 @@ import android.view.KeyEvent
 
 object LayoutZhuyin {
 
-    val EXTRA_KEYS = listOf("-")
-
     val TABLE = mapOf(
         KeyEvent.KEYCODE_1 to listOf('ㄅ'.code),
         KeyEvent.KEYCODE_2 to listOf('ㄉ'.code),

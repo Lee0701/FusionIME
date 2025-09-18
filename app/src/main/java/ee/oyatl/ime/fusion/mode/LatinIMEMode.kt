@@ -23,6 +23,11 @@ import com.android.inputmethod.latin.settings.SettingsValuesForSuggestion
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.TripleCandidateView
 import ee.oyatl.ime.fusion.R
+import ee.oyatl.ime.keyboard.KeyCodeMapper
+import ee.oyatl.ime.keyboard.KeyboardConfiguration
+import ee.oyatl.ime.keyboard.layout.KeyboardConfigurations
+import ee.oyatl.ime.keyboard.layout.KeyboardMappings
+import ee.oyatl.ime.keyboard.layout.KeyboardTemplates
 import java.util.Locale
 
 abstract class LatinIMEMode(
@@ -178,13 +183,24 @@ abstract class LatinIMEMode(
         override val text: CharSequence
     ): CandidateView.Candidate
 
-    class Qwerty(override val locale: Locale, listener: IMEMode.Listener): LatinIMEMode(listener) {
-    }
+    class Qwerty(override val locale: Locale, listener: IMEMode.Listener): LatinIMEMode(listener)
 
     class Dvorak(override val locale: Locale, listener: IMEMode.Listener): LatinIMEMode(listener) {
+        override val keyCodeMapper: KeyCodeMapper = KeyCodeMapper.from(
+            KeyboardMappings.ANSI_QWERTY,
+            KeyboardMappings.ANSI_QWERTY_DVORAK
+        )
+        override val keyboardConfiguration: KeyboardConfiguration = KeyboardConfigurations.MOBILE_DVORAK
+        override val keyboardTemplate: List<String> = KeyboardTemplates.MOBILE_DVORAK
     }
 
     class Colemak(override val locale: Locale, listener: IMEMode.Listener): LatinIMEMode(listener) {
+        override val keyCodeMapper: KeyCodeMapper = KeyCodeMapper.from(
+            KeyboardMappings.ANSI_QWERTY,
+            KeyboardMappings.ANSI_QWERTY_COLEMAK
+        )
+        override val keyboardConfiguration: KeyboardConfiguration = KeyboardConfigurations.MOBILE_EXT1
+        override val keyboardTemplate: List<String> = KeyboardTemplates.MOBILE_SEMICOLON
     }
 
     data class Params(

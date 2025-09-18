@@ -7,13 +7,19 @@ object KeyboardTemplates {
         "zxcvbnm"
     )
 
+    val MOBILE_SEMICOLON: List<String> = listOf(
+        "qwertyuiop",
+        "asdfghjkl;",
+        "zxcvbnm"
+    )
+
     val MOBILE_MINUS: List<String> = listOf(
         "qwertyuiop",
         "asdfghjkl-",
         "zxcvbnm"
     )
 
-    val MOBILE_WITH_QUOTE: List<String> = listOf(
+    val MOBILE_QUOTE: List<String> = listOf(
         "1234567890",
         "qwertyuiop",
         "asdfghjkl;",
@@ -28,24 +34,9 @@ object KeyboardTemplates {
     )
 
     val MOBILE_DVORAK: List<String> = listOf(
-        "',.pyfgcrl",
-        "aoeuidhtns",
-        "jkxbmwv",
+        "qwertyuiop",
+        "asdfghjkl;",
+        "cvbnm,.",
     )
 
-    val TABLET_DVORAK: List<String> = listOf(
-        "',.pyfgcrl",
-        "aoeuidhtns",
-        "qjkxbmw",
-    )
-
-    val TABLET_DVORAK_EXTRA: List<String> = listOf(
-        "vz",
-    )
-
-    val MOBILE_COLEMAK: List<String> = listOf(
-        "qwfpgjluy;",
-        "arstdhneio",
-        "zxcvbkm",
-    )
 }

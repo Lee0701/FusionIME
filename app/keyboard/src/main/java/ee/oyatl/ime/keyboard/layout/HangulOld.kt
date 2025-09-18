@@ -1,20 +1,9 @@
-package ee.oyatl.ime.fusion.korean.layout
+package ee.oyatl.ime.keyboard.layout
 
 import android.view.KeyEvent
 
 object HangulOld {
     val TABLE_OLD_2SET = mapOf(
-        KeyEvent.KEYCODE_1 to listOf(0x31, 0x21),
-        KeyEvent.KEYCODE_2 to listOf(0x32, 0x40),
-        KeyEvent.KEYCODE_3 to listOf(0x33, 0x23),
-        KeyEvent.KEYCODE_4 to listOf(0x34, 0x24),
-        KeyEvent.KEYCODE_5 to listOf(0x35, 0x25),
-        KeyEvent.KEYCODE_6 to listOf(0x36, 0x5e),
-        KeyEvent.KEYCODE_7 to listOf(0x37, 0x26),
-        KeyEvent.KEYCODE_8 to listOf(0x38, 0x2a),
-        KeyEvent.KEYCODE_9 to listOf(0x39, 0x28),
-        KeyEvent.KEYCODE_0 to listOf(0x30, 0x29),
-
         KeyEvent.KEYCODE_Q to listOf(0x3142, 0x3143),
         KeyEvent.KEYCODE_W to listOf(0x3148, 0x3149),
         KeyEvent.KEYCODE_E to listOf(0x3137, 0x3138),

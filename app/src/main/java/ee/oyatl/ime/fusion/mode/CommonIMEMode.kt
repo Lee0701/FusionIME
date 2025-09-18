@@ -19,10 +19,13 @@ import ee.oyatl.ime.keyboard.layout.KeyboardTemplates
 import ee.oyatl.ime.keyboard.layout.LayoutQwerty
 import ee.oyatl.ime.keyboard.KeyboardListener
 import ee.oyatl.ime.keyboard.DefaultKeyboardInflater
+import ee.oyatl.ime.keyboard.KeyCodeMapper
 import ee.oyatl.ime.keyboard.Keyboard
+import ee.oyatl.ime.keyboard.KeyboardConfiguration
 import ee.oyatl.ime.keyboard.KeyboardParams
 import ee.oyatl.ime.keyboard.KeyboardViewManager
 import ee.oyatl.ime.keyboard.LayoutTable
+import ee.oyatl.ime.keyboard.layout.KeyboardMappings
 import kotlin.math.roundToInt
 
 abstract class CommonIMEMode(
@@ -30,6 +33,9 @@ abstract class CommonIMEMode(
 ): IMEMode, KeyboardListener, CandidateView.Listener {
     protected val keyCharacterMap: KeyCharacterMap = KeyCharacterMap.load(KeyCharacterMap.VIRTUAL_KEYBOARD)
 
+    open val keyCodeMapper: KeyCodeMapper = KeyCodeMapper(mapOf())
+    open val keyboardConfiguration: KeyboardConfiguration = KeyboardConfigurations.MOBILE
+    open val keyboardTemplate: List<String> = KeyboardTemplates.MOBILE
     open val layoutTable: LayoutTable = LayoutTable.from(LayoutQwerty.TABLE_QWERTY)
 
     protected var keyboard: Keyboard? = null
@@ -96,7 +102,7 @@ abstract class CommonIMEMode(
             soundVolume = soundVolume,
             vibrationDuration = vibrationDuration,
             previewPopups = showPreviewPopup,
-            shiftLockDelay = 3000,
+            shiftLockDelay = 300,
             shiftAutoRelease = true,
             repeatDelay = 300,
             repeatInterval = 30,
@@ -104,10 +110,10 @@ abstract class CommonIMEMode(
         val defaultScreenMode = context.resources.getString(R.string.screen_mode_default)
         val screenMode = KeyboardState.ScreenMode.valueOf(preference.getString("screen_mode", null) ?: defaultScreenMode)
 
-        val contentRows = KeyboardTemplates.MOBILE.map { row -> row.map { keyCharacterMap.getEvents(charArrayOf(it))[0].keyCode } }
+        val contentRows = keyboardTemplate.map { row -> row.map { KeyCodeMapper.keyCharToKeyCode(it) } }
 
-        val keyboardInflater = DefaultKeyboardInflater()
-        val keyboard = keyboardInflater.inflate(KeyboardConfigurations.MOBILE, contentRows, params)
+        val keyboardInflater = DefaultKeyboardInflater(params, keyCodeMapper)
+        val keyboard = keyboardInflater.inflate(keyboardConfiguration, contentRows)
 
         val keyboardView = keyboard.createView(context, this)
         updateInputView()

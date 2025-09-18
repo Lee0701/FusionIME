@@ -1,7 +1,6 @@
 package ee.oyatl.ime.keyboard
 
 import android.content.Context
-import ee.oyatl.ime.keyboard.KeyboardListener
 
 interface Keyboard {
     fun createView(context: Context, listener: KeyboardListener): KeyboardViewManager

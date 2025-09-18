@@ -30,8 +30,6 @@ abstract class CangjieIMEMode(
         }
     }
 
-    override val layoutTable: LayoutTable = LayoutTable.from(LayoutCangjie.TABLE_QWERTY)
-    abstract val keyboardTemplate: List<String>
     abstract val keyMap: Map<Char, Char>
 
     private var table: TableLoader? = null
