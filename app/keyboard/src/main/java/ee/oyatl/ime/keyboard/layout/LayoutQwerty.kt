@@ -4,6 +4,20 @@ import android.view.KeyEvent
 
 object LayoutQwerty {
     val TABLE_QWERTY = mapOf(
+        KeyEvent.KEYCODE_GRAVE to listOf('`'.code, '~'.code),
+        KeyEvent.KEYCODE_1 to listOf('1'.code, '1'.code),
+        KeyEvent.KEYCODE_2 to listOf('2'.code, '2'.code),
+        KeyEvent.KEYCODE_3 to listOf('3'.code, '3'.code),
+        KeyEvent.KEYCODE_4 to listOf('4'.code, '4'.code),
+        KeyEvent.KEYCODE_5 to listOf('5'.code, '5'.code),
+        KeyEvent.KEYCODE_6 to listOf('6'.code, '6'.code),
+        KeyEvent.KEYCODE_7 to listOf('7'.code, '7'.code),
+        KeyEvent.KEYCODE_8 to listOf('8'.code, '8'.code),
+        KeyEvent.KEYCODE_9 to listOf('9'.code, '9'.code),
+        KeyEvent.KEYCODE_0 to listOf('0'.code, '0'.code),
+        KeyEvent.KEYCODE_MINUS to listOf('-'.code, '_'.code),
+        KeyEvent.KEYCODE_EQUALS to listOf('='.code, '+'.code),
+
         KeyEvent.KEYCODE_Q to listOf('q'.code, 'Q'.code),
         KeyEvent.KEYCODE_W to listOf('w'.code, 'W'.code),
         KeyEvent.KEYCODE_E to listOf('e'.code, 'E'.code),
@@ -14,8 +28,9 @@ object LayoutQwerty {
         KeyEvent.KEYCODE_I to listOf('i'.code, 'I'.code),
         KeyEvent.KEYCODE_O to listOf('o'.code, 'O'.code),
         KeyEvent.KEYCODE_P to listOf('p'.code, 'P'.code),
-        KeyEvent.KEYCODE_LEFT_BRACKET to listOf('['.code, '}'.code),
-        KeyEvent.KEYCODE_RIGHT_BRACKET to listOf('['.code, '}'.code),
+        KeyEvent.KEYCODE_LEFT_BRACKET to listOf('['.code, '}'.code, '['.code),
+        KeyEvent.KEYCODE_RIGHT_BRACKET to listOf('['.code, '}'.code, ']'.code),
+        KeyEvent.KEYCODE_BACKSLASH to listOf('\\'.code, '|'.code, '\\'.code),
 
         KeyEvent.KEYCODE_A to listOf('a'.code, 'A'.code),
         KeyEvent.KEYCODE_S to listOf('s'.code, 'S'.code),
@@ -26,8 +41,8 @@ object LayoutQwerty {
         KeyEvent.KEYCODE_J to listOf('j'.code, 'J'.code),
         KeyEvent.KEYCODE_K to listOf('k'.code, 'K'.code),
         KeyEvent.KEYCODE_L to listOf('l'.code, 'L'.code),
-        KeyEvent.KEYCODE_SEMICOLON to listOf(';'.code, ':'.code),
-        KeyEvent.KEYCODE_APOSTROPHE to listOf('\''.code, '"'.code),
+        KeyEvent.KEYCODE_SEMICOLON to listOf(';'.code, ':'.code, ':'.code),
+        KeyEvent.KEYCODE_APOSTROPHE to listOf('\''.code, '"'.code, '\''.code),
 
         KeyEvent.KEYCODE_Z to listOf('z'.code, 'Z'.code),
         KeyEvent.KEYCODE_X to listOf('x'.code, 'X'.code),
@@ -36,8 +51,8 @@ object LayoutQwerty {
         KeyEvent.KEYCODE_B to listOf('b'.code, 'B'.code),
         KeyEvent.KEYCODE_N to listOf('n'.code, 'N'.code),
         KeyEvent.KEYCODE_M to listOf('m'.code, 'M'.code),
-        KeyEvent.KEYCODE_COMMA to listOf(','.code, '<'.code),
-        KeyEvent.KEYCODE_PERIOD to listOf('.'.code, '>'.code),
-        KeyEvent.KEYCODE_SLASH to listOf('/'.code, '?'.code)
+        KeyEvent.KEYCODE_COMMA to listOf(','.code, '<'.code, ','.code),
+        KeyEvent.KEYCODE_PERIOD to listOf('.'.code, '>'.code, '.'.code),
+        KeyEvent.KEYCODE_SLASH to listOf('/'.code, '?'.code, '/'.code)
     )
 }

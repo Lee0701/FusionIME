@@ -35,6 +35,59 @@ object LayoutCangjie {
         KeyEvent.KEYCODE_M to listOf('一'.code, 'M'.code)
     )
 
+    val TABLE_DAYI3 = mapOf(
+        KeyEvent.KEYCODE_GRAVE to listOf('巷'.code, '`'.code),
+        KeyEvent.KEYCODE_1 to listOf('言'.code, '!'.code),
+        KeyEvent.KEYCODE_2 to listOf('牛'.code, '@'.code),
+        KeyEvent.KEYCODE_3 to listOf('目'.code, '#'.code),
+        KeyEvent.KEYCODE_4 to listOf('四'.code, '$'.code),
+        KeyEvent.KEYCODE_5 to listOf('王'.code, '%'.code),
+        KeyEvent.KEYCODE_6 to listOf('門'.code, '^'.code),
+        KeyEvent.KEYCODE_7 to listOf('田'.code, '&'.code),
+        KeyEvent.KEYCODE_8 to listOf('米'.code, '*'.code),
+        KeyEvent.KEYCODE_9 to listOf('足'.code, '('.code),
+        KeyEvent.KEYCODE_0 to listOf('金'.code, ')'.code),
+        KeyEvent.KEYCODE_MINUS to listOf('郷'.code, '-'.code),
+        KeyEvent.KEYCODE_EQUALS to listOf('='.code, '='.code),
+
+        KeyEvent.KEYCODE_Q to listOf('石'.code, 'Q'.code),
+        KeyEvent.KEYCODE_W to listOf('山'.code, 'W'.code),
+        KeyEvent.KEYCODE_E to listOf('一'.code, 'E'.code),
+        KeyEvent.KEYCODE_R to listOf('工'.code, 'R'.code),
+        KeyEvent.KEYCODE_T to listOf('糸'.code, 'T'.code),
+        KeyEvent.KEYCODE_Y to listOf('火'.code, 'Y'.code),
+        KeyEvent.KEYCODE_U to listOf('艸'.code, 'U'.code),
+        KeyEvent.KEYCODE_I to listOf('木'.code, 'I'.code),
+        KeyEvent.KEYCODE_O to listOf('口'.code, 'O'.code),
+        KeyEvent.KEYCODE_P to listOf('耳'.code, 'P'.code),
+        KeyEvent.KEYCODE_LEFT_BRACKET to listOf('路'.code, '['.code),
+        KeyEvent.KEYCODE_RIGHT_BRACKET to listOf('街'.code, ']'.code),
+        KeyEvent.KEYCODE_BACKSLASH to listOf('鎮'.code, '\\'.code),
+
+        KeyEvent.KEYCODE_A to listOf('人'.code, 'A'.code),
+        KeyEvent.KEYCODE_S to listOf('革'.code, 'S'.code),
+        KeyEvent.KEYCODE_D to listOf('日'.code, 'D'.code),
+        KeyEvent.KEYCODE_F to listOf('土'.code, 'F'.code),
+        KeyEvent.KEYCODE_G to listOf('手'.code, 'G'.code),
+        KeyEvent.KEYCODE_H to listOf('鳥'.code, 'H'.code),
+        KeyEvent.KEYCODE_J to listOf('月'.code, 'J'.code),
+        KeyEvent.KEYCODE_K to listOf('立'.code, 'K'.code),
+        KeyEvent.KEYCODE_L to listOf('女'.code, 'L'.code),
+        KeyEvent.KEYCODE_SEMICOLON to listOf('虫'.code, ';'.code),
+        KeyEvent.KEYCODE_APOSTROPHE to listOf('號'.code, '\''.code),
+
+        KeyEvent.KEYCODE_Z to listOf('心'.code, 'Z'.code),
+        KeyEvent.KEYCODE_X to listOf('水'.code, 'X'.code),
+        KeyEvent.KEYCODE_C to listOf('鹿'.code, 'C'.code),
+        KeyEvent.KEYCODE_V to listOf('禾'.code, 'V'.code),
+        KeyEvent.KEYCODE_B to listOf('馬'.code, 'B'.code),
+        KeyEvent.KEYCODE_N to listOf('魚'.code, 'N'.code),
+        KeyEvent.KEYCODE_M to listOf('雨'.code, 'M'.code),
+        KeyEvent.KEYCODE_COMMA to listOf('力'.code, ','.code),
+        KeyEvent.KEYCODE_PERIOD to listOf('舟'.code, '.'.code),
+        KeyEvent.KEYCODE_SLASH to listOf('竹'.code, '/'.code),
+    )
+
     val KEY_MAP_CANGJIE = mapOf(
         '日' to 'a',
         '月' to 'b',
@@ -62,13 +115,6 @@ object LayoutCangjie {
         '難' to 'x',
         '卜' to 'y',
         '重' to 'z'
-    )
-
-    val ROWS_DAYI3: List<String> = listOf(
-        "言牛目四王門田米足金",
-        "石山一工糸火艸木口耳",
-        "人革日土手鳥月立女虫",
-        "心水鹿禾馬魚雨力舟竹",
     )
 
     val KEY_MAP_DAYI3 = mapOf(

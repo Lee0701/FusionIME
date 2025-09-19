@@ -9,13 +9,16 @@ import com.android.inputmethod.zhuyin.TextEntryState
 import com.android.inputmethod.zhuyin.WordComposer
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.fusion.R
-import ee.oyatl.ime.keyboard.DefaultGridKeyboard
-import ee.oyatl.ime.keyboard.GridBottomRowKeyboard
-import ee.oyatl.ime.keyboard.Keyboard
-import ee.oyatl.ime.keyboard.KeyboardInflater
-import ee.oyatl.ime.keyboard.StackedKeyboard
-import ee.oyatl.ime.keyboard.layout.KeyboardTemplates
+import ee.oyatl.ime.keyboard.KeyboardConfiguration
+import ee.oyatl.ime.keyboard.KeyboardTemplate
 import ee.oyatl.ime.keyboard.layout.LayoutZhuyin
+import ee.oyatl.ime.keyboard.LayoutTable
+import ee.oyatl.ime.keyboard.layout.MobileKeyboard
+import ee.oyatl.ime.keyboard.layout.MobileKeyboardRows
+import ee.oyatl.ime.keyboard.layout.LayoutExt
+import ee.oyatl.ime.keyboard.layout.LayoutQwerty
+import ee.oyatl.ime.keyboard.layout.TabletKeyboard
+import ee.oyatl.ime.keyboard.layout.TabletKeyboardRows
 import tw.cheyingwu.zhuyin.ZhuYinDictionary
 import tw.cheyingwu.zhuyin.ZhuYinIMESettings
 import java.util.Locale
@@ -33,7 +36,25 @@ class ZhuyinIMEMode(
         }
     }
 
-    override val layoutTable: Map<Int, List<Int>> = LayoutZhuyin.TABLE
+    override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
+        mobile = KeyboardTemplate.Basic(
+            configuration = KeyboardConfiguration(
+                MobileKeyboard.numbers(),
+                MobileKeyboard.alphabetic(semicolon = true, shiftDeleteWidth = 1f, shift = false),
+                MobileKeyboard.bottom(KeyEvent.KEYCODE_MINUS, KeyEvent.KEYCODE_SLASH)
+            ),
+            contentRows = MobileKeyboardRows.NUMBERS + MobileKeyboardRows.HALF_GRID
+        ),
+        tablet = KeyboardTemplate.Basic(
+            configuration = KeyboardConfiguration(
+                TabletKeyboard.numbers(delete = true),
+                TabletKeyboard.alphabetic(semicolon = true, rightShift = false, delete = false, spacerOnDelete = false),
+                TabletKeyboard.bottom()
+            ),
+            contentRows = TabletKeyboardRows.NUMBERS + TabletKeyboardRows.SEMICOLON_SLASH_MINUS
+        )
+    )
+    override val textLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutExt.TABLE_CHINESE + LayoutZhuyin.TABLE)
 
     private val wordComposer = WordComposer()
     private var mSuggest: Suggest? = null
@@ -56,14 +77,6 @@ class ZhuyinIMEMode(
         super.onReset()
         bestCandidate = null
         wordComposer.reset()
-    }
-
-    override fun createTextKeyboard(): Keyboard {
-        val layers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE_GRID, layoutTable)
-        return StackedKeyboard(
-            DefaultGridKeyboard(layers[0]),
-            GridBottomRowKeyboard(KeyboardInflater.inflate(LayoutZhuyin.EXTRA_KEYS, layoutTable)[0][0])
-        )
     }
 
     override fun onCandidateSelected(candidate: CandidateView.Candidate) {
@@ -139,23 +152,23 @@ class ZhuyinIMEMode(
         renderResult()
     }
 
-    override fun onChar(code: Int) {
-        val key = code.toChar()
+    override fun onChar(codePoint: Int) {
+        val key = codePoint.toChar()
         val value = LayoutZhuyin.CODES_MAP[key]
         if(value != null) {
-            wordComposer.add(code, intArrayOf(value))
+            wordComposer.add(codePoint, intArrayOf(value))
             renderResult()
         } else {
             onReset()
-            util?.sendKeyChar(code.toChar())
+            util?.sendKeyChar(codePoint.toChar())
         }
     }
 
-    override fun onSpecial(type: Keyboard.SpecialKey) {
-        when(type) {
-            Keyboard.SpecialKey.Space -> handleSpace()
-            Keyboard.SpecialKey.Return -> handleReturn()
-            Keyboard.SpecialKey.Delete -> handleBackspace()
+    override fun onSpecial(keyCode: Int) {
+        when(keyCode) {
+            KeyEvent.KEYCODE_SPACE -> handleSpace()
+            KeyEvent.KEYCODE_ENTER -> handleReturn()
+            KeyEvent.KEYCODE_DEL -> handleBackspace()
             else -> {}
         }
     }

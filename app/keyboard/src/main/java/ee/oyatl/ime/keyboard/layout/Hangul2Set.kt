@@ -1,4 +1,4 @@
-package ee.oyatl.ime.fusion.korean.layout
+package ee.oyatl.ime.keyboard.layout
 
 import android.view.KeyEvent
 

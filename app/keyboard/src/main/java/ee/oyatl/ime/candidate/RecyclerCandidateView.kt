@@ -24,7 +24,8 @@ abstract class RecyclerCandidateView(
     init {
         adapter = Adapter { listener?.onCandidateSelected(it) }
         val typedValue = TypedValue()
-        ContextThemeWrapper(context, R.style.Theme_FusionIME_Candidates).theme.resolveAttribute(R.attr.backgroundColor, typedValue, false)
+        ContextThemeWrapper(context, R.style.Theme_FusionIME_Candidates).theme
+            .resolveAttribute(R.attr.backgroundColor, typedValue, false)
         backgroundColor = context.resources.getColor(typedValue.data)
         itemAnimator = null
     }

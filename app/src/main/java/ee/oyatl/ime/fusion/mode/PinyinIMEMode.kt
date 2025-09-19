@@ -24,14 +24,6 @@ import ee.oyatl.ime.fusion.pinyin.ComposingView
 import ee.oyatl.ime.fusion.pinyin.ComposingView.ComposingStatus
 import ee.oyatl.ime.fusion.pinyin.DecodingInfo
 import ee.oyatl.ime.fusion.pinyin.OnGestureListener
-import ee.oyatl.ime.keyboard.DefaultMobileKeyboard
-import ee.oyatl.ime.keyboard.DefaultTabletKeyboard
-import ee.oyatl.ime.keyboard.Keyboard
-import ee.oyatl.ime.keyboard.KeyboardInflater
-import ee.oyatl.ime.keyboard.ScreenModeKeyboard
-import ee.oyatl.ime.keyboard.ShiftStateKeyboard
-import ee.oyatl.ime.keyboard.StackedKeyboard
-import ee.oyatl.ime.keyboard.layout.LayoutPinyin
 import java.util.Locale
 
 class PinyinIMEMode(
@@ -80,26 +72,6 @@ class PinyinIMEMode(
     override fun onReset() {
         super.onReset()
         resetToIdleState(true)
-    }
-
-    override fun createTextKeyboard(): Keyboard {
-        return StackedKeyboard(
-            ShiftStateKeyboard(
-                createDefaultKeyboard(KeyboardInflater.inflate(LayoutPinyin.ROWS_LOWER)[0]),
-                createDefaultKeyboard(KeyboardInflater.inflate(LayoutPinyin.ROWS_UPPER)[0])
-            ),
-            ShiftStateKeyboard(
-                createBottomRowKeyboard(shift = false, symbol = false),
-                createBottomRowKeyboard(shift = true, symbol = false)
-            )
-        )
-    }
-
-    override fun createDefaultKeyboard(layer: List<List<Int>>): Keyboard {
-        return ScreenModeKeyboard(
-            mobile = DefaultMobileKeyboard(layer),
-            tablet = DefaultTabletKeyboard(layer, extraKeys = listOf('，'.code, '。'.code))
-        )
     }
 
     override fun createCandidateView(context: Context): View {
@@ -164,22 +136,22 @@ class PinyinIMEMode(
         }
     }
 
-    override fun onChar(code: Int) {
-        if(code in 'a'.code .. 'z'.code) {
-            processKeyCode(code - 'a'.code + KeyEvent.KEYCODE_A)
-        } else if(code == '\''.code) {
+    override fun onChar(codePoint: Int) {
+        if(codePoint in 'a'.code .. 'z'.code) {
+            processKeyCode(codePoint - 'a'.code + KeyEvent.KEYCODE_A)
+        } else if(codePoint == '\''.code) {
             processKeyCode(KeyEvent.KEYCODE_APOSTROPHE)
         } else {
             onReset()
-            util?.sendKeyChar(code.toChar())
+            util?.sendKeyChar(codePoint.toChar())
         }
     }
 
-    override fun onSpecial(type: Keyboard.SpecialKey) {
-        when(type) {
-            Keyboard.SpecialKey.Delete -> processKeyCode(KeyEvent.KEYCODE_DEL)
-            Keyboard.SpecialKey.Space -> processKeyCode(KeyEvent.KEYCODE_SPACE)
-            Keyboard.SpecialKey.Return -> processKeyCode(KeyEvent.KEYCODE_ENTER)
+    override fun onSpecial(keyCode: Int) {
+        when(keyCode) {
+            KeyEvent.KEYCODE_DEL -> processKeyCode(KeyEvent.KEYCODE_DEL)
+            KeyEvent.KEYCODE_SPACE -> processKeyCode(KeyEvent.KEYCODE_SPACE)
+            KeyEvent.KEYCODE_ENTER -> processKeyCode(KeyEvent.KEYCODE_ENTER)
             else -> {}
         }
     }
