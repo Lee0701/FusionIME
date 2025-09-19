@@ -1,17 +1,38 @@
 package ee.oyatl.ime.keyboard.layout
 
 import android.view.KeyEvent
+import ee.oyatl.ime.keyboard.KeyboardConfiguration
 
 object LayoutKana {
-    val ROWS_50ONZU: List<String> = listOf(
+    val ROWS_SYLLABLES: List<String> = listOf(
         "わらやまはなたさかあ",
         "ゐり　みひにちしきい",
         "　るゆむふぬつすくう",
         "ゑれ　めへねてせけえ",
         "をろよもほのとそこお"
     )
-    const val BOTTOM_LEFT_50ONZU: String = "ん"
-    const val BOTTOM_RIGHT_50ONZU: String = "*ー"
+    const val BOTTOM_LEFT_SYLLABLES: String = "ん"
+    const val BOTTOM_RIGHT_SYLLABLES: String = "*ー"
+
+    fun keyboardConfigurationSyllables(): KeyboardConfiguration {
+        val rows = ROWS_SYLLABLES.map { row ->
+            row.map { item -> when(item) {
+                '　' -> KeyboardConfiguration.Item.Spacer(width = 1f)
+                else -> KeyboardConfiguration.Item.TemplateKey(-item.code)
+            } }
+        }
+        val bottom = listOf(
+            KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_SYM, 1.5f, true),
+            KeyboardConfiguration.Item.TemplateKey(-BOTTOM_LEFT_SYLLABLES[0].code),
+            KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_LANGUAGE_SWITCH, 1f, true),
+            KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_SPACE, 2f),
+            KeyboardConfiguration.Item.TemplateKey(-BOTTOM_RIGHT_SYLLABLES[0].code),
+            KeyboardConfiguration.Item.TemplateKey(-BOTTOM_RIGHT_SYLLABLES[1].code),
+            KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_DEL, 1f, true),
+            KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_ENTER, 1.5f, true)
+        )
+        return KeyboardConfiguration(rows + listOf(bottom))
+    }
 
     val TABLE_JIS = mapOf(
         KeyEvent.KEYCODE_GRAVE to listOf('ろ'.code),

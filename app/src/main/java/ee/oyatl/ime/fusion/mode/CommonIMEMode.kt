@@ -113,7 +113,6 @@ abstract class CommonIMEMode(
         val screenMode = KeyboardState.ScreenMode.valueOf(preference.getString("screen_mode", null) ?: defaultScreenMode)
 
         val contentRows = keyboardTemplate.map { row -> row.map { KeyCodeMapper.keyCharToKeyCode(it) } }
-
         val keyboardInflater = DefaultKeyboardInflater(params, keyCodeMapper)
         val keyboard = keyboardInflater.inflate(keyboardConfiguration, contentRows)
 
@@ -190,6 +189,8 @@ abstract class CommonIMEMode(
             shiftState = KeyboardState.Shift.Pressed
         } else if(keyCode == KeyEvent.KEYCODE_CAPS_LOCK) {
             shiftState = KeyboardState.Shift.Locked
+        } else if(keyCode < 0) {
+            onChar(-keyCode)
         } else if(keyCode > KeyEvent.getMaxKeyCode() || keyCharacterMap.isPrintingKey(keyCode)) {
             onChar(
                 layoutTable[keyCode]?.forShiftState(shiftState)

@@ -186,6 +186,7 @@ abstract class MozcIMEMode(
 
     class KanaSyllables(listener: IMEMode.Listener): MozcIMEMode(listener) {
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.TWELVE_KEY_FLICK_KANA
+        override val keyboardConfiguration: KeyboardConfiguration = LayoutKana.keyboardConfigurationSyllables()
     }
 
     data class Params(

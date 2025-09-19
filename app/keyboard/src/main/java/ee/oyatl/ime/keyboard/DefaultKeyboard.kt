@@ -47,6 +47,7 @@ class DefaultKeyboard(
                         val themedInflater = LayoutInflater.from(ContextThemeWrapper(context, R.style.Theme_FusionIME_Keyboard_Key))
                         val key = KbdKeyBinding.inflate(themedInflater)
                         keySet += DefaultKeyboardView.KeyContainer(item.keyCode, key)
+                        if(item.keyCode < 0) key.label.text = (-item.keyCode).toChar().toString()
                         key.root.setOnTouchListener(createOnTouchListener(item.keyCode, keyboardListener))
                         key.root
                     }
