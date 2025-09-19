@@ -1,56 +1,56 @@
 package ee.oyatl.ime.keyboard.layout
 
-object KeyboardRows {
-    val MOBILE: List<String> = listOf(
+object MobileKeyboardRows {
+    val DEFAULT: List<String> = listOf(
         "qwertyuiop",
         "asdfghjkl",
         "zxcvbnm"
     )
 
-    val MOBILE_SEMICOLON: List<String> = listOf(
+    val SEMICOLON: List<String> = listOf(
         "qwertyuiop",
         "asdfghjkl;",
         "zxcvbnm"
     )
 
-    val MOBILE_MINUS: List<String> = listOf(
+    val MINUS: List<String> = listOf(
         "qwertyuiop",
         "asdfghjkl-",
         "zxcvbnm"
     )
 
-    val MOBILE_SEMICOLON_QUOTE: List<String> = listOf(
+    val SEMICOLON_QUOTE_SLASH: List<String> = listOf(
         "qwertyuiop",
         "asdfghjkl;",
-        "zxcvbnm\'"
+        "zxcvbnm\'/"
     )
 
-    val MOBILE_HALF_GRID: List<String> = listOf(
+    val HALF_GRID: List<String> = listOf(
         "qwertyuiop",
         "asdfghjkl;",
         "zxcvbnm,."
     )
 
-    val MOBILE_GRID: List<String> = listOf(
+    val GRID: List<String> = listOf(
         "qwertyuiop",
         "asdfghjkl;",
         "zxcvbnm,./"
     )
 
-    val MOBILE_JIS: List<String> = listOf(
+    val JIS: List<String> = listOf(
         "1234567890-",
         "qwertyuiop[",
         "asdfghjkl;'",
         "zxcvbnm,.",
     )
 
-    val MOBILE_DVORAK: List<String> = listOf(
+    val DVORAK: List<String> = listOf(
         "qwertyuiop",
         "asdfghjkl;",
         "cvbnm,."
     )
 
-    val MOBILE_NUMBERS: List<String> = listOf(
+    val NUMBERS: List<String> = listOf(
         "1234567890"
     )
 }

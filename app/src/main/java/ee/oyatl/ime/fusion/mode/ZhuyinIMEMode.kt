@@ -14,7 +14,7 @@ import ee.oyatl.ime.keyboard.KeyboardTemplate
 import ee.oyatl.ime.keyboard.layout.LayoutZhuyin
 import ee.oyatl.ime.keyboard.LayoutTable
 import ee.oyatl.ime.keyboard.layout.MobileKeyboard
-import ee.oyatl.ime.keyboard.layout.KeyboardRows
+import ee.oyatl.ime.keyboard.layout.MobileKeyboardRows
 import ee.oyatl.ime.keyboard.layout.LayoutExt
 import ee.oyatl.ime.keyboard.layout.LayoutQwerty
 import tw.cheyingwu.zhuyin.ZhuYinDictionary
@@ -40,7 +40,7 @@ class ZhuyinIMEMode(
             MobileKeyboard.alphabetic(semicolon = true, shiftDeleteWidth = 1f, shift = false),
             MobileKeyboard.bottom(KeyEvent.KEYCODE_MINUS, KeyEvent.KEYCODE_SLASH)
         ),
-        contentRows = KeyboardRows.MOBILE_NUMBERS + KeyboardRows.MOBILE_HALF_GRID
+        contentRows = MobileKeyboardRows.NUMBERS + MobileKeyboardRows.HALF_GRID
     )
     override val textLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutExt.TABLE_CHINESE + LayoutZhuyin.TABLE)
 

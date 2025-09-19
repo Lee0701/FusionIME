@@ -15,7 +15,7 @@ import ee.oyatl.ime.keyboard.KeyboardTemplate
 import ee.oyatl.ime.keyboard.LayoutTable
 import ee.oyatl.ime.keyboard.layout.ExtKeyCode
 import ee.oyatl.ime.keyboard.layout.MobileKeyboard
-import ee.oyatl.ime.keyboard.layout.KeyboardRows
+import ee.oyatl.ime.keyboard.layout.MobileKeyboardRows
 import ee.oyatl.ime.keyboard.layout.LayoutCangjie
 import ee.oyatl.ime.keyboard.layout.LayoutExt
 import ee.oyatl.ime.keyboard.layout.LayoutQwerty
@@ -176,7 +176,7 @@ abstract class CangjieIMEMode(
                 MobileKeyboard.alphabetic(semicolon = true, shiftDeleteWidth = 1f, shift = false),
                 MobileKeyboard.bottom(ExtKeyCode.KEYCODE_PERIOD_COMMA, KeyEvent.KEYCODE_SLASH)
             ),
-            contentRows = KeyboardRows.MOBILE_NUMBERS + KeyboardRows.MOBILE_HALF_GRID
+            contentRows = MobileKeyboardRows.NUMBERS + MobileKeyboardRows.HALF_GRID
         )
         override val textLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutExt.TABLE_CHINESE + LayoutCangjie.TABLE_DAYI3)
         override val keyMap: Map<Char, Char> = LayoutCangjie.KEY_MAP_DAYI3

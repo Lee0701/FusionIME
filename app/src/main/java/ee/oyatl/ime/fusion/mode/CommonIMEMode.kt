@@ -14,8 +14,6 @@ import ee.oyatl.ime.candidate.ScrollingCandidateView
 import ee.oyatl.ime.fusion.KeyEventUtil
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.keyboard.DefaultKeyboardInflater
-import ee.oyatl.ime.keyboard.KeyCodeMapper
-import ee.oyatl.ime.keyboard.Keyboard
 import ee.oyatl.ime.keyboard.KeyboardConfiguration
 import ee.oyatl.ime.keyboard.KeyboardListener
 import ee.oyatl.ime.keyboard.KeyboardParams
@@ -25,10 +23,12 @@ import ee.oyatl.ime.keyboard.KeyboardViewManager
 import ee.oyatl.ime.keyboard.LayoutTable
 import ee.oyatl.ime.keyboard.SwitcherKeyboardViewManager
 import ee.oyatl.ime.keyboard.layout.MobileKeyboard
-import ee.oyatl.ime.keyboard.layout.KeyboardRows
+import ee.oyatl.ime.keyboard.layout.MobileKeyboardRows
 import ee.oyatl.ime.keyboard.layout.LayoutExt
 import ee.oyatl.ime.keyboard.layout.LayoutQwerty
 import ee.oyatl.ime.keyboard.layout.LayoutSymbol
+import ee.oyatl.ime.keyboard.layout.TabletKeyboard
+import ee.oyatl.ime.keyboard.layout.TabletKeyboardRows
 import kotlin.collections.plus
 import kotlin.math.roundToInt
 
@@ -41,26 +41,35 @@ abstract class CommonIMEMode(
     open val symbolLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutSymbol.TABLE_G)
     open val numberLayoutTable: LayoutTable = LayoutTable(mapOf())
 
-    open val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.Basic(
-        configuration = KeyboardConfiguration(
-            MobileKeyboard.alphabetic(),
-            MobileKeyboard.bottom()
+    open val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
+        mobile = KeyboardTemplate.Basic(
+            configuration = KeyboardConfiguration(
+                MobileKeyboard.alphabetic(),
+                MobileKeyboard.bottom()
+            ),
+            contentRows = MobileKeyboardRows.DEFAULT
         ),
-        contentRows = KeyboardRows.MOBILE
+        tablet = KeyboardTemplate.Basic(
+            configuration = KeyboardConfiguration(
+                TabletKeyboard.alphabetic(),
+                TabletKeyboard.bottom()
+            ),
+            contentRows = TabletKeyboardRows.DEFAULT
+        )
     )
     open val symbolKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.Basic(
         configuration = KeyboardConfiguration(
             MobileKeyboard.alphabetic(semicolon = true),
             MobileKeyboard.bottom()
         ),
-        contentRows = KeyboardRows.MOBILE_SEMICOLON,
+        contentRows = MobileKeyboardRows.SEMICOLON,
     )
     open val numberKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.Basic(
         configuration = KeyboardConfiguration(
             MobileKeyboard.alphabetic(semicolon = true),
             MobileKeyboard.bottom()
         ),
-        contentRows = KeyboardRows.MOBILE_SEMICOLON,
+        contentRows = MobileKeyboardRows.SEMICOLON,
     )
 
     val currentLayoutTable: LayoutTable get() = when(symbolState) {

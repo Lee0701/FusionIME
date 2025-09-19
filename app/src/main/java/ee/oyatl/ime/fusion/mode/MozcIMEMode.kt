@@ -20,7 +20,7 @@ import ee.oyatl.ime.keyboard.layout.LayoutRomaji
 import ee.oyatl.ime.keyboard.LayoutTable
 import ee.oyatl.ime.keyboard.layout.ExtKeyCode
 import ee.oyatl.ime.keyboard.layout.MobileKeyboard
-import ee.oyatl.ime.keyboard.layout.KeyboardRows
+import ee.oyatl.ime.keyboard.layout.MobileKeyboardRows
 import ee.oyatl.ime.keyboard.layout.LayoutExt
 import org.mozc.android.inputmethod.japanese.MozcUtil
 import org.mozc.android.inputmethod.japanese.PrimaryKeyCodeConverter
@@ -167,7 +167,7 @@ abstract class MozcIMEMode(
                 MobileKeyboard.alphabetic(semicolon = true),
                 MobileKeyboard.bottom()
             ),
-            contentRows = KeyboardRows.MOBILE_MINUS
+            contentRows = MobileKeyboardRows.MINUS
         )
     }
 
@@ -180,7 +180,7 @@ abstract class MozcIMEMode(
                 MobileKeyboard.alphabetic(semicolon = true, shiftDeleteWidth = 1f),
                 MobileKeyboard.bottom(left = ExtKeyCode.KEYCODE_KANA_EQUALS, right = ExtKeyCode.KEYCODE_KANA_SLASH)
             ),
-            contentRows = KeyboardRows.MOBILE_JIS,
+            contentRows = MobileKeyboardRows.JIS,
             codeMapper = KeyCodeMapper(mapOf(
                 KeyEvent.KEYCODE_MINUS to ExtKeyCode.KEYCODE_KANA_MINUS,
                 KeyEvent.KEYCODE_APOSTROPHE to ExtKeyCode.KEYCODE_KANA_APOSTROPHE,

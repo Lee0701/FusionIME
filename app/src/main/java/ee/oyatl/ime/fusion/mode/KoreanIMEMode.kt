@@ -22,9 +22,10 @@ import ee.oyatl.ime.keyboard.layout.HangulOld
 import ee.oyatl.ime.keyboard.LayoutTable
 import ee.oyatl.ime.keyboard.layout.ExtKeyCode
 import ee.oyatl.ime.keyboard.layout.MobileKeyboard
-import ee.oyatl.ime.keyboard.layout.KeyboardRows
+import ee.oyatl.ime.keyboard.layout.MobileKeyboardRows
 import ee.oyatl.ime.keyboard.layout.LayoutExt
 import ee.oyatl.ime.keyboard.layout.LayoutQwerty
+import ee.oyatl.ime.keyboard.layout.TabletKeyboard
 import java.util.Locale
 import java.util.concurrent.Executors
 
@@ -135,14 +136,25 @@ abstract class KoreanIMEMode(
      */
     abstract class Hangul3Set390391(listener: IMEMode.Listener): KoreanIMEMode(listener) {
         open val keyCodeMapper: KeyCodeMapper get() = KeyCodeMapper()
-        override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.Basic(
-            configuration = KeyboardConfiguration(
-                MobileKeyboard.numbers(),
-                MobileKeyboard.alphabetic(semicolon = true, shiftDeleteWidth = 1f),
-                MobileKeyboard.bottom(ExtKeyCode.KEYCODE_PERIOD_COMMA, KeyEvent.KEYCODE_SLASH)
+        override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
+            mobile = KeyboardTemplate.Basic(
+                configuration = KeyboardConfiguration(
+                    MobileKeyboard.numbers(),
+                    MobileKeyboard.alphabetic(semicolon = true, shiftDeleteWidth = 1f),
+                    MobileKeyboard.bottom(ExtKeyCode.KEYCODE_PERIOD_COMMA, KeyEvent.KEYCODE_SLASH)
+                ),
+                contentRows = MobileKeyboardRows.NUMBERS + MobileKeyboardRows.SEMICOLON_QUOTE_SLASH,
+                codeMapper = keyCodeMapper
             ),
-            contentRows = KeyboardRows.MOBILE_NUMBERS + KeyboardRows.MOBILE_SEMICOLON_QUOTE,
-            codeMapper = keyCodeMapper
+            tablet = KeyboardTemplate.Basic(
+                configuration = KeyboardConfiguration(
+                    TabletKeyboard.numbers(delete = true),
+                    TabletKeyboard.alphabetic(semicolon = true, delete = false),
+                    TabletKeyboard.bottom()
+                ),
+                contentRows = MobileKeyboardRows.NUMBERS + MobileKeyboardRows.SEMICOLON_QUOTE_SLASH,
+                codeMapper = keyCodeMapper
+            )
         )
     }
 

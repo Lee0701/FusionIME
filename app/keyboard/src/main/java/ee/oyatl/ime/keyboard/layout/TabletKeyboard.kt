@@ -17,31 +17,42 @@ object TabletKeyboard {
         ))
     }
 
-    fun numbers(): KeyboardConfiguration {
-        return KeyboardConfiguration(listOf(
-            listOf(
-                KeyboardConfiguration.Item.ContentRow(3)
-            )
-        ))
-    }
-
-    fun alphabetic(
-        semicolon: Boolean = false,
-        shift: Boolean = true,
-        delete: Boolean = true
+    fun numbers(
+        delete: Boolean = false
     ): KeyboardConfiguration {
         val row0: MutableList<KeyboardConfiguration.Item> = mutableListOf(
-            KeyboardConfiguration.Item.ContentRow(2)
+            KeyboardConfiguration.Item.ContentRow(3)
         )
         if(delete) {
             row0.add(KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_DEL, 1f, true))
         } else {
             row0.add(KeyboardConfiguration.Item.Spacer(1f))
         }
+        return KeyboardConfiguration(listOf(
+            row0
+        ))
+    }
+
+    fun alphabetic(
+        semicolon: Boolean = false,
+        shift: Boolean = true,
+        delete: Boolean = true,
+        spacerOnDelete: Boolean = true
+    ): KeyboardConfiguration {
+        val row0: MutableList<KeyboardConfiguration.Item> = mutableListOf(
+            KeyboardConfiguration.Item.ContentRow(2)
+        )
+        if(delete) {
+            row0.add(KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_DEL, 1f, true))
+        } else if(spacerOnDelete) {
+            row0.add(KeyboardConfiguration.Item.Spacer(1f))
+        }
+        val spacerWidth = if(semicolon) 0.25f else 0.5f
+        val returnWidth = if(semicolon) 0.75f else 1.5f
         val row1: MutableList<KeyboardConfiguration.Item> = mutableListOf(
-            KeyboardConfiguration.Item.Spacer(0.5f),
+            KeyboardConfiguration.Item.Spacer(spacerWidth),
             KeyboardConfiguration.Item.ContentRow(1),
-            KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_ENTER, 2f, true)
+            KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_ENTER, returnWidth, true)
         )
         val row2: MutableList<KeyboardConfiguration.Item> = mutableListOf(
             KeyboardConfiguration.Item.ContentRow(0)
