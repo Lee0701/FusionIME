@@ -53,7 +53,12 @@ object Hangul3Set {
         KeyEvent.KEYCODE_M to listOf(0x1112, 0x31),
         KeyEvent.KEYCODE_COMMA to listOf(0x2c, 0x32),
         KeyEvent.KEYCODE_PERIOD to listOf(0x2e, 0x33),
-        KeyEvent.KEYCODE_SLASH to listOf(0x1169, 0x3f)
+        KeyEvent.KEYCODE_SLASH to listOf(0x1169, 0x3f),
+
+        ExtKeyCode.KEYCODE_390_0 to listOf(0x116e, 0x30),
+        ExtKeyCode.KEYCODE_390_1 to listOf(0x1109, 0x31),
+        ExtKeyCode.KEYCODE_390_2 to listOf(0x1112, 0x32),
+        ExtKeyCode.KEYCODE_390_3 to listOf(0x1110, 0x33)
     )
 
     val COMBINATION_390 = mapOf(

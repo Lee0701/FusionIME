@@ -11,9 +11,11 @@ import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.keyboard.KeyboardConfiguration
 import ee.oyatl.ime.keyboard.LayoutTable
+import ee.oyatl.ime.keyboard.layout.ExtKeyCode
 import ee.oyatl.ime.keyboard.layout.KeyboardConfigurations
 import ee.oyatl.ime.keyboard.layout.KeyboardTemplates
 import ee.oyatl.ime.keyboard.layout.LayoutCangjie
+import ee.oyatl.ime.keyboard.layout.LayoutExt
 import ee.oyatl.ime.keyboard.layout.LayoutQwerty
 import java.util.Locale
 import kotlin.collections.plus
@@ -34,7 +36,7 @@ abstract class CangjieIMEMode(
         }
     }
 
-    override val layoutTable: LayoutTable = LayoutTable.from(LayoutQwerty.TABLE_QWERTY + LayoutCangjie.TABLE_QWERTY)
+    override val layoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutExt.TABLE_CHINESE + LayoutCangjie.TABLE_QWERTY)
     abstract val keyMap: Map<Char, Char>
 
     private var table: TableLoader? = null
@@ -151,16 +153,14 @@ abstract class CangjieIMEMode(
         listener: IMEMode.Listener
     ): CangjieIMEMode(listener) {
         override val inputMode: Int = TableLoader.DAYI3
-        private val bottomConfiguration: KeyboardConfiguration =
-            KeyboardConfigurations.mobileBottom(KeyEvent.KEYCODE_MINUS, KeyEvent.KEYCODE_SLASH)
         override val keyboardConfiguration: KeyboardConfiguration = KeyboardConfiguration(
             KeyboardConfigurations.mobileNumbers(),
             KeyboardConfigurations.mobileAlpha(semicolon = true, shiftDeleteWidth = 1f, shift = false),
-            bottomConfiguration
+            KeyboardConfigurations.mobileBottom(ExtKeyCode.KEYCODE_PERIOD_COMMA, KeyEvent.KEYCODE_SLASH)
         )
         override val keyboardTemplate: List<String> =
             KeyboardTemplates.MOBILE_NUMBERS + KeyboardTemplates.MOBILE_HALF_GRID
-        override val layoutTable: LayoutTable = LayoutTable.from(LayoutQwerty.TABLE_QWERTY + LayoutCangjie.TABLE_DAYI3)
+        override val layoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutExt.TABLE_CHINESE + LayoutCangjie.TABLE_DAYI3)
         override val keyMap: Map<Char, Char> = LayoutCangjie.KEY_MAP_DAYI3
     }
 

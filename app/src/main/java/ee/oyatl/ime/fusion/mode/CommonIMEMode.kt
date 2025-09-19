@@ -24,7 +24,9 @@ import ee.oyatl.ime.keyboard.KeyboardViewManager
 import ee.oyatl.ime.keyboard.LayoutTable
 import ee.oyatl.ime.keyboard.layout.KeyboardConfigurations
 import ee.oyatl.ime.keyboard.layout.KeyboardTemplates
+import ee.oyatl.ime.keyboard.layout.LayoutExt
 import ee.oyatl.ime.keyboard.layout.LayoutQwerty
+import kotlin.collections.plus
 import kotlin.math.roundToInt
 
 abstract class CommonIMEMode(
@@ -36,7 +38,7 @@ abstract class CommonIMEMode(
     open val keyboardConfiguration: KeyboardConfiguration =
         KeyboardConfigurations.mobileAlpha() + KeyboardConfigurations.mobileBottom()
     open val keyboardTemplate: List<String> = KeyboardTemplates.MOBILE
-    open val layoutTable: LayoutTable = LayoutTable.from(LayoutQwerty.TABLE_QWERTY)
+    open val layoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY)
 
     protected var keyboard: Keyboard? = null
     protected var keyboardView: KeyboardViewManager? = null
@@ -188,12 +190,14 @@ abstract class CommonIMEMode(
             shiftState = KeyboardState.Shift.Pressed
         } else if(keyCode == KeyEvent.KEYCODE_CAPS_LOCK) {
             shiftState = KeyboardState.Shift.Locked
-        } else if(!keyCharacterMap.isPrintingKey(keyCode)) {
+        } else if(keyCode > KeyEvent.getMaxKeyCode() || keyCharacterMap.isPrintingKey(keyCode)) {
+            onChar(
+                layoutTable[keyCode]?.forShiftState(shiftState)
+                    ?: keyCharacterMap.get(keyCode, metaState)
+            )
+        } else {
             handleSpecialKey(keyCode)
-        } else onChar(
-            layoutTable[keyCode]?.forShiftState(shiftState)
-                ?: keyCharacterMap.get(keyCode, metaState)
-        )
+        }
         updateInputView()
     }
 
