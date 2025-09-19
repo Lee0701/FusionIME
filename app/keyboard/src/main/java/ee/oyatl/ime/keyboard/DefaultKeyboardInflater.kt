@@ -1,26 +1,27 @@
 package ee.oyatl.ime.keyboard
 
 class DefaultKeyboardInflater(
-    override val keyboardParams: KeyboardParams,
-    override val keyCodeMapper: KeyCodeMapper
+    override val keyboardParams: KeyboardParams
 ): KeyboardInflater {
     override fun inflate(
         configuration: KeyboardConfiguration,
-        contentRows: List<List<Int>>
+        contentRows: List<String>,
+        keyCodeMapper: KeyCodeMapper
     ): DefaultKeyboard {
+        val keyCodeRows = contentRows.map { row -> row.map { KeyCodeMapper.keyCharToKeyCode(it) } }
         val result = mutableListOf<List<Keyboard.KeyItem>>()
         configuration.rows.forEach { row ->
             val resultRow = mutableListOf<Keyboard.KeyItem>()
             row.forEach { item ->
                 when(item) {
                     is KeyboardConfiguration.Item.ContentKey -> {
-                        val rowIndex = contentRows.size - item.rowId - 1
-                        val keyCode = keyCodeMapper[contentRows[rowIndex][item.index]]
+                        val rowIndex = keyCodeRows.size - item.rowId - 1
+                        val keyCode = keyCodeMapper[keyCodeRows[rowIndex][item.index]]
                         resultRow += Keyboard.KeyItem.NormalKey(keyCode)
                     }
                     is KeyboardConfiguration.Item.ContentRow -> {
-                        val rowIndex = contentRows.size - item.rowId - 1
-                        val content = contentRows[rowIndex].map {
+                        val rowIndex = keyCodeRows.size - item.rowId - 1
+                        val content = keyCodeRows[rowIndex].map {
                             val keyCode = keyCodeMapper[it]
                             Keyboard.KeyItem.NormalKey(keyCode)
                         }

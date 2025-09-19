@@ -20,11 +20,12 @@ import ee.oyatl.ime.keyboard.KeyboardConfiguration
 import ee.oyatl.ime.keyboard.KeyboardListener
 import ee.oyatl.ime.keyboard.KeyboardParams
 import ee.oyatl.ime.keyboard.KeyboardState
+import ee.oyatl.ime.keyboard.KeyboardTemplate
 import ee.oyatl.ime.keyboard.KeyboardViewManager
 import ee.oyatl.ime.keyboard.LayoutTable
 import ee.oyatl.ime.keyboard.SwitcherKeyboardViewManager
-import ee.oyatl.ime.keyboard.layout.KeyboardConfigurations
-import ee.oyatl.ime.keyboard.layout.KeyboardTemplates
+import ee.oyatl.ime.keyboard.layout.MobileKeyboard
+import ee.oyatl.ime.keyboard.layout.KeyboardRows
 import ee.oyatl.ime.keyboard.layout.LayoutExt
 import ee.oyatl.ime.keyboard.layout.LayoutQwerty
 import ee.oyatl.ime.keyboard.layout.LayoutSymbol
@@ -36,21 +37,38 @@ abstract class CommonIMEMode(
 ): IMEMode, KeyboardListener, CandidateView.Listener {
     protected val keyCharacterMap: KeyCharacterMap = KeyCharacterMap.load(KeyCharacterMap.VIRTUAL_KEYBOARD)
 
-    open val keyCodeMapper: KeyCodeMapper = KeyCodeMapper()
-    open val keyboardConfiguration: KeyboardConfiguration =
-        KeyboardConfigurations.mobileAlpha() + KeyboardConfigurations.mobileBottom()
-    open val keyboardTemplate: List<String> = KeyboardTemplates.MOBILE
-    open val layoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY)
+    open val textLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY)
     open val symbolLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutSymbol.TABLE_G)
     open val numberLayoutTable: LayoutTable = LayoutTable(mapOf())
 
+    open val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.Basic(
+        configuration = KeyboardConfiguration(
+            MobileKeyboard.alphabetic(),
+            MobileKeyboard.bottom()
+        ),
+        contentRows = KeyboardRows.MOBILE
+    )
+    open val symbolKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.Basic(
+        configuration = KeyboardConfiguration(
+            MobileKeyboard.alphabetic(semicolon = true),
+            MobileKeyboard.bottom()
+        ),
+        contentRows = KeyboardRows.MOBILE_SEMICOLON,
+    )
+    open val numberKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.Basic(
+        configuration = KeyboardConfiguration(
+            MobileKeyboard.alphabetic(semicolon = true),
+            MobileKeyboard.bottom()
+        ),
+        contentRows = KeyboardRows.MOBILE_SEMICOLON,
+    )
+
     val currentLayoutTable: LayoutTable get() = when(symbolState) {
-        KeyboardState.Symbol.Text -> layoutTable
+        KeyboardState.Symbol.Text -> textLayoutTable
         KeyboardState.Symbol.Symbol -> symbolLayoutTable
         KeyboardState.Symbol.Number -> numberLayoutTable
     }
 
-    protected var keyboard: Keyboard? = null
     protected var keyboardView: KeyboardViewManager? = null
     protected var candidateView: CandidateView? = null
 
@@ -87,6 +105,8 @@ abstract class CommonIMEMode(
     override fun createInputView(context: Context): View {
         val preference = PreferenceManager.getDefaultSharedPreferences(context)
 
+        val defaultScreenMode = context.resources.getString(R.string.screen_mode_default)
+        val screenMode = KeyboardState.ScreenMode.valueOf(preference.getString("screen_mode", null) ?: defaultScreenMode)
         val landscape = context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
         val rowHeightKey = if(landscape) "keyboard_height_landscape" else "keyboard_height_portrait"
         val rowHeightDefaultKey = if(landscape) R.integer.keyboard_height_landscape_default else R.integer.keyboard_height_portrait_default
@@ -100,6 +120,7 @@ abstract class CommonIMEMode(
         val soundVolume = if(sound) 1f else 0f
         val vibrationDuration = if(haptic) duration else 0L
         val params = KeyboardParams(
+            screenMode = screenMode,
             height = height,
             soundFeedback = false,
             hapticFeedback = false,
@@ -111,28 +132,18 @@ abstract class CommonIMEMode(
             repeatDelay = 300,
             repeatInterval = 30,
         )
-        val defaultScreenMode = context.resources.getString(R.string.screen_mode_default)
-        val screenMode = KeyboardState.ScreenMode.valueOf(preference.getString("screen_mode", null) ?: defaultScreenMode)
 
-        val contentRows = keyboardTemplate.map { row -> row.map { KeyCodeMapper.keyCharToKeyCode(it) } }
-        val keyboardInflater = DefaultKeyboardInflater(params, keyCodeMapper)
-        val keyboard = keyboardInflater.inflate(keyboardConfiguration, contentRows)
-        val keyboardView = keyboard.createView(context, this)
+        val textKeyboard = textKeyboardTemplate.inflate(DefaultKeyboardInflater(params))
+        val symbolKeyboard = symbolKeyboardTemplate.inflate(DefaultKeyboardInflater(params.copy(shiftAutoRelease = false)))
+        val numberKeyboard = numberKeyboardTemplate.inflate(DefaultKeyboardInflater(params.copy(shiftAutoRelease = false)))
 
-        val symbolConfiguration = KeyboardConfiguration(
-            KeyboardConfigurations.mobileAlpha(semicolon = true),
-            KeyboardConfigurations.mobileBottom()
-        )
-        val symbolRows = KeyboardTemplates.MOBILE_SEMICOLON.map { row -> row.map { KeyCodeMapper.keyCharToKeyCode(it) } }
-        val symbolKeyboard = DefaultKeyboardInflater(params.copy(shiftAutoRelease = false), KeyCodeMapper())
-            .inflate(symbolConfiguration, symbolRows)
+        val textKeyboardView = textKeyboard.createView(context, this)
         val symbolKeyboardView = symbolKeyboard.createView(context, this)
-        val numberKeyboardView = symbolKeyboard.createView(context, this)
+        val numberKeyboardView = numberKeyboard.createView(context, this)
 
         updateInputView()
-        this.keyboard = keyboard
         val switcherKeyboardView = SwitcherKeyboardViewManager(context, mapOf(
-            KeyboardState.Symbol.Text to keyboardView,
+            KeyboardState.Symbol.Text to textKeyboardView,
             KeyboardState.Symbol.Symbol to symbolKeyboardView,
             KeyboardState.Symbol.Number to numberKeyboardView
         ))

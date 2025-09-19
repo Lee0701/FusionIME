@@ -1,6 +1,6 @@
 package ee.oyatl.ime.keyboard.layout
 
-object KeyboardTemplates {
+object KeyboardRows {
     val MOBILE: List<String> = listOf(
         "qwertyuiop",
         "asdfghjkl",

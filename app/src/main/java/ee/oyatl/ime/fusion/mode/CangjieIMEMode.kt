@@ -11,10 +11,11 @@ import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.keyboard.KeyboardConfiguration
 import ee.oyatl.ime.keyboard.KeyboardState
+import ee.oyatl.ime.keyboard.KeyboardTemplate
 import ee.oyatl.ime.keyboard.LayoutTable
 import ee.oyatl.ime.keyboard.layout.ExtKeyCode
-import ee.oyatl.ime.keyboard.layout.KeyboardConfigurations
-import ee.oyatl.ime.keyboard.layout.KeyboardTemplates
+import ee.oyatl.ime.keyboard.layout.MobileKeyboard
+import ee.oyatl.ime.keyboard.layout.KeyboardRows
 import ee.oyatl.ime.keyboard.layout.LayoutCangjie
 import ee.oyatl.ime.keyboard.layout.LayoutExt
 import ee.oyatl.ime.keyboard.layout.LayoutQwerty
@@ -37,7 +38,6 @@ abstract class CangjieIMEMode(
         }
     }
 
-    override val layoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutExt.TABLE_CHINESE + LayoutCangjie.TABLE_QWERTY)
     abstract val keyMap: Map<Char, Char>
 
     private var table: TableLoader? = null
@@ -143,22 +143,26 @@ abstract class CangjieIMEMode(
         override val text: CharSequence
     ): CandidateView.Candidate
 
-    class Cangjie(
+    abstract class CangjieQuick(
         override val fullWidth: Boolean,
         listener: IMEMode.Listener
     ): CangjieIMEMode(listener) {
-        override val inputMode: Int = TableLoader.CANGJIE
-        override val keyboardTemplate: List<String> = KeyboardTemplates.MOBILE
+        override val textLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutExt.TABLE_CHINESE + LayoutCangjie.TABLE_QWERTY)
         override val keyMap: Map<Char, Char> = LayoutCangjie.KEY_MAP_CANGJIE
     }
 
-    class Quick(
-        override val fullWidth: Boolean,
+    class Cangjie(
+        fullWidth: Boolean,
         listener: IMEMode.Listener
-    ): CangjieIMEMode(listener) {
+    ): CangjieQuick(fullWidth, listener) {
+        override val inputMode: Int = TableLoader.CANGJIE
+    }
+
+    class Quick(
+        fullWidth: Boolean,
+        listener: IMEMode.Listener
+    ): CangjieQuick(fullWidth, listener) {
         override val inputMode: Int = TableLoader.QUICK
-        override val keyboardTemplate: List<String> = KeyboardTemplates.MOBILE
-        override val keyMap: Map<Char, Char> = LayoutCangjie.KEY_MAP_CANGJIE
     }
 
     class Dayi3(
@@ -166,14 +170,15 @@ abstract class CangjieIMEMode(
         listener: IMEMode.Listener
     ): CangjieIMEMode(listener) {
         override val inputMode: Int = TableLoader.DAYI3
-        override val keyboardConfiguration: KeyboardConfiguration = KeyboardConfiguration(
-            KeyboardConfigurations.mobileNumbers(),
-            KeyboardConfigurations.mobileAlpha(semicolon = true, shiftDeleteWidth = 1f, shift = false),
-            KeyboardConfigurations.mobileBottom(ExtKeyCode.KEYCODE_PERIOD_COMMA, KeyEvent.KEYCODE_SLASH)
+        override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.Basic(
+            configuration = KeyboardConfiguration(
+                MobileKeyboard.numbers(),
+                MobileKeyboard.alphabetic(semicolon = true, shiftDeleteWidth = 1f, shift = false),
+                MobileKeyboard.bottom(ExtKeyCode.KEYCODE_PERIOD_COMMA, KeyEvent.KEYCODE_SLASH)
+            ),
+            contentRows = KeyboardRows.MOBILE_NUMBERS + KeyboardRows.MOBILE_HALF_GRID
         )
-        override val keyboardTemplate: List<String> =
-            KeyboardTemplates.MOBILE_NUMBERS + KeyboardTemplates.MOBILE_HALF_GRID
-        override val layoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutExt.TABLE_CHINESE + LayoutCangjie.TABLE_DAYI3)
+        override val textLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutExt.TABLE_CHINESE + LayoutCangjie.TABLE_DAYI3)
         override val keyMap: Map<Char, Char> = LayoutCangjie.KEY_MAP_DAYI3
     }
 

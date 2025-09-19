@@ -1,6 +1,7 @@
 package ee.oyatl.ime.keyboard
 
 data class KeyboardParams(
+    val screenMode: KeyboardState.ScreenMode,
     val height: Int,
     val soundFeedback: Boolean,
     val hapticFeedback: Boolean,

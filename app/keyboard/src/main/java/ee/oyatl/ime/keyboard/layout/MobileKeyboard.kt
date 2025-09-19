@@ -3,8 +3,8 @@ package ee.oyatl.ime.keyboard.layout
 import android.view.KeyEvent
 import ee.oyatl.ime.keyboard.KeyboardConfiguration
 
-object KeyboardConfigurations {
-    fun mobileBottom(
+object MobileKeyboard {
+    fun bottom(
         left: Int = KeyEvent.KEYCODE_COMMA,
         right: Int = KeyEvent.KEYCODE_PERIOD
     ): KeyboardConfiguration {
@@ -20,7 +20,7 @@ object KeyboardConfigurations {
         ))
     }
 
-    fun mobileNumbers(): KeyboardConfiguration {
+    fun numbers(): KeyboardConfiguration {
         return KeyboardConfiguration(listOf(
             listOf(
                 KeyboardConfiguration.Item.ContentRow(3)
@@ -28,7 +28,7 @@ object KeyboardConfigurations {
         ))
     }
 
-    fun mobileAlpha(
+    fun alphabetic(
         semicolon: Boolean = false,
         shiftDeleteWidth: Float = 1.5f,
         shift: Boolean = true,

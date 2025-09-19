@@ -15,13 +15,14 @@ import ee.oyatl.ime.fusion.korean.UnigramHanjaConverter
 import ee.oyatl.ime.fusion.korean.WordComposer
 import ee.oyatl.ime.keyboard.KeyCodeMapper
 import ee.oyatl.ime.keyboard.KeyboardConfiguration
+import ee.oyatl.ime.keyboard.KeyboardTemplate
 import ee.oyatl.ime.keyboard.layout.Hangul2Set
 import ee.oyatl.ime.keyboard.layout.Hangul3Set
 import ee.oyatl.ime.keyboard.layout.HangulOld
 import ee.oyatl.ime.keyboard.LayoutTable
 import ee.oyatl.ime.keyboard.layout.ExtKeyCode
-import ee.oyatl.ime.keyboard.layout.KeyboardConfigurations
-import ee.oyatl.ime.keyboard.layout.KeyboardTemplates
+import ee.oyatl.ime.keyboard.layout.MobileKeyboard
+import ee.oyatl.ime.keyboard.layout.KeyboardRows
 import ee.oyatl.ime.keyboard.layout.LayoutExt
 import ee.oyatl.ime.keyboard.layout.LayoutQwerty
 import java.util.Locale
@@ -126,20 +127,23 @@ abstract class KoreanIMEMode(
     ): KoreanIMEMode(listener) {
         override val hangulCombiner: HangulCombiner = HangulCombiner(Hangul2Set.COMB_KS, correctOrders)
         override val hanjaConverter: HanjaConverter = converterType.create()
-        override val layoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + Hangul2Set.TABLE_KS)
+        override val textLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + Hangul2Set.TABLE_KS)
     }
 
     /*
      * Common part for 390 and 391
      */
     abstract class Hangul3Set390391(listener: IMEMode.Listener): KoreanIMEMode(listener) {
-        override val keyboardConfiguration: KeyboardConfiguration = KeyboardConfiguration(
-            KeyboardConfigurations.mobileNumbers(),
-            KeyboardConfigurations.mobileAlpha(semicolon = true, shiftDeleteWidth = 1f),
-            KeyboardConfigurations.mobileBottom(ExtKeyCode.KEYCODE_PERIOD_COMMA, KeyEvent.KEYCODE_SLASH)
+        open val keyCodeMapper: KeyCodeMapper get() = KeyCodeMapper()
+        override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.Basic(
+            configuration = KeyboardConfiguration(
+                MobileKeyboard.numbers(),
+                MobileKeyboard.alphabetic(semicolon = true, shiftDeleteWidth = 1f),
+                MobileKeyboard.bottom(ExtKeyCode.KEYCODE_PERIOD_COMMA, KeyEvent.KEYCODE_SLASH)
+            ),
+            contentRows = KeyboardRows.MOBILE_NUMBERS + KeyboardRows.MOBILE_SEMICOLON_QUOTE,
+            codeMapper = keyCodeMapper
         )
-        override val keyboardTemplate: List<String> =
-            KeyboardTemplates.MOBILE_NUMBERS + KeyboardTemplates.MOBILE_SEMICOLON_QUOTE
     }
 
     class Hangul3Set390(
@@ -149,8 +153,8 @@ abstract class KoreanIMEMode(
     ): Hangul3Set390391(listener) {
         override val hangulCombiner: HangulCombiner = HangulCombiner(Hangul3Set.COMBINATION_390, correctOrders)
         override val hanjaConverter: HanjaConverter = converterType.create()
-        override val layoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + Hangul3Set.TABLE_390)
-        override val keyCodeMapper: KeyCodeMapper = KeyCodeMapper(mapOf(
+        override val textLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + Hangul3Set.TABLE_390)
+        override val keyCodeMapper: KeyCodeMapper get() = KeyCodeMapper(mapOf(
             KeyEvent.KEYCODE_B to ExtKeyCode.KEYCODE_390_0,
             KeyEvent.KEYCODE_N to ExtKeyCode.KEYCODE_390_1,
             KeyEvent.KEYCODE_M to ExtKeyCode.KEYCODE_390_2,
@@ -165,7 +169,7 @@ abstract class KoreanIMEMode(
     ): Hangul3Set390391(listener) {
         override val hangulCombiner: HangulCombiner = HangulCombiner(Hangul3Set.COMBINATION_391, correctOrders)
         override val hanjaConverter: HanjaConverter = converterType.create()
-        override val layoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + Hangul3Set.TABLE_391)
+        override val textLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + Hangul3Set.TABLE_391)
     }
 
     class HangulOld2Set(
@@ -175,7 +179,7 @@ abstract class KoreanIMEMode(
     ): KoreanIMEMode(listener) {
         override val hangulCombiner: HangulCombiner = HangulCombiner(HangulOld.COMB_FULL, correctOrders)
         override val hanjaConverter: HanjaConverter = converterType.create()
-        override val layoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + HangulOld.TABLE_OLD_2SET)
+        override val textLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + HangulOld.TABLE_OLD_2SET)
     }
 
     data class Params(
