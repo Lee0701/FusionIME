@@ -22,10 +22,12 @@ import ee.oyatl.ime.keyboard.KeyboardParams
 import ee.oyatl.ime.keyboard.KeyboardState
 import ee.oyatl.ime.keyboard.KeyboardViewManager
 import ee.oyatl.ime.keyboard.LayoutTable
+import ee.oyatl.ime.keyboard.SwitcherKeyboardViewManager
 import ee.oyatl.ime.keyboard.layout.KeyboardConfigurations
 import ee.oyatl.ime.keyboard.layout.KeyboardTemplates
 import ee.oyatl.ime.keyboard.layout.LayoutExt
 import ee.oyatl.ime.keyboard.layout.LayoutQwerty
+import ee.oyatl.ime.keyboard.layout.LayoutSymbol
 import kotlin.collections.plus
 import kotlin.math.roundToInt
 
@@ -34,11 +36,19 @@ abstract class CommonIMEMode(
 ): IMEMode, KeyboardListener, CandidateView.Listener {
     protected val keyCharacterMap: KeyCharacterMap = KeyCharacterMap.load(KeyCharacterMap.VIRTUAL_KEYBOARD)
 
-    open val keyCodeMapper: KeyCodeMapper = KeyCodeMapper(mapOf())
+    open val keyCodeMapper: KeyCodeMapper = KeyCodeMapper()
     open val keyboardConfiguration: KeyboardConfiguration =
         KeyboardConfigurations.mobileAlpha() + KeyboardConfigurations.mobileBottom()
     open val keyboardTemplate: List<String> = KeyboardTemplates.MOBILE
     open val layoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY)
+    open val symbolLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutSymbol.TABLE_G)
+    open val numberLayoutTable: LayoutTable = LayoutTable(mapOf())
+
+    val currentLayoutTable: LayoutTable get() = when(symbolState) {
+        KeyboardState.Symbol.Text -> layoutTable
+        KeyboardState.Symbol.Symbol -> symbolLayoutTable
+        KeyboardState.Symbol.Number -> numberLayoutTable
+    }
 
     protected var keyboard: Keyboard? = null
     protected var keyboardView: KeyboardViewManager? = null
@@ -46,14 +56,6 @@ abstract class CommonIMEMode(
 
     var symbolState: KeyboardState.Symbol = KeyboardState.Symbol.Text
     var shiftState: KeyboardState.Shift = KeyboardState.Shift.Released
-    val metaState: Int get() {
-        val shift = when(shiftState) {
-            KeyboardState.Shift.Released -> 0
-            KeyboardState.Shift.Pressed -> KeyEvent.META_SHIFT_ON
-            KeyboardState.Shift.Locked -> KeyEvent.META_CAPS_LOCK_ON
-        }
-        return shift
-    }
 
     protected var util: KeyEventUtil? = null
         private set
@@ -115,12 +117,27 @@ abstract class CommonIMEMode(
         val contentRows = keyboardTemplate.map { row -> row.map { KeyCodeMapper.keyCharToKeyCode(it) } }
         val keyboardInflater = DefaultKeyboardInflater(params, keyCodeMapper)
         val keyboard = keyboardInflater.inflate(keyboardConfiguration, contentRows)
-
         val keyboardView = keyboard.createView(context, this)
+
+        val symbolConfiguration = KeyboardConfiguration(
+            KeyboardConfigurations.mobileAlpha(semicolon = true),
+            KeyboardConfigurations.mobileBottom()
+        )
+        val symbolRows = KeyboardTemplates.MOBILE_SEMICOLON.map { row -> row.map { KeyCodeMapper.keyCharToKeyCode(it) } }
+        val symbolKeyboard = DefaultKeyboardInflater(params.copy(shiftAutoRelease = false), KeyCodeMapper())
+            .inflate(symbolConfiguration, symbolRows)
+        val symbolKeyboardView = symbolKeyboard.createView(context, this)
+        val numberKeyboardView = symbolKeyboard.createView(context, this)
+
         updateInputView()
         this.keyboard = keyboard
-        this.keyboardView = keyboardView
-        return keyboardView.view
+        val switcherKeyboardView = SwitcherKeyboardViewManager(context, mapOf(
+            KeyboardState.Symbol.Text to keyboardView,
+            KeyboardState.Symbol.Symbol to symbolKeyboardView,
+            KeyboardState.Symbol.Number to numberKeyboardView
+        ))
+        this.keyboardView = switcherKeyboardView
+        return switcherKeyboardView.view
     }
 
     override fun createCandidateView(context: Context): View {
@@ -137,8 +154,11 @@ abstract class CommonIMEMode(
 
     protected fun updateInputView() {
         val keyboardView = keyboardView
+        if(keyboardView is SwitcherKeyboardViewManager) {
+            keyboardView.state = symbolState
+        }
         if(keyboardView != null) {
-            val labels = layoutTable.map.mapValues { (_, v) -> v.forShiftState(shiftState).toChar().toString() }
+            val labels = currentLayoutTable.map.mapValues { (_, v) -> v.forShiftState(shiftState).toChar().toString() }
             keyboardView.setLabels(labels)
             val shiftIcon = when(shiftState) {
                 KeyboardState.Shift.Released -> ee.oyatl.ime.keyboard.R.drawable.keyic_shift
@@ -193,7 +213,7 @@ abstract class CommonIMEMode(
             onChar(-keyCode)
         } else if(keyCode > KeyEvent.getMaxKeyCode() || keyCharacterMap.isPrintingKey(keyCode)) {
             onChar(
-                layoutTable[keyCode]?.forShiftState(shiftState)
+                currentLayoutTable[keyCode]?.forShiftState(shiftState)
                     ?: keyCharacterMap.get(keyCode, metaState)
             )
         } else {

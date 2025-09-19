@@ -3,7 +3,7 @@ package ee.oyatl.ime.keyboard
 import android.view.KeyCharacterMap
 
 class KeyCodeMapper(
-    val map: Map<Int, Int>
+    val map: Map<Int, Int> = emptyMap()
 ) {
     operator fun get(keyCode: Int): Int {
         return map[keyCode] ?: keyCode
