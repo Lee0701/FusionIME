@@ -17,6 +17,8 @@ import ee.oyatl.ime.keyboard.layout.MobileKeyboard
 import ee.oyatl.ime.keyboard.layout.MobileKeyboardRows
 import ee.oyatl.ime.keyboard.layout.LayoutExt
 import ee.oyatl.ime.keyboard.layout.LayoutQwerty
+import ee.oyatl.ime.keyboard.layout.TabletKeyboard
+import ee.oyatl.ime.keyboard.layout.TabletKeyboardRows
 import tw.cheyingwu.zhuyin.ZhuYinDictionary
 import tw.cheyingwu.zhuyin.ZhuYinIMESettings
 import java.util.Locale
@@ -34,13 +36,23 @@ class ZhuyinIMEMode(
         }
     }
 
-    override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.Basic(
-        configuration = KeyboardConfiguration(
-            MobileKeyboard.numbers(),
-            MobileKeyboard.alphabetic(semicolon = true, shiftDeleteWidth = 1f, shift = false),
-            MobileKeyboard.bottom(KeyEvent.KEYCODE_MINUS, KeyEvent.KEYCODE_SLASH)
+    override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
+        mobile = KeyboardTemplate.Basic(
+            configuration = KeyboardConfiguration(
+                MobileKeyboard.numbers(),
+                MobileKeyboard.alphabetic(semicolon = true, shiftDeleteWidth = 1f, shift = false),
+                MobileKeyboard.bottom(KeyEvent.KEYCODE_MINUS, KeyEvent.KEYCODE_SLASH)
+            ),
+            contentRows = MobileKeyboardRows.NUMBERS + MobileKeyboardRows.HALF_GRID
         ),
-        contentRows = MobileKeyboardRows.NUMBERS + MobileKeyboardRows.HALF_GRID
+        tablet = KeyboardTemplate.Basic(
+            configuration = KeyboardConfiguration(
+                TabletKeyboard.numbers(delete = true),
+                TabletKeyboard.alphabetic(semicolon = true, rightShift = false, delete = false, spacerOnDelete = false),
+                TabletKeyboard.bottom()
+            ),
+            contentRows = TabletKeyboardRows.NUMBERS + TabletKeyboardRows.SEMICOLON_SLASH_MINUS
+        )
     )
     override val textLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutExt.TABLE_CHINESE + LayoutZhuyin.TABLE)
 

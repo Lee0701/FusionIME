@@ -26,6 +26,7 @@ import ee.oyatl.ime.keyboard.layout.MobileKeyboardRows
 import ee.oyatl.ime.keyboard.layout.LayoutExt
 import ee.oyatl.ime.keyboard.layout.LayoutQwerty
 import ee.oyatl.ime.keyboard.layout.TabletKeyboard
+import ee.oyatl.ime.keyboard.layout.TabletKeyboardRows
 import java.util.Locale
 import java.util.concurrent.Executors
 
@@ -143,7 +144,7 @@ abstract class KoreanIMEMode(
                     MobileKeyboard.alphabetic(semicolon = true, shiftDeleteWidth = 1f),
                     MobileKeyboard.bottom(ExtKeyCode.KEYCODE_PERIOD_COMMA, KeyEvent.KEYCODE_SLASH)
                 ),
-                contentRows = MobileKeyboardRows.NUMBERS + MobileKeyboardRows.SEMICOLON_QUOTE_SLASH,
+                contentRows = MobileKeyboardRows.NUMBERS + MobileKeyboardRows.SEMICOLON_QUOTE,
                 codeMapper = keyCodeMapper
             ),
             tablet = KeyboardTemplate.Basic(
@@ -152,7 +153,7 @@ abstract class KoreanIMEMode(
                     TabletKeyboard.alphabetic(semicolon = true, delete = false),
                     TabletKeyboard.bottom()
                 ),
-                contentRows = MobileKeyboardRows.NUMBERS + MobileKeyboardRows.SEMICOLON_QUOTE_SLASH,
+                contentRows = TabletKeyboardRows.NUMBERS + TabletKeyboardRows.SEMICOLON_QUOTE_SLASH,
                 codeMapper = keyCodeMapper
             )
         )

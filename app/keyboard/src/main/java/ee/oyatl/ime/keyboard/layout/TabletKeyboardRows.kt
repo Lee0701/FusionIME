@@ -19,10 +19,22 @@ object TabletKeyboardRows {
         "zxcvbnm,."
     )
 
-    val SEMICOLON_QUOTE: List<String> = listOf(
+    val SEMICOLON_QUOTE_SLASH: List<String> = listOf(
         "qwertyuiop",
-        "asdfghjkl",
-        "zxcvbnm;\'/"
+        "asdfghjkl;",
+        "zxcvbnm\'/"
+    )
+
+    val SEMICOLON_SLASH: List<String> = listOf(
+        "qwertyuiop",
+        "asdfghjkl;",
+        "zxcvbnm,./"
+    )
+
+    val SEMICOLON_SLASH_MINUS: List<String> = listOf(
+        "qwertyuiop-",
+        "asdfghjkl;",
+        "zxcvbnm,./"
     )
 
     val DVORAK: List<String> = listOf(

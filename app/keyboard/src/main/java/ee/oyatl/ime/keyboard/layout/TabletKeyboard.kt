@@ -35,7 +35,7 @@ object TabletKeyboard {
 
     fun alphabetic(
         semicolon: Boolean = false,
-        shift: Boolean = true,
+        rightShift: Boolean = true,
         delete: Boolean = true,
         spacerOnDelete: Boolean = true
     ): KeyboardConfiguration {
@@ -55,10 +55,10 @@ object TabletKeyboard {
             KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_ENTER, returnWidth, true)
         )
         val row2: MutableList<KeyboardConfiguration.Item> = mutableListOf(
+            KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_SHIFT_LEFT, 1f, true),
             KeyboardConfiguration.Item.ContentRow(0)
         )
-        if(shift) {
-            row2.add(0, KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_SHIFT_LEFT, 1f, true))
+        if(rightShift) {
             row2.add(KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_SHIFT_LEFT, 1f, true))
         }
         return KeyboardConfiguration(listOf(

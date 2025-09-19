@@ -19,10 +19,10 @@ object MobileKeyboardRows {
         "zxcvbnm"
     )
 
-    val SEMICOLON_QUOTE_SLASH: List<String> = listOf(
+    val SEMICOLON_QUOTE: List<String> = listOf(
         "qwertyuiop",
         "asdfghjkl;",
-        "zxcvbnm\'/"
+        "zxcvbnm\'"
     )
 
     val HALF_GRID: List<String> = listOf(
