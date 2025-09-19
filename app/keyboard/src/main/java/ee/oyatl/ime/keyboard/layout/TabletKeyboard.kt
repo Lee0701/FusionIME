@@ -10,8 +10,8 @@ object TabletKeyboard {
                 KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_SYM, 1.5f, true),
                 KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_LANGUAGE_SWITCH, 1f, true),
                 KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_SPACE, 5f),
-                KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_DPAD_LEFT),
-                KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_DPAD_RIGHT),
+                KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_DPAD_LEFT, 1f, true),
+                KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_DPAD_RIGHT, 1f, true),
                 KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_SYM, 1.5f, true)
             )
         ))

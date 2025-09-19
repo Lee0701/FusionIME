@@ -115,6 +115,7 @@ class DefaultKeyboard(
             themeRes = R.style.Theme_FusionIME_Keyboard_Key_Modifier,
             iconRes = R.drawable.keyic_language
         ),
+
         Symbol(
             keyCode = KeyEvent.KEYCODE_SYM,
             themeRes = R.style.Theme_FusionIME_Keyboard_Key_Modifier,
@@ -143,6 +144,18 @@ class DefaultKeyboard(
             keyCode = KeyEvent.KEYCODE_SPACE,
             themeRes = R.style.Theme_FusionIME_Keyboard_Key,
             iconRes = R.drawable.keyic_space
+        ),
+
+        Left(
+            keyCode = KeyEvent.KEYCODE_DPAD_LEFT,
+            themeRes = R.style.Theme_FusionIME_Keyboard_Key_Modifier,
+            iconRes = R.drawable.keyic_left
+        ),
+
+        Right(
+            keyCode = KeyEvent.KEYCODE_DPAD_RIGHT,
+            themeRes = R.style.Theme_FusionIME_Keyboard_Key_Modifier,
+            iconRes = R.drawable.keyic_right
         );
 
         companion object {

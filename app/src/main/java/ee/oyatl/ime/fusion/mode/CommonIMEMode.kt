@@ -264,6 +264,9 @@ abstract class CommonIMEMode(
                     else KeyboardState.Symbol.Text
                 shiftState = KeyboardState.Shift.Released
             }
+            KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.KEYCODE_DPAD_RIGHT, KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_DPAD_DOWN -> {
+                util?.sendDownUpKeyEvents(keyCode)
+            }
             else -> onSpecial(keyCode)
         }
     }
