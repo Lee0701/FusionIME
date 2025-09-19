@@ -10,6 +10,7 @@ import com.diycircuits.cangjie.TableLoader
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.keyboard.KeyboardConfiguration
+import ee.oyatl.ime.keyboard.KeyboardState
 import ee.oyatl.ime.keyboard.LayoutTable
 import ee.oyatl.ime.keyboard.layout.ExtKeyCode
 import ee.oyatl.ime.keyboard.layout.KeyboardConfigurations
@@ -89,7 +90,8 @@ abstract class CangjieIMEMode(
     }
 
     override fun onChar(codePoint: Int) {
-        wordComposer.add(codePoint, intArrayOf(codePoint))
+        val char = getFullOrHalfWidthChar(codePoint)
+        wordComposer.add(char, intArrayOf(char))
         table?.setInputMethod(TableLoader.CANGJIE)
         renderInput()
     }
@@ -124,6 +126,17 @@ abstract class CangjieIMEMode(
             else -> {}
         }
         renderInput()
+    }
+
+    private fun getFullOrHalfWidthChar(codePoint: Int): Int {
+        return if(fullWidth && symbolState == KeyboardState.Symbol.Symbol) getFullWidthChar(codePoint)
+        else codePoint
+    }
+
+    private fun getFullWidthChar(codePoint: Int): Int {
+        return if(codePoint in 0x21 .. 0x5f)
+            codePoint - 0x21 + 0xff01
+        else codePoint
     }
 
     data class CangjieCandidate(
