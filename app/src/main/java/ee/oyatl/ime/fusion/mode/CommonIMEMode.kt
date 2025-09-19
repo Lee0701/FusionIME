@@ -27,6 +27,7 @@ import ee.oyatl.ime.keyboard.layout.MobileKeyboardRows
 import ee.oyatl.ime.keyboard.layout.LayoutExt
 import ee.oyatl.ime.keyboard.layout.LayoutQwerty
 import ee.oyatl.ime.keyboard.layout.LayoutSymbol
+import ee.oyatl.ime.keyboard.layout.NumberKeyboard
 import ee.oyatl.ime.keyboard.layout.TabletKeyboard
 import ee.oyatl.ime.keyboard.layout.TabletKeyboardRows
 import kotlin.collections.plus
@@ -74,11 +75,8 @@ abstract class CommonIMEMode(
         )
     )
     open val numberKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.Basic(
-        configuration = KeyboardConfiguration(
-            MobileKeyboard.alphabetic(semicolon = true),
-            MobileKeyboard.bottom()
-        ),
-        contentRows = MobileKeyboardRows.SEMICOLON,
+        configuration = KeyboardConfiguration(NumberKeyboard.mobile()),
+        contentRows = emptyList(),
     )
 
     val currentLayoutTable: LayoutTable get() = when(symbolState) {
