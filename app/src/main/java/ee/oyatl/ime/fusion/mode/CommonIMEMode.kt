@@ -74,9 +74,15 @@ abstract class CommonIMEMode(
             contentRows = TabletKeyboardRows.SEMICOLON
         )
     )
-    open val numberKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.Basic(
-        configuration = KeyboardConfiguration(NumberKeyboard.mobile()),
-        contentRows = emptyList(),
+    open val numberKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
+        mobile = KeyboardTemplate.Basic(
+            configuration = NumberKeyboard.mobile(),
+            contentRows = emptyList(),
+        ),
+        tablet = KeyboardTemplate.Basic(
+            configuration = NumberKeyboard.tablet(),
+            contentRows = emptyList(),
+        )
     )
 
     val currentLayoutTable: LayoutTable get() = when(symbolState) {
