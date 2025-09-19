@@ -57,28 +57,18 @@ object LayoutKana {
         KeyEvent.KEYCODE_Z to listOf('つ'.code, 'っ'.code),
         KeyEvent.KEYCODE_X to listOf('さ'.code),
         KeyEvent.KEYCODE_C to listOf('そ'.code),
-        KeyEvent.KEYCODE_V to listOf('ひ'.code),
-        KeyEvent.KEYCODE_B to listOf('こ'.code, 'ゐ'.code),
+        KeyEvent.KEYCODE_V to listOf('ひ'.code, 'ゐ'.code),
+        KeyEvent.KEYCODE_B to listOf('こ'.code),
         KeyEvent.KEYCODE_N to listOf('み'.code),
         KeyEvent.KEYCODE_M to listOf('も'.code),
         KeyEvent.KEYCODE_COMMA to listOf('ね'.code, '、'.code),
         KeyEvent.KEYCODE_PERIOD to listOf('る'.code, '。'.code),
-        KeyEvent.KEYCODE_SLASH to listOf('め'.code, '・'.code)
-    )
+        KeyEvent.KEYCODE_SLASH to listOf('め'.code, '・'.code),
 
-    val ROWS_JIS_LOWER: List<String> = listOf(
-        "ぬふあうえおやゆよわほ",
-        "たていすかんなにらせ゛",
-        "ちとしはきくまのりれけ",
-        "つさそひこみもねるめろ",
+        ExtKeyCode.KEYCODE_KANA_VOICED_MARK to listOf('゛'.code, '゜'.code),
+        ExtKeyCode.KEYCODE_KANA_MINUS to listOf('ほ'.code, 'ー'.code),
+        ExtKeyCode.KEYCODE_KANA_EQUALS to listOf('へ'.code, 'ゑ'.code),
+        ExtKeyCode.KEYCODE_KANA_APOSTROPHE to listOf('け'.code, 'む'.code),
+        ExtKeyCode.KEYCODE_KANA_SLASH to listOf('め'.code, 'ろ'.code)
     )
-
-    val ROWS_JIS_UPPER: List<String> = listOf(
-        "ぬふぁぅぇぉゃゅょをー",
-        "たてぃすかんなにらせ゜",
-        "ちとしはきくまのりれけ",
-        "っさそゐこみも、。・ろ",
-    )
-
-    const val BOTTOM_RIGHT_JIS: String = "\\="
 }

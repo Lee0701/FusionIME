@@ -12,12 +12,15 @@ import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.VerticalScrollingCandidateView
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.mozc.InputConnectionRenderer
+import ee.oyatl.ime.keyboard.KeyCodeMapper
 import ee.oyatl.ime.keyboard.KeyboardConfiguration
 import ee.oyatl.ime.keyboard.layout.LayoutKana
 import ee.oyatl.ime.keyboard.layout.LayoutRomaji
 import ee.oyatl.ime.keyboard.LayoutTable
+import ee.oyatl.ime.keyboard.layout.ExtKeyCode
 import ee.oyatl.ime.keyboard.layout.KeyboardConfigurations
 import ee.oyatl.ime.keyboard.layout.KeyboardTemplates
+import ee.oyatl.ime.keyboard.layout.LayoutExt
 import org.mozc.android.inputmethod.japanese.MozcUtil
 import org.mozc.android.inputmethod.japanese.PrimaryKeyCodeConverter
 import org.mozc.android.inputmethod.japanese.keyboard.Keyboard.KeyboardSpecification
@@ -157,7 +160,7 @@ abstract class MozcIMEMode(
 
     class RomajiQwerty(listener: IMEMode.Listener): MozcIMEMode(listener) {
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.QWERTY_KANA
-        override val layoutTable: LayoutTable = LayoutTable.from(LayoutRomaji.TABLE_QWERTY)
+        override val layoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutRomaji.TABLE_QWERTY)
         override val keyboardConfiguration: KeyboardConfiguration = KeyboardConfiguration(
             KeyboardConfigurations.mobileAlpha(semicolon = true),
             KeyboardConfigurations.mobileBottom()
@@ -167,7 +170,18 @@ abstract class MozcIMEMode(
 
     class KanaJIS(listener: IMEMode.Listener): MozcIMEMode(listener) {
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.QWERTY_KANA_JIS
-        override val layoutTable: LayoutTable = LayoutTable.from(LayoutKana.TABLE_JIS)
+        override val layoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutKana.TABLE_JIS)
+        override val keyboardConfiguration: KeyboardConfiguration = KeyboardConfiguration(
+            KeyboardConfigurations.mobileNumbers(),
+            KeyboardConfigurations.mobileAlpha(semicolon = true, shiftDeleteWidth = 1f),
+            KeyboardConfigurations.mobileBottom(left = ExtKeyCode.KEYCODE_KANA_EQUALS, right = ExtKeyCode.KEYCODE_KANA_SLASH)
+        )
+        override val keyboardTemplate: List<String> = KeyboardTemplates.MOBILE_JIS
+        override val keyCodeMapper: KeyCodeMapper = KeyCodeMapper(mapOf(
+            KeyEvent.KEYCODE_MINUS to ExtKeyCode.KEYCODE_KANA_MINUS,
+            KeyEvent.KEYCODE_APOSTROPHE to ExtKeyCode.KEYCODE_KANA_APOSTROPHE,
+            KeyEvent.KEYCODE_LEFT_BRACKET to ExtKeyCode.KEYCODE_KANA_VOICED_MARK,
+        ))
     }
 
     class KanaSyllables(listener: IMEMode.Listener): MozcIMEMode(listener) {

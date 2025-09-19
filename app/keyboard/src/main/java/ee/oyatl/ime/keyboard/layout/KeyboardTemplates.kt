@@ -37,6 +37,13 @@ object KeyboardTemplates {
         "zxcvbnm,./"
     )
 
+    val MOBILE_JIS: List<String> = listOf(
+        "1234567890-",
+        "qwertyuiop[",
+        "asdfghjkl;'",
+        "zxcvbnm,.",
+    )
+
     val MOBILE_DVORAK: List<String> = listOf(
         "qwertyuiop",
         "asdfghjkl;",
