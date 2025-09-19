@@ -129,16 +129,12 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         if(event.isSystem || event.isCtrlPressed || event.isAltPressed || event.isMetaPressed)
             return super.onKeyDown(keyCode, event)
-        if(event.keyCode == KeyEvent.KEYCODE_SHIFT_LEFT || event.keyCode == KeyEvent.KEYCODE_SHIFT_RIGHT)
-            return super.onKeyDown(keyCode, event)
         imeModeSwitcher.currentMode.onKeyDown(keyCode, event.metaState)
         return true
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
         if(event.isSystem || event.isCtrlPressed || event.isAltPressed || event.isMetaPressed)
-            return super.onKeyUp(keyCode, event)
-        if(event.keyCode == KeyEvent.KEYCODE_SHIFT_LEFT || event.keyCode == KeyEvent.KEYCODE_SHIFT_RIGHT)
             return super.onKeyUp(keyCode, event)
         imeModeSwitcher.currentMode.onKeyUp(keyCode, event.metaState)
         return true
