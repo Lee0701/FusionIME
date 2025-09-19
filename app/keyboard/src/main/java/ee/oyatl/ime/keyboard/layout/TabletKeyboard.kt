@@ -18,14 +18,15 @@ object TabletKeyboard {
     }
 
     fun numbers(
-        delete: Boolean = false
+        delete: Boolean = false,
+        spacerOnDelete: Boolean = true
     ): KeyboardConfiguration {
         val row0: MutableList<KeyboardConfiguration.Item> = mutableListOf(
             KeyboardConfiguration.Item.ContentRow(3)
         )
         if(delete) {
             row0.add(KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_DEL, 1f, true))
-        } else {
+        } else if(spacerOnDelete) {
             row0.add(KeyboardConfiguration.Item.Spacer(1f))
         }
         return KeyboardConfiguration(listOf(

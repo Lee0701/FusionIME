@@ -184,7 +184,7 @@ abstract class CangjieIMEMode(
             tablet = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
                     TabletKeyboard.numbers(delete = true),
-                    TabletKeyboard.alphabetic(semicolon = true, delete = false, spacerOnDelete = true),
+                    TabletKeyboard.alphabetic(semicolon = true, rightShift = false, delete = false, spacerOnDelete = true),
                     TabletKeyboard.bottom()
                 ),
                 contentRows = TabletKeyboardRows.NUMBERS + TabletKeyboardRows.SEMICOLON_SLASH

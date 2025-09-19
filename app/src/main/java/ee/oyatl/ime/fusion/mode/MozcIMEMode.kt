@@ -22,6 +22,8 @@ import ee.oyatl.ime.keyboard.layout.ExtKeyCode
 import ee.oyatl.ime.keyboard.layout.MobileKeyboard
 import ee.oyatl.ime.keyboard.layout.MobileKeyboardRows
 import ee.oyatl.ime.keyboard.layout.LayoutExt
+import ee.oyatl.ime.keyboard.layout.TabletKeyboard
+import ee.oyatl.ime.keyboard.layout.TabletKeyboardRows
 import org.mozc.android.inputmethod.japanese.MozcUtil
 import org.mozc.android.inputmethod.japanese.PrimaryKeyCodeConverter
 import org.mozc.android.inputmethod.japanese.keyboard.Keyboard.KeyboardSpecification
@@ -162,38 +164,66 @@ abstract class MozcIMEMode(
     class RomajiQwerty(listener: IMEMode.Listener): MozcIMEMode(listener) {
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.QWERTY_KANA
         override val textLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutRomaji.TABLE_QWERTY)
-        override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.Basic(
-            configuration = KeyboardConfiguration(
-                MobileKeyboard.alphabetic(semicolon = true),
-                MobileKeyboard.bottom()
+        override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
+            mobile = KeyboardTemplate.Basic(
+                configuration = KeyboardConfiguration(
+                    MobileKeyboard.alphabetic(semicolon = true),
+                    MobileKeyboard.bottom()
+                ),
+                contentRows = MobileKeyboardRows.MINUS
             ),
-            contentRows = MobileKeyboardRows.MINUS
+            tablet = KeyboardTemplate.Basic(
+                configuration = KeyboardConfiguration(
+                    TabletKeyboard.alphabetic(semicolon = true),
+                    TabletKeyboard.bottom()
+                ),
+                contentRows = TabletKeyboardRows.MINUS
+            )
         )
     }
 
     class KanaJIS(listener: IMEMode.Listener): MozcIMEMode(listener) {
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.QWERTY_KANA_JIS
         override val textLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutKana.TABLE_JIS)
-        override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.Basic(
-            configuration = KeyboardConfiguration(
-                MobileKeyboard.numbers(),
-                MobileKeyboard.alphabetic(semicolon = true, shiftDeleteWidth = 1f),
-                MobileKeyboard.bottom(left = ExtKeyCode.KEYCODE_KANA_EQUALS, right = ExtKeyCode.KEYCODE_KANA_SLASH)
+        override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
+            mobile = KeyboardTemplate.Basic(
+                configuration = KeyboardConfiguration(
+                    MobileKeyboard.numbers(),
+                    MobileKeyboard.alphabetic(semicolon = true, shiftDeleteWidth = 1f),
+                    MobileKeyboard.bottom(left = ExtKeyCode.KEYCODE_KANA_EQUALS, right = ExtKeyCode.KEYCODE_KANA_SLASH)
+                ),
+                contentRows = MobileKeyboardRows.JIS,
+                codeMapper = KeyCodeMapper(mapOf(
+                    KeyEvent.KEYCODE_MINUS to ExtKeyCode.KEYCODE_KANA_MINUS,
+                    KeyEvent.KEYCODE_APOSTROPHE to ExtKeyCode.KEYCODE_KANA_APOSTROPHE,
+                    KeyEvent.KEYCODE_LEFT_BRACKET to ExtKeyCode.KEYCODE_KANA_VOICED_MARK
+                ))
             ),
-            contentRows = MobileKeyboardRows.JIS,
-            codeMapper = KeyCodeMapper(mapOf(
-                KeyEvent.KEYCODE_MINUS to ExtKeyCode.KEYCODE_KANA_MINUS,
-                KeyEvent.KEYCODE_APOSTROPHE to ExtKeyCode.KEYCODE_KANA_APOSTROPHE,
-                KeyEvent.KEYCODE_LEFT_BRACKET to ExtKeyCode.KEYCODE_KANA_VOICED_MARK,
-            ))
+            tablet = KeyboardTemplate.Basic(
+                configuration = KeyboardConfiguration(
+                    TabletKeyboard.numbers(delete = false, spacerOnDelete = false),
+                    TabletKeyboard.alphabetic(semicolon = true, rightShift = false),
+                    TabletKeyboard.bottom()
+                ),
+                contentRows = TabletKeyboardRows.JIS,
+                codeMapper = KeyCodeMapper(mapOf(
+                    KeyEvent.KEYCODE_LEFT_BRACKET to ExtKeyCode.KEYCODE_KANA_VOICED_MARK
+                ))
+            )
         )
     }
 
     class KanaSyllables(listener: IMEMode.Listener): MozcIMEMode(listener) {
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.TWELVE_KEY_FLICK_KANA
-        override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.Basic(
-            configuration = LayoutKana.keyboardConfigurationSyllables(),
-            emptyList()
+        override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
+            mobile = KeyboardTemplate.Basic(
+                configuration = LayoutKana.mobileKeyboardConfigurationSyllables(),
+                emptyList()
+            ),
+            tablet = KeyboardTemplate.Basic(
+                configuration = LayoutKana.tabletKeyboardConfigurationSyllables(),
+                emptyList()
+            )
         )
     }
 
