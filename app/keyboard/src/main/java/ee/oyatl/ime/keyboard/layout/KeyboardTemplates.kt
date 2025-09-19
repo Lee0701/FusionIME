@@ -19,24 +19,31 @@ object KeyboardTemplates {
         "zxcvbnm"
     )
 
-    val MOBILE_QUOTE: List<String> = listOf(
-        "1234567890",
+    val MOBILE_SEMICOLON_QUOTE: List<String> = listOf(
         "qwertyuiop",
         "asdfghjkl;",
-        "zxcvbnm\'",
+        "zxcvbnm\'"
+    )
+
+    val MOBILE_HALF_GRID: List<String> = listOf(
+        "qwertyuiop",
+        "asdfghjkl;",
+        "zxcvbnm,."
     )
 
     val MOBILE_GRID: List<String> = listOf(
-        "1234567890",
         "qwertyuiop",
         "asdfghjkl;",
-        "zxcvbnm,./",
+        "zxcvbnm,./"
     )
 
     val MOBILE_DVORAK: List<String> = listOf(
         "qwertyuiop",
         "asdfghjkl;",
-        "cvbnm,.",
+        "cvbnm,."
     )
 
+    val MOBILE_NUMBERS: List<String> = listOf(
+        "1234567890"
+    )
 }

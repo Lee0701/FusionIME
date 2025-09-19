@@ -13,10 +13,13 @@ import ee.oyatl.ime.fusion.korean.HanjaConverter
 import ee.oyatl.ime.fusion.korean.JeongUnHanjaConverter
 import ee.oyatl.ime.fusion.korean.UnigramHanjaConverter
 import ee.oyatl.ime.fusion.korean.WordComposer
+import ee.oyatl.ime.keyboard.KeyboardConfiguration
 import ee.oyatl.ime.keyboard.layout.Hangul2Set
 import ee.oyatl.ime.keyboard.layout.Hangul3Set
 import ee.oyatl.ime.keyboard.layout.HangulOld
 import ee.oyatl.ime.keyboard.LayoutTable
+import ee.oyatl.ime.keyboard.layout.KeyboardConfigurations
+import ee.oyatl.ime.keyboard.layout.KeyboardTemplates
 import ee.oyatl.ime.keyboard.layout.LayoutQwerty
 import java.util.Locale
 import java.util.concurrent.Executors
@@ -127,6 +130,12 @@ abstract class KoreanIMEMode(
      * Common part for 390 and 391
      */
     abstract class Hangul3Set390391(listener: IMEMode.Listener): KoreanIMEMode(listener) {
+        private val bottomConfiguration: KeyboardConfiguration =
+            KeyboardConfigurations.mobileBottom(KeyEvent.KEYCODE_PERIOD, KeyEvent.KEYCODE_SLASH)
+        override val keyboardConfiguration: KeyboardConfiguration =
+            KeyboardConfigurations.mobileNumbers() + KeyboardConfigurations.mobileAlpha(semicolon = true, shiftDeleteWidth = 1f) + bottomConfiguration
+        override val keyboardTemplate: List<String> =
+            KeyboardTemplates.MOBILE_NUMBERS + KeyboardTemplates.MOBILE_SEMICOLON_QUOTE
     }
 
     class Hangul3Set390(

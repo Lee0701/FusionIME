@@ -9,8 +9,11 @@ import com.android.inputmethod.zhuyin.TextEntryState
 import com.android.inputmethod.zhuyin.WordComposer
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.fusion.R
+import ee.oyatl.ime.keyboard.KeyboardConfiguration
 import ee.oyatl.ime.keyboard.layout.LayoutZhuyin
 import ee.oyatl.ime.keyboard.LayoutTable
+import ee.oyatl.ime.keyboard.layout.KeyboardConfigurations
+import ee.oyatl.ime.keyboard.layout.KeyboardTemplates
 import tw.cheyingwu.zhuyin.ZhuYinDictionary
 import tw.cheyingwu.zhuyin.ZhuYinIMESettings
 import java.util.Locale
@@ -28,6 +31,15 @@ class ZhuyinIMEMode(
         }
     }
 
+    private val bottomConfiguration: KeyboardConfiguration =
+        KeyboardConfigurations.mobileBottom(KeyEvent.KEYCODE_MINUS, KeyEvent.KEYCODE_SLASH)
+    override val keyboardConfiguration: KeyboardConfiguration = KeyboardConfiguration(
+        KeyboardConfigurations.mobileNumbers(),
+        KeyboardConfigurations.mobileAlpha(semicolon = true, shiftDeleteWidth = 1f, shift = false),
+        bottomConfiguration
+    )
+    override val keyboardTemplate: List<String> =
+        KeyboardTemplates.MOBILE_NUMBERS + KeyboardTemplates.MOBILE_HALF_GRID
     override val layoutTable: LayoutTable = LayoutTable.from(LayoutZhuyin.TABLE)
 
     private val wordComposer = WordComposer()

@@ -4,81 +4,58 @@ import android.view.KeyEvent
 import ee.oyatl.ime.keyboard.KeyboardConfiguration
 
 object KeyboardConfigurations {
-    val COMMON_BOTTOM: KeyboardConfiguration = KeyboardConfiguration(listOf(
-        listOf(
-            KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_SYM, 1.5f, true),
-            KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_COMMA),
-            KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_LANGUAGE_SWITCH, 1f, true),
-            KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_SPACE, 4f),
-            KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_PERIOD),
-            KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_ENTER, 1.5f, true)
-        )
-    ))
+    fun mobileBottom(
+        left: Int = KeyEvent.KEYCODE_COMMA,
+        right: Int = KeyEvent.KEYCODE_PERIOD
+    ): KeyboardConfiguration {
+        return KeyboardConfiguration(listOf(
+            listOf(
+                KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_SYM, 1.5f, true),
+                KeyboardConfiguration.Item.TemplateKey(left),
+                KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_LANGUAGE_SWITCH, 1f, true),
+                KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_SPACE, 4f),
+                KeyboardConfiguration.Item.TemplateKey(right),
+                KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_ENTER, 1.5f, true)
+            )
+        ))
+    }
 
-    val MOBILE: KeyboardConfiguration = KeyboardConfiguration(listOf(
-        listOf(
-            KeyboardConfiguration.Item.ContentRow(2)
-        ),
-        listOf(
-            KeyboardConfiguration.Item.Spacer(0.5f),
-            KeyboardConfiguration.Item.ContentRow(1),
-            KeyboardConfiguration.Item.Spacer(0.5f)
-        ),
-        listOf(
-            KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_SHIFT_LEFT, 1.5f, true),
-            KeyboardConfiguration.Item.ContentRow(0),
-            KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_DEL, 1.5f, true)
-        )
-    )) + COMMON_BOTTOM
+    fun mobileNumbers(): KeyboardConfiguration {
+        return KeyboardConfiguration(listOf(
+            listOf(
+                KeyboardConfiguration.Item.ContentRow(3)
+            )
+        ))
+    }
 
-    val MOBILE_EXT1: KeyboardConfiguration = KeyboardConfiguration(listOf(
-        listOf(
-            KeyboardConfiguration.Item.ContentRow(2)
-        ),
-        listOf(
-            KeyboardConfiguration.Item.ContentRow(1),
-        ),
-        listOf(
-            KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_SHIFT_LEFT, 1.5f, true),
-            KeyboardConfiguration.Item.ContentRow(0),
-            KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_DEL, 1.5f, true)
+    fun mobileAlpha(
+        semicolon: Boolean = false,
+        shiftDeleteWidth: Float = 1.5f,
+        shift: Boolean = true,
+        delete: Boolean = true
+    ): KeyboardConfiguration {
+        val row1 = mutableListOf<KeyboardConfiguration.Item>(
+            KeyboardConfiguration.Item.ContentRow(1)
         )
-    )) + COMMON_BOTTOM
-
-    val MOBILE_EXT2: KeyboardConfiguration = KeyboardConfiguration(listOf(
-        listOf(
-            KeyboardConfiguration.Item.ContentRow(2)
-        ),
-        listOf(
-            KeyboardConfiguration.Item.ContentRow(1),
-        ),
-        listOf(
-            KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_SHIFT_LEFT, 1f, true),
-            KeyboardConfiguration.Item.ContentRow(0),
-            KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_DEL, 1f, true)
+        if(!semicolon) {
+            row1.add(0, KeyboardConfiguration.Item.Spacer(0.5f))
+            row1.add(KeyboardConfiguration.Item.Spacer(0.5f))
+        }
+        val row2 = mutableListOf<KeyboardConfiguration.Item>(
+            KeyboardConfiguration.Item.ContentRow(0)
         )
-    )) + COMMON_BOTTOM
-
-    val MOBILE_DVORAK: KeyboardConfiguration = KeyboardConfiguration(listOf(
-        listOf(
-            KeyboardConfiguration.Item.ContentRow(2)
-        ),
-        listOf(
-            KeyboardConfiguration.Item.ContentRow(1),
-        ),
-        listOf(
-            KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_SHIFT_LEFT, 1.5f, true),
-            KeyboardConfiguration.Item.ContentRow(0),
-            KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_DEL, 1.5f, true)
-        ),
-        listOf(
-            KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_SYM, 1.5f, true),
-            KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_X),
-            KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_LANGUAGE_SWITCH, 1f, true),
-            KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_SPACE, 4f),
-            KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_SLASH),
-            KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_ENTER, 1.5f, true)
-        )
-    ))
-
+        if(shift) {
+            row2.add(0, KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_SHIFT_LEFT, shiftDeleteWidth, true))
+        }
+        if(delete) {
+            row2.add(KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_DEL, shiftDeleteWidth, true))
+        }
+        return KeyboardConfiguration(listOf(
+            listOf(
+                KeyboardConfiguration.Item.ContentRow(2)
+            ),
+            row1,
+            row2
+        ))
+    }
 }

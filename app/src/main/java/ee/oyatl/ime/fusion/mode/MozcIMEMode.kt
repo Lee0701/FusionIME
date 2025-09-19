@@ -158,7 +158,10 @@ abstract class MozcIMEMode(
     class RomajiQwerty(listener: IMEMode.Listener): MozcIMEMode(listener) {
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.QWERTY_KANA
         override val layoutTable: LayoutTable = LayoutTable.from(LayoutRomaji.TABLE_QWERTY)
-        override val keyboardConfiguration: KeyboardConfiguration = KeyboardConfigurations.MOBILE_EXT1
+        override val keyboardConfiguration: KeyboardConfiguration = KeyboardConfiguration(
+            KeyboardConfigurations.mobileAlpha(semicolon = true),
+            KeyboardConfigurations.mobileBottom()
+        )
         override val keyboardTemplate: List<String> = KeyboardTemplates.MOBILE_MINUS
     }
 

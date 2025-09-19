@@ -190,7 +190,10 @@ abstract class LatinIMEMode(
             KeyboardMappings.ANSI_QWERTY,
             KeyboardMappings.ANSI_QWERTY_DVORAK
         )
-        override val keyboardConfiguration: KeyboardConfiguration = KeyboardConfigurations.MOBILE_DVORAK
+        override val keyboardConfiguration: KeyboardConfiguration = KeyboardConfiguration(
+            KeyboardConfigurations.mobileAlpha(semicolon = true),
+            KeyboardConfigurations.mobileBottom(KeyEvent.KEYCODE_X, KeyEvent.KEYCODE_SLASH)
+        )
         override val keyboardTemplate: List<String> = KeyboardTemplates.MOBILE_DVORAK
     }
 
@@ -199,7 +202,8 @@ abstract class LatinIMEMode(
             KeyboardMappings.ANSI_QWERTY,
             KeyboardMappings.ANSI_QWERTY_COLEMAK
         )
-        override val keyboardConfiguration: KeyboardConfiguration = KeyboardConfigurations.MOBILE_EXT1
+        override val keyboardConfiguration: KeyboardConfiguration =
+            KeyboardConfigurations.mobileAlpha(semicolon = true) + KeyboardConfigurations.mobileBottom()
         override val keyboardTemplate: List<String> = KeyboardTemplates.MOBILE_SEMICOLON
     }
 

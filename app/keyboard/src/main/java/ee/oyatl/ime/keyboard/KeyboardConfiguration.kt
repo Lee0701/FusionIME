@@ -3,6 +3,8 @@ package ee.oyatl.ime.keyboard
 data class KeyboardConfiguration(
     val rows: List<List<Item>>
 ) {
+    constructor(vararg configurations: KeyboardConfiguration): this(configurations.flatMap { it.rows })
+
     operator fun plus(other: KeyboardConfiguration): KeyboardConfiguration {
         return KeyboardConfiguration(this.rows + other.rows)
     }
