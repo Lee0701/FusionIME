@@ -6,13 +6,14 @@ import ee.oyatl.ime.keyboard.KeyboardConfiguration
 object MobileKeyboard {
     fun bottom(
         left: Int = KeyEvent.KEYCODE_COMMA,
-        right: Int = KeyEvent.KEYCODE_PERIOD
+        right: Int = KeyEvent.KEYCODE_PERIOD,
+        languageKeyCode: Int = KeyEvent.KEYCODE_LANGUAGE_SWITCH
     ): KeyboardConfiguration {
         return KeyboardConfiguration(listOf(
             listOf(
                 KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_SYM, 1.5f, true),
                 KeyboardConfiguration.Item.TemplateKey(left),
-                KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_LANGUAGE_SWITCH, 1f, true),
+                KeyboardConfiguration.Item.TemplateKey(languageKeyCode, 1f, true),
                 KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_SPACE, 4f),
                 KeyboardConfiguration.Item.TemplateKey(right),
                 KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_ENTER, 1.5f, true)

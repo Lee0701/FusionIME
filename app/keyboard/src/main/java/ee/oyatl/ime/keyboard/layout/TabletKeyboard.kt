@@ -4,11 +4,13 @@ import android.view.KeyEvent
 import ee.oyatl.ime.keyboard.KeyboardConfiguration
 
 object TabletKeyboard {
-    fun bottom(): KeyboardConfiguration {
+    fun bottom(
+        languageKeyCode: Int = KeyEvent.KEYCODE_LANGUAGE_SWITCH
+    ): KeyboardConfiguration {
         return KeyboardConfiguration(listOf(
             listOf(
                 KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_SYM, 1.5f, true),
-                KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_LANGUAGE_SWITCH, 1f, true),
+                KeyboardConfiguration.Item.TemplateKey(languageKeyCode, 1f, true),
                 KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_SPACE, 5f),
                 KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_DPAD_LEFT, 1f, true),
                 KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_DPAD_RIGHT, 1f, true),

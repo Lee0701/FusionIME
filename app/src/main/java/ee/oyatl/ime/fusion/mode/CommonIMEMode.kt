@@ -57,12 +57,21 @@ abstract class CommonIMEMode(
             contentRows = TabletKeyboardRows.DEFAULT
         )
     )
-    open val symbolKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.Basic(
-        configuration = KeyboardConfiguration(
-            MobileKeyboard.alphabetic(semicolon = true),
-            MobileKeyboard.bottom()
+    open val symbolKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
+        mobile = KeyboardTemplate.Basic(
+            configuration = KeyboardConfiguration(
+                MobileKeyboard.alphabetic(semicolon = true),
+                MobileKeyboard.bottom(languageKeyCode = KeyEvent.KEYCODE_NUM)
+            ),
+            contentRows = MobileKeyboardRows.SEMICOLON,
         ),
-        contentRows = MobileKeyboardRows.SEMICOLON,
+        tablet = KeyboardTemplate.Basic(
+            configuration = KeyboardConfiguration(
+                TabletKeyboard.alphabetic(semicolon = true),
+                TabletKeyboard.bottom(languageKeyCode = KeyEvent.KEYCODE_NUM)
+            ),
+            contentRows = TabletKeyboardRows.SEMICOLON
+        )
     )
     open val numberKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.Basic(
         configuration = KeyboardConfiguration(
