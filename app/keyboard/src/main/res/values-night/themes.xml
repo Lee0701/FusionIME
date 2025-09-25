@@ -8,7 +8,7 @@
     </style>
 
     <style name="Theme.FusionIME.Keyboard.Popup">
-        <item name="backgroundColor">@color/key_bg_dark_pressed</item>
+        <item name="backgroundColor">@color/key_bg_dark_unpressed</item>
         <item name="foregroundColor">@color/white</item>
     </style>
 
