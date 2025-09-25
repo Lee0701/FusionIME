@@ -37,7 +37,8 @@ import org.mozc.android.inputmethod.japanese.session.SessionHandlerFactory
 import java.util.Locale
 
 abstract class MozcIMEMode(
-    listener: IMEMode.Listener
+    listener: IMEMode.Listener,
+    val candidateViewHeight: Int
 ): CommonIMEMode(listener) {
 
     private lateinit var resources: Resources
@@ -111,7 +112,7 @@ abstract class MozcIMEMode(
     }
 
     override fun createCandidateView(context: Context): View {
-        val candidateView = VerticalScrollingCandidateView(context, null, 2).apply {
+        val candidateView = VerticalScrollingCandidateView(context, null, candidateViewHeight).apply {
             listener = this@MozcIMEMode
         }
         this.candidateView = candidateView
@@ -161,7 +162,10 @@ abstract class MozcIMEMode(
         )
     }
 
-    class RomajiQwerty(listener: IMEMode.Listener): MozcIMEMode(listener) {
+    class RomajiQwerty(
+        listener: IMEMode.Listener,
+        candidateViewHeight: Int
+    ): MozcIMEMode(listener, candidateViewHeight) {
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.QWERTY_KANA
         override val textLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutRomaji.TABLE_QWERTY)
         override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
@@ -182,7 +186,10 @@ abstract class MozcIMEMode(
         )
     }
 
-    class KanaJIS(listener: IMEMode.Listener): MozcIMEMode(listener) {
+    class KanaJIS(
+        listener: IMEMode.Listener,
+        candidateViewHeight: Int
+    ): MozcIMEMode(listener, candidateViewHeight) {
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.QWERTY_KANA_JIS
         override val textLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutKana.TABLE_JIS)
         override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
@@ -213,7 +220,10 @@ abstract class MozcIMEMode(
         )
     }
 
-    class KanaSyllables(listener: IMEMode.Listener): MozcIMEMode(listener) {
+    class KanaSyllables(
+        listener: IMEMode.Listener,
+        candidateViewHeight: Int
+    ): MozcIMEMode(listener, candidateViewHeight) {
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.TWELVE_KEY_FLICK_KANA
         override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
             mobile = KeyboardTemplate.Basic(
@@ -228,14 +238,15 @@ abstract class MozcIMEMode(
     }
 
     data class Params(
-        val layout: Layout = Layout.RomajiQwerty
+        val layout: Layout = Layout.RomajiQwerty,
+        val candidateViewHeight: Int = 2
     ): IMEMode.Params {
         override val type: String = TYPE
         override fun create(listener: IMEMode.Listener): IMEMode {
             return when(layout) {
-                Layout.RomajiQwerty -> RomajiQwerty(listener)
-                Layout.KanaJIS -> KanaJIS(listener)
-                Layout.KanaSyllables -> KanaSyllables(listener)
+                Layout.RomajiQwerty -> RomajiQwerty(listener, candidateViewHeight)
+                Layout.KanaJIS -> KanaJIS(listener, candidateViewHeight)
+                Layout.KanaSyllables -> KanaSyllables(listener, candidateViewHeight)
             }
         }
 
@@ -256,8 +267,10 @@ abstract class MozcIMEMode(
         companion object {
             fun parse(map: Map<String, String>): Params {
                 val layout = Layout.valueOf(map["layout"] ?: Layout.RomajiQwerty.name)
+                val candidateViewHeight = map["candidate_view_height"]?.toFloatOrNull()?.toInt() ?: 2
                 return Params(
-                    layout = layout
+                    layout = layout,
+                    candidateViewHeight = candidateViewHeight
                 )
             }
         }

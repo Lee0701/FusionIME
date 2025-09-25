@@ -59,7 +59,9 @@ abstract class InputModeDetailsFragment(
     ): InputModeDetailsFragment(map) {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             super.onCreatePreferences(savedInstanceState, rootKey)
-            addPreferencesFromResource(R.xml.pref_input_mode_mozc)
+            addPreferencesFromResource(R.xml.pref_input_mode_mozc_layout)
+            if(Feature.MozcCandidateHeight.availableInCurrentVersion)
+                addPreferencesFromResource(R.xml.pref_input_mode_mozc_candidate)
         }
     }
 

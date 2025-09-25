@@ -6,6 +6,7 @@ enum class Feature(
     val availableFrom: LocalDate
 ) {
     BigramHanjaConverter(LocalDate.of(2025, 9, 11)),
+    MozcCandidateHeight(LocalDate.of(2025, 9, 25)),
     ;
 
     val availableInPaidVersion: Boolean get() =
