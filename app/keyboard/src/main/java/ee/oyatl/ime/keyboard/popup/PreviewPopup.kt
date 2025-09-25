@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
+import android.view.animation.DecelerateInterpolator
 import android.widget.PopupWindow
 import androidx.appcompat.view.ContextThemeWrapper
 import ee.oyatl.ime.keyboard.R
@@ -31,11 +32,17 @@ class PreviewPopup(context: Context): Popup {
 
     override fun show(parent: View, x: Int, y: Int) {
         window.setBackgroundDrawable(null)
+        window.isTouchable = false
         window.contentView = view
         window.showAtLocation(parent, Gravity.TOP or Gravity.LEFT, x, y)
     }
 
     override fun hide() {
-        window.dismiss()
+        view.animate()
+            .scaleY(0.8f)
+            .translationY(view.height * 0.1f)
+            .setDuration(100)
+            .setInterpolator(DecelerateInterpolator())
+            .withEndAction { window.dismiss() }
     }
 }

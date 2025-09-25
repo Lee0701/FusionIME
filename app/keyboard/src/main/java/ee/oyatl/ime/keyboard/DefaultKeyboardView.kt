@@ -18,18 +18,20 @@ import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresPermission
 import ee.oyatl.ime.keyboard.databinding.KbdKeyBinding
 import ee.oyatl.ime.keyboard.databinding.KbdKeyboardBinding
+import ee.oyatl.ime.keyboard.popup.Popup
+import ee.oyatl.ime.keyboard.popup.PreviewPopup
 import kotlin.math.min
 import kotlin.math.roundToInt
 
 class DefaultKeyboardView(
     private val binding: KbdKeyboardBinding,
     private val keys: Set<KeyContainer>,
-    private val listener: KeyboardListener
+    private val listener: Listener
 ): KeyboardViewManager {
     override val view: View get() = binding.root
     private val rect: Rect = Rect()
     private val location = IntArray(2)
-    private val pointers: MutableMap<Int, KeyContainer> = mutableMapOf()
+    private val pointers: MutableMap<Int, Pointer> = mutableMapOf()
 
     init {
         view.viewTreeObserver.addOnGlobalLayoutListener {
@@ -50,18 +52,30 @@ class DefaultKeyboardView(
             when(event.actionMasked) {
                 MotionEvent.ACTION_DOWN, MotionEvent.ACTION_POINTER_DOWN -> {
                     val key = findKey(x, y) ?: return@setOnTouchListener true
-                    pointers += pointerId to key
+                    val popup =
+                        if(listener.params.previewPopups && key.binding.label.text.isNotEmpty())
+                            PreviewPopup(view.context)
+                        else null
+                    if(popup != null) {
+                        popup.label = key.binding.label.text.toString()
+                        popup.size = key.rect.width() to key.rect.height() * 2
+                        popup.show(view, key.rect.left, key.rect.top - key.rect.height()/4)
+                    }
+                    pointers += pointerId to Pointer(x, y, key, popup)
                     key.binding.root.isPressed = true
                     listener.onKeyDown(key.keyCode, 0)
                 }
                 MotionEvent.ACTION_MOVE -> {
-                    val key = pointers[pointerId] ?: findKey(x, y) ?: return@setOnTouchListener true
+                    val pointer = pointers[pointerId]
+                    val key = pointer?.key ?: findKey(x, y) ?: return@setOnTouchListener true
                     if(!key.rect.contains(x, y)) key.binding.root.isPressed = false
                 }
                 MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_UP -> {
-                    val key = pointers[pointerId] ?: findKey(x, y) ?: return@setOnTouchListener true
+                    val pointer = pointers[pointerId]
+                    val key = pointer?.key ?: findKey(x, y) ?: return@setOnTouchListener true
                     key.binding.root.isPressed = false
                     listener.onKeyUp(key.keyCode, 0)
+                    pointer?.popup?.hide()
                     pointers -= pointerId
                 }
             }
@@ -251,6 +265,13 @@ class DefaultKeyboardView(
             }
         }
     }
+
+    data class Pointer(
+        val x: Int,
+        val y: Int,
+        val key: KeyContainer,
+        val popup: Popup?
+    )
 
     data class KeyContainer(
         val keyCode: Int,
