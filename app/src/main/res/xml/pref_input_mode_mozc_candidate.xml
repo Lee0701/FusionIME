@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ee.oyatl.ime.fusion.preference.SliderPreference
+        app:key="candidate_view_height"
+        app:valueFrom="1"
+        app:valueTo="3"
+        app:stepSize="1.0"
+        app:defaultValue="2"
+        app:title="@string/settings_input_mode_candidate_view_height_title"
+        app:useSimpleSummaryProvider="true" />
+
+</androidx.preference.PreferenceScreen>
