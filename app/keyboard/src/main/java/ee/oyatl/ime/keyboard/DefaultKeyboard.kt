@@ -40,7 +40,6 @@ class DefaultKeyboard(
                         val key = KbdKeyBinding.inflate(themedInflater)
                         if(type.iconRes != null) key.icon.setImageResource(type.iconRes)
                         keySet += DefaultKeyboardView.KeyContainer(item.keyCode, key)
-                        key.root.setOnTouchListener(createOnTouchListener(item.keyCode, keyboardListener))
                         key.root
                     }
                     is Keyboard.KeyItem.Key -> {
@@ -48,7 +47,6 @@ class DefaultKeyboard(
                         val key = KbdKeyBinding.inflate(themedInflater)
                         keySet += DefaultKeyboardView.KeyContainer(item.keyCode, key)
                         if(item.keyCode < 0) key.label.text = (-item.keyCode).toChar().toString()
-                        key.root.setOnTouchListener(createOnTouchListener(item.keyCode, keyboardListener))
                         key.root
                     }
                 }
@@ -57,7 +55,7 @@ class DefaultKeyboard(
             }
             keyboard.root.addView(row.root)
         }
-        return DefaultKeyboardView(keyboard, keySet)
+        return DefaultKeyboardView(keyboard, keySet, keyboardListener)
     }
 
     private fun createLayoutParams(width: Float): LinearLayout.LayoutParams {
@@ -66,24 +64,6 @@ class DefaultKeyboard(
             params.height / rows.size
         ).apply {
             weight = width
-        }
-    }
-
-    private fun createOnTouchListener(code: Int, listener: KeyboardListener): View.OnTouchListener {
-        @SuppressLint("ClickableViewAccessibility")
-        return View.OnTouchListener { view, event ->
-            when(event.actionMasked) {
-                MotionEvent.ACTION_DOWN, MotionEvent.ACTION_POINTER_DOWN -> {
-                    listener.onKeyDown(code, 0)
-                    view.isPressed = true
-                }
-
-                MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_UP -> {
-                    listener.onKeyUp(code, 0)
-                    view.isPressed = false
-                }
-            }
-            true
         }
     }
 

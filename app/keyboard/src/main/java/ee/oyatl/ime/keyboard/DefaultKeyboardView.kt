@@ -1,7 +1,9 @@
 package ee.oyatl.ime.keyboard
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Rect
 import android.media.AudioManager
 import android.os.Build
 import android.os.Handler
@@ -10,18 +12,78 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
 import android.view.KeyEvent
+import android.view.MotionEvent
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresPermission
 import ee.oyatl.ime.keyboard.databinding.KbdKeyBinding
 import ee.oyatl.ime.keyboard.databinding.KbdKeyboardBinding
 import kotlin.math.min
+import kotlin.math.roundToInt
 
 class DefaultKeyboardView(
     private val binding: KbdKeyboardBinding,
-    private val keys: Set<KeyContainer>
+    private val keys: Set<KeyContainer>,
+    private val listener: KeyboardListener
 ): KeyboardViewManager {
     override val view: View get() = binding.root
+    private val rect: Rect = Rect()
+    private val location = IntArray(2)
+    private val pointers: MutableMap<Int, KeyContainer> = mutableMapOf()
+
+    init {
+        view.viewTreeObserver.addOnGlobalLayoutListener {
+            cacheKeys()
+        }
+        @SuppressLint("ClickableViewAccessibility")
+        view.setOnTouchListener { view, event ->
+            val pointerId = event.getPointerId(event.actionIndex)
+            val rawX =
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) event.getRawX(event.actionIndex)
+                else event.getX(event.actionIndex) + location[0]
+            val rawY =
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) event.getRawY(event.actionIndex)
+                else event.getY(event.actionIndex) + location[1]
+            val x = rawX.roundToInt() - location[0]
+            val y = rawY.roundToInt() - location[1]
+
+            when(event.actionMasked) {
+                MotionEvent.ACTION_DOWN, MotionEvent.ACTION_POINTER_DOWN -> {
+                    val key = findKey(x, y) ?: return@setOnTouchListener true
+                    pointers += pointerId to key
+                    key.binding.root.isPressed = true
+                    listener.onKeyDown(key.keyCode, 0)
+                }
+                MotionEvent.ACTION_MOVE -> {
+                    val key = pointers[pointerId] ?: findKey(x, y) ?: return@setOnTouchListener true
+                    if(!key.rect.contains(x, y)) key.binding.root.isPressed = false
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_UP -> {
+                    val key = pointers[pointerId] ?: findKey(x, y) ?: return@setOnTouchListener true
+                    key.binding.root.isPressed = false
+                    listener.onKeyUp(key.keyCode, 0)
+                    pointers -= pointerId
+                }
+            }
+            true
+        }
+    }
+
+    private fun cacheKeys() {
+        view.getLocationOnScreen(location)
+        view.getGlobalVisibleRect(rect)
+        keys.forEach {
+            it.binding.root.getGlobalVisibleRect(it.rect)
+            it.rect.offset(0, -rect.top)
+        }
+    }
+
+    private fun findKey(x: Int, y: Int): KeyContainer? {
+        return keys.find { key ->
+            (x in key.rect.left until key.rect.right)
+                    && (y in key.rect.top until key.rect.bottom)
+        }
+    }
 
     override fun setLabels(labels: Map<Int, String>) {
         keys.forEach {
@@ -193,5 +255,7 @@ class DefaultKeyboardView(
     data class KeyContainer(
         val keyCode: Int,
         val binding: KbdKeyBinding
-    )
+    ) {
+        val rect: Rect = Rect()
+    }
 }
