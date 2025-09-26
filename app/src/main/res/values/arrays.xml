@@ -1,46 +1,14 @@
 <resources>
-    <string-array name="settings_input_mode_entries">
-        <item>Latin QWERTY</item>
-        <item>Latin Dvorak</item>
-        <item>Latin Colemak</item>
-        <item>Korean 2-Set KS</item>
-        <item>Korean 3-Set 390</item>
-        <item>Korean 3-Set 391</item>
-        <item>Old Korean 2-Set</item>
-        <item>Japanese Romaji QWERTY</item>
-        <item>Japanese Kana Syllables</item>
-        <item>Japanese Kana JIS</item>
-        <item>Chinese Pinyin</item>
-        <item>Chinese Zhuyin</item>
-        <item>Chinese Cangjie</item>
-        <item>Vietnamese QWERTY</item>
-        <item>Vietnamese Telex</item>
+    <string-array name="settings_appearance_screen_mode_entries">
+        <item>@string/screen_mode_mobile</item>
+        <item>@string/screen_mode_tablet</item>
+<!--        <item>@string/screen_mode_full</item>-->
     </string-array>
 
-    <string-array name="settings_input_mode_values">
-        <item>qwerty</item>
-        <item>dvorak</item>
-        <item>colemak</item>
-        <item>ko_ks</item>
-        <item>ko_390</item>
-        <item>ko_391</item>
-        <item>ko_old_2set</item>
-        <item>ja_qwerty</item>
-        <item>ja_50onzu</item>
-        <item>ja_jis</item>
-        <item>zh_pinyin</item>
-        <item>zh_zhuyin</item>
-        <item>zh_cangjie</item>
-        <item>vi_qwerty</item>
-        <item>vi_telex</item>
-    </string-array>
-
-    <string-array name="settings_input_mode_defaults">
-        <item>qwerty</item>
-        <item>ko_ks</item>
-        <item>ja_qwerty</item>
-        <item>zh_pinyin</item>
-        <item>vi_telex</item>
+    <string-array name="settings_appearance_screen_mode_values">
+        <item>Mobile</item>
+        <item>Tablet</item>
+<!--        <item>Full</item>-->
     </string-array>
 
     <string-array name="settings_input_mode_type_entries">
@@ -107,6 +75,18 @@
         <item>Set2Old</item>
     </string-array>
 
+    <string-array name="settings_input_mode_korean_converter_entries">
+        <item>@string/korean_converter_word</item>
+        <item>@string/korean_converter_phrase</item>
+        <item>@string/korean_converter_jeongun</item>
+    </string-array>
+
+    <string-array name="settings_input_mode_korean_converter_values">
+        <item>Word</item>
+        <item>Phrase</item>
+        <item>JeongUn</item>
+    </string-array>
+
     <string-array name="settings_input_mode_mozc_layout_entries">
         <item>@string/mozc_layout_romaji_qwerty</item>
         <item>@string/mozc_layout_kana_jis</item>
@@ -127,5 +107,17 @@
     <string-array name="settings_input_mode_viet_layout_values">
         <item>Qwerty</item>
         <item>Telex</item>
+    </string-array>
+
+    <string-array name="settings_input_mode_cangjie_layout_entries">
+        <item>@string/cangjie_layout_cangjie</item>
+        <item>@string/cangjie_layout_quick</item>
+        <item>@string/cangjie_layout_dayi3</item>
+    </string-array>
+
+    <string-array name="settings_input_mode_cangjie_layout_values">
+        <item>Cangjie</item>
+        <item>Quick</item>
+        <item>Dayi3</item>
     </string-array>
 </resources>

@@ -1,17 +1,58 @@
 package ee.oyatl.ime.keyboard.layout
 
 import android.view.KeyEvent
+import ee.oyatl.ime.keyboard.KeyboardConfiguration
 
 object LayoutKana {
-    val ROWS_50ONZU: List<String> = listOf(
+    val ROWS_SYLLABLES: List<String> = listOf(
         "わらやまはなたさかあ",
         "ゐり　みひにちしきい",
         "　るゆむふぬつすくう",
         "ゑれ　めへねてせけえ",
         "をろよもほのとそこお"
     )
-    const val BOTTOM_LEFT_50ONZU: String = "ん"
-    const val BOTTOM_RIGHT_50ONZU: String = "*ー"
+    const val BOTTOM_LEFT_SYLLABLES: String = "ん"
+    const val BOTTOM_RIGHT_SYLLABLES: String = "*ー"
+
+    fun mobileKeyboardConfigurationSyllables(): KeyboardConfiguration {
+        val rows = ROWS_SYLLABLES.map { row ->
+            row.map { item -> when(item) {
+                '　' -> KeyboardConfiguration.Item.Spacer(width = 1f)
+                else -> KeyboardConfiguration.Item.TemplateKey(-item.code)
+            } }
+        }
+        val bottom = listOf(
+            KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_SYM, 1.5f, true),
+            KeyboardConfiguration.Item.TemplateKey(-BOTTOM_LEFT_SYLLABLES[0].code),
+            KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_LANGUAGE_SWITCH, 1f, true),
+            KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_SPACE, 2f),
+            KeyboardConfiguration.Item.TemplateKey(-BOTTOM_RIGHT_SYLLABLES[0].code),
+            KeyboardConfiguration.Item.TemplateKey(-BOTTOM_RIGHT_SYLLABLES[1].code),
+            KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_ENTER, 1.5f, true),
+            KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_DEL, 1f, true)
+        )
+        return KeyboardConfiguration(rows + listOf(bottom))
+    }
+
+    fun tabletKeyboardConfigurationSyllables(): KeyboardConfiguration {
+        val rows = ROWS_SYLLABLES.map { row ->
+            row.map { item -> when(item) {
+                '　' -> KeyboardConfiguration.Item.Spacer(width = 1f)
+                else -> KeyboardConfiguration.Item.TemplateKey(-item.code)
+            } }.toMutableList()
+        }
+        rows[0].add(0, KeyboardConfiguration.Item.TemplateKey(-BOTTOM_LEFT_SYLLABLES[0].code))
+        rows[0].add(KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_DEL, 1f, true))
+        rows[1].add(0, KeyboardConfiguration.Item.Spacer(1f))
+        rows[1].add(KeyboardConfiguration.Item.Spacer(1f))
+        rows[2].add(0, KeyboardConfiguration.Item.TemplateKey(-BOTTOM_RIGHT_SYLLABLES[0].code))
+        rows[2].add(KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_ENTER, 1f, true))
+        rows[3].add(0, KeyboardConfiguration.Item.Spacer(1f))
+        rows[3].add(KeyboardConfiguration.Item.Spacer(1f))
+        rows[4].add(0, KeyboardConfiguration.Item.TemplateKey(-BOTTOM_RIGHT_SYLLABLES[1].code))
+        rows[4].add(KeyboardConfiguration.Item.Spacer(1f))
+        return KeyboardConfiguration(rows) + TabletKeyboard.bottom()
+    }
 
     val TABLE_JIS = mapOf(
         KeyEvent.KEYCODE_GRAVE to listOf('ろ'.code),
@@ -57,28 +98,18 @@ object LayoutKana {
         KeyEvent.KEYCODE_Z to listOf('つ'.code, 'っ'.code),
         KeyEvent.KEYCODE_X to listOf('さ'.code),
         KeyEvent.KEYCODE_C to listOf('そ'.code),
-        KeyEvent.KEYCODE_V to listOf('ひ'.code),
-        KeyEvent.KEYCODE_B to listOf('こ'.code, 'ゐ'.code),
+        KeyEvent.KEYCODE_V to listOf('ひ'.code, 'ゐ'.code),
+        KeyEvent.KEYCODE_B to listOf('こ'.code),
         KeyEvent.KEYCODE_N to listOf('み'.code),
         KeyEvent.KEYCODE_M to listOf('も'.code),
         KeyEvent.KEYCODE_COMMA to listOf('ね'.code, '、'.code),
         KeyEvent.KEYCODE_PERIOD to listOf('る'.code, '。'.code),
-        KeyEvent.KEYCODE_SLASH to listOf('め'.code, '・'.code)
-    )
+        KeyEvent.KEYCODE_SLASH to listOf('め'.code, '・'.code),
 
-    val ROWS_JIS_LOWER: List<String> = listOf(
-        "ぬふあうえおやゆよわほ",
-        "たていすかんなにらせ゛",
-        "ちとしはきくまのりれけ",
-        "つさそひこみもねるめろ",
+        ExtKeyCode.KEYCODE_KANA_VOICED_MARK to listOf('゛'.code, '゜'.code),
+        ExtKeyCode.KEYCODE_KANA_MINUS to listOf('ほ'.code, 'ー'.code),
+        ExtKeyCode.KEYCODE_KANA_EQUALS to listOf('へ'.code, 'ゑ'.code),
+        ExtKeyCode.KEYCODE_KANA_APOSTROPHE to listOf('け'.code, 'む'.code),
+        ExtKeyCode.KEYCODE_KANA_SLASH to listOf('め'.code, 'ろ'.code)
     )
-
-    val ROWS_JIS_UPPER: List<String> = listOf(
-        "ぬふぁぅぇぉゃゅょをー",
-        "たてぃすかんなにらせ゜",
-        "ちとしはきくまのりれけ",
-        "っさそゐこみも、。・ろ",
-    )
-
-    const val BOTTOM_RIGHT_JIS: String = "\\="
 }

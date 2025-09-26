@@ -6,7 +6,6 @@ import androidx.annotation.StringRes
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.korean.WordComposer
-import ee.oyatl.ime.keyboard.Keyboard
 import ee.oyatl.ime.viet.ChuQuocNguTableConverter
 import ee.oyatl.ime.viet.HanNomConverter
 import java.util.Locale
@@ -66,14 +65,14 @@ abstract class VietIMEMode(
         convert()
     }
 
-    override fun onChar(code: Int) {
-        wordComposer.commit(code.toChar().toString())
+    override fun onChar(codePoint: Int) {
+        wordComposer.commit(codePoint.toChar().toString())
         renderInputView()
     }
 
-    override fun onSpecial(type: Keyboard.SpecialKey) {
-        when(type) {
-            Keyboard.SpecialKey.Space -> {
+    override fun onSpecial(keyCode: Int) {
+        when(keyCode) {
+            KeyEvent.KEYCODE_SPACE -> {
                 val bestCandidate = bestCandidate
                 if(bestCandidate != null) {
                     onCandidateSelected(bestCandidate)
@@ -82,7 +81,7 @@ abstract class VietIMEMode(
                     util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_SPACE)
                 }
             }
-            Keyboard.SpecialKey.Return -> {
+            KeyEvent.KEYCODE_ENTER -> {
                 val send = wordComposer.word.isEmpty()
                 onReset()
                 if(send) {
@@ -90,7 +89,7 @@ abstract class VietIMEMode(
                         util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_ENTER)
                 }
             }
-            Keyboard.SpecialKey.Delete -> {
+            KeyEvent.KEYCODE_DEL -> {
                 if(wordComposer.word.isNotEmpty()) {
                     wordComposer.delete(1)
                     renderInputView()

@@ -2,6 +2,7 @@ package ee.oyatl.ime.fusion.mode
 
 import android.content.Context
 import android.content.res.Resources
+import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
@@ -11,17 +12,18 @@ import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.VerticalScrollingCandidateView
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.mozc.InputConnectionRenderer
-import ee.oyatl.ime.keyboard.DefaultBottomRowKeyboard
-import ee.oyatl.ime.keyboard.DefaultGridKeyboard
-import ee.oyatl.ime.keyboard.DefaultMobileKeyboard
-import ee.oyatl.ime.keyboard.GridKanaBottomRowKeyboard
-import ee.oyatl.ime.keyboard.Keyboard
-import ee.oyatl.ime.keyboard.KeyboardInflater
-import ee.oyatl.ime.keyboard.ShiftStateKeyboard
-import ee.oyatl.ime.keyboard.StackedKeyboard
-import ee.oyatl.ime.keyboard.layout.KeyboardTemplates
+import ee.oyatl.ime.keyboard.KeyCodeMapper
+import ee.oyatl.ime.keyboard.KeyboardConfiguration
+import ee.oyatl.ime.keyboard.KeyboardTemplate
 import ee.oyatl.ime.keyboard.layout.LayoutKana
 import ee.oyatl.ime.keyboard.layout.LayoutRomaji
+import ee.oyatl.ime.keyboard.LayoutTable
+import ee.oyatl.ime.keyboard.layout.ExtKeyCode
+import ee.oyatl.ime.keyboard.layout.MobileKeyboard
+import ee.oyatl.ime.keyboard.layout.MobileKeyboardRows
+import ee.oyatl.ime.keyboard.layout.LayoutExt
+import ee.oyatl.ime.keyboard.layout.TabletKeyboard
+import ee.oyatl.ime.keyboard.layout.TabletKeyboardRows
 import org.mozc.android.inputmethod.japanese.MozcUtil
 import org.mozc.android.inputmethod.japanese.PrimaryKeyCodeConverter
 import org.mozc.android.inputmethod.japanese.keyboard.Keyboard.KeyboardSpecification
@@ -35,7 +37,8 @@ import org.mozc.android.inputmethod.japanese.session.SessionHandlerFactory
 import java.util.Locale
 
 abstract class MozcIMEMode(
-    listener: IMEMode.Listener
+    listener: IMEMode.Listener,
+    val candidateViewHeight: Int
 ): CommonIMEMode(listener) {
 
     private lateinit var resources: Resources
@@ -109,7 +112,7 @@ abstract class MozcIMEMode(
     }
 
     override fun createCandidateView(context: Context): View {
-        val candidateView = VerticalScrollingCandidateView(context, null, 2).apply {
+        val candidateView = VerticalScrollingCandidateView(context, null, candidateViewHeight).apply {
             listener = this@MozcIMEMode
         }
         this.candidateView = candidateView
@@ -122,12 +125,12 @@ abstract class MozcIMEMode(
         }
     }
 
-    override fun onChar(code: Int) {
+    override fun onChar(codePoint: Int) {
         val primaryKeyCodeConverter = primaryKeyCodeConverter ?: return
         val sessionExecutor = sessionExecutor ?: return
         val eventList = emptyList<TouchEvent>()
-        val keyEvent = primaryKeyCodeConverter.getPrimaryCodeKeyEvent(code)
-        val mozcKeyEvent = primaryKeyCodeConverter.createMozcKeyEvent(code, eventList).orNull()
+        val keyEvent = primaryKeyCodeConverter.getPrimaryCodeKeyEvent(codePoint)
+        val mozcKeyEvent = primaryKeyCodeConverter.createMozcKeyEvent(codePoint, eventList).orNull()
         if(mozcKeyEvent != null) {
             sessionExecutor.sendKey(mozcKeyEvent, keyEvent, eventList, renderResultCallback)
         } else if(keyEvent != null) {
@@ -135,11 +138,11 @@ abstract class MozcIMEMode(
         }
     }
 
-    override fun onSpecial(type: Keyboard.SpecialKey) {
-        when(type) {
-            Keyboard.SpecialKey.Space -> onChar(' '.code)
-            Keyboard.SpecialKey.Return -> onChar(primaryKeyCodeConverter?.keyCodeEnter ?: return)
-            Keyboard.SpecialKey.Delete -> onChar(primaryKeyCodeConverter?.keyCodeBackspace ?: return)
+    override fun onSpecial(keyCode: Int) {
+        when(keyCode) {
+            KeyEvent.KEYCODE_SPACE -> onChar(' '.code)
+            KeyEvent.KEYCODE_ENTER -> onChar(primaryKeyCodeConverter?.keyCodeEnter ?: return)
+            KeyEvent.KEYCODE_DEL -> onChar(primaryKeyCodeConverter?.keyCodeBackspace ?: return)
             else -> {}
         }
     }
@@ -159,58 +162,91 @@ abstract class MozcIMEMode(
         )
     }
 
-    class RomajiQwerty(listener: IMEMode.Listener): MozcIMEMode(listener) {
+    class RomajiQwerty(
+        listener: IMEMode.Listener,
+        candidateViewHeight: Int
+    ): MozcIMEMode(listener, candidateViewHeight) {
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.QWERTY_KANA
-        override val layoutTable: Map<Int, List<Int>> = LayoutRomaji.TABLE_QWERTY
-        private val layers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE_MINUS, layoutTable)
-        override val textKeyboard: Keyboard = StackedKeyboard(
-            ShiftStateKeyboard(
-                DefaultMobileKeyboard(layers[0]),
-                DefaultMobileKeyboard(layers[1])
+        override val textLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutRomaji.TABLE_QWERTY)
+        override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
+            mobile = KeyboardTemplate.Basic(
+                configuration = KeyboardConfiguration(
+                    MobileKeyboard.alphabetic(semicolon = true),
+                    MobileKeyboard.bottom()
+                ),
+                contentRows = MobileKeyboardRows.MINUS
             ),
-            DefaultBottomRowKeyboard()
-        )
-    }
-
-    class KanaJIS(listener: IMEMode.Listener): MozcIMEMode(listener) {
-        override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.QWERTY_KANA_JIS
-        override val layoutTable: Map<Int, List<Int>> = LayoutKana.TABLE_JIS
-        private val lower = KeyboardInflater.inflate(LayoutKana.ROWS_JIS_LOWER)
-        private val upper = KeyboardInflater.inflate(LayoutKana.ROWS_JIS_UPPER)
-        private val bottomRight = KeyboardInflater.inflate(listOf(LayoutKana.BOTTOM_RIGHT_JIS), layoutTable)
-        override val textKeyboard: Keyboard = StackedKeyboard(
-            ShiftStateKeyboard(
-                DefaultGridKeyboard(lower[0]),
-                DefaultGridKeyboard(upper[0])
-            ),
-            ShiftStateKeyboard(
-                GridKanaBottomRowKeyboard(listOf(), bottomRight[0][0]),
-                GridKanaBottomRowKeyboard(listOf(), bottomRight[1][0])
+            tablet = KeyboardTemplate.Basic(
+                configuration = KeyboardConfiguration(
+                    TabletKeyboard.alphabetic(semicolon = true),
+                    TabletKeyboard.bottom()
+                ),
+                contentRows = TabletKeyboardRows.MINUS
             )
         )
     }
 
-    class KanaSyllables(listener: IMEMode.Listener): MozcIMEMode(listener) {
+    class KanaJIS(
+        listener: IMEMode.Listener,
+        candidateViewHeight: Int
+    ): MozcIMEMode(listener, candidateViewHeight) {
+        override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.QWERTY_KANA_JIS
+        override val textLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutKana.TABLE_JIS)
+        override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
+            mobile = KeyboardTemplate.Basic(
+                configuration = KeyboardConfiguration(
+                    MobileKeyboard.numbers(),
+                    MobileKeyboard.alphabetic(semicolon = true, shiftDeleteWidth = 1f),
+                    MobileKeyboard.bottom(left = ExtKeyCode.KEYCODE_KANA_EQUALS, right = ExtKeyCode.KEYCODE_KANA_SLASH)
+                ),
+                contentRows = MobileKeyboardRows.JIS,
+                codeMapper = KeyCodeMapper(mapOf(
+                    KeyEvent.KEYCODE_MINUS to ExtKeyCode.KEYCODE_KANA_MINUS,
+                    KeyEvent.KEYCODE_APOSTROPHE to ExtKeyCode.KEYCODE_KANA_APOSTROPHE,
+                    KeyEvent.KEYCODE_LEFT_BRACKET to ExtKeyCode.KEYCODE_KANA_VOICED_MARK
+                ))
+            ),
+            tablet = KeyboardTemplate.Basic(
+                configuration = KeyboardConfiguration(
+                    TabletKeyboard.numbers(delete = false, spacerOnDelete = false),
+                    TabletKeyboard.alphabetic(semicolon = true, rightShift = false),
+                    TabletKeyboard.bottom()
+                ),
+                contentRows = TabletKeyboardRows.JIS,
+                codeMapper = KeyCodeMapper(mapOf(
+                    KeyEvent.KEYCODE_LEFT_BRACKET to ExtKeyCode.KEYCODE_KANA_VOICED_MARK
+                ))
+            )
+        )
+    }
+
+    class KanaSyllables(
+        listener: IMEMode.Listener,
+        candidateViewHeight: Int
+    ): MozcIMEMode(listener, candidateViewHeight) {
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.TWELVE_KEY_FLICK_KANA
-        private val layers = KeyboardInflater.inflate(LayoutKana.ROWS_50ONZU)
-        override val textKeyboard: Keyboard = StackedKeyboard(
-            DefaultGridKeyboard(layers[0]),
-            GridKanaBottomRowKeyboard(
-                KeyboardInflater.inflate(listOf(LayoutKana.BOTTOM_LEFT_50ONZU))[0][0],
-                KeyboardInflater.inflate(listOf(LayoutKana.BOTTOM_RIGHT_50ONZU))[0][0]
+        override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
+            mobile = KeyboardTemplate.Basic(
+                configuration = LayoutKana.mobileKeyboardConfigurationSyllables(),
+                emptyList()
+            ),
+            tablet = KeyboardTemplate.Basic(
+                configuration = LayoutKana.tabletKeyboardConfigurationSyllables(),
+                emptyList()
             )
         )
     }
 
     data class Params(
-        val layout: Layout = Layout.RomajiQwerty
+        val layout: Layout = Layout.RomajiQwerty,
+        val candidateViewHeight: Int = 2
     ): IMEMode.Params {
         override val type: String = TYPE
         override fun create(listener: IMEMode.Listener): IMEMode {
             return when(layout) {
-                Layout.RomajiQwerty -> RomajiQwerty(listener)
-                Layout.KanaJIS -> KanaJIS(listener)
-                Layout.KanaSyllables -> KanaSyllables(listener)
+                Layout.RomajiQwerty -> RomajiQwerty(listener, candidateViewHeight)
+                Layout.KanaJIS -> KanaJIS(listener, candidateViewHeight)
+                Layout.KanaSyllables -> KanaSyllables(listener, candidateViewHeight)
             }
         }
 
@@ -231,8 +267,10 @@ abstract class MozcIMEMode(
         companion object {
             fun parse(map: Map<String, String>): Params {
                 val layout = Layout.valueOf(map["layout"] ?: Layout.RomajiQwerty.name)
+                val candidateViewHeight = map["candidate_view_height"]?.toFloatOrNull()?.toInt() ?: 2
                 return Params(
-                    layout = layout
+                    layout = layout,
+                    candidateViewHeight = candidateViewHeight
                 )
             }
         }

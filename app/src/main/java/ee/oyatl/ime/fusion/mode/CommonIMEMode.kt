@@ -8,71 +8,93 @@ import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
-import android.widget.FrameLayout
 import androidx.preference.PreferenceManager
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.ScrollingCandidateView
 import ee.oyatl.ime.fusion.KeyEventUtil
-import ee.oyatl.ime.keyboard.DefaultBottomRowKeyboard
-import ee.oyatl.ime.keyboard.DefaultMobileKeyboard
-import ee.oyatl.ime.keyboard.DefaultNumberKeyboard
-import ee.oyatl.ime.keyboard.Keyboard
-import ee.oyatl.ime.keyboard.KeyboardInflater
+import ee.oyatl.ime.fusion.R
+import ee.oyatl.ime.keyboard.DefaultKeyboardInflater
+import ee.oyatl.ime.keyboard.KeyboardConfiguration
+import ee.oyatl.ime.keyboard.KeyboardListener
+import ee.oyatl.ime.keyboard.KeyboardParams
 import ee.oyatl.ime.keyboard.KeyboardState
-import ee.oyatl.ime.keyboard.KeyboardViewParams
-import ee.oyatl.ime.keyboard.ShiftStateKeyboard
-import ee.oyatl.ime.keyboard.StackedKeyboard
-import ee.oyatl.ime.keyboard.layout.KeyboardTemplates
+import ee.oyatl.ime.keyboard.KeyboardTemplate
+import ee.oyatl.ime.keyboard.KeyboardViewManager
+import ee.oyatl.ime.keyboard.LayoutTable
+import ee.oyatl.ime.keyboard.SwitcherKeyboardViewManager
+import ee.oyatl.ime.keyboard.layout.LayoutExt
 import ee.oyatl.ime.keyboard.layout.LayoutQwerty
 import ee.oyatl.ime.keyboard.layout.LayoutSymbol
-import ee.oyatl.ime.keyboard.listener.AutoShiftLockListener
-import ee.oyatl.ime.keyboard.listener.ClickKeyOnReleaseListener
-import ee.oyatl.ime.keyboard.listener.FeedbackListener
-import ee.oyatl.ime.keyboard.listener.KeyboardListener
-import ee.oyatl.ime.keyboard.listener.OnKeyClickListener
-import ee.oyatl.ime.keyboard.listener.RepeatableKeyListener
+import ee.oyatl.ime.keyboard.layout.MobileKeyboard
+import ee.oyatl.ime.keyboard.layout.MobileKeyboardRows
+import ee.oyatl.ime.keyboard.layout.NumberKeyboard
+import ee.oyatl.ime.keyboard.layout.TabletKeyboard
+import ee.oyatl.ime.keyboard.layout.TabletKeyboardRows
 import kotlin.math.roundToInt
 
 abstract class CommonIMEMode(
     private val listener: IMEMode.Listener
-): IMEMode, CandidateView.Listener, AutoShiftLockListener.StateContainer {
-    private val keyCharacterMap = KeyCharacterMap.load(KeyCharacterMap.VIRTUAL_KEYBOARD)
+): IMEMode, KeyboardListener, CandidateView.Listener {
+    protected val keyCharacterMap: KeyCharacterMap = KeyCharacterMap.load(KeyCharacterMap.VIRTUAL_KEYBOARD)
 
-    open val layoutTable: Map<Int, List<Int>> = LayoutQwerty.TABLE_QWERTY
-    private val textKeyboardLayers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE, LayoutQwerty.TABLE_QWERTY)
-    open val textKeyboard: Keyboard = StackedKeyboard(
-        ShiftStateKeyboard(
-            DefaultMobileKeyboard(textKeyboardLayers[0]),
-            DefaultMobileKeyboard(textKeyboardLayers[1])
+    open val textLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY)
+    open val symbolLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutSymbol.TABLE_G)
+    open val numberLayoutTable: LayoutTable = LayoutTable(mapOf())
+
+    open val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
+        mobile = KeyboardTemplate.Basic(
+            configuration = KeyboardConfiguration(
+                MobileKeyboard.alphabetic(),
+                MobileKeyboard.bottom()
+            ),
+            contentRows = MobileKeyboardRows.DEFAULT
         ),
-        DefaultBottomRowKeyboard()
+        tablet = KeyboardTemplate.Basic(
+            configuration = KeyboardConfiguration(
+                TabletKeyboard.alphabetic(),
+                TabletKeyboard.bottom()
+            ),
+            contentRows = TabletKeyboardRows.DEFAULT
+        )
     )
-
-    open val symbolKeyboard: Keyboard = StackedKeyboard(
-        ShiftStateKeyboard(
-            DefaultMobileKeyboard(KeyboardInflater.inflate(LayoutSymbol.ROWS_LOWER, mapOf())[0]),
-            DefaultMobileKeyboard(KeyboardInflater.inflate(LayoutSymbol.ROWS_UPPER, mapOf())[0])
+    open val symbolKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
+        mobile = KeyboardTemplate.Basic(
+            configuration = KeyboardConfiguration(
+                MobileKeyboard.alphabetic(semicolon = true),
+                MobileKeyboard.bottom(languageKeyCode = KeyEvent.KEYCODE_NUM)
+            ),
+            contentRows = MobileKeyboardRows.SEMICOLON,
         ),
-        ShiftStateKeyboard(
-            DefaultBottomRowKeyboard(isSymbols = true),
-            DefaultBottomRowKeyboard(extraKeys = listOf('<'.code, '>'.code), isSymbols = true)
+        tablet = KeyboardTemplate.Basic(
+            configuration = KeyboardConfiguration(
+                TabletKeyboard.alphabetic(semicolon = true),
+                TabletKeyboard.bottom(languageKeyCode = KeyEvent.KEYCODE_NUM)
+            ),
+            contentRows = TabletKeyboardRows.SEMICOLON
+        )
+    )
+    open val numberKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
+        mobile = KeyboardTemplate.Basic(
+            configuration = NumberKeyboard.mobile(),
+            contentRows = emptyList(),
+        ),
+        tablet = KeyboardTemplate.Basic(
+            configuration = NumberKeyboard.tablet(),
+            contentRows = emptyList(),
         )
     )
 
-    open val numpadKeyboard: Keyboard = DefaultNumberKeyboard()
+    val currentLayoutTable: LayoutTable get() = when(symbolState) {
+        KeyboardState.Symbol.Text -> textLayoutTable
+        KeyboardState.Symbol.Symbol -> symbolLayoutTable
+        KeyboardState.Symbol.Number -> numberLayoutTable
+    }
 
-    private var switcherView: FrameLayout? = null
-    private var textKeyboardView: View? = null
-    private var symbolKeyboardView: View? = null
-    private var numpadKeyboardView: View? = null
+    protected var keyboardView: KeyboardViewManager? = null
     protected var candidateView: CandidateView? = null
 
-    private var symbolState: KeyboardState.Symbol = KeyboardState.Symbol.Text
-    override var shiftState: KeyboardState.Shift = KeyboardState.Shift.Released
-        set(value) {
-            field = value
-            updateInputView()
-        }
+    var symbolState: KeyboardState.Symbol = KeyboardState.Symbol.Text
+    var shiftState: KeyboardState.Shift = KeyboardState.Shift.Released
 
     protected var util: KeyEventUtil? = null
         private set
@@ -80,8 +102,8 @@ abstract class CommonIMEMode(
     protected val currentInputConnection: InputConnection? get() = util?.currentInputConnection
     protected val currentInputEditorInfo: EditorInfo? get() = util?.currentInputEditorInfo
 
-    abstract fun onChar(code: Int)
-    abstract fun onSpecial(type: Keyboard.SpecialKey)
+    abstract fun onChar(codePoint: Int)
+    abstract fun onSpecial(keyCode: Int)
 
     override suspend fun onLoad(context: Context) = Unit
 
@@ -103,33 +125,51 @@ abstract class CommonIMEMode(
 
     override fun createInputView(context: Context): View {
         val preference = PreferenceManager.getDefaultSharedPreferences(context)
-        val switcherView = FrameLayout(context)
-        this.switcherView = switcherView
 
-        val textKeyboardListener = createKeyboardListener(context, KeyListener())
-        val symbolKeyboardListener = createKeyboardListener(context, KeyListener(), false)
-        val directKeyboardListener = createKeyboardListener(context, DirectKeyListener())
-
+        val defaultScreenMode = context.resources.getString(R.string.screen_mode_default)
+        val screenMode = KeyboardState.ScreenMode.valueOf(preference.getString("screen_mode", null) ?: defaultScreenMode)
         val landscape = context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
         val rowHeightKey = if(landscape) "keyboard_height_landscape" else "keyboard_height_portrait"
-        val rowHeightDefault = if(landscape) 45f else 55f
+        val rowHeightDefaultKey = if(landscape) R.integer.keyboard_height_landscape_default else R.integer.keyboard_height_portrait_default
+        val rowHeightDefault = context.resources.getInteger(rowHeightDefaultKey).toFloat()
         val rowHeightDIP = preference.getFloat(rowHeightKey, rowHeightDefault)
         val height = (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, rowHeightDIP, context.resources.displayMetrics) * 4).roundToInt()
         val showPreviewPopup = preference.getBoolean("preview_popup", true)
-        val params = KeyboardViewParams(
-            keyHeight = height / 4,
-            showPreviewPopup = showPreviewPopup
+        val sound = preference.getBoolean("sound_feedback", true)
+        val haptic = preference.getBoolean("haptic_feedback", true)
+        val duration = preference.getFloat("vibration_duration", 10f).toLong()
+        val soundVolume = if(sound) 1f else 0f
+        val vibrationDuration = if(haptic) duration else 0L
+        val params = KeyboardParams(
+            screenMode = screenMode,
+            height = height,
+            soundFeedback = false,
+            hapticFeedback = false,
+            soundVolume = soundVolume,
+            vibrationDuration = vibrationDuration,
+            previewPopups = showPreviewPopup,
+            shiftLockDelay = 300,
+            shiftAutoRelease = true,
+            repeatDelay = 300,
+            repeatInterval = 30,
         )
 
-        textKeyboardView = textKeyboard.createView(context, textKeyboardListener, params.copy(keyHeight = height / textKeyboard.numRows))
-        symbolKeyboardView = symbolKeyboard.createView(context, symbolKeyboardListener, params.copy(keyHeight = height / symbolKeyboard.numRows))
-        numpadKeyboardView = numpadKeyboard.createView(context, directKeyboardListener, params.copy(keyHeight = height / numpadKeyboard.numRows))
-        switcherView.addView(textKeyboardView)
-        switcherView.addView(symbolKeyboardView)
-        switcherView.addView(numpadKeyboardView)
+        val textKeyboard = textKeyboardTemplate.inflate(DefaultKeyboardInflater(params))
+        val symbolKeyboard = symbolKeyboardTemplate.inflate(DefaultKeyboardInflater(params.copy(shiftAutoRelease = false)))
+        val numberKeyboard = numberKeyboardTemplate.inflate(DefaultKeyboardInflater(params.copy(shiftAutoRelease = false)))
+
+        val textKeyboardView = textKeyboard.createView(context, this)
+        val symbolKeyboardView = symbolKeyboard.createView(context, this)
+        val numberKeyboardView = numberKeyboard.createView(context, this)
 
         updateInputView()
-        return switcherView
+        val switcherKeyboardView = SwitcherKeyboardViewManager(context, mapOf(
+            KeyboardState.Symbol.Text to textKeyboardView,
+            KeyboardState.Symbol.Symbol to symbolKeyboardView,
+            KeyboardState.Symbol.Number to numberKeyboardView
+        ))
+        this.keyboardView = switcherKeyboardView
+        return switcherKeyboardView.view
     }
 
     override fun createCandidateView(context: Context): View {
@@ -141,27 +181,31 @@ abstract class CommonIMEMode(
 
     override fun getInputView(): View? {
         updateInputView()
-        return switcherView
+        return keyboardView?.view
     }
 
-    private fun updateInputView() {
-        when (symbolState) {
-            KeyboardState.Symbol.Text -> {
-                textKeyboardView?.bringToFront()
-                textKeyboard.setShiftState(shiftState)
+    protected fun updateInputView() {
+        val keyboardView = keyboardView
+        if(keyboardView is SwitcherKeyboardViewManager) {
+            keyboardView.state = symbolState
+        }
+        if(keyboardView != null) {
+            val labels = currentLayoutTable.map.mapValues { (_, v) -> v.forShiftState(shiftState).toChar().toString() }
+            keyboardView.setLabels(labels)
+            val shiftIcon = when(shiftState) {
+                KeyboardState.Shift.Released -> ee.oyatl.ime.keyboard.R.drawable.keyic_shift
+                KeyboardState.Shift.Pressed -> ee.oyatl.ime.keyboard.R.drawable.keyic_shift_pressed
+                KeyboardState.Shift.Locked -> ee.oyatl.ime.keyboard.R.drawable.keyic_shift_locked
             }
-            KeyboardState.Symbol.Symbol -> {
-                symbolKeyboardView?.bringToFront()
-                symbolKeyboard.setShiftState(shiftState)
-            }
-            KeyboardState.Symbol.Number -> {
-                numpadKeyboardView?.bringToFront()
-                numpadKeyboard.setShiftState(shiftState)
-            }
+            val icons = mapOf<Int, Int>(
+                KeyEvent.KEYCODE_SHIFT_LEFT to shiftIcon,
+                KeyEvent.KEYCODE_SHIFT_RIGHT to shiftIcon
+            )
+            keyboardView.setIcons(icons)
         }
     }
 
-    private fun setPreferredKeyboard(editorInfo: EditorInfo) {
+    protected fun setPreferredKeyboard(editorInfo: EditorInfo) {
         when(editorInfo.inputType and EditorInfo.TYPE_MASK_CLASS) {
             EditorInfo.TYPE_CLASS_NUMBER -> {
                 if(symbolState != KeyboardState.Symbol.Number) {
@@ -193,49 +237,49 @@ abstract class CommonIMEMode(
     }
 
     override fun onKeyDown(keyCode: Int, metaState: Int) {
-        val shiftOn = (metaState and KeyEvent.META_SHIFT_MASK) != 0
-        val layer = if(shiftOn) 1 else 0
-        val specialKey = getSpecialKeyType(keyCode)
-        if(specialKey != null) handleSpecialKey(specialKey)
-        else onChar(
-            layoutTable[keyCode]?.getOrNull(layer)
-                ?: layoutTable[keyCode]?.getOrNull(0)
-                ?: keyCharacterMap.get(keyCode, metaState)
-        )
+        if(keyCode == KeyEvent.KEYCODE_SHIFT_LEFT || keyCode == KeyEvent.KEYCODE_SHIFT_RIGHT) {
+            shiftState = KeyboardState.Shift.Pressed
+        } else if(keyCode == KeyEvent.KEYCODE_CAPS_LOCK) {
+            shiftState = KeyboardState.Shift.Locked
+        } else if(keyCode < 0) {
+            onChar(-keyCode)
+        } else if(keyCode > KeyEvent.getMaxKeyCode() || keyCharacterMap.isPrintingKey(keyCode)) {
+            onChar(
+                currentLayoutTable[keyCode]?.forShiftState(shiftState)
+                    ?: keyCharacterMap.get(keyCode, metaState)
+            )
+        } else {
+            handleSpecialKey(keyCode)
+        }
+        updateInputView()
     }
 
     override fun onKeyUp(keyCode: Int, metaState: Int) {
+        if(keyCode == KeyEvent.KEYCODE_SHIFT_LEFT || keyCode == KeyEvent.KEYCODE_SHIFT_RIGHT) {
+            shiftState = KeyboardState.Shift.Released
+        }
+        updateInputView()
     }
 
-    private fun handleSpecialKey(type: Keyboard.SpecialKey) {
-        when(type) {
-            Keyboard.SpecialKey.Language -> listener.onLanguageSwitch()
-            Keyboard.SpecialKey.Symbols -> {
+    protected fun handleSpecialKey(keyCode: Int) {
+        when(keyCode) {
+            KeyEvent.KEYCODE_LANGUAGE_SWITCH -> listener.onLanguageSwitch()
+            KeyEvent.KEYCODE_SYM -> {
                 symbolState =
                     if(symbolState != KeyboardState.Symbol.Symbol) KeyboardState.Symbol.Symbol
                     else KeyboardState.Symbol.Text
                 shiftState = KeyboardState.Shift.Released
             }
-            Keyboard.SpecialKey.Numbers -> {
+            KeyEvent.KEYCODE_NUM -> {
                 symbolState =
                     if(symbolState != KeyboardState.Symbol.Number) KeyboardState.Symbol.Number
                     else KeyboardState.Symbol.Text
                 shiftState = KeyboardState.Shift.Released
             }
-            else -> onSpecial(type)
-        }
-    }
-
-    private fun getSpecialKeyType(keyCode: Int): Keyboard.SpecialKey? {
-        return when(keyCode) {
-            KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.KEYCODE_SHIFT_RIGHT -> Keyboard.SpecialKey.Shift
-            KeyEvent.KEYCODE_CAPS_LOCK -> Keyboard.SpecialKey.Caps
-            KeyEvent.KEYCODE_SPACE -> Keyboard.SpecialKey.Space
-            KeyEvent.KEYCODE_ENTER -> Keyboard.SpecialKey.Return
-            KeyEvent.KEYCODE_DEL -> Keyboard.SpecialKey.Delete
-            KeyEvent.KEYCODE_LANGUAGE_SWITCH -> Keyboard.SpecialKey.Language
-            KeyEvent.KEYCODE_SYM -> Keyboard.SpecialKey.Symbols
-            else -> null
+            KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.KEYCODE_DPAD_RIGHT, KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_DPAD_DOWN -> {
+                util?.sendDownUpKeyEvents(keyCode)
+            }
+            else -> onSpecial(keyCode)
         }
     }
 
@@ -250,52 +294,5 @@ abstract class CommonIMEMode(
 
     protected fun requestHideSelf(flags: Int) {
         listener.onRequestHideSelf(flags)
-    }
-
-    private fun createKeyboardListener(
-        context: Context,
-        listener: OnKeyClickListener,
-        autoReleaseOnInput: Boolean = true
-    ): KeyboardListener {
-        val pref = PreferenceManager.getDefaultSharedPreferences(context)
-        val sound = pref.getBoolean("sound_feedback", true)
-        val haptic = pref.getBoolean("haptic_feedback", true)
-        val duration = pref.getFloat("vibration_duration", 10f).toLong()
-        val soundVolume = if(sound) 1f else 0f
-        val vibrationDuration = if(haptic) duration else 0L
-        return FeedbackListener.Repeatable(
-            context,
-            RepeatableKeyListener.RepeatToKeyDownUp(
-                AutoShiftLockListener(
-                    ClickKeyOnReleaseListener(listener),
-                    stateContainer = this,
-                    autoReleaseOnInput = autoReleaseOnInput
-                )
-            ),
-            soundVolume = soundVolume,
-            vibrationDuration = vibrationDuration,
-            repeatVibrationDuration = vibrationDuration / 2
-        )
-    }
-
-    inner class KeyListener: OnKeyClickListener {
-        override fun onKeyClick(code: Int) {
-            val special = Keyboard.SpecialKey.ofCode(code)
-            if(special != null) handleSpecialKey(special)
-            else onChar(code)
-            updateInputView()
-        }
-    }
-
-    inner class DirectKeyListener: OnKeyClickListener {
-        override fun onKeyClick(code: Int) {
-            val special = Keyboard.SpecialKey.ofCode(code)
-            if(special != null) handleSpecialKey(special)
-            else {
-                onReset()
-                util?.sendKeyChar(code.toChar())
-            }
-            updateInputView()
-        }
     }
 }

@@ -486,6 +486,7 @@ public class Convert {
 					hkchar = true;
 					continue;
 				}
+				str = str.toLowerCase();
 				index = str.indexOf('\t');
 				if (index < 0) index = str.lastIndexOf(' ');
 				if (index > 0) {

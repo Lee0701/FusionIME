@@ -14,21 +14,15 @@ import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.preference.PreferenceManager
-import ee.oyatl.ime.fusion.mode.CangjieIMEMode
 import ee.oyatl.ime.fusion.mode.IMEMode
 import ee.oyatl.ime.fusion.mode.IMEModeSwitcher
-import ee.oyatl.ime.fusion.mode.KoreanIMEMode
 import ee.oyatl.ime.fusion.mode.LatinIMEMode
-import ee.oyatl.ime.fusion.mode.MozcIMEMode
 import ee.oyatl.ime.fusion.mode.PinyinIMEMode
-import ee.oyatl.ime.fusion.mode.VietIMEMode
-import ee.oyatl.ime.fusion.mode.ZhuyinIMEMode
 import ee.oyatl.ime.fusion.settings.InputModeSettingsFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONArray
-import java.util.Locale
 
 class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.Callback, SharedPreferences.OnSharedPreferenceChangeListener {
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
@@ -135,16 +129,12 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         if(event.isSystem || event.isCtrlPressed || event.isAltPressed || event.isMetaPressed)
             return super.onKeyDown(keyCode, event)
-        if(event.keyCode == KeyEvent.KEYCODE_SHIFT_LEFT || event.keyCode == KeyEvent.KEYCODE_SHIFT_RIGHT)
-            return super.onKeyDown(keyCode, event)
         imeModeSwitcher.currentMode.onKeyDown(keyCode, event.metaState)
         return true
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
         if(event.isSystem || event.isCtrlPressed || event.isAltPressed || event.isMetaPressed)
-            return super.onKeyUp(keyCode, event)
-        if(event.keyCode == KeyEvent.KEYCODE_SHIFT_LEFT || event.keyCode == KeyEvent.KEYCODE_SHIFT_RIGHT)
             return super.onKeyUp(keyCode, event)
         imeModeSwitcher.currentMode.onKeyUp(keyCode, event.metaState)
         return true

@@ -3,7 +3,9 @@ package ee.oyatl.ime.fusion.settings
 import android.os.Bundle
 import androidx.fragment.app.setFragmentResult
 import androidx.preference.PreferenceFragmentCompat
+import ee.oyatl.ime.fusion.Feature
 import ee.oyatl.ime.fusion.R
+import ee.oyatl.ime.fusion.mode.CangjieIMEMode
 import ee.oyatl.ime.fusion.mode.KoreanIMEMode
 import ee.oyatl.ime.fusion.mode.LatinIMEMode
 import ee.oyatl.ime.fusion.mode.MozcIMEMode
@@ -21,11 +23,15 @@ abstract class InputModeDetailsFragment(
     }
 
     override fun onDetach() {
+        save()
+        super.onDetach()
+    }
+
+    fun save() {
         val stringifiedMap = map.map { (key, value) -> "$key=$value" }.joinToString(";")
         val bundle = Bundle()
         bundle.putString(KEY_MAP, stringifiedMap)
         setFragmentResult(KEY_INPUT_MODE_DETAILS, bundle)
-        super.onDetach()
     }
 
     class Latin(
@@ -33,7 +39,7 @@ abstract class InputModeDetailsFragment(
     ): InputModeDetailsFragment(map) {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             super.onCreatePreferences(savedInstanceState, rootKey)
-            setPreferencesFromResource(R.xml.pref_input_mode_latin, rootKey)
+            addPreferencesFromResource(R.xml.pref_input_mode_latin)
         }
     }
 
@@ -42,7 +48,9 @@ abstract class InputModeDetailsFragment(
     ): InputModeDetailsFragment(map) {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             super.onCreatePreferences(savedInstanceState, rootKey)
-            setPreferencesFromResource(R.xml.pref_input_mode_korean, rootKey)
+            addPreferencesFromResource(R.xml.pref_input_mode_korean_layout)
+            if(Feature.BigramHanjaConverter.availableInCurrentVersion)
+                addPreferencesFromResource(R.xml.pref_input_mode_korean_converter)
         }
     }
 
@@ -51,7 +59,9 @@ abstract class InputModeDetailsFragment(
     ): InputModeDetailsFragment(map) {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             super.onCreatePreferences(savedInstanceState, rootKey)
-            setPreferencesFromResource(R.xml.pref_input_mode_mozc, rootKey)
+            addPreferencesFromResource(R.xml.pref_input_mode_mozc_layout)
+            if(Feature.MozcCandidateHeight.availableInCurrentVersion)
+                addPreferencesFromResource(R.xml.pref_input_mode_mozc_candidate)
         }
     }
 
@@ -60,7 +70,16 @@ abstract class InputModeDetailsFragment(
     ): InputModeDetailsFragment(map) {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             super.onCreatePreferences(savedInstanceState, rootKey)
-            setPreferencesFromResource(R.xml.pref_input_mode_viet, rootKey)
+            addPreferencesFromResource(R.xml.pref_input_mode_viet)
+        }
+    }
+
+    class Cangjie(
+        map: MutableMap<String, String>
+    ): InputModeDetailsFragment(map) {
+        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+            super.onCreatePreferences(savedInstanceState, rootKey)
+            setPreferencesFromResource(R.xml.pref_input_mode_cangjie, rootKey)
         }
     }
 
@@ -75,6 +94,7 @@ abstract class InputModeDetailsFragment(
                 KoreanIMEMode.TYPE -> Korean(map)
                 MozcIMEMode.TYPE -> Mozc(map)
                 VietIMEMode.TYPE -> Viet(map)
+                CangjieIMEMode.TYPE -> Cangjie(map)
                 else -> null
             }
         }

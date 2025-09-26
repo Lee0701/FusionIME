@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ListPreference
+        android:key="layout"
+        android:entries="@array/settings_input_mode_cangjie_layout_entries"
+        android:entryValues="@array/settings_input_mode_cangjie_layout_values"
+        android:title="@string/settings_input_mode_layout_title"
+        app:useSimpleSummaryProvider="true" />
+
+    <SwitchPreferenceCompat
+        android:key="full_width"
+        android:title="@string/settings_input_mode_fullwidth_symbols_title" />
+
+</androidx.preference.PreferenceScreen>

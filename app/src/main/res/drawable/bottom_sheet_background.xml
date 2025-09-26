@@ -6,5 +6,5 @@
         android:topLeftRadius="24dp"
         android:topRightRadius="24dp" />
     <solid
-        android:color="@android:color/white" />
+        android:color="?attr/colorOnPrimaryContainer" />
 </shape>

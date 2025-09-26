@@ -2,16 +2,24 @@ package ee.oyatl.ime.fusion.korean
 
 import android.content.Context
 import ee.oyatl.ime.candidate.CandidateView
+import ee.oyatl.ime.fusion.dictionary.manager.DictionaryCache
 import ee.oyatl.ime.newdict.DiskHanjaDictionary
 import ee.oyatl.ime.newdict.DiskTrieDictionary
 
-class UnigramHanjaConverter(
-    context: Context
-): HanjaConverter {
-    private val indexDict: DiskTrieDictionary =
-        DiskTrieDictionary(context.resources.openRawResource(R.raw.hanja_index))
-    private val vocabDict: DiskHanjaDictionary =
-        DiskHanjaDictionary(context.resources.openRawResource(R.raw.hanja_content))
+class UnigramHanjaConverter: HanjaConverter {
+    private lateinit var indexDict: DiskTrieDictionary
+    private lateinit var vocabDict: DiskHanjaDictionary
+
+    override fun load(context: Context) {
+        val indexDictId = R.raw.hanja_index
+        val vocabDictId = R.raw.hanja_content
+        indexDict = DictionaryCache.get(indexDictId) {
+            DiskTrieDictionary(context.resources.openRawResource(indexDictId))
+        }
+        vocabDict = DictionaryCache.get(vocabDictId) {
+            DiskHanjaDictionary(context.resources.openRawResource(vocabDictId))
+        }
+    }
 
     override fun convert(text: String): List<CandidateView.Candidate> {
         val hanjaResult = (1 .. text.length).map { l ->

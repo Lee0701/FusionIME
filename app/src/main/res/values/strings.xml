@@ -1,4 +1,6 @@
 <resources>
+    <string name="msg_input_modes_limit_reached">Please consider using paid version to add more input modes.</string>
+
     <string name="settings_method_header">Input Method</string>
     <string name="settings_appearance_header">Appearance</string>
     <string name="settings_behaviour_header">Behaviour</string>
@@ -9,6 +11,7 @@
     <string name="settings_method_choose_method_title">Choose Input Method</string>
     <string name="settings_method_choose_method_summary">Please choose \'FusionIME\'.</string>
 
+    <string name="settings_appearance_screen_mode_title">Screen Mode</string>
     <string name="settings_appearance_keyboard_height_portrait_title">Keyboard Height (Portrait)</string>
     <string name="settings_appearance_keyboard_height_landscape_title">Keyboard Height (Landscape)</string>
     <string name="settings_appearance_preview_popup_title">Preview Popups</string>
@@ -24,6 +27,14 @@
 
     <string name="settings_input_mode_locale_title">Language</string>
     <string name="settings_input_mode_layout_title">Keyboard Layout</string>
+    <string name="settings_input_mode_fullwidth_symbols_title">Full Width Symbols</string>
+    <string name="settings_input_mode_correct_orders_title">Correct Jamo Orders</string>
+    <string name="settings_input_mode_converter_title">Converter</string>
+    <string name="settings_input_mode_candidate_view_height_title">Candidate View Height</string>
+
+    <string name="screen_mode_mobile">Mobile</string>
+    <string name="screen_mode_tablet">Tablet</string>
+    <string name="screen_mode_full">Full</string>
 
     <string name="input_mode_latin">Latin</string>
     <string name="input_mode_korean">Korean</string>
@@ -49,6 +60,10 @@
     <string name="korean_layout_hangul_3set_391">Hangul 3-Set Final</string>
     <string name="korean_layout_old_hangul_2set_ks">Old Hangul 2-Set</string>
 
+    <string name="korean_converter_word">Word Converter</string>
+    <string name="korean_converter_phrase">Phrase Converter</string>
+    <string name="korean_converter_jeongun">Jeong-Un Converter</string>
+
     <string name="mozc_layout_romaji_qwerty">Romaji QWERTY</string>
     <string name="mozc_layout_kana_jis">Kana JIS</string>
     <string name="mozc_layout_kana_syllables">Kana Syllables</string>
@@ -58,6 +73,8 @@
     <string name="zhuyin_layout_zhuyin">Bopomofo</string>
 
     <string name="cangjie_layout_cangjie">Cangjie</string>
+    <string name="cangjie_layout_quick">Quick</string>
+    <string name="cangjie_layout_dayi3">Dayi</string>
 
     <string name="viet_layout_qwerty">QWERTY</string>
     <string name="viet_layout_telex">Telex</string>

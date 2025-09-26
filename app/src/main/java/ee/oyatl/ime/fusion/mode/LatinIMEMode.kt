@@ -23,13 +23,14 @@ import com.android.inputmethod.latin.settings.SettingsValuesForSuggestion
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.TripleCandidateView
 import ee.oyatl.ime.fusion.R
-import ee.oyatl.ime.keyboard.DefaultBottomRowKeyboard
-import ee.oyatl.ime.keyboard.DefaultMobileKeyboard
-import ee.oyatl.ime.keyboard.Keyboard.SpecialKey
-import ee.oyatl.ime.keyboard.KeyboardInflater
-import ee.oyatl.ime.keyboard.ShiftStateKeyboard
-import ee.oyatl.ime.keyboard.StackedKeyboard
-import ee.oyatl.ime.keyboard.layout.KeyboardTemplates
+import ee.oyatl.ime.keyboard.KeyCodeMapper
+import ee.oyatl.ime.keyboard.KeyboardConfiguration
+import ee.oyatl.ime.keyboard.KeyboardTemplate
+import ee.oyatl.ime.keyboard.layout.MobileKeyboard
+import ee.oyatl.ime.keyboard.layout.KeyboardMappings
+import ee.oyatl.ime.keyboard.layout.MobileKeyboardRows
+import ee.oyatl.ime.keyboard.layout.TabletKeyboard
+import ee.oyatl.ime.keyboard.layout.TabletKeyboardRows
 import java.util.Locale
 
 abstract class LatinIMEMode(
@@ -139,8 +140,8 @@ abstract class LatinIMEMode(
         }
     }
 
-    override fun onChar(code: Int) {
-        val event = Event.createEventForCodePointFromUnknownSource(code)
+    override fun onChar(codePoint: Int) {
+        val event = Event.createEventForCodePointFromUnknownSource(codePoint)
         val processedEvent = wordComposer.processEvent(event)
         wordComposer.applyProcessedEvent(processedEvent)
         if(ghostSpace) currentInputConnection?.commitText(" ", 1)
@@ -149,9 +150,9 @@ abstract class LatinIMEMode(
         updateSuggestions()
     }
 
-    override fun onSpecial(type: SpecialKey) {
-        when(type) {
-            SpecialKey.Delete -> {
+    override fun onSpecial(keyCode: Int) {
+        when(keyCode) {
+            KeyEvent.KEYCODE_DEL -> {
                 val event = Event.createSoftwareKeypressEvent(Event.NOT_A_CODE_POINT, Constants.CODE_DELETE, 0, 0, false)
                 val processedEvent = wordComposer.processEvent(event)
                 if(wordComposer.isComposingWord) {
@@ -162,11 +163,11 @@ abstract class LatinIMEMode(
                 }
                 updateSuggestions()
             }
-            SpecialKey.Space -> {
+            KeyEvent.KEYCODE_SPACE -> {
                 onReset()
                 util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_SPACE)
             }
-            SpecialKey.Return -> {
+            KeyEvent.KEYCODE_ENTER -> {
                 onReset()
                 if (util?.sendDefaultEditorAction(true) != true)
                     util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_ENTER)
@@ -185,39 +186,59 @@ abstract class LatinIMEMode(
         override val text: CharSequence
     ): CandidateView.Candidate
 
-    class Qwerty(override val locale: Locale, listener: IMEMode.Listener): LatinIMEMode(listener) {
-        private val layers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE, layoutTable)
-        override val textKeyboard: ee.oyatl.ime.keyboard.Keyboard = StackedKeyboard(
-            ShiftStateKeyboard(
-                DefaultMobileKeyboard(layers[0]),
-                DefaultMobileKeyboard(layers[1])
-            ),
-            DefaultBottomRowKeyboard()
-        )
-    }
+    class Qwerty(override val locale: Locale, listener: IMEMode.Listener): LatinIMEMode(listener)
 
     class Dvorak(override val locale: Locale, listener: IMEMode.Listener): LatinIMEMode(listener) {
-        private val layers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE_DVORAK, layoutTable)
-        override val textKeyboard: ee.oyatl.ime.keyboard.Keyboard = StackedKeyboard(
-            ShiftStateKeyboard(
-                DefaultMobileKeyboard(layers[0]),
-                DefaultMobileKeyboard(layers[1])
+        override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
+            mobile = KeyboardTemplate.Basic(
+                configuration = KeyboardConfiguration(
+                    MobileKeyboard.alphabetic(semicolon = true),
+                    MobileKeyboard.bottom(KeyEvent.KEYCODE_X, KeyEvent.KEYCODE_SLASH)
+                ),
+                contentRows = MobileKeyboardRows.DVORAK,
+                codeMapper = KeyCodeMapper.from(
+                    KeyboardMappings.ANSI_QWERTY,
+                    KeyboardMappings.ANSI_QWERTY_DVORAK
+                )
             ),
-            ShiftStateKeyboard(
-                DefaultBottomRowKeyboard(extraKeys = listOf('q'.code, 'z'.code)),
-                DefaultBottomRowKeyboard(extraKeys = listOf('Q'.code, 'Z'.code))
+            tablet = KeyboardTemplate.Basic(
+                configuration = KeyboardConfiguration(
+                    TabletKeyboard.alphabetic(semicolon = true),
+                    TabletKeyboard.bottom()
+                ),
+                contentRows = TabletKeyboardRows.DVORAK,
+                codeMapper = KeyCodeMapper.from(
+                    KeyboardMappings.ANSI_QWERTY,
+                    KeyboardMappings.ANSI_QWERTY_DVORAK
+                )
             )
         )
     }
 
     class Colemak(override val locale: Locale, listener: IMEMode.Listener): LatinIMEMode(listener) {
-        private val layers = KeyboardInflater.inflate(KeyboardTemplates.MOBILE_COLEMAK, layoutTable)
-        override val textKeyboard: ee.oyatl.ime.keyboard.Keyboard = StackedKeyboard(
-            ShiftStateKeyboard(
-                DefaultMobileKeyboard(layers[0]),
-                DefaultMobileKeyboard(layers[1])
+        override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
+            mobile = KeyboardTemplate.Basic(
+                configuration = KeyboardConfiguration(
+                    MobileKeyboard.alphabetic(semicolon = true),
+                    MobileKeyboard.bottom()
+                ),
+                contentRows = MobileKeyboardRows.SEMICOLON,
+                codeMapper = KeyCodeMapper.from(
+                    KeyboardMappings.ANSI_QWERTY,
+                    KeyboardMappings.ANSI_QWERTY_COLEMAK
+                )
             ),
-            DefaultBottomRowKeyboard()
+            tablet = KeyboardTemplate.Basic(
+                configuration = KeyboardConfiguration(
+                    TabletKeyboard.alphabetic(semicolon = true),
+                    TabletKeyboard.bottom()
+                ),
+                contentRows = TabletKeyboardRows.SEMICOLON,
+                codeMapper = KeyCodeMapper.from(
+                    KeyboardMappings.ANSI_QWERTY,
+                    KeyboardMappings.ANSI_QWERTY_COLEMAK
+                )
+            )
         )
     }
 
