@@ -39,6 +39,7 @@ class DefaultKeyboardView(
         }
         @SuppressLint("ClickableViewAccessibility")
         view.setOnTouchListener { view, event ->
+            view.getGlobalVisibleRect(rect)
             val pointerId = event.getPointerId(event.actionIndex)
             val rawX =
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) event.getRawX(event.actionIndex)
@@ -59,7 +60,8 @@ class DefaultKeyboardView(
                     if(popup != null) {
                         popup.label = key.binding.label.text.toString()
                         popup.size = key.rect.width() to key.rect.height() * 2
-                        popup.show(view, key.rect.left, key.rect.top - key.rect.height()/4)
+                        val y = rect.top + key.location[1] - location[1] - key.rect.height()
+                        popup.show(view, key.rect.left, y)
                     }
                     pointers += pointerId to Pointer(x, y, key, popup)
                     key.binding.root.isPressed = true
@@ -84,10 +86,12 @@ class DefaultKeyboardView(
     }
 
     private fun cacheKeys() {
+        val rect = Rect()
         view.getLocationOnScreen(location)
         view.getGlobalVisibleRect(rect)
         keys.forEach {
             it.binding.root.getGlobalVisibleRect(it.rect)
+            it.binding.root.getLocationOnScreen(it.location)
             it.rect.offset(0, -rect.top)
         }
     }
@@ -278,5 +282,6 @@ class DefaultKeyboardView(
         val binding: KbdKeyBinding
     ) {
         val rect: Rect = Rect()
+        val location: IntArray = IntArray(2)
     }
 }
