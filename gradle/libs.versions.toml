@@ -1,20 +1,19 @@
 [versions]
-agp = "8.13.0"
-kotlin = "2.0.21"
+agp = "8.13.1"
+kotlin = "2.2.21"
 coreKtx = "1.17.0"
 junit = "4.13.2"
 junitVersion = "1.3.0"
 espressoCore = "3.7.0"
 appcompat = "1.7.1"
 material = "1.13.0"
-guava = "33.4.8-jre"
+guava = "33.5.0-jre"
 protobufJava = "3.25.3"
 httpclient = "4.5.14"
 jsr305 = "3.0.2"
 flexbox = "3.0.0"
 legacySupportV4 = "1.0.0"
 annotation = "1.9.1"
-jetbrainsKotlinJvm = "2.0.21"
 preference = "1.2.1"
 desugarJdkLibs = "2.1.5"
 
@@ -39,5 +38,5 @@ desugar-jdk-libs = { group = "com.android.tools", name = "desugar_jdk_libs", ver
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 android-library = { id = "com.android.library", version.ref = "agp" }
-jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 
