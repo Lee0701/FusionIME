@@ -22,6 +22,20 @@ jobs:
       version-name: ${{ steps.gen_version_name.outputs.VERSION_NAME }}
 
     steps:
+      - name: Cache Gradle packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('gradle.properties', '**/*.gradle*', '**/gradle-wrapper.properties') }}
+
+      - name: Cache Android SDK
+        uses: actions/cache@v4
+        with:
+          path: ~/.android
+          key: ${{ runner.os }}-android
+
       - name: Checkout
         id: checkout
         uses: actions/checkout@v3
@@ -105,6 +119,20 @@ jobs:
         edition: [free, paid]
 
     steps:
+      - name: Cache Gradle packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('gradle.properties', '**/*.gradle*', '**/gradle-wrapper.properties') }}
+
+      - name: Cache Android SDK
+        uses: actions/cache@v4
+        with:
+          path: ~/.android
+          key: ${{ runner.os }}-android
+
       - name: Checkout
         id: checkout
         uses: actions/checkout@v3
