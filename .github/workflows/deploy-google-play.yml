@@ -56,11 +56,11 @@ jobs:
 
       - name: Increment version code
         id: increment_version_code
-        run: echo "VERSION_CODE=$(expr ${{ env.VERSION_CODE }} + 1)" >> $GITHUB_OUTPUT
+        run: echo "VERSION_CODE=$(expr ${{ steps.get_version_code.outputs.VERSION_CODE }} + 1)" >> $GITHUB_OUTPUT
 
       - name: Generate new version name with date and commit SHA
         id: gen_version_name
-        run: echo "VERSION_NAME=$(date +%Y%m%d)-${{ env.VERSION_CODE }}-$(git rev-parse --short ${{ github.sha }})" >> $GITHUB_OUTPUT
+        run: echo "VERSION_NAME=$(date +%Y%m%d)-${{ steps.get_version_code.outputs.VERSION_CODE }}-$(git rev-parse --short ${{ github.sha }})" >> $GITHUB_OUTPUT
 
       - name: Push new version information
         id: push_version_info
@@ -69,7 +69,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TASK_NAME: 'Bump version'
           TIMEZONE: 'Asia/Seoul'
-          BRANCH_NAME: ${{ env.GITHUB_REF_NAME }}
+          BRANCH_NAME: ${{ github.ref_name }}
 
       - uses: rickstaa/action-create-tag@v1
         id: create_tag
@@ -84,8 +84,9 @@ jobs:
 
     needs: [new-version]
 
-    matrix:
-      edition: [free, paid]
+    strategy:
+      matrix:
+        edition: [free, paid]
 
     steps:
       - name: Checkout
@@ -117,8 +118,8 @@ jobs:
         uses: Fboard/android-version-actions@master
         with:
           gradlePath: app/build.gradle.kts
-          versionCode: ${{ needs.new-version.outputs.VERSION_CODE }}
-          versionName: ${{ needs.new-version.outputs.VERSION_NAME }}
+          versionCode: ${{ needs.new-version.outputs.version-code }}
+          versionName: ${{ needs.new-version.outputs.version-name }}
 
       - name: Build with Gradle
         id: build_app
@@ -159,13 +160,12 @@ jobs:
         with:
           stripHeaders: true
           stripGeneratorNotice: true
-          sinceTag: ${{ needs.new-version.outputs.CURRENT_VERSION_NAME }}
+          sinceTag: ${{ needs.new-version.outputs.current-version-name }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Write changelog
         id: write_changelog
         run: echo "${{ steps.gen_changelog.outputs.changelog }}" > whatsnew/whatsnew-en-US
-
 
       - name: Deploy to Play Store
         id: deploy_google_play
