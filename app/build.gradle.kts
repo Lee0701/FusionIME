@@ -13,8 +13,8 @@ android {
         applicationId = "ee.oyatl.ime.fusion"
         minSdk = 21
         targetSdk = 36
-        versionCode = 3
-        versionName = "20260220-2-41b82c6"
+        versionCode = 4
+        versionName = "20260220-3-f5b7560"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
