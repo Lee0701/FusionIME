@@ -50,6 +50,10 @@ jobs:
         with:
           timezoneMacos: "Asia/Seoul"
 
+      - name: Run Gradle
+        id: run_gradle
+        run: ${{ github.workspace }}/gradlew -q
+
       - name: Get version code from build.gradle.kts
         id: get_version_code
         run: echo "VERSION_CODE=$(${{ github.workspace }}/gradlew -q printVersionCode)" >> $GITHUB_OUTPUT
