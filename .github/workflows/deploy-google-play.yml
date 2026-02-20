@@ -173,7 +173,7 @@ jobs:
         id: sign_app_bundle
         uses: r0adkll/sign-android-release@v1
         with:
-          releaseDirectory: app/build/outputs/bundle/paidRelease
+          releaseDirectory: app/build/outputs/bundle/${{ steps.edition_name.outputs.lowercase }}Release
           signingKeyBase64: ${{ secrets.SIGNING_KEY }}
           alias: ${{ secrets.ALIAS }}
           keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
