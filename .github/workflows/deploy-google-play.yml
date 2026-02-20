@@ -1,0 +1,179 @@
+name: Deploy to Google Play
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  issues: read
+  pull-requests: read
+
+jobs:
+  new-version:
+    runs-on: ubuntu-latest
+
+    outputs:
+      current-version-name: ${{ steps.get_version_name.outputs.CURRENT_VERSION_NAME }}
+      version-code: ${{ steps.get_version_code.outputs.VERSION_CODE }}
+      version-name: ${{ steps.gen_version_name.outputs.VERSION_NAME }}
+
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          submodules: true
+
+      - name: set up JDK 17
+        id: setup_jdk
+        uses: actions/setup-java@v3.6.0
+        with:
+          distribution: 'adopt'
+          java-version: '17'
+
+      - name: Grant execute permission for gradlew
+        id: chmod_gradlew
+        run: chmod +x gradlew
+
+      - name: Set timezone
+        id: set_timezone
+        uses: szenius/set-timezone@v1.2
+        with:
+          timezoneMacos: "Asia/Seoul"
+
+      - name: Get version code from build.gradle.kts
+        id: get_version_code
+        run: echo "VERSION_CODE=$(${{ github.workspace }}/gradlew -q printVersionCode)" >> $GITHUB_OUTPUT
+
+      - name: Get version name from build.gradle.kts
+        id: get_version_name
+        run: echo "CURRENT_VERSION_NAME=$(${{ github.workspace }}/gradlew -q printVersionName)" >> $GITHUB_OUTPUT
+
+      - name: Increment version code
+        id: increment_version_code
+        run: echo "VERSION_CODE=$(expr ${{ env.VERSION_CODE }} + 1)" >> $GITHUB_OUTPUT
+
+      - name: Generate new version name with date and commit SHA
+        id: gen_version_name
+        run: echo "VERSION_NAME=$(date +%Y%m%d)-${{ env.VERSION_CODE }}-$(git rev-parse --short ${{ github.sha }})" >> $GITHUB_OUTPUT
+
+      - name: Push new version information
+        id: push_version_info
+        uses: Fboard/publish@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TASK_NAME: 'Bump version'
+          TIMEZONE: 'Asia/Seoul'
+          BRANCH_NAME: ${{ env.GITHUB_REF_NAME }}
+
+      - uses: rickstaa/action-create-tag@v1
+        id: create_tag
+        with:
+          tag: ${{ steps.gen_version_name.outputs.VERSION_NAME }}
+          tag_exists_error: false
+          message: ""
+
+
+  deploy:
+    runs-on: ubuntu-latest
+
+    needs: [new-version]
+
+    matrix:
+      edition: [free, paid]
+
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          submodules: true
+
+      - name: set up JDK 17
+        id: setup_jdk
+        uses: actions/setup-java@v3.6.0
+        with:
+          distribution: 'adopt'
+          java-version: '17'
+
+      - name: Grant execute permission for gradlew
+        id: chmod_gradlew
+        run: chmod +x gradlew
+
+      - name: Generate capitalized edition name
+        id: edition_name
+        uses: ASzc/change-string-case-action@v6
+        with:
+          string: ${{ matrix.edition }}
+
+      - name: Override version name and code
+        id: override_version_info
+        uses: Fboard/android-version-actions@master
+        with:
+          gradlePath: app/build.gradle.kts
+          versionCode: ${{ needs.new-version.outputs.VERSION_CODE }}
+          versionName: ${{ needs.new-version.outputs.VERSION_NAME }}
+
+      - name: Build with Gradle
+        id: build_app
+        run: ./gradlew build${{ steps.edition_name.outputs.capitalized }}Release
+
+      - name: Build AAB
+        id: build_app_bundle
+        run: ./gradlew bundle${{ steps.edition_name.outputs.capitalized }}Release
+
+      - name: Sign AAB
+        id: sign_app_bundle
+        uses: r0adkll/sign-android-release@v1
+        with:
+          releaseDirectory: app/build/outputs/bundle/paidRelease
+          signingKeyBase64: ${{ secrets.SIGNING_KEY }}
+          alias: ${{ secrets.ALIAS }}
+          keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEY_PASSWORD }}
+
+      - name: Upload AAB
+        id: upload_app_bundle
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-${{ steps.edition_name.outputs.lowercase }}-release
+          path: app/build/outputs/bundle/${{ steps.edition_name.outputs.lowercase }}Release/app-${{ steps.edition_name.outputs.lowercase }}-release.aab
+
+      - name: Get package name from build.gradle.kts
+        id: get_package_name
+        run: echo "PACKAGE_NAME=$(${{ github.workspace }}/gradlew -q printPackageName)" >> $GITHUB_OUTPUT
+
+      - name: Get package name suffix from build.gradle.kts
+        id: get_package_name_suffix
+        run: echo "PACKAGE_NAME_SUFFIX=$(${{ github.workspace }}/gradlew -q print${{ steps.edition_name.outputs.capitalized }}PackageNameSuffix)" >> $GITHUB_OUTPUT
+
+      - name: Generate changelog
+        id: gen_changelog
+        uses: heinrichreimer/action-github-changelog-generator@v2.3
+        with:
+          stripHeaders: true
+          stripGeneratorNotice: true
+          sinceTag: ${{ needs.new-version.outputs.CURRENT_VERSION_NAME }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Write changelog
+        id: write_changelog
+        run: echo "${{ steps.gen_changelog.outputs.changelog }}" > whatsnew/whatsnew-en-US
+
+
+      - name: Deploy to Play Store
+        id: deploy_google_play
+        uses: r0adkll/upload-google-play@v1.1.2
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+          packageName: ${{ steps.get_package_name.outputs.PACKAGE_NAME }}${{ steps.get_package_name_suffix.outputs.PACKAGE_NAME_SUFFIX }}
+          releaseFiles: app/build/outputs/bundle/${{ steps.edition_name.outputs.lowercase }}Release/app-${{ steps.edition_name.outputs.lowercase }}-release.aab
+          whatsNewDirectory: whatsnew
+          track: beta
+          status: draft
