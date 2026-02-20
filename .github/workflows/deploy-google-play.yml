@@ -89,8 +89,8 @@ jobs:
         uses: Fboard/android-version-actions@master
         with:
           gradlePath: app/build.gradle.kts
-          versionCode: ${{ steps.increment_version_code.outputs.version-code }}
-          versionName: ${{ steps.gen_version_name.outputs.version-name }}
+          versionCode: ${{ steps.increment_version_code.outputs.VERSION_CODE }}
+          versionName: ${{ steps.gen_version_name.outputs.VERSION_NAME }}
 
       - name: Push new version information
         id: push_version_info
