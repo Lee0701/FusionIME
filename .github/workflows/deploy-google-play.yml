@@ -70,6 +70,14 @@ jobs:
         id: gen_version_name
         run: echo "VERSION_NAME=$(date +%Y%m%d)-${{ steps.get_version_code.outputs.VERSION_CODE }}-$(git rev-parse --short ${{ github.sha }})" >> $GITHUB_OUTPUT
 
+      - name: Override version name and code
+        id: override_version_info
+        uses: Fboard/android-version-actions@master
+        with:
+          gradlePath: app/build.gradle.kts
+          versionCode: ${{ steps.increment_version_code.outputs.version-code }}
+          versionName: ${{ steps.gen_version_name.outputs.version-name }}
+
       - name: Push new version information
         id: push_version_info
         uses: Fboard/publish@master
@@ -124,14 +132,6 @@ jobs:
         uses: ASzc/change-string-case-action@v6
         with:
           string: ${{ matrix.edition }}
-
-      - name: Override version name and code
-        id: override_version_info
-        uses: Fboard/android-version-actions@master
-        with:
-          gradlePath: app/build.gradle.kts
-          versionCode: ${{ needs.new-version.outputs.version-code }}
-          versionName: ${{ needs.new-version.outputs.version-name }}
 
       - name: Build with Gradle
         id: build_app
