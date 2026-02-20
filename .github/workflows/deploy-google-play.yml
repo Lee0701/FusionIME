@@ -18,7 +18,7 @@ jobs:
 
     outputs:
       current-version-name: ${{ steps.get_version_name.outputs.CURRENT_VERSION_NAME }}
-      version-code: ${{ steps.get_version_code.outputs.VERSION_CODE }}
+      version-code: ${{ steps.increment_version_code.outputs.VERSION_CODE }}
       version-name: ${{ steps.gen_version_name.outputs.VERSION_NAME }}
 
     steps:
@@ -82,7 +82,7 @@ jobs:
 
       - name: Generate new version name with date and commit SHA
         id: gen_version_name
-        run: echo "VERSION_NAME=$(date +%Y%m%d)-${{ steps.get_version_code.outputs.VERSION_CODE }}-$(git rev-parse --short ${{ github.sha }})" >> $GITHUB_OUTPUT
+        run: echo "VERSION_NAME=$(date +%Y%m%d)-${{ steps.increment_version_code.outputs.VERSION_CODE }}-$(git rev-parse --short ${{ github.sha }})" >> $GITHUB_OUTPUT
 
       - name: Override version name and code
         id: override_version_info
