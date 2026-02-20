@@ -101,3 +101,11 @@ tasks.register("printVersionName") {
 tasks.register("printPackageName") {
     println(android.defaultConfig.applicationId)
 }
+
+tasks.register("printPaidPackageNameSuffix") {
+    println(android.productFlavors["paid"].applicationIdSuffix)
+}
+
+tasks.register("printFreePackageNameSuffix") {
+    println(android.productFlavors["free"].applicationIdSuffix)
+}
