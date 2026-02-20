@@ -40,6 +40,10 @@ jobs:
         id: chmod_gradlew
         run: chmod +x gradlew
 
+      - name: Setup Android SDK
+        id: setup_android
+        uses: android-actions/setup-android@v2
+
       - name: Set timezone
         id: set_timezone
         uses: szenius/set-timezone@v1.2
@@ -106,6 +110,10 @@ jobs:
       - name: Grant execute permission for gradlew
         id: chmod_gradlew
         run: chmod +x gradlew
+
+      - name: Setup Android SDK
+        id: setup_android
+        uses: android-actions/setup-android@v2
 
       - name: Generate capitalized edition name
         id: edition_name
