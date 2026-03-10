@@ -6,10 +6,10 @@ interface KeyboardTemplate {
     data class Basic(
         val configuration: KeyboardConfiguration,
         val contentRows: List<String>,
-        val codeMapper: KeyCodeMapper = KeyCodeMapper()
+        val softKeyCodeMapper: SoftKeyCodeMapper = SoftKeyCodeMapper()
     ): KeyboardTemplate {
         override fun inflate(inflater: KeyboardInflater): Keyboard {
-            return inflater.inflate(configuration, contentRows, codeMapper)
+            return inflater.inflate(configuration, contentRows, softKeyCodeMapper)
         }
     }
 

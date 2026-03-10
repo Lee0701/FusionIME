@@ -12,7 +12,7 @@ import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.VerticalScrollingCandidateView
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.mozc.InputConnectionRenderer
-import ee.oyatl.ime.keyboard.KeyCodeMapper
+import ee.oyatl.ime.keyboard.SoftKeyCodeMapper
 import ee.oyatl.ime.keyboard.KeyboardConfiguration
 import ee.oyatl.ime.keyboard.KeyboardTemplate
 import ee.oyatl.ime.keyboard.layout.LayoutKana
@@ -200,7 +200,7 @@ abstract class MozcIMEMode(
                     MobileKeyboard.bottom(left = ExtKeyCode.KEYCODE_KANA_EQUALS, right = ExtKeyCode.KEYCODE_KANA_SLASH)
                 ),
                 contentRows = MobileKeyboardRows.JIS,
-                codeMapper = KeyCodeMapper(mapOf(
+                softKeyCodeMapper = SoftKeyCodeMapper(mapOf(
                     KeyEvent.KEYCODE_MINUS to ExtKeyCode.KEYCODE_KANA_MINUS,
                     KeyEvent.KEYCODE_APOSTROPHE to ExtKeyCode.KEYCODE_KANA_APOSTROPHE,
                     KeyEvent.KEYCODE_LEFT_BRACKET to ExtKeyCode.KEYCODE_KANA_VOICED_MARK
@@ -213,7 +213,7 @@ abstract class MozcIMEMode(
                     TabletKeyboard.bottom()
                 ),
                 contentRows = TabletKeyboardRows.JIS,
-                codeMapper = KeyCodeMapper(mapOf(
+                softKeyCodeMapper = SoftKeyCodeMapper(mapOf(
                     KeyEvent.KEYCODE_LEFT_BRACKET to ExtKeyCode.KEYCODE_KANA_VOICED_MARK
                 ))
             )

@@ -55,4 +55,5 @@ object LayoutQwerty {
         KeyEvent.KEYCODE_PERIOD to listOf('.'.code, '>'.code, '.'.code),
         KeyEvent.KEYCODE_SLASH to listOf('/'.code, '?'.code, '/'.code)
     )
+
 }
