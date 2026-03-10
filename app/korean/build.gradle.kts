@@ -1,11 +1,11 @@
+import com.android.build.api.dsl.LibraryExtension
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
 }
 
-android {
+configure<LibraryExtension> {
     namespace = "ee.oyatl.ime.fusion.korean"
     compileSdk = 36
 
@@ -29,10 +29,11 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    kotlin {
-        compilerOptions {
-            jvmTarget = JvmTarget.JVM_11
-        }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget = JvmTarget.JVM_11
     }
 }
 

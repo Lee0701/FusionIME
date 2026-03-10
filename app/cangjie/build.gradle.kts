@@ -1,11 +1,11 @@
+import com.android.build.api.dsl.LibraryExtension
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
 }
 
-android {
+configure<LibraryExtension> {
     namespace = "com.diycircuits.cangjie"
     compileSdk = 36
 
@@ -14,10 +14,10 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
-        externalNativeBuild {
-            ndkBuild {
-                cppFlags += ""
-            }
+    }
+
+    externalNativeBuild {
+        ndkBuild {
         }
     }
 
@@ -34,17 +34,18 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    kotlin {
-        compilerOptions {
-            jvmTarget = JvmTarget.JVM_11
-        }
-    }
     externalNativeBuild {
         ndkBuild {
             path = file("src/main/jni/Android.mk")
         }
     }
     ndkVersion = "29.0.14033849 rc4"
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget = JvmTarget.JVM_11
+    }
 }
 
 dependencies {

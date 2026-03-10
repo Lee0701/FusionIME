@@ -1,11 +1,11 @@
+import com.android.build.api.dsl.LibraryExtension
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
 }
 
-android {
+configure<LibraryExtension> {
     namespace = "com.android.inputmethod.pinyin"
     compileSdk = 36
 
@@ -29,17 +29,18 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    kotlin {
-        compilerOptions {
-            jvmTarget = JvmTarget.JVM_11
-        }
-    }
     externalNativeBuild {
         ndkBuild {
             path = file("src/main/Android.mk")
         }
     }
     ndkVersion = "29.0.14033849 rc4"
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget = JvmTarget.JVM_11
+    }
 }
 
 dependencies {
