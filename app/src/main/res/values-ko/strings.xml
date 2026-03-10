@@ -48,4 +48,18 @@
     <string name="settings_input_mode_select_type_title">유형 선택</string>
     <string name="settings_input_mode_layout_title">키보드 배열</string>
     <string name="input_mode_zhuyin">주음부호 (번체 중국어)</string>
+    <string name="settings_appearance_screen_mode_title">화면 모드</string>
+    <string name="screen_mode_mobile">모바일</string>
+    <string name="msg_input_modes_limit_reached">입력 모드를 더 많이 추가하려면 유료 버전을 사용해 주세요.</string>
+    <string name="settings_input_mode_candidate_view_height_title">후보 창 높이</string>
+    <string name="cangjie_layout_quick">빠른 창힐</string>
+    <string name="cangjie_layout_dayi3">대이</string>
+    <string name="settings_input_mode_fullwidth_symbols_title">전각 기호</string>
+    <string name="settings_input_mode_correct_orders_title">자모 순서 교정</string>
+    <string name="settings_input_mode_converter_title">변환기</string>
+    <string name="screen_mode_tablet">태블릿</string>
+    <string name="screen_mode_full">PC</string>
+    <string name="korean_converter_word">단어 변환기</string>
+    <string name="korean_converter_phrase">어절 변환기</string>
+    <string name="korean_converter_jeongun">정음 변환기</string>
 </resources>
