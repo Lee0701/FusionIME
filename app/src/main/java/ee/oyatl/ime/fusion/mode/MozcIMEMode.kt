@@ -208,14 +208,11 @@ abstract class MozcIMEMode(
             ),
             tablet = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
-                    TabletKeyboard.numbers(delete = false, spacerOnDelete = false),
-                    TabletKeyboard.alphabetic(semicolon = true, rightShift = false),
+                    TabletKeyboard.numbers(delete = true, spacerOnDelete = false),
+                    TabletKeyboard.alphabetic(semicolon = true, delete = false, spacerOnDelete = true),
                     TabletKeyboard.bottom()
                 ),
-                contentRows = TabletKeyboardRows.JIS,
-                softKeyCodeMapper = SoftKeyCodeMapper(mapOf(
-                    KeyEvent.KEYCODE_LEFT_BRACKET to ExtKeyCode.KEYCODE_KANA_VOICED_MARK
-                ))
+                contentRows = TabletKeyboardRows.JIS
             )
         )
     }
