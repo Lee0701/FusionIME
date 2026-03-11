@@ -21,4 +21,10 @@
         app:defaultValue="10.0"
         app:title="@string/settings_behaviour_vibration_duration_title" />
 
+    <SwitchPreferenceCompat
+        app:key="always_show_soft_keyboard"
+        app:defaultValue="false"
+        app:title="@string/settings_behaviour_always_show_soft_keyboard_title"
+        app:summary="@string/settings_behaviour_always_show_soft_keyboard_summary" />
+
 </PreferenceScreen>
