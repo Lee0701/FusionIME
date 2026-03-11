@@ -7,6 +7,7 @@
 /app/free/release
 /app/paid/release
 /captures
+.kotlin
 .externalNativeBuild
 .cxx
 local.properties
