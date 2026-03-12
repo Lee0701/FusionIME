@@ -11,9 +11,6 @@ import ee.oyatl.ime.fusion.mode.KoreanIMEMode
 import ee.oyatl.ime.fusion.mode.LatinIMEMode
 import ee.oyatl.ime.fusion.mode.MozcIMEMode
 import ee.oyatl.ime.fusion.mode.VietIMEMode
-import kotlin.collections.component1
-import kotlin.collections.component2
-import kotlin.collections.map
 
 abstract class InputModeDetailsFragment: PreferenceFragmentCompat() {
 
@@ -36,8 +33,8 @@ abstract class InputModeDetailsFragment: PreferenceFragmentCompat() {
         outState.putString(KEY_MAP, stringifyMap(map))
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onPause() {
+        super.onPause()
         save()
     }
 

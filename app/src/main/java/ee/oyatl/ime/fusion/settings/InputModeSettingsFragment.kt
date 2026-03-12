@@ -115,7 +115,8 @@ class InputModeSettingsFragment: Fragment() {
                     R.anim.slide_in_right, R.anim.slide_out_left,
                     R.anim.slide_in_left, R.anim.slide_out_right
                 )
-                .replace(R.id.settings, fragment)
+                .add(R.id.settings, fragment)
+                .hide(this)
                 .addToBackStack(null)
                 .commit()
             this.position = position

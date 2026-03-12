@@ -16,7 +16,6 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <FrameLayout
-        android:background="?attr/colorOnBackground"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
         android:id="@+id/settings"
         android:layout_width="match_parent"
