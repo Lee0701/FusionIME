@@ -62,4 +62,10 @@
     <string name="korean_converter_word">단어 변환기</string>
     <string name="korean_converter_phrase">어절 변환기</string>
     <string name="korean_converter_jeongun">정음 변환기</string>
+    <string name="settings_input_mode_add_description">입력 모드 추가</string>
+    <string name="settings_input_mode_move_up_description">위로 이동</string>
+    <string name="settings_input_mode_move_down_description">아래로 이동</string>
+    <string name="settings_input_mode_remove_description">제거</string>
+    <string name="settings_behaviour_always_show_soft_keyboard_title">항상 화면 키보드 표시</string>
+    <string name="settings_behaviour_always_show_soft_keyboard_summary">하드웨어 키보드가 연결된 상태에서도 화면 키보드를 표시합니다.</string>
 </resources>
