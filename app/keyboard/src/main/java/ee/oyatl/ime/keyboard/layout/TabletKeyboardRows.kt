@@ -39,8 +39,8 @@ object TabletKeyboardRows {
 
     val JIS: List<String> = listOf(
         "1234567890-=",
-        "qwertyuiop[",
-        "asdfghjkl;'",
+        "qwertyuiop[]",
+        "asdfghjkl;'\\",
         "zxcvbnm,./`",
     )
 

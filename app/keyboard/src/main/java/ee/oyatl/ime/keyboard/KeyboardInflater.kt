@@ -5,6 +5,6 @@ interface KeyboardInflater {
     fun inflate(
         configuration: KeyboardConfiguration,
         contentRows: List<String>,
-        keyCodeMapper: KeyCodeMapper
+        softKeyCodeMapper: SoftKeyCodeMapper
     ): Keyboard
 }

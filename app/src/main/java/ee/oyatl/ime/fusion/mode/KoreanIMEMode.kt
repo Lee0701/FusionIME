@@ -13,7 +13,7 @@ import ee.oyatl.ime.fusion.korean.HanjaConverter
 import ee.oyatl.ime.fusion.korean.JeongUnHanjaConverter
 import ee.oyatl.ime.fusion.korean.UnigramHanjaConverter
 import ee.oyatl.ime.fusion.korean.WordComposer
-import ee.oyatl.ime.keyboard.KeyCodeMapper
+import ee.oyatl.ime.keyboard.SoftKeyCodeMapper
 import ee.oyatl.ime.keyboard.KeyboardConfiguration
 import ee.oyatl.ime.keyboard.KeyboardTemplate
 import ee.oyatl.ime.keyboard.layout.Hangul2Set
@@ -136,7 +136,7 @@ abstract class KoreanIMEMode(
      * Common part for 390 and 391
      */
     abstract class Hangul3Set390391(listener: IMEMode.Listener): KoreanIMEMode(listener) {
-        open val keyCodeMapper: KeyCodeMapper get() = KeyCodeMapper()
+        open val softKeyCodeMapper: SoftKeyCodeMapper get() = SoftKeyCodeMapper()
         override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
             mobile = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
@@ -145,7 +145,7 @@ abstract class KoreanIMEMode(
                     MobileKeyboard.bottom(ExtKeyCode.KEYCODE_PERIOD_COMMA, KeyEvent.KEYCODE_SLASH)
                 ),
                 contentRows = MobileKeyboardRows.NUMBERS + MobileKeyboardRows.SEMICOLON_QUOTE,
-                codeMapper = keyCodeMapper
+                softKeyCodeMapper = softKeyCodeMapper
             ),
             tablet = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
@@ -154,7 +154,7 @@ abstract class KoreanIMEMode(
                     TabletKeyboard.bottom()
                 ),
                 contentRows = TabletKeyboardRows.NUMBERS + TabletKeyboardRows.SEMICOLON_QUOTE_SLASH,
-                codeMapper = keyCodeMapper
+                softKeyCodeMapper = softKeyCodeMapper
             )
         )
     }
@@ -167,7 +167,7 @@ abstract class KoreanIMEMode(
         override val hangulCombiner: HangulCombiner = HangulCombiner(Hangul3Set.COMBINATION_390, correctOrders)
         override val hanjaConverter: HanjaConverter = converterType.create()
         override val textLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + Hangul3Set.TABLE_390)
-        override val keyCodeMapper: KeyCodeMapper get() = KeyCodeMapper(mapOf(
+        override val softKeyCodeMapper: SoftKeyCodeMapper get() = SoftKeyCodeMapper(mapOf(
             KeyEvent.KEYCODE_B to ExtKeyCode.KEYCODE_390_0,
             KeyEvent.KEYCODE_N to ExtKeyCode.KEYCODE_390_1,
             KeyEvent.KEYCODE_M to ExtKeyCode.KEYCODE_390_2,

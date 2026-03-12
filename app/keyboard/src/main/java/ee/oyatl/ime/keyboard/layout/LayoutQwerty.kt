@@ -4,7 +4,7 @@ import android.view.KeyEvent
 
 object LayoutQwerty {
     val TABLE_QWERTY = mapOf(
-        KeyEvent.KEYCODE_GRAVE to listOf('`'.code, '~'.code),
+        KeyEvent.KEYCODE_GRAVE to listOf('`'.code, '~'.code, '`'.code),
         KeyEvent.KEYCODE_1 to listOf('1'.code, '1'.code),
         KeyEvent.KEYCODE_2 to listOf('2'.code, '2'.code),
         KeyEvent.KEYCODE_3 to listOf('3'.code, '3'.code),
@@ -15,8 +15,8 @@ object LayoutQwerty {
         KeyEvent.KEYCODE_8 to listOf('8'.code, '8'.code),
         KeyEvent.KEYCODE_9 to listOf('9'.code, '9'.code),
         KeyEvent.KEYCODE_0 to listOf('0'.code, '0'.code),
-        KeyEvent.KEYCODE_MINUS to listOf('-'.code, '_'.code),
-        KeyEvent.KEYCODE_EQUALS to listOf('='.code, '+'.code),
+        KeyEvent.KEYCODE_MINUS to listOf('-'.code, '_'.code, '-'.code),
+        KeyEvent.KEYCODE_EQUALS to listOf('='.code, '+'.code, '='.code),
 
         KeyEvent.KEYCODE_Q to listOf('q'.code, 'Q'.code),
         KeyEvent.KEYCODE_W to listOf('w'.code, 'W'.code),
@@ -29,7 +29,7 @@ object LayoutQwerty {
         KeyEvent.KEYCODE_O to listOf('o'.code, 'O'.code),
         KeyEvent.KEYCODE_P to listOf('p'.code, 'P'.code),
         KeyEvent.KEYCODE_LEFT_BRACKET to listOf('['.code, '}'.code, '['.code),
-        KeyEvent.KEYCODE_RIGHT_BRACKET to listOf('['.code, '}'.code, ']'.code),
+        KeyEvent.KEYCODE_RIGHT_BRACKET to listOf(']'.code, '}'.code, ']'.code),
         KeyEvent.KEYCODE_BACKSLASH to listOf('\\'.code, '|'.code, '\\'.code),
 
         KeyEvent.KEYCODE_A to listOf('a'.code, 'A'.code),
@@ -55,4 +55,5 @@ object LayoutQwerty {
         KeyEvent.KEYCODE_PERIOD to listOf('.'.code, '>'.code, '.'.code),
         KeyEvent.KEYCODE_SLASH to listOf('/'.code, '?'.code, '/'.code)
     )
+
 }
