@@ -59,7 +59,6 @@ class InputModeSettingsFragment: Fragment() {
         ) { _, result ->
             activity?.setTitle(R.string.settings_input_mode_header)
             val resultMap = result.getString(InputModeDetailsFragment.KEY_MAP)
-            println(resultMap)
             if(resultMap != null) {
                 val mutableList = items.toMutableList()
                 mutableList[position] = resultMap
@@ -72,7 +71,7 @@ class InputModeSettingsFragment: Fragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.getInt(KEY_POSITION, position)
+        outState.putInt(KEY_POSITION, position)
         save()
     }
 
