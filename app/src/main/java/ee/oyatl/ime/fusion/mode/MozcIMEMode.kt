@@ -143,7 +143,7 @@ abstract class MozcIMEMode(
             KeyEvent.KEYCODE_SPACE -> onChar(' '.code)
             KeyEvent.KEYCODE_ENTER -> onChar(primaryKeyCodeConverter?.keyCodeEnter ?: return)
             KeyEvent.KEYCODE_DEL -> onChar(primaryKeyCodeConverter?.keyCodeBackspace ?: return)
-            else -> {}
+            else -> super.onSpecial(keyCode)
         }
     }
 

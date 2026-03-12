@@ -118,7 +118,7 @@ abstract class KoreanIMEMode(
                 onReset()
                 util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_ENTER)
             }
-            else -> {}
+            else -> super.onSpecial(keyCode)
         }
     }
 

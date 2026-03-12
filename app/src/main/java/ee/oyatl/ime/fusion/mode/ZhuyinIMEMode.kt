@@ -169,7 +169,7 @@ class ZhuyinIMEMode(
             KeyEvent.KEYCODE_SPACE -> handleSpace()
             KeyEvent.KEYCODE_ENTER -> handleReturn()
             KeyEvent.KEYCODE_DEL -> handleBackspace()
-            else -> {}
+            else -> super.onSpecial(keyCode)
         }
     }
 

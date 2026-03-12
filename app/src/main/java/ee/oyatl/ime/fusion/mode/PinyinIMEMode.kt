@@ -152,7 +152,7 @@ class PinyinIMEMode(
             KeyEvent.KEYCODE_DEL -> processKeyCode(KeyEvent.KEYCODE_DEL)
             KeyEvent.KEYCODE_SPACE -> processKeyCode(KeyEvent.KEYCODE_SPACE)
             KeyEvent.KEYCODE_ENTER -> processKeyCode(KeyEvent.KEYCODE_ENTER)
-            else -> {}
+            else -> super.onSpecial(keyCode)
         }
     }
 
