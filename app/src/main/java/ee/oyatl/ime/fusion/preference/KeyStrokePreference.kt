@@ -82,6 +82,15 @@ class KeyStrokePreference(
             result.put("meta", meta)
             return result.toString()
         }
+
+        fun matches(keyEvent: KeyEvent): Boolean {
+            return keyEvent.keyCode == keyCode
+                    && keyEvent.isShiftPressed == shift
+                    && keyEvent.isCtrlPressed == control
+                    && keyEvent.isAltPressed == alt
+                    && keyEvent.isMetaPressed == meta
+        }
+
         companion object {
             fun parse(json: String): KeyStroke? {
                 try {
