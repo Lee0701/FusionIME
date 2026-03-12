@@ -25,24 +25,64 @@ class InputModeSettingsFragment: Fragment() {
     private lateinit var pref: SharedPreferences
     private lateinit var binding: FragmentInputModeSettingsBinding
     private lateinit var adapter: Adapter
-    private var items: List<String> = listOf()
+    private val items: MutableList<String> = mutableListOf()
+    private val itemListener: Adapter.ViewHolder.Listener = ItemListener()
+    private var position: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if(savedInstanceState != null) {
+            this.position = savedInstanceState.getInt(KEY_POSITION)
+        }
+
         pref = PreferenceManager.getDefaultSharedPreferences(requireContext())
-        items = listOf()
+        items.clear()
         try {
             val json = pref.getString(PREF_KEY, null) ?: "[]"
             items += JSONArray(json).let { arr -> (0 until arr.length()).map { arr.getString(it) } }
-        } catch (ex: ClassCastException) {
+        } catch (_: ClassCastException) {
         }
+
+        // result callback for input mode type chooser
+        parentFragmentManager.setFragmentResultListener(
+            ChooseInputModeTypeBottomSheet.KEY_INPUT_MODE_TYPE, this
+        ) { _, result ->
+            val type = result.getString(ChooseInputModeTypeBottomSheet.FIELD_TYPE)
+            if(type != null) {
+                val position = items.size
+                items += "type=$type"
+                adapter.notifyItemInserted(position)
+                if(position - 1 in items.indices) adapter.notifyItemChanged(position - 1)
+                save()
+                itemListener.onClick(items.lastIndex)
+            }
+        }
+
+        // result callback for input mode details
+        parentFragmentManager.setFragmentResultListener(
+            InputModeDetailsFragment.KEY_INPUT_MODE_DETAILS, this
+        ) { _, result ->
+            activity?.setTitle(R.string.settings_input_mode_header)
+            val resultMap = result.getString(InputModeDetailsFragment.KEY_MAP)
+            if(resultMap != null) {
+                items[position] = resultMap
+                adapter.notifyItemChanged(position)
+                save()
+            }
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(KEY_POSITION, position)
+        save()
     }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentInputModeSettingsBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -50,7 +90,7 @@ class InputModeSettingsFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = Adapter { onItemClicked(it) }
+        adapter = Adapter(itemListener)
         binding.recyclerView.adapter = adapter
         adapter.submitList(items)
         val itemTouchHelper = ItemTouchHelper(ItemTouchHelperCallback())
@@ -65,58 +105,67 @@ class InputModeSettingsFragment: Fragment() {
                 Snackbar.make(binding.root, R.string.msg_input_modes_limit_reached, Snackbar.LENGTH_LONG).show()
             }
         }
-        parentFragmentManager.setFragmentResultListener(
-            ChooseInputModeTypeBottomSheet.KEY_INPUT_MODE_TYPE, this
-        ) { resultKey, result ->
-            val type = result.getString(ChooseInputModeTypeBottomSheet.FIELD_TYPE)
-            if(type != null) {
-                items += "type=$type"
-                adapter.submitList(items)
-                save()
-                onItemClicked(items.lastIndex)
-            }
-        }
     }
 
-    fun onItemClicked(position: Int) {
-        if(position < 0) return
-        val map = items[position]
-            .split(';').map { it.split('=') }
-            .associate { (key, value) -> key to value }.toMutableMap()
-        val fragment = InputModeDetailsFragment.create(map)
-        if(fragment != null) {
-            parentFragmentManager
-                .beginTransaction()
-                .setCustomAnimations(
-                    R.anim.slide_in_right, R.anim.slide_out_left,
-                    R.anim.slide_in_left, R.anim.slide_out_right
-                )
-                .replace(R.id.settings, fragment)
-                .addToBackStack(null)
-                .commit()
-            activity?.title = IMEMode.Params.parse(items[position])?.getLabel(requireContext())
-            parentFragmentManager.setFragmentResultListener(
-                InputModeDetailsFragment.KEY_INPUT_MODE_DETAILS, this
-            ) { requestKey, result ->
-                activity?.setTitle(R.string.settings_input_mode_header)
-                val resultMap = result.getString(InputModeDetailsFragment.KEY_MAP)
-                if(resultMap != null) {
-                    val mutableList = items.toMutableList()
-                    mutableList[position] = resultMap
-                    items = mutableList
-                    adapter.submitList(items)
-                    save()
-                }
-            }
-        }
+    fun removeItem(position: Int) {
+        items.removeAt(position)
+        adapter.notifyItemRemoved(position)
+        if(position - 1 in items.indices) adapter.notifyItemChanged(position - 1)
+        if(position in items.indices) adapter.notifyItemChanged(position)
+        save()
+    }
+
+    fun swapItems(from: Int, to: Int) {
+        Collections.swap(items, from, to)
+        adapter.notifyItemMoved(from, to)
+        if(from in items.indices) adapter.notifyItemChanged(from)
+        if(to in items.indices) adapter.notifyItemChanged(to)
+        save()
     }
 
     fun save() {
         pref.edit { putString(PREF_KEY, JSONArray(items).toString()) }
     }
 
+    inner class ItemListener: Adapter.ViewHolder.Listener {
+        override fun onClick(position: Int) {
+            if(position < 0) return
+            val map = InputModeDetailsFragment.parseMap(items[position])
+            val fragment = InputModeDetailsFragment.create(map)
+            if(fragment != null) {
+                parentFragmentManager
+                    .beginTransaction()
+                    .setCustomAnimations(
+                        R.anim.slide_in_right, R.anim.slide_out_left,
+                        R.anim.slide_in_left, R.anim.slide_out_right
+                    )
+                    .add(R.id.settings, fragment)
+                    .hide(this@InputModeSettingsFragment)
+                    .addToBackStack(null)
+                    .commit()
+                this@InputModeSettingsFragment.position = position
+            }
+        }
+
+        override fun onMoveUp(position: Int) {
+            if(position - 1 in items.indices) {
+                swapItems(position, position - 1)
+            }
+        }
+
+        override fun onMoveDown(position: Int) {
+            if(position + 1 in items.indices) {
+                swapItems(position, position + 1)
+            }
+        }
+
+        override fun onRemove(position: Int) {
+            removeItem(position)
+        }
+    }
+
     class Adapter(
-        val onItemClick: (Int) -> Unit
+        val itemListener: ViewHolder.Listener
     ): ListAdapter<String, Adapter.ViewHolder>(DiffCallback()) {
         override fun onCreateViewHolder(
             parent: ViewGroup,
@@ -124,7 +173,7 @@ class InputModeSettingsFragment: Fragment() {
         ): ViewHolder {
             val layoutInflater = LayoutInflater.from(parent.context)
             val binding = InputModeListItemBinding.inflate(layoutInflater, parent, false)
-            return ViewHolder(binding, onItemClick)
+            return ViewHolder(binding, itemListener)
         }
 
         override fun onBindViewHolder(
@@ -137,12 +186,24 @@ class InputModeSettingsFragment: Fragment() {
 
         class ViewHolder(
             private val binding: InputModeListItemBinding,
-            private val onClick: (Int) -> Unit
+            private val listener: Listener
         ): RecyclerView.ViewHolder(binding.root) {
             fun onBind(item: String) {
                 val params = IMEMode.Params.parse(item)
                 binding.title.text = params?.getLabel(binding.root.context) ?: item
-                binding.root.setOnClickListener { onClick(this.bindingAdapterPosition) }
+                binding.root.setOnClickListener { listener.onClick(this.bindingAdapterPosition) }
+                binding.moveUp.setOnClickListener { listener.onMoveUp(this.bindingAdapterPosition) }
+                binding.moveDown.setOnClickListener { listener.onMoveDown(this.bindingAdapterPosition)}
+                binding.remove.setOnClickListener { listener.onRemove(this.bindingAdapterPosition)}
+                val count = this.bindingAdapter?.itemCount ?: 0
+                binding.moveUp.isEnabled = this.bindingAdapterPosition > 0
+                binding.moveDown.isEnabled = this.bindingAdapterPosition < count - 1
+            }
+            interface Listener {
+                fun onClick(position: Int)
+                fun onMoveUp(position: Int)
+                fun onMoveDown(position: Int)
+                fun onRemove(position: Int)
             }
         }
     }
@@ -158,9 +219,7 @@ class InputModeSettingsFragment: Fragment() {
         ): Boolean {
             val from = viewHolder.bindingAdapterPosition
             val to = target.bindingAdapterPosition
-            Collections.swap(items, from, to)
-            adapter.notifyItemMoved(from, to)
-            save()
+            swapItems(from, to)
             return true
         }
 
@@ -169,9 +228,7 @@ class InputModeSettingsFragment: Fragment() {
             direction: Int
         ) {
             val position = viewHolder.bindingAdapterPosition
-            items = items.toMutableList().apply { removeAt(position) }.toList()
-            adapter.submitList(items)
-            save()
+            removeItem(position)
         }
     }
 
@@ -194,5 +251,6 @@ class InputModeSettingsFragment: Fragment() {
     companion object {
         const val PREF_KEY: String = "input_modes"
         const val FREE_INPUT_MODES_LIMIT = 3
+        const val KEY_POSITION = "position"
     }
 }
