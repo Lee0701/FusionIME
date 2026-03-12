@@ -142,13 +142,19 @@ class PinyinIMEMode(
     }
 
     override fun onChar(codePoint: Int) {
-        if(codePoint in 'a'.code .. 'z'.code) {
-            processKeyCode(codePoint - 'a'.code + KeyEvent.KEYCODE_A)
-        } else if(codePoint == '\''.code) {
-            processKeyCode(KeyEvent.KEYCODE_APOSTROPHE)
-        } else {
-            onReset()
-            util?.sendKeyChar(codePoint.toChar())
+        when (codePoint) {
+            in 'a'.code..'z'.code -> {
+                processKeyCode(codePoint - 'a'.code + KeyEvent.KEYCODE_A)
+            }
+            '\''.code -> {
+                processKeyCode(KeyEvent.KEYCODE_APOSTROPHE)
+            }
+            else -> {
+                if(imeState == ImeState.STATE_INPUT || imeState == ImeState.STATE_PREDICT)
+                    chooseCandidate(-1)
+                onReset()
+                util?.sendKeyChar(codePoint.toChar())
+            }
         }
     }
 
