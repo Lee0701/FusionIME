@@ -7,6 +7,12 @@ data class LayoutTable(
         return map[keyCode]
     }
 
+    fun mapKeyCodes(keyCodeMap: Map<Int, Int>): LayoutTable {
+        // Convert from "QWERTY to LAYOUT" to "LAYOUT TO QWERTY" by swapping keys and values
+        val revKeyCodeMap = keyCodeMap.map { (k, v) -> v to k }.toMap()
+        return LayoutTable(map.mapKeys { (key, _) -> revKeyCodeMap[key] ?: key })
+    }
+
     data class Item(
         val normal: Int,
         val shifted: Int = normal,

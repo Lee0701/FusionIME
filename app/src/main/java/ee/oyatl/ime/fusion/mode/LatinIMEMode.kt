@@ -23,11 +23,11 @@ import com.android.inputmethod.latin.settings.SettingsValuesForSuggestion
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.TripleCandidateView
 import ee.oyatl.ime.fusion.R
-import ee.oyatl.ime.keyboard.KeyCodeMapper
 import ee.oyatl.ime.keyboard.KeyboardConfiguration
 import ee.oyatl.ime.keyboard.KeyboardTemplate
+import ee.oyatl.ime.keyboard.LayoutTable
+import ee.oyatl.ime.keyboard.layout.LayoutLatin
 import ee.oyatl.ime.keyboard.layout.MobileKeyboard
-import ee.oyatl.ime.keyboard.layout.KeyboardMappings
 import ee.oyatl.ime.keyboard.layout.MobileKeyboardRows
 import ee.oyatl.ime.keyboard.layout.TabletKeyboard
 import ee.oyatl.ime.keyboard.layout.TabletKeyboardRows
@@ -189,55 +189,41 @@ abstract class LatinIMEMode(
     class Qwerty(override val locale: Locale, listener: IMEMode.Listener): LatinIMEMode(listener)
 
     class Dvorak(override val locale: Locale, listener: IMEMode.Listener): LatinIMEMode(listener) {
+        override val textLayoutTable: LayoutTable = super.textLayoutTable.mapKeyCodes(LayoutLatin.KEYCODE_MAP_DVORAK)
         override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
             mobile = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
                     MobileKeyboard.alphabetic(semicolon = true),
                     MobileKeyboard.bottom(KeyEvent.KEYCODE_X, KeyEvent.KEYCODE_SLASH)
                 ),
-                contentRows = MobileKeyboardRows.DVORAK,
-                codeMapper = KeyCodeMapper.from(
-                    KeyboardMappings.ANSI_QWERTY,
-                    KeyboardMappings.ANSI_QWERTY_DVORAK
-                )
+                contentRows = MobileKeyboardRows.DVORAK
             ),
             tablet = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
                     TabletKeyboard.alphabetic(semicolon = true),
                     TabletKeyboard.bottom()
                 ),
-                contentRows = TabletKeyboardRows.DVORAK,
-                codeMapper = KeyCodeMapper.from(
-                    KeyboardMappings.ANSI_QWERTY,
-                    KeyboardMappings.ANSI_QWERTY_DVORAK
-                )
+                contentRows = TabletKeyboardRows.DVORAK
             )
         )
     }
 
     class Colemak(override val locale: Locale, listener: IMEMode.Listener): LatinIMEMode(listener) {
+        override val textLayoutTable: LayoutTable = super.textLayoutTable.mapKeyCodes(LayoutLatin.KEYCODE_MAP_COLEMAK)
         override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
             mobile = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
                     MobileKeyboard.alphabetic(semicolon = true),
                     MobileKeyboard.bottom()
                 ),
-                contentRows = MobileKeyboardRows.SEMICOLON,
-                codeMapper = KeyCodeMapper.from(
-                    KeyboardMappings.ANSI_QWERTY,
-                    KeyboardMappings.ANSI_QWERTY_COLEMAK
-                )
+                contentRows = MobileKeyboardRows.SEMICOLON
             ),
             tablet = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
                     TabletKeyboard.alphabetic(semicolon = true),
                     TabletKeyboard.bottom()
                 ),
-                contentRows = TabletKeyboardRows.SEMICOLON,
-                codeMapper = KeyCodeMapper.from(
-                    KeyboardMappings.ANSI_QWERTY,
-                    KeyboardMappings.ANSI_QWERTY_COLEMAK
-                )
+                contentRows = TabletKeyboardRows.SEMICOLON
             )
         )
     }

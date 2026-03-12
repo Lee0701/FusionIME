@@ -24,6 +24,9 @@ import ee.oyatl.ime.fusion.pinyin.ComposingView
 import ee.oyatl.ime.fusion.pinyin.ComposingView.ComposingStatus
 import ee.oyatl.ime.fusion.pinyin.DecodingInfo
 import ee.oyatl.ime.fusion.pinyin.OnGestureListener
+import ee.oyatl.ime.keyboard.LayoutTable
+import ee.oyatl.ime.keyboard.layout.LayoutExt
+import ee.oyatl.ime.keyboard.layout.LayoutQwerty
 import java.util.Locale
 
 class PinyinIMEMode(
@@ -64,6 +67,8 @@ class PinyinIMEMode(
     private lateinit var candidatesContainer: CandidatesContainer
 
     private var isEnterNormalState = true
+
+    override val textLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutExt.TABLE_CHINESE)
 
     override suspend fun onLoad(context: Context) {
         startPinyinDecoderService(context)
@@ -137,13 +142,19 @@ class PinyinIMEMode(
     }
 
     override fun onChar(codePoint: Int) {
-        if(codePoint in 'a'.code .. 'z'.code) {
-            processKeyCode(codePoint - 'a'.code + KeyEvent.KEYCODE_A)
-        } else if(codePoint == '\''.code) {
-            processKeyCode(KeyEvent.KEYCODE_APOSTROPHE)
-        } else {
-            onReset()
-            util?.sendKeyChar(codePoint.toChar())
+        when (codePoint) {
+            in 'a'.code..'z'.code -> {
+                processKeyCode(codePoint - 'a'.code + KeyEvent.KEYCODE_A)
+            }
+            '\''.code -> {
+                processKeyCode(KeyEvent.KEYCODE_APOSTROPHE)
+            }
+            else -> {
+                if(imeState == ImeState.STATE_INPUT || imeState == ImeState.STATE_PREDICT)
+                    chooseCandidate(-1)
+                onReset()
+                util?.sendKeyChar(codePoint.toChar())
+            }
         }
     }
 

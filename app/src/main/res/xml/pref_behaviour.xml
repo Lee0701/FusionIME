@@ -26,4 +26,10 @@
         app:title="@string/settings_behaviour_hardware_language_key_title"
         app:summary="@string/settings_behaviour_hardware_language_key_summary" />
 
+    <SwitchPreferenceCompat
+        app:key="always_show_soft_keyboard"
+        app:defaultValue="false"
+        app:title="@string/settings_behaviour_always_show_soft_keyboard_title"
+        app:summary="@string/settings_behaviour_always_show_soft_keyboard_summary" />
+
 </PreferenceScreen>
