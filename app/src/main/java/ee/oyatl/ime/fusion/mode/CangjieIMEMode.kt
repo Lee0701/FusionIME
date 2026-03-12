@@ -125,7 +125,7 @@ abstract class CangjieIMEMode(
                     util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_DEL)
                 }
             }
-            else -> {}
+            else -> super.onSpecial(keyCode)
         }
         renderInput()
     }

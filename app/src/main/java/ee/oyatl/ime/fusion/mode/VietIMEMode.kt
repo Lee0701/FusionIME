@@ -98,7 +98,7 @@ abstract class VietIMEMode(
                     util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_DEL)
                 }
             }
-            else -> {}
+            else -> super.onSpecial(keyCode)
         }
     }
 

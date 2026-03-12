@@ -102,8 +102,13 @@ abstract class CommonIMEMode(
     protected val currentInputConnection: InputConnection? get() = util?.currentInputConnection
     protected val currentInputEditorInfo: EditorInfo? get() = util?.currentInputEditorInfo
 
-    abstract fun onChar(codePoint: Int)
-    abstract fun onSpecial(keyCode: Int)
+    open fun onChar(codePoint: Int) {
+        util?.sendKeyChar(codePoint.toChar())
+    }
+
+    open fun onSpecial(keyCode: Int) {
+        util?.sendDownUpKeyEvents(keyCode)
+    }
 
     override suspend fun onLoad(context: Context) = Unit
 
