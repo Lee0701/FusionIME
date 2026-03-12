@@ -15,6 +15,7 @@
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
         android:src="@android:drawable/ic_input_add"
+        android:contentDescription="@string/settings_input_mode_add_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"

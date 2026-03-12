@@ -1,17 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.LinearLayoutCompat
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
     android:background="?android:attr/selectableItemBackground"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/title"
+        tools:text="Entry"
         android:textAppearance="?android:attr/textAppearanceListItem"
         android:gravity="center_vertical"
         android:layout_marginHorizontal="10dp"
-        android:layout_marginVertical="10dp"
+        android:layout_marginVertical="20dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"/>
+
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/move_up"
+            android:src="@drawable/arrow_upward_alt_24px"
+            android:contentDescription="@string/settings_input_mode_move_up_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/move_down"
+            android:src="@drawable/arrow_downward_alt_24px"
+            android:contentDescription="@string/settings_input_mode_move_down_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/remove"
+            android:src="@drawable/delete_24px"
+            android:contentDescription="@string/settings_input_mode_remove_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
 </androidx.appcompat.widget.LinearLayoutCompat>

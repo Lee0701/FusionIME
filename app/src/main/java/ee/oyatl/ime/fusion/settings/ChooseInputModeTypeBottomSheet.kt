@@ -20,7 +20,7 @@ class ChooseInputModeTypeBottomSheet: BottomSheetDialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentInputModeTypeBinding.inflate(layoutInflater, container, false)
         return binding.root
     }

@@ -25,6 +25,11 @@
 
     <string name="settings_input_mode_select_type_title">Select Type</string>
 
+    <string name="settings_input_mode_add_description">Add Input Mode</string>
+    <string name="settings_input_mode_move_up_description">Move Up</string>
+    <string name="settings_input_mode_move_down_description">Move Down</string>
+    <string name="settings_input_mode_remove_description">Remove</string>
+
     <string name="settings_input_mode_locale_title">Language</string>
     <string name="settings_input_mode_layout_title">Keyboard Layout</string>
     <string name="settings_input_mode_fullwidth_symbols_title">Full Width Symbols</string>
