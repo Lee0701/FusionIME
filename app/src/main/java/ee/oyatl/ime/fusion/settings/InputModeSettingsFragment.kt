@@ -26,23 +26,61 @@ class InputModeSettingsFragment: Fragment() {
     private lateinit var binding: FragmentInputModeSettingsBinding
     private lateinit var adapter: Adapter
     private var items: List<String> = listOf()
+    private var position: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if(savedInstanceState != null) {
+            this.position = savedInstanceState.getInt(KEY_POSITION)
+        }
+
         pref = PreferenceManager.getDefaultSharedPreferences(requireContext())
         items = listOf()
         try {
             val json = pref.getString(PREF_KEY, null) ?: "[]"
             items += JSONArray(json).let { arr -> (0 until arr.length()).map { arr.getString(it) } }
-        } catch (ex: ClassCastException) {
+        } catch (_: ClassCastException) {
         }
+
+        parentFragmentManager.setFragmentResultListener(
+            ChooseInputModeTypeBottomSheet.KEY_INPUT_MODE_TYPE, this
+        ) { _, result ->
+            val type = result.getString(ChooseInputModeTypeBottomSheet.FIELD_TYPE)
+            if(type != null) {
+                items += "type=$type"
+                adapter.submitList(items)
+                save()
+                onItemClicked(items.lastIndex)
+            }
+        }
+
+        parentFragmentManager.setFragmentResultListener(
+            InputModeDetailsFragment.KEY_INPUT_MODE_DETAILS, this
+        ) { _, result ->
+            activity?.setTitle(R.string.settings_input_mode_header)
+            val resultMap = result.getString(InputModeDetailsFragment.KEY_MAP)
+            println(resultMap)
+            if(resultMap != null) {
+                val mutableList = items.toMutableList()
+                mutableList[position] = resultMap
+                items = mutableList
+                adapter.submitList(items)
+                save()
+            }
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.getInt(KEY_POSITION, position)
+        save()
     }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentInputModeSettingsBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -65,24 +103,11 @@ class InputModeSettingsFragment: Fragment() {
                 Snackbar.make(binding.root, R.string.msg_input_modes_limit_reached, Snackbar.LENGTH_LONG).show()
             }
         }
-        parentFragmentManager.setFragmentResultListener(
-            ChooseInputModeTypeBottomSheet.KEY_INPUT_MODE_TYPE, this
-        ) { resultKey, result ->
-            val type = result.getString(ChooseInputModeTypeBottomSheet.FIELD_TYPE)
-            if(type != null) {
-                items += "type=$type"
-                adapter.submitList(items)
-                save()
-                onItemClicked(items.lastIndex)
-            }
-        }
     }
 
     fun onItemClicked(position: Int) {
         if(position < 0) return
-        val map = items[position]
-            .split(';').map { it.split('=') }
-            .associate { (key, value) -> key to value }.toMutableMap()
+        val map = InputModeDetailsFragment.parseMap(items[position])
         val fragment = InputModeDetailsFragment.create(map)
         if(fragment != null) {
             parentFragmentManager
@@ -94,20 +119,7 @@ class InputModeSettingsFragment: Fragment() {
                 .replace(R.id.settings, fragment)
                 .addToBackStack(null)
                 .commit()
-            activity?.title = IMEMode.Params.parse(items[position])?.getLabel(requireContext())
-            parentFragmentManager.setFragmentResultListener(
-                InputModeDetailsFragment.KEY_INPUT_MODE_DETAILS, this
-            ) { requestKey, result ->
-                activity?.setTitle(R.string.settings_input_mode_header)
-                val resultMap = result.getString(InputModeDetailsFragment.KEY_MAP)
-                if(resultMap != null) {
-                    val mutableList = items.toMutableList()
-                    mutableList[position] = resultMap
-                    items = mutableList
-                    adapter.submitList(items)
-                    save()
-                }
-            }
+            this.position = position
         }
     }
 
@@ -194,5 +206,6 @@ class InputModeSettingsFragment: Fragment() {
     companion object {
         const val PREF_KEY: String = "input_modes"
         const val FREE_INPUT_MODES_LIMIT = 3
+        const val KEY_POSITION = "position"
     }
 }
