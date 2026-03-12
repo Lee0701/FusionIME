@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
+import androidx.fragment.app.FragmentManager
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import ee.oyatl.ime.fusion.databinding.SettingsActivityBinding
@@ -39,7 +40,7 @@ class SettingsActivity : AppCompatActivity(),
         } else {
             title = savedInstanceState.getCharSequence(TITLE_TAG)
         }
-        supportFragmentManager.addOnBackStackChangedListener {
+        val onBackStackChangedListener = FragmentManager.OnBackStackChangedListener {
             if (supportFragmentManager.backStackEntryCount == 0) {
                 setTitle(R.string.settings_activity_name)
                 supportActionBar?.setDisplayHomeAsUpEnabled(false)
@@ -47,7 +48,8 @@ class SettingsActivity : AppCompatActivity(),
                 supportActionBar?.setDisplayHomeAsUpEnabled(true)
             }
         }
-        supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        supportFragmentManager.addOnBackStackChangedListener(onBackStackChangedListener)
+        onBackStackChangedListener.onBackStackChanged()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
