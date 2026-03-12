@@ -22,6 +22,8 @@
     <string name="settings_behaviour_haptic_feedback_title">Haptic Feedback</string>
     <string name="settings_behaviour_haptic_feedback_summary">Vibrate on key press.</string>
     <string name="settings_behaviour_vibration_duration_title">Vibration Duration</string>
+    <string name="settings_behaviour_always_show_soft_keyboard_title">Always Show Soft Keyboard</string>
+    <string name="settings_behaviour_always_show_soft_keyboard_summary">Show soft keyboard even if hardware keyboard is connected.</string>
 
     <string name="settings_input_mode_select_type_title">Select Type</string>
 

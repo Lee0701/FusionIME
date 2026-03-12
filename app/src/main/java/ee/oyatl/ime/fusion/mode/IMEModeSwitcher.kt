@@ -1,6 +1,8 @@
 package ee.oyatl.ime.fusion.mode
 
 import android.content.Context
+import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +11,7 @@ import android.view.inputmethod.InputConnection
 import android.widget.FrameLayout
 import ee.oyatl.ime.fusion.databinding.ModeSwitcherTabBinding
 import androidx.core.view.isVisible
+import androidx.preference.PreferenceManager
 import ee.oyatl.ime.fusion.databinding.ModeSwitcherTabBarBinding
 
 class IMEModeSwitcher(
@@ -27,6 +30,8 @@ class IMEModeSwitcher(
 
     private var inputConnection: InputConnection? = null
     private var editorInfo: EditorInfo? = null
+
+    private val preference: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
 
     var isShown: Boolean
         get() = tabBar?.isVisible == true
@@ -76,6 +81,10 @@ class IMEModeSwitcher(
         currentEntry.inputView = view
         (view.parent as ViewGroup?)?.removeView(view)
         inputView?.addView(view)
+
+        val alwaysShowSoftKeyboard = preference.getBoolean("always_show_soft_keyboard", false)
+        val hardwareKeyboard = context.resources.configuration.hardKeyboardHidden != Configuration.HARDKEYBOARDHIDDEN_YES
+        view.visibility = if(alwaysShowSoftKeyboard || !hardwareKeyboard) View.VISIBLE else View.GONE
     }
 
     private fun updateCandidateView() {
