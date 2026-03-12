@@ -163,6 +163,10 @@ class PinyinIMEMode(
             KeyEvent.KEYCODE_DEL -> processKeyCode(KeyEvent.KEYCODE_DEL)
             KeyEvent.KEYCODE_SPACE -> processKeyCode(KeyEvent.KEYCODE_SPACE)
             KeyEvent.KEYCODE_ENTER -> processKeyCode(KeyEvent.KEYCODE_ENTER)
+            KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.KEYCODE_DPAD_RIGHT,
+            KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_DPAD_DOWN -> {
+                if(!processKeyCode(keyCode)) return super.onSpecial(keyCode)
+            }
             else -> super.onSpecial(keyCode)
         }
     }
@@ -424,7 +428,7 @@ class PinyinIMEMode(
             if (!realAction) return true
 
             var activePos = keyCode - KeyEvent.KEYCODE_1
-            val currentPage: Int = candidatesContainer.getCurrentPage()
+            val currentPage: Int = candidatesContainer.currentPage
             if (activePos < decInfo.getCurrentPageSize(currentPage)) {
                 activePos = (activePos
                         + decInfo.getCurrentPageStart(currentPage))
@@ -655,7 +659,7 @@ class PinyinIMEMode(
 
                     resultStr += "0x" + Integer.toHexString(str[pos].code)
                 }
-                commitResultText(resultStr.toString())
+                commitResultText(resultStr)
                 return true
             }
         }
