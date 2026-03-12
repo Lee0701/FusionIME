@@ -191,6 +191,7 @@ class PinyinIMEMode(
         }
 
         if (processFunctionKeys(keyCode, realAction)) {
+            onReset()
             return true
         }
 
