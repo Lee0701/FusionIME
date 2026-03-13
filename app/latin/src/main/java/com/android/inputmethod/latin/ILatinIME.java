@@ -129,6 +129,10 @@ public interface ILatinIME extends KeyboardActionListener,
 
     void onCurrentInputMethodSubtypeChanged(final InputMethodSubtype subtype);
 
+    void onStartInputInternal(final EditorInfo editorInfo, final boolean restarting);
+
+    void onStartInputViewInternal(final EditorInfo editorInfo, final boolean restarting);
+
     void onWindowShown();
 
     void onWindowHidden();
@@ -136,6 +140,8 @@ public interface ILatinIME extends KeyboardActionListener,
     void onFinishInputInternal();
 
     void onFinishInputViewInternal(final boolean finishingInput);
+
+    void deallocateMemory();
 
     void onUpdateSelection(final int oldSelStart, final int oldSelEnd,
                                   final int newSelStart, final int newSelEnd,

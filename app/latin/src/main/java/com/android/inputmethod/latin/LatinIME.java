@@ -202,7 +202,7 @@ public class LatinIME extends InputMethodService implements ILatinIME {
 
     public final UIHandler mHandler = new UIHandler(this);
 
-    public static final class UIHandler extends LeakGuardHandlerWrapper<LatinIME> {
+    public static final class UIHandler extends LeakGuardHandlerWrapper<ILatinIME> {
         private static final int MSG_UPDATE_SHIFT_STATE = 0;
         private static final int MSG_PENDING_IMS_CALLBACK = 1;
         private static final int MSG_UPDATE_SUGGESTION_STRIP = 2;
@@ -227,12 +227,12 @@ public class LatinIME extends InputMethodService implements ILatinIME {
         private int mDelayInMillisecondsToUpdateSuggestions;
         private int mDelayInMillisecondsToUpdateShiftState;
 
-        public UIHandler(@Nonnull final LatinIME ownerInstance) {
+        public UIHandler(@Nonnull final ILatinIME ownerInstance) {
             super(ownerInstance);
         }
 
         public void onCreate() {
-            final LatinIME latinIme = getOwnerInstance();
+            final ILatinIME latinIme = getOwnerInstance();
             if (latinIme == null) {
                 return;
             }
@@ -245,16 +245,16 @@ public class LatinIME extends InputMethodService implements ILatinIME {
 
         @Override
         public void handleMessage(final Message msg) {
-            final LatinIME latinIme = getOwnerInstance();
+            final ILatinIME latinIme = getOwnerInstance();
             if (latinIme == null) {
                 return;
             }
-            final KeyboardSwitcher switcher = latinIme.mKeyboardSwitcher;
+            final KeyboardSwitcher switcher = latinIme.getKeyboardSwitcher();
             switch (msg.what) {
             case MSG_UPDATE_SUGGESTION_STRIP:
                 cancelUpdateSuggestionStrip();
-                latinIme.mInputLogic.performUpdateSuggestionStripSync(
-                        latinIme.mSettings.getCurrent(), msg.arg1 /* inputStyle */);
+                latinIme.getInputLogic().performUpdateSuggestionStripSync(
+                        latinIme.getSettings().getCurrent(), msg.arg1 /* inputStyle */);
                 break;
             case MSG_UPDATE_SHIFT_STATE:
                 switcher.requestUpdatingShiftState(latinIme.getCurrentAutoCapsState(),
@@ -270,14 +270,14 @@ public class LatinIME extends InputMethodService implements ILatinIME {
                 }
                 break;
             case MSG_RESUME_SUGGESTIONS:
-                latinIme.mInputLogic.restartSuggestionsOnWordTouchedByCursor(
-                        latinIme.mSettings.getCurrent(), false /* forStartInput */,
-                        latinIme.mKeyboardSwitcher.getCurrentKeyboardScriptId());
+                latinIme.getInputLogic().restartSuggestionsOnWordTouchedByCursor(
+                        latinIme.getSettings().getCurrent(), false /* forStartInput */,
+                        latinIme.getKeyboardSwitcher().getCurrentKeyboardScriptId());
                 break;
             case MSG_RESUME_SUGGESTIONS_FOR_START_INPUT:
-                latinIme.mInputLogic.restartSuggestionsOnWordTouchedByCursor(
-                        latinIme.mSettings.getCurrent(), true /* forStartInput */,
-                        latinIme.mKeyboardSwitcher.getCurrentKeyboardScriptId());
+                latinIme.getInputLogic().restartSuggestionsOnWordTouchedByCursor(
+                        latinIme.getSettings().getCurrent(), true /* forStartInput */,
+                        latinIme.getKeyboardSwitcher().getCurrentKeyboardScriptId());
                 break;
             case MSG_REOPEN_DICTIONARIES:
                 // We need to re-evaluate the currently composing word in case the script has
@@ -287,19 +287,19 @@ public class LatinIME extends InputMethodService implements ILatinIME {
                 break;
             case MSG_UPDATE_TAIL_BATCH_INPUT_COMPLETED:
                 final SuggestedWords suggestedWords = (SuggestedWords) msg.obj;
-                latinIme.mInputLogic.onUpdateTailBatchInputCompleted(
-                        latinIme.mSettings.getCurrent(),
-                        suggestedWords, latinIme.mKeyboardSwitcher);
+                latinIme.getInputLogic().onUpdateTailBatchInputCompleted(
+                        latinIme.getSettings().getCurrent(),
+                        suggestedWords, latinIme.getKeyboardSwitcher());
                 latinIme.onTailBatchInputResultShown(suggestedWords);
                 break;
             case MSG_RESET_CACHES:
-                final SettingsValues settingsValues = latinIme.mSettings.getCurrent();
-                if (latinIme.mInputLogic.retryResetCachesAndReturnSuccess(
+                final SettingsValues settingsValues = latinIme.getSettings().getCurrent();
+                if (latinIme.getInputLogic().retryResetCachesAndReturnSuccess(
                         msg.arg1 == ARG1_TRUE /* tryResumeSuggestions */,
                         msg.arg2 /* remainingTries */, this /* handler */)) {
                     // If we were able to reset the caches, then we can reload the keyboard.
                     // Otherwise, we'll do it when we can.
-                    latinIme.mKeyboardSwitcher.loadKeyboard(latinIme.getCurrentInputEditorInfo(),
+                    latinIme.getKeyboardSwitcher().loadKeyboard(latinIme.getCurrentInputEditorInfo(),
                             settingsValues, latinIme.getCurrentAutoCapsState(),
                             latinIme.getCurrentRecapitalizeState());
                 }
@@ -327,11 +327,11 @@ public class LatinIME extends InputMethodService implements ILatinIME {
 
         private void postResumeSuggestionsInternal(final boolean shouldDelay,
                 final boolean forStartInput) {
-            final LatinIME latinIme = getOwnerInstance();
+            final ILatinIME latinIme = getOwnerInstance();
             if (latinIme == null) {
                 return;
             }
-            if (!latinIme.mSettings.getCurrent().isSuggestionsEnabledPerUserSettings()) {
+            if (!latinIme.getSettings().getCurrent().isSuggestionsEnabledPerUserSettings()) {
                 return;
             }
             removeMessages(MSG_RESUME_SUGGESTIONS);
@@ -447,12 +447,12 @@ public class LatinIME extends InputMethodService implements ILatinIME {
             removeMessages(MSG_PENDING_IMS_CALLBACK);
             resetPendingImsCallback();
             mIsOrientationChanging = true;
-            final LatinIME latinIme = getOwnerInstance();
+            final ILatinIME latinIme = getOwnerInstance();
             if (latinIme == null) {
                 return;
             }
             if (latinIme.isInputViewShown()) {
-                latinIme.mKeyboardSwitcher.saveKeyboardState();
+                latinIme.getKeyboardSwitcher().saveKeyboardState();
             }
         }
 
@@ -462,7 +462,7 @@ public class LatinIME extends InputMethodService implements ILatinIME {
             mHasPendingStartInput = false;
         }
 
-        private void executePendingImsCallback(final LatinIME latinIme, final EditorInfo editorInfo,
+        private void executePendingImsCallback(final ILatinIME latinIme, final EditorInfo editorInfo,
                 boolean restarting) {
             if (mHasPendingFinishInputView) {
                 latinIme.onFinishInputViewInternal(mHasPendingFinishInput);
@@ -486,7 +486,7 @@ public class LatinIME extends InputMethodService implements ILatinIME {
                     mIsOrientationChanging = false;
                     mPendingSuccessiveImsCallback = true;
                 }
-                final LatinIME latinIme = getOwnerInstance();
+                final ILatinIME latinIme = getOwnerInstance();
                 if (latinIme != null) {
                     executePendingImsCallback(latinIme, editorInfo, restarting);
                     latinIme.onStartInputInternal(editorInfo, restarting);
@@ -507,7 +507,7 @@ public class LatinIME extends InputMethodService implements ILatinIME {
                     sendMessageDelayed(obtainMessage(MSG_PENDING_IMS_CALLBACK),
                             PENDING_IMS_CALLBACK_DURATION_MILLIS);
                 }
-                final LatinIME latinIme = getOwnerInstance();
+                final ILatinIME latinIme = getOwnerInstance();
                 if (latinIme != null) {
                     executePendingImsCallback(latinIme, editorInfo, restarting);
                     latinIme.onStartInputViewInternal(editorInfo, restarting);
@@ -522,7 +522,7 @@ public class LatinIME extends InputMethodService implements ILatinIME {
                 // Typically this is the first onFinishInputView after orientation changed.
                 mHasPendingFinishInputView = true;
             } else {
-                final LatinIME latinIme = getOwnerInstance();
+                final ILatinIME latinIme = getOwnerInstance();
                 if (latinIme != null) {
                     latinIme.onFinishInputViewInternal(finishingInput);
                     mAppliedEditorInfo = null;
@@ -538,7 +538,7 @@ public class LatinIME extends InputMethodService implements ILatinIME {
                 // Typically this is the first onFinishInput after orientation changed.
                 mHasPendingFinishInput = true;
             } else {
-                final LatinIME latinIme = getOwnerInstance();
+                final ILatinIME latinIme = getOwnerInstance();
                 if (latinIme != null) {
                     executePendingImsCallback(latinIme, null, false);
                     latinIme.onFinishInputInternal();
@@ -902,7 +902,7 @@ public class LatinIME extends InputMethodService implements ILatinIME {
         loadKeyboard();
     }
 
-    void onStartInputInternal(final EditorInfo editorInfo, final boolean restarting) {
+    public void onStartInputInternal(final EditorInfo editorInfo, final boolean restarting) {
         super.onStartInput(editorInfo, restarting);
 
         // If the primary hint language does not match the current subtype language, then try
@@ -920,7 +920,7 @@ public class LatinIME extends InputMethodService implements ILatinIME {
     }
 
     @SuppressWarnings("deprecation")
-    void onStartInputViewInternal(final EditorInfo editorInfo, final boolean restarting) {
+    public void onStartInputViewInternal(final EditorInfo editorInfo, final boolean restarting) {
         super.onStartInputView(editorInfo, restarting);
 
         mDictionaryFacilitator.onStartInput();
@@ -1128,7 +1128,7 @@ public class LatinIME extends InputMethodService implements ILatinIME {
         mInputLogic.finishInput();
     }
 
-    protected void deallocateMemory() {
+    public void deallocateMemory() {
         mKeyboardSwitcher.deallocateMemory();
     }
 
