@@ -114,10 +114,7 @@ import javax.annotation.Nullable;
 /**
  * Input method implementation for Qwerty'ish keyboard.
  */
-public class LatinIME extends InputMethodService implements KeyboardActionListener,
-        SuggestionStripView.Listener, SuggestionStripViewAccessor,
-        DictionaryFacilitator.DictionaryInitializationListener,
-        PermissionsManager.PermissionsResultCallback {
+public class LatinIME extends InputMethodService implements ILatinIME {
     static final String TAG = LatinIME.class.getSimpleName();
     private static final boolean TRACE = false;
 
@@ -700,7 +697,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         }
     }
 
-    void resetDictionaryFacilitatorIfNecessary() {
+    public void resetDictionaryFacilitatorIfNecessary() {
         final Locale subtypeSwitcherLocale = mRichImm.getCurrentSubtypeLocale();
         final Locale subtypeLocale;
         if (subtypeSwitcherLocale == null) {
@@ -744,7 +741,8 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
     /**
      * Reset suggest by loading the main dictionary of the current locale.
      */
-    /* package private */ void resetSuggestMainDict() {
+    /* package private */
+    public void resetSuggestMainDict() {
         final SettingsValues settingsValues = mSettings.getCurrent();
         mDictionaryFacilitator.resetDictionaries(this /* context */,
                 mDictionaryFacilitator.getLocale(), settingsValues.mUseContactsDict,
@@ -1108,7 +1106,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         setNavigationBarVisibility(false);
     }
 
-    void onFinishInputInternal() {
+    public void onFinishInputInternal() {
         super.onFinishInput();
 
         mDictionaryFacilitator.onFinishInput(this);
@@ -1118,7 +1116,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         }
     }
 
-    void onFinishInputViewInternal(final boolean finishingInput) {
+    public void onFinishInputViewInternal(final boolean finishingInput) {
         super.onFinishInputView(finishingInput);
         cleanupInternalStateForFinishInput();
     }
@@ -1362,11 +1360,11 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         }
     }
 
-    int getCurrentAutoCapsState() {
+    public int getCurrentAutoCapsState() {
         return mInputLogic.getCurrentAutoCapsState(mSettings.getCurrent());
     }
 
-    int getCurrentRecapitalizeState() {
+    public int getCurrentRecapitalizeState() {
         return mInputLogic.getCurrentRecapitalizeState();
     }
 
@@ -1552,8 +1550,8 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
     }
 
     // This method must run on the UI Thread.
-    void showGesturePreviewAndSuggestionStrip(@Nonnull final SuggestedWords suggestedWords,
-            final boolean dismissGestureFloatingPreviewText) {
+    public void showGesturePreviewAndSuggestionStrip(@Nonnull final SuggestedWords suggestedWords,
+                                                     final boolean dismissGestureFloatingPreviewText) {
         showSuggestionStrip(suggestedWords);
         final MainKeyboardView mainKeyboardView = mKeyboardSwitcher.getMainKeyboardView();
         mainKeyboardView.showGestureFloatingPreviewText(suggestedWords,
@@ -1857,7 +1855,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
                 ActivityOptions.makeBasic().setLaunchDisplayId(currentDisplayId).toBundle());
     }
 
-    void launchSettings(final String extraEntryValue) {
+    public void launchSettings(final String extraEntryValue) {
         mInputLogic.commitTyped(mSettings.getCurrent(), LastComposedWord.NOT_A_SEPARATOR);
         requestHideSelf(0);
         final MainKeyboardView mainKeyboardView = mKeyboardSwitcher.getMainKeyboardView();
@@ -2029,5 +2027,30 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
             getWindow().getWindow().setNavigationBarColor(
                     visible ? Color.BLACK : Color.TRANSPARENT);
         }
+    }
+
+    @Override
+    public Context getContext() {
+        return this;
+    }
+
+    @Override
+    public UIHandler getHandler() {
+        return mHandler;
+    }
+
+    @Override
+    public InputLogic getInputLogic() {
+        return mInputLogic;
+    }
+
+    @Override
+    public Settings getSettings() {
+        return mSettings;
+    }
+
+    @Override
+    public KeyboardSwitcher getKeyboardSwitcher() {
+        return mKeyboardSwitcher;
     }
 }
