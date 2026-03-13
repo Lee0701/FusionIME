@@ -292,6 +292,15 @@ abstract class CommonIMEMode(
         listener.onCandidateViewVisibilityChange(visible)
     }
 
+    override fun updateSelection(
+        oldSelStart: Int,
+        oldSelEnd: Int,
+        newSelStart: Int,
+        newSelEnd: Int,
+        candidatesStart: Int,
+        candidatesEnd: Int
+    ) = Unit
+
     protected fun requestHideSelf(flags: Int) {
         listener.onRequestHideSelf(flags)
     }

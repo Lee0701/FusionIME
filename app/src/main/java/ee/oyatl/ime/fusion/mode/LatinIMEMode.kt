@@ -125,6 +125,22 @@ abstract class LatinIMEMode(
         }
     }
 
+    override fun updateSelection(
+        oldSelStart: Int,
+        oldSelEnd: Int,
+        newSelStart: Int,
+        newSelEnd: Int,
+        candidatesStart: Int,
+        candidatesEnd: Int
+    ) {
+        super.updateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd, candidatesStart, candidatesEnd)
+        if(isInputViewShown &&
+            inputLogic?.onUpdateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd, settings?.current) == true) {
+
+            keyboardSwitcher?.requestUpdatingShiftState(currentAutoCapsState, currentRecapitalizeState)
+        }
+    }
+
     fun loadSettings() {
         val editorInfo = currentInputEditorInfo ?: return
         val inputAttributes = InputAttributes(
