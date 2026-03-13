@@ -105,7 +105,9 @@ abstract class KoreanIMEMode(
                 if(currentState != HangulCombiner.State.Initial) {
                     currentState = currentState.previous as HangulCombiner.State
                     wordComposer.compose(currentState.combined.toString())
-                } else if(!wordComposer.delete(1)) {
+                } else if(wordComposer.composingText.isNotEmpty()) {
+                    wordComposer.delete(1)
+                } else {
                     currentInputConnection?.deleteSurroundingText(1, 0)
                 }
                 renderInputView()
@@ -121,14 +123,22 @@ abstract class KoreanIMEMode(
             KeyEvent.KEYCODE_DPAD_LEFT -> {
                 currentState = HangulCombiner.State.Initial
                 wordComposer.commit()
-                wordComposer.moveCursorLeft(1)
-                convert()
+                if(wordComposer.composingText.isNotEmpty()) {
+                    wordComposer.moveCursorRelative(-1)
+                    convert()
+                } else {
+                    util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_DPAD_LEFT)
+                }
             }
             KeyEvent.KEYCODE_DPAD_RIGHT -> {
                 currentState = HangulCombiner.State.Initial
                 wordComposer.commit()
-                wordComposer.moveCursorRight(1)
-                convert()
+                if(wordComposer.composingText.isNotEmpty()) {
+                    wordComposer.moveCursorRelative(1)
+                    convert()
+                } else {
+                    util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_DPAD_RIGHT)
+                }
             }
             else -> super.onSpecial(keyCode)
         }

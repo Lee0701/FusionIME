@@ -18,7 +18,7 @@ class WordComposer {
     fun commit(text: String) {
         if(text.isEmpty()) return
         composingWord = composingWord.take(cursor) + text + composingWord.drop(cursor)
-        moveCursorRight(text.length)
+        moveCursorRelative(text.length)
         composingChar = ""
     }
 
@@ -27,32 +27,30 @@ class WordComposer {
     fun delete(length: Int): Boolean {
         val result = cursor >= length
         composingWord = composingWord.take(cursor).dropLast(length) + composingChar + composingWord.drop(cursor)
-        moveCursorLeft(length)
+        moveCursorRelative(-length)
         return result
     }
 
     fun consume(length: Int) {
         commit(composingChar)
         composingWord = composingText.drop(length)
-        moveCursorLeft(length)
+        moveCursorRelative(-length)
     }
 
-    fun moveCursor(position: Int) {
+    fun moveCursor(position: Int): Boolean {
         cursor = position
         cursor = max(cursor, 0)
         cursor = min(cursor, composingWord.length)
+        return cursor == position
     }
 
-    fun moveCursorLeft(amount: Int) {
-        moveCursor(cursor - amount)
-    }
-
-    fun moveCursorRight(amount: Int) {
-        moveCursor(cursor + amount)
+    fun moveCursorRelative(amount: Int): Boolean {
+        return moveCursor(cursor + amount)
     }
 
     fun reset() {
         composingWord = ""
         composingChar = ""
+        cursor = 0
     }
 }
