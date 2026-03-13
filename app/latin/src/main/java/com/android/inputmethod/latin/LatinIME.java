@@ -115,7 +115,7 @@ import javax.annotation.Nullable;
  * Input method implementation for Qwerty'ish keyboard.
  */
 public class LatinIME extends InputMethodService implements ILatinIME {
-    static final String TAG = LatinIME.class.getSimpleName();
+    public static final String TAG = LatinIME.class.getSimpleName();
     private static final boolean TRACE = false;
 
     private static final int PERIOD_FOR_AUDIO_AND_HAPTIC_FEEDBACK_IN_KEY_REPEAT = 2;

@@ -99,8 +99,8 @@ abstract class CommonIMEMode(
     protected var util: KeyEventUtil? = null
         private set
     protected var passwordField: Boolean = false
-    protected val currentInputConnection: InputConnection? get() = util?.currentInputConnection
-    protected val currentInputEditorInfo: EditorInfo? get() = util?.currentInputEditorInfo
+    protected open val currentInputConnection: InputConnection? get() = util?.currentInputConnection
+    protected open val currentInputEditorInfo: EditorInfo? get() = util?.currentInputEditorInfo
 
     abstract fun onChar(codePoint: Int)
     abstract fun onSpecial(keyCode: Int)

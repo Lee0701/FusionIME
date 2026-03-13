@@ -86,7 +86,7 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
         mLatinIME = latinIme;
         mRichImm = RichInputMethodManager.getInstance();
         mState = new KeyboardState(this);
-        mIsHardwareAcceleratedDrawingEnabled = mLatinIME.enableHardwareAcceleration();
+//        mIsHardwareAcceleratedDrawingEnabled = mLatinIME.enableHardwareAcceleration();
     }
 
     public void updateKeyboardTheme(@NonNull Context displayContext) {

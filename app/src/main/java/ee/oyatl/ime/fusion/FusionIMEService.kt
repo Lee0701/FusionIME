@@ -14,6 +14,8 @@ import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.preference.PreferenceManager
+import com.android.inputmethod.latin.RichInputMethodManager
+import com.android.inputmethod.latin.settings.Settings
 import ee.oyatl.ime.fusion.mode.IMEMode
 import ee.oyatl.ime.fusion.mode.IMEModeSwitcher
 import ee.oyatl.ime.fusion.mode.LatinIMEMode
@@ -36,6 +38,10 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
         onInit()
         onLoad()
         preference.registerOnSharedPreferenceChangeListener(this)
+
+        // LatinIMEMode
+        Settings.init(this)
+        RichInputMethodManager.init(this)
     }
 
     override fun onDestroy() {
