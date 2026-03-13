@@ -1,36 +1,58 @@
 package ee.oyatl.ime.fusion.korean
 
+import kotlin.math.max
+import kotlin.math.min
+
 class WordComposer {
-    private val history: MutableList<String> = mutableListOf()
-    private var composing: String = ""
-    val word: String get() = history.lastOrNull().orEmpty() + composing
+    private var composingWord: String = ""
+    private var composingChar: String = ""
+    private var cursor: Int = 0
+    val composingText: String get() = composingWord.take(cursor) + composingChar + composingWord.drop(cursor)
+    val textBeforeCursor: String get() = composingWord.take(cursor) + composingChar
+    val cursorPosition: Int get() = cursor
 
     fun compose(text: String) {
-        composing = text
+        composingChar = text
     }
 
     fun commit(text: String) {
         if(text.isEmpty()) return
-        history += history.lastOrNull().orEmpty() + text
-        composing = ""
+        composingWord = composingWord.take(cursor) + text + composingWord.drop(cursor)
+        moveCursorRight(text.length)
+        composingChar = ""
     }
 
+    fun commit() = this.commit(composingChar)
+
     fun delete(length: Int): Boolean {
-        (0 until length).forEach { _ ->
-            history.removeLastOrNull() ?: return false
-        }
-        return true
+        val result = cursor >= length
+        composingWord = composingWord.take(cursor).dropLast(length) + composingChar + composingWord.drop(cursor)
+        moveCursorLeft(length)
+        return result
     }
 
     fun consume(length: Int) {
-        commit(composing)
-        val newHistory = history.map { it.drop(length) }.filter { it.isNotEmpty() }
-        history.clear()
-        history += newHistory
+        commit(composingChar)
+        composingWord = composingText.drop(length)
+        moveCursorLeft(length)
+    }
+
+    fun moveCursor(position: Int) {
+        cursor = position
+        cursor = max(cursor, 0)
+        cursor = min(cursor, composingWord.length)
+    }
+
+    fun moveCursorLeft(amount: Int) {
+        moveCursor(cursor - amount)
+    }
+
+    fun moveCursorRight(amount: Int) {
+        moveCursor(cursor + amount)
     }
 
     fun reset() {
-        history.clear()
-        composing = ""
+        composingWord = ""
+        composingChar = ""
     }
 }

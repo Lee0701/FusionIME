@@ -75,7 +75,7 @@ abstract class KoreanIMEMode(
 
     private fun convert() {
         executor.execute {
-            val candidates = hanjaConverter.convert(wordComposer.word)
+            val candidates = hanjaConverter.convert(wordComposer.textBeforeCursor)
             handler.post { submitCandidates(candidates) }
         }
     }
@@ -86,7 +86,7 @@ abstract class KoreanIMEMode(
     }
 
     private fun renderInputView() {
-        currentInputConnection?.setComposingText(wordComposer.word, 1)
+        currentInputConnection?.setComposingText(wordComposer.composingText, 1)
         postConvert()
     }
 
@@ -106,7 +106,7 @@ abstract class KoreanIMEMode(
                     currentState = currentState.previous as HangulCombiner.State
                     wordComposer.compose(currentState.combined.toString())
                 } else if(!wordComposer.delete(1)) {
-                    util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_DEL)
+                    currentInputConnection?.deleteSurroundingText(1, 0)
                 }
                 renderInputView()
             }
@@ -117,6 +117,18 @@ abstract class KoreanIMEMode(
             KeyEvent.KEYCODE_ENTER -> {
                 onReset()
                 util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_ENTER)
+            }
+            KeyEvent.KEYCODE_DPAD_LEFT -> {
+                currentState = HangulCombiner.State.Initial
+                wordComposer.commit()
+                wordComposer.moveCursorLeft(1)
+                convert()
+            }
+            KeyEvent.KEYCODE_DPAD_RIGHT -> {
+                currentState = HangulCombiner.State.Initial
+                wordComposer.commit()
+                wordComposer.moveCursorRight(1)
+                convert()
             }
             else -> super.onSpecial(keyCode)
         }

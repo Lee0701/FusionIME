@@ -54,13 +54,13 @@ abstract class VietIMEMode(
     }
 
     private fun convert() {
-        val candidates = hanNomConverter?.convert(wordComposer.word, keyboardMode) ?: return
+        val candidates = hanNomConverter?.convert(wordComposer.composingText, keyboardMode) ?: return
         bestCandidate = candidates.firstOrNull() as? HanNomConverter.Candidate
         submitCandidates(candidates)
     }
 
     private fun renderInputView() {
-        val composing = chuQuocNguTableConverter.convert(wordComposer.word, keyboardMode)
+        val composing = chuQuocNguTableConverter.convert(wordComposer.composingText, keyboardMode)
         currentInputConnection?.setComposingText(composing, 1)
         convert()
     }
@@ -82,7 +82,7 @@ abstract class VietIMEMode(
                 }
             }
             KeyEvent.KEYCODE_ENTER -> {
-                val send = wordComposer.word.isEmpty()
+                val send = wordComposer.composingText.isEmpty()
                 onReset()
                 if(send) {
                     if(util?.sendDefaultEditorAction(true) != true)
@@ -90,7 +90,7 @@ abstract class VietIMEMode(
                 }
             }
             KeyEvent.KEYCODE_DEL -> {
-                if(wordComposer.word.isNotEmpty()) {
+                if(wordComposer.composingText.isNotEmpty()) {
                     wordComposer.delete(1)
                     renderInputView()
                 } else {
