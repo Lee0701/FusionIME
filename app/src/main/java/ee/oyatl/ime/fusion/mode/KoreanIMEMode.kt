@@ -68,6 +68,7 @@ abstract class KoreanIMEMode(
             if(candidate is CandidateView.VarLengthCandidate) candidate.inputLength
             else candidate.text.length
         wordComposer.consume(length)
+        wordComposer.moveCursor(wordComposer.composingText.length)
         currentState = HangulCombiner.State.Initial
         inputConnection.commitText(candidate.text, 1)
         renderInputView()
@@ -86,7 +87,7 @@ abstract class KoreanIMEMode(
     }
 
     private fun renderInputView() {
-        currentInputConnection?.setComposingText(wordComposer.composingText, 1)
+        currentInputConnection?.setComposingText(wordComposer.getSpannableSurfaceString(), 1)
         postConvert()
     }
 
@@ -125,7 +126,7 @@ abstract class KoreanIMEMode(
                 wordComposer.commit()
                 if(wordComposer.composingText.isNotEmpty()) {
                     wordComposer.moveCursorRelative(-1)
-                    convert()
+                    renderInputView()
                 } else {
                     util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_DPAD_LEFT)
                 }
@@ -135,7 +136,7 @@ abstract class KoreanIMEMode(
                 wordComposer.commit()
                 if(wordComposer.composingText.isNotEmpty()) {
                     wordComposer.moveCursorRelative(1)
-                    convert()
+                    renderInputView()
                 } else {
                     util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_DPAD_RIGHT)
                 }

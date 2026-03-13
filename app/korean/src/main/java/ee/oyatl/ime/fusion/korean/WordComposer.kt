@@ -1,5 +1,9 @@
 package ee.oyatl.ime.fusion.korean
 
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.style.BackgroundColorSpan
+import android.text.style.UnderlineSpan
 import kotlin.math.max
 import kotlin.math.min
 
@@ -46,6 +50,15 @@ class WordComposer {
 
     fun moveCursorRelative(amount: Int): Boolean {
         return moveCursor(cursor + amount)
+    }
+
+    fun getSpannableSurfaceString(): CharSequence {
+        val builder = SpannableStringBuilder()
+        builder.append(composingWord.take(cursor), BackgroundColorSpan(0x664DB6AC), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        builder.append(composingChar, BackgroundColorSpan(0x664DB6AC), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        builder.append(composingWord.drop(cursor))
+        builder.setSpan(UnderlineSpan(), 0, composingWord.length + composingChar.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        return builder
     }
 
     fun reset() {
