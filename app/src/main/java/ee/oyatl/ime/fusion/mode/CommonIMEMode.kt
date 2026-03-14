@@ -286,9 +286,6 @@ abstract class CommonIMEMode(
     protected fun submitCandidates(candidates: List<CandidateView.Candidate>) {
         candidateView?.submitList(candidates)
         val visible = candidates.isNotEmpty()
-        val candidateView = candidateView as? View
-        candidateView?.visibility = if(visible) View.VISIBLE else View.GONE
-        if(visible) candidateView?.bringToFront()
         listener.onCandidateViewVisibilityChange(visible)
     }
 

@@ -96,14 +96,13 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
     }
 
     override fun onCreateInputView(): View {
+
         imeView = LinearLayout(this)
         imeView.orientation = LinearLayout.VERTICAL
-        val candidateSwitchView = FrameLayout(this)
-        candidateSwitchView.addView(imeModeSwitcher.initTabBarView(this))
-        candidateSwitchView.addView(imeModeSwitcher.createCandidateView())
-        imeView.addView(candidateSwitchView)
+        imeView.addView(imeModeSwitcher.createCandidateView())
         imeView.addView(imeModeSwitcher.createInputView())
         imeView.fitsSystemWindows = true
+
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) updateNavigationBar()
         onSwitchInputMode(0)
         return imeView
@@ -156,7 +155,8 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
     }
 
     override fun onCandidateViewVisibilityChange(visible: Boolean) {
-        imeModeSwitcher.isShown = !visible
+        if(visible) imeModeSwitcher.showCandidates()
+        else imeModeSwitcher.showTabBar()
     }
 
     override fun onUpdateSelection(

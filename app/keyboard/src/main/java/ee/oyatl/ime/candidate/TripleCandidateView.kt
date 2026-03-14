@@ -2,7 +2,6 @@ package ee.oyatl.ime.candidate
 
 import android.content.Context
 import android.util.AttributeSet
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
@@ -20,6 +19,10 @@ class TripleCandidateView(
         ).apply {
             justifyContent = JustifyContent.SPACE_AROUND
         }
+        layoutParams = LayoutParams(
+            LayoutParams.MATCH_PARENT,
+            context.resources.getDimensionPixelSize(R.dimen.candidate_view_height)
+        )
         setHasFixedSize(true)
     }
 

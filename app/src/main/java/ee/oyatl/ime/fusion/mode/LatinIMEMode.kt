@@ -394,7 +394,7 @@ abstract class LatinIMEMode(
     fun setSuggestedWords(suggestedWords: SuggestedWords) {
         val wordList = (0 until suggestedWords.size()).map { suggestedWords.getInfo(it) }
         val candidates = wordList.mapIndexed { i, s -> LatinCandidate(i, s) }
-        submitCandidates(if(candidates.size > 1) candidates.drop(1) else candidates)
+        submitCandidates(candidates)
     }
 
     override fun setNeutralSuggestionStrip() {

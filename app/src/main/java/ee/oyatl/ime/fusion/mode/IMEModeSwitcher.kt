@@ -12,6 +12,7 @@ import android.widget.FrameLayout
 import ee.oyatl.ime.fusion.databinding.ModeSwitcherTabBinding
 import androidx.core.view.isVisible
 import androidx.preference.PreferenceManager
+import ee.oyatl.ime.fusion.databinding.CandidateViewWrapperBinding
 import ee.oyatl.ime.fusion.databinding.ModeSwitcherTabBarBinding
 
 class IMEModeSwitcher(
@@ -26,27 +27,20 @@ class IMEModeSwitcher(
     val currentMode: IMEMode get() = currentEntry.imeMode
 
     private var inputView: FrameLayout? = null
-    private var candidateView: FrameLayout? = null
+    private var candidateView: CandidateViewWrapperBinding? = null
 
     private var inputConnection: InputConnection? = null
     private var editorInfo: EditorInfo? = null
 
     private val preference: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
 
-    var isShown: Boolean
-        get() = tabBar?.isVisible == true
-        set(v) {
-            if(v) tabBar?.bringToFront()
-            tabBar?.visibility = if(v) View.VISIBLE else View.INVISIBLE
-        }
-
-    private var tabBar: ViewGroup? = null
     private var tabs: List<ModeSwitcherTabBinding> = listOf()
 
     fun onStart(inputConnection: InputConnection, editorInfo: EditorInfo) {
         this.inputConnection = inputConnection
         this.editorInfo = editorInfo
         currentEntry.imeMode.onStart(inputConnection, editorInfo)
+        showTabBar()
     }
 
     fun onFinish() {
@@ -62,9 +56,12 @@ class IMEModeSwitcher(
     }
 
     fun createCandidateView(): View {
-        val candidateView = FrameLayout(context)
+        val inflater = LayoutInflater.from(context)
+        val candidateView = CandidateViewWrapperBinding.inflate(inflater)
         this.candidateView = candidateView
-        return candidateView
+        candidateView.tabViewFrame.addView(this.initTabBarView(context))
+        candidateView.closeButton.setOnClickListener { showTabBar() }
+        return candidateView.root
     }
 
     fun resetInputViews() {
@@ -88,11 +85,12 @@ class IMEModeSwitcher(
     }
 
     private fun updateCandidateView() {
-        candidateView?.removeAllViews()
+        val candidateView = candidateView ?: return
+        candidateView.candidateView.removeAllViews()
         val view = currentEntry.candidateView ?: currentEntry.imeMode.createCandidateView(context)
         currentEntry.candidateView = view
         (view.parent as ViewGroup?)?.removeView(view)
-        candidateView?.addView(view)
+        candidateView.candidateView.addView(view)
     }
 
     fun switchMode(index: Int) {
@@ -107,6 +105,23 @@ class IMEModeSwitcher(
         tabs[index].root.isSelected = true
     }
 
+    fun showCandidates() {
+        val candidateView = candidateView ?: return
+        setShown(candidateView.candidateViewFrame, true)
+        setShown(candidateView.tabViewFrame, false)
+    }
+
+    fun showTabBar() {
+        val candidateView = candidateView ?: return
+        setShown(candidateView.tabViewFrame, true)
+        setShown(candidateView.candidateViewFrame, false)
+    }
+
+    fun setShown(view: View, shown: Boolean) {
+        view.visibility = if(shown) View.VISIBLE else View.GONE
+        if(shown) view.bringToFront()
+    }
+
     fun initTabBarView(context: Context): View {
         val layoutInflater = LayoutInflater.from(context)
         val tabBar = ModeSwitcherTabBarBinding.inflate(layoutInflater, null, false)
@@ -118,7 +133,6 @@ class IMEModeSwitcher(
             }
             return@mapIndexed tab
         }
-        this.tabBar = tabBar.root
         return tabBar.root
     }
 
