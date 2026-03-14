@@ -68,6 +68,7 @@ abstract class KoreanIMEMode(
             if(candidate is CandidateView.VarLengthCandidate) candidate.inputLength
             else candidate.text.length
         wordComposer.consume(length)
+        wordComposer.moveCursor(wordComposer.composingText.length)
         currentState = HangulCombiner.State.Initial
         inputConnection.commitText(candidate.text, 1)
         renderInputView()
@@ -75,7 +76,7 @@ abstract class KoreanIMEMode(
 
     private fun convert() {
         executor.execute {
-            val candidates = hanjaConverter.convert(wordComposer.word)
+            val candidates = hanjaConverter.convert(wordComposer.textBeforeCursor)
             handler.post { submitCandidates(candidates) }
         }
     }
@@ -86,7 +87,7 @@ abstract class KoreanIMEMode(
     }
 
     private fun renderInputView() {
-        currentInputConnection?.setComposingText(wordComposer.word, 1)
+        currentInputConnection?.setComposingText(wordComposer.getSpannableSurfaceString(), 1)
         postConvert()
     }
 
@@ -105,8 +106,10 @@ abstract class KoreanIMEMode(
                 if(currentState != HangulCombiner.State.Initial) {
                     currentState = currentState.previous as HangulCombiner.State
                     wordComposer.compose(currentState.combined.toString())
-                } else if(!wordComposer.delete(1)) {
-                    util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_DEL)
+                } else if(wordComposer.composingText.isNotEmpty()) {
+                    wordComposer.delete(1)
+                } else {
+                    currentInputConnection?.deleteSurroundingText(1, 0)
                 }
                 renderInputView()
             }
@@ -117,6 +120,26 @@ abstract class KoreanIMEMode(
             KeyEvent.KEYCODE_ENTER -> {
                 onReset()
                 util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_ENTER)
+            }
+            KeyEvent.KEYCODE_DPAD_LEFT -> {
+                currentState = HangulCombiner.State.Initial
+                wordComposer.commit()
+                if(wordComposer.composingText.isNotEmpty()) {
+                    wordComposer.moveCursorRelative(-1)
+                    renderInputView()
+                } else {
+                    util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_DPAD_LEFT)
+                }
+            }
+            KeyEvent.KEYCODE_DPAD_RIGHT -> {
+                currentState = HangulCombiner.State.Initial
+                wordComposer.commit()
+                if(wordComposer.composingText.isNotEmpty()) {
+                    wordComposer.moveCursorRelative(1)
+                    renderInputView()
+                } else {
+                    util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_DPAD_RIGHT)
+                }
             }
             else -> super.onSpecial(keyCode)
         }
