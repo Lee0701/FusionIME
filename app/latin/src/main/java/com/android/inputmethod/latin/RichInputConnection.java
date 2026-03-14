@@ -125,7 +125,7 @@ public final class RichInputConnection implements PrivateCommandPerformer {
      */
     private SpannableStringBuilder mTempObjectForCommitText = new SpannableStringBuilder();
 
-    private final InputMethodService mParent;
+    private final ILatinIME mParent;
     private InputConnection mIC;
     private int mNestLevel;
 
@@ -134,7 +134,7 @@ public final class RichInputConnection implements PrivateCommandPerformer {
      */
     private long mLastSlowInputConnectionTime = -SLOW_INPUTCONNECTION_PERSIST_MS;
 
-    public RichInputConnection(final InputMethodService parent) {
+    public RichInputConnection(final ILatinIME parent) {
         mParent = parent;
         mIC = null;
         mNestLevel = 0;

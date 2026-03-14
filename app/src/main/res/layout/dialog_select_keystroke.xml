@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/summary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/key_name"
+        android:hint="@string/settings_dialog_keystroke_key_name"
+        android:enabled="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/key_code"
+        android:hint="@string/settings_dialog_keystroke_key_code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/key_shift"
+        android:text="@string/settings_dialog_keystroke_shift"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/key_control"
+        android:text="@string/settings_dialog_keystroke_control"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/key_alt"
+        android:text="@string/settings_dialog_keystroke_alt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/key_meta"
+        android:text="@string/settings_dialog_keystroke_meta"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</androidx.appcompat.widget.LinearLayoutCompat>

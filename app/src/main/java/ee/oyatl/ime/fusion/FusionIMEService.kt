@@ -9,16 +9,19 @@ import android.view.KeyEvent
 import android.view.View
 import android.view.WindowInsets.Type
 import android.view.inputmethod.EditorInfo
-import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.preference.PreferenceManager
+import com.android.inputmethod.latin.RichInputMethodManager
+import com.android.inputmethod.latin.settings.Settings
 import ee.oyatl.ime.fusion.mode.IMEMode
 import ee.oyatl.ime.fusion.mode.IMEModeSwitcher
 import ee.oyatl.ime.fusion.mode.LatinIMEMode
 import ee.oyatl.ime.fusion.mode.PinyinIMEMode
+import ee.oyatl.ime.fusion.preference.KeyStrokePreference
 import ee.oyatl.ime.fusion.settings.InputModeSettingsFragment
+import ee.oyatl.ime.keyboard.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -29,6 +32,7 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
     private lateinit var preference: SharedPreferences
     private lateinit var imeModeSwitcher: IMEModeSwitcher
     private lateinit var imeView: LinearLayout
+    private var hardwareLanguageKeyStroke: KeyStrokePreference.KeyStroke = KeyStrokePreference.KeyStroke()
 
     override fun onCreate() {
         super.onCreate()
@@ -36,6 +40,10 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
         onInit()
         onLoad()
         preference.registerOnSharedPreferenceChangeListener(this)
+
+        // LatinIMEMode
+        Settings.init(this)
+        RichInputMethodManager.init(this)
     }
 
     override fun onDestroy() {
@@ -72,6 +80,9 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
     }
 
     fun onLoad() {
+        hardwareLanguageKeyStroke = KeyStrokePreference.KeyStroke
+            .parse(preference.getString("hardware_language_key", null) ?: "")
+            ?: hardwareLanguageKeyStroke
         coroutineScope.launch {
             imeModeSwitcher.entries.forEach { it.imeMode.onLoad(this@FusionIMEService) }
         }
@@ -92,12 +103,10 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
     override fun onCreateInputView(): View {
         imeView = LinearLayout(this)
         imeView.orientation = LinearLayout.VERTICAL
-        val candidateSwitchView = FrameLayout(this)
-        candidateSwitchView.addView(imeModeSwitcher.initTabBarView(this))
-        candidateSwitchView.addView(imeModeSwitcher.createCandidateView())
-        imeView.addView(candidateSwitchView)
+        imeView.addView(imeModeSwitcher.createCandidateView())
         imeView.addView(imeModeSwitcher.createInputView())
         imeView.fitsSystemWindows = true
+
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) updateNavigationBar()
         onSwitchInputMode(0)
         return imeView
@@ -127,6 +136,10 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
+        if(hardwareLanguageKeyStroke.matches(event)) {
+            onLanguageSwitch()
+            return true
+        }
         if(event.isSystem || event.isCtrlPressed || event.isAltPressed || event.isMetaPressed)
             return super.onKeyDown(keyCode, event)
         imeModeSwitcher.currentMode.onKeyDown(keyCode, event.metaState)
@@ -134,6 +147,7 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
+        if(hardwareLanguageKeyStroke.matches(event)) return true
         if(event.isSystem || event.isCtrlPressed || event.isAltPressed || event.isMetaPressed)
             return super.onKeyUp(keyCode, event)
         imeModeSwitcher.currentMode.onKeyUp(keyCode, event.metaState)
@@ -150,7 +164,22 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
     }
 
     override fun onCandidateViewVisibilityChange(visible: Boolean) {
-        imeModeSwitcher.isShown = !visible
+        if(visible) imeModeSwitcher.showCandidates()
+        else imeModeSwitcher.showTabBar()
+    }
+
+    override fun onUpdateSelection(
+        oldSelStart: Int,
+        oldSelEnd: Int,
+        newSelStart: Int,
+        newSelEnd: Int,
+        candidatesStart: Int,
+        candidatesEnd: Int
+    ) {
+        super.onUpdateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd, candidatesStart, candidatesEnd)
+        imeModeSwitcher.currentMode.updateSelection(
+            oldSelStart, oldSelEnd, newSelStart, newSelEnd, candidatesStart, candidatesEnd
+        )
     }
 
     override fun onRequestHideSelf(flags: Int) {
@@ -170,8 +199,8 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
     @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
     private fun updateNavigationBar() {
         val typedValue = TypedValue()
-        val theme = ContextThemeWrapper(this, ee.oyatl.ime.keyboard.R.style.Theme_FusionIME_Keyboard).theme
-        theme.resolveAttribute(ee.oyatl.ime.keyboard.R.attr.backgroundColor, typedValue, true)
+        val theme = ContextThemeWrapper(this, R.style.Theme_FusionIME_Keyboard).theme
+        theme.resolveAttribute(R.attr.backgroundColor, typedValue, true)
         window.window?.decorView?.setOnApplyWindowInsetsListener { view, insets ->
             val statusBarInsets = insets.getInsets(Type.statusBars())
             view.setBackgroundColor(typedValue.data)

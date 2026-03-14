@@ -99,8 +99,8 @@ abstract class CommonIMEMode(
     protected var util: KeyEventUtil? = null
         private set
     protected var passwordField: Boolean = false
-    protected val currentInputConnection: InputConnection? get() = util?.currentInputConnection
-    protected val currentInputEditorInfo: EditorInfo? get() = util?.currentInputEditorInfo
+    protected open val currentInputConnection: InputConnection? get() = util?.currentInputConnection
+    protected open val currentInputEditorInfo: EditorInfo? get() = util?.currentInputEditorInfo
 
     open fun onChar(codePoint: Int) {
         util?.sendKeyChar(codePoint.toChar())
@@ -288,11 +288,17 @@ abstract class CommonIMEMode(
     protected fun submitCandidates(candidates: List<CandidateView.Candidate>) {
         candidateView?.submitList(candidates)
         val visible = candidates.isNotEmpty()
-        val candidateView = candidateView as? View
-        candidateView?.visibility = if(visible) View.VISIBLE else View.GONE
-        if(visible) candidateView?.bringToFront()
         listener.onCandidateViewVisibilityChange(visible)
     }
+
+    override fun updateSelection(
+        oldSelStart: Int,
+        oldSelEnd: Int,
+        newSelStart: Int,
+        newSelEnd: Int,
+        candidatesStart: Int,
+        candidatesEnd: Int
+    ) = Unit
 
     protected fun requestHideSelf(flags: Int) {
         listener.onRequestHideSelf(flags)

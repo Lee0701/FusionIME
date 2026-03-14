@@ -20,6 +20,7 @@ import ee.oyatl.ime.keyboard.databinding.KbdKeyBinding
 import ee.oyatl.ime.keyboard.databinding.KbdKeyboardBinding
 import ee.oyatl.ime.keyboard.popup.Popup
 import ee.oyatl.ime.keyboard.popup.PreviewPopup
+import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
 
@@ -48,7 +49,8 @@ class DefaultKeyboardView(
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) event.getRawY(event.actionIndex)
                 else event.getY(event.actionIndex) + location[1]
             val x = rawX.roundToInt() - location[0]
-            val y = rawY.roundToInt() - location[1]
+            // Clamp event from outside (maybe intercepted from candidate view?)
+            val y = max(0, rawY.roundToInt() - location[1])
 
             when(event.actionMasked) {
                 MotionEvent.ACTION_DOWN, MotionEvent.ACTION_POINTER_DOWN -> {
