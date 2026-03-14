@@ -17,6 +17,12 @@ interface IMEMode {
     fun onKeyDown(keyCode: Int, metaState: Int)
     fun onKeyUp(keyCode: Int, metaState: Int)
 
+    fun updateSelection(
+        oldSelStart: Int, oldSelEnd: Int,
+        newSelStart: Int, newSelEnd: Int,
+        candidatesStart: Int, candidatesEnd: Int
+    )
+
     interface Listener {
         fun onLanguageSwitch()
         fun onRequestHideSelf(flags: Int)

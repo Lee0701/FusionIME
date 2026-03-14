@@ -102,9 +102,10 @@ public class RichInputMethodManager {
 
         // Initialize additional subtypes.
         SubtypeLocaleUtils.init(context);
-        final InputMethodSubtype[] additionalSubtypes = getAdditionalSubtypes();
-        mImmWrapper.mImm.setAdditionalInputMethodSubtypes(
-                getInputMethodIdOfThisIme(), additionalSubtypes);
+        // Edit FusionIME: Removed for unified subtype
+//        final InputMethodSubtype[] additionalSubtypes = getAdditionalSubtypes();
+//        mImmWrapper.mImm.setAdditionalInputMethodSubtypes(
+//                getInputMethodIdOfThisIme(), additionalSubtypes);
 
         // Initialize the current input method subtype and the shortcut IME.
         refreshSubtypeCaches();

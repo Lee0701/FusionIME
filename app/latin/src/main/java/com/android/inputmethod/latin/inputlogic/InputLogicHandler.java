@@ -21,7 +21,7 @@ import android.os.HandlerThread;
 import android.os.Message;
 
 import com.android.inputmethod.compat.LooperCompatUtils;
-import com.android.inputmethod.latin.LatinIME;
+import com.android.inputmethod.latin.ILatinIME;
 import com.android.inputmethod.latin.SuggestedWords;
 import com.android.inputmethod.latin.Suggest.OnGetSuggestedWordsCallback;
 import com.android.inputmethod.latin.common.InputPointers;
@@ -32,7 +32,7 @@ import com.android.inputmethod.latin.common.InputPointers;
 class InputLogicHandler implements Handler.Callback {
     final Handler mNonUIThreadHandler;
     // TODO: remove this reference.
-    final LatinIME mLatinIME;
+    final ILatinIME mLatinIME;
     final InputLogic mInputLogic;
     private final Object mLock = new Object();
     private boolean mInBatchInput; // synchronized using {@link #mLock}.
@@ -67,7 +67,7 @@ class InputLogicHandler implements Handler.Callback {
         mInputLogic = null;
     }
 
-    public InputLogicHandler(final LatinIME latinIME, final InputLogic inputLogic) {
+    public InputLogicHandler(final ILatinIME latinIME, final InputLogic inputLogic) {
         final HandlerThread handlerThread = new HandlerThread(
                 InputLogicHandler.class.getSimpleName());
         handlerThread.start();
@@ -158,13 +158,13 @@ class InputLogicHandler implements Handler.Callback {
         } else {
             suggestedWordsToShowSuggestions = suggestedWordsForBatchInput;
         }
-        mLatinIME.mHandler.showGesturePreviewAndSuggestionStrip(suggestedWordsToShowSuggestions,
+        mLatinIME.getHandler().showGesturePreviewAndSuggestionStrip(suggestedWordsToShowSuggestions,
                 isTailBatchInput /* dismissGestureFloatingPreviewText */);
         if (isTailBatchInput) {
             mInBatchInput = false;
             // The following call schedules onEndBatchInputInternal
             // to be called on the UI thread.
-            mLatinIME.mHandler.showTailBatchInputResult(suggestedWordsToShowSuggestions);
+            mLatinIME.getHandler().showTailBatchInputResult(suggestedWordsToShowSuggestions);
         }
     }
 

@@ -36,6 +36,7 @@ import com.android.inputmethod.keyboard.Keyboard;
 import com.android.inputmethod.keyboard.KeyboardSwitcher;
 import com.android.inputmethod.latin.Dictionary;
 import com.android.inputmethod.latin.DictionaryFacilitator;
+import com.android.inputmethod.latin.ILatinIME;
 import com.android.inputmethod.latin.LastComposedWord;
 import com.android.inputmethod.latin.LatinIME;
 import com.android.inputmethod.latin.NgramContext;
@@ -73,7 +74,7 @@ public final class InputLogic {
     private static final String TAG = InputLogic.class.getSimpleName();
 
     // TODO : Remove this member when we can.
-    final LatinIME mLatinIME;
+    final ILatinIME mLatinIME;
     private final SuggestionStripViewAccessor mSuggestionStripViewAccessor;
 
     // Never null.
@@ -116,7 +117,7 @@ public final class InputLogic {
      * @param dictionaryFacilitator facilitator for getting suggestions and updating user history
      * dictionary.
      */
-    public InputLogic(final LatinIME latinIME,
+    public InputLogic(final ILatinIME latinIME,
             final SuggestionStripViewAccessor suggestionStripViewAccessor,
             final DictionaryFacilitator dictionaryFacilitator) {
         mLatinIME = latinIME;
@@ -414,7 +415,7 @@ public final class InputLogic {
         // The cursor has been moved : we now accept to perform recapitalization
         mRecapitalizeStatus.enable();
         // We moved the cursor. If we are touching a word, we need to resume suggestion.
-        mLatinIME.mHandler.postResumeSuggestions(true /* shouldDelay */);
+        mLatinIME.getHandler().postResumeSuggestions(true /* shouldDelay */);
         // Stop the last recapitalization, if started.
         mRecapitalizeStatus.stop();
         mWordBeingCorrectedByCursor = null;
@@ -1540,7 +1541,7 @@ public final class InputLogic {
                     true /* checkTextAfter */)) {
             // Show predictions.
             mWordComposer.setCapitalizedModeAtStartComposingTime(WordComposer.CAPS_MODE_OFF);
-            mLatinIME.mHandler.postUpdateSuggestionStrip(SuggestedWords.INPUT_STYLE_RECORRECTION);
+            mLatinIME.getHandler().postUpdateSuggestionStrip(SuggestedWords.INPUT_STYLE_RECORRECTION);
             return;
         }
         final TextRange range = mConnection.getWordRangeAtCursor(
@@ -1620,7 +1621,7 @@ public final class InputLogic {
 
     void doShowSuggestionsAndClearAutoCorrectionIndicator(final SuggestedWords suggestedWords) {
         mIsAutoCorrectionIndicatorOn = false;
-        mLatinIME.mHandler.showSuggestionStrip(suggestedWords);
+        mLatinIME.getHandler().showSuggestionStrip(suggestedWords);
     }
 
     /**
@@ -1695,7 +1696,7 @@ public final class InputLogic {
                 }
             }
             // Add the suggestion list to the list of suggestions.
-            textToCommit.setSpan(new SuggestionSpan(mLatinIME /* context */,
+            textToCommit.setSpan(new SuggestionSpan(mLatinIME.getContext() /* context */,
                     inputTransaction.mSettingsValues.mLocale,
                     suggestions.toArray(new String[suggestions.size()]), 0 /* flags */,
                     null /* notificationTargetClass */),
@@ -1956,7 +1957,7 @@ public final class InputLogic {
         // TODO: Locale should be determined based on context and the text given.
         return mIsAutoCorrectionIndicatorOn
                 ? SuggestionSpanUtils.getTextWithAutoCorrectionIndicatorUnderline(
-                        mLatinIME, text, getDictionaryFacilitatorLocale())
+                        mLatinIME.getContext(), text, getDictionaryFacilitatorLocale())
                 : text;
     }
 
