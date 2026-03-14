@@ -5,6 +5,12 @@
     android:layout_height="wrap_content"
     android:minHeight="@dimen/candidate_view_height">
 
+    <ee.oyatl.ime.fusion.TouchBlockingFrameLayout
+        android:id="@+id/touch_blocker"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <FrameLayout
         android:id="@+id/tab_view_frame"
         android:layout_width="match_parent"

@@ -1,25 +1,29 @@
 package ee.oyatl.ime.fusion.mode
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Configuration
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
 import android.widget.FrameLayout
-import ee.oyatl.ime.fusion.databinding.ModeSwitcherTabBinding
-import androidx.core.view.isVisible
 import androidx.preference.PreferenceManager
 import ee.oyatl.ime.fusion.databinding.CandidateViewWrapperBinding
 import ee.oyatl.ime.fusion.databinding.ModeSwitcherTabBarBinding
+import ee.oyatl.ime.fusion.databinding.ModeSwitcherTabBinding
 
 class IMEModeSwitcher(
     private val context: Context,
     val entries: List<Entry>,
     private val callback: Callback
 ) {
+    val handler = Handler(Looper.getMainLooper())
+
     val size: Int get() = entries.size
     var currentModeIndex: Int = 0
         private set
@@ -28,13 +32,12 @@ class IMEModeSwitcher(
 
     private var inputView: FrameLayout? = null
     private var candidateView: CandidateViewWrapperBinding? = null
+    private var tabs: List<ModeSwitcherTabBinding> = listOf()
 
     private var inputConnection: InputConnection? = null
     private var editorInfo: EditorInfo? = null
 
     private val preference: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-
-    private var tabs: List<ModeSwitcherTabBinding> = listOf()
 
     fun onStart(inputConnection: InputConnection, editorInfo: EditorInfo) {
         this.inputConnection = inputConnection
@@ -58,9 +61,14 @@ class IMEModeSwitcher(
     fun createCandidateView(): View {
         val inflater = LayoutInflater.from(context)
         val candidateView = CandidateViewWrapperBinding.inflate(inflater)
-        this.candidateView = candidateView
         candidateView.tabViewFrame.addView(this.initTabBarView(context))
         candidateView.closeButton.setOnClickListener { showTabBar() }
+        @SuppressLint("ClickableViewAccessibility")
+        candidateView.touchBlocker.setOnTouchListener { _, event ->
+            // Intercept touch events to input view while blocking
+            inputView?.dispatchTouchEvent(event) ?: false
+        }
+        this.candidateView = candidateView
         return candidateView.root
     }
 
@@ -107,14 +115,17 @@ class IMEModeSwitcher(
 
     fun showCandidates() {
         val candidateView = candidateView ?: return
-        setShown(candidateView.candidateViewFrame, true)
         setShown(candidateView.tabViewFrame, false)
+        setShown(candidateView.candidateViewFrame, true)
+        // Block touch events while view height is being changed
+        setShown(candidateView.touchBlocker, true)
+        handler.postDelayed({ setShown(candidateView.touchBlocker, false) }, SWITCH_DELAY)
     }
 
     fun showTabBar() {
         val candidateView = candidateView ?: return
-        setShown(candidateView.tabViewFrame, true)
         setShown(candidateView.candidateViewFrame, false)
+        setShown(candidateView.tabViewFrame, true)
     }
 
     fun setShown(view: View, shown: Boolean) {
@@ -146,5 +157,9 @@ class IMEModeSwitcher(
     ) {
         internal var inputView: View? = null
         internal var candidateView: View? = null
+    }
+
+    companion object {
+        const val SWITCH_DELAY: Long = 100
     }
 }

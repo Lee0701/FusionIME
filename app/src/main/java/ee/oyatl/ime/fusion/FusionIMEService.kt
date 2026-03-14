@@ -9,7 +9,6 @@ import android.view.KeyEvent
 import android.view.View
 import android.view.WindowInsets.Type
 import android.view.inputmethod.EditorInfo
-import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import androidx.appcompat.view.ContextThemeWrapper
@@ -21,6 +20,7 @@ import ee.oyatl.ime.fusion.mode.IMEModeSwitcher
 import ee.oyatl.ime.fusion.mode.LatinIMEMode
 import ee.oyatl.ime.fusion.mode.PinyinIMEMode
 import ee.oyatl.ime.fusion.settings.InputModeSettingsFragment
+import ee.oyatl.ime.keyboard.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -96,7 +96,6 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
     }
 
     override fun onCreateInputView(): View {
-
         imeView = LinearLayout(this)
         imeView.orientation = LinearLayout.VERTICAL
         imeView.addView(imeModeSwitcher.createCandidateView())
@@ -190,8 +189,8 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
     @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
     private fun updateNavigationBar() {
         val typedValue = TypedValue()
-        val theme = ContextThemeWrapper(this, ee.oyatl.ime.keyboard.R.style.Theme_FusionIME_Keyboard).theme
-        theme.resolveAttribute(ee.oyatl.ime.keyboard.R.attr.backgroundColor, typedValue, true)
+        val theme = ContextThemeWrapper(this, R.style.Theme_FusionIME_Keyboard).theme
+        theme.resolveAttribute(R.attr.backgroundColor, typedValue, true)
         window.window?.decorView?.setOnApplyWindowInsetsListener { view, insets ->
             val statusBarInsets = insets.getInsets(Type.statusBars())
             view.setBackgroundColor(typedValue.data)
