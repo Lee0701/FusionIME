@@ -22,6 +22,8 @@
     <string name="settings_behaviour_haptic_feedback_title">Haptic Feedback</string>
     <string name="settings_behaviour_haptic_feedback_summary">Vibrate on key press.</string>
     <string name="settings_behaviour_vibration_duration_title">Vibration Duration</string>
+    <string name="settings_behaviour_hardware_language_key_title">Hardware Language Key</string>
+    <string name="settings_behaviour_hardware_language_key_summary">Set a key combination to use as language switch on hardware keyboard.</string>
     <string name="settings_behaviour_always_show_soft_keyboard_title">Always Show Soft Keyboard</string>
     <string name="settings_behaviour_always_show_soft_keyboard_summary">Show soft keyboard even if hardware keyboard is connected.</string>
 
@@ -38,6 +40,13 @@
     <string name="settings_input_mode_correct_orders_title">Correct Jamo Orders</string>
     <string name="settings_input_mode_converter_title">Converter</string>
     <string name="settings_input_mode_candidate_view_height_title">Candidate View Height</string>
+
+    <string name="settings_dialog_keystroke_key_name">Key Name</string>
+    <string name="settings_dialog_keystroke_key_code">Key Code</string>
+    <string name="settings_dialog_keystroke_shift">Shift</string>
+    <string name="settings_dialog_keystroke_control">Control</string>
+    <string name="settings_dialog_keystroke_alt">Alt</string>
+    <string name="settings_dialog_keystroke_meta">Meta</string>
 
     <string name="screen_mode_mobile">Mobile</string>
     <string name="screen_mode_tablet">Tablet</string>

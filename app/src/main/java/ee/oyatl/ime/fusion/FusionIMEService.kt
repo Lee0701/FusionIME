@@ -18,6 +18,7 @@ import ee.oyatl.ime.fusion.mode.IMEMode
 import ee.oyatl.ime.fusion.mode.IMEModeSwitcher
 import ee.oyatl.ime.fusion.mode.LatinIMEMode
 import ee.oyatl.ime.fusion.mode.PinyinIMEMode
+import ee.oyatl.ime.fusion.preference.KeyStrokePreference
 import ee.oyatl.ime.fusion.settings.InputModeSettingsFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -29,6 +30,7 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
     private lateinit var preference: SharedPreferences
     private lateinit var imeModeSwitcher: IMEModeSwitcher
     private lateinit var imeView: LinearLayout
+    private var hardwareLanguageKeyStroke: KeyStrokePreference.KeyStroke = KeyStrokePreference.KeyStroke()
 
     override fun onCreate() {
         super.onCreate()
@@ -72,6 +74,9 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
     }
 
     fun onLoad() {
+        hardwareLanguageKeyStroke = KeyStrokePreference.KeyStroke
+            .parse(preference.getString("hardware_language_key", null) ?: "")
+            ?: hardwareLanguageKeyStroke
         coroutineScope.launch {
             imeModeSwitcher.entries.forEach { it.imeMode.onLoad(this@FusionIMEService) }
         }
@@ -127,6 +132,10 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
+        if(hardwareLanguageKeyStroke.matches(event)) {
+            onLanguageSwitch()
+            return true
+        }
         if(event.isSystem || event.isCtrlPressed || event.isAltPressed || event.isMetaPressed)
             return super.onKeyDown(keyCode, event)
         imeModeSwitcher.currentMode.onKeyDown(keyCode, event.metaState)
@@ -134,6 +143,7 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
+        if(hardwareLanguageKeyStroke.matches(event)) return true
         if(event.isSystem || event.isCtrlPressed || event.isAltPressed || event.isMetaPressed)
             return super.onKeyUp(keyCode, event)
         imeModeSwitcher.currentMode.onKeyUp(keyCode, event.metaState)

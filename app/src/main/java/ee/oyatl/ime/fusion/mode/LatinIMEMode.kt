@@ -172,7 +172,7 @@ abstract class LatinIMEMode(
                 if (util?.sendDefaultEditorAction(true) != true)
                     util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_ENTER)
             }
-            else -> {}
+            else -> super.onSpecial(keyCode)
         }
         ghostSpace = false
         renderInputView()
