@@ -201,6 +201,8 @@ jobs:
         with:
           stripHeaders: true
           stripGeneratorNotice: true
+          issues: false
+          pullRequests: false
           sinceTag: ${{ needs.new-version.outputs.current-version-name }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
