@@ -160,6 +160,6 @@ class IMEModeSwitcher(
     }
 
     companion object {
-        const val SWITCH_DELAY: Long = 100
+        const val SWITCH_DELAY: Long = 10
     }
 }
