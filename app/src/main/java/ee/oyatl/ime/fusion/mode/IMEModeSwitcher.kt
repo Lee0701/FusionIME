@@ -115,6 +115,7 @@ class IMEModeSwitcher(
 
     fun showCandidates() {
         val candidateView = candidateView ?: return
+        candidateView.candidateView.visibility = View.VISIBLE
         candidateView.tabViewFrame.visibility = View.GONE
         // Block touch events while view height is being changed
         candidateView.touchBlocker.visibility = View.VISIBLE
@@ -124,6 +125,7 @@ class IMEModeSwitcher(
     fun showTabBar() {
         val candidateView = candidateView ?: return
         candidateView.tabViewFrame.visibility = View.VISIBLE
+        candidateView.candidateView.visibility = View.GONE
     }
 
     fun initTabBarView(context: Context): View {
