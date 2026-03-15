@@ -497,17 +497,42 @@ abstract class LatinIMEMode(
         override val text: CharSequence = suggestedWordInfo.word
     }
 
-    class Qwerty(override val locale: Locale, listener: IMEMode.Listener): LatinIMEMode(listener)
+    class Qwerty(
+        override val locale: Locale,
+        numberRow: Boolean,
+        listener: IMEMode.Listener
+    ): LatinIMEMode(listener) {
+        override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
+            mobile = KeyboardTemplate.Basic(
+                configuration = KeyboardConfiguration(
+                    MobileKeyboard.alphabetic(numberRow = numberRow),
+                    MobileKeyboard.bottom()
+                ),
+                contentRows = (if(numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.DEFAULT
+            ),
+            tablet = KeyboardTemplate.Basic(
+                configuration = KeyboardConfiguration(
+                    TabletKeyboard.alphabetic(),
+                    TabletKeyboard.bottom()
+                ),
+                contentRows = TabletKeyboardRows.DEFAULT
+            )
+        )
+    }
 
-    class Dvorak(override val locale: Locale, listener: IMEMode.Listener): LatinIMEMode(listener) {
+    class Dvorak(
+        override val locale: Locale,
+        numberRow: Boolean,
+        listener: IMEMode.Listener
+    ): LatinIMEMode(listener) {
         override val textLayoutTable: LayoutTable = super.textLayoutTable.mapKeyCodes(LayoutLatin.KEYCODE_MAP_DVORAK)
         override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
             mobile = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
-                    MobileKeyboard.alphabetic(semicolon = true),
+                    MobileKeyboard.alphabetic(semicolon = true, numberRow = numberRow),
                     MobileKeyboard.bottom(KeyEvent.KEYCODE_X, KeyEvent.KEYCODE_SLASH)
                 ),
-                contentRows = MobileKeyboardRows.DVORAK
+                contentRows = (if(numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.DVORAK
             ),
             tablet = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
@@ -519,15 +544,19 @@ abstract class LatinIMEMode(
         )
     }
 
-    class Colemak(override val locale: Locale, listener: IMEMode.Listener): LatinIMEMode(listener) {
+    class Colemak(
+        override val locale: Locale,
+        numberRow: Boolean,
+        listener: IMEMode.Listener
+    ): LatinIMEMode(listener) {
         override val textLayoutTable: LayoutTable = super.textLayoutTable.mapKeyCodes(LayoutLatin.KEYCODE_MAP_COLEMAK)
         override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
             mobile = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
-                    MobileKeyboard.alphabetic(semicolon = true),
+                    MobileKeyboard.alphabetic(semicolon = true, numberRow = numberRow),
                     MobileKeyboard.bottom()
                 ),
-                contentRows = MobileKeyboardRows.SEMICOLON
+                contentRows = (if(numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.SEMICOLON
             ),
             tablet = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
@@ -541,15 +570,16 @@ abstract class LatinIMEMode(
 
     data class Params(
         val locale: Locale = Locale.ENGLISH,
-        val layout: Layout = Layout.Qwerty
+        val layout: Layout = Layout.Qwerty,
+        val numberRow: Boolean = true
     ): IMEMode.Params {
         override val type: String = TYPE
 
         override fun create(listener: IMEMode.Listener): LatinIMEMode {
             return when(layout) {
-                Layout.Qwerty -> Qwerty(locale, listener)
-                Layout.Dvorak -> Dvorak(locale, listener)
-                Layout.Colemak -> Colemak(locale, listener)
+                Layout.Qwerty -> Qwerty(locale, numberRow, listener)
+                Layout.Dvorak -> Dvorak(locale, numberRow, listener)
+                Layout.Colemak -> Colemak(locale, numberRow, listener)
             }
         }
 
@@ -570,9 +600,11 @@ abstract class LatinIMEMode(
                     if(localeName.size == 2) Locale(localeName[0], localeName[1])
                     else Locale(localeName[0])
                 val layout = Layout.valueOf(map["layout"] ?: Layout.Qwerty.name)
+                val numberRow = map["number_row"]?.toBoolean() ?: false
                 return Params(
                     locale = locale,
-                    layout = layout
+                    layout = layout,
+                    numberRow = numberRow
                 )
             }
         }

@@ -33,7 +33,8 @@ object MobileKeyboard {
         semicolon: Boolean = false,
         shiftDeleteWidth: Float = 1.5f,
         shift: Boolean = true,
-        delete: Boolean = true
+        delete: Boolean = true,
+        numberRow: Boolean = false
     ): KeyboardConfiguration {
         val row1 = mutableListOf<KeyboardConfiguration.Item>(
             KeyboardConfiguration.Item.ContentRow(1)
@@ -51,12 +52,10 @@ object MobileKeyboard {
         if(delete) {
             row2.add(KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_DEL, shiftDeleteWidth, true))
         }
-        return KeyboardConfiguration(listOf(
-            listOf(
-                KeyboardConfiguration.Item.ContentRow(2)
-            ),
-            row1,
-            row2
-        ))
+        val rows = mutableListOf<List<KeyboardConfiguration.Item>>()
+        if(numberRow) rows += listOf(KeyboardConfiguration.Item.ContentRow(3))
+        rows += listOf(KeyboardConfiguration.Item.ContentRow(2))
+        rows += listOf(row1, row2)
+        return KeyboardConfiguration(rows)
     }
 }
