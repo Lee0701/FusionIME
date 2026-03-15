@@ -115,22 +115,15 @@ class IMEModeSwitcher(
 
     fun showCandidates() {
         val candidateView = candidateView ?: return
-        setShown(candidateView.tabViewFrame, false)
-        setShown(candidateView.candidateViewFrame, true)
+        candidateView.tabViewFrame.visibility = View.GONE
         // Block touch events while view height is being changed
-        setShown(candidateView.touchBlocker, true)
-        handler.postDelayed({ setShown(candidateView.touchBlocker, false) }, SWITCH_DELAY)
+        candidateView.touchBlocker.visibility = View.VISIBLE
+        handler.postDelayed({ candidateView.touchBlocker.visibility = View.GONE }, SWITCH_DELAY)
     }
 
     fun showTabBar() {
         val candidateView = candidateView ?: return
-        setShown(candidateView.candidateViewFrame, false)
-        setShown(candidateView.tabViewFrame, true)
-    }
-
-    fun setShown(view: View, shown: Boolean) {
-        view.visibility = if(shown) View.VISIBLE else View.GONE
-        if(shown) view.bringToFront()
+        candidateView.tabViewFrame.visibility = View.VISIBLE
     }
 
     fun initTabBarView(context: Context): View {
