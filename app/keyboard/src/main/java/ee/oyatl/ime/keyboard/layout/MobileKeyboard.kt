@@ -7,18 +7,26 @@ object MobileKeyboard {
     fun bottom(
         left: Int = KeyEvent.KEYCODE_COMMA,
         right: Int = KeyEvent.KEYCODE_PERIOD,
+        dpad: Boolean = false,
         languageKeyCode: Int = KeyEvent.KEYCODE_LANGUAGE_SWITCH
     ): KeyboardConfiguration {
-        return KeyboardConfiguration(listOf(
-            listOf(
-                KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_SYM, 1.5f, true),
-                KeyboardConfiguration.Item.TemplateKey(left),
-                KeyboardConfiguration.Item.TemplateKey(languageKeyCode, 1f, true),
-                KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_SPACE, 4f),
-                KeyboardConfiguration.Item.TemplateKey(right),
-                KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_ENTER, 1.5f, true)
+        val row = mutableListOf<KeyboardConfiguration.Item>()
+        row += listOf(
+            KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_SYM, 1.5f, true),
+            KeyboardConfiguration.Item.TemplateKey(left),
+            KeyboardConfiguration.Item.TemplateKey(languageKeyCode, 1f, true)
+        )
+        val spaceWidth = if(dpad) 2f else 4f
+        row += KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_SPACE, spaceWidth)
+        row += KeyboardConfiguration.Item.TemplateKey(right)
+        if(dpad) {
+            row += listOf(
+                KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_DPAD_LEFT, 1f, true),
+                KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_DPAD_RIGHT, 1f, true)
             )
-        ))
+        }
+        row += KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_ENTER, 1.5f, true)
+        return KeyboardConfiguration(listOf(row))
     }
 
     fun numbers(): KeyboardConfiguration {
