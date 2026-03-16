@@ -32,6 +32,7 @@ configure<ApplicationExtension> {
     flavorDimensions += "edition"
     productFlavors {
         create("paid") {
+            isDefault = true
             dimension = "edition"
             applicationIdSuffix = ""
             buildConfigField("boolean", "IS_PAID", "true")
