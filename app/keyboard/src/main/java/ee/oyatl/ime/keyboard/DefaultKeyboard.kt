@@ -26,22 +26,26 @@ class DefaultKeyboard(
         val keySet = mutableSetOf<DefaultKeyboardView.KeyContainer>()
         rows.forEach { keys ->
             val row = KbdRowBinding.inflate(inflater)
+            var subRow = KbdRowBinding.inflate(inflater)
             keys.forEach { item ->
-                val view: View = when(item) {
+                when(item) {
                     is Keyboard.KeyItem.SplitSpacer -> {
+                        subRow.root.layoutParams = createLayoutParams(1f)
+                        row.root.addView(subRow.root)
                         val view = View(context)
                         view.isClickable = true
                         view.layoutParams = LinearLayout.LayoutParams(
                             item.absoluteWidth,
                             keyHeight
                         )
-                        view
+                        row.root.addView(view)
+                        subRow = KbdRowBinding.inflate(inflater)
                     }
                     is Keyboard.KeyItem.Spacer -> {
                         val view = View(context)
                         view.isClickable = true
                         view.layoutParams = createLayoutParams(item.width)
-                        view
+                        subRow.root.addView(view)
                     }
                     is Keyboard.KeyItem.SpecialKey -> {
                         val type = SpecialKeyType.ofKeyCode(item.keyCode) ?: SpecialKeyType.Default
@@ -50,7 +54,7 @@ class DefaultKeyboard(
                         if(type.iconRes != null) key.icon.setImageResource(type.iconRes)
                         keySet += DefaultKeyboardView.KeyContainer(item.keyCode, key)
                         key.root.layoutParams = createLayoutParams(item.width)
-                        key.root
+                        subRow.root.addView(key.root)
                     }
                     is Keyboard.KeyItem.Key -> {
                         val themedInflater = LayoutInflater.from(ContextThemeWrapper(context, R.style.Theme_FusionIME_Keyboard_Key))
@@ -58,11 +62,12 @@ class DefaultKeyboard(
                         keySet += DefaultKeyboardView.KeyContainer(item.keyCode, key)
                         if(item.keyCode < 0) key.label.text = (-item.keyCode).toChar().toString()
                         key.root.layoutParams = createLayoutParams(item.width)
-                        key.root
+                        subRow.root.addView(key.root)
                     }
                 }
-                row.root.addView(view)
             }
+            subRow.root.layoutParams = createLayoutParams(1f)
+            row.root.addView(subRow.root)
             keyboard.root.addView(row.root)
         }
         return DefaultKeyboardView(keyboard, keySet, keyboardListener)
