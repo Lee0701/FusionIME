@@ -176,7 +176,7 @@ abstract class MozcIMEMode(
             mobile = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
                     MobileKeyboard.alphabetic(semicolon = true),
-                    MobileKeyboard.bottom()
+                    MobileKeyboard.bottom(dpad = true)
                 ),
                 contentRows = MobileKeyboardRows.MINUS
             ),
@@ -201,7 +201,7 @@ abstract class MozcIMEMode(
                 configuration = KeyboardConfiguration(
                     MobileKeyboard.numbers(),
                     MobileKeyboard.alphabetic(semicolon = true, shiftDeleteWidth = 1f),
-                    MobileKeyboard.bottom(left = ExtKeyCode.KEYCODE_KANA_EQUALS, right = ExtKeyCode.KEYCODE_KANA_SLASH)
+                    MobileKeyboard.bottom(left = ExtKeyCode.KEYCODE_KANA_EQUALS, right = ExtKeyCode.KEYCODE_KANA_SLASH, dpad = true)
                 ),
                 contentRows = MobileKeyboardRows.JIS,
                 softKeyCodeMapper = SoftKeyCodeMapper(mapOf(
