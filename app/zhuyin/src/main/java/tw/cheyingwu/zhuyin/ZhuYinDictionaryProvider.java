@@ -119,7 +119,7 @@ public class ZhuYinDictionaryProvider extends ContentProvider {
 			SQLiteDatabase checkDB = null;
 
 			try {
-				String myPath = DB_PATH + this.dbName;
+				String myPath = myContext.getDatabasePath(this.dbName).getPath();
 				Boolean exists = (new File(myPath)).exists();
 				if(exists) {
 					checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
@@ -151,7 +151,7 @@ public class ZhuYinDictionaryProvider extends ContentProvider {
 			Integer fIdx;
 			
 			// Path to the just created empty db
-			outFileName = DB_PATH + this.dbName;
+			outFileName = myContext.getDatabasePath(this.dbName).getPath();
 			// Open the empty db as the output stream
 			myOutput = new FileOutputStream(outFileName);
 
