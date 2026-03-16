@@ -12,6 +12,7 @@ import android.view.inputmethod.InputConnection
 import androidx.preference.PreferenceManager
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.ScrollingCandidateView
+import ee.oyatl.ime.fusion.Feature
 import ee.oyatl.ime.fusion.KeyEventUtil
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.keyboard.DefaultKeyboardInflater
@@ -162,7 +163,7 @@ abstract class CommonIMEMode(
         val screenMode = KeyboardState.ScreenMode.valueOf(preference.getString("screen_mode", null) ?: defaultScreenMode)
         val rowHeightDIP = getOrientationInteger(context, "keyboard_height")
         val height = (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, rowHeightDIP, context.resources.displayMetrics) * 4).roundToInt()
-        val split = getOrientationBoolean(context, "split_keyboard")
+        val split = Feature.SplitKeyboard.availableInCurrentVersion && getOrientationBoolean(context, "split_keyboard")
         val splitRatio = if(split) getOrientationInteger(context, "split_ratio") else 0f
         val splitWidthDIP = context.resources.configuration.screenWidthDp / 100f * splitRatio
         val splitWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, splitWidthDIP, context.resources.displayMetrics).roundToInt()

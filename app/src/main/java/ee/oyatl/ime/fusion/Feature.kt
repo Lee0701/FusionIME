@@ -7,6 +7,7 @@ enum class Feature(
 ) {
     BigramHanjaConverter(LocalDate.of(2025, 9, 11)),
     MozcCandidateHeight(LocalDate.of(2025, 9, 25)),
+    SplitKeyboard(LocalDate.of(2026, 3, 15)),
     ;
 
     val availableInPaidVersion: Boolean get() =
