@@ -3,4 +3,8 @@
     <string translatable="false" name="screen_mode_default">Tablet</string>
     <integer name="keyboard_height_portrait_default">75</integer>
     <integer name="keyboard_height_landscape_default">65</integer>
+    <bool name="split_keyboard_portrait_default">true</bool>
+    <bool name="split_keyboard_landscape_default">true</bool>
+    <integer name="split_ratio_portrait_default">20</integer>
+    <integer name="split_ratio_landscape_default">50</integer>
 </resources>

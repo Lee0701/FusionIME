@@ -14,6 +14,10 @@
     <string name="settings_appearance_screen_mode_title">Screen Mode</string>
     <string name="settings_appearance_keyboard_height_portrait_title">Keyboard Height (Portrait)</string>
     <string name="settings_appearance_keyboard_height_landscape_title">Keyboard Height (Landscape)</string>
+    <string name="settings_appearance_split_keyboard_portrait_title">Split Keyboard (Portrait)</string>
+    <string name="settings_appearance_split_ratio_portrait_title">Split Ratio (Portrait)</string>
+    <string name="settings_appearance_split_keyboard_landscape_title">Split Keyboard (Landscape)</string>
+    <string name="settings_appearance_split_ratio_landscape_title">Split Ratio (Landscape)</string>
     <string name="settings_appearance_preview_popup_title">Preview Popups</string>
     <string name="settings_appearance_preview_popup_summary">Show preview popups on key press.</string>
 

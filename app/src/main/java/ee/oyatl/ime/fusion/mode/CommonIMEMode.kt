@@ -1,5 +1,6 @@
 package ee.oyatl.ime.fusion.mode
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Configuration
 import android.util.TypedValue
@@ -128,17 +129,43 @@ abstract class CommonIMEMode(
         submitCandidates(emptyList())
     }
 
+    private fun getOrientationSuffix(context: Context): String {
+        val landscape = context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+        val suffix = if(landscape) "_landscape" else "_portrait"
+        return suffix
+    }
+
+    private fun getOrientationInteger(context: Context, key: String): Float {
+        val preference = PreferenceManager.getDefaultSharedPreferences(context)
+        val suffix = getOrientationSuffix(context)
+        @SuppressLint("DiscouragedApi")
+        val defaultId = context.resources.getIdentifier("${key}${suffix}_default", "integer", context.packageName)
+        val defaultValue = context.resources.getInteger(defaultId).toFloat()
+        val value = preference.getFloat("${key}${suffix}", defaultValue)
+        return value
+    }
+
+    private fun getOrientationBoolean(context: Context, key: String): Boolean {
+        val preference = PreferenceManager.getDefaultSharedPreferences(context)
+        val suffix = getOrientationSuffix(context)
+        @SuppressLint("DiscouragedApi")
+        val defaultId = context.resources.getIdentifier("${key}${suffix}_default", "bool", context.packageName)
+        val defaultValue = context.resources.getBoolean(defaultId)
+        val value = preference.getBoolean("${key}${suffix}", defaultValue)
+        return value
+    }
+
     override fun createInputView(context: Context): View {
         val preference = PreferenceManager.getDefaultSharedPreferences(context)
 
         val defaultScreenMode = context.resources.getString(R.string.screen_mode_default)
         val screenMode = KeyboardState.ScreenMode.valueOf(preference.getString("screen_mode", null) ?: defaultScreenMode)
-        val landscape = context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
-        val rowHeightKey = if(landscape) "keyboard_height_landscape" else "keyboard_height_portrait"
-        val rowHeightDefaultKey = if(landscape) R.integer.keyboard_height_landscape_default else R.integer.keyboard_height_portrait_default
-        val rowHeightDefault = context.resources.getInteger(rowHeightDefaultKey).toFloat()
-        val rowHeightDIP = preference.getFloat(rowHeightKey, rowHeightDefault)
+        val rowHeightDIP = getOrientationInteger(context, "keyboard_height")
         val height = (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, rowHeightDIP, context.resources.displayMetrics) * 4).roundToInt()
+        val split = getOrientationBoolean(context, "split_keyboard")
+        val splitRatio = if(split) getOrientationInteger(context, "split_ratio") else 0f
+        val splitWidthDIP = context.resources.configuration.screenWidthDp / 100f * splitRatio
+        val splitWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, splitWidthDIP, context.resources.displayMetrics).roundToInt()
         val showPreviewPopup = preference.getBoolean("preview_popup", true)
         val sound = preference.getBoolean("sound_feedback", true)
         val haptic = preference.getBoolean("haptic_feedback", true)
@@ -148,7 +175,7 @@ abstract class CommonIMEMode(
         val params = KeyboardParams(
             screenMode = screenMode,
             height = height,
-            splitWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100f, context.resources.displayMetrics).roundToInt(),
+            splitWidth = splitWidth,
             soundFeedback = false,
             hapticFeedback = false,
             soundVolume = soundVolume,

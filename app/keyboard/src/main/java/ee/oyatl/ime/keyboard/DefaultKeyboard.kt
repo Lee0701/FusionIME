@@ -30,6 +30,7 @@ class DefaultKeyboard(
             keys.forEach { item ->
                 when(item) {
                     is Keyboard.KeyItem.SplitSpacer -> {
+                        if(params.splitWidth == 0) return@forEach
                         subRow.root.layoutParams = createLayoutParams(1f)
                         row.root.addView(subRow.root)
                         val view = View(context)

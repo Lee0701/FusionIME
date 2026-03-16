@@ -29,6 +29,34 @@
         app:useSimpleSummaryProvider="true" />
 
     <SwitchPreferenceCompat
+        app:key="split_keyboard_portrait"
+        app:defaultValue="@bool/split_keyboard_portrait_default"
+        app:title="@string/settings_appearance_split_keyboard_portrait_title" />
+
+    <ee.oyatl.ime.fusion.preference.SliderPreference
+        app:key="split_ratio_portrait"
+        app:valueFrom="10.0"
+        app:valueTo="50.0"
+        app:stepSize="5.0"
+        app:defaultValue="@integer/split_ratio_portrait_default"
+        app:title="@string/settings_appearance_split_ratio_portrait_title"
+        app:useSimpleSummaryProvider="true" />
+
+    <SwitchPreferenceCompat
+        app:key="split_keyboard_landscape"
+        app:defaultValue="@bool/split_keyboard_landscape_default"
+        app:title="@string/settings_appearance_split_keyboard_landscape_title" />
+
+    <ee.oyatl.ime.fusion.preference.SliderPreference
+        app:key="split_ratio_landscape"
+        app:valueFrom="10.0"
+        app:valueTo="50.0"
+        app:stepSize="5.0"
+        app:defaultValue="@integer/split_ratio_landscape_default"
+        app:title="@string/settings_appearance_split_ratio_landscape_title"
+        app:useSimpleSummaryProvider="true" />
+
+    <SwitchPreferenceCompat
         app:key="preview_popup"
         app:defaultValue="true"
         app:title="@string/settings_appearance_preview_popup_title"
