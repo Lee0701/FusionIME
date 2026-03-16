@@ -577,7 +577,7 @@ abstract class LatinIMEMode(
     data class Params(
         val locale: Locale = Locale.ENGLISH,
         val layout: Layout = Layout.Qwerty,
-        val numberRow: Boolean = true
+        val numberRow: Boolean = false
     ): IMEMode.Params {
         override val type: String = TYPE
 

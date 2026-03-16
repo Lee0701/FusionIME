@@ -18,8 +18,4 @@
         android:title="@string/settings_input_mode_layout_title"
         app:useSimpleSummaryProvider="true" />
 
-    <SwitchPreferenceCompat
-        android:key="number_row"
-        android:title="@string/settings_input_mode_number_row_title" />
-
 </androidx.preference.PreferenceScreen>
