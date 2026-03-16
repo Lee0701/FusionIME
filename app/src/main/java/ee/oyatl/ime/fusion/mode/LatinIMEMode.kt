@@ -505,7 +505,8 @@ abstract class LatinIMEMode(
         override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
             mobile = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
-                    MobileKeyboard.alphabetic(numberRow = numberRow),
+                    if(numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
+                    MobileKeyboard.alphabetic(),
                     MobileKeyboard.bottom()
                 ),
                 contentRows = (if(numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.DEFAULT
@@ -529,7 +530,8 @@ abstract class LatinIMEMode(
         override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
             mobile = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
-                    MobileKeyboard.alphabetic(semicolon = true, numberRow = numberRow),
+                    if(numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
+                    MobileKeyboard.alphabetic(semicolon = true),
                     MobileKeyboard.bottom(KeyEvent.KEYCODE_X, KeyEvent.KEYCODE_SLASH)
                 ),
                 contentRows = (if(numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.DVORAK
@@ -553,7 +555,8 @@ abstract class LatinIMEMode(
         override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
             mobile = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
-                    MobileKeyboard.alphabetic(semicolon = true, numberRow = numberRow),
+                    if(numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
+                    MobileKeyboard.alphabetic(semicolon = true),
                     MobileKeyboard.bottom()
                 ),
                 contentRows = (if(numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.SEMICOLON
