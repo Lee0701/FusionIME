@@ -106,7 +106,9 @@ class SettingsActivity : AppCompatActivity(),
 
     class AppearanceFragment : PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-            setPreferencesFromResource(R.xml.pref_appearance, rootKey)
+            addPreferencesFromResource(R.xml.pref_appearance_basic)
+            if(Feature.SplitKeyboard.availableInCurrentVersion)
+                addPreferencesFromResource(R.xml.pref_appearance_split_keyboard)
         }
     }
 
