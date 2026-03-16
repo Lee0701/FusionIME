@@ -1,5 +1,7 @@
 package ee.oyatl.ime.keyboard
 
+import android.view.KeyEvent
+
 class DefaultKeyboardInflater(
     override val keyboardParams: KeyboardParams
 ): KeyboardInflater {
@@ -22,8 +24,12 @@ class DefaultKeyboardInflater(
                     is KeyboardConfiguration.Item.ContentRow -> {
                         val rowIndex = keyCodeRows.size - item.rowId - 1
                         val content = keyCodeRows[rowIndex].map {
-                            val keyCode = softKeyCodeMapper[it]
-                            Keyboard.KeyItem.NormalKey(keyCode)
+                            if(it == KeyEvent.KEYCODE_SPACE) {
+                                Keyboard.KeyItem.SplitSpacer(keyboardParams.splitWidth)
+                            } else {
+                                val keyCode = softKeyCodeMapper[it]
+                                Keyboard.KeyItem.NormalKey(keyCode)
+                            }
                         }
                         resultRow += content
                     }

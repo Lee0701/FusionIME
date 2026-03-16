@@ -148,6 +148,7 @@ abstract class CommonIMEMode(
         val params = KeyboardParams(
             screenMode = screenMode,
             height = height,
+            splitWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100f, context.resources.displayMetrics).roundToInt(),
             soundFeedback = false,
             hapticFeedback = false,
             soundVolume = soundVolume,

@@ -1,11 +1,9 @@
 package ee.oyatl.ime.keyboard
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.view.ContextThemeWrapper
 import android.view.KeyEvent
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.widget.LinearLayout
 import ee.oyatl.ime.keyboard.databinding.KbdKeyBinding
@@ -16,7 +14,8 @@ class DefaultKeyboard(
     val rows: List<List<Keyboard.KeyItem>>,
     val params: KeyboardParams
 ): Keyboard {
-    @SuppressLint("ClickableViewAccessibility")
+    val keyHeight = params.height / rows.size
+
     override fun createView(
         context: Context,
         listener: KeyboardListener
@@ -29,9 +28,19 @@ class DefaultKeyboard(
             val row = KbdRowBinding.inflate(inflater)
             keys.forEach { item ->
                 val view: View = when(item) {
+                    is Keyboard.KeyItem.SplitSpacer -> {
+                        val view = View(context)
+                        view.isClickable = true
+                        view.layoutParams = LinearLayout.LayoutParams(
+                            item.absoluteWidth,
+                            keyHeight
+                        )
+                        view
+                    }
                     is Keyboard.KeyItem.Spacer -> {
                         val view = View(context)
                         view.isClickable = true
+                        view.layoutParams = createLayoutParams(item.width)
                         view
                     }
                     is Keyboard.KeyItem.SpecialKey -> {
@@ -40,6 +49,7 @@ class DefaultKeyboard(
                         val key = KbdKeyBinding.inflate(themedInflater)
                         if(type.iconRes != null) key.icon.setImageResource(type.iconRes)
                         keySet += DefaultKeyboardView.KeyContainer(item.keyCode, key)
+                        key.root.layoutParams = createLayoutParams(item.width)
                         key.root
                     }
                     is Keyboard.KeyItem.Key -> {
@@ -47,10 +57,10 @@ class DefaultKeyboard(
                         val key = KbdKeyBinding.inflate(themedInflater)
                         keySet += DefaultKeyboardView.KeyContainer(item.keyCode, key)
                         if(item.keyCode < 0) key.label.text = (-item.keyCode).toChar().toString()
+                        key.root.layoutParams = createLayoutParams(item.width)
                         key.root
                     }
                 }
-                view.layoutParams = createLayoutParams(item.width)
                 row.root.addView(view)
             }
             keyboard.root.addView(row.root)
@@ -61,7 +71,7 @@ class DefaultKeyboard(
     private fun createLayoutParams(width: Float): LinearLayout.LayoutParams {
         return LinearLayout.LayoutParams(
             0,
-            params.height / rows.size
+            keyHeight
         ).apply {
             weight = width
         }
