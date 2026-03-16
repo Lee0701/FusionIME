@@ -513,10 +513,11 @@ abstract class LatinIMEMode(
             ),
             tablet = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
-                    TabletKeyboard.alphabetic(),
+                    if(numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
+                    TabletKeyboard.alphabetic(delete = !numberRow),
                     TabletKeyboard.bottom()
                 ),
-                contentRows = TabletKeyboardRows.DEFAULT
+                contentRows = (if(numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.DEFAULT
             )
         )
     }
@@ -538,10 +539,11 @@ abstract class LatinIMEMode(
             ),
             tablet = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
-                    TabletKeyboard.alphabetic(semicolon = true),
+                    if(numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
+                    TabletKeyboard.alphabetic(semicolon = true, delete = !numberRow),
                     TabletKeyboard.bottom()
                 ),
-                contentRows = TabletKeyboardRows.DVORAK
+                contentRows = (if(numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.DVORAK
             )
         )
     }
@@ -563,10 +565,11 @@ abstract class LatinIMEMode(
             ),
             tablet = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
-                    TabletKeyboard.alphabetic(semicolon = true),
+                    if(numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
+                    TabletKeyboard.alphabetic(semicolon = true, delete = !numberRow),
                     TabletKeyboard.bottom()
                 ),
-                contentRows = TabletKeyboardRows.SEMICOLON
+                contentRows = (if(numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.SEMICOLON
             )
         )
     }
