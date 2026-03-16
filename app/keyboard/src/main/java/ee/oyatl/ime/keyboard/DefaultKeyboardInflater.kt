@@ -38,14 +38,25 @@ class DefaultKeyboardInflater(
                     }
                     is KeyboardConfiguration.Item.TemplateKey -> {
                         val keyCode = softKeyCodeMapper[item.keyCode]
-                        resultRow +=
-                            if(item.special) Keyboard.KeyItem.SpecialKey(keyCode, item.width)
-                            else Keyboard.KeyItem.NormalKey(keyCode, item.width)
+                        if(keyboardParams.splitWidth != 0 && keyCode == KeyEvent.KEYCODE_SPACE) {
+                            resultRow += inflateKey(keyCode, item.copy(width = item.width / 2))
+                            resultRow += Keyboard.KeyItem.SplitSpacer(keyboardParams.splitWidth)
+                            resultRow += inflateKey(keyCode, item.copy(width = item.width / 2))
+                        } else {
+                            resultRow += inflateKey(keyCode, item)
+                        }
                     }
                 }
             }
             result += resultRow
         }
         return DefaultKeyboard(result, keyboardParams)
+    }
+
+    private fun inflateKey(keyCode: Int, item: KeyboardConfiguration.Item.TemplateKey): Keyboard.KeyItem {
+        val result =
+            if(item.special) Keyboard.KeyItem.SpecialKey(keyCode, item.width)
+            else Keyboard.KeyItem.NormalKey(keyCode, item.width)
+        return result
     }
 }
