@@ -13,8 +13,8 @@ configure<ApplicationExtension> {
         applicationId = "ee.oyatl.ime.fusion"
         minSdk = 21
         targetSdk = 36
-        versionCode = 9
-        versionName = "20260316-9-643bf04"
+        versionCode = 10
+        versionName = "20260317-10-0d44a52"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
