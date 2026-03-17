@@ -74,6 +74,7 @@
     <string name="korean_layout_hangul_2set_ks">Hangul 2-Set KS</string>
     <string name="korean_layout_hangul_3set_390">Hangul 3-Set 390</string>
     <string name="korean_layout_hangul_3set_391">Hangul 3-Set Final</string>
+    <string name="korean_layout_hangul_3set_391_strict">Hangul 3-Set Final (Strict)</string>
     <string name="korean_layout_old_hangul_2set_ks">Old Hangul 2-Set</string>
     <string name="korean_layout_old_hangul_3set_393">Old Hangul 3-Set 393</string>
 
