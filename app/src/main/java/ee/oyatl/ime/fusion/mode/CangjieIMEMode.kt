@@ -214,7 +214,7 @@ abstract class CangjieIMEMode(
             return "$localeName $layoutName"
         }
 
-        override fun getShortLabel(context: Context): String {
+        override fun getShortLabel(context: Context, params: List<IMEMode.Params>): String {
             return when(layout) {
                 Layout.Cangjie -> "倉頡"
                 Layout.Quick -> "速成"
