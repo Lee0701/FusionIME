@@ -240,10 +240,33 @@ abstract class KoreanIMEMode(
             return "$localeName $layoutName"
         }
 
-        override fun getShortLabel(context: Context): String {
+        override fun getShortLabel(context: Context, params: List<IMEMode.Params>): String {
+            val koreanParams = params.filterIsInstance<Params>().filterNot { it == this }
+            // If this is the only Korean mode
+            if(koreanParams.isEmpty()) {
+                return when(layout) {
+                    // For modern Hangul layouts
+                    Layout.Set2KS, Layout.Set3390, Layout.Set3391 -> "한"
+                    // For old Hangul layouts
+                    Layout.Set2Old -> "ᄒᆞ"
+                }
+            }
+            // If there are any other Korean modes
             return when(layout) {
+                // For 2-set layouts
                 Layout.Set2KS -> "한2"
-                Layout.Set3390, Layout.Set3391 -> "한3"
+                Layout.Set3390, Layout.Set3391 -> {
+                    // Find if there are any other 3-set layouts
+                    val korean3SetParams = koreanParams.filter { it.layout in setOf(Layout.Set3390, Layout.Set3391) }
+                    // If this is the only mode with 3-set layout
+                    if(korean3SetParams.isEmpty()) "한3"
+                    // If not, use specific layout name
+                    else when(layout) {
+                        Layout.Set3390 -> "390"
+                        Layout.Set3391 -> "391"
+                    }
+                }
+                // For old Hangul layouts
                 Layout.Set2Old -> "ᄒᆞ"
             }
         }
