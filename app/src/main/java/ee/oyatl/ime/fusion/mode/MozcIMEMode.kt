@@ -168,24 +168,27 @@ abstract class MozcIMEMode(
 
     class RomajiQwerty(
         listener: IMEMode.Listener,
-        candidateViewHeight: Int
+        candidateViewHeight: Int,
+        numberRow: Boolean
     ): MozcIMEMode(listener, candidateViewHeight) {
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.QWERTY_KANA
         override val textLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutRomaji.TABLE_QWERTY)
         override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
             mobile = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
+                    if(numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
                     MobileKeyboard.alphabetic(semicolon = true),
                     MobileKeyboard.bottom(dpad = true)
                 ),
-                contentRows = MobileKeyboardRows.MINUS
+                contentRows = (if(numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.MINUS
             ),
             tablet = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
+                    if(numberRow) TabletKeyboard.numbers() else KeyboardConfiguration(),
                     TabletKeyboard.alphabetic(semicolon = true),
                     TabletKeyboard.bottom()
                 ),
-                contentRows = TabletKeyboardRows.MINUS
+                contentRows = (if(numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.MINUS
             )
         )
     }
@@ -240,12 +243,13 @@ abstract class MozcIMEMode(
 
     data class Params(
         val layout: Layout = Layout.RomajiQwerty,
+        val numberRow: Boolean = false,
         val candidateViewHeight: Int = 2
     ): IMEMode.Params {
         override val type: String = TYPE
         override fun create(listener: IMEMode.Listener): IMEMode {
             return when(layout) {
-                Layout.RomajiQwerty -> RomajiQwerty(listener, candidateViewHeight)
+                Layout.RomajiQwerty -> RomajiQwerty(listener, candidateViewHeight, numberRow)
                 Layout.KanaJIS -> KanaJIS(listener, candidateViewHeight)
                 Layout.KanaSyllables -> KanaSyllables(listener, candidateViewHeight)
             }
@@ -268,10 +272,12 @@ abstract class MozcIMEMode(
         companion object {
             fun parse(map: Map<String, String>): Params {
                 val layout = Layout.valueOf(map["layout"] ?: Layout.RomajiQwerty.name)
+                val numberRow = map["number_row"]?.toBoolean() ?: false
                 val candidateViewHeight = map["candidate_view_height"]?.toFloatOrNull()?.toInt() ?: 2
                 return Params(
                     layout = layout,
-                    candidateViewHeight = candidateViewHeight
+                    candidateViewHeight = candidateViewHeight,
+                    numberRow = numberRow
                 )
             }
         }

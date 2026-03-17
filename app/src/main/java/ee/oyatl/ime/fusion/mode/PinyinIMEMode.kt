@@ -24,13 +24,20 @@ import ee.oyatl.ime.fusion.pinyin.ComposingView
 import ee.oyatl.ime.fusion.pinyin.ComposingView.ComposingStatus
 import ee.oyatl.ime.fusion.pinyin.DecodingInfo
 import ee.oyatl.ime.fusion.pinyin.OnGestureListener
+import ee.oyatl.ime.keyboard.KeyboardConfiguration
+import ee.oyatl.ime.keyboard.KeyboardTemplate
 import ee.oyatl.ime.keyboard.LayoutTable
 import ee.oyatl.ime.keyboard.layout.LayoutExt
 import ee.oyatl.ime.keyboard.layout.LayoutQwerty
+import ee.oyatl.ime.keyboard.layout.MobileKeyboard
+import ee.oyatl.ime.keyboard.layout.MobileKeyboardRows
+import ee.oyatl.ime.keyboard.layout.TabletKeyboard
+import ee.oyatl.ime.keyboard.layout.TabletKeyboardRows
 import java.util.Locale
 
 class PinyinIMEMode(
-    listener: IMEMode.Listener
+    listener: IMEMode.Listener,
+    numberRow: Boolean
 ): CommonIMEMode(listener) {
     /**
      * Connection used to bind the decoding service.
@@ -67,6 +74,25 @@ class PinyinIMEMode(
     private lateinit var candidatesContainer: CandidatesContainer
 
     private var isEnterNormalState = true
+
+    override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
+        mobile = KeyboardTemplate.Basic(
+            configuration = KeyboardConfiguration(
+                if(numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
+                MobileKeyboard.alphabetic(),
+                MobileKeyboard.bottom()
+            ),
+            contentRows = (if(numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.DEFAULT
+        ),
+        tablet = KeyboardTemplate.Basic(
+            configuration = KeyboardConfiguration(
+                if(numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
+                TabletKeyboard.alphabetic(delete = !numberRow),
+                TabletKeyboard.bottom()
+            ),
+            contentRows = (if(numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.DEFAULT
+        )
+    )
 
     override val textLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutExt.TABLE_CHINESE)
 
@@ -875,11 +901,13 @@ class PinyinIMEMode(
         override val text: CharSequence
     ): CandidateView.Candidate
 
-    class Params: IMEMode.Params {
+    class Params(
+        val numberRow: Boolean
+    ): IMEMode.Params {
         override val type: String = TYPE
 
         override fun create(listener: IMEMode.Listener): IMEMode {
-            return PinyinIMEMode(listener)
+            return PinyinIMEMode(listener, numberRow)
         }
 
         override fun getLabel(context: Context): String {
@@ -894,7 +922,8 @@ class PinyinIMEMode(
 
         companion object {
             fun parse(map: Map<String, String>): Params {
-                return Params()
+                val numberRow = map["number_row"]?.toBoolean() ?: false
+                return Params(numberRow)
             }
         }
     }

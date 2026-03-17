@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <SwitchPreferenceCompat
+        android:key="number_row"
+        android:title="@string/settings_input_mode_number_row_title"
+        android:summary="@string/settings_input_mode_number_row_summary" />
+
+</androidx.preference.PreferenceScreen>

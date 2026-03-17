@@ -145,13 +145,39 @@ abstract class KoreanIMEMode(
         }
     }
 
+    abstract class Hangul2SetKSCompatible(
+        converterType: ConverterType,
+        numberRow: Boolean,
+        listener: IMEMode.Listener
+    ): KoreanIMEMode(listener) {
+        override val hanjaConverter: HanjaConverter = converterType.create()
+        override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
+            mobile = KeyboardTemplate.Basic(
+                configuration = KeyboardConfiguration(
+                    if(numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
+                    MobileKeyboard.alphabetic(),
+                    MobileKeyboard.bottom()
+                ),
+                contentRows = (if(numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.DEFAULT
+            ),
+            tablet = KeyboardTemplate.Basic(
+                configuration = KeyboardConfiguration(
+                    if(numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
+                    TabletKeyboard.alphabetic(delete = !numberRow),
+                    TabletKeyboard.bottom()
+                ),
+                contentRows = (if(numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.DEFAULT
+            )
+        )
+    }
+
     class Hangul2SetKS(
         correctOrders: Boolean,
         converterType: ConverterType,
+        numberRow: Boolean,
         listener: IMEMode.Listener
-    ): KoreanIMEMode(listener) {
+    ): Hangul2SetKSCompatible(converterType, numberRow, listener) {
         override val hangulCombiner: HangulCombiner = HangulCombiner(Hangul2Set.COMB_KS, correctOrders)
-        override val hanjaConverter: HanjaConverter = converterType.create()
         override val textLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + Hangul2Set.TABLE_KS)
     }
 
@@ -211,26 +237,27 @@ abstract class KoreanIMEMode(
     class HangulOld2Set(
         correctOrders: Boolean,
         converterType: ConverterType,
+        numberRow: Boolean,
         listener: IMEMode.Listener
-    ): KoreanIMEMode(listener) {
+    ): Hangul2SetKSCompatible(converterType, numberRow, listener) {
         override val hangulCombiner: HangulCombiner = HangulCombiner(HangulOld.COMB_FULL, correctOrders)
-        override val hanjaConverter: HanjaConverter = converterType.create()
         override val textLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + HangulOld.TABLE_OLD_2SET)
     }
 
     data class Params(
         val layout: Layout,
         val correctOrders: Boolean,
-        val converterType: ConverterType
+        val converterType: ConverterType,
+        val numberRow: Boolean
     ): IMEMode.Params {
         override val type: String = TYPE
 
         override fun create(listener: IMEMode.Listener): IMEMode {
             return when(layout) {
-                Layout.Set2KS -> Hangul2SetKS(correctOrders, converterType, listener)
+                Layout.Set2KS -> Hangul2SetKS(correctOrders, converterType, numberRow, listener)
                 Layout.Set3390 -> Hangul3Set390(correctOrders, converterType, listener)
                 Layout.Set3391 -> Hangul3Set391(correctOrders, converterType, listener)
-                Layout.Set2Old -> HangulOld2Set(correctOrders, converterType, listener)
+                Layout.Set2Old -> HangulOld2Set(correctOrders, converterType, numberRow, listener)
             }
         }
 
@@ -253,10 +280,12 @@ abstract class KoreanIMEMode(
                 val layout = Layout.valueOf(map["layout"] ?: Layout.Set2KS.name)
                 val converterType = ConverterType.valueOf(map["converter"] ?: ConverterType.Word.name)
                 val correctOrders = (map["correct_orders"] ?: "false").toBoolean()
+                val numberRow = map["number_row"]?.toBoolean() ?: false
                 return Params(
                     layout = layout,
                     converterType = converterType,
-                    correctOrders = correctOrders
+                    correctOrders = correctOrders,
+                    numberRow = numberRow
                 )
             }
         }

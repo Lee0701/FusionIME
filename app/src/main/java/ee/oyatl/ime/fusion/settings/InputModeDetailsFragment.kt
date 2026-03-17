@@ -10,6 +10,7 @@ import ee.oyatl.ime.fusion.mode.IMEMode
 import ee.oyatl.ime.fusion.mode.KoreanIMEMode
 import ee.oyatl.ime.fusion.mode.LatinIMEMode
 import ee.oyatl.ime.fusion.mode.MozcIMEMode
+import ee.oyatl.ime.fusion.mode.PinyinIMEMode
 import ee.oyatl.ime.fusion.mode.VietIMEMode
 
 abstract class InputModeDetailsFragment: PreferenceFragmentCompat() {
@@ -49,6 +50,8 @@ abstract class InputModeDetailsFragment: PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             super.onCreatePreferences(savedInstanceState, rootKey)
             addPreferencesFromResource(R.xml.pref_input_mode_latin)
+            if(Feature.NumberRow.availableInCurrentVersion)
+                addPreferencesFromResource(R.xml.pref_input_mode_number_row)
         }
     }
 
@@ -56,6 +59,8 @@ abstract class InputModeDetailsFragment: PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             super.onCreatePreferences(savedInstanceState, rootKey)
             addPreferencesFromResource(R.xml.pref_input_mode_korean_layout)
+            if(Feature.NumberRow.availableInCurrentVersion)
+                addPreferencesFromResource(R.xml.pref_input_mode_number_row)
             if(Feature.BigramHanjaConverter.availableInCurrentVersion)
                 addPreferencesFromResource(R.xml.pref_input_mode_korean_converter)
         }
@@ -65,8 +70,18 @@ abstract class InputModeDetailsFragment: PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             super.onCreatePreferences(savedInstanceState, rootKey)
             addPreferencesFromResource(R.xml.pref_input_mode_mozc_layout)
+            if(Feature.NumberRow.availableInCurrentVersion)
+                addPreferencesFromResource(R.xml.pref_input_mode_number_row)
             if(Feature.MozcCandidateHeight.availableInCurrentVersion)
                 addPreferencesFromResource(R.xml.pref_input_mode_mozc_candidate)
+        }
+    }
+
+    class Pinyin: InputModeDetailsFragment() {
+        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+            super.onCreatePreferences(savedInstanceState, rootKey)
+            if(Feature.NumberRow.availableInCurrentVersion)
+                addPreferencesFromResource(R.xml.pref_input_mode_number_row)
         }
     }
 
@@ -74,13 +89,19 @@ abstract class InputModeDetailsFragment: PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             super.onCreatePreferences(savedInstanceState, rootKey)
             addPreferencesFromResource(R.xml.pref_input_mode_viet)
+            if(Feature.NumberRow.availableInCurrentVersion)
+                addPreferencesFromResource(R.xml.pref_input_mode_number_row)
         }
     }
 
     class Cangjie: InputModeDetailsFragment() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             super.onCreatePreferences(savedInstanceState, rootKey)
-            setPreferencesFromResource(R.xml.pref_input_mode_cangjie, rootKey)
+            addPreferencesFromResource(R.xml.pref_input_mode_cangjie_layout)
+            if(Feature.NumberRow.availableInCurrentVersion)
+                addPreferencesFromResource(R.xml.pref_input_mode_number_row)
+            addPreferencesFromResource(R.xml.pref_input_mode_cangjie_extra)
+
         }
     }
 
@@ -94,6 +115,7 @@ abstract class InputModeDetailsFragment: PreferenceFragmentCompat() {
                 LatinIMEMode.TYPE -> Latin()
                 KoreanIMEMode.TYPE -> Korean()
                 MozcIMEMode.TYPE -> Mozc()
+                PinyinIMEMode.TYPE -> Pinyin()
                 VietIMEMode.TYPE -> Viet()
                 CangjieIMEMode.TYPE -> Cangjie()
                 else -> null
