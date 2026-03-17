@@ -194,7 +194,7 @@ abstract class KoreanIMEMode(
             KeyEvent.KEYCODE_B to ExtKeyCode.KEYCODE_390_0,
             KeyEvent.KEYCODE_N to ExtKeyCode.KEYCODE_390_1,
             KeyEvent.KEYCODE_M to ExtKeyCode.KEYCODE_390_2,
-            KeyEvent.KEYCODE_APOSTROPHE to ExtKeyCode.KEYCODE_390_3,
+            KeyEvent.KEYCODE_APOSTROPHE to ExtKeyCode.KEYCODE_390_3
         ))
     }
 
@@ -218,6 +218,44 @@ abstract class KoreanIMEMode(
         override val textLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + HangulOld.TABLE_OLD_2SET)
     }
 
+    class HangulOld3Set393(
+        correctOrders: Boolean,
+        converterType: ConverterType,
+        listener: IMEMode.Listener
+    ): Hangul3Set390391(listener) {
+        override val hangulCombiner: HangulCombiner = HangulCombiner(HangulOld.COMB_FULL, correctOrders)
+        override val hanjaConverter: HanjaConverter = converterType.create()
+        override val textLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + HangulOld.TABLE_OLD_393)
+        override val softKeyCodeMapper: SoftKeyCodeMapper get() = SoftKeyCodeMapper(mapOf(
+            KeyEvent.KEYCODE_B to ExtKeyCode.KEYCODE_390_0,
+            KeyEvent.KEYCODE_N to ExtKeyCode.KEYCODE_390_1,
+            KeyEvent.KEYCODE_M to ExtKeyCode.KEYCODE_390_2,
+            KeyEvent.KEYCODE_APOSTROPHE to ExtKeyCode.KEYCODE_390_3,
+            KeyEvent.KEYCODE_SLASH to ExtKeyCode.KEYCODE_PERIOD_COMMA,
+            ExtKeyCode.KEYCODE_PERIOD_COMMA to KeyEvent.KEYCODE_GRAVE
+        ))
+        override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
+            mobile = KeyboardTemplate.Basic(
+                configuration = KeyboardConfiguration(
+                    MobileKeyboard.numbers(),
+                    MobileKeyboard.alphabetic(semicolon = true, shiftDeleteWidth = 1f),
+                    MobileKeyboard.bottom(ExtKeyCode.KEYCODE_PERIOD_COMMA, KeyEvent.KEYCODE_SLASH)
+                ),
+                contentRows = MobileKeyboardRows.NUMBERS + MobileKeyboardRows.SEMICOLON_QUOTE,
+                softKeyCodeMapper = softKeyCodeMapper
+            ),
+            tablet = KeyboardTemplate.Basic(
+                configuration = KeyboardConfiguration(
+                    TabletKeyboard.numbers(delete = true),
+                    TabletKeyboard.alphabetic(semicolon = true, delete = false, spacerOnDelete = false),
+                    TabletKeyboard.bottom()
+                ),
+                contentRows = TabletKeyboardRows.HANGUL_OLD_393,
+                softKeyCodeMapper = SoftKeyCodeMapper()
+            )
+        )
+    }
+
     data class Params(
         val layout: Layout,
         val correctOrders: Boolean,
@@ -231,6 +269,7 @@ abstract class KoreanIMEMode(
                 Layout.Set3390 -> Hangul3Set390(correctOrders, converterType, listener)
                 Layout.Set3391 -> Hangul3Set391(correctOrders, converterType, listener)
                 Layout.Set2Old -> HangulOld2Set(correctOrders, converterType, listener)
+                Layout.Set3Old393 -> HangulOld3Set393(correctOrders, converterType, listener)
             }
         }
 
@@ -244,7 +283,8 @@ abstract class KoreanIMEMode(
             return when(layout) {
                 Layout.Set2KS -> "한2"
                 Layout.Set3390, Layout.Set3391 -> "한3"
-                Layout.Set2Old -> "ᄒᆞ"
+                Layout.Set2Old -> "ᄒᆞ2"
+                Layout.Set3Old393 -> "ᄒᆞ3"
             }
         }
 
@@ -268,7 +308,8 @@ abstract class KoreanIMEMode(
         Set2KS(R.string.korean_layout_hangul_2set_ks),
         Set3390(R.string.korean_layout_hangul_3set_390),
         Set3391(R.string.korean_layout_hangul_3set_391),
-        Set2Old(R.string.korean_layout_old_hangul_2set_ks)
+        Set2Old(R.string.korean_layout_old_hangul_2set_ks),
+        Set3Old393(R.string.korean_layout_old_hangul_3set_393)
     }
 
     enum class ConverterType {

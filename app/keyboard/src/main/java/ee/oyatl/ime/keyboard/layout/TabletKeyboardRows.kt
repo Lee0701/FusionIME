@@ -44,6 +44,13 @@ object TabletKeyboardRows {
         "zxcvbnm,./`",
     )
 
+    val HANGUL_OLD_393: List<String> = listOf(
+        "`1234567890",
+        "qwertyuiop[]",
+        "asdfghjkl;'",
+        "zxcvbnm,./",
+    )
+
     val DVORAK: List<String> = listOf(
         "qwertyuiop",
         "asdfghjkl;",

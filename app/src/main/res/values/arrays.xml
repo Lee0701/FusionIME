@@ -66,6 +66,7 @@
         <item>@string/korean_layout_hangul_3set_390</item>
         <item>@string/korean_layout_hangul_3set_391</item>
         <item>@string/korean_layout_old_hangul_2set_ks</item>
+        <item>@string/korean_layout_old_hangul_3set_393</item>
     </string-array>
 
     <string-array name="settings_input_mode_korean_layout_values">
@@ -73,6 +74,7 @@
         <item>Set3390</item>
         <item>Set3391</item>
         <item>Set2Old</item>
+        <item>Set3Old393</item>
     </string-array>
 
     <string-array name="settings_input_mode_korean_converter_entries">
