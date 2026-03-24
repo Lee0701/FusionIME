@@ -153,6 +153,22 @@ abstract class KoreanIMEMode(
         override val hangulCombiner: HangulCombiner = HangulCombiner(Hangul2Set.COMB_KS, correctOrders)
         override val hanjaConverter: HanjaConverter = converterType.create()
         override val textLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + Hangul2Set.TABLE_KS)
+        override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
+            mobile = KeyboardTemplate.Basic(
+                configuration = KeyboardConfiguration(
+                    MobileKeyboard.alphabetic(),
+                    MobileKeyboard.bottom()
+                ),
+                contentRows = MobileKeyboardRows.KS
+            ),
+            tablet = KeyboardTemplate.Basic(
+                configuration = KeyboardConfiguration(
+                    TabletKeyboard.alphabetic(),
+                    TabletKeyboard.bottom()
+                ),
+                contentRows = TabletKeyboardRows.KS
+            )
+        )
     }
 
     /*
@@ -226,6 +242,22 @@ abstract class KoreanIMEMode(
         override val hangulCombiner: HangulCombiner = HangulCombiner(HangulOld.COMB_FULL, correctOrders)
         override val hanjaConverter: HanjaConverter = converterType.create()
         override val textLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + HangulOld.TABLE_OLD_2SET)
+        override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
+            mobile = KeyboardTemplate.Basic(
+                configuration = KeyboardConfiguration(
+                    MobileKeyboard.alphabetic(),
+                    MobileKeyboard.bottom()
+                ),
+                contentRows = MobileKeyboardRows.KS
+            ),
+            tablet = KeyboardTemplate.Basic(
+                configuration = KeyboardConfiguration(
+                    TabletKeyboard.alphabetic(),
+                    TabletKeyboard.bottom()
+                ),
+                contentRows = TabletKeyboardRows.KS
+            )
+        )
     }
 
     class HangulOld3Set393(

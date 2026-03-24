@@ -21,6 +21,12 @@
         app:defaultValue="10.0"
         app:title="@string/settings_behaviour_vibration_duration_title" />
 
+    <SwitchPreferenceCompat
+        app:key="preview_popup"
+        app:defaultValue="true"
+        app:title="@string/settings_behaviour_preview_popup_title"
+        app:summary="@string/settings_behaviour_preview_popup_summary" />
+
     <ee.oyatl.ime.fusion.preference.KeyStrokePreference
         app:key="hardware_language_key"
         app:title="@string/settings_behaviour_hardware_language_key_title"
