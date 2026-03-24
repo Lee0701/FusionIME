@@ -10,8 +10,8 @@ import android.view.View
 import android.view.WindowInsets.Type
 import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
-import androidx.annotation.RequiresApi
 import androidx.appcompat.view.ContextThemeWrapper
+import androidx.core.view.WindowCompat
 import androidx.preference.PreferenceManager
 import com.android.inputmethod.latin.RichInputMethodManager
 import com.android.inputmethod.latin.settings.Settings
@@ -31,7 +31,7 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
     private lateinit var preference: SharedPreferences
     private lateinit var imeModeSwitcher: IMEModeSwitcher
-    private lateinit var imeView: LinearLayout
+    private var imeView: View? = null
     private var hardwareLanguageKeyStroke: KeyStrokePreference.KeyStroke = KeyStrokePreference.KeyStroke()
 
     override fun onCreate() {
@@ -40,6 +40,8 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
         onInit()
         onLoad()
         preference.registerOnSharedPreferenceChangeListener(this)
+
+        updateNavigationBar()
 
         // LatinIMEMode
         Settings.init(this)
@@ -101,14 +103,13 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
     }
 
     override fun onCreateInputView(): View {
-        imeView = LinearLayout(this)
+        val imeView = LinearLayout(this)
         imeView.orientation = LinearLayout.VERTICAL
         imeView.addView(imeModeSwitcher.createCandidateView())
         imeView.addView(imeModeSwitcher.createInputView())
-        imeView.fitsSystemWindows = true
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) updateNavigationBar()
         onSwitchInputMode(0)
+        this.imeView = imeView
         return imeView
     }
 
@@ -196,16 +197,25 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
         return true
     }
 
-    @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
     private fun updateNavigationBar() {
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM) return
+        val window = window.window ?: return
         val typedValue = TypedValue()
-        val theme = ContextThemeWrapper(this, R.style.Theme_FusionIME_Keyboard).theme
-        theme.resolveAttribute(R.attr.backgroundColor, typedValue, true)
-        window.window?.decorView?.setOnApplyWindowInsetsListener { view, insets ->
-            val statusBarInsets = insets.getInsets(Type.statusBars())
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        WindowCompat.enableEdgeToEdge(window)
+        window.decorView.setOnApplyWindowInsetsListener { view, windowInsets ->
+            val insets = windowInsets.getInsets(Type.systemBars() and Type.ime().inv())
+            val theme = ContextThemeWrapper(this, R.style.Theme_FusionIME_Keyboard).theme
+            theme.resolveAttribute(R.attr.backgroundColor, typedValue, true)
+            val darkMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
             view.setBackgroundColor(typedValue.data)
-            view.setPadding(0, statusBarInsets.top, 0, 0)
-            insets
+            WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightNavigationBars = !darkMode
+            imeView?.apply {
+                setPadding(0, 0, 0, insets.bottom)
+                requestLayout()
+                requestApplyInsets()
+            }
+            windowInsets
         }
     }
 }
