@@ -559,8 +559,18 @@ abstract class LatinIMEMode(
             return "$localeName $layoutName"
         }
 
-        override fun getShortLabel(context: Context): String {
-            return locale.language.replaceFirstChar { it.uppercase() }
+        override fun getShortLabel(context: Context, params: List<IMEMode.Params>): String {
+            val latinParams = params.filterIsInstance<Params>().filterNot { it == this }
+            val localeLabel = locale.language.replaceFirstChar { it.uppercase() }
+            // If this is the only Latin modes, use locale name
+            if(latinParams.isEmpty()) return localeLabel
+            // Find if there are any other Latin mode with same locale but different layout
+            val localeParams = latinParams.filter { it.locale == this.locale && it.layout != this.layout }
+            // If this is the only Latin mode with same locale, use locale name
+            if(localeParams.isEmpty()) return localeLabel
+            // Use locale and layout name
+            val layoutLabel = layout.name.first().toString()
+            return "$localeLabel$layoutLabel"
         }
 
         companion object {
