@@ -201,15 +201,20 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM) return
         val window = window.window ?: return
         val typedValue = TypedValue()
+        // Enable edge-to-edge
         WindowCompat.setDecorFitsSystemWindows(window, false)
         WindowCompat.enableEdgeToEdge(window)
+        // Get system bar insets after keyboard is displayed
         window.decorView.setOnApplyWindowInsetsListener { view, windowInsets ->
             val insets = windowInsets.getInsets(Type.systemBars() and Type.ime().inv())
             val theme = ContextThemeWrapper(this, R.style.Theme_FusionIME_Keyboard).theme
             theme.resolveAttribute(R.attr.backgroundColor, typedValue, true)
             val darkMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+            // Update colors
             view.setBackgroundColor(typedValue.data)
             WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightNavigationBars = !darkMode
+            // Apply bottom padding to root input view
+            // Not applying to the decor view since different behaviours between devices
             imeView?.apply {
                 setPadding(0, 0, 0, insets.bottom)
                 requestLayout()
