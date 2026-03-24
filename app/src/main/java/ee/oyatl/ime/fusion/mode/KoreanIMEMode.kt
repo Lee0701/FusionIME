@@ -158,7 +158,7 @@ abstract class KoreanIMEMode(
                     MobileKeyboard.alphabetic(),
                     MobileKeyboard.bottom()
                 ),
-                contentRows = (if(numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.DEFAULT
+                contentRows = (if(numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.KS
             ),
             tablet = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
@@ -166,7 +166,7 @@ abstract class KoreanIMEMode(
                     TabletKeyboard.alphabetic(delete = !numberRow),
                     TabletKeyboard.bottom()
                 ),
-                contentRows = (if(numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.DEFAULT
+                contentRows = (if(numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.KS
             )
         )
     }
@@ -179,22 +179,6 @@ abstract class KoreanIMEMode(
     ): Hangul2SetKSCompatible(converterType, numberRow, listener) {
         override val hangulCombiner: HangulCombiner = HangulCombiner(Hangul2Set.COMB_KS, correctOrders)
         override val textLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + Hangul2Set.TABLE_KS)
-        override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
-            mobile = KeyboardTemplate.Basic(
-                configuration = KeyboardConfiguration(
-                    MobileKeyboard.alphabetic(),
-                    MobileKeyboard.bottom()
-                ),
-                contentRows = MobileKeyboardRows.KS
-            ),
-            tablet = KeyboardTemplate.Basic(
-                configuration = KeyboardConfiguration(
-                    TabletKeyboard.alphabetic(),
-                    TabletKeyboard.bottom()
-                ),
-                contentRows = TabletKeyboardRows.KS
-            )
-        )
     }
 
     /*
@@ -268,22 +252,6 @@ abstract class KoreanIMEMode(
     ): Hangul2SetKSCompatible(converterType, numberRow, listener) {
         override val hangulCombiner: HangulCombiner = HangulCombiner(HangulOld.COMB_FULL, correctOrders)
         override val textLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + HangulOld.TABLE_OLD_2SET)
-        override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
-            mobile = KeyboardTemplate.Basic(
-                configuration = KeyboardConfiguration(
-                    MobileKeyboard.alphabetic(),
-                    MobileKeyboard.bottom()
-                ),
-                contentRows = MobileKeyboardRows.KS
-            ),
-            tablet = KeyboardTemplate.Basic(
-                configuration = KeyboardConfiguration(
-                    TabletKeyboard.alphabetic(),
-                    TabletKeyboard.bottom()
-                ),
-                contentRows = TabletKeyboardRows.KS
-            )
-        )
     }
 
     class HangulOld3Set393(
