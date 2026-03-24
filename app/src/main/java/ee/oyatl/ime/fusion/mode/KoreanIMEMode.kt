@@ -328,28 +328,36 @@ abstract class KoreanIMEMode(
             if(koreanParams.isEmpty()) {
                 return when(layout) {
                     // For modern Hangul layouts
-                    Layout.Set2KS, Layout.Set3390, Layout.Set3391 -> "한"
+                    Layout.Set2KS, Layout.Set3390, Layout.Set3391, Layout.Set3391Strict -> "한"
                     // For old Hangul layouts
-                    Layout.Set2Old -> "ᄒᆞ"
+                    Layout.Set2Old, Layout.Set3Old393 -> "ᄒᆞ"
                 }
             }
             // If there are any other Korean modes
             return when(layout) {
                 // For 2-set layouts
                 Layout.Set2KS -> "한2"
-                Layout.Set3390, Layout.Set3391 -> {
+                Layout.Set3390, Layout.Set3391, Layout.Set3391Strict -> {
                     // Find if there are any other 3-set layouts
-                    val korean3SetParams = koreanParams.filter { it.layout in setOf(Layout.Set3390, Layout.Set3391) }
+                    val korean3SetParams = koreanParams.filter { it.layout in setOf(Layout.Set3390, Layout.Set3391, Layout.Set3391Strict) }
                     // If this is the only mode with 3-set layout
                     if(korean3SetParams.isEmpty()) "한3"
                     // If not, use specific layout name
                     else when(layout) {
                         Layout.Set3390 -> "390"
                         Layout.Set3391 -> "391"
+                        Layout.Set3391Strict -> "391"
                     }
                 }
                 // For old Hangul layouts
-                Layout.Set2Old -> "ᄒᆞ"
+                Layout.Set2Old, Layout.Set3Old393 -> {
+                    val oldParams = koreanParams.filter { it.layout in setOf(Layout.Set2Old, Layout.Set3Old393) }
+                    if(oldParams.isEmpty()) "ᄒᆞ"
+                    else when(layout) {
+                        Layout.Set2Old -> "ᄒᆞ2"
+                        Layout.Set3Old393 -> "ᄒᆞ3"
+                    }
+                }
             }
         }
 
