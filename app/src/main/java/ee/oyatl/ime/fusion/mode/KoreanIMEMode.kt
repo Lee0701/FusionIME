@@ -378,7 +378,7 @@ abstract class KoreanIMEMode(
         Set2KS(R.string.korean_layout_hangul_2set_ks),
         Set3390(R.string.korean_layout_hangul_3set_390),
         Set3391(R.string.korean_layout_hangul_3set_391),
-        Set3391Strict(R.string.korean_layout_hangul_3set_391),
+        Set3391Strict(R.string.korean_layout_hangul_3set_391_strict),
         Set2Old(R.string.korean_layout_old_hangul_2set_ks),
         Set3Old393(R.string.korean_layout_old_hangul_3set_393)
     }
