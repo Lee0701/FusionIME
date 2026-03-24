@@ -11,17 +11,24 @@
     <string name="settings_method_choose_method_title">Choose Input Method</string>
     <string name="settings_method_choose_method_summary">Please choose \'FusionIME\'.</string>
 
+    <string name="settings_appearance_basic_title">Basic</string>
     <string name="settings_appearance_screen_mode_title">Screen Mode</string>
     <string name="settings_appearance_keyboard_height_portrait_title">Keyboard Height (Portrait)</string>
     <string name="settings_appearance_keyboard_height_landscape_title">Keyboard Height (Landscape)</string>
-    <string name="settings_appearance_preview_popup_title">Preview Popups</string>
-    <string name="settings_appearance_preview_popup_summary">Show preview popups on key press.</string>
+
+    <string name="settings_appearance_split_keyboard_title">Split Keyboard</string>
+    <string name="settings_appearance_split_keyboard_portrait_title">Split Keyboard (Portrait)</string>
+    <string name="settings_appearance_split_ratio_portrait_title">Split Ratio (Portrait)</string>
+    <string name="settings_appearance_split_keyboard_landscape_title">Split Keyboard (Landscape)</string>
+    <string name="settings_appearance_split_ratio_landscape_title">Split Ratio (Landscape)</string>
 
     <string name="settings_behaviour_sound_feedback_title">Sound Feedback</string>
     <string name="settings_behaviour_sound_feedback_summary">Play sound effect on key press.</string>
     <string name="settings_behaviour_haptic_feedback_title">Haptic Feedback</string>
     <string name="settings_behaviour_haptic_feedback_summary">Vibrate on key press.</string>
     <string name="settings_behaviour_vibration_duration_title">Vibration Duration</string>
+    <string name="settings_behaviour_preview_popup_title">Preview Popups</string>
+    <string name="settings_behaviour_preview_popup_summary">Show preview popups on key press.</string>
     <string name="settings_behaviour_hardware_language_key_title">Hardware Language Key</string>
     <string name="settings_behaviour_hardware_language_key_summary">Set a key combination to use as language switch on hardware keyboard.</string>
     <string name="settings_behaviour_always_show_soft_keyboard_title">Always Show Soft Keyboard</string>
@@ -76,7 +83,9 @@
     <string name="korean_layout_hangul_2set_ks">Hangul 2-Set KS</string>
     <string name="korean_layout_hangul_3set_390">Hangul 3-Set 390</string>
     <string name="korean_layout_hangul_3set_391">Hangul 3-Set Final</string>
+    <string name="korean_layout_hangul_3set_391_strict">Hangul 3-Set Final (Strict)</string>
     <string name="korean_layout_old_hangul_2set_ks">Old Hangul 2-Set</string>
+    <string name="korean_layout_old_hangul_3set_393">Old Hangul 3-Set 393</string>
 
     <string name="korean_converter_word">Word Converter</string>
     <string name="korean_converter_phrase">Phrase Converter</string>

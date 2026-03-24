@@ -13,8 +13,8 @@ configure<ApplicationExtension> {
         applicationId = "ee.oyatl.ime.fusion"
         minSdk = 21
         targetSdk = 36
-        versionCode = 8
-        versionName = "20260314-8-6e24b5f"
+        versionCode = 10
+        versionName = "20260317-10-0d44a52"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -32,6 +32,7 @@ configure<ApplicationExtension> {
     flavorDimensions += "edition"
     productFlavors {
         create("paid") {
+            isDefault = true
             dimension = "edition"
             applicationIdSuffix = ""
             buildConfigField("boolean", "IS_PAID", "true")

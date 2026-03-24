@@ -191,7 +191,7 @@ class ZhuyinIMEMode(
             return "$localeName $layoutName"
         }
 
-        override fun getShortLabel(context: Context): String {
+        override fun getShortLabel(context: Context, params: List<IMEMode.Params>): String {
             return "注音"
         }
 

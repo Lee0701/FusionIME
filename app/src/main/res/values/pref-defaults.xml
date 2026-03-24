@@ -3,4 +3,8 @@
     <string translatable="false" name="screen_mode_default">Mobile</string>
     <integer name="keyboard_height_portrait_default">55</integer>
     <integer name="keyboard_height_landscape_default">45</integer>
+    <bool name="split_keyboard_portrait_default">false</bool>
+    <bool name="split_keyboard_landscape_default">true</bool>
+    <integer name="split_ratio_portrait_default">10</integer>
+    <integer name="split_ratio_landscape_default">20</integer>
 </resources>

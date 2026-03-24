@@ -33,7 +33,7 @@ interface IMEMode {
         val type: String
         fun create(listener: Listener): IMEMode
         fun getLabel(context: Context): String
-        fun getShortLabel(context: Context): String
+        fun getShortLabel(context: Context, params: List<Params>): String
 
         companion object {
             fun parse(stringifedMap: String): Params? {

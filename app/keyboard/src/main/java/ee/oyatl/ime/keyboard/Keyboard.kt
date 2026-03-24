@@ -7,6 +7,11 @@ interface Keyboard {
 
     sealed interface KeyItem {
         val width: Float
+        data class SplitSpacer(
+            val absoluteWidth: Int
+        ): KeyItem {
+            override val width: Float = 0f
+        }
         data class Spacer(
             override val width: Float
         ): KeyItem
