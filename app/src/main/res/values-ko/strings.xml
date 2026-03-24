@@ -76,4 +76,14 @@
     <string name="settings_dialog_keystroke_meta">Meta</string>
     <string name="settings_behaviour_hardware_language_key_title">하드웨어 언어 키</string>
     <string name="settings_behaviour_hardware_language_key_summary">하드웨어 키보드 사용시 언어 전환에 사용할 키 조합을 설정합니다.</string>
+    <string name="settings_appearance_basic_title">기본</string>
+    <string name="settings_appearance_split_keyboard_title">좌우분할 키보드</string>
+    <string name="settings_appearance_split_keyboard_landscape_title">좌우분할 키보드 (가로 화면)</string>
+    <string name="settings_appearance_split_ratio_portrait_title">좌우분할 간격 비율 (세로 화면)</string>
+    <string name="settings_appearance_split_keyboard_portrait_title">좌우분할 키보드 (세로 화면)</string>
+    <string name="settings_appearance_split_ratio_landscape_title">좌우분할 간격 비율 (가로 화면)</string>
+    <string name="settings_input_mode_number_row_title">숫자 열</string>
+    <string name="settings_input_mode_number_row_summary">최상단 숫자 열 항상 표시</string>
+    <string name="korean_layout_hangul_3set_391_strict">한글 세벌식 최종 (정석 강요)</string>
+    <string name="korean_layout_old_hangul_3set_393">옛한글 세벌식 393</string>
 </resources>
