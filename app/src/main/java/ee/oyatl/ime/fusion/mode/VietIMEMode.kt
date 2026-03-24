@@ -6,23 +6,51 @@ import androidx.annotation.StringRes
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.korean.WordComposer
+import ee.oyatl.ime.keyboard.KeyboardConfiguration
+import ee.oyatl.ime.keyboard.KeyboardTemplate
+import ee.oyatl.ime.keyboard.layout.MobileKeyboard
+import ee.oyatl.ime.keyboard.layout.MobileKeyboardRows
+import ee.oyatl.ime.keyboard.layout.TabletKeyboard
+import ee.oyatl.ime.keyboard.layout.TabletKeyboardRows
 import ee.oyatl.ime.viet.ChuQuocNguTableConverter
 import ee.oyatl.ime.viet.HanNomConverter
 import java.util.Locale
 
 abstract class VietIMEMode(
-    listener: IMEMode.Listener
+    listener: IMEMode.Listener,
+    numberRow: Boolean,
 ): CommonIMEMode(listener) {
 
+    override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
+        mobile = KeyboardTemplate.Basic(
+            configuration = KeyboardConfiguration(
+                if(numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
+                MobileKeyboard.alphabetic(),
+                MobileKeyboard.bottom()
+            ),
+            contentRows = (if(numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.DEFAULT
+        ),
+        tablet = KeyboardTemplate.Basic(
+            configuration = KeyboardConfiguration(
+                if(numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
+                TabletKeyboard.alphabetic(delete = !numberRow),
+                TabletKeyboard.bottom()
+            ),
+            contentRows = (if(numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.DEFAULT
+        )
+    )
+
     class Qwerty(
-        listener: IMEMode.Listener
-    ): VietIMEMode(listener) {
+        listener: IMEMode.Listener,
+        numberRow: Boolean
+    ): VietIMEMode(listener, numberRow) {
         override val keyboardMode: String = "q"
     }
 
     class Telex(
-        listener: IMEMode.Listener
-    ): VietIMEMode(listener) {
+        listener: IMEMode.Listener,
+        numberRow: Boolean
+    ): VietIMEMode(listener, numberRow) {
         override val keyboardMode: String = "t"
     }
 
@@ -103,14 +131,15 @@ abstract class VietIMEMode(
     }
 
     data class Params(
-        val layout: Layout
+        val layout: Layout,
+        val numberRow: Boolean
     ): IMEMode.Params {
         override val type: String = TYPE
 
         override fun create(listener: IMEMode.Listener): IMEMode {
             return when(layout) {
-                Layout.Qwerty -> Qwerty(listener)
-                Layout.Telex -> Telex(listener)
+                Layout.Qwerty -> Qwerty(listener, numberRow)
+                Layout.Telex -> Telex(listener, numberRow)
             }
         }
 
@@ -132,8 +161,10 @@ abstract class VietIMEMode(
         companion object {
             fun parse(map: Map<String, String>): Params {
                 val layout = Layout.valueOf(map["layout"] ?: Layout.Qwerty.name)
+                val numberRow = map["number_row"]?.toBoolean() ?: false
                 return Params(
-                    layout = layout
+                    layout = layout,
+                    numberRow = numberRow
                 )
             }
         }

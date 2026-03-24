@@ -153,17 +153,44 @@ abstract class CangjieIMEMode(
         override val keyMap: Map<Char, Char> = LayoutCangjie.KEY_MAP_CANGJIE
     }
 
-    class Cangjie(
+    abstract class QwertyCompatible(
         fullWidth: Boolean,
+        numberRow: Boolean,
         listener: IMEMode.Listener
     ): CangjieQuick(fullWidth, listener) {
+        override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
+            mobile = KeyboardTemplate.Basic(
+                configuration = KeyboardConfiguration(
+                    if(numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
+                    MobileKeyboard.alphabetic(),
+                    MobileKeyboard.bottom()
+                ),
+                contentRows = (if(numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.DEFAULT
+            ),
+            tablet = KeyboardTemplate.Basic(
+                configuration = KeyboardConfiguration(
+                    if(numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
+                    TabletKeyboard.alphabetic(delete = !numberRow),
+                    TabletKeyboard.bottom()
+                ),
+                contentRows = (if(numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.DEFAULT
+            )
+        )
+    }
+
+    class Cangjie(
+        fullWidth: Boolean,
+        numberRow: Boolean,
+        listener: IMEMode.Listener
+    ): QwertyCompatible(fullWidth, numberRow, listener) {
         override val inputMode: Int = TableLoader.CANGJIE
     }
 
     class Quick(
         fullWidth: Boolean,
+        numberRow: Boolean,
         listener: IMEMode.Listener
-    ): CangjieQuick(fullWidth, listener) {
+    ): QwertyCompatible(fullWidth, numberRow, listener) {
         override val inputMode: Int = TableLoader.QUICK
     }
 
@@ -196,14 +223,15 @@ abstract class CangjieIMEMode(
 
     data class Params(
         val layout: Layout,
-        val fullWidth: Boolean
+        val fullWidth: Boolean,
+        val numberRow: Boolean
     ): IMEMode.Params {
         override val type: String = TYPE
 
         override fun create(listener: IMEMode.Listener): IMEMode {
             return when(layout) {
-                Layout.Cangjie -> Cangjie(fullWidth, listener)
-                Layout.Quick -> Quick(fullWidth, listener)
+                Layout.Cangjie -> Cangjie(fullWidth, numberRow, listener)
+                Layout.Quick -> Quick(fullWidth, numberRow, listener)
                 Layout.Dayi3 -> Dayi3(fullWidth, listener)
             }
         }
@@ -226,9 +254,11 @@ abstract class CangjieIMEMode(
             fun parse(map: Map<String, String>): Params {
                 val layout = Layout.valueOf(map["layout"] ?: Layout.Cangjie.name)
                 val fullWidth = map["full_width"].toBoolean()
+                val numberRow = map["number_row"]?.toBoolean() ?: false
                 return Params(
                     layout = layout,
-                    fullWidth = fullWidth
+                    fullWidth = fullWidth,
+                    numberRow = numberRow
                 )
             }
         }
