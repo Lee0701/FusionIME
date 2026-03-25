@@ -4,6 +4,7 @@ import android.view.View
 
 interface KeyboardViewManager {
     val view: View
+    fun onReset()
     fun setLabels(labels: Map<Int, String>)
     fun setIcons(icons: Map<Int, Int>)
 }

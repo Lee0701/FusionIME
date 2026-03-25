@@ -23,6 +23,10 @@ class SwitcherKeyboardViewManager(
         map.values.forEach { (view as FrameLayout).addView(it.view) }
     }
 
+    override fun onReset() {
+        map.values.forEach { it.onReset() }
+    }
+
     override fun setLabels(labels: Map<Int, String>) {
         currentView.setLabels(labels)
     }

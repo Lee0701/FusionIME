@@ -121,10 +121,12 @@ abstract class CommonIMEMode(
         setPreferredKeyboard(editorInfo)
         shiftState = KeyboardState.Shift.Released
         updateInputView()
+        keyboardView?.onReset()
     }
 
     override fun onFinish() {
         onReset()
+        keyboardView?.onReset()
         util = null
     }
 
@@ -193,7 +195,7 @@ abstract class CommonIMEMode(
 
         val textKeyboard = textKeyboardTemplate.inflate(DefaultKeyboardInflater(params))
         val symbolKeyboard = symbolKeyboardTemplate.inflate(DefaultKeyboardInflater(params.copy(shiftAutoRelease = false)))
-        val numberKeyboard = numberKeyboardTemplate.inflate(DefaultKeyboardInflater(params.copy(shiftAutoRelease = false)))
+        val numberKeyboard = numberKeyboardTemplate.inflate(DefaultKeyboardInflater(params.copy(shiftAutoRelease = false, splitWidth = 0)))
 
         val textKeyboardView = textKeyboard.createView(context, this)
         val symbolKeyboardView = symbolKeyboard.createView(context, this)
