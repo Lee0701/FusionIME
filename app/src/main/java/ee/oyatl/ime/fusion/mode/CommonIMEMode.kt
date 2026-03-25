@@ -306,12 +306,14 @@ abstract class CommonIMEMode(
                     if(symbolState != KeyboardState.Symbol.Symbol) KeyboardState.Symbol.Symbol
                     else KeyboardState.Symbol.Text
                 shiftState = KeyboardState.Shift.Released
+                keyboardView?.onReset()
             }
             KeyEvent.KEYCODE_NUM -> {
                 symbolState =
                     if(symbolState != KeyboardState.Symbol.Number) KeyboardState.Symbol.Number
                     else KeyboardState.Symbol.Text
                 shiftState = KeyboardState.Shift.Released
+                keyboardView?.onReset()
             }
             else -> onSpecial(keyCode)
         }
