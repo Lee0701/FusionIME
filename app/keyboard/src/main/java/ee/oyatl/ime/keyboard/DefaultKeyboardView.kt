@@ -28,15 +28,11 @@ class DefaultKeyboardView(
     private val binding: KbdKeyboardBinding,
     private val keys: Set<KeyContainer>,
     private val listener: Listener
-): StateKeyboardViewManager {
+): KeyboardViewManager {
     override val view: View get() = binding.root
     private val rect: Rect = Rect()
     private val location = IntArray(2)
     private val pointers: MutableMap<Int, Pointer> = mutableMapOf()
-    // Update current shift state from IME mode
-    override var state: KeyboardState
-        get() = listener.shiftState
-        set(value) { if(value is KeyboardState.Shift) listener.shiftState = value }
 
     init {
         view.viewTreeObserver.addOnGlobalLayoutListener {
@@ -110,6 +106,7 @@ class DefaultKeyboardView(
     }
 
     override fun onReset() {
+        listener.shiftState = KeyboardState.Shift.Released
         pointers.values.forEach {
             it.key.binding.root.isPressed = false
             it.popup?.hide()
@@ -145,6 +142,21 @@ class DefaultKeyboardView(
         private val handler = Handler(Looper.getMainLooper())
 
         var shiftState: KeyboardState.Shift = KeyboardState.Shift.Released
+            set(value) {
+                field = value
+                when(value) {
+                    KeyboardState.Shift.Released -> {
+                        listener.onKeyUp(KeyEvent.KEYCODE_CAPS_LOCK, metaState)
+                        listener.onKeyUp(KeyEvent.KEYCODE_SHIFT_LEFT, metaState)
+                    }
+                    KeyboardState.Shift.Pressed -> {
+                        listener.onKeyDown(KeyEvent.KEYCODE_SHIFT_LEFT, metaState)
+                    }
+                    KeyboardState.Shift.Locked -> {
+                        listener.onKeyDown(KeyEvent.KEYCODE_CAPS_LOCK, metaState)
+                    }
+                }
+            }
         private var shiftPressing: Boolean = false
         private var shiftTime: Long = 0
         private var inputWhileShifted: Boolean = false
@@ -228,7 +240,6 @@ class DefaultKeyboardView(
                     shiftState = KeyboardState.Shift.Released
                 }
             }
-            updateShiftState()
         }
 
         private fun onShiftReleased(code: Int) {
@@ -245,7 +256,6 @@ class DefaultKeyboardView(
             }
             shiftTime = System.currentTimeMillis()
             inputWhileShifted = false
-            updateShiftState()
         }
 
         private fun autoReleaseShift() {
@@ -255,23 +265,6 @@ class DefaultKeyboardView(
                     shiftState = KeyboardState.Shift.Released
                 } else {
                     inputWhileShifted = true
-                }
-            }
-            updateShiftState()
-        }
-
-        private fun updateShiftState() {
-            // Send shift state to parent listener
-            when(shiftState) {
-                KeyboardState.Shift.Released -> {
-                    listener.onKeyUp(KeyEvent.KEYCODE_CAPS_LOCK, metaState)
-                    listener.onKeyUp(KeyEvent.KEYCODE_SHIFT_LEFT, metaState)
-                }
-                KeyboardState.Shift.Pressed -> {
-                    listener.onKeyDown(KeyEvent.KEYCODE_SHIFT_LEFT, metaState)
-                }
-                KeyboardState.Shift.Locked -> {
-                    listener.onKeyDown(KeyEvent.KEYCODE_CAPS_LOCK, metaState)
                 }
             }
         }

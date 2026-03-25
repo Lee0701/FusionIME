@@ -23,7 +23,6 @@ import ee.oyatl.ime.keyboard.KeyboardState
 import ee.oyatl.ime.keyboard.KeyboardTemplate
 import ee.oyatl.ime.keyboard.KeyboardViewManager
 import ee.oyatl.ime.keyboard.LayoutTable
-import ee.oyatl.ime.keyboard.StateKeyboardViewManager
 import ee.oyatl.ime.keyboard.SwitcherKeyboardViewManager
 import ee.oyatl.ime.keyboard.layout.LayoutExt
 import ee.oyatl.ime.keyboard.layout.LayoutQwerty
@@ -225,10 +224,9 @@ abstract class CommonIMEMode(
 
     protected fun updateInputView() {
         val keyboardView = keyboardView
-        if(keyboardView is StateKeyboardViewManager) {
+        if(keyboardView is SwitcherKeyboardViewManager) {
             // Update keyboard view states
             keyboardView.state = symbolState
-            keyboardView.state = shiftState
         }
         if(keyboardView != null) {
             val labels = currentLayoutTable.map.mapValues { (_, v) -> v.forShiftState(shiftState).toChar().toString() }

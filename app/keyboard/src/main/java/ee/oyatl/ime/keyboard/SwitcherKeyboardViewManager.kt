@@ -7,12 +7,10 @@ import android.widget.FrameLayout
 class SwitcherKeyboardViewManager(
     context: Context,
     val map: Map<KeyboardState, KeyboardViewManager>
-): StateKeyboardViewManager {
-    override var state: KeyboardState = map.keys.first()
+): KeyboardViewManager {
+    var state: KeyboardState = map.keys.first()
         set(value) {
             field = value
-            // Update children states
-            map.values.filterIsInstance<StateKeyboardViewManager>().forEach { it.state = value }
             currentView.view.bringToFront()
         }
     private val currentView: KeyboardViewManager get() = map[state] ?: map.values.first()
