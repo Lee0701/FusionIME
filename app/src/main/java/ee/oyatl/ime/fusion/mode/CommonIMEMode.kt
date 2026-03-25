@@ -118,10 +118,12 @@ abstract class CommonIMEMode(
         util = KeyEventUtil(inputConnection, editorInfo)
         onReset()
         setPreferredKeyboard(editorInfo)
+        keyboardView?.onReset()
     }
 
     override fun onFinish() {
         onReset()
+        keyboardView?.onReset()
         util = null
     }
 
