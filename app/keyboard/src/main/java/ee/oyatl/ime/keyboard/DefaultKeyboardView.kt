@@ -105,6 +105,14 @@ class DefaultKeyboardView(
         }
     }
 
+    override fun onReset() {
+        pointers.values.forEach {
+            it.key.binding.root.isPressed = false
+            it.popup?.hide()
+        }
+        pointers.clear()
+    }
+
     override fun setLabels(labels: Map<Int, String>) {
         keys.forEach {
             val label = labels[it.keyCode]
