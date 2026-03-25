@@ -106,6 +106,7 @@ class DefaultKeyboardView(
     }
 
     override fun onReset() {
+        listener.shiftState = KeyboardState.Shift.Released
         pointers.values.forEach {
             it.key.binding.root.isPressed = false
             it.popup?.hide()
@@ -140,7 +141,7 @@ class DefaultKeyboardView(
         private val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
         private val handler = Handler(Looper.getMainLooper())
 
-        private var shiftState: KeyboardState.Shift = KeyboardState.Shift.Released
+        var shiftState: KeyboardState.Shift = KeyboardState.Shift.Released
             set(value) {
                 field = value
                 when(value) {
