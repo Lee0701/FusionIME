@@ -23,6 +23,7 @@ import ee.oyatl.ime.keyboard.KeyboardState
 import ee.oyatl.ime.keyboard.KeyboardTemplate
 import ee.oyatl.ime.keyboard.KeyboardViewManager
 import ee.oyatl.ime.keyboard.LayoutTable
+import ee.oyatl.ime.keyboard.StateKeyboardViewManager
 import ee.oyatl.ime.keyboard.SwitcherKeyboardViewManager
 import ee.oyatl.ime.keyboard.layout.LayoutExt
 import ee.oyatl.ime.keyboard.layout.LayoutQwerty
@@ -118,6 +119,8 @@ abstract class CommonIMEMode(
         util = KeyEventUtil(inputConnection, editorInfo)
         onReset()
         setPreferredKeyboard(editorInfo)
+        shiftState = KeyboardState.Shift.Released
+        updateInputView()
     }
 
     override fun onFinish() {
@@ -220,8 +223,10 @@ abstract class CommonIMEMode(
 
     protected fun updateInputView() {
         val keyboardView = keyboardView
-        if(keyboardView is SwitcherKeyboardViewManager) {
+        if(keyboardView is StateKeyboardViewManager) {
+            // Update keyboard view states
             keyboardView.state = symbolState
+            keyboardView.state = shiftState
         }
         if(keyboardView != null) {
             val labels = currentLayoutTable.map.mapValues { (_, v) -> v.forShiftState(shiftState).toChar().toString() }
@@ -231,7 +236,7 @@ abstract class CommonIMEMode(
                 KeyboardState.Shift.Pressed -> ee.oyatl.ime.keyboard.R.drawable.keyic_shift_pressed
                 KeyboardState.Shift.Locked -> ee.oyatl.ime.keyboard.R.drawable.keyic_shift_locked
             }
-            val icons = mapOf<Int, Int>(
+            val icons = mapOf(
                 KeyEvent.KEYCODE_SHIFT_LEFT to shiftIcon,
                 KeyEvent.KEYCODE_SHIFT_RIGHT to shiftIcon
             )
@@ -244,7 +249,6 @@ abstract class CommonIMEMode(
             EditorInfo.TYPE_CLASS_NUMBER -> {
                 if(symbolState != KeyboardState.Symbol.Number) {
                     symbolState = KeyboardState.Symbol.Number
-                    updateInputView()
                 }
             }
             EditorInfo.TYPE_CLASS_TEXT -> {
@@ -265,7 +269,6 @@ abstract class CommonIMEMode(
                     }
                 }
                 symbolState = KeyboardState.Symbol.Text
-                updateInputView()
             }
         }
     }
