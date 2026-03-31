@@ -39,14 +39,18 @@ class ChewingConverter {
     }
 
     fun getSuggestions(codes: List<Int>): List<String> {
+        // Input codes in composing string sequentially
         codes.forEach { code -> chewing.handleDefault(code.toChar()) }
+        // Begin candidate generation
         chewing.candOpen()
+        // Join converted string prefix with candidates
         val bufferString = chewing.bufferStringStatic()
         val list = (0 until chewing.candTotalChoice()).map { i ->
             val candidate = chewing.candStringByIndexStatic(i)
             bufferString.dropLast(candidate.length) + candidate
         }
         chewing.candClose()
+        // Clear composing buffer for next conversion
         chewing.cleanPreeditBuf()
         chewing.cleanBopomofoBuf()
         return list

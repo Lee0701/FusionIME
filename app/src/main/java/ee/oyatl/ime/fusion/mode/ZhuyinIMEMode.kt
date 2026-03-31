@@ -122,8 +122,10 @@ class ZhuyinIMEMode(
     }
 
     private fun handleReturn() {
-        if(bestCandidate != null) pickDefaultSuggestion()
-        else {
+        if(wordComposer.typedWord?.isNotEmpty() == true) {
+            if(bestCandidate != null) pickDefaultSuggestion()
+            else onReset()
+        } else {
             if (util?.sendDefaultEditorAction(true) != true)
                 currentInputConnection?.commitText("\n", 1)
         }
@@ -137,7 +139,6 @@ class ZhuyinIMEMode(
             val length: Int = wordComposer.typedWord.length
             if (length > 0) {
                 wordComposer.deleteLast()
-                postUpdateSuggestions()
             } else {
                 ic.deleteSurroundingText(1, 0)
             }
