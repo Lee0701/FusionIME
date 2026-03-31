@@ -17,6 +17,7 @@ import ee.oyatl.ime.keyboard.layout.MobileKeyboard
 import ee.oyatl.ime.keyboard.layout.MobileKeyboardRows
 import ee.oyatl.ime.keyboard.layout.LayoutExt
 import ee.oyatl.ime.keyboard.layout.LayoutQwerty
+import ee.oyatl.ime.keyboard.layout.LayoutSymbol
 import ee.oyatl.ime.keyboard.layout.TabletKeyboard
 import ee.oyatl.ime.keyboard.layout.TabletKeyboardRows
 import java.util.Locale
@@ -53,6 +54,7 @@ class ZhuyinIMEMode(
         )
     )
     override val textLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutExt.TABLE_CHINESE + LayoutZhuyin.TABLE)
+    override val symbolLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutExt.TABLE_CHINESE + LayoutSymbol.TABLE_G)
 
     private val wordComposer = WordComposer()
     private val converter: ChewingConverter = ChewingConverter()
