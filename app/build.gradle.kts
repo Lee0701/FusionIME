@@ -81,6 +81,7 @@ dependencies {
     implementation(project(":app:mozc"))
     implementation(project(":app:pinyin"))
     implementation(project(":app:zhuyin"))
+    implementation(project(":app:chewing"))
     implementation(project(":app:cangjie"))
     implementation(project(":app:korean"))
     implementation(project(":app:korean:hangul"))
