@@ -1,10 +1,9 @@
 package ee.oyatl.ime.keyboard
 
-import android.content.Context
-
-interface Keyboard {
-    fun createView(context: Context, listener: KeyboardListener): KeyboardViewManager
-
+data class Keyboard(
+    val rows: List<List<KeyItem>>,
+    val params: KeyboardParams
+) {
     sealed interface KeyItem {
         val width: Float
         data class SplitSpacer(

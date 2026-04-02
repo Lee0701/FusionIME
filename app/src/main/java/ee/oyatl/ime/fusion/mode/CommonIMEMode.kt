@@ -15,15 +15,15 @@ import ee.oyatl.ime.candidate.ScrollingCandidateView
 import ee.oyatl.ime.fusion.Feature
 import ee.oyatl.ime.fusion.KeyEventUtil
 import ee.oyatl.ime.fusion.R
-import ee.oyatl.ime.keyboard.DefaultKeyboardInflater
+import ee.oyatl.ime.keyboard.DefaultKeyboardView
 import ee.oyatl.ime.keyboard.KeyboardConfiguration
 import ee.oyatl.ime.keyboard.KeyboardListener
 import ee.oyatl.ime.keyboard.KeyboardParams
 import ee.oyatl.ime.keyboard.KeyboardState
 import ee.oyatl.ime.keyboard.KeyboardTemplate
-import ee.oyatl.ime.keyboard.KeyboardViewManager
+import ee.oyatl.ime.keyboard.KeyboardView
 import ee.oyatl.ime.keyboard.LayoutTable
-import ee.oyatl.ime.keyboard.SwitcherKeyboardViewManager
+import ee.oyatl.ime.keyboard.SwitcherKeyboardView
 import ee.oyatl.ime.keyboard.layout.LayoutExt
 import ee.oyatl.ime.keyboard.layout.LayoutQwerty
 import ee.oyatl.ime.keyboard.layout.LayoutSymbol
@@ -92,7 +92,7 @@ abstract class CommonIMEMode(
         KeyboardState.Symbol.Number -> numberLayoutTable
     }
 
-    protected var keyboardView: KeyboardViewManager? = null
+    protected var keyboardView: KeyboardView? = null
     protected var candidateView: CandidateView? = null
 
     var symbolState: KeyboardState.Symbol = KeyboardState.Symbol.Text
@@ -192,22 +192,27 @@ abstract class CommonIMEMode(
             repeatInterval = 30,
         )
 
-        val textKeyboard = textKeyboardTemplate.inflate(DefaultKeyboardInflater(params))
-        val symbolKeyboard = symbolKeyboardTemplate.inflate(DefaultKeyboardInflater(params.copy(shiftAutoRelease = false)))
-        val numberKeyboard = numberKeyboardTemplate.inflate(DefaultKeyboardInflater(params.copy(shiftAutoRelease = false, splitWidth = 0)))
+        val textKeyboardParams = params.copy()
+        val symbolKeyboardParams = params.copy(shiftAutoRelease = false)
+        val numberKeyboardParams = params.copy(shiftAutoRelease = false, splitWidth = 0)
 
-        val textKeyboardView = textKeyboard.createView(context, this)
-        val symbolKeyboardView = symbolKeyboard.createView(context, this)
-        val numberKeyboardView = numberKeyboard.createView(context, this)
+        val textKeyboard = textKeyboardTemplate.inflate(textKeyboardParams)
+        val symbolKeyboard = symbolKeyboardTemplate.inflate(symbolKeyboardParams)
+        val numberKeyboard = numberKeyboardTemplate.inflate(numberKeyboardParams)
+
+        val textKeyboardView = DefaultKeyboardView(context, null).also { it.setup(textKeyboard, this) }
+        val symbolKeyboardView = DefaultKeyboardView(context, null).also { it.setup(symbolKeyboard, this) }
+        val numberKeyboardView = DefaultKeyboardView(context, null).also { it.setup(numberKeyboard, this) }
 
         updateInputView()
-        val switcherKeyboardView = SwitcherKeyboardViewManager(context, mapOf(
+        val switcherKeyboardView = SwitcherKeyboardView(context, null)
+        switcherKeyboardView.map = mapOf(
             KeyboardState.Symbol.Text to textKeyboardView,
             KeyboardState.Symbol.Symbol to symbolKeyboardView,
             KeyboardState.Symbol.Number to numberKeyboardView
-        ))
+        )
         this.keyboardView = switcherKeyboardView
-        return switcherKeyboardView.view
+        return switcherKeyboardView
     }
 
     override fun createCandidateView(context: Context): View {
@@ -219,12 +224,12 @@ abstract class CommonIMEMode(
 
     override fun getInputView(): View? {
         updateInputView()
-        return keyboardView?.view
+        return keyboardView
     }
 
     protected fun updateInputView() {
         val keyboardView = keyboardView
-        if(keyboardView is SwitcherKeyboardViewManager) {
+        if(keyboardView is SwitcherKeyboardView) {
             // Update keyboard view states
             keyboardView.state = symbolState
         }
