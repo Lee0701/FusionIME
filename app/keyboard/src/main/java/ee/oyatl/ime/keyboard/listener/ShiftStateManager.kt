@@ -1,31 +1,16 @@
-package ee.oyatl.ime.keyboard
+package ee.oyatl.ime.keyboard.listener
 
-import android.Manifest
-import android.content.Context
-import android.media.AudioManager
-import android.os.Build
 import android.os.Handler
 import android.os.Looper
-import android.os.VibrationEffect
-import android.os.Vibrator
-import android.os.VibratorManager
 import android.view.KeyEvent
-import androidx.annotation.RequiresApi
-import androidx.annotation.RequiresPermission
-import kotlin.math.min
+import ee.oyatl.ime.keyboard.KeyboardListener
+import ee.oyatl.ime.keyboard.KeyboardParams
+import ee.oyatl.ime.keyboard.KeyboardState
 
-class DefaultKeyboardListener(
-    context: Context,
+class ShiftStateManager(
     val listener: KeyboardListener,
     val params: KeyboardParams
 ): KeyboardListener {
-    @RequiresApi(Build.VERSION_CODES.S)
-    private val vibratorManager = context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
-    @Suppress("DEPRECATION")
-    private val vibrator =
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) vibratorManager.defaultVibrator
-        else context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-    private val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
     private val handler = Handler(Looper.getMainLooper())
 
     var shiftState: KeyboardState.Shift = KeyboardState.Shift.Released
@@ -47,7 +32,6 @@ class DefaultKeyboardListener(
     private var shiftPressing: Boolean = false
     private var shiftTime: Long = 0
     private var inputWhileShifted: Boolean = false
-    private var downTime: Long = 0
 
     private val metaState: Int get() = when(shiftState) {
         KeyboardState.Shift.Released -> 0
@@ -56,19 +40,6 @@ class DefaultKeyboardListener(
     }
 
     override fun onKeyDown(keyCode: Int, metaState: Int) {
-        if(params.vibrationDuration > 0) {
-            vibrate(params.vibrationDuration)
-        }
-        if(params.soundVolume > 0f) {
-            val fx = when(keyCode) {
-                KeyEvent.KEYCODE_DEL -> AudioManager.FX_KEYPRESS_DELETE
-                KeyEvent.KEYCODE_ENTER -> AudioManager.FX_KEYPRESS_RETURN
-                KeyEvent.KEYCODE_SPACE -> AudioManager.FX_KEYPRESS_SPACEBAR
-                else -> AudioManager.FX_KEYPRESS_STANDARD
-            }
-            audioManager.playSoundEffect(fx, params.soundVolume)
-        }
-        downTime = System.currentTimeMillis()
         when(keyCode) {
             KeyEvent.KEYCODE_DEL -> onDeletePressed(keyCode)
             KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.KEYCODE_SHIFT_RIGHT -> onShiftPressed(keyCode)
@@ -85,11 +56,10 @@ class DefaultKeyboardListener(
                 autoReleaseShift()
             }
         }
-        val diff = System.currentTimeMillis() - downTime
-        if(params.vibrationDuration > 0) {
-            val duration = params.vibrationDuration / 5f * min(diff / 100f, 1f)
-            vibrate(duration.toLong())
-        }
+    }
+
+    override fun onReset() {
+        shiftState = KeyboardState.Shift.Released
     }
 
     private fun repeat(code: Int) {
@@ -156,15 +126,4 @@ class DefaultKeyboardListener(
         }
     }
 
-    @RequiresPermission(Manifest.permission.VIBRATE)
-    fun vibrate(duration: Long) {
-        if(duration == 0L) return
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val effect = VibrationEffect.createOneShot(duration, VibrationEffect.DEFAULT_AMPLITUDE)
-            vibrator.vibrate(effect)
-        } else {
-            @Suppress("DEPRECATION")
-            vibrator.vibrate(duration)
-        }
-    }
 }

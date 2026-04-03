@@ -15,7 +15,9 @@ import ee.oyatl.ime.candidate.ScrollingCandidateView
 import ee.oyatl.ime.fusion.Feature
 import ee.oyatl.ime.fusion.KeyEventUtil
 import ee.oyatl.ime.fusion.R
+import ee.oyatl.ime.keyboard.listener.CompoundKeyboardListener
 import ee.oyatl.ime.keyboard.DefaultKeyboardView
+import ee.oyatl.ime.keyboard.listener.KeyFeedbackManager
 import ee.oyatl.ime.keyboard.KeyboardConfiguration
 import ee.oyatl.ime.keyboard.KeyboardListener
 import ee.oyatl.ime.keyboard.KeyboardParams
@@ -23,6 +25,7 @@ import ee.oyatl.ime.keyboard.KeyboardState
 import ee.oyatl.ime.keyboard.KeyboardTemplate
 import ee.oyatl.ime.keyboard.KeyboardView
 import ee.oyatl.ime.keyboard.LayoutTable
+import ee.oyatl.ime.keyboard.listener.ShiftStateManager
 import ee.oyatl.ime.keyboard.SwitcherKeyboardView
 import ee.oyatl.ime.keyboard.layout.LayoutExt
 import ee.oyatl.ime.keyboard.layout.LayoutQwerty
@@ -129,7 +132,7 @@ abstract class CommonIMEMode(
         util = null
     }
 
-    open fun onReset() {
+    override fun onReset() {
         currentInputConnection?.finishComposingText()
         submitCandidates(emptyList())
     }
@@ -200,9 +203,18 @@ abstract class CommonIMEMode(
         val symbolKeyboard = symbolKeyboardTemplate.inflate(symbolKeyboardParams)
         val numberKeyboard = numberKeyboardTemplate.inflate(numberKeyboardParams)
 
-        val textKeyboardView = DefaultKeyboardView(context, null).also { it.setup(textKeyboard, this) }
-        val symbolKeyboardView = DefaultKeyboardView(context, null).also { it.setup(symbolKeyboard, this) }
-        val numberKeyboardView = DefaultKeyboardView(context, null).also { it.setup(numberKeyboard, this) }
+        val textKeyboardView = DefaultKeyboardView(context, null).also {
+            it.keyboard = textKeyboard
+            it.listener = createKeyboardListener(context, textKeyboardParams)
+        }
+        val symbolKeyboardView = DefaultKeyboardView(context, null).also {
+            it.keyboard = symbolKeyboard
+            it.listener = createKeyboardListener(context, symbolKeyboardParams)
+        }
+        val numberKeyboardView = DefaultKeyboardView(context, null).also {
+            it.keyboard = numberKeyboard
+            it.listener = createKeyboardListener(context, numberKeyboardParams)
+        }
 
         updateInputView()
         val switcherKeyboardView = SwitcherKeyboardView(context, null)
@@ -247,6 +259,13 @@ abstract class CommonIMEMode(
             )
             keyboardView.setIcons(icons)
         }
+    }
+
+    private fun createKeyboardListener(context: Context, params: KeyboardParams): KeyboardListener {
+        return CompoundKeyboardListener(
+            ShiftStateManager(this, params),
+            KeyFeedbackManager(context, params)
+        )
     }
 
     protected fun setPreferredKeyboard(editorInfo: EditorInfo) {
