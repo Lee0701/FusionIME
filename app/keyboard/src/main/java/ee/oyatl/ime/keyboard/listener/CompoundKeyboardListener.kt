@@ -1,6 +1,6 @@
 package ee.oyatl.ime.keyboard.listener
 
-import ee.oyatl.ime.keyboard.KeyboardListener
+import ee.oyatl.ime.keyboard.listener.KeyboardListener
 
 class CompoundKeyboardListener(
     val listeners: List<KeyboardListener>

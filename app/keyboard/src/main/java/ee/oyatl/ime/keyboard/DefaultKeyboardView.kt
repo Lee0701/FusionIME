@@ -13,26 +13,31 @@ import android.widget.LinearLayout
 import ee.oyatl.ime.keyboard.databinding.KbdKeyBinding
 import ee.oyatl.ime.keyboard.databinding.KbdKeyboardBinding
 import ee.oyatl.ime.keyboard.databinding.KbdRowBinding
-import ee.oyatl.ime.keyboard.popup.Popup
-import ee.oyatl.ime.keyboard.popup.PreviewPopup
+import ee.oyatl.ime.keyboard.listener.EmptyListener
+import ee.oyatl.ime.keyboard.listener.KeyboardListener
+import ee.oyatl.ime.keyboard.popup.EmptyPopupManager
+import ee.oyatl.ime.keyboard.popup.PopupManager
+import ee.oyatl.ime.keyboard.touchhandler.CompoundTouchHandler
+import ee.oyatl.ime.keyboard.touchhandler.TouchHandler
 import kotlin.math.max
 import kotlin.math.roundToInt
 
 class DefaultKeyboardView(
     context: Context,
     attrs: AttributeSet?
-): KeyboardView(context, attrs) {
-    private val rect: Rect = Rect()
-    private val location = IntArray(2)
+): KeyboardView(context, attrs), TouchHandler.KeyboardViewInterface {
+    override val rect: Rect = Rect()
+    override val location: IntArray = IntArray(2)
     private val keySet: MutableSet<CachedKey> = mutableSetOf()
-    private val pointers: MutableMap<Int, Pointer> = mutableMapOf()
 
     var keyboard: Keyboard? = null
         set(value) {
             field = value
             if(value != null) setup(value)
         }
-    var listener: KeyboardListener? = null
+    override var listener: KeyboardListener = EmptyListener
+    override var popupManager: PopupManager = EmptyPopupManager
+    var touchHandler: TouchHandler = CompoundTouchHandler(this)
 
     init {
         viewTreeObserver.addOnGlobalLayoutListener {
@@ -45,7 +50,6 @@ class DefaultKeyboardView(
         val binding = KbdKeyboardBinding.inflate(inflater)
 
         keySet.clear()
-        pointers.clear()
 
         val keyHeight = keyboard.params.height / keyboard.rows.size
         keyboard.rows.forEach { keys ->
@@ -100,6 +104,10 @@ class DefaultKeyboardView(
         this.addView(binding.root)
     }
 
+    override fun onReset() {
+        listener.onReset()
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         event ?: return super.onTouchEvent(event)
@@ -117,48 +125,16 @@ class DefaultKeyboardView(
 
         when(event.actionMasked) {
             MotionEvent.ACTION_DOWN, MotionEvent.ACTION_POINTER_DOWN -> {
-                onTouchDown(pointerId, x, y)
+                touchHandler.onTouchDown(pointerId, x, y)
             }
             MotionEvent.ACTION_MOVE -> {
-                onTouchMove(pointerId, x, y)
+                touchHandler.onTouchMove(pointerId, x, y)
             }
             MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_UP -> {
-                onTouchUp(pointerId, x, y)
+                touchHandler.onTouchUp(pointerId, x, y)
             }
         }
         return true
-    }
-
-    private fun onTouchDown(pointerId: Int, x: Int, y: Int) {
-        val key = findKey(x, y) ?: return
-        val popup =
-            if(keyboard?.params?.previewPopups == true && key.binding.label.text.isNotEmpty())
-                PreviewPopup(context)
-            else null
-        if(popup != null) {
-            popup.label = key.binding.label.text.toString()
-            popup.size = key.rect.width() to key.rect.height() * 2
-            val y = rect.top + key.location[1] - location[1] - key.rect.height()
-            popup.show(this, key.rect.left, y)
-        }
-        pointers += pointerId to Pointer(x, y, key, popup)
-        key.binding.root.isPressed = true
-        listener?.onKeyDown(key.keyCode, 0)
-    }
-
-    private fun onTouchMove(pointerId: Int, x: Int, y: Int) {
-        val pointer = pointers[pointerId]
-        val key = pointer?.key ?: findKey(x, y) ?: return
-        if(!key.rect.contains(x, y)) key.binding.root.isPressed = false
-    }
-
-    private fun onTouchUp(pointerId: Int, x: Int, y: Int) {
-        val pointer = pointers[pointerId]
-        val key = pointer?.key ?: findKey(x, y) ?: return
-        key.binding.root.isPressed = false
-        listener?.onKeyUp(key.keyCode, 0)
-        pointer?.popup?.hide()
-        pointers -= pointerId
     }
 
     private fun cacheKeys() {
@@ -172,7 +148,7 @@ class DefaultKeyboardView(
         }
     }
 
-    private fun findKey(x: Int, y: Int): CachedKey? {
+    override fun findKey(x: Int, y: Int): CachedKey? {
         return keySet.find { key ->
             key.rect.contains(x, y)
         }
@@ -192,28 +168,21 @@ class DefaultKeyboardView(
         }
     }
 
-    override fun onReset() {
-        listener?.onReset()
-        pointers.values.forEach {
-            it.key.binding.root.isPressed = false
-            it.popup?.hide()
-        }
-        pointers.clear()
-    }
-
-    data class Pointer(
-        val x: Int,
-        val y: Int,
-        val key: CachedKey,
-        val popup: Popup?
-    )
-
     data class CachedKey(
-        val keyCode: Int,
+        override val keyCode: Int,
         val binding: KbdKeyBinding
-    ) {
-        val rect: Rect = Rect()
-        val location: IntArray = IntArray(2)
+    ): TouchHandler.KeyInterface {
+        override val label: String get() = binding.label.text.toString()
+        override val rect: Rect = Rect()
+        override val location: IntArray = IntArray(2)
+
+        override fun onPressed() {
+            binding.root.isPressed = true
+        }
+
+        override fun onReleased() {
+            binding.root.isPressed = false
+        }
     }
 
     private fun createLayoutParams(width: Float, height: Int): LinearLayout.LayoutParams {

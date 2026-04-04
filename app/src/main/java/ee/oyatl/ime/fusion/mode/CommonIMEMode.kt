@@ -19,7 +19,7 @@ import ee.oyatl.ime.keyboard.listener.CompoundKeyboardListener
 import ee.oyatl.ime.keyboard.DefaultKeyboardView
 import ee.oyatl.ime.keyboard.listener.KeyFeedbackManager
 import ee.oyatl.ime.keyboard.KeyboardConfiguration
-import ee.oyatl.ime.keyboard.KeyboardListener
+import ee.oyatl.ime.keyboard.listener.KeyboardListener
 import ee.oyatl.ime.keyboard.KeyboardParams
 import ee.oyatl.ime.keyboard.KeyboardState
 import ee.oyatl.ime.keyboard.KeyboardTemplate
@@ -35,6 +35,8 @@ import ee.oyatl.ime.keyboard.layout.MobileKeyboardRows
 import ee.oyatl.ime.keyboard.layout.NumberKeyboard
 import ee.oyatl.ime.keyboard.layout.TabletKeyboard
 import ee.oyatl.ime.keyboard.layout.TabletKeyboardRows
+import ee.oyatl.ime.keyboard.popup.DefaultPopupManager
+import ee.oyatl.ime.keyboard.touchhandler.SeekTouchHandler
 import kotlin.math.roundToInt
 
 abstract class CommonIMEMode(
@@ -206,14 +208,20 @@ abstract class CommonIMEMode(
         val textKeyboardView = DefaultKeyboardView(context, null).also {
             it.keyboard = textKeyboard
             it.listener = createKeyboardListener(context, textKeyboardParams)
+            it.touchHandler = SeekTouchHandler(it)
+            if(params.previewPopups) it.popupManager = DefaultPopupManager(it, it)
         }
         val symbolKeyboardView = DefaultKeyboardView(context, null).also {
             it.keyboard = symbolKeyboard
             it.listener = createKeyboardListener(context, symbolKeyboardParams)
+            it.touchHandler = SeekTouchHandler(it)
+            if(params.previewPopups) it.popupManager = DefaultPopupManager(it, it)
         }
         val numberKeyboardView = DefaultKeyboardView(context, null).also {
             it.keyboard = numberKeyboard
             it.listener = createKeyboardListener(context, numberKeyboardParams)
+            it.touchHandler = SeekTouchHandler(it)
+            if(params.previewPopups) it.popupManager = DefaultPopupManager(it, it)
         }
 
         updateInputView()
