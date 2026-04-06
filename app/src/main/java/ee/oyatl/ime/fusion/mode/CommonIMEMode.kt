@@ -15,18 +15,6 @@ import ee.oyatl.ime.candidate.ScrollingCandidateView
 import ee.oyatl.ime.fusion.Feature
 import ee.oyatl.ime.fusion.KeyEventUtil
 import ee.oyatl.ime.fusion.R
-import ee.oyatl.ime.keyboard.listener.CompoundKeyboardListener
-import ee.oyatl.ime.keyboard.DefaultKeyboardView
-import ee.oyatl.ime.keyboard.listener.KeyFeedbackManager
-import ee.oyatl.ime.keyboard.KeyboardConfiguration
-import ee.oyatl.ime.keyboard.listener.KeyboardListener
-import ee.oyatl.ime.keyboard.KeyboardParams
-import ee.oyatl.ime.keyboard.KeyboardState
-import ee.oyatl.ime.keyboard.KeyboardTemplate
-import ee.oyatl.ime.keyboard.KeyboardView
-import ee.oyatl.ime.keyboard.LayoutTable
-import ee.oyatl.ime.keyboard.listener.ShiftStateManager
-import ee.oyatl.ime.keyboard.SwitcherKeyboardView
 import ee.oyatl.ime.fusion.layout.LayoutExt
 import ee.oyatl.ime.fusion.layout.LayoutQwerty
 import ee.oyatl.ime.fusion.layout.LayoutSymbol
@@ -35,9 +23,21 @@ import ee.oyatl.ime.fusion.layout.MobileKeyboardRows
 import ee.oyatl.ime.fusion.layout.NumberKeyboard
 import ee.oyatl.ime.fusion.layout.TabletKeyboard
 import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
+import ee.oyatl.ime.keyboard.DefaultKeyboardView
+import ee.oyatl.ime.keyboard.FlickKeyCode
+import ee.oyatl.ime.keyboard.KeyboardConfiguration
+import ee.oyatl.ime.keyboard.KeyboardParams
+import ee.oyatl.ime.keyboard.KeyboardState
+import ee.oyatl.ime.keyboard.KeyboardTemplate
+import ee.oyatl.ime.keyboard.KeyboardView
+import ee.oyatl.ime.keyboard.LayoutTable
+import ee.oyatl.ime.keyboard.SwitcherKeyboardView
+import ee.oyatl.ime.keyboard.listener.CompoundKeyboardListener
+import ee.oyatl.ime.keyboard.listener.KeyFeedbackManager
+import ee.oyatl.ime.keyboard.listener.KeyboardListener
+import ee.oyatl.ime.keyboard.listener.ShiftStateManager
 import ee.oyatl.ime.keyboard.popup.DefaultPopupManager
 import ee.oyatl.ime.keyboard.touchhandler.FlickTouchHandler
-import ee.oyatl.ime.keyboard.touchhandler.SeekTouchHandler
 import ee.oyatl.ime.keyboard.touchhandler.TouchHandler
 import kotlin.math.roundToInt
 
@@ -319,10 +319,21 @@ abstract class CommonIMEMode(
         } else if(keyCode < 0) {
             onChar(-keyCode)
         } else if(keyCode > KeyEvent.getMaxKeyCode() || keyCharacterMap.isPrintingKey(keyCode)) {
-            onChar(
-                currentLayoutTable[keyCode]?.forShiftState(shiftState)
-                    ?: keyCharacterMap.get(keyCode, metaState)
-            )
+            val maskedKeyCode = keyCode and FlickKeyCode.MASK_KEYCODE
+            val default = keyCharacterMap.get(maskedKeyCode, metaState)
+            if(keyCode and FlickKeyCode.FLAG_FLICK != 0) {
+                val direction = keyCode and FlickKeyCode.MASK_DIRECTION
+                when(direction) {
+                    FlickKeyCode.DIRECTION_UP -> onChar(
+                        currentLayoutTable[maskedKeyCode]?.forShiftState(KeyboardState.Shift.Pressed) ?: default)
+                    FlickKeyCode.DIRECTION_DOWN -> onChar(
+                        symbolLayoutTable[maskedKeyCode]?.forShiftState(shiftState) ?: default)
+                }
+            } else {
+                onChar(
+                    currentLayoutTable[keyCode]?.forShiftState(shiftState) ?: default
+                )
+            }
         } else {
             handleSpecialKey(keyCode)
         }

@@ -107,7 +107,7 @@ abstract class LatinIMEMode(
     }
 
     override fun onChar(codePoint: Int) {
-        onCodeInput(codePoint, 0, 0, false)
+        if(codePoint != 0) onCodeInput(codePoint, 0, 0, false)
     }
 
     override fun onSpecial(keyCode: Int) {

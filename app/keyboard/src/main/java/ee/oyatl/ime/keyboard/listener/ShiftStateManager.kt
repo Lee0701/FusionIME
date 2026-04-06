@@ -3,6 +3,7 @@ package ee.oyatl.ime.keyboard.listener
 import android.os.Handler
 import android.os.Looper
 import android.view.KeyEvent
+import ee.oyatl.ime.keyboard.FlickKeyCode
 import ee.oyatl.ime.keyboard.listener.KeyboardListener
 import ee.oyatl.ime.keyboard.KeyboardParams
 import ee.oyatl.ime.keyboard.KeyboardState
@@ -40,14 +41,14 @@ class ShiftStateManager(
     }
 
     override fun onKeyDown(keyCode: Int, metaState: Int) {
-        when(keyCode) {
+        when(keyCode and FlickKeyCode.MASK_KEYCODE) {
             KeyEvent.KEYCODE_DEL -> onDeletePressed(keyCode)
             KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.KEYCODE_SHIFT_RIGHT -> onShiftPressed(keyCode)
         }
     }
 
     override fun onKeyUp(keyCode: Int, metaState: Int) {
-        when(keyCode) {
+        when(keyCode and FlickKeyCode.MASK_KEYCODE) {
             KeyEvent.KEYCODE_DEL -> onDeleteReleased(keyCode)
             KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.KEYCODE_SHIFT_RIGHT -> onShiftReleased(keyCode)
             else -> {
