@@ -47,7 +47,7 @@ class FlickTouchHandler(
             if(direction != null) {
                 val flicks = pointer.flicks.toMutableList()
                 if(direction != lastDirection && (multiFlick || flicks.isEmpty())) {
-                    if(pointer.key != null) {
+                    if(pointer.key != null && pointer.key.keyCode >= 0) {
                         val keyCode = direction.keyCodeFlag or pointer.key.keyCode
                         keyboardView.listener.onKeyDown(keyCode, 0)
                         keyboardView.listener.onKeyUp(keyCode, 0)
