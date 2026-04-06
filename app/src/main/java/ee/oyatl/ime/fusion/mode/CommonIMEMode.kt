@@ -36,7 +36,9 @@ import ee.oyatl.ime.fusion.layout.NumberKeyboard
 import ee.oyatl.ime.fusion.layout.TabletKeyboard
 import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
 import ee.oyatl.ime.keyboard.popup.DefaultPopupManager
+import ee.oyatl.ime.keyboard.touchhandler.FlickTouchHandler
 import ee.oyatl.ime.keyboard.touchhandler.SeekTouchHandler
+import ee.oyatl.ime.keyboard.touchhandler.TouchHandler
 import kotlin.math.roundToInt
 
 abstract class CommonIMEMode(
@@ -208,19 +210,19 @@ abstract class CommonIMEMode(
         val textKeyboardView = DefaultKeyboardView(context, null).also {
             it.keyboard = textKeyboard
             it.listener = createKeyboardListener(context, textKeyboardParams)
-            it.touchHandler = SeekTouchHandler(it)
+            it.touchHandler = createTouchHandler(it, textKeyboardParams)
             if(params.previewPopups) it.popupManager = DefaultPopupManager(it, it)
         }
         val symbolKeyboardView = DefaultKeyboardView(context, null).also {
             it.keyboard = symbolKeyboard
             it.listener = createKeyboardListener(context, symbolKeyboardParams)
-            it.touchHandler = SeekTouchHandler(it)
+            it.touchHandler = createTouchHandler(it, symbolKeyboardParams)
             if(params.previewPopups) it.popupManager = DefaultPopupManager(it, it)
         }
         val numberKeyboardView = DefaultKeyboardView(context, null).also {
             it.keyboard = numberKeyboard
             it.listener = createKeyboardListener(context, numberKeyboardParams)
-            it.touchHandler = SeekTouchHandler(it)
+            it.touchHandler = createTouchHandler(it, numberKeyboardParams)
             if(params.previewPopups) it.popupManager = DefaultPopupManager(it, it)
         }
 
@@ -269,11 +271,15 @@ abstract class CommonIMEMode(
         }
     }
 
-    private fun createKeyboardListener(context: Context, params: KeyboardParams): KeyboardListener {
+    open fun createKeyboardListener(context: Context, params: KeyboardParams): KeyboardListener {
         return CompoundKeyboardListener(
             ShiftStateManager(this, params),
             KeyFeedbackManager(context, params)
         )
+    }
+
+    open fun createTouchHandler(keyboardView: TouchHandler.KeyboardViewInterface, params: KeyboardParams): TouchHandler {
+        return FlickTouchHandler(keyboardView, 50, diagonal = false, multiFlick = false)
     }
 
     protected fun setPreferredKeyboard(editorInfo: EditorInfo) {
