@@ -11,6 +11,16 @@
 <!--        <item>Full</item>-->
     </string-array>
 
+    <string-array name="settings_behaviour_touch_mode_entries">
+        <item>@string/touch_mode_seek</item>
+        <item>@string/touch_mode_flick</item>
+    </string-array>
+
+    <string-array name="settings_behaviour_touch_mode_values">
+        <item>seek</item>
+        <item>flick</item>
+    </string-array>
+
     <string-array name="settings_input_mode_type_entries">
         <item>@string/input_mode_latin</item>
         <item>@string/input_mode_korean</item>

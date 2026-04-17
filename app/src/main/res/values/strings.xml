@@ -22,6 +22,7 @@
     <string name="settings_appearance_split_keyboard_landscape_title">Split Keyboard (Landscape)</string>
     <string name="settings_appearance_split_ratio_landscape_title">Split Ratio (Landscape)</string>
 
+    <string name="settings_behaviour_feedback_title">Feedback</string>
     <string name="settings_behaviour_sound_feedback_title">Sound Feedback</string>
     <string name="settings_behaviour_sound_feedback_summary">Play sound effect on key press.</string>
     <string name="settings_behaviour_haptic_feedback_title">Haptic Feedback</string>
@@ -29,6 +30,13 @@
     <string name="settings_behaviour_vibration_duration_title">Vibration Duration</string>
     <string name="settings_behaviour_preview_popup_title">Preview Popups</string>
     <string name="settings_behaviour_preview_popup_summary">Show preview popups on key press.</string>
+
+    <string name="settings_behaviour_touch_title">Touch</string>
+    <string name="settings_behaviour_touch_mode_title">Touch Mode</string>
+    <string name="settings_behaviour_touch_mode_summary">Set keyboard touch behaviour.</string>
+    <string name="settings_behaviour_flick_sensitivity_title">Flick Sensitivity</string>
+
+    <string name="settings_behaviour_hardware_title">Hardware Keyboard</string>
     <string name="settings_behaviour_hardware_language_key_title">Hardware Language Key</string>
     <string name="settings_behaviour_hardware_language_key_summary">Set a key combination to use as language switch on hardware keyboard.</string>
     <string name="settings_behaviour_always_show_soft_keyboard_title">Always Show Soft Keyboard</string>
@@ -60,6 +68,9 @@
     <string name="screen_mode_mobile">Mobile</string>
     <string name="screen_mode_tablet">Tablet</string>
     <string name="screen_mode_full">Full</string>
+
+    <string name="touch_mode_seek">Seek</string>
+    <string name="touch_mode_flick">Flick</string>
 
     <string name="input_mode_latin">Latin</string>
     <string name="input_mode_korean">Korean</string>

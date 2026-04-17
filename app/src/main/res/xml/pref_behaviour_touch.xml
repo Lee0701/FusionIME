@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        app:title="@string/settings_behaviour_touch_title">
+
+        <ListPreference
+            app:key="touch_mode"
+            app:defaultValue="seek"
+            app:entries="@array/settings_behaviour_touch_mode_entries"
+            app:entryValues="@array/settings_behaviour_touch_mode_values"
+            app:title="@string/settings_behaviour_touch_mode_title"
+            app:summary="@string/settings_behaviour_touch_mode_summary" />
+
+        <ee.oyatl.ime.fusion.preference.SliderPreference
+            app:key="flick_sensitivity"
+            app:valueFrom="10.0"
+            app:valueTo="150.0"
+            app:stepSize="10.0"
+            app:defaultValue="@integer/flick_sensitivity_default"
+            app:title="@string/settings_behaviour_flick_sensitivity_title"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

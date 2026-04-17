@@ -2,6 +2,7 @@ package ee.oyatl.ime.fusion.mode
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.util.TypedValue
 import android.view.KeyCharacterMap
@@ -38,6 +39,7 @@ import ee.oyatl.ime.keyboard.listener.KeyboardListener
 import ee.oyatl.ime.keyboard.listener.ShiftStateManager
 import ee.oyatl.ime.keyboard.popup.DefaultPopupManager
 import ee.oyatl.ime.keyboard.touchhandler.FlickTouchHandler
+import ee.oyatl.ime.keyboard.touchhandler.SeekTouchHandler
 import ee.oyatl.ime.keyboard.touchhandler.TouchHandler
 import kotlin.math.roundToInt
 
@@ -210,19 +212,19 @@ abstract class CommonIMEMode(
         val textKeyboardView = DefaultKeyboardView(context, null).also {
             it.keyboard = textKeyboard
             it.listener = createKeyboardListener(context, textKeyboardParams)
-            it.touchHandler = createTouchHandler(it, textKeyboardParams)
+            it.touchHandler = createTouchHandler(it, context)
             if(params.previewPopups) it.popupManager = DefaultPopupManager(it, it)
         }
         val symbolKeyboardView = DefaultKeyboardView(context, null).also {
             it.keyboard = symbolKeyboard
             it.listener = createKeyboardListener(context, symbolKeyboardParams)
-            it.touchHandler = createTouchHandler(it, symbolKeyboardParams)
+            it.touchHandler = createTouchHandler(it, context)
             if(params.previewPopups) it.popupManager = DefaultPopupManager(it, it)
         }
         val numberKeyboardView = DefaultKeyboardView(context, null).also {
             it.keyboard = numberKeyboard
             it.listener = createKeyboardListener(context, numberKeyboardParams)
-            it.touchHandler = createTouchHandler(it, numberKeyboardParams)
+            it.touchHandler = createTouchHandler(it, context)
             if(params.previewPopups) it.popupManager = DefaultPopupManager(it, it)
         }
 
@@ -278,8 +280,16 @@ abstract class CommonIMEMode(
         )
     }
 
-    open fun createTouchHandler(keyboardView: TouchHandler.KeyboardViewInterface, params: KeyboardParams): TouchHandler {
-        return FlickTouchHandler(keyboardView, 50, diagonal = false, multiFlick = false)
+    open fun createTouchHandler(keyboardView: TouchHandler.KeyboardViewInterface, context: Context): TouchHandler {
+        val preference = PreferenceManager.getDefaultSharedPreferences(context)
+        val touchMode = preference.getString("touch_mode", "seek")
+        if(touchMode == "flick" && Feature.TouchMode.availableInCurrentVersion) {
+            val defaultValue = context.resources.getInteger(R.integer.flick_sensitivity_default).toFloat()
+            val flickSensitivity = preference.getFloat("flick_sensitivity", defaultValue).toInt()
+            return FlickTouchHandler(keyboardView, flickSensitivity, diagonal = false, multiFlick = false)
+        } else {
+            return SeekTouchHandler(keyboardView)
+        }
     }
 
     protected fun setPreferredKeyboard(editorInfo: EditorInfo) {

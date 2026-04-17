@@ -3,7 +3,7 @@ package ee.oyatl.ime.keyboard
 object FlickKeyCode {
     const val FLAG_FLICK = 0x2000000
     const val MASK_KEYCODE = 0x00fffff
-    const val MASK_DIRECTION = 0x0f000
+    const val MASK_DIRECTION = 0x0f00000
     const val DIRECTION_UP = 0x0100000
     const val DIRECTION_DOWN = 0x0200000
     const val DIRECTION_LEFT = 0x0300000
