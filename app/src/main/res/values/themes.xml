@@ -17,6 +17,7 @@
 
     <style name="Slider" parent="Widget.MaterialComponents.Slider">
         <item name="colorPrimary">?attr/colorSecondary</item>
+        <item name="colorOnPrimary">?attr/colorOnSecondary</item>
         <item name="colorPrimaryVariant">?attr/colorSecondaryVariant</item>
     </style>
 </resources>
