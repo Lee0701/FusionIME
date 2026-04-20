@@ -13,14 +13,14 @@ import ee.oyatl.ime.keyboard.KeyboardConfiguration
 import ee.oyatl.ime.keyboard.KeyboardState
 import ee.oyatl.ime.keyboard.KeyboardTemplate
 import ee.oyatl.ime.keyboard.LayoutTable
-import ee.oyatl.ime.keyboard.layout.ExtKeyCode
-import ee.oyatl.ime.keyboard.layout.MobileKeyboard
-import ee.oyatl.ime.keyboard.layout.MobileKeyboardRows
-import ee.oyatl.ime.keyboard.layout.LayoutCangjie
-import ee.oyatl.ime.keyboard.layout.LayoutExt
-import ee.oyatl.ime.keyboard.layout.LayoutQwerty
-import ee.oyatl.ime.keyboard.layout.TabletKeyboard
-import ee.oyatl.ime.keyboard.layout.TabletKeyboardRows
+import ee.oyatl.ime.fusion.layout.ExtKeyCode
+import ee.oyatl.ime.fusion.layout.MobileKeyboard
+import ee.oyatl.ime.fusion.layout.MobileKeyboardRows
+import ee.oyatl.ime.fusion.layout.LayoutCangjie
+import ee.oyatl.ime.fusion.layout.LayoutExt
+import ee.oyatl.ime.fusion.layout.LayoutQwerty
+import ee.oyatl.ime.fusion.layout.TabletKeyboard
+import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
 import java.util.Locale
 import kotlin.collections.plus
 

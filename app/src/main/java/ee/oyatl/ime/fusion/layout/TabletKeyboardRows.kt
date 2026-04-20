@@ -1,38 +1,38 @@
-package ee.oyatl.ime.keyboard.layout
+package ee.oyatl.ime.fusion.layout
 
-object MobileKeyboardRows {
+object TabletKeyboardRows {
     val DEFAULT: List<String> = listOf(
         "qwert yuiop",
         "asdfg hjkl",
-        "zxcvb nm"
+        "zxcvb nm,."
     )
 
     val SEMICOLON: List<String> = listOf(
         "qwert yuiop",
         "asdfg hjkl;",
-        "zxcvb nm"
+        "zxcvb nm,."
     )
 
     val MINUS: List<String> = listOf(
         "qwert yuiop",
         "asdfg hjkl-",
-        "zxcvb nm"
-    )
-
-    val SEMICOLON_QUOTE: List<String> = listOf(
-        "qwert yuiop",
-        "asdfg hjkl;",
-        "zxcvb nm\'"
-    )
-
-    val HALF_GRID: List<String> = listOf(
-        "qwert yuiop",
-        "asdfg hjkl;",
         "zxcvb nm,."
     )
 
-    val GRID: List<String> = listOf(
+    val SEMICOLON_QUOTE_SLASH: List<String> = listOf(
         "qwert yuiop",
+        "asdfg hjkl;",
+        "zxcvb nm\'/"
+    )
+
+    val SEMICOLON_SLASH: List<String> = listOf(
+        "qwert yuiop",
+        "asdfg hjkl;",
+        "zxcvb nm,./"
+    )
+
+    val SEMICOLON_SLASH_MINUS: List<String> = listOf(
+        "qwert yuiop-",
         "asdfg hjkl;",
         "zxcvb nm,./"
     )
@@ -40,20 +40,27 @@ object MobileKeyboardRows {
     val KS: List<String> = listOf(
         "qwert yuiop",
         "asdfg hjkl",
-        "zxcv bnm"
+        "zxcv bnm,."
     )
 
     val JIS: List<String> = listOf(
-        "12345 67890-",
-        "qwert yuiop[",
-        "asdfg hjkl;'",
-        "zxcvb nm,.",
+        "12345 67890-=",
+        "qwert yuiop[]",
+        "asdfg hjkl;'\\",
+        "zxcvb nm,./`",
+    )
+
+    val HANGUL_OLD_393: List<String> = listOf(
+        "`1234567890",
+        "qwertyuiop[]",
+        "asdfghjkl;'",
+        "zxcvbnm,./",
     )
 
     val DVORAK: List<String> = listOf(
         "qwert yuiop",
         "asdfg hjkl;",
-        "cvb nm,."
+        "xcvb nm,./"
     )
 
     val NUMBERS: List<String> = listOf(
