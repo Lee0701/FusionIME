@@ -8,10 +8,10 @@ import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.korean.WordComposer
 import ee.oyatl.ime.keyboard.KeyboardConfiguration
 import ee.oyatl.ime.keyboard.KeyboardTemplate
-import ee.oyatl.ime.keyboard.layout.MobileKeyboard
-import ee.oyatl.ime.keyboard.layout.MobileKeyboardRows
-import ee.oyatl.ime.keyboard.layout.TabletKeyboard
-import ee.oyatl.ime.keyboard.layout.TabletKeyboardRows
+import ee.oyatl.ime.fusion.layout.MobileKeyboard
+import ee.oyatl.ime.fusion.layout.MobileKeyboardRows
+import ee.oyatl.ime.fusion.layout.TabletKeyboard
+import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
 import ee.oyatl.ime.viet.ChuQuocNguTableConverter
 import ee.oyatl.ime.viet.HanNomConverter
 import java.util.Locale
