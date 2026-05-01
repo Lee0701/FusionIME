@@ -48,6 +48,7 @@ abstract class CangjieIMEMode(
     private var bestCandidate: CangjieCandidate? = null
 
     override suspend fun onLoad(context: Context) {
+        super.onLoad(context)
         val table = TableLoader()
         table.setPath(context.filesDir.absolutePath.encodeToByteArray())
         table.initialize()

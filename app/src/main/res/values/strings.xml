@@ -35,6 +35,8 @@
     <string name="settings_behaviour_touch_mode_title">Touch Mode</string>
     <string name="settings_behaviour_touch_mode_summary">Set keyboard touch behaviour.</string>
     <string name="settings_behaviour_flick_sensitivity_title">Flick Sensitivity</string>
+    <string name="settings_behaviour_default_flick_action_up_title">Default Flick Action (Up)</string>
+    <string name="settings_behaviour_default_flick_action_down_title">Default Flick Action (Down)</string>
 
     <string name="settings_behaviour_hardware_title">Hardware Keyboard</string>
     <string name="settings_behaviour_hardware_language_key_title">Hardware Language Key</string>
@@ -71,6 +73,12 @@
 
     <string name="touch_mode_seek">Seek</string>
     <string name="touch_mode_flick">Flick</string>
+
+    <string name="flick_action_none">None</string>
+    <string name="flick_action_default">Character</string>
+    <string name="flick_action_shifted">Shifted Character</string>
+    <string name="flick_action_symbol">Symbol</string>
+    <string name="flick_action_shifted_symbol">Shifted Symbol</string>
 
     <string name="input_mode_latin">Latin</string>
     <string name="input_mode_korean">Korean</string>

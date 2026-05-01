@@ -22,6 +22,20 @@
             app:title="@string/settings_behaviour_flick_sensitivity_title"
             app:useSimpleSummaryProvider="true" />
 
+        <ListPreference
+            app:key="default_flick_action_up"
+            app:defaultValue="Shifted"
+            app:entries="@array/settings_behaviour_default_flick_action_entries"
+            app:entryValues="@array/settings_behaviour_default_flick_action_values"
+            app:title="@string/settings_behaviour_default_flick_action_up_title" />
+
+        <ListPreference
+            app:key="default_flick_action_down"
+            app:defaultValue="Symbol"
+            app:entries="@array/settings_behaviour_default_flick_action_entries"
+            app:entryValues="@array/settings_behaviour_default_flick_action_values"
+            app:title="@string/settings_behaviour_default_flick_action_down_title" />
+
     </PreferenceCategory>
 
 </PreferenceScreen>

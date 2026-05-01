@@ -72,6 +72,7 @@ abstract class MozcIMEMode(
     }
 
     override suspend fun onLoad(context: Context) {
+        super.onLoad(context)
         primaryKeyCodeConverter = PrimaryKeyCodeConverter(context)
         sessionExecutor = SessionExecutor.getInstanceInitializedIfNecessary(SessionHandlerFactory(context), context)
         resources = context.resources

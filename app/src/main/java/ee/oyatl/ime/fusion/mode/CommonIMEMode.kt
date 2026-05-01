@@ -2,7 +2,6 @@ package ee.oyatl.ime.fusion.mode
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.util.TypedValue
 import android.view.KeyCharacterMap
@@ -14,6 +13,7 @@ import androidx.preference.PreferenceManager
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.ScrollingCandidateView
 import ee.oyatl.ime.fusion.Feature
+import ee.oyatl.ime.fusion.FlickAction
 import ee.oyatl.ime.fusion.KeyEventUtil
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.layout.LayoutExt
@@ -38,6 +38,7 @@ import ee.oyatl.ime.keyboard.listener.KeyFeedbackManager
 import ee.oyatl.ime.keyboard.listener.KeyboardListener
 import ee.oyatl.ime.keyboard.listener.ShiftStateManager
 import ee.oyatl.ime.keyboard.popup.DefaultPopupManager
+import ee.oyatl.ime.keyboard.touchhandler.FlickDirection
 import ee.oyatl.ime.keyboard.touchhandler.FlickTouchHandler
 import ee.oyatl.ime.keyboard.touchhandler.SeekTouchHandler
 import ee.oyatl.ime.keyboard.touchhandler.TouchHandler
@@ -107,6 +108,8 @@ abstract class CommonIMEMode(
     var symbolState: KeyboardState.Symbol = KeyboardState.Symbol.Text
     var shiftState: KeyboardState.Shift = KeyboardState.Shift.Released
 
+    private var defaultFlickActions: Map<FlickDirection, FlickAction> = mapOf()
+
     protected var util: KeyEventUtil? = null
         private set
     protected var passwordField: Boolean = false
@@ -121,7 +124,16 @@ abstract class CommonIMEMode(
         util?.sendDownUpKeyEvents(keyCode)
     }
 
-    override suspend fun onLoad(context: Context) = Unit
+    override suspend fun onLoad(context: Context) {
+        val preference = PreferenceManager.getDefaultSharedPreferences(context)
+
+        val flickActionUp = FlickAction.valueOf(preference.getString("default_flick_action_up", null) ?: FlickAction.Shifted.name)
+        val flickActionDown = FlickAction.valueOf(preference.getString("default_flick_action_down", null) ?: FlickAction.Symbol.name)
+        defaultFlickActions = mapOf(
+            FlickDirection.Up to flickActionUp,
+            FlickDirection.Down to flickActionDown
+        )
+    }
 
     override fun onStart(inputConnection: InputConnection, editorInfo: EditorInfo) {
         util = KeyEventUtil(inputConnection, editorInfo)
@@ -332,17 +344,21 @@ abstract class CommonIMEMode(
             val maskedKeyCode = keyCode and FlickKeyCode.MASK_KEYCODE
             val default = keyCharacterMap.get(maskedKeyCode, metaState)
             if(keyCode and FlickKeyCode.FLAG_FLICK != 0) {
-                val direction = keyCode and FlickKeyCode.MASK_DIRECTION
-                when(direction) {
-                    FlickKeyCode.DIRECTION_UP -> onChar(
+                val direction = FlickDirection.valueOfKeycode(keyCode)
+                when(defaultFlickActions[direction]) {
+                    FlickAction.Default -> onChar(
+                        currentLayoutTable[maskedKeyCode]?.forShiftState(shiftState) ?: default)
+                    FlickAction.Shifted -> onChar(
                         currentLayoutTable[maskedKeyCode]?.forShiftState(KeyboardState.Shift.Pressed) ?: default)
-                    FlickKeyCode.DIRECTION_DOWN -> onChar(
+                    FlickAction.Symbol -> onChar(
                         symbolLayoutTable[maskedKeyCode]?.forShiftState(shiftState) ?: default)
+                    FlickAction.ShiftedSymbol -> onChar(
+                        symbolLayoutTable[maskedKeyCode]?.forShiftState(KeyboardState.Shift.Pressed) ?: default)
+                    else -> Unit
                 }
             } else {
                 onChar(
-                    currentLayoutTable[keyCode]?.forShiftState(shiftState) ?: default
-                )
+                    currentLayoutTable[keyCode]?.forShiftState(shiftState) ?: default)
             }
         } else {
             handleSpecialKey(keyCode)

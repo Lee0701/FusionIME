@@ -73,6 +73,7 @@ abstract class LatinIMEMode(
     override val currentRecapitalizeState: Int = 0
 
     override suspend fun onLoad(context: Context) {
+        super.onLoad(context)
         this.context = context
         dummyKeyboard = KeyboardBuilder(context, keyboardParams).build()
         dictionaryFacilitator = DictionaryFacilitatorProvider.getDictionaryFacilitator(false)
