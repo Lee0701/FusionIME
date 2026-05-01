@@ -2,7 +2,6 @@ package ee.oyatl.ime.keyboard.touchhandler
 
 import android.graphics.Rect
 import ee.oyatl.ime.keyboard.listener.KeyboardListener
-import ee.oyatl.ime.keyboard.popup.DefaultPopupManager
 import ee.oyatl.ime.keyboard.popup.PopupManager
 
 interface TouchHandler {

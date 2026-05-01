@@ -9,6 +9,7 @@ enum class Feature(
     MozcCandidateHeight(LocalDate.of(2025, 9, 25)),
     NumberRow(LocalDate.of(2026, 3, 15)),
     SplitKeyboard(LocalDate.of(2026, 3, 15)),
+    TouchMode(LocalDate.of(2026, 4, 16)),
     ;
 
     val availableInPaidVersion: Boolean get() =

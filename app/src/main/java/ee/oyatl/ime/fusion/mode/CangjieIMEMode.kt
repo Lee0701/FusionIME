@@ -48,6 +48,7 @@ abstract class CangjieIMEMode(
     private var bestCandidate: CangjieCandidate? = null
 
     override suspend fun onLoad(context: Context) {
+        super.onLoad(context)
         val table = TableLoader()
         table.setPath(context.filesDir.absolutePath.encodeToByteArray())
         table.initialize()
@@ -102,6 +103,7 @@ abstract class CangjieIMEMode(
         when(keyCode) {
             KeyEvent.KEYCODE_SPACE -> {
                 if(wordComposer.typedWord?.isNotEmpty() == true) {
+                    updateSuggestions()
                     val bestCandidate = bestCandidate
                     if(bestCandidate != null) onCandidateSelected(bestCandidate)
                 } else {

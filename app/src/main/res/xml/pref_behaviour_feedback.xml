@@ -1,0 +1,35 @@
+<PreferenceScreen
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        app:title="@string/settings_behaviour_feedback_title">
+
+        <SwitchPreferenceCompat
+            app:key="sound_feedback"
+            app:defaultValue="true"
+            app:title="@string/settings_behaviour_sound_feedback_title"
+            app:summary="@string/settings_behaviour_sound_feedback_summary" />
+
+        <SwitchPreferenceCompat
+            app:key="haptic_feedback"
+            app:defaultValue="true"
+            app:title="@string/settings_behaviour_haptic_feedback_title"
+            app:summary="@string/settings_behaviour_haptic_feedback_summary" />
+
+        <ee.oyatl.ime.fusion.preference.SliderPreference
+            app:key="vibration_duration"
+            app:valueFrom="5.0"
+            app:valueTo="50.0"
+            app:stepSize="5.0"
+            app:defaultValue="10.0"
+            app:title="@string/settings_behaviour_vibration_duration_title" />
+
+        <SwitchPreferenceCompat
+            app:key="preview_popup"
+            app:defaultValue="true"
+            app:title="@string/settings_behaviour_preview_popup_title"
+            app:summary="@string/settings_behaviour_preview_popup_summary" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

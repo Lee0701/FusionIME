@@ -62,6 +62,7 @@ class ZhuyinIMEMode(
     private var bestCandidate: ZhuyinCandidate? = null
 
     override suspend fun onLoad(context: Context) {
+        super.onLoad(context)
         converter.initialize(context)
     }
 

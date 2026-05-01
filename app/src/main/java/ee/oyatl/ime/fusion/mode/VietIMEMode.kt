@@ -63,6 +63,7 @@ abstract class VietIMEMode(
     private var bestCandidate: HanNomConverter.Candidate? = null
 
     override suspend fun onLoad(context: Context) {
+        super.onLoad(context)
         hanNomConverter = HanNomConverter(context)
     }
 

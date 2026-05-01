@@ -114,7 +114,10 @@ class SettingsActivity : AppCompatActivity(),
 
     class BehaviourFragment : PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-            setPreferencesFromResource(R.xml.pref_behaviour, rootKey)
+            addPreferencesFromResource(R.xml.pref_behaviour_feedback)
+            if(Feature.TouchMode.availableInCurrentVersion)
+                addPreferencesFromResource(R.xml.pref_behaviour_touch)
+            addPreferencesFromResource(R.xml.pref_behaviour_hardware)
         }
     }
 }
