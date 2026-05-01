@@ -102,6 +102,7 @@ abstract class CangjieIMEMode(
         when(keyCode) {
             KeyEvent.KEYCODE_SPACE -> {
                 if(wordComposer.typedWord?.isNotEmpty() == true) {
+                    updateSuggestions()
                     val bestCandidate = bestCandidate
                     if(bestCandidate != null) onCandidateSelected(bestCandidate)
                 } else {
