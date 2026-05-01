@@ -86,4 +86,22 @@
     <string name="settings_input_mode_number_row_summary">최상단 숫자 열 항상 표시</string>
     <string name="korean_layout_hangul_3set_391_strict">한글 세벌식 최종 (정석 강요)</string>
     <string name="korean_layout_old_hangul_3set_393">옛한글 세벌식 393</string>
+    <string name="settings_behaviour_feedback_title">반응</string>
+    <string name="settings_behaviour_touch_title">터치</string>
+    <string name="settings_behaviour_touch_mode_title">터치 모드</string>
+    <string name="settings_behaviour_touch_mode_summary">키보드 터치 행동 유형을 설정합니다.</string>
+    <string name="settings_behaviour_flick_sensitivity_title">플릭 감도</string>
+    <string name="settings_behaviour_default_flick_action_up_title">기본 플릭 동작 (위)</string>
+    <string name="settings_behaviour_default_flick_action_down_title">기본 플릭 동작 (아래)</string>
+    <string name="settings_behaviour_hardware_title">하드웨어 키보드</string>
+    <string name="settings_input_mode_chinese_traditional_title">중국어 번체</string>
+    <string name="touch_mode_seek">찾아보기</string>
+    <string name="touch_mode_flick">플릭</string>
+    <string name="flick_action_none">동작 없음</string>
+    <string name="flick_action_default">문자</string>
+    <string name="flick_action_shifted">윗글쇠 문자</string>
+    <string name="flick_action_symbol">기호</string>
+    <string name="flick_action_shifted_symbol">윗글쇠 기호</string>
+    <string name="pinyin_chinese_simplified">간체</string>
+    <string name="pinyin_chinese_traditional">번체</string>
 </resources>
