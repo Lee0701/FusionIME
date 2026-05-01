@@ -97,6 +97,7 @@ class PinyinIMEMode(
     override val textLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutExt.TABLE_CHINESE)
 
     override suspend fun onLoad(context: Context) {
+        super.onLoad(context)
         startPinyinDecoderService(context)
     }
 

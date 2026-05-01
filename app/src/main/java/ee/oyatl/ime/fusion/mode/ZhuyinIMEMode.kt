@@ -63,6 +63,7 @@ class ZhuyinIMEMode(
     private var bestCandidate: ZhuyinCandidate? = null
 
     override suspend fun onLoad(context: Context) {
+        super.onLoad(context)
         val suggest = Suggest(context, R.raw.dict_zhuyin)
         mUserDictionary = ZhuYinDictionary(context)
 

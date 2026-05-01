@@ -11,6 +11,32 @@
 <!--        <item>Full</item>-->
     </string-array>
 
+    <string-array name="settings_behaviour_touch_mode_entries">
+        <item>@string/touch_mode_seek</item>
+        <item>@string/touch_mode_flick</item>
+    </string-array>
+
+    <string-array name="settings_behaviour_touch_mode_values">
+        <item>seek</item>
+        <item>flick</item>
+    </string-array>
+
+    <string-array name="settings_behaviour_default_flick_action_entries">
+        <item>@string/flick_action_none</item>
+        <item>@string/flick_action_default</item>
+        <item>@string/flick_action_shifted</item>
+        <item>@string/flick_action_symbol</item>
+        <item>@string/flick_action_shifted_symbol</item>
+    </string-array>
+
+    <string-array name="settings_behaviour_default_flick_action_values">
+        <item>None</item>
+        <item>Default</item>
+        <item>Shifted</item>
+        <item>Symbol</item>
+        <item>ShiftedSymbol</item>
+    </string-array>
+
     <string-array name="settings_input_mode_type_entries">
         <item>@string/input_mode_latin</item>
         <item>@string/input_mode_korean</item>
