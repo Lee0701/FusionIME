@@ -59,6 +59,7 @@
     <string name="settings_input_mode_correct_orders_title">Correct Jamo Orders</string>
     <string name="settings_input_mode_converter_title">Converter</string>
     <string name="settings_input_mode_candidate_view_height_title">Candidate View Height</string>
+    <string name="settings_input_mode_chinese_traditional_title">Chinese Traditional</string>
 
     <string name="settings_dialog_keystroke_key_name">Key Name</string>
     <string name="settings_dialog_keystroke_key_code">Key Code</string>
@@ -115,6 +116,8 @@
     <string name="mozc_layout_kana_syllables">Kana Syllables</string>
 
     <string name="pinyin_layout_pinyin">Pinyin</string>
+    <string name="pinyin_chinese_simplified">Simplified</string>
+    <string name="pinyin_chinese_traditional">Traditional</string>
 
     <string name="zhuyin_layout_zhuyin">Bopomofo</string>
 
