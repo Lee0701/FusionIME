@@ -80,6 +80,7 @@ abstract class InputModeDetailsFragment: PreferenceFragmentCompat() {
     class Pinyin: InputModeDetailsFragment() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             super.onCreatePreferences(savedInstanceState, rootKey)
+            addPreferencesFromResource(R.xml.pref_input_mode_pinyin)
             if(Feature.NumberRow.availableInCurrentVersion)
                 addPreferencesFromResource(R.xml.pref_input_mode_number_row)
         }

@@ -98,6 +98,7 @@ public class PinyinDecoderService extends Service {
     private final static int MAX_PATH_FILE_LENGTH = 100;
     private static boolean inited = false;
 
+    private int mDictResId = R.raw.dict_pinyin_hans;
     private String mUsr_dict_file;
 
     static {
@@ -128,8 +129,7 @@ public class PinyinDecoderService extends Service {
 
         // Here is how we open a built-in dictionary for access through
         // a file descriptor...
-        AssetFileDescriptor afd = getResources().openRawResourceFd(
-                R.raw.dict_pinyin);
+        AssetFileDescriptor afd = getResources().openRawResourceFd(mDictResId);
         if (Environment.getInstance().needDebug()) {
             Log
                     .i("foo", "Dict: start=" + afd.getStartOffset()
@@ -315,6 +315,13 @@ public class PinyinDecoderService extends Service {
 
         public int imSyncGetCapacity() {
             return nativeSyncGetCapacity();
+        }
+
+        @Override
+        public void setDictResId(int dictResId) {
+            int oldId = mDictResId;
+            mDictResId = dictResId;
+            if(oldId != dictResId) initPinyinEngine();
         }
     };
 

@@ -55,6 +55,8 @@ public interface IPinyinDecoderService {
     void syncClearLastGot();
     int imSyncGetCapacity();
 
+    void setDictResId(int dictResId);
+
     class Stub extends Binder implements IPinyinDecoderService {
         public static IPinyinDecoderService asInterface(IBinder service) {
             return (IPinyinDecoderService) service;
@@ -203,6 +205,10 @@ public interface IPinyinDecoderService {
         @Override
         public int imSyncGetCapacity() {
             return 0;
+        }
+
+        @Override
+        public void setDictResId(int dictResId) {
         }
     }
 }

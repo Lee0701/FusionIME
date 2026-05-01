@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <SwitchPreferenceCompat
+        app:key="chinese_traditional"
+        app:title="@string/settings_input_mode_chinese_traditional_title" />
+
+</androidx.preference.PreferenceScreen>
