@@ -33,6 +33,7 @@ import ee.oyatl.ime.fusion.layout.MobileKeyboard
 import ee.oyatl.ime.fusion.layout.MobileKeyboardRows
 import ee.oyatl.ime.fusion.layout.TabletKeyboard
 import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
+import ee.oyatl.ime.keyboard.SoftKeyCodeMapper
 import java.util.Locale
 
 class PinyinIMEMode(
@@ -75,6 +76,10 @@ class PinyinIMEMode(
 
     private var isEnterNormalState = true
 
+    private val softKeyCodeMapper = SoftKeyCodeMapper(mapOf(
+        KeyEvent.KEYCODE_SHIFT_LEFT to KeyEvent.KEYCODE_APOSTROPHE
+    ))
+
     override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
         mobile = KeyboardTemplate.Basic(
             configuration = KeyboardConfiguration(
@@ -82,7 +87,8 @@ class PinyinIMEMode(
                 MobileKeyboard.alphabetic(),
                 MobileKeyboard.bottom()
             ),
-            contentRows = (if(numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.DEFAULT
+            contentRows = (if(numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.DEFAULT,
+            softKeyCodeMapper = softKeyCodeMapper
         ),
         tablet = KeyboardTemplate.Basic(
             configuration = KeyboardConfiguration(
@@ -90,7 +96,8 @@ class PinyinIMEMode(
                 TabletKeyboard.alphabetic(delete = !numberRow),
                 TabletKeyboard.bottom()
             ),
-            contentRows = (if(numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.DEFAULT
+            contentRows = (if(numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.DEFAULT,
+            softKeyCodeMapper = softKeyCodeMapper
         )
     )
 
