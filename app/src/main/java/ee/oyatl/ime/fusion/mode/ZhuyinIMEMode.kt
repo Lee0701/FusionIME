@@ -4,23 +4,22 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.view.KeyEvent
-import com.android.inputmethod.zhuyin.Suggest
 import com.android.inputmethod.zhuyin.TextEntryState
 import com.android.inputmethod.zhuyin.WordComposer
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.fusion.R
+import ee.oyatl.ime.fusion.zhuyin.ChewingConverter
 import ee.oyatl.ime.keyboard.KeyboardConfiguration
 import ee.oyatl.ime.keyboard.KeyboardTemplate
 import ee.oyatl.ime.fusion.layout.LayoutZhuyin
-import ee.oyatl.ime.keyboard.LayoutTable
 import ee.oyatl.ime.fusion.layout.MobileKeyboard
 import ee.oyatl.ime.fusion.layout.MobileKeyboardRows
 import ee.oyatl.ime.fusion.layout.LayoutExt
 import ee.oyatl.ime.fusion.layout.LayoutQwerty
+import ee.oyatl.ime.fusion.layout.LayoutSymbol
 import ee.oyatl.ime.fusion.layout.TabletKeyboard
 import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
-import tw.cheyingwu.zhuyin.ZhuYinDictionary
-import tw.cheyingwu.zhuyin.ZhuYinIMESettings
+import ee.oyatl.ime.keyboard.LayoutTable
 import java.util.Locale
 
 class ZhuyinIMEMode(
@@ -55,23 +54,16 @@ class ZhuyinIMEMode(
         )
     )
     override val textLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutExt.TABLE_CHINESE + LayoutZhuyin.TABLE)
+    override val symbolLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutExt.TABLE_CHINESE + LayoutSymbol.TABLE_G)
 
     private val wordComposer = WordComposer()
-    private var mSuggest: Suggest? = null
-    private var mUserDictionary: ZhuYinDictionary? = null
+    private val converter: ChewingConverter = ChewingConverter()
 
     private var bestCandidate: ZhuyinCandidate? = null
 
     override suspend fun onLoad(context: Context) {
         super.onLoad(context)
-        val suggest = Suggest(context, R.raw.dict_zhuyin)
-        mUserDictionary = ZhuYinDictionary(context)
-
-        suggest.correctionMode = Suggest.CORRECTION_BASIC
-        suggest.setUserDictionary(mUserDictionary)
-        ZhuYinIMESettings.setCandidateCnt(50)
-
-        this.mSuggest = suggest
+        converter.initialize(context)
     }
 
     override fun onReset() {
@@ -85,8 +77,8 @@ class ZhuyinIMEMode(
         if(candidate is ZhuyinCandidate) {
             val text = candidate.text.toString().replace(" ", "")
             inputConnection.commitText(text, 1)
-            mUserDictionary?.useWordDB(text)
             onReset()
+            updateSuggestions()
         }
     }
 
@@ -97,8 +89,8 @@ class ZhuyinIMEMode(
     }
 
     private fun updateSuggestions() {
-        val list = mSuggest?.getSuggestions(getInputView(), wordComposer, false) ?: return
-        val candidates = list.mapIndexed { i, s -> ZhuyinCandidate(i, s) }
+        val codes = (0 until wordComposer.size()).mapNotNull { i -> wordComposer.getCodesAt(i).firstOrNull() }
+        val candidates = converter.getSuggestions(codes).mapIndexed { i, s -> ZhuyinCandidate(i, s) }
         bestCandidate = candidates.getOrNull(0)
         submitCandidates(candidates)
     }
@@ -112,7 +104,6 @@ class ZhuyinIMEMode(
         // Complete any pending candidate query first
         if (handler.hasMessages(MSG_UPDATE_SUGGESTIONS)) {
             handler.removeMessages(MSG_UPDATE_SUGGESTIONS)
-            //Log.i(TAG, "MSG_UPDATE_SUGGESTIONS");
             updateSuggestions()
         }
         val bestCandidate = bestCandidate
@@ -120,16 +111,28 @@ class ZhuyinIMEMode(
     }
 
     private fun handleSpace() {
-        if(bestCandidate != null) pickDefaultSuggestion()
+        val typedWord = wordComposer.typedWord ?: ""
+        if(typedWord.isNotEmpty()) {
+            if(typedWord.lastOrNull() in LayoutZhuyin.TONE_MARKS) {
+                if(bestCandidate != null) pickDefaultSuggestion()
+                else onReset()
+            } else {
+                onChar('ˉ'.code)
+            }
+            renderResult()
+        }
         else currentInputConnection?.commitText(" ", 1)
     }
 
     private fun handleReturn() {
-        if(wordComposer.typedWord?.isNotEmpty() == true) onReset()
-        else {
+        if(wordComposer.typedWord?.isNotEmpty() == true) {
+            if(bestCandidate != null) pickDefaultSuggestion()
+            else onReset()
+        } else {
             if (util?.sendDefaultEditorAction(true) != true)
                 currentInputConnection?.commitText("\n", 1)
         }
+        renderResult()
     }
 
     private fun handleBackspace() {
@@ -139,7 +142,6 @@ class ZhuyinIMEMode(
             val length: Int = wordComposer.typedWord.length
             if (length > 0) {
                 wordComposer.deleteLast()
-                postUpdateSuggestions()
             } else {
                 ic.deleteSurroundingText(1, 0)
             }
@@ -155,7 +157,7 @@ class ZhuyinIMEMode(
 
     override fun onChar(codePoint: Int) {
         val key = codePoint.toChar()
-        val value = LayoutZhuyin.CODES_MAP[key]
+        val value = LayoutZhuyin.CODES_MAP[key]?.code
         if(value != null) {
             wordComposer.add(codePoint, intArrayOf(value))
             renderResult()
