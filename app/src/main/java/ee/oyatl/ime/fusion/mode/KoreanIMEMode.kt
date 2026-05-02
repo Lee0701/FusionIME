@@ -358,7 +358,7 @@ abstract class KoreanIMEMode(
 
         companion object {
             fun parse(map: Map<String, String>): Params {
-                val layout = Layout.valueOf(map["layout"] ?: Layout.Set2KS.name)
+                val layout = Layout.entries.find { it.name == map["layout"] } ?: Layout.Set2KS
                 val converterType = ConverterType.valueOf(map["converter"] ?: ConverterType.Word.name)
                 val correctOrders = (map["correct_orders"] ?: "false").toBoolean()
                 val numberRow = map["number_row"]?.toBoolean() ?: false

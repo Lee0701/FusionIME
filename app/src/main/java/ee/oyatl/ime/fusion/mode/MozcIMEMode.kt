@@ -277,7 +277,7 @@ abstract class MozcIMEMode(
 
         companion object {
             fun parse(map: Map<String, String>): Params {
-                val layout = Layout.valueOf(map["layout"] ?: Layout.RomajiQwerty.name)
+                val layout = Layout.entries.find { it.name == map["layout"] } ?: Layout.RomajiQwerty
                 val numberRow = map["number_row"]?.toBoolean() ?: false
                 val candidateViewHeight = map["candidate_view_height"]?.toFloatOrNull()?.toInt() ?: 2
                 return Params(

@@ -161,7 +161,7 @@ abstract class VietIMEMode(
 
         companion object {
             fun parse(map: Map<String, String>): Params {
-                val layout = Layout.valueOf(map["layout"] ?: Layout.Qwerty.name)
+                val layout = Layout.entries.find { it.name == map["layout"] } ?: Layout.Qwerty
                 val numberRow = map["number_row"]?.toBoolean() ?: false
                 return Params(
                     layout = layout,

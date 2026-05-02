@@ -254,7 +254,7 @@ abstract class CangjieIMEMode(
 
         companion object {
             fun parse(map: Map<String, String>): Params {
-                val layout = Layout.valueOf(map["layout"] ?: Layout.Cangjie.name)
+                val layout = Layout.entries.find { it.name == map["layout"] } ?: Layout.Cangjie
                 val fullWidth = map["full_width"].toBoolean()
                 val numberRow = map["number_row"]?.toBoolean() ?: false
                 return Params(
