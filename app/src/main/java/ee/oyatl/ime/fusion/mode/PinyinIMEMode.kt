@@ -44,10 +44,6 @@ class PinyinIMEMode(
     val chineseTraditional: Boolean,
     numberRow: Boolean
 ): CommonIMEMode(listener) {
-    private val dictResId =
-        if(chineseTraditional) ee.oyatl.ime.fusion.R.raw.dict_pinyin_hant
-        else ee.oyatl.ime.fusion.R.raw.dict_pinyin_hans
-
     /**
      * Connection used to bind the decoding service.
      */
@@ -118,7 +114,7 @@ class PinyinIMEMode(
 
     override fun onStart(inputConnection: InputConnection, editorInfo: EditorInfo) {
         super.onStart(inputConnection, editorInfo)
-        decInfo.mIPinyinDecoderService.setDictResId(dictResId)
+        decInfo.mIPinyinDecoderService.setChineseTraditional(chineseTraditional);
     }
 
     override fun onReset() {
@@ -944,10 +940,10 @@ class PinyinIMEMode(
 
         override fun getShortLabel(context: Context, params: List<IMEMode.Params>): String {
             val pinyinParams = params.filterIsInstance<Params>().filterNot { it == this }
-            if(pinyinParams.isEmpty()) return "拼音"
+            return if(pinyinParams.isEmpty()) "拼音"
             else {
-                if(chineseTraditional) return "繁拼"
-                else return "简拼"
+                if(chineseTraditional) "繁拼"
+                else "简拼"
             }
         }
 

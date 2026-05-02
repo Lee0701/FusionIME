@@ -55,7 +55,7 @@ public interface IPinyinDecoderService {
     void syncClearLastGot();
     int imSyncGetCapacity();
 
-    void setDictResId(int dictResId);
+    void setChineseTraditional(boolean chineseTraditional);
 
     class Stub extends Binder implements IPinyinDecoderService {
         public static IPinyinDecoderService asInterface(IBinder service) {
@@ -208,7 +208,7 @@ public interface IPinyinDecoderService {
         }
 
         @Override
-        public void setDictResId(int dictResId) {
+        public void setChineseTraditional(boolean chineseTraditional) {
         }
     }
 }
