@@ -121,12 +121,26 @@
         <item>@string/mozc_layout_romaji_qwerty</item>
         <item>@string/mozc_layout_kana_jis</item>
         <item>@string/mozc_layout_kana_syllables</item>
+        <item>@string/mozc_layout_kana_iroha</item>
     </string-array>
 
     <string-array name="settings_input_mode_mozc_layout_values">
         <item>RomajiQwerty</item>
         <item>KanaJIS</item>
         <item>KanaSyllables</item>
+        <item>KanaIroha</item>
+    </string-array>
+
+    <string-array name="settings_input_mode_mozc_syllables_key_layout_entries">
+        <item>@string/mozc_syllables_key_layout_horizontal</item>
+        <item>@string/mozc_syllables_key_layout_vertical_left</item>
+        <item>@string/mozc_syllables_key_layout_vertical_right</item>
+    </string-array>
+
+    <string-array name="settings_input_mode_mozc_syllables_key_layout_values">
+        <item>Horizontal</item>
+        <item>VerticalLeft</item>
+        <item>VerticalRight</item>
     </string-array>
 
     <string-array name="settings_input_mode_viet_layout_entries">
