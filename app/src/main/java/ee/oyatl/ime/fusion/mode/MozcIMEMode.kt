@@ -225,23 +225,9 @@ abstract class MozcIMEMode(
             )
         )
 
-        val extraLabels: Map<Int, String> = mapOf(
-            KeyEvent.KEYCODE_1 to "あ",
-            KeyEvent.KEYCODE_2 to "か",
-            KeyEvent.KEYCODE_3 to "さ",
-            KeyEvent.KEYCODE_4 to "た",
-            KeyEvent.KEYCODE_5 to "な",
-            KeyEvent.KEYCODE_6 to "は",
-            KeyEvent.KEYCODE_7 to "ま",
-            KeyEvent.KEYCODE_8 to "や",
-            KeyEvent.KEYCODE_9 to "ら",
-            KeyEvent.KEYCODE_0 to "わ",
-            KeyEvent.KEYCODE_COMMA to "゛゜",
-            KeyEvent.KEYCODE_PERIOD to "、。"
-        )
         override val keyLabels: Map<Int, String>
             get() =
-                if(symbolState == Symbol.Text) super.keyLabels + extraLabels
+                if(symbolState == Symbol.Text) super.keyLabels + LayoutKana.LABELS_12KEY
                 else super.keyLabels
 
         private val flicks: MutableMap<Int, Int> = mutableMapOf()

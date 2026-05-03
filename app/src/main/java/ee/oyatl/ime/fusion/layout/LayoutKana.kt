@@ -153,6 +153,76 @@ object LayoutKana {
         KeyEvent.KEYCODE_PERIOD or FlickKeyCode.DIRECTION_DOWN  to listOf('>'.code)
     )
 
+    val LABELS_12KEY: Map<Int, String> = mapOf(
+        KeyEvent.KEYCODE_1 or FlickKeyCode.DIRECTION_NONE  to "あ",
+        KeyEvent.KEYCODE_1 or FlickKeyCode.DIRECTION_LEFT  to "い",
+        KeyEvent.KEYCODE_1 or FlickKeyCode.DIRECTION_UP    to "う",
+        KeyEvent.KEYCODE_1 or FlickKeyCode.DIRECTION_RIGHT to "え",
+        KeyEvent.KEYCODE_1 or FlickKeyCode.DIRECTION_DOWN  to "お",
+
+        KeyEvent.KEYCODE_2 or FlickKeyCode.DIRECTION_NONE  to "か",
+        KeyEvent.KEYCODE_2 or FlickKeyCode.DIRECTION_LEFT  to "き",
+        KeyEvent.KEYCODE_2 or FlickKeyCode.DIRECTION_UP    to "く",
+        KeyEvent.KEYCODE_2 or FlickKeyCode.DIRECTION_RIGHT to "け",
+        KeyEvent.KEYCODE_2 or FlickKeyCode.DIRECTION_DOWN  to "こ",
+
+        KeyEvent.KEYCODE_3 or FlickKeyCode.DIRECTION_NONE  to "さ",
+        KeyEvent.KEYCODE_3 or FlickKeyCode.DIRECTION_LEFT  to "し",
+        KeyEvent.KEYCODE_3 or FlickKeyCode.DIRECTION_UP    to "す",
+        KeyEvent.KEYCODE_3 or FlickKeyCode.DIRECTION_RIGHT to "せ",
+        KeyEvent.KEYCODE_3 or FlickKeyCode.DIRECTION_DOWN  to "そ",
+
+        KeyEvent.KEYCODE_4 or FlickKeyCode.DIRECTION_NONE  to "た",
+        KeyEvent.KEYCODE_4 or FlickKeyCode.DIRECTION_LEFT  to "ち",
+        KeyEvent.KEYCODE_4 or FlickKeyCode.DIRECTION_UP    to "つ",
+        KeyEvent.KEYCODE_4 or FlickKeyCode.DIRECTION_RIGHT to "て",
+        KeyEvent.KEYCODE_4 or FlickKeyCode.DIRECTION_DOWN  to "と",
+
+        KeyEvent.KEYCODE_5 or FlickKeyCode.DIRECTION_NONE  to "な",
+        KeyEvent.KEYCODE_5 or FlickKeyCode.DIRECTION_LEFT  to "に",
+        KeyEvent.KEYCODE_5 or FlickKeyCode.DIRECTION_UP    to "ぬ",
+        KeyEvent.KEYCODE_5 or FlickKeyCode.DIRECTION_RIGHT to "ね",
+        KeyEvent.KEYCODE_5 or FlickKeyCode.DIRECTION_DOWN  to "の",
+
+        KeyEvent.KEYCODE_6 or FlickKeyCode.DIRECTION_NONE  to "は",
+        KeyEvent.KEYCODE_6 or FlickKeyCode.DIRECTION_LEFT  to "ひ",
+        KeyEvent.KEYCODE_6 or FlickKeyCode.DIRECTION_UP    to "ふ",
+        KeyEvent.KEYCODE_6 or FlickKeyCode.DIRECTION_RIGHT to "へ",
+        KeyEvent.KEYCODE_6 or FlickKeyCode.DIRECTION_DOWN  to "ほ",
+
+        KeyEvent.KEYCODE_7 or FlickKeyCode.DIRECTION_NONE  to "ま",
+        KeyEvent.KEYCODE_7 or FlickKeyCode.DIRECTION_LEFT  to "み",
+        KeyEvent.KEYCODE_7 or FlickKeyCode.DIRECTION_UP    to "む",
+        KeyEvent.KEYCODE_7 or FlickKeyCode.DIRECTION_RIGHT to "め",
+        KeyEvent.KEYCODE_7 or FlickKeyCode.DIRECTION_DOWN  to "も",
+
+        KeyEvent.KEYCODE_8 or FlickKeyCode.DIRECTION_NONE  to "や",
+        KeyEvent.KEYCODE_8 or FlickKeyCode.DIRECTION_LEFT  to "（",
+        KeyEvent.KEYCODE_8 or FlickKeyCode.DIRECTION_UP    to "ゆ",
+        KeyEvent.KEYCODE_8 or FlickKeyCode.DIRECTION_RIGHT to "）",
+        KeyEvent.KEYCODE_8 or FlickKeyCode.DIRECTION_DOWN  to "よ",
+
+        KeyEvent.KEYCODE_9 or FlickKeyCode.DIRECTION_NONE  to "ら",
+        KeyEvent.KEYCODE_9 or FlickKeyCode.DIRECTION_LEFT  to "り",
+        KeyEvent.KEYCODE_9 or FlickKeyCode.DIRECTION_UP    to "る",
+        KeyEvent.KEYCODE_9 or FlickKeyCode.DIRECTION_RIGHT to "れ",
+        KeyEvent.KEYCODE_9 or FlickKeyCode.DIRECTION_DOWN  to "ろ",
+
+        KeyEvent.KEYCODE_0 or FlickKeyCode.DIRECTION_NONE  to "わ",
+        KeyEvent.KEYCODE_0 or FlickKeyCode.DIRECTION_LEFT  to "を",
+        KeyEvent.KEYCODE_0 or FlickKeyCode.DIRECTION_UP    to "ん",
+        KeyEvent.KEYCODE_0 or FlickKeyCode.DIRECTION_RIGHT to "ー",
+        KeyEvent.KEYCODE_0 or FlickKeyCode.DIRECTION_DOWN  to "～",
+
+        KeyEvent.KEYCODE_COMMA or FlickKeyCode.DIRECTION_NONE to "゛゜",
+
+        KeyEvent.KEYCODE_PERIOD or FlickKeyCode.DIRECTION_NONE  to "、",
+        KeyEvent.KEYCODE_PERIOD or FlickKeyCode.DIRECTION_LEFT  to "。",
+        KeyEvent.KEYCODE_PERIOD or FlickKeyCode.DIRECTION_UP    to "？",
+        KeyEvent.KEYCODE_PERIOD or FlickKeyCode.DIRECTION_RIGHT to "！",
+        KeyEvent.KEYCODE_PERIOD or FlickKeyCode.DIRECTION_DOWN  to "…"
+    )
+
     val TABLE_JIS = mapOf(
         KeyEvent.KEYCODE_GRAVE to listOf('ろ'.code),
         KeyEvent.KEYCODE_1 to listOf('ぬ'.code),

@@ -290,8 +290,7 @@ abstract class CommonIMEMode(
             keyboardView.state = symbolState
         }
         if(keyboardView != null) {
-            val labels = this.keyLabels
-            keyboardView.setLabels(labels)
+            keyboardView.labels = this.keyLabels
             val shiftIcon = when(shiftState) {
                 KeyboardState.Shift.Released -> ee.oyatl.ime.keyboard.R.drawable.keyic_shift
                 KeyboardState.Shift.Pressed -> ee.oyatl.ime.keyboard.R.drawable.keyic_shift_pressed
@@ -301,7 +300,7 @@ abstract class CommonIMEMode(
                 KeyEvent.KEYCODE_SHIFT_LEFT to shiftIcon,
                 KeyEvent.KEYCODE_SHIFT_RIGHT to shiftIcon
             )
-            keyboardView.setIcons(icons)
+            keyboardView.icons = icons
         }
     }
 

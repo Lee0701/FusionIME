@@ -8,7 +8,7 @@ abstract class KeyboardView(
     context: Context,
     attrs: AttributeSet?
 ): FrameLayout(context, attrs) {
+    abstract var labels: Map<Int, String>
+    abstract var icons: Map<Int, Int>
     abstract fun onReset()
-    abstract fun setLabels(labels: Map<Int, String>)
-    abstract fun setIcons(icons: Map<Int, Int>)
 }

@@ -2,6 +2,7 @@ package ee.oyatl.ime.keyboard.touchhandler
 
 import ee.oyatl.ime.keyboard.FlickKeyCode
 import ee.oyatl.ime.keyboard.popup.Popup
+import ee.oyatl.ime.keyboard.popup.PreviewPopup
 import kotlin.math.PI
 import kotlin.math.atan2
 import kotlin.math.pow
@@ -51,6 +52,10 @@ class FlickTouchHandler(
                 if(direction != lastDirection && (multiFlick || flicks.isEmpty())) {
                     if(pointer.key != null && pointer.key.keyCode >= 0) {
                         val keyCode = FlickKeyCode.FLAG_FLICK or direction.keyCodeFlag or pointer.key.keyCode
+                        if(pointer.popup is PreviewPopup) {
+                            val newLabel = keyboardView.labels[direction.keyCodeFlag or pointer.key.keyCode]
+                            if(newLabel != null) pointer.popup.label = newLabel
+                        }
                         keyboardView.listener.onKeyDown(keyCode, 0)
                         keyboardView.listener.onKeyUp(keyCode, 0)
                     }

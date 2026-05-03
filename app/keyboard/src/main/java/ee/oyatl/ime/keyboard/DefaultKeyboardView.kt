@@ -30,6 +30,24 @@ class DefaultKeyboardView(
     override val location: IntArray = IntArray(2)
     private val keySet: MutableSet<CachedKey> = mutableSetOf()
 
+    override var labels: Map<Int, String> = mapOf()
+        set(value) {
+            field = value
+            keySet.forEach {
+                val label = value[it.keyCode]
+                if(label != null) it.binding.label.text = label
+            }
+        }
+
+    override var icons: Map<Int, Int> = mapOf()
+        set(value) {
+            field = value
+            keySet.forEach {
+                val icon = value[it.keyCode]
+                if(icon != null) it.binding.icon.setImageResource(icon)
+            }
+        }
+
     var keyboard: Keyboard? = null
         set(value) {
             field = value
@@ -151,20 +169,6 @@ class DefaultKeyboardView(
     override fun findKey(x: Int, y: Int): CachedKey? {
         return keySet.find { key ->
             key.rect.contains(x, y)
-        }
-    }
-
-    override fun setLabels(labels: Map<Int, String>) {
-        keySet.forEach {
-            val label = labels[it.keyCode]
-            if(label != null) it.binding.label.text = label
-        }
-    }
-
-    override fun setIcons(icons: Map<Int, Int>) {
-        keySet.forEach {
-            val icon = icons[it.keyCode]
-            if(icon != null) it.binding.icon.setImageResource(icon)
         }
     }
 

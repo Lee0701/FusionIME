@@ -26,6 +26,8 @@ interface TouchHandler {
         val location: IntArray
         val listener: KeyboardListener
         val popupManager: PopupManager
+        val labels: Map<Int, String>
+        val icons: Map<Int, Int>
         fun findKey(x: Int, y: Int): KeyInterface?
     }
 }
