@@ -244,6 +244,8 @@ abstract class MozcIMEMode(
                 if(symbolState == Symbol.Text) super.keyLabels + extraLabels
                 else super.keyLabels
 
+        private val flicks: MutableMap<Int, Int> = mutableMapOf()
+
         override fun createTouchHandler(
             keyboardView: TouchHandler.KeyboardViewInterface,
             context: Context
@@ -251,19 +253,42 @@ abstract class MozcIMEMode(
             val preference = PreferenceManager.getDefaultSharedPreferences(context)
             val defaultValue = context.resources.getInteger(R.integer.flick_sensitivity_default).toFloat()
             val flickSensitivity = preference.getFloat("flick_sensitivity", defaultValue).toInt()
-            return FlickTouchHandler(keyboardView, flickSensitivity, diagonal = false, multiFlick = false)
+            return FlickTouchHandler(keyboardView, flickSensitivity, diagonal = false, multiFlick = false, sendOnUp = true)
         }
 
         override fun onKeyDown(keyCode: Int, metaState: Int) {
-            if(keyCode >= 0 && keyCode and FlickKeyCode.FLAG_FLICK != 0) {
+            val isFlick = keyCode and FlickKeyCode.FLAG_FLICK != 0
+            if(!isFlick) {
+                if(keyCode <= 0 || !keyCharacterMap.isPrintingKey(keyCode)) {
+                    return super.onKeyDown(keyCode, metaState)
+                }
+            } else if(symbolState != Symbol.Text) {
+                return super.onKeyDown(keyCode, metaState)
+            }
+        }
+
+        override fun onKeyUp(keyCode: Int, metaState: Int) {
+            val isFlick = keyCode and FlickKeyCode.FLAG_FLICK != 0
+            if(!isFlick) {
+                if(keyCode <= 0 || !keyCharacterMap.isPrintingKey(keyCode)) {
+                    return super.onKeyUp(keyCode, metaState)
+                }
+            }
+            if(symbolState != Symbol.Text) {
+                // Workaround to avoid doubled input caused by sendOnUp option.
+                return
+            }
+            if(isFlick) {
                 val code = keyCode and FlickKeyCode.MASK_KEYCODE
                 val direction = keyCode and FlickKeyCode.MASK_DIRECTION
-                val key = if(flickMode == FlickMode.ToggleOnly) code else code or direction
-                val charCode = textLayoutTable[key]?.forShiftState(shiftState)
-                val default = keyCharacterMap.get(code, metaState)
-                onChar(charCode ?: default)
+                this.flicks += code to direction
             } else {
-                super.onKeyDown(keyCode, metaState)
+                val direction = flicks[keyCode] ?: FlickKeyCode.DIRECTION_NONE
+                val key = if(flickMode == FlickMode.ToggleOnly) keyCode else keyCode or direction
+                val charCode = currentLayoutTable[key]?.forShiftState(shiftState)
+                val default = keyCharacterMap.get(keyCode, metaState)
+                onChar(charCode ?: default)
+                this.flicks -= keyCode
             }
         }
     }

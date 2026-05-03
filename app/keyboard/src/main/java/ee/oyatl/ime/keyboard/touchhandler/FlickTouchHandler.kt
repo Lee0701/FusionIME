@@ -11,7 +11,8 @@ class FlickTouchHandler(
     override val keyboardView: TouchHandler.KeyboardViewInterface,
     val threshold: Int,
     val diagonal: Boolean = false,
-    val multiFlick: Boolean = false
+    val multiFlick: Boolean = false,
+    val sendOnUp: Boolean = false
 ): TouchHandler {
     val pointers = mutableMapOf<Int, Pointer>()
 
@@ -67,7 +68,7 @@ class FlickTouchHandler(
         val key = pointer.key
         if(key != null) {
             key.onReleased()
-            if(pointer.flicks.isEmpty()) keyboardView.listener.onKeyUp(key.keyCode, 0)
+            if(pointer.flicks.isEmpty() || sendOnUp) keyboardView.listener.onKeyUp(key.keyCode, 0)
         }
         pointer.popup?.hide()
         pointers -= pointerId
