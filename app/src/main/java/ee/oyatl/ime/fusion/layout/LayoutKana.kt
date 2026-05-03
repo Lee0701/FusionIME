@@ -65,7 +65,7 @@ object LayoutKana {
     fun mobileKeyboardConfiguration12Key(): KeyboardConfiguration {
         val rows = (0 until 4).map { mutableListOf<KeyboardConfiguration.Item>() }
 
-        rows[0] += KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_TAB, special = true)
+        rows[0] += KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_NUM, special = true)
         rows[1] += KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_DPAD_LEFT, special = true)
         rows[2] += KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_LANGUAGE_SWITCH, special = true)
         rows[3] += KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_SYM, special = true)
