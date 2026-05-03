@@ -112,6 +112,7 @@
     <string name="korean_converter_jeongun">Jeong-Un Converter</string>
 
     <string name="mozc_layout_romaji_qwerty">Romaji QWERTY</string>
+    <string name="mozc_layout_kana_12key">Kana 12-Key</string>
     <string name="mozc_layout_kana_jis">Kana JIS</string>
     <string name="mozc_layout_kana_syllables">Kana Syllables</string>
 

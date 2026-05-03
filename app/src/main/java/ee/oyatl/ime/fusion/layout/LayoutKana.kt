@@ -1,6 +1,7 @@
 package ee.oyatl.ime.fusion.layout
 
 import android.view.KeyEvent
+import ee.oyatl.ime.keyboard.FlickKeyCode
 import ee.oyatl.ime.keyboard.KeyboardConfiguration
 
 object LayoutKana {
@@ -13,6 +14,13 @@ object LayoutKana {
     )
     const val BOTTOM_LEFT_SYLLABLES: String = "ん"
     const val BOTTOM_RIGHT_SYLLABLES: String = "*ー"
+
+    val ROWS_12KEY: List<String> = listOf(
+        "123",
+        "456",
+        "789",
+        ",0."
+    )
 
     fun mobileKeyboardConfigurationSyllables(): KeyboardConfiguration {
         val rows = ROWS_SYLLABLES.map { row ->
@@ -53,6 +61,95 @@ object LayoutKana {
         rows[4].add(KeyboardConfiguration.Item.Spacer(1f))
         return KeyboardConfiguration(rows) + TabletKeyboard.bottom()
     }
+
+    fun mobileKeyboardConfiguration12Key(): KeyboardConfiguration {
+        val rows = (0 until 4).map { mutableListOf<KeyboardConfiguration.Item>() }
+
+        rows[0] += KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_TAB, special = true)
+        rows[1] += KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_DPAD_LEFT, special = true)
+        rows[2] += KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_LANGUAGE_SWITCH, special = true)
+        rows[3] += KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_SYM, special = true)
+
+        rows[0] += KeyboardConfiguration.Item.ContentRow(3)
+        rows[1] += KeyboardConfiguration.Item.ContentRow(2)
+        rows[2] += KeyboardConfiguration.Item.ContentRow(1)
+        rows[3] += KeyboardConfiguration.Item.ContentRow(0)
+
+        rows[0] += KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_DEL, special = true)
+        rows[1] += KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_DPAD_RIGHT, special = true)
+        rows[2] += KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_SPACE, special = true)
+        rows[3] += KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_ENTER, special = true)
+
+        return KeyboardConfiguration(rows)
+    }
+
+    val TABLE_12KEY = mapOf(
+        KeyEvent.KEYCODE_1 or FlickKeyCode.DIRECTION_NONE  to listOf('1'.code),
+        KeyEvent.KEYCODE_1 or FlickKeyCode.DIRECTION_LEFT  to listOf('_'.code),
+        KeyEvent.KEYCODE_1 or FlickKeyCode.DIRECTION_UP    to listOf(';'.code),
+        KeyEvent.KEYCODE_1 or FlickKeyCode.DIRECTION_RIGHT to listOf(':'.code),
+        KeyEvent.KEYCODE_1 or FlickKeyCode.DIRECTION_DOWN  to listOf('@'.code),
+
+        KeyEvent.KEYCODE_2 or FlickKeyCode.DIRECTION_NONE  to listOf('2'.code),
+        KeyEvent.KEYCODE_2 or FlickKeyCode.DIRECTION_LEFT  to listOf('a'.code),
+        KeyEvent.KEYCODE_2 or FlickKeyCode.DIRECTION_UP    to listOf('b'.code),
+        KeyEvent.KEYCODE_2 or FlickKeyCode.DIRECTION_RIGHT to listOf('c'.code),
+        KeyEvent.KEYCODE_2 or FlickKeyCode.DIRECTION_DOWN  to listOf('|'.code),
+
+        KeyEvent.KEYCODE_3 or FlickKeyCode.DIRECTION_NONE  to listOf('3'.code),
+        KeyEvent.KEYCODE_3 or FlickKeyCode.DIRECTION_LEFT  to listOf('d'.code),
+        KeyEvent.KEYCODE_3 or FlickKeyCode.DIRECTION_UP    to listOf('e'.code),
+        KeyEvent.KEYCODE_3 or FlickKeyCode.DIRECTION_RIGHT to listOf('f'.code),
+        KeyEvent.KEYCODE_3 or FlickKeyCode.DIRECTION_DOWN  to listOf('~'.code),
+
+        KeyEvent.KEYCODE_4 or FlickKeyCode.DIRECTION_NONE  to listOf('4'.code),
+        KeyEvent.KEYCODE_4 or FlickKeyCode.DIRECTION_LEFT  to listOf('g'.code),
+        KeyEvent.KEYCODE_4 or FlickKeyCode.DIRECTION_UP    to listOf('h'.code),
+        KeyEvent.KEYCODE_4 or FlickKeyCode.DIRECTION_RIGHT to listOf('i'.code),
+        KeyEvent.KEYCODE_4 or FlickKeyCode.DIRECTION_DOWN  to listOf('$'.code),
+
+        KeyEvent.KEYCODE_5 or FlickKeyCode.DIRECTION_NONE  to listOf('5'.code),
+        KeyEvent.KEYCODE_5 or FlickKeyCode.DIRECTION_LEFT  to listOf('j'.code),
+        KeyEvent.KEYCODE_5 or FlickKeyCode.DIRECTION_UP    to listOf('k'.code),
+        KeyEvent.KEYCODE_5 or FlickKeyCode.DIRECTION_RIGHT to listOf('l'.code),
+        KeyEvent.KEYCODE_5 or FlickKeyCode.DIRECTION_DOWN  to listOf('%'.code),
+
+        KeyEvent.KEYCODE_6 or FlickKeyCode.DIRECTION_NONE  to listOf('6'.code),
+        KeyEvent.KEYCODE_6 or FlickKeyCode.DIRECTION_LEFT  to listOf('m'.code),
+        KeyEvent.KEYCODE_6 or FlickKeyCode.DIRECTION_UP    to listOf('n'.code),
+        KeyEvent.KEYCODE_6 or FlickKeyCode.DIRECTION_RIGHT to listOf('o'.code),
+        KeyEvent.KEYCODE_6 or FlickKeyCode.DIRECTION_DOWN  to listOf('&'.code),
+
+        KeyEvent.KEYCODE_7 or FlickKeyCode.DIRECTION_NONE  to listOf('7'.code),
+        KeyEvent.KEYCODE_7 or FlickKeyCode.DIRECTION_LEFT  to listOf('p'.code),
+        KeyEvent.KEYCODE_7 or FlickKeyCode.DIRECTION_UP    to listOf('q'.code),
+        KeyEvent.KEYCODE_7 or FlickKeyCode.DIRECTION_RIGHT to listOf('r'.code),
+        KeyEvent.KEYCODE_7 or FlickKeyCode.DIRECTION_DOWN  to listOf('s'.code),
+
+        KeyEvent.KEYCODE_8 or FlickKeyCode.DIRECTION_NONE  to listOf('8'.code),
+        KeyEvent.KEYCODE_8 or FlickKeyCode.DIRECTION_LEFT  to listOf('t'.code),
+        KeyEvent.KEYCODE_8 or FlickKeyCode.DIRECTION_UP    to listOf('u'.code),
+        KeyEvent.KEYCODE_8 or FlickKeyCode.DIRECTION_RIGHT to listOf('v'.code),
+        KeyEvent.KEYCODE_8 or FlickKeyCode.DIRECTION_DOWN  to listOf('^'.code),
+
+        KeyEvent.KEYCODE_9 or FlickKeyCode.DIRECTION_NONE  to listOf('9'.code),
+        KeyEvent.KEYCODE_9 or FlickKeyCode.DIRECTION_LEFT  to listOf('w'.code),
+        KeyEvent.KEYCODE_9 or FlickKeyCode.DIRECTION_UP    to listOf('x'.code),
+        KeyEvent.KEYCODE_9 or FlickKeyCode.DIRECTION_RIGHT to listOf('y'.code),
+        KeyEvent.KEYCODE_9 or FlickKeyCode.DIRECTION_DOWN  to listOf('z'.code),
+
+        KeyEvent.KEYCODE_0 or FlickKeyCode.DIRECTION_NONE  to listOf('0'.code),
+        KeyEvent.KEYCODE_0 or FlickKeyCode.DIRECTION_LEFT  to listOf('+'.code),
+        KeyEvent.KEYCODE_0 or FlickKeyCode.DIRECTION_UP    to listOf('/'.code),
+        KeyEvent.KEYCODE_0 or FlickKeyCode.DIRECTION_RIGHT to listOf('-'.code),
+        KeyEvent.KEYCODE_0 or FlickKeyCode.DIRECTION_DOWN  to listOf('<'.code),
+
+        KeyEvent.KEYCODE_PERIOD or FlickKeyCode.DIRECTION_NONE  to listOf('#'.code),
+        KeyEvent.KEYCODE_PERIOD or FlickKeyCode.DIRECTION_LEFT  to listOf(','.code),
+        KeyEvent.KEYCODE_PERIOD or FlickKeyCode.DIRECTION_UP    to listOf('?'.code),
+        KeyEvent.KEYCODE_PERIOD or FlickKeyCode.DIRECTION_RIGHT to listOf('!'.code),
+        KeyEvent.KEYCODE_PERIOD or FlickKeyCode.DIRECTION_DOWN  to listOf('>'.code)
+    )
 
     val TABLE_JIS = mapOf(
         KeyEvent.KEYCODE_GRAVE to listOf('ろ'.code),
