@@ -102,6 +102,9 @@ abstract class CommonIMEMode(
         KeyboardState.Symbol.Number -> numberLayoutTable
     }
 
+    open val keyLabels: Map<Int, String>
+        get() = currentLayoutTable.map.mapValues { (_, v) -> v.forShiftState(shiftState).toChar().toString() }
+
     protected var keyboardView: KeyboardView? = null
     protected var candidateView: CandidateView? = null
 
@@ -270,7 +273,7 @@ abstract class CommonIMEMode(
             keyboardView.state = symbolState
         }
         if(keyboardView != null) {
-            val labels = currentLayoutTable.map.mapValues { (_, v) -> v.forShiftState(shiftState).toChar().toString() }
+            val labels = this.keyLabels
             keyboardView.setLabels(labels)
             val shiftIcon = when(shiftState) {
                 KeyboardState.Shift.Released -> ee.oyatl.ime.keyboard.R.drawable.keyic_shift

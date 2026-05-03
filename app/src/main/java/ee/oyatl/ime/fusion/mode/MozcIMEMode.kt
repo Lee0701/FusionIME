@@ -26,6 +26,7 @@ import ee.oyatl.ime.fusion.layout.LayoutExt
 import ee.oyatl.ime.fusion.layout.TabletKeyboard
 import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
 import ee.oyatl.ime.keyboard.FlickKeyCode
+import ee.oyatl.ime.keyboard.KeyboardState.Symbol
 import ee.oyatl.ime.keyboard.touchhandler.FlickTouchHandler
 import ee.oyatl.ime.keyboard.touchhandler.TouchHandler
 import org.mozc.android.inputmethod.japanese.MozcUtil
@@ -207,16 +208,31 @@ abstract class MozcIMEMode(
     ): MozcIMEMode(listener, candidateViewHeight) {
         override val keyboardSpecification: KeyboardSpecification = flickMode.keyboardSpecification
         override val textLayoutTable: LayoutTable = LayoutTable.from(LayoutKana.TABLE_12KEY)
-        private val softKeyCodeMapper = SoftKeyCodeMapper(mapOf(
-            KeyEvent.KEYCODE_COMMA to -'*'.code,
-        ))
         override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
             mobile = KeyboardTemplate.Basic(
                 configuration = LayoutKana.mobileKeyboardConfiguration12Key(),
-                contentRows = LayoutKana.ROWS_12KEY,
-                softKeyCodeMapper = softKeyCodeMapper
+                contentRows = LayoutKana.ROWS_12KEY
             )
         )
+
+        val extraLabels: Map<Int, String> = mapOf(
+            KeyEvent.KEYCODE_1 to "あ",
+            KeyEvent.KEYCODE_2 to "か",
+            KeyEvent.KEYCODE_3 to "さ",
+            KeyEvent.KEYCODE_4 to "た",
+            KeyEvent.KEYCODE_5 to "な",
+            KeyEvent.KEYCODE_6 to "は",
+            KeyEvent.KEYCODE_7 to "ま",
+            KeyEvent.KEYCODE_8 to "や",
+            KeyEvent.KEYCODE_9 to "ら",
+            KeyEvent.KEYCODE_0 to "わ",
+            KeyEvent.KEYCODE_COMMA to "゛゜",
+            KeyEvent.KEYCODE_PERIOD to "、。"
+        )
+        override val keyLabels: Map<Int, String>
+            get() =
+                if(symbolState == Symbol.Text) super.keyLabels + extraLabels
+                else super.keyLabels
 
         override fun createTouchHandler(
             keyboardView: TouchHandler.KeyboardViewInterface,

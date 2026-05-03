@@ -144,6 +144,8 @@ object LayoutKana {
         KeyEvent.KEYCODE_0 or FlickKeyCode.DIRECTION_RIGHT to listOf('-'.code),
         KeyEvent.KEYCODE_0 or FlickKeyCode.DIRECTION_DOWN  to listOf('<'.code),
 
+        KeyEvent.KEYCODE_COMMA or FlickKeyCode.DIRECTION_NONE to listOf('*'.code),
+
         KeyEvent.KEYCODE_PERIOD or FlickKeyCode.DIRECTION_NONE  to listOf('#'.code),
         KeyEvent.KEYCODE_PERIOD or FlickKeyCode.DIRECTION_LEFT  to listOf(','.code),
         KeyEvent.KEYCODE_PERIOD or FlickKeyCode.DIRECTION_UP    to listOf('?'.code),
