@@ -109,6 +109,9 @@ abstract class MozcIMEMode(
                     .setIncognitoMode(passwordField)
                     .build()
             )
+            val keyboardSpecification =
+                if(symbolState == Symbol.Text) this.keyboardSpecification
+                else KeyboardSpecification.QWERTY_KANA
             sessionExecutor.updateRequest(
                 MozcUtil.getRequestBuilder(resources, keyboardSpecification, resources.configuration).build(),
                 emptyList()
@@ -145,6 +148,13 @@ abstract class MozcIMEMode(
     }
 
     override fun onSpecial(keyCode: Int) {
+        when(keyCode) {
+            KeyEvent.KEYCODE_SYM -> {
+                super.onSpecial(keyCode)
+                restartInput()
+                return
+            }
+        }
         val converter = primaryKeyCodeConverter ?: return super.onSpecial(keyCode)
         when(keyCode) {
             KeyEvent.KEYCODE_SPACE -> onChar(' '.code)

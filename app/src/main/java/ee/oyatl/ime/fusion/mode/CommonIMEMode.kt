@@ -124,7 +124,24 @@ abstract class CommonIMEMode(
     }
 
     open fun onSpecial(keyCode: Int) {
-        util?.sendDownUpKeyEvents(keyCode)
+        when(keyCode) {
+            KeyEvent.KEYCODE_LANGUAGE_SWITCH -> listener.onLanguageSwitch()
+            KeyEvent.KEYCODE_SYM -> {
+                symbolState =
+                    if(symbolState != KeyboardState.Symbol.Symbol) KeyboardState.Symbol.Symbol
+                    else KeyboardState.Symbol.Text
+                shiftState = KeyboardState.Shift.Released
+                keyboardView?.onReset()
+            }
+            KeyEvent.KEYCODE_NUM -> {
+                symbolState =
+                    if(symbolState != KeyboardState.Symbol.Number) KeyboardState.Symbol.Number
+                    else KeyboardState.Symbol.Text
+                shiftState = KeyboardState.Shift.Released
+                keyboardView?.onReset()
+            }
+            else -> util?.sendDownUpKeyEvents(keyCode)
+        }
     }
 
     override suspend fun onLoad(context: Context) {
@@ -364,7 +381,7 @@ abstract class CommonIMEMode(
                     currentLayoutTable[keyCode]?.forShiftState(shiftState) ?: default)
             }
         } else {
-            handleSpecialKey(keyCode)
+            onSpecial(keyCode)
         }
         updateInputView()
     }
@@ -374,27 +391,6 @@ abstract class CommonIMEMode(
             shiftState = KeyboardState.Shift.Released
         }
         updateInputView()
-    }
-
-    protected fun handleSpecialKey(keyCode: Int) {
-        when(keyCode) {
-            KeyEvent.KEYCODE_LANGUAGE_SWITCH -> listener.onLanguageSwitch()
-            KeyEvent.KEYCODE_SYM -> {
-                symbolState =
-                    if(symbolState != KeyboardState.Symbol.Symbol) KeyboardState.Symbol.Symbol
-                    else KeyboardState.Symbol.Text
-                shiftState = KeyboardState.Shift.Released
-                keyboardView?.onReset()
-            }
-            KeyEvent.KEYCODE_NUM -> {
-                symbolState =
-                    if(symbolState != KeyboardState.Symbol.Number) KeyboardState.Symbol.Number
-                    else KeyboardState.Symbol.Text
-                shiftState = KeyboardState.Shift.Released
-                keyboardView?.onReset()
-            }
-            else -> onSpecial(keyCode)
-        }
     }
 
     protected fun submitCandidates(candidates: List<CandidateView.Candidate>) {
