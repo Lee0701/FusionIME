@@ -1,8 +1,6 @@
 package ee.oyatl.ime.fusion.mode
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.content.res.Configuration
 import android.util.TypedValue
 import android.view.KeyCharacterMap
 import android.view.KeyEvent
@@ -12,6 +10,7 @@ import android.view.inputmethod.InputConnection
 import androidx.preference.PreferenceManager
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.ScrollingCandidateView
+import ee.oyatl.ime.fusion.DimensionUtil
 import ee.oyatl.ime.fusion.Feature
 import ee.oyatl.ime.fusion.FlickAction
 import ee.oyatl.ime.fusion.KeyEventUtil
@@ -155,41 +154,14 @@ abstract class CommonIMEMode(
         submitCandidates(emptyList())
     }
 
-    private fun getOrientationSuffix(context: Context): String {
-        val landscape = context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
-        val suffix = if(landscape) "_landscape" else "_portrait"
-        return suffix
-    }
-
-    private fun getOrientationInteger(context: Context, key: String): Float {
-        val preference = PreferenceManager.getDefaultSharedPreferences(context)
-        val suffix = getOrientationSuffix(context)
-        @SuppressLint("DiscouragedApi")
-        val defaultId = context.resources.getIdentifier("${key}${suffix}_default", "integer", context.packageName)
-        val defaultValue = context.resources.getInteger(defaultId).toFloat()
-        val value = preference.getFloat("${key}${suffix}", defaultValue)
-        return value
-    }
-
-    private fun getOrientationBoolean(context: Context, key: String): Boolean {
-        val preference = PreferenceManager.getDefaultSharedPreferences(context)
-        val suffix = getOrientationSuffix(context)
-        @SuppressLint("DiscouragedApi")
-        val defaultId = context.resources.getIdentifier("${key}${suffix}_default", "bool", context.packageName)
-        val defaultValue = context.resources.getBoolean(defaultId)
-        val value = preference.getBoolean("${key}${suffix}", defaultValue)
-        return value
-    }
-
     override fun createInputView(context: Context): View {
         val preference = PreferenceManager.getDefaultSharedPreferences(context)
 
         val defaultScreenMode = context.resources.getString(R.string.screen_mode_default)
         val screenMode = KeyboardState.ScreenMode.valueOf(preference.getString("screen_mode", null) ?: defaultScreenMode)
-        val rowHeightDIP = getOrientationInteger(context, "keyboard_height")
-        val height = (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, rowHeightDIP, context.resources.displayMetrics) * 4).roundToInt()
-        val split = Feature.SplitKeyboard.availableInCurrentVersion && getOrientationBoolean(context, "split_keyboard")
-        val splitRatio = if(split) getOrientationInteger(context, "split_ratio") else 0f
+        val height = DimensionUtil.getKeyboardHeight(context)
+        val split = Feature.SplitKeyboard.availableInCurrentVersion && DimensionUtil.getOrientationBoolean(context, "split_keyboard")
+        val splitRatio = if(split) DimensionUtil.getOrientationInteger(context, "split_ratio") else 0f
         val splitWidthDIP = context.resources.configuration.screenWidthDp / 100f * splitRatio
         val splitWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, splitWidthDIP, context.resources.displayMetrics).roundToInt()
         val showPreviewPopup = preference.getBoolean("preview_popup", true)
