@@ -1,24 +1,25 @@
 package ee.oyatl.ime.fusion.mode
 
 import android.content.Context
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
 import androidx.core.util.Consumer
-import androidx.emoji2.emojipicker.EmojiPickerView
 import androidx.emoji2.emojipicker.EmojiViewItem
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.ScrollingCandidateView
 import ee.oyatl.ime.fusion.DimensionUtil
 import ee.oyatl.ime.fusion.KeyEventUtil
+import ee.oyatl.ime.fusion.databinding.EmojiImeModeBinding
 
 class EmojiIMEMode(
     private val listener: IMEMode.Listener
 ): IMEMode, Consumer<EmojiViewItem>, CandidateView.Listener {
 
-    private var emojiPickerView: EmojiPickerView? = null
-    var candidateView: CandidateView? = null
+    private var inputView: View? = null
+    private var candidateView: CandidateView? = null
     private var util: KeyEventUtil? = null
     private val currentInputConnection: InputConnection? get() = util?.currentInputConnection
 
@@ -38,15 +39,18 @@ class EmojiIMEMode(
     }
 
     override fun createInputView(context: Context): View {
-        val emojiPickerView = EmojiPickerView(context)
         val height = DimensionUtil.getKeyboardHeight(context)
-        emojiPickerView.layoutParams = ViewGroup.LayoutParams(
+        val binding = EmojiImeModeBinding.inflate(LayoutInflater.from(context))
+        binding.emojiPickerView.setOnEmojiPickedListener(this)
+        binding.buttonDelete.setOnClickListener {
+            onDelete()
+        }
+        binding.root.layoutParams = ViewGroup.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
             height
         )
-        emojiPickerView.setOnEmojiPickedListener(this)
-        this.emojiPickerView = emojiPickerView
-        return emojiPickerView
+        this.inputView = binding.root
+        return binding.root
     }
 
     override fun createCandidateView(context: Context): View {
@@ -57,7 +61,7 @@ class EmojiIMEMode(
     }
 
     override fun getInputView(): View? {
-        return emojiPickerView
+        return inputView
     }
 
     override fun accept(value: EmojiViewItem) {
@@ -76,6 +80,11 @@ class EmojiIMEMode(
         currentInputConnection?.setComposingText(candidate.text, 1)
         currentInputConnection?.finishComposingText()
         submitCandidates(emptyList())
+    }
+
+    private fun onDelete() {
+        currentInputConnection?.finishComposingText()
+        currentInputConnection?.deleteSurroundingText(1, 0)
     }
 
     override fun onKeyDown(keyCode: Int, metaState: Int) = Unit
