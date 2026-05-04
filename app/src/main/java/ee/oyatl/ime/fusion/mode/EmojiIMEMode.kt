@@ -84,7 +84,7 @@ class EmojiIMEMode(
 
     private fun onDelete() {
         currentInputConnection?.finishComposingText()
-        currentInputConnection?.deleteSurroundingText(1, 0)
+        util?.deleteSurroundingText(1, 0)
     }
 
     override fun onKeyDown(keyCode: Int, metaState: Int) = Unit

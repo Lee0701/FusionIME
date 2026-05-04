@@ -325,7 +325,7 @@ class PinyinIMEMode(
                 if (SIMULATE_KEY_DELETE) {
                     simulateKeyEventDownUp(keyCode)
                 } else {
-                    currentInputConnection?.deleteSurroundingText(1, 0)
+                    util?.deleteSurroundingText(1, 0)
                 }
                 return true
             }
@@ -360,7 +360,7 @@ class PinyinIMEMode(
             if (SIMULATE_KEY_DELETE) {
                 simulateKeyEventDownUp(keyCode)
             } else {
-                currentInputConnection?.deleteSurroundingText(1, 0)
+                util?.deleteSurroundingText(1, 0)
             }
             return true
         } else if (keyCode == KeyEvent.KEYCODE_ENTER) {
