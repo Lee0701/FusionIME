@@ -12,6 +12,7 @@ import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.ScrollingCandidateView
 import ee.oyatl.ime.fusion.DimensionUtil
 import ee.oyatl.ime.fusion.KeyEventUtil
+import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.databinding.EmojiImeModeBinding
 
 class EmojiIMEMode(
@@ -112,7 +113,7 @@ class EmojiIMEMode(
         }
 
         override fun getLabel(context: Context): String {
-            return "Emoji"
+            return context.getString(R.string.input_mode_emoji)
         }
 
         override fun getShortLabel(
@@ -120,6 +121,12 @@ class EmojiIMEMode(
             params: List<IMEMode.Params>
         ): String {
             return "\uD83D\uDE00"
+        }
+
+        companion object {
+            fun parse(map: Map<String, String>): Params {
+                return Params()
+            }
         }
     }
 

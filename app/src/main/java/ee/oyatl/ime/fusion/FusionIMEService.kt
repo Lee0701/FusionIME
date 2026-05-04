@@ -15,7 +15,6 @@ import androidx.core.view.WindowCompat
 import androidx.preference.PreferenceManager
 import com.android.inputmethod.latin.RichInputMethodManager
 import com.android.inputmethod.latin.settings.Settings
-import ee.oyatl.ime.fusion.mode.EmojiIMEMode
 import ee.oyatl.ime.fusion.mode.IMEMode
 import ee.oyatl.ime.fusion.mode.IMEModeSwitcher
 import ee.oyatl.ime.fusion.mode.LatinIMEMode
@@ -76,7 +75,6 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
             IMEMode.Params.parse(item)
         }.toMutableList()
         if(params.isEmpty()) params += LatinIMEMode.Params()
-        params += EmojiIMEMode.Params()
         params.forEach { p ->
             entries += IMEModeSwitcher.Entry(p.getShortLabel(this, params), p.create(this))
         }
