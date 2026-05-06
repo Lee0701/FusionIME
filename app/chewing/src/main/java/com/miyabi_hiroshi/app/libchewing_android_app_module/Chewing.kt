@@ -40,6 +40,8 @@ class Chewing {
     }
 
     private external fun chewingNew(dataPath: String): Long
+    external fun ack(chewingCtx: Long = context): Int
+    external fun bopomofoString(chewingCtx: Long = context): String
     external fun bopomofoStringStatic(chewingCtx: Long = context): String
     external fun bufferCheck(chewingCtx: Long = context): Int
     external fun bufferLen(chewingCtx: Long = context): Int
@@ -69,12 +71,20 @@ class Chewing {
     external fun commitPreeditBuf(chewingCtx: Long = context): Int
     external fun commitString(chewingCtx: Long = context): String
     external fun commitStringStatic(chewingCtx: Long = context): String
+    external fun configGetInt(option: String, chewingCtx: Long = context): Int
+    external fun configGetStr(option: String, chewingCtx: Long = context): String
+    external fun configHasOption(option: String, chewingCtx: Long = context): Int
+    external fun configSetInt(option: String, value: Int, chewingCtx: Long = context): Int
+    external fun configSetStr(option: String, value: String, chewingCtx: Long = context): Int
     external fun convKBStr2Num(keyboardString: String): Int
     external fun cursorCurrent(chewingCtx: Long = context): Int
+    // delete(): destroys the ChewingContext (wraps chewing_delete)
     external fun delete(chewingCtx: Long = context)
+    // free(): frees individual resources returned by libchewing (wraps chewing_free)
     external fun free(resourcePtr: Long)
     external fun getCandPerPage(chewingCtx: Long = context): Int
     external fun getChiEngMode(chewingCtx: Long = context): Int
+    external fun getEasySymbolInput(chewingCtx: Long = context): Int
     external fun getKBString(chewingCtx: Long = context): String
     external fun getKBType(chewingCtx: Long = context): Int
     external fun getMaxChiSymbolLen(chewingCtx: Long = context): Int
@@ -102,6 +112,12 @@ class Chewing {
     external fun setSelKey(selKeys: IntArray, length: Int, chewingCtx: Long = context)
     external fun setSpaceAsSelection(mode: Int, chewingCtx: Long = context)
     external fun setShapeMode(mode: Int, chewingCtx: Long = context)
+    // Returns all user phrases as Array<Array<String>>, each inner array is [phrase, bopomofo]
+    external fun userphraseGetAll(chewingCtx: Long = context): Array<Array<String>>?
+    external fun userphraseAdd(phrase: String, bopomofo: String, chewingCtx: Long = context): Int
+    external fun userphraseRemove(phrase: String, bopomofo: String, chewingCtx: Long = context): Int
+    external fun userphraseLookup(phrase: String, bopomofo: String, chewingCtx: Long = context): Int
+    external fun version(): String
 
     fun connect(dataPath: String): Long {
         context = chewingNew(dataPath)
