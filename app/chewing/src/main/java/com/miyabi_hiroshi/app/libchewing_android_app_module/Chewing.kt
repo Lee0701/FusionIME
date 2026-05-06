@@ -27,7 +27,7 @@ class Chewing {
 
     init {
         try {
-            System.loadLibrary("libchewing_android_app_module")
+            System.loadLibrary("chewing_android_app_module")
         } catch (exception: Throwable) {
             exception.printStackTrace()
             throw ChewingInitException
