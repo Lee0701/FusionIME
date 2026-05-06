@@ -2,9 +2,11 @@ package ee.oyatl.ime.fusion.zhuyin
 
 import android.content.Context
 import com.miyabi_hiroshi.app.libchewing_android_app_module.Chewing
+import com.miyabi_hiroshi.app.libchewing_android_app_module.ConversionEngines
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import kotlin.math.min
 
 class ChewingConverter {
     val chewing = Chewing()
@@ -36,6 +38,8 @@ class ChewingConverter {
         chewing.connect(context.cacheDir.absolutePath)
         chewing.setChiEngMode(1)
         chewing.setPhraseChoiceRearward(1)
+        chewing.configSetInt("chewing.conversion_engine", ConversionEngines.FUZZY_CHEWING_CONVERSION_ENGINE.mode)
+        chewing.configSetInt("chewing.sort_candidates_by_frequency", 1)
     }
 
     fun getSuggestions(codes: List<Int>): List<String> {
@@ -45,7 +49,7 @@ class ChewingConverter {
         chewing.candOpen()
         // Join converted string prefix with candidates
         val bufferString = chewing.bufferStringStatic()
-        val list = (0 until chewing.candTotalChoice()).map { i ->
+        val list = (0 until min(MAX_CANDIDATES, chewing.candTotalChoice())).map { i ->
             val candidate = chewing.candStringByIndexStatic(i)
             bufferString.dropLast(candidate.length) + candidate
         }
@@ -58,5 +62,9 @@ class ChewingConverter {
 
     fun destroy() {
         chewing.delete()
+    }
+
+    companion object {
+        const val MAX_CANDIDATES = 50
     }
 }

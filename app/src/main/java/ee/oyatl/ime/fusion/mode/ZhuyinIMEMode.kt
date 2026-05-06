@@ -89,7 +89,8 @@ class ZhuyinIMEMode(
     }
 
     private fun updateSuggestions() {
-        val codes = (0 until wordComposer.size()).mapNotNull { i -> wordComposer.getCodesAt(i).firstOrNull() }
+        val codes = (0 until wordComposer.size()).mapNotNull { i -> wordComposer.getCodesAt(i).firstOrNull() }.toMutableList()
+        if(wordComposer.typedWord?.lastOrNull() !in LayoutZhuyin.TONE_MARKS) codes += ' '.code
         val candidates = converter.getSuggestions(codes).mapIndexed { i, s -> ZhuyinCandidate(i, s) }
         bestCandidate = candidates.getOrNull(0)
         submitCandidates(candidates)
@@ -113,12 +114,8 @@ class ZhuyinIMEMode(
     private fun handleSpace() {
         val typedWord = wordComposer.typedWord ?: ""
         if(typedWord.isNotEmpty()) {
-            if(typedWord.lastOrNull() in LayoutZhuyin.TONE_MARKS) {
-                if(bestCandidate != null) pickDefaultSuggestion()
-                else onReset()
-            } else {
-                onChar('ˉ'.code)
-            }
+            if(bestCandidate != null) pickDefaultSuggestion()
+            else onReset()
             renderResult()
         }
         else currentInputConnection?.commitText(" ", 1)
