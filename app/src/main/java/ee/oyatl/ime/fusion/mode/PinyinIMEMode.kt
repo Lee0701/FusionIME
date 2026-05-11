@@ -43,7 +43,7 @@ class PinyinIMEMode(
     listener: IMEMode.Listener,
     val chineseTraditional: Boolean,
     numberRow: Boolean
-): CommonIMEMode(listener) {
+): CommonIMEMode(listener), DecodingInfo.IMEStateHolder {
     /**
      * Connection used to bind the decoding service.
      */
@@ -54,13 +54,13 @@ class PinyinIMEMode(
      *
      * @see ImeState
      */
-    private var imeState = ImeState.STATE_IDLE
+    override var imeState = ImeState.STATE_IDLE
 
     /**
      * The decoding information, include spelling(Pinyin) string, decoding
      * result, etc.
      */
-    private val decInfo: DecodingInfo = DecodingInfo { this.imeState }
+    private val decInfo: DecodingInfo = DecodingInfo(this)
 
     /**
      * The floating container which contains the composing view. If necessary,
@@ -114,7 +114,7 @@ class PinyinIMEMode(
 
     override fun onStart(inputConnection: InputConnection, editorInfo: EditorInfo) {
         super.onStart(inputConnection, editorInfo)
-        decInfo.mIPinyinDecoderService.setChineseTraditional(chineseTraditional);
+        decInfo.mIPinyinDecoderService.setChineseTraditional(chineseTraditional)
     }
 
     override fun onReset() {
