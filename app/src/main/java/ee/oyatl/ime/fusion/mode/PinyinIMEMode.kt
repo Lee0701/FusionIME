@@ -37,6 +37,7 @@ import ee.oyatl.ime.fusion.layout.MobileKeyboardRows
 import ee.oyatl.ime.fusion.layout.TabletKeyboard
 import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
 import ee.oyatl.ime.keyboard.SoftKeyCodeMapper
+import java.lang.ref.WeakReference
 import java.util.Locale
 
 class PinyinIMEMode(
@@ -47,7 +48,7 @@ class PinyinIMEMode(
     /**
      * Connection used to bind the decoding service.
      */
-    private var pinyinDecoderServiceConnection: PinyinDecoderServiceConnection? = null
+    private var pinyinDecoderServiceConnection: WeakReference<PinyinDecoderServiceConnection>? = null
 
     /**
      * The current IME status.
@@ -856,30 +857,22 @@ class PinyinIMEMode(
 
     private fun startPinyinDecoderService(context: Context): Boolean {
         if (decInfo.mIPinyinDecoderService is Stub) {
-            val serviceIntent = Intent()
-            try {
-                serviceIntent.setClass(
-                    context,
-                    Class.forName("com.android.inputmethod.pinyin.PinyinDecoderService")
-                )
-            } catch (e: ClassNotFoundException) {
-                return false
-            }
-
-            val pinyinDecoderServiceConnection = pinyinDecoderServiceConnection ?: PinyinDecoderServiceConnection()
+            val pinyinDecoderServiceConnection = pinyinDecoderServiceConnection?.get() ?: PinyinDecoderServiceConnection()
+            this.pinyinDecoderServiceConnection = WeakReference(pinyinDecoderServiceConnection)
 
             // Bind service
             return context.bindService(
-                    serviceIntent, pinyinDecoderServiceConnection,
-                    Context.BIND_AUTO_CREATE
-                )
+                Intent(context, PinyinDecoderService::class.java),
+                pinyinDecoderServiceConnection,
+                Context.BIND_AUTO_CREATE
+            )
         }
         return true
     }
 
     fun stopPinyinDecoderService(context: Context) {
-        val pinyinDecoderServiceConnection = pinyinDecoderServiceConnection ?: return
-        context.unbindService(pinyinDecoderServiceConnection)
+        context.unbindService(pinyinDecoderServiceConnection?.get() ?: return)
+        pinyinDecoderServiceConnection?.clear()
     }
 
     inner class CandidateListener: CandidateViewListener {
