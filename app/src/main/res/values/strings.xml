@@ -88,6 +88,7 @@
     <string name="input_mode_zhuyin">Bopomofo (Traditional Chinese)</string>
     <string name="input_mode_cangjie">Cangjie</string>
     <string name="input_mode_viet">Vietnamese</string>
+    <string name="input_mode_emoji">Emoji</string>
 
     <string name="latin_locale_de">German</string>
     <string name="latin_locale_en">English</string>

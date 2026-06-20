@@ -136,14 +136,13 @@ class ZhuyinIMEMode(
     }
 
     private fun handleBackspace() {
-        val ic = currentInputConnection ?: return
         var deleteChar = false
         if (wordComposer.typedWord?.isNotEmpty() == true) {
             val length: Int = wordComposer.typedWord.length
             if (length > 0) {
                 wordComposer.deleteLast()
             } else {
-                ic.deleteSurroundingText(1, 0)
+                util?.deleteSurroundingText(1, 0)
             }
         } else {
             deleteChar = true
