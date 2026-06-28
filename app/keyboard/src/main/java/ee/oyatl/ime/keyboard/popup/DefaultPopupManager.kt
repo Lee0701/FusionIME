@@ -2,18 +2,17 @@ package ee.oyatl.ime.keyboard.popup
 
 import android.view.View
 import ee.oyatl.ime.keyboard.KeyboardView
-import ee.oyatl.ime.keyboard.touchhandler.TouchHandler
 
 class DefaultPopupManager(
     private val parent: View,
     private val keyboardView: KeyboardView
 ): PopupManager {
-    override fun getPopupPosition(key: TouchHandler.KeyInterface): Pair<Int, Int> {
+    override fun getPopupPosition(key: KeyboardView.Key): Pair<Int, Int> {
         val y = keyboardView.rect.top + key.location[1] - keyboardView.location[1] - key.rect.height()
         return key.rect.left to y
     }
 
-    override fun createPreviewPopup(key: TouchHandler.KeyInterface): Popup? {
+    override fun createPreviewPopup(key: KeyboardView.Key): Popup? {
         if(key.label.isNotEmpty()) {
             val popup = PreviewPopup(parent)
             popup.label = key.label

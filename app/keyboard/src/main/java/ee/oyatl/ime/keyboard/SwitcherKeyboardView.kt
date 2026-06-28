@@ -42,7 +42,7 @@ class SwitcherKeyboardView(
     override fun findKey(
         x: Int,
         y: Int
-    ): TouchHandler.KeyInterface? = null
+    ): KeyboardView.Key? = null
 
     override fun onReset() {
         map.values.forEach { it.onReset() }

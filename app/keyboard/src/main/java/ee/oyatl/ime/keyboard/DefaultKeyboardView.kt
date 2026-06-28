@@ -173,7 +173,7 @@ class DefaultKeyboardView(
     data class CachedKey(
         override val keyCode: Int,
         val binding: KbdKeyBinding
-    ): TouchHandler.KeyInterface {
+    ): KeyboardView.Key {
         override val label: String get() = binding.label.text.toString()
         override val rect: Rect = Rect()
         override val location: IntArray = IntArray(2)

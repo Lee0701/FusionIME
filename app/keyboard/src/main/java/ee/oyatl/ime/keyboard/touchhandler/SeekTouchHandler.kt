@@ -66,7 +66,7 @@ class SeekTouchHandler(
         val id: Int,
         val x: Int,
         val y: Int,
-        val key: TouchHandler.KeyInterface?,
+        val key: KeyboardView.Key?,
         val popup: Popup?
     )
 }
