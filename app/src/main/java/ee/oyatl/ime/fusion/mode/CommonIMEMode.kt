@@ -260,7 +260,7 @@ abstract class CommonIMEMode(
 
     override fun getInputView(): View? {
         updateInputView()
-        return keyboardView
+        return keyboardView?.view
     }
 
     protected fun updateInputView() {
@@ -292,7 +292,7 @@ abstract class CommonIMEMode(
         )
     }
 
-    open fun createTouchHandler(keyboardView: TouchHandler.KeyboardViewInterface, context: Context): TouchHandler {
+    open fun createTouchHandler(keyboardView: KeyboardView, context: Context): TouchHandler {
         val preference = PreferenceManager.getDefaultSharedPreferences(context)
         val touchMode = preference.getString("touch_mode", "seek")
         if(touchMode == "flick" && Feature.TouchMode.availableInCurrentVersion) {

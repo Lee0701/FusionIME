@@ -1,6 +1,7 @@
 package ee.oyatl.ime.keyboard.touchhandler
 
 import ee.oyatl.ime.keyboard.FlickKeyCode
+import ee.oyatl.ime.keyboard.KeyboardView
 import ee.oyatl.ime.keyboard.popup.Popup
 import kotlin.math.PI
 import kotlin.math.atan2
@@ -8,7 +9,7 @@ import kotlin.math.pow
 import kotlin.math.sqrt
 
 class FlickTouchHandler(
-    override val keyboardView: TouchHandler.KeyboardViewInterface,
+    override val keyboardView: KeyboardView,
     val threshold: Int,
     val diagonal: Boolean = false,
     val multiFlick: Boolean = false

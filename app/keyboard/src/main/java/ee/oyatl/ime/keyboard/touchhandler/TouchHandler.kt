@@ -1,11 +1,10 @@
 package ee.oyatl.ime.keyboard.touchhandler
 
 import android.graphics.Rect
-import ee.oyatl.ime.keyboard.listener.KeyboardListener
-import ee.oyatl.ime.keyboard.popup.PopupManager
+import ee.oyatl.ime.keyboard.KeyboardView
 
 interface TouchHandler {
-    val keyboardView: KeyboardViewInterface
+    val keyboardView: KeyboardView
 
     fun onReset()
     fun onTouchDown(pointerId: Int, x: Int, y: Int)
@@ -19,13 +18,5 @@ interface TouchHandler {
         val location: IntArray
         fun onPressed()
         fun onReleased()
-    }
-
-    interface KeyboardViewInterface {
-        val rect: Rect
-        val location: IntArray
-        val listener: KeyboardListener
-        val popupManager: PopupManager
-        fun findKey(x: Int, y: Int): KeyInterface?
     }
 }

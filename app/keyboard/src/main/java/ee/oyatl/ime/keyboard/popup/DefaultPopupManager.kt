@@ -1,11 +1,12 @@
 package ee.oyatl.ime.keyboard.popup
 
 import android.view.View
+import ee.oyatl.ime.keyboard.KeyboardView
 import ee.oyatl.ime.keyboard.touchhandler.TouchHandler
 
 class DefaultPopupManager(
     private val parent: View,
-    private val keyboardView: TouchHandler.KeyboardViewInterface
+    private val keyboardView: KeyboardView
 ): PopupManager {
     override fun getPopupPosition(key: TouchHandler.KeyInterface): Pair<Int, Int> {
         val y = keyboardView.rect.top + key.location[1] - keyboardView.location[1] - key.rect.height()

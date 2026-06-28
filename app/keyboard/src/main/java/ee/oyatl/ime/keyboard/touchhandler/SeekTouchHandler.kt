@@ -1,11 +1,12 @@
 package ee.oyatl.ime.keyboard.touchhandler
 
 import android.view.KeyEvent
+import ee.oyatl.ime.keyboard.KeyboardView
 import ee.oyatl.ime.keyboard.popup.Popup
 import ee.oyatl.ime.keyboard.popup.PreviewPopup
 
 class SeekTouchHandler(
-    override val keyboardView: TouchHandler.KeyboardViewInterface
+    override val keyboardView: KeyboardView
 ): TouchHandler {
     val pointers = mutableMapOf<Int, Pointer>()
 
