@@ -24,6 +24,7 @@ import ee.oyatl.ime.fusion.layout.MobileKeyboardRows
 import ee.oyatl.ime.fusion.layout.NumberKeyboard
 import ee.oyatl.ime.fusion.layout.TabletKeyboard
 import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
+import ee.oyatl.ime.keyboard.CanvasKeyboardView
 import ee.oyatl.ime.keyboard.DefaultKeyboardView
 import ee.oyatl.ime.keyboard.FlickKeyCode
 import ee.oyatl.ime.keyboard.KeyboardConfiguration
@@ -221,19 +222,19 @@ abstract class CommonIMEMode(
         val symbolKeyboard = symbolKeyboardTemplate.inflate(symbolKeyboardParams)
         val numberKeyboard = numberKeyboardTemplate.inflate(numberKeyboardParams)
 
-        val textKeyboardView = DefaultKeyboardView(context, null).also {
+        val textKeyboardView = CanvasKeyboardView(context, null).also {
             it.keyboard = textKeyboard
             it.listener = createKeyboardListener(context, textKeyboardParams)
             it.touchHandler = createTouchHandler(it, context)
             if(params.previewPopups) it.popupManager = DefaultPopupManager(it, it)
         }
-        val symbolKeyboardView = DefaultKeyboardView(context, null).also {
+        val symbolKeyboardView = CanvasKeyboardView(context, null).also {
             it.keyboard = symbolKeyboard
             it.listener = createKeyboardListener(context, symbolKeyboardParams)
             it.touchHandler = createTouchHandler(it, context)
             if(params.previewPopups) it.popupManager = DefaultPopupManager(it, it)
         }
-        val numberKeyboardView = DefaultKeyboardView(context, null).also {
+        val numberKeyboardView = CanvasKeyboardView(context, null).also {
             it.keyboard = numberKeyboard
             it.listener = createKeyboardListener(context, numberKeyboardParams)
             it.touchHandler = createTouchHandler(it, context)
