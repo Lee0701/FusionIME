@@ -226,8 +226,22 @@ abstract class MozcIMEMode(
         candidateViewHeight: Int,
         val flickMode: FlickMode
     ): MozcIMEMode(listener, candidateViewHeight) {
+        // Remove flick mappings if toggle only mode
+        val layoutTable12Key: Map<Int, List<Int>> =
+            if(flickMode == FlickMode.ToggleOnly) LayoutKana.TABLE_12KEY.filter { (k, v) ->
+                (k and FlickKeyCode.MASK_DIRECTION) == FlickKeyCode.DIRECTION_NONE
+            }
+            else LayoutKana.TABLE_12KEY
+
+        // Remove flick labels if toggle only mode
+        val keyLabels12Key: Map<Int, String> =
+            if(flickMode == FlickMode.ToggleOnly) LayoutKana.LABELS_12KEY.filter { (k, v) ->
+                (k and FlickKeyCode.MASK_DIRECTION) == FlickKeyCode.DIRECTION_NONE
+            }
+            else LayoutKana.LABELS_12KEY
+
         override val keyboardSpecification: KeyboardSpecification = flickMode.keyboardSpecification
-        override val textLayoutTable: LayoutTable = LayoutTable.from(LayoutKana.TABLE_12KEY)
+        override val textLayoutTable: LayoutTable = LayoutTable.from(layoutTable12Key)
         override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
             mobile = KeyboardTemplate.Basic(
                 configuration = LayoutKana.mobileKeyboardConfiguration12Key(),
@@ -237,7 +251,7 @@ abstract class MozcIMEMode(
 
         override val keyLabels: Map<Int, String>
             get() =
-                if(symbolState == Symbol.Text) super.keyLabels + LayoutKana.LABELS_12KEY
+                if(symbolState == Symbol.Text) super.keyLabels + keyLabels12Key
                 else super.keyLabels
 
         private val flicks: MutableMap<Int, Int> = mutableMapOf()
