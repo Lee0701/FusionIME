@@ -12,21 +12,21 @@ import com.google.common.base.Optional
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.VerticalScrollingCandidateView
 import ee.oyatl.ime.fusion.R
-import ee.oyatl.ime.fusion.mozc.InputConnectionRenderer
-import ee.oyatl.ime.keyboard.SoftKeyCodeMapper
-import ee.oyatl.ime.keyboard.KeyboardConfiguration
-import ee.oyatl.ime.keyboard.KeyboardTemplate
+import ee.oyatl.ime.fusion.layout.ExtKeyCode
+import ee.oyatl.ime.fusion.layout.LayoutExt
 import ee.oyatl.ime.fusion.layout.LayoutKana
 import ee.oyatl.ime.fusion.layout.LayoutRomaji
-import ee.oyatl.ime.keyboard.LayoutTable
-import ee.oyatl.ime.fusion.layout.ExtKeyCode
 import ee.oyatl.ime.fusion.layout.MobileKeyboard
 import ee.oyatl.ime.fusion.layout.MobileKeyboardRows
-import ee.oyatl.ime.fusion.layout.LayoutExt
 import ee.oyatl.ime.fusion.layout.TabletKeyboard
 import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
+import ee.oyatl.ime.fusion.mozc.InputConnectionRenderer
 import ee.oyatl.ime.keyboard.FlickKeyCode
+import ee.oyatl.ime.keyboard.KeyboardConfiguration
 import ee.oyatl.ime.keyboard.KeyboardState.Symbol
+import ee.oyatl.ime.keyboard.KeyboardTemplate
+import ee.oyatl.ime.keyboard.LayoutTable
+import ee.oyatl.ime.keyboard.SoftKeyCodeMapper
 import ee.oyatl.ime.keyboard.touchhandler.FlickTouchHandler
 import ee.oyatl.ime.keyboard.touchhandler.TouchHandler
 import org.mozc.android.inputmethod.japanese.MozcUtil
@@ -137,6 +137,10 @@ abstract class MozcIMEMode(
     }
 
     override fun onChar(codePoint: Int) {
+        if(symbolState == Symbol.Number) {
+            onReset()
+            return super.onChar(codePoint)
+        }
         val primaryKeyCodeConverter = primaryKeyCodeConverter ?: return
         val sessionExecutor = sessionExecutor ?: return
         val eventList = emptyList<TouchEvent>()
@@ -153,9 +157,13 @@ abstract class MozcIMEMode(
         when(keyCode) {
             KeyEvent.KEYCODE_SYM, KeyEvent.KEYCODE_NUM -> {
                 super.onSpecial(keyCode)
-                restartInput()
+                onReset()
                 return
             }
+        }
+        if(symbolState == Symbol.Number) {
+            onReset()
+            return super.onSpecial(keyCode)
         }
         val converter = primaryKeyCodeConverter ?: return super.onSpecial(keyCode)
         when(keyCode) {
@@ -236,12 +244,17 @@ abstract class MozcIMEMode(
 
         override fun createTouchHandler(
             keyboardView: TouchHandler.KeyboardViewInterface,
-            context: Context
+            context: Context,
+            symbolState: Symbol
         ): TouchHandler {
-            val preference = PreferenceManager.getDefaultSharedPreferences(context)
-            val defaultValue = context.resources.getInteger(R.integer.flick_sensitivity_default).toFloat()
-            val flickSensitivity = preference.getFloat("flick_sensitivity", defaultValue).toInt()
-            return FlickTouchHandler(keyboardView, flickSensitivity, diagonal = false, multiFlick = false, sendOnUp = true)
+            if(symbolState == Symbol.Text) {
+                val preference = PreferenceManager.getDefaultSharedPreferences(context)
+                val defaultValue = context.resources.getInteger(R.integer.flick_sensitivity_default).toFloat()
+                val flickSensitivity = preference.getFloat("flick_sensitivity", defaultValue).toInt()
+                return FlickTouchHandler(keyboardView, flickSensitivity, diagonal = false, multiFlick = false, sendOnUp = true)
+            } else {
+                return super.createTouchHandler(keyboardView, context, symbolState)
+            }
         }
 
         override fun onKeyDown(keyCode: Int, metaState: Int) {
@@ -261,10 +274,6 @@ abstract class MozcIMEMode(
                 if(keyCode <= 0 || !keyCharacterMap.isPrintingKey(keyCode)) {
                     return super.onKeyUp(keyCode, metaState)
                 }
-            }
-            if(symbolState != Symbol.Text) {
-                // Workaround to avoid doubled input caused by sendOnUp option.
-                return
             }
             if(isFlick) {
                 val code = keyCode and FlickKeyCode.MASK_KEYCODE

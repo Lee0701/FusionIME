@@ -244,19 +244,19 @@ abstract class CommonIMEMode(
         val textKeyboardView = DefaultKeyboardView(context, null).also {
             it.keyboard = textKeyboard
             it.listener = createKeyboardListener(context, textKeyboardParams)
-            it.touchHandler = createTouchHandler(it, context)
+            it.touchHandler = createTouchHandler(it, context, KeyboardState.Symbol.Text)
             if(params.previewPopups) it.popupManager = DefaultPopupManager(it, it)
         }
         val symbolKeyboardView = DefaultKeyboardView(context, null).also {
             it.keyboard = symbolKeyboard
             it.listener = createKeyboardListener(context, symbolKeyboardParams)
-            it.touchHandler = createTouchHandler(it, context)
+            it.touchHandler = createTouchHandler(it, context, KeyboardState.Symbol.Symbol)
             if(params.previewPopups) it.popupManager = DefaultPopupManager(it, it)
         }
         val numberKeyboardView = DefaultKeyboardView(context, null).also {
             it.keyboard = numberKeyboard
             it.listener = createKeyboardListener(context, numberKeyboardParams)
-            it.touchHandler = createTouchHandler(it, context)
+            it.touchHandler = createTouchHandler(it, context, KeyboardState.Symbol.Number)
             if(params.previewPopups) it.popupManager = DefaultPopupManager(it, it)
         }
 
@@ -311,7 +311,11 @@ abstract class CommonIMEMode(
         )
     }
 
-    open fun createTouchHandler(keyboardView: TouchHandler.KeyboardViewInterface, context: Context): TouchHandler {
+    open fun createTouchHandler(
+        keyboardView: TouchHandler.KeyboardViewInterface,
+        context: Context,
+        symbolState: KeyboardState.Symbol
+    ): TouchHandler {
         val preference = PreferenceManager.getDefaultSharedPreferences(context)
         val touchMode = preference.getString("touch_mode", "seek")
         if(touchMode == "flick" && Feature.TouchMode.availableInCurrentVersion) {
