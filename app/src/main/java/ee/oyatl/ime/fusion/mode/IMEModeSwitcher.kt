@@ -11,6 +11,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
+import android.view.inputmethod.InputMethodManager
+import android.view.inputmethod.InputMethodSubtype
 import android.widget.FrameLayout
 import androidx.preference.PreferenceManager
 import ee.oyatl.ime.fusion.databinding.CandidateViewWrapperBinding
@@ -131,6 +133,22 @@ class IMEModeSwitcher(
     fun initTabBarView(context: Context): View {
         val layoutInflater = LayoutInflater.from(context)
         val tabBar = ModeSwitcherTabBarBinding.inflate(layoutInflater, null, false)
+        val showVoiceInputButton = preference.getBoolean("show_voice_input_button", false)
+        tabBar.voiceInputButton.visibility = View.GONE
+        if(showVoiceInputButton) {
+            val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            val entry = imm.shortcutInputMethodsAndSubtypes?.entries?.firstOrNull()
+            if(entry != null) {
+                val shortcutIme = entry.key
+                val shortcutSubtype = entry.value.firstOrNull()
+                if(shortcutSubtype != null) {
+                    tabBar.voiceInputButton.visibility = View.VISIBLE
+                    tabBar.voiceInputButton.setOnClickListener {
+                        callback.onSwitchInputMethod(shortcutIme.id, shortcutSubtype)
+                    }
+                }
+            }
+        }
         tabs = entries.mapIndexed { index, entry ->
             val tab = ModeSwitcherTabBinding.inflate(layoutInflater, tabBar.content, true)
             tab.label.text = entry.label
@@ -144,6 +162,7 @@ class IMEModeSwitcher(
 
     interface Callback {
         fun onSwitchInputMode(index: Int)
+        fun onSwitchInputMethod(id: String, subtype: InputMethodSubtype)
     }
 
     data class Entry(
