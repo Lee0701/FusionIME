@@ -131,6 +131,18 @@
         <item>KanaSyllables</item>
     </string-array>
 
+    <string-array name="settings_input_mode_mozc_flick_mode_entries">
+        <item>@string/mozc_flick_mode_flick_toggle</item>
+        <item>@string/mozc_flick_mode_toggle_only</item>
+        <item>@string/mozc_flick_mode_flick_only</item>
+    </string-array>
+
+    <string-array name="settings_input_mode_mozc_flick_mode_values">
+        <item>FlickToggle</item>
+        <item>ToggleOnly</item>
+        <item>FlickOnly</item>
+    </string-array>
+
     <string-array name="settings_input_mode_viet_layout_entries">
         <item>@string/viet_layout_qwerty</item>
         <item>@string/viet_layout_telex</item>

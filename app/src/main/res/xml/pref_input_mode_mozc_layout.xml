@@ -10,4 +10,11 @@
         android:title="@string/settings_input_mode_layout_title"
         app:useSimpleSummaryProvider="true" />
 
+    <ListPreference
+        android:key="flick_mode"
+        android:entries="@array/settings_input_mode_mozc_flick_mode_entries"
+        android:entryValues="@array/settings_input_mode_mozc_flick_mode_values"
+        android:title="@string/settings_input_mode_mozc_flick_mode_title"
+        app:useSimpleSummaryProvider="true" />
+
 </androidx.preference.PreferenceScreen>
