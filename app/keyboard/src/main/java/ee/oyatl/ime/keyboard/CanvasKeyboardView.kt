@@ -100,8 +100,10 @@ class CanvasKeyboardView(
                         keySet += key
                     }
                     is Keyboard.KeyItem.SplitSpacer -> {
-                        unitWidth = rowWidth / items.drop(splitSpacerIndex + 1).map { it.width }.sum()
-                        x += keyboard.params.splitWidth
+                        if(splitKeyboard) {
+                            unitWidth = rowWidth / items.drop(splitSpacerIndex + 1).map { it.width }.sum()
+                            x += keyboard.params.splitWidth
+                        }
                     }
                     else -> Unit
                 }
