@@ -24,7 +24,6 @@ import ee.oyatl.ime.fusion.layout.MobileKeyboardRows
 import ee.oyatl.ime.fusion.layout.LayoutExt
 import ee.oyatl.ime.fusion.layout.TabletKeyboard
 import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
-import ee.oyatl.ime.keyboard.FlickKeyCode
 import org.mozc.android.inputmethod.japanese.MozcUtil
 import org.mozc.android.inputmethod.japanese.PrimaryKeyCodeConverter
 import org.mozc.android.inputmethod.japanese.keyboard.Keyboard.KeyboardSpecification
@@ -228,16 +227,19 @@ abstract class MozcIMEMode(
 
     class KanaSyllables(
         listener: IMEMode.Listener,
-        candidateViewHeight: Int
+        candidateViewHeight: Int,
+        keys: String,
+        keyLayout: LayoutKana.KeyLayout
     ): MozcIMEMode(listener, candidateViewHeight) {
+        private val contentRows = LayoutKana.generateContentRows(keys, keyLayout)
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.TWELVE_KEY_FLICK_KANA
         override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
             mobile = KeyboardTemplate.Basic(
-                configuration = LayoutKana.mobileKeyboardConfigurationSyllables(),
+                configuration = LayoutKana.mobileKeyboardConfigurationSyllables(contentRows),
                 emptyList()
             ),
             tablet = KeyboardTemplate.Basic(
-                configuration = LayoutKana.tabletKeyboardConfigurationSyllables(),
+                configuration = LayoutKana.tabletKeyboardConfigurationSyllables(contentRows),
                 emptyList()
             )
         )
@@ -246,14 +248,16 @@ abstract class MozcIMEMode(
     data class Params(
         val layout: Layout = Layout.RomajiQwerty,
         val numberRow: Boolean = false,
-        val candidateViewHeight: Int = 2
+        val candidateViewHeight: Int = 2,
+        val syllablesKeyLayout: LayoutKana.KeyLayout
     ): IMEMode.Params {
         override val type: String = TYPE
         override fun create(listener: IMEMode.Listener): IMEMode {
             return when(layout) {
                 Layout.RomajiQwerty -> RomajiQwerty(listener, candidateViewHeight, numberRow)
                 Layout.KanaJIS -> KanaJIS(listener, candidateViewHeight)
-                Layout.KanaSyllables -> KanaSyllables(listener, candidateViewHeight)
+                Layout.KanaSyllables -> KanaSyllables(listener, candidateViewHeight, LayoutKana.KEYS_AIUEO, syllablesKeyLayout)
+                Layout.KanaIroha -> KanaSyllables(listener, candidateViewHeight, LayoutKana.KEYS_IROHA, syllablesKeyLayout)
             }
         }
 
@@ -272,6 +276,7 @@ abstract class MozcIMEMode(
                 Layout.RomajiQwerty -> "あQ"
                 Layout.KanaJIS -> "JIS"
                 Layout.KanaSyllables -> "あいう"
+                Layout.KanaIroha -> "いろは"
             }
         }
 
@@ -280,10 +285,12 @@ abstract class MozcIMEMode(
                 val layout = Layout.entries.find { it.name == map["layout"] } ?: Layout.RomajiQwerty
                 val numberRow = map["number_row"]?.toBoolean() ?: false
                 val candidateViewHeight = map["candidate_view_height"]?.toFloatOrNull()?.toInt() ?: 2
+                val syllablesKeyLayout = LayoutKana.KeyLayout.entries.find { it.name == map["syllables_key_layout"] } ?: LayoutKana.KeyLayout.Horizontal
                 return Params(
                     layout = layout,
                     candidateViewHeight = candidateViewHeight,
-                    numberRow = numberRow
+                    numberRow = numberRow,
+                    syllablesKeyLayout = syllablesKeyLayout
                 )
             }
         }
@@ -294,7 +301,8 @@ abstract class MozcIMEMode(
     ) {
         RomajiQwerty(R.string.mozc_layout_romaji_qwerty),
         KanaJIS(R.string.mozc_layout_kana_jis),
-        KanaSyllables(R.string.mozc_layout_kana_syllables)
+        KanaSyllables(R.string.mozc_layout_kana_syllables),
+        KanaIroha(R.string.mozc_layout_kana_iroha)
     }
 
     companion object {

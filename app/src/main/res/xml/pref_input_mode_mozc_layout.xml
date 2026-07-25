@@ -10,4 +10,11 @@
         android:title="@string/settings_input_mode_layout_title"
         app:useSimpleSummaryProvider="true" />
 
+    <ListPreference
+        android:key="syllables_key_layout"
+        android:entries="@array/settings_input_mode_mozc_syllables_key_layout_entries"
+        android:entryValues="@array/settings_input_mode_mozc_syllables_key_layout_values"
+        android:title="@string/settings_input_mode_syllables_key_layout_title"
+        android:summary="@string/settings_input_mode_syllables_key_layout_summary" />
+
 </androidx.preference.PreferenceScreen>

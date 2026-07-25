@@ -2,20 +2,42 @@ package ee.oyatl.ime.fusion.layout
 
 import android.view.KeyEvent
 import ee.oyatl.ime.keyboard.KeyboardConfiguration
+import kotlin.math.ceil
 
 object LayoutKana {
-    val ROWS_SYLLABLES: List<String> = listOf(
-        "わらやまはなたさかあ",
-        "ゐり　みひにちしきい",
-        "　るゆむふぬつすくう",
-        "ゑれ　めへねてせけえ",
-        "をろよもほのとそこお"
-    )
+    const val KEYS_AIUEO = "あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもや　ゆ　よらりるれろわゐ　ゑを"
+    const val KEYS_IROHA = "いろはにほへとちりぬるをわかよたれそつねならむうゐのおくやまけふこえてあさきゆめみしゑひもせす　　　"
     const val BOTTOM_LEFT_SYLLABLES: String = "ん"
     const val BOTTOM_RIGHT_SYLLABLES: String = "*ー"
 
-    fun mobileKeyboardConfigurationSyllables(): KeyboardConfiguration {
-        val rows = ROWS_SYLLABLES.map { row ->
+    enum class KeyLayout {
+        Horizontal, VerticalLeft, VerticalRight
+    }
+
+    fun generateContentRows(
+        keys: String,
+        layout: KeyLayout
+    ): List<String> {
+        return when(layout) {
+            KeyLayout.Horizontal -> group(keys, 10)
+            KeyLayout.VerticalLeft -> transpose(group(keys, 5))
+            KeyLayout.VerticalRight -> transpose(group(keys, 5).reversed())
+        }
+    }
+
+    fun group(string: String, n: Int): List<String> {
+        val len = ceil(string.length.toFloat() / n).toInt()
+        return (0 until len).map { i -> string.substring(i * n, (i + 1) * n) }
+    }
+
+    fun transpose(layout: List<String>): List<String> {
+        return layout[0].indices.map { i -> layout.map { it[i] }.joinToString("") }
+    }
+
+    fun mobileKeyboardConfigurationSyllables(
+        contentRows: List<String>
+    ): KeyboardConfiguration {
+        val rows = contentRows.map { row ->
             row.map { item -> when(item) {
                 '　' -> KeyboardConfiguration.Item.Spacer(width = 1f)
                 else -> KeyboardConfiguration.Item.TemplateKey(-item.code)
@@ -34,8 +56,10 @@ object LayoutKana {
         return KeyboardConfiguration(rows + listOf(bottom))
     }
 
-    fun tabletKeyboardConfigurationSyllables(): KeyboardConfiguration {
-        val rows = ROWS_SYLLABLES.map { row ->
+    fun tabletKeyboardConfigurationSyllables(
+        contentRows: List<String>
+    ): KeyboardConfiguration {
+        val rows = contentRows.map { row ->
             row.map { item -> when(item) {
                 '　' -> KeyboardConfiguration.Item.Spacer(width = 1f)
                 else -> KeyboardConfiguration.Item.TemplateKey(-item.code)
