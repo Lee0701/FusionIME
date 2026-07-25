@@ -1,5 +1,6 @@
 package ee.oyatl.ime.fusion
 
+import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.inputmethodservice.InputMethodService
@@ -9,6 +10,8 @@ import android.view.KeyEvent
 import android.view.View
 import android.view.WindowInsets.Type
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
+import android.view.inputmethod.InputMethodSubtype
 import android.widget.LinearLayout
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.view.WindowCompat
@@ -162,6 +165,16 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
 
     override fun onSwitchInputMode(index: Int) {
         imeModeSwitcher.switchMode(index)
+    }
+
+    override fun onSwitchInputMethod(id: String, subtype: InputMethodSubtype) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) switchInputMethod(id, subtype)
+        else {
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            val token = window?.window?.attributes?.token
+            @Suppress("DEPRECATION")
+            if(token != null) imm.setInputMethodAndSubtype(token, id, subtype)
+        }
     }
 
     override fun onCandidateViewVisibilityChange(visible: Boolean) {
