@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.widget.LinearLayout
+import androidx.appcompat.widget.AppCompatTextView
 import ee.oyatl.ime.keyboard.databinding.KbdKeyBinding
 import ee.oyatl.ime.keyboard.databinding.KbdKeyboardBinding
 import ee.oyatl.ime.keyboard.databinding.KbdRowBinding
@@ -36,6 +37,10 @@ class DefaultKeyboardView(
             keySet.forEach {
                 val label = value[it.keyCode]
                 if(label != null) it.binding.label.text = label
+                FLICK_LABEL_MAP.entries.forEach { (dir, id) ->
+                    val label = value[it.keyCode or dir]
+                    if(label != null) it.binding.root.findViewById<AppCompatTextView>(id).text = label
+                }
             }
         }
 
@@ -196,5 +201,14 @@ class DefaultKeyboardView(
         ).apply {
             weight = width
         }
+    }
+
+    companion object {
+        val FLICK_LABEL_MAP = mapOf(
+            FlickKeyCode.DIRECTION_LEFT to R.id.label_hint_left,
+            FlickKeyCode.DIRECTION_RIGHT to R.id.label_hint_right,
+            FlickKeyCode.DIRECTION_UP to R.id.label_hint_top,
+            FlickKeyCode.DIRECTION_DOWN to R.id.label_hint_bottom,
+        )
     }
 }

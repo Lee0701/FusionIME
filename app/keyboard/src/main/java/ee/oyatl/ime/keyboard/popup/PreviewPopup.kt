@@ -6,6 +6,8 @@ import android.view.View
 import android.view.animation.DecelerateInterpolator
 import android.widget.PopupWindow
 import androidx.appcompat.view.ContextThemeWrapper
+import androidx.appcompat.widget.AppCompatTextView
+import ee.oyatl.ime.keyboard.DefaultKeyboardView
 import ee.oyatl.ime.keyboard.R
 import ee.oyatl.ime.keyboard.databinding.PopupPreviewBinding
 
