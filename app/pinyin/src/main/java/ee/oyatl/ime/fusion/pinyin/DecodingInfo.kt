@@ -9,9 +9,9 @@ import java.util.Vector
 
 
 class DecodingInfo(
-    private val getImeState: () -> ImeState
+    private val imeStateHolder: IMEStateHolder
 ) {
-    private val imeState: ImeState get() = getImeState()
+    private val imeState: ImeState get() = imeStateHolder.imeState
 
     /**
      * Spelling (Pinyin) string.
@@ -581,6 +581,10 @@ class DecodingInfo(
 
     val splNum: Int
         get() = splStart[0]
+
+    interface IMEStateHolder {
+        val imeState: ImeState
+    }
 
     companion object {
         /**
