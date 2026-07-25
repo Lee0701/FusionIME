@@ -15,6 +15,7 @@
     <string name="settings_appearance_screen_mode_title">Screen Mode</string>
     <string name="settings_appearance_keyboard_height_portrait_title">Keyboard Height (Portrait)</string>
     <string name="settings_appearance_keyboard_height_landscape_title">Keyboard Height (Landscape)</string>
+    <string name="settings_appearance_show_voice_input_button_title">Show Voice Input Button</string>
 
     <string name="settings_appearance_split_keyboard_title">Split Keyboard</string>
     <string name="settings_appearance_split_keyboard_portrait_title">Split Keyboard (Portrait)</string>
