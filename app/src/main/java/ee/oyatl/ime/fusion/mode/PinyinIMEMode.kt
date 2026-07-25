@@ -37,34 +37,31 @@ import ee.oyatl.ime.fusion.layout.MobileKeyboardRows
 import ee.oyatl.ime.fusion.layout.TabletKeyboard
 import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
 import ee.oyatl.ime.keyboard.SoftKeyCodeMapper
+import java.lang.ref.WeakReference
 import java.util.Locale
 
 class PinyinIMEMode(
     listener: IMEMode.Listener,
     val chineseTraditional: Boolean,
     numberRow: Boolean
-): CommonIMEMode(listener) {
-    private val dictResId =
-        if(chineseTraditional) ee.oyatl.ime.fusion.R.raw.dict_pinyin_hant
-        else ee.oyatl.ime.fusion.R.raw.dict_pinyin_hans
-
+): CommonIMEMode(listener), DecodingInfo.IMEStateHolder {
     /**
      * Connection used to bind the decoding service.
      */
-    private var pinyinDecoderServiceConnection: PinyinDecoderServiceConnection? = null
+    private var pinyinDecoderServiceConnection: WeakReference<PinyinDecoderServiceConnection>? = null
 
     /**
      * The current IME status.
      *
      * @see ImeState
      */
-    private var imeState = ImeState.STATE_IDLE
+    override var imeState = ImeState.STATE_IDLE
 
     /**
      * The decoding information, include spelling(Pinyin) string, decoding
      * result, etc.
      */
-    private val decInfo: DecodingInfo = DecodingInfo { this.imeState }
+    private val decInfo: DecodingInfo = DecodingInfo(this)
 
     /**
      * The floating container which contains the composing view. If necessary,
@@ -118,7 +115,7 @@ class PinyinIMEMode(
 
     override fun onStart(inputConnection: InputConnection, editorInfo: EditorInfo) {
         super.onStart(inputConnection, editorInfo)
-        decInfo.mIPinyinDecoderService.setDictResId(dictResId)
+        decInfo.mIPinyinDecoderService.setChineseTraditional(chineseTraditional)
     }
 
     override fun onReset() {
@@ -860,30 +857,22 @@ class PinyinIMEMode(
 
     private fun startPinyinDecoderService(context: Context): Boolean {
         if (decInfo.mIPinyinDecoderService is Stub) {
-            val serviceIntent = Intent()
-            try {
-                serviceIntent.setClass(
-                    context,
-                    Class.forName("com.android.inputmethod.pinyin.PinyinDecoderService")
-                )
-            } catch (e: ClassNotFoundException) {
-                return false
-            }
-
-            val pinyinDecoderServiceConnection = pinyinDecoderServiceConnection ?: PinyinDecoderServiceConnection()
+            val pinyinDecoderServiceConnection = pinyinDecoderServiceConnection?.get() ?: PinyinDecoderServiceConnection()
+            this.pinyinDecoderServiceConnection = WeakReference(pinyinDecoderServiceConnection)
 
             // Bind service
             return context.bindService(
-                    serviceIntent, pinyinDecoderServiceConnection,
-                    Context.BIND_AUTO_CREATE
-                )
+                Intent(context, PinyinDecoderService::class.java),
+                pinyinDecoderServiceConnection,
+                Context.BIND_AUTO_CREATE
+            )
         }
         return true
     }
 
     fun stopPinyinDecoderService(context: Context) {
-        val pinyinDecoderServiceConnection = pinyinDecoderServiceConnection ?: return
-        context.unbindService(pinyinDecoderServiceConnection)
+        context.unbindService(pinyinDecoderServiceConnection?.get() ?: return)
+        pinyinDecoderServiceConnection?.clear()
     }
 
     inner class CandidateListener: CandidateViewListener {
@@ -944,10 +933,10 @@ class PinyinIMEMode(
 
         override fun getShortLabel(context: Context, params: List<IMEMode.Params>): String {
             val pinyinParams = params.filterIsInstance<Params>().filterNot { it == this }
-            if(pinyinParams.isEmpty()) return "拼音"
+            return if(pinyinParams.isEmpty()) "拼音"
             else {
-                if(chineseTraditional) return "繁拼"
-                else return "简拼"
+                if(chineseTraditional) "繁拼"
+                else "简拼"
             }
         }
 

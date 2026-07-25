@@ -1703,6 +1703,7 @@ size_t MatrixSearch::get_lpis(const uint16* splid_str, size_t splid_str_len,
     size_t lpsi_num = (max_lma_buf - num) * sizeof(LmaPsbItem) /
         sizeof(LmaPsbStrItem);
     assert(lpsi_num > num);
+    if(lpsi_num <= num) return 0;
     if (num > lpsi_num) num = lpsi_num;
     lpsi_num = num;
 

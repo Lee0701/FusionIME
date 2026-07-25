@@ -31,6 +31,11 @@
             app:title="@string/settings_appearance_keyboard_height_landscape_title"
             app:useSimpleSummaryProvider="true" />
 
+        <SwitchPreferenceCompat
+            android:key="show_voice_input_button"
+            app:defaultValue="false"
+            app:title="@string/settings_appearance_show_voice_input_button_title" />
+
     </androidx.preference.PreferenceCategory>
 
 </androidx.preference.PreferenceScreen>

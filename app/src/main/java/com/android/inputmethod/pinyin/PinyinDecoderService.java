@@ -23,7 +23,6 @@ import android.os.IBinder;
 import android.util.Log;
 
 import java.io.FileDescriptor;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Vector;
@@ -98,8 +97,7 @@ public class PinyinDecoderService extends Service {
     private final static int MAX_PATH_FILE_LENGTH = 100;
     private static boolean inited = false;
 
-    private int mDictResId = R.raw.dict_pinyin_hans;
-    private String mUsr_dict_file;
+    private ChineseMode mChineseMode = ChineseMode.SIMPLIFIED;
 
     static {
         try {
@@ -111,25 +109,33 @@ public class PinyinDecoderService extends Service {
     }
 
     // Get file name of the specified dictionary
-    private boolean getUsrDictFileName(byte usr_dict[]) {
+    private boolean getUsrDictFileName(byte[] usr_dict) {
         if (null == usr_dict) {
             return false;
         }
 
-        for (int i = 0; i < mUsr_dict_file.length(); i++)
-            usr_dict[i] = (byte) mUsr_dict_file.charAt(i);
-        usr_dict[mUsr_dict_file.length()] = 0;
+        String usrDictFile = getFileStreamPath(mChineseMode.userDictFilename).getPath();
+        // This is a hack to make sure our "files" directory has been
+        // created.
+        try {
+            openFileOutput("dummy", 0).close();
+        } catch (IOException ignored) {
+        }
+
+        for (int i = 0; i < usrDictFile.length(); i++)
+            usr_dict[i] = (byte) usrDictFile.charAt(i);
+        usr_dict[usrDictFile.length()] = 0;
 
         return true;
     }
 
     private void initPinyinEngine() {
-        byte usr_dict[];
+        byte[] usr_dict;
         usr_dict = new byte[MAX_PATH_FILE_LENGTH];
 
         // Here is how we open a built-in dictionary for access through
         // a file descriptor...
-        AssetFileDescriptor afd = getResources().openRawResourceFd(mDictResId);
+        AssetFileDescriptor afd = getResources().openRawResourceFd(mChineseMode.dictResId);
         if (Environment.getInstance().needDebug()) {
             Log
                     .i("foo", "Dict: start=" + afd.getStartOffset()
@@ -142,21 +148,13 @@ public class PinyinDecoderService extends Service {
         }
         try {
             afd.close();
-        } catch (IOException e) {
+        } catch (IOException ignored) {
         }
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        mUsr_dict_file = getFileStreamPath("usr_dict.dat").getPath();
-        // This is a hack to make sure our "files" directory has been
-        // created.
-        try {
-            openFileOutput("dummy", 0).close();
-        } catch (FileNotFoundException e) {
-        } catch (IOException e) {
-        }
 
         initPinyinEngine();
     }
@@ -270,7 +268,7 @@ public class PinyinDecoderService extends Service {
         }
 
         public String syncUserDict(String tomerge) {
-            byte usr_dict[];
+            byte[] usr_dict;
             usr_dict = new byte[MAX_PATH_FILE_LENGTH];
 
             if (getUsrDictFileName(usr_dict)) {
@@ -280,7 +278,7 @@ public class PinyinDecoderService extends Service {
         }
 
         public boolean syncBegin() {
-            byte usr_dict[];
+            byte[] usr_dict;
             usr_dict = new byte[MAX_PATH_FILE_LENGTH];
 
             if (getUsrDictFileName(usr_dict)) {
@@ -318,10 +316,10 @@ public class PinyinDecoderService extends Service {
         }
 
         @Override
-        public void setDictResId(int dictResId) {
-            int oldId = mDictResId;
-            mDictResId = dictResId;
-            if(oldId != dictResId) initPinyinEngine();
+        public void setChineseTraditional(boolean chineseTraditional) {
+            ChineseMode oldMode = mChineseMode;
+            mChineseMode = chineseTraditional ? ChineseMode.TRADITIONAL : ChineseMode.SIMPLIFIED;
+            if(!oldMode.equals(mChineseMode)) initPinyinEngine();
         }
     };
 
@@ -329,4 +327,25 @@ public class PinyinDecoderService extends Service {
     public IBinder onBind(Intent intent) {
         return mBinder;
     }
+
+    enum ChineseMode {
+        SIMPLIFIED(R.raw.dict_pinyin_hans, "pinyin_user_dict_hans.dat"),
+        TRADITIONAL(R.raw.dict_pinyin_hant, "pinyin_user_dict_hant.dat");
+
+        final int dictResId;
+        final String userDictFilename;
+        ChineseMode(int dictResId, String userDictFilename) {
+            this.dictResId = dictResId;
+            this.userDictFilename = userDictFilename;
+        }
+
+        public int getDictResId() {
+            return dictResId;
+        }
+
+        public String getUserDictFilename() {
+            return userDictFilename;
+        }
+    }
+
 }

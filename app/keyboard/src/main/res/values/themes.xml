@@ -10,11 +10,13 @@
     <style name="Theme.FusionIME.Keyboard.Popup">
         <item name="backgroundColor">@color/key_bg_light_unpressed</item>
         <item name="foregroundColor">@color/black</item>
+        <item name="hintTextColor">@color/gray</item>
     </style>
 
     <style name="Theme.FusionIME.Keyboard.Key">
         <item name="backgroundColor">@color/key_bg_static_light</item>
         <item name="foregroundColor">@color/black</item>
+        <item name="hintTextColor">@color/gray</item>
     </style>
 
     <style name="Theme.FusionIME.Keyboard.Key.Modifier">

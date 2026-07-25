@@ -102,6 +102,9 @@ abstract class CommonIMEMode(
         KeyboardState.Symbol.Number -> numberLayoutTable
     }
 
+    open val keyLabels: Map<Int, String>
+        get() = currentLayoutTable.map.mapValues { (_, v) -> v.forShiftState(shiftState).toChar().toString() }
+
     protected var keyboardView: KeyboardView? = null
     protected var candidateView: CandidateView? = null
 
@@ -121,7 +124,24 @@ abstract class CommonIMEMode(
     }
 
     open fun onSpecial(keyCode: Int) {
-        util?.sendDownUpKeyEvents(keyCode)
+        when(keyCode) {
+            KeyEvent.KEYCODE_LANGUAGE_SWITCH -> listener.onLanguageSwitch()
+            KeyEvent.KEYCODE_SYM -> {
+                symbolState =
+                    if(symbolState != KeyboardState.Symbol.Symbol) KeyboardState.Symbol.Symbol
+                    else KeyboardState.Symbol.Text
+                shiftState = KeyboardState.Shift.Released
+                keyboardView?.onReset()
+            }
+            KeyEvent.KEYCODE_NUM -> {
+                symbolState =
+                    if(symbolState != KeyboardState.Symbol.Number) KeyboardState.Symbol.Number
+                    else KeyboardState.Symbol.Text
+                shiftState = KeyboardState.Shift.Released
+                keyboardView?.onReset()
+            }
+            else -> util?.sendDownUpKeyEvents(keyCode)
+        }
     }
 
     override suspend fun onLoad(context: Context) {
@@ -224,19 +244,19 @@ abstract class CommonIMEMode(
         val textKeyboardView = DefaultKeyboardView(context, null).also {
             it.keyboard = textKeyboard
             it.listener = createKeyboardListener(context, textKeyboardParams)
-            it.touchHandler = createTouchHandler(it, context)
+            it.touchHandler = createTouchHandler(it, context, KeyboardState.Symbol.Text)
             if(params.previewPopups) it.popupManager = DefaultPopupManager(it, it)
         }
         val symbolKeyboardView = DefaultKeyboardView(context, null).also {
             it.keyboard = symbolKeyboard
             it.listener = createKeyboardListener(context, symbolKeyboardParams)
-            it.touchHandler = createTouchHandler(it, context)
+            it.touchHandler = createTouchHandler(it, context, KeyboardState.Symbol.Symbol)
             if(params.previewPopups) it.popupManager = DefaultPopupManager(it, it)
         }
         val numberKeyboardView = DefaultKeyboardView(context, null).also {
             it.keyboard = numberKeyboard
             it.listener = createKeyboardListener(context, numberKeyboardParams)
-            it.touchHandler = createTouchHandler(it, context)
+            it.touchHandler = createTouchHandler(it, context, KeyboardState.Symbol.Number)
             if(params.previewPopups) it.popupManager = DefaultPopupManager(it, it)
         }
 
@@ -270,8 +290,7 @@ abstract class CommonIMEMode(
             keyboardView.state = symbolState
         }
         if(keyboardView != null) {
-            val labels = currentLayoutTable.map.mapValues { (_, v) -> v.forShiftState(shiftState).toChar().toString() }
-            keyboardView.setLabels(labels)
+            keyboardView.labels = this.keyLabels
             val shiftIcon = when(shiftState) {
                 KeyboardState.Shift.Released -> ee.oyatl.ime.keyboard.R.drawable.keyic_shift
                 KeyboardState.Shift.Pressed -> ee.oyatl.ime.keyboard.R.drawable.keyic_shift_pressed
@@ -281,7 +300,7 @@ abstract class CommonIMEMode(
                 KeyEvent.KEYCODE_SHIFT_LEFT to shiftIcon,
                 KeyEvent.KEYCODE_SHIFT_RIGHT to shiftIcon
             )
-            keyboardView.setIcons(icons)
+            keyboardView.icons = icons
         }
     }
 
@@ -292,7 +311,11 @@ abstract class CommonIMEMode(
         )
     }
 
-    open fun createTouchHandler(keyboardView: TouchHandler.KeyboardViewInterface, context: Context): TouchHandler {
+    open fun createTouchHandler(
+        keyboardView: TouchHandler.KeyboardViewInterface,
+        context: Context,
+        symbolState: KeyboardState.Symbol
+    ): TouchHandler {
         val preference = PreferenceManager.getDefaultSharedPreferences(context)
         val touchMode = preference.getString("touch_mode", "seek")
         if(touchMode == "flick" && Feature.TouchMode.availableInCurrentVersion) {
@@ -361,7 +384,7 @@ abstract class CommonIMEMode(
                     currentLayoutTable[keyCode]?.forShiftState(shiftState) ?: default)
             }
         } else {
-            handleSpecialKey(keyCode)
+            onSpecial(keyCode)
         }
         updateInputView()
     }
@@ -371,27 +394,6 @@ abstract class CommonIMEMode(
             shiftState = KeyboardState.Shift.Released
         }
         updateInputView()
-    }
-
-    protected fun handleSpecialKey(keyCode: Int) {
-        when(keyCode) {
-            KeyEvent.KEYCODE_LANGUAGE_SWITCH -> listener.onLanguageSwitch()
-            KeyEvent.KEYCODE_SYM -> {
-                symbolState =
-                    if(symbolState != KeyboardState.Symbol.Symbol) KeyboardState.Symbol.Symbol
-                    else KeyboardState.Symbol.Text
-                shiftState = KeyboardState.Shift.Released
-                keyboardView?.onReset()
-            }
-            KeyEvent.KEYCODE_NUM -> {
-                symbolState =
-                    if(symbolState != KeyboardState.Symbol.Number) KeyboardState.Symbol.Number
-                    else KeyboardState.Symbol.Text
-                shiftState = KeyboardState.Shift.Released
-                keyboardView?.onReset()
-            }
-            else -> onSpecial(keyCode)
-        }
     }
 
     protected fun submitCandidates(candidates: List<CandidateView.Candidate>) {

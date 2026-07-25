@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.widget.LinearLayout
+import androidx.appcompat.widget.AppCompatTextView
 import ee.oyatl.ime.keyboard.databinding.KbdKeyBinding
 import ee.oyatl.ime.keyboard.databinding.KbdKeyboardBinding
 import ee.oyatl.ime.keyboard.databinding.KbdRowBinding
@@ -29,6 +30,28 @@ class DefaultKeyboardView(
     override val rect: Rect = Rect()
     override val location: IntArray = IntArray(2)
     private val keySet: MutableSet<CachedKey> = mutableSetOf()
+
+    override var labels: Map<Int, String> = mapOf()
+        set(value) {
+            field = value
+            keySet.forEach {
+                val label = value[it.keyCode]
+                if(label != null) it.binding.label.text = label
+                FLICK_LABEL_MAP.entries.forEach { (dir, id) ->
+                    val label = value[it.keyCode or dir]
+                    if(label != null) it.binding.root.findViewById<AppCompatTextView>(id).text = label
+                }
+            }
+        }
+
+    override var icons: Map<Int, Int> = mapOf()
+        set(value) {
+            field = value
+            keySet.forEach {
+                val icon = value[it.keyCode]
+                if(icon != null) it.binding.icon.setImageResource(icon)
+            }
+        }
 
     var keyboard: Keyboard? = null
         set(value) {
@@ -154,20 +177,6 @@ class DefaultKeyboardView(
         }
     }
 
-    override fun setLabels(labels: Map<Int, String>) {
-        keySet.forEach {
-            val label = labels[it.keyCode]
-            if(label != null) it.binding.label.text = label
-        }
-    }
-
-    override fun setIcons(icons: Map<Int, Int>) {
-        keySet.forEach {
-            val icon = icons[it.keyCode]
-            if(icon != null) it.binding.icon.setImageResource(icon)
-        }
-    }
-
     data class CachedKey(
         override val keyCode: Int,
         val binding: KbdKeyBinding
@@ -192,5 +201,14 @@ class DefaultKeyboardView(
         ).apply {
             weight = width
         }
+    }
+
+    companion object {
+        val FLICK_LABEL_MAP = mapOf(
+            FlickKeyCode.DIRECTION_LEFT to R.id.label_hint_left,
+            FlickKeyCode.DIRECTION_RIGHT to R.id.label_hint_right,
+            FlickKeyCode.DIRECTION_UP to R.id.label_hint_top,
+            FlickKeyCode.DIRECTION_DOWN to R.id.label_hint_bottom,
+        )
     }
 }

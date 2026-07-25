@@ -1,5 +1,6 @@
 package ee.oyatl.ime.keyboard.touchhandler
 
+import android.view.KeyEvent
 import ee.oyatl.ime.keyboard.popup.Popup
 import ee.oyatl.ime.keyboard.popup.PreviewPopup
 
@@ -33,6 +34,7 @@ class SeekTouchHandler(
         if(newKey != oldKey) {
             oldKey?.onReleased()
             newKey?.onPressed()
+            if(oldKey?.keyCode == KeyEvent.KEYCODE_DEL) keyboardView.listener.onKeyUp(oldKey.keyCode, 0)
             if(popup is PreviewPopup) {
                 if(newKey?.label?.isNotEmpty() == true) {
                     if(!popup.isShown) popup.show()

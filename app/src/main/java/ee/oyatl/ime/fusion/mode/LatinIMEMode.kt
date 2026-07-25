@@ -616,7 +616,7 @@ abstract class LatinIMEMode(
                 val locale =
                     if(localeName.size == 2) Locale(localeName[0], localeName[1])
                     else Locale(localeName[0])
-                val layout = Layout.valueOf(map["layout"] ?: Layout.Qwerty.name)
+                val layout = Layout.entries.find { it.name == map["layout"] } ?: Layout.Qwerty
                 val numberRow = map["number_row"]?.toBoolean() ?: false
                 return Params(
                     locale = locale,
