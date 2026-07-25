@@ -23,15 +23,19 @@ class SwitcherKeyboardView(
 
     private val currentView: KeyboardView get() = map[state] ?: map.values.first()
 
+    override var labels: Map<Int, String>
+        get() = currentView.labels
+        set(value) {
+            currentView.labels = value
+        }
+
+    override var icons: Map<Int, Int>
+        get() = currentView.icons
+        set(value) {
+            currentView.icons = value
+        }
+
     override fun onReset() {
         map.values.forEach { it.onReset() }
-    }
-
-    override fun setLabels(labels: Map<Int, String>) {
-        currentView.setLabels(labels)
-    }
-
-    override fun setIcons(icons: Map<Int, Int>) {
-        currentView.setIcons(icons)
     }
 }

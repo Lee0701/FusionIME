@@ -119,6 +119,7 @@
 
     <string-array name="settings_input_mode_mozc_layout_entries">
         <item>@string/mozc_layout_romaji_qwerty</item>
+        <item>@string/mozc_layout_kana_12key</item>
         <item>@string/mozc_layout_kana_jis</item>
         <item>@string/mozc_layout_kana_syllables</item>
         <item>@string/mozc_layout_kana_iroha</item>
@@ -126,6 +127,7 @@
 
     <string-array name="settings_input_mode_mozc_layout_values">
         <item>RomajiQwerty</item>
+        <item>Kana12Key</item>
         <item>KanaJIS</item>
         <item>KanaSyllables</item>
         <item>KanaIroha</item>
@@ -141,6 +143,18 @@
         <item>Horizontal</item>
         <item>VerticalLeft</item>
         <item>VerticalRight</item>
+    </string-array>
+
+    <string-array name="settings_input_mode_mozc_flick_mode_entries">
+        <item>@string/mozc_flick_mode_flick_toggle</item>
+        <item>@string/mozc_flick_mode_toggle_only</item>
+        <item>@string/mozc_flick_mode_flick_only</item>
+    </string-array>
+
+    <string-array name="settings_input_mode_mozc_flick_mode_values">
+        <item>FlickToggle</item>
+        <item>ToggleOnly</item>
+        <item>FlickOnly</item>
     </string-array>
 
     <string-array name="settings_input_mode_viet_layout_entries">

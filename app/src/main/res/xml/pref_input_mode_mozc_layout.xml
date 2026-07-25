@@ -11,6 +11,13 @@
         app:useSimpleSummaryProvider="true" />
 
     <ListPreference
+        android:key="flick_mode"
+        android:entries="@array/settings_input_mode_mozc_flick_mode_entries"
+        android:entryValues="@array/settings_input_mode_mozc_flick_mode_values"
+        android:title="@string/settings_input_mode_mozc_flick_mode_title"
+        app:useSimpleSummaryProvider="true" />
+
+    <ListPreference
         android:key="syllables_key_layout"
         android:entries="@array/settings_input_mode_mozc_syllables_key_layout_entries"
         android:entryValues="@array/settings_input_mode_mozc_syllables_key_layout_values"

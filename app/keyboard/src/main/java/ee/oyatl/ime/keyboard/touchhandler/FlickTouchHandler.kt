@@ -2,6 +2,7 @@ package ee.oyatl.ime.keyboard.touchhandler
 
 import ee.oyatl.ime.keyboard.FlickKeyCode
 import ee.oyatl.ime.keyboard.popup.Popup
+import ee.oyatl.ime.keyboard.popup.PreviewPopup
 import kotlin.math.PI
 import kotlin.math.atan2
 import kotlin.math.pow
@@ -11,7 +12,8 @@ class FlickTouchHandler(
     override val keyboardView: TouchHandler.KeyboardViewInterface,
     val threshold: Int,
     val diagonal: Boolean = false,
-    val multiFlick: Boolean = false
+    val multiFlick: Boolean = false,
+    val sendOnUp: Boolean = false
 ): TouchHandler {
     val pointers = mutableMapOf<Int, Pointer>()
 
@@ -50,6 +52,10 @@ class FlickTouchHandler(
                 if(direction != lastDirection && (multiFlick || flicks.isEmpty())) {
                     if(pointer.key != null && pointer.key.keyCode >= 0) {
                         val keyCode = FlickKeyCode.FLAG_FLICK or direction.keyCodeFlag or pointer.key.keyCode
+                        if(pointer.popup is PreviewPopup) {
+                            val newLabel = keyboardView.labels[direction.keyCodeFlag or pointer.key.keyCode]
+                            if(newLabel != null) pointer.popup.label = newLabel
+                        }
                         keyboardView.listener.onKeyDown(keyCode, 0)
                         keyboardView.listener.onKeyUp(keyCode, 0)
                     }
@@ -67,7 +73,7 @@ class FlickTouchHandler(
         val key = pointer.key
         if(key != null) {
             key.onReleased()
-            if(pointer.flicks.isEmpty()) keyboardView.listener.onKeyUp(key.keyCode, 0)
+            if(pointer.flicks.isEmpty() || sendOnUp) keyboardView.listener.onKeyUp(key.keyCode, 0)
         }
         pointer.popup?.hide()
         pointers -= pointerId

@@ -61,6 +61,7 @@
     <string name="settings_input_mode_converter_title">Converter</string>
     <string name="settings_input_mode_candidate_view_height_title">Candidate View Height</string>
     <string name="settings_input_mode_chinese_traditional_title">Chinese Traditional</string>
+    <string name="settings_input_mode_mozc_flick_mode_title">12-Key Flick Mode</string>
     <string name="settings_input_mode_syllables_key_layout_title">Syllables Key Layout</string>
     <string name="settings_input_mode_syllables_key_layout_summary">Choose Key Arrangement for Syllables or Iroha Layout.</string>
 
@@ -115,6 +116,7 @@
     <string name="korean_converter_jeongun">Jeong-Un Converter</string>
 
     <string name="mozc_layout_romaji_qwerty">Romaji QWERTY</string>
+    <string name="mozc_layout_kana_12key">Kana 12-Key</string>
     <string name="mozc_layout_kana_jis">Kana JIS</string>
     <string name="mozc_layout_kana_syllables">Kana Syllables</string>
     <string name="mozc_layout_kana_iroha">Kana Iroha</string>
@@ -122,6 +124,10 @@
     <string name="mozc_syllables_key_layout_horizontal">Horizontal</string>
     <string name="mozc_syllables_key_layout_vertical_left">Vertical (Left to Right)</string>
     <string name="mozc_syllables_key_layout_vertical_right">Vertical (Right to Left)</string>
+
+    <string name="mozc_flick_mode_flick_toggle">Flick and Toggle</string>
+    <string name="mozc_flick_mode_toggle_only">Toggle Only</string>
+    <string name="mozc_flick_mode_flick_only">Flick Only</string>
 
     <string name="pinyin_layout_pinyin">Pinyin</string>
     <string name="pinyin_chinese_simplified">Simplified</string>
