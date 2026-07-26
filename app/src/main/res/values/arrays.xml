@@ -157,6 +157,16 @@
         <item>FlickOnly</item>
     </string-array>
 
+    <string-array name="settings_input_mode_pinyin_spelling_entries">
+        <item>@string/pinyin_spelling_full</item>
+        <item>@string/pinyin_spelling_ziranma</item>
+    </string-array>
+
+    <string-array name="settings_input_mode_pinyin_spelling_values">
+        <item>FullPinyin</item>
+        <item>Ziranma</item>
+    </string-array>
+
     <string-array name="settings_input_mode_viet_layout_entries">
         <item>@string/viet_layout_qwerty</item>
         <item>@string/viet_layout_telex</item>

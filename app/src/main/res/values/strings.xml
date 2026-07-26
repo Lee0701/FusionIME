@@ -61,6 +61,7 @@
     <string name="settings_input_mode_converter_title">Converter</string>
     <string name="settings_input_mode_candidate_view_height_title">Candidate View Height</string>
     <string name="settings_input_mode_chinese_traditional_title">Chinese Traditional</string>
+    <string name="settings_input_mode_pinyin_spelling_title">Pinyin Input Style</string>
     <string name="settings_input_mode_mozc_flick_mode_title">12-Key Flick Mode</string>
     <string name="settings_input_mode_syllables_key_layout_title">Syllables Key Layout</string>
     <string name="settings_input_mode_syllables_key_layout_summary">Choose Key Arrangement for Syllables or Iroha Layout.</string>
@@ -130,6 +131,8 @@
     <string name="mozc_flick_mode_flick_only">Flick Only</string>
 
     <string name="pinyin_layout_pinyin">Pinyin</string>
+    <string name="pinyin_spelling_full">Full Pinyin</string>
+    <string name="pinyin_spelling_ziranma">Ziranma Double Pinyin</string>
     <string name="pinyin_chinese_simplified">Simplified</string>
     <string name="pinyin_chinese_traditional">Traditional</string>
 

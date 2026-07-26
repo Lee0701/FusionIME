@@ -39,6 +39,7 @@
     <string name="settings_input_mode_converter_title">コンバーター</string>
     <string name="settings_input_mode_candidate_view_height_title">候補ウィンドウの高さ</string>
     <string name="settings_input_mode_chinese_traditional_title">繁体字中国語</string>
+    <string name="settings_input_mode_pinyin_spelling_title">ピンイン入力方式</string>
     <string name="settings_dialog_keystroke_key_name">キー名</string>
     <string name="settings_dialog_keystroke_key_code">キーコード</string>
     <string name="settings_dialog_keystroke_shift">Shift</string>
@@ -80,6 +81,8 @@
     <string name="mozc_layout_kana_jis">かなJIS</string>
     <string name="mozc_layout_kana_syllables">かな五十音表</string>
     <string name="pinyin_layout_pinyin">ピンイン</string>
+    <string name="pinyin_spelling_full">全拼（フルピンイン）</string>
+    <string name="pinyin_spelling_ziranma">自然碼双拼</string>
     <string name="pinyin_chinese_simplified">簡体字</string>
     <string name="pinyin_chinese_traditional">繁体字</string>
     <string name="zhuyin_layout_zhuyin">注音符号</string>

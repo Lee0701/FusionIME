@@ -1,2 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="settings_input_mode_pinyin_spelling_title">拼音輸入方式</string>
+    <string name="pinyin_spelling_full">全拼</string>
+    <string name="pinyin_spelling_ziranma">自然碼雙拼</string>
+</resources>
