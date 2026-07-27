@@ -7,13 +7,12 @@ import ee.oyatl.ime.dictionary.DiskDictionary
 class HanNomConverter(
     context: Context
 ) {
-    private val dictionary: DiskDictionary = DiskDictionary(context.resources.openRawResource(R.raw.viet))
+    private val dictionary: DiskDictionary = DiskDictionary(context.resources.openRawResource(R.raw.nom_qwerty))
 
     fun convert(text: String, mode: String): List<CandidateView.Candidate> {
         val result = (1 .. text.length).asSequence()
             .map { l ->
                 dictionary.search(text.take(l))
-                    .filter { it.extra == mode }
                     .map { Candidate(text.take(l), it.result, it.frequency.toFloat()) }
             }
             .flatten()
