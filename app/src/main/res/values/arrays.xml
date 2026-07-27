@@ -160,11 +160,23 @@
     <string-array name="settings_input_mode_pinyin_spelling_entries">
         <item>@string/pinyin_spelling_full</item>
         <item>@string/pinyin_spelling_ziranma</item>
+        <item>@string/pinyin_spelling_microsoft</item>
+        <item>@string/pinyin_spelling_smart_abc</item>
+        <item>@string/pinyin_spelling_jiajia</item>
+        <item>@string/pinyin_spelling_xiaohe</item>
+        <item>@string/pinyin_spelling_sogou</item>
+        <item>@string/pinyin_spelling_ziguang</item>
     </string-array>
 
     <string-array name="settings_input_mode_pinyin_spelling_values">
         <item>FullPinyin</item>
         <item>Ziranma</item>
+        <item>Microsoft</item>
+        <item>SmartABC</item>
+        <item>Jiajia</item>
+        <item>Xiaohe</item>
+        <item>Sogou</item>
+        <item>Ziguang</item>
     </string-array>
 
     <string-array name="settings_input_mode_viet_layout_entries">

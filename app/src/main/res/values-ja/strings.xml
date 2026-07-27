@@ -83,6 +83,12 @@
     <string name="pinyin_layout_pinyin">ピンイン</string>
     <string name="pinyin_spelling_full">全拼（フルピンイン）</string>
     <string name="pinyin_spelling_ziranma">自然碼双拼</string>
+    <string name="pinyin_spelling_microsoft">Microsoft双拼</string>
+    <string name="pinyin_spelling_smart_abc">智能ABC双拼</string>
+    <string name="pinyin_spelling_jiajia">拼音加加双拼</string>
+    <string name="pinyin_spelling_xiaohe">小鶴双拼</string>
+    <string name="pinyin_spelling_sogou">搜狗双拼</string>
+    <string name="pinyin_spelling_ziguang">紫光双拼</string>
     <string name="pinyin_chinese_simplified">簡体字</string>
     <string name="pinyin_chinese_traditional">繁体字</string>
     <string name="zhuyin_layout_zhuyin">注音符号</string>

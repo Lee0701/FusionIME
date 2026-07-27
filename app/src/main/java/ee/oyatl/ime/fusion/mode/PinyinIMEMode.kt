@@ -26,8 +26,9 @@ import ee.oyatl.ime.fusion.pinyin.CandidatesContainer
 import ee.oyatl.ime.fusion.pinyin.ComposingView
 import ee.oyatl.ime.fusion.pinyin.ComposingView.ComposingStatus
 import ee.oyatl.ime.fusion.pinyin.DecodingInfo
+import ee.oyatl.ime.fusion.pinyin.DoublePinyinComposer
+import ee.oyatl.ime.fusion.pinyin.DoublePinyinScheme
 import ee.oyatl.ime.fusion.pinyin.OnGestureListener
-import ee.oyatl.ime.fusion.pinyin.ZiranmaComposer
 import ee.oyatl.ime.keyboard.KeyboardConfiguration
 import ee.oyatl.ime.keyboard.KeyboardTemplate
 import ee.oyatl.ime.keyboard.LayoutTable
@@ -64,7 +65,7 @@ class PinyinIMEMode(
      * result, etc.
      */
     private val decInfo: DecodingInfo = DecodingInfo(this)
-    private val ziranmaComposer = ZiranmaComposer()
+    private val doublePinyinComposer = spelling.doublePinyinScheme?.let(::DoublePinyinComposer)
 
     /**
      * The floating container which contains the composing view. If necessary,
@@ -356,9 +357,10 @@ class PinyinIMEMode(
         // change to input state.
         if (keyChar >= 'a'.code && keyChar <= 'z'.code && !event.isAltPressed) {
             if (!realAction) return true
-            if(spelling == Spelling.Ziranma) {
-                ziranmaComposer.reset()
-                applyZiranmaEdit(ziranmaComposer.type(keyChar.toChar(), false), true)
+            val composer = doublePinyinComposer
+            if(composer != null) {
+                composer.reset()
+                applyDoublePinyinEdit(composer.type(keyChar.toChar(), false), true)
             } else {
                 decInfo.addSplChar(keyChar.toChar(), true)
                 chooseAndUpdate(-1)
@@ -547,9 +549,10 @@ class PinyinIMEMode(
         // change to input state.
         if (keyChar >= 'a'.code && keyChar <= 'z'.code) {
             changeToStateInput(true)
-            if(spelling == Spelling.Ziranma) {
-                ziranmaComposer.reset()
-                applyZiranmaEdit(ziranmaComposer.type(keyChar.toChar(), false), true)
+            val composer = doublePinyinComposer
+            if(composer != null) {
+                composer.reset()
+                applyDoublePinyinEdit(composer.type(keyChar.toChar(), false), true)
             } else {
                 decInfo.addSplChar(keyChar.toChar(), true)
                 chooseAndUpdate(-1)
@@ -729,23 +732,25 @@ class PinyinIMEMode(
             return true
         }
 
-        if(spelling == Spelling.Ziranma) {
+        val composer = doublePinyinComposer
+        if(composer != null) {
+            val typedChar = keyChar.toChar()
             when {
-                keyChar in 'a'.code..'z'.code -> {
+                composer.canType(typedChar) -> {
                     val prependSeparator = decInfo.length() > 0 && !decInfo.charBeforeCursorIsSeparator()
-                    applyZiranmaEdit(ziranmaComposer.type(keyChar.toChar(), prependSeparator))
+                    applyDoublePinyinEdit(composer.type(typedChar, prependSeparator))
                     return true
                 }
                 keyCode == KeyEvent.KEYCODE_DEL -> {
-                    val edit = ziranmaComposer.backspace()
-                    if(edit != null) applyZiranmaEdit(edit)
+                    val edit = composer.backspace()
+                    if(edit != null) applyDoublePinyinEdit(edit)
                     else {
                         decInfo.prepareDeleteBeforeCursor()
                         chooseAndUpdate(-1)
                     }
                     return true
                 }
-                keyChar == '\''.code -> ziranmaComposer.reset()
+                keyChar == '\''.code -> composer.reset()
             }
         }
 
@@ -811,7 +816,7 @@ class PinyinIMEMode(
     }
 
     private fun resetToIdleState(resetInlineText: Boolean) {
-        ziranmaComposer.reset()
+        doublePinyinComposer?.reset()
         if (ImeState.STATE_IDLE == imeState) return
 
         imeState = ImeState.STATE_IDLE
@@ -823,7 +828,7 @@ class PinyinIMEMode(
     }
 
     private fun chooseAndUpdate(candId: Int) {
-        if(candId >= 0) ziranmaComposer.reset()
+        if(candId >= 0) doublePinyinComposer?.reset()
         if (ImeState.STATE_PREDICT != imeState) {
             // Get result candidate list, if choice_id < 0, do a new decoding.
             // If choice_id >=0, select the candidate, and get the new candidate
@@ -890,7 +895,7 @@ class PinyinIMEMode(
         }
     }
 
-    private fun applyZiranmaEdit(edit: ZiranmaComposer.Edit, resetInput: Boolean = false) {
+    private fun applyDoublePinyinEdit(edit: DoublePinyinComposer.Edit, resetInput: Boolean = false) {
         repeat(edit.removeBeforeCursor) {
             decInfo.prepareDeleteBeforeCursor()
             decInfo.chooseDecodingCandidate(-1)
@@ -973,6 +978,12 @@ class PinyinIMEMode(
             val spellingLabelId = when(spelling) {
                 Spelling.FullPinyin -> ee.oyatl.ime.fusion.R.string.pinyin_layout_pinyin
                 Spelling.Ziranma -> ee.oyatl.ime.fusion.R.string.pinyin_spelling_ziranma
+                Spelling.Microsoft -> ee.oyatl.ime.fusion.R.string.pinyin_spelling_microsoft
+                Spelling.SmartABC -> ee.oyatl.ime.fusion.R.string.pinyin_spelling_smart_abc
+                Spelling.Jiajia -> ee.oyatl.ime.fusion.R.string.pinyin_spelling_jiajia
+                Spelling.Xiaohe -> ee.oyatl.ime.fusion.R.string.pinyin_spelling_xiaohe
+                Spelling.Sogou -> ee.oyatl.ime.fusion.R.string.pinyin_spelling_sogou
+                Spelling.Ziguang -> ee.oyatl.ime.fusion.R.string.pinyin_spelling_ziguang
             }
             val layoutName = context.resources.getString(spellingLabelId)
             val chineseLabelId =
@@ -985,14 +996,10 @@ class PinyinIMEMode(
         override fun getShortLabel(context: Context, params: List<IMEMode.Params>): String {
             val pinyinParams = params.filterIsInstance<Params>().filterNot { it == this }
             return if(pinyinParams.isEmpty()) {
-                if(spelling == Spelling.Ziranma) "双拼" else "拼音"
+                if(spelling.isDoublePinyin) "双拼" else "拼音"
             } else {
-                when {
-                    spelling == Spelling.Ziranma && chineseTraditional -> "繁双"
-                    spelling == Spelling.Ziranma -> "简双"
-                    chineseTraditional -> "繁拼"
-                    else -> "简拼"
-                }
+                val script = if(chineseTraditional) "繁" else "简"
+                if(spelling.isDoublePinyin) "$script${spelling.shortLabel}" else "${script}拼"
             }
         }
 
@@ -1008,9 +1015,21 @@ class PinyinIMEMode(
         }
     }
 
-    enum class Spelling {
+    enum class Spelling(
+        val doublePinyinScheme: DoublePinyinScheme? = null,
+        val shortLabel: String = ""
+    ) {
         FullPinyin,
-        Ziranma
+        Ziranma(DoublePinyinScheme.Ziranma, "自"),
+        Microsoft(DoublePinyinScheme.Microsoft, "微"),
+        SmartABC(DoublePinyinScheme.SmartABC, "ABC"),
+        Jiajia(DoublePinyinScheme.Jiajia, "加"),
+        Xiaohe(DoublePinyinScheme.Xiaohe, "鹤"),
+        Sogou(DoublePinyinScheme.Sogou, "搜"),
+        Ziguang(DoublePinyinScheme.Ziguang, "紫");
+
+        val isDoublePinyin: Boolean
+            get() = doublePinyinScheme != null
     }
 
     companion object {

@@ -3,4 +3,10 @@
     <string name="settings_input_mode_pinyin_spelling_title">Kiểu nhập Pinyin</string>
     <string name="pinyin_spelling_full">Pinyin đầy đủ</string>
     <string name="pinyin_spelling_ziranma">Song bính Ziranma</string>
+    <string name="pinyin_spelling_microsoft">Song bính Microsoft</string>
+    <string name="pinyin_spelling_smart_abc">Song bính Intelligent ABC</string>
+    <string name="pinyin_spelling_jiajia">Song bính Pinyin Jiajia</string>
+    <string name="pinyin_spelling_xiaohe">Song bính Xiaohe</string>
+    <string name="pinyin_spelling_sogou">Song bính Sogou</string>
+    <string name="pinyin_spelling_ziguang">Song bính Ziguang</string>
 </resources>

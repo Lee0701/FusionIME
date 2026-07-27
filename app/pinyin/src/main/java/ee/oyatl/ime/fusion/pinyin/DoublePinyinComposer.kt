@@ -1,6 +1,6 @@
 package ee.oyatl.ime.fusion.pinyin
 
-class ZiranmaComposer {
+class DoublePinyinComposer(private val scheme: DoublePinyinScheme) {
     data class Edit(
         val removeBeforeCursor: Int = 0,
         val append: String = ""
@@ -22,18 +22,24 @@ class ZiranmaComposer {
         clearPending()
     }
 
+    fun canType(ch: Char): Boolean = if(pendingFirst == null) {
+        ch in 'a'..'z'
+    } else {
+        scheme.acceptsFinal(ch)
+    }
+
     fun type(ch: Char, prependSeparator: Boolean): Edit {
-        require(ch in 'a'..'z')
+        require(canType(ch))
 
         val first = pendingFirst
         if(first != null) {
-            val replacement = pendingPrefix + ZiranmaPinyin.decode(first, ch)
+            val replacement = pendingPrefix + scheme.decode(first, ch)
             syllables.addLast(Syllable(first, replacement.length, pendingPrefix))
             return Edit(pendingEmissionLength, replacement).also { clearPending() }
         }
 
         val prefix = if(prependSeparator) "'" else ""
-        val provisional = prefix + ZiranmaPinyin.expandInitial(ch)
+        val provisional = prefix + scheme.expandInitial(ch)
         pendingFirst = ch
         pendingPrefix = prefix
         pendingEmissionLength = provisional.length
@@ -46,7 +52,7 @@ class ZiranmaComposer {
         }
 
         val syllable = syllables.removeLastOrNull() ?: return null
-        val provisional = syllable.prefix + ZiranmaPinyin.expandInitial(syllable.first)
+        val provisional = syllable.prefix + scheme.expandInitial(syllable.first)
         pendingFirst = syllable.first
         pendingPrefix = syllable.prefix
         pendingEmissionLength = provisional.length

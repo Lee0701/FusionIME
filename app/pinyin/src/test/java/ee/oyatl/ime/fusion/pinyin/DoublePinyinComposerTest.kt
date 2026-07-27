@@ -1,20 +1,22 @@
 package ee.oyatl.ime.fusion.pinyin
 
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
-class ZiranmaComposerTest {
-    private val composer = ZiranmaComposer()
+class DoublePinyinComposerTest {
+    private val composer = DoublePinyinComposer(DoublePinyinScheme.Ziranma)
 
     @Test
     fun replacesProvisionalInitialWithDecodedSyllable() {
         assertEquals(
-            ZiranmaComposer.Edit(append = "sh"),
+            DoublePinyinComposer.Edit(append = "sh"),
             composer.type('u', prependSeparator = false)
         )
         assertEquals(
-            ZiranmaComposer.Edit(removeBeforeCursor = 2, append = "shuang"),
+            DoublePinyinComposer.Edit(removeBeforeCursor = 2, append = "shuang"),
             composer.type('d', prependSeparator = false)
         )
     }
@@ -25,11 +27,11 @@ class ZiranmaComposerTest {
         composer.type('m', prependSeparator = false)
 
         assertEquals(
-            ZiranmaComposer.Edit(append = "'g"),
+            DoublePinyinComposer.Edit(append = "'g"),
             composer.type('g', prependSeparator = true)
         )
         assertEquals(
-            ZiranmaComposer.Edit(removeBeforeCursor = 2, append = "'gong"),
+            DoublePinyinComposer.Edit(removeBeforeCursor = 2, append = "'gong"),
             composer.type('s', prependSeparator = false)
         )
     }
@@ -39,7 +41,7 @@ class ZiranmaComposerTest {
         composer.type('u', prependSeparator = false)
 
         assertEquals(
-            ZiranmaComposer.Edit(removeBeforeCursor = 2),
+            DoublePinyinComposer.Edit(removeBeforeCursor = 2),
             composer.backspace()
         )
         assertNull(composer.backspace())
@@ -51,11 +53,11 @@ class ZiranmaComposerTest {
         composer.type('d', prependSeparator = false)
 
         assertEquals(
-            ZiranmaComposer.Edit(removeBeforeCursor = 6, append = "sh"),
+            DoublePinyinComposer.Edit(removeBeforeCursor = 6, append = "sh"),
             composer.backspace()
         )
         assertEquals(
-            ZiranmaComposer.Edit(removeBeforeCursor = 2),
+            DoublePinyinComposer.Edit(removeBeforeCursor = 2),
             composer.backspace()
         )
     }
@@ -68,7 +70,7 @@ class ZiranmaComposerTest {
         composer.type('d', prependSeparator = false)
 
         assertEquals(
-            ZiranmaComposer.Edit(removeBeforeCursor = 7, append = "'zh"),
+            DoublePinyinComposer.Edit(removeBeforeCursor = 7, append = "'zh"),
             composer.backspace()
         )
     }
@@ -80,5 +82,31 @@ class ZiranmaComposerTest {
         composer.reset()
 
         assertNull(composer.backspace())
+    }
+
+    @Test
+    fun acceptsSemicolonOnlyAsAConfiguredSecondKey() {
+        val microsoft = DoublePinyinComposer(DoublePinyinScheme.Microsoft)
+        assertFalse(microsoft.canType(';'))
+
+        microsoft.type('j', prependSeparator = false)
+        assertTrue(microsoft.canType(';'))
+        assertEquals(
+            DoublePinyinComposer.Edit(removeBeforeCursor = 1, append = "jing"),
+            microsoft.type(';', prependSeparator = false)
+        )
+    }
+
+    @Test
+    fun usesSchemeSpecificProvisionalInitials() {
+        val smartABC = DoublePinyinComposer(DoublePinyinScheme.SmartABC)
+        assertEquals(
+            DoublePinyinComposer.Edit(append = "zh"),
+            smartABC.type('a', prependSeparator = false)
+        )
+        assertEquals(
+            DoublePinyinComposer.Edit(removeBeforeCursor = 2, append = "zhuang"),
+            smartABC.type('t', prependSeparator = false)
+        )
     }
 }

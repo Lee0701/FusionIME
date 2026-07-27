@@ -133,6 +133,12 @@
     <string name="pinyin_layout_pinyin">Pinyin</string>
     <string name="pinyin_spelling_full">Full Pinyin</string>
     <string name="pinyin_spelling_ziranma">Ziranma Double Pinyin</string>
+    <string name="pinyin_spelling_microsoft">Microsoft Double Pinyin</string>
+    <string name="pinyin_spelling_smart_abc">Intelligent ABC Double Pinyin</string>
+    <string name="pinyin_spelling_jiajia">Pinyin Jiajia Double Pinyin</string>
+    <string name="pinyin_spelling_xiaohe">Xiaohe Double Pinyin</string>
+    <string name="pinyin_spelling_sogou">Sogou Double Pinyin</string>
+    <string name="pinyin_spelling_ziguang">Ziguang Double Pinyin</string>
     <string name="pinyin_chinese_simplified">Simplified</string>
     <string name="pinyin_chinese_traditional">Traditional</string>
 
