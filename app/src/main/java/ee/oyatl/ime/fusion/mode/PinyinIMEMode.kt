@@ -89,23 +89,27 @@ class PinyinIMEMode(
         KeyEvent.KEYCODE_SHIFT_LEFT to KeyEvent.KEYCODE_APOSTROPHE
     ))
 
+    private val hasSemicolonKey: Boolean = spelling.doublePinyinScheme?.acceptsFinal(';') == true
+
     override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
         mobile = KeyboardTemplate.Basic(
             configuration = KeyboardConfiguration(
                 if(numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
-                MobileKeyboard.alphabetic(),
+                MobileKeyboard.alphabetic(semicolon = hasSemicolonKey),
                 MobileKeyboard.bottom()
             ),
-            contentRows = (if(numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.DEFAULT,
+            contentRows = (if(numberRow) MobileKeyboardRows.NUMBERS else listOf()) +
+                    (if(hasSemicolonKey) MobileKeyboardRows.SEMICOLON else MobileKeyboardRows.DEFAULT),
             softKeyCodeMapper = softKeyCodeMapper
         ),
         tablet = KeyboardTemplate.Basic(
             configuration = KeyboardConfiguration(
                 if(numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
-                TabletKeyboard.alphabetic(delete = !numberRow),
+                TabletKeyboard.alphabetic(semicolon = hasSemicolonKey, delete = !numberRow),
                 TabletKeyboard.bottom()
             ),
-            contentRows = (if(numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.DEFAULT,
+            contentRows = (if(numberRow) TabletKeyboardRows.NUMBERS else listOf()) +
+                    (if(hasSemicolonKey) TabletKeyboardRows.SEMICOLON else TabletKeyboardRows.DEFAULT),
             softKeyCodeMapper = softKeyCodeMapper
         )
     )
@@ -194,6 +198,9 @@ class PinyinIMEMode(
             in 'a'.code..'z'.code -> {
                 processKeyCode(codePoint - 'a'.code + KeyEvent.KEYCODE_A)
             }
+            ';'.code -> {
+                processKeyCode(KeyEvent.KEYCODE_SEMICOLON)
+            }
             '\''.code -> {
                 processKeyCode(KeyEvent.KEYCODE_APOSTROPHE)
             }
@@ -260,6 +267,8 @@ class PinyinIMEMode(
             keyChar = '.'.code
         } else if (keyCode == KeyEvent.KEYCODE_SPACE) {
             keyChar = ' '.code
+        } else if(keyCode == KeyEvent.KEYCODE_SEMICOLON) {
+            keyChar = ';'.code
         } else if (keyCode == KeyEvent.KEYCODE_APOSTROPHE) {
             keyChar = '\''.code
         }
@@ -438,7 +447,7 @@ class PinyinIMEMode(
             }
         }
 
-        if (keyChar >= 'a'.code && keyChar <= 'z'.code || keyChar == '\''.code
+        if (keyChar >= 'a'.code && keyChar <= 'z'.code || keyChar == ';'.code || keyChar == '\''.code
             && !decInfo.charBeforeCursorIsSeparator() || keyCode == KeyEvent.KEYCODE_DEL
         ) {
             if (!realAction) return true
