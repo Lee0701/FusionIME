@@ -5,6 +5,7 @@
     <string name="settings_appearance_header">Appearance</string>
     <string name="settings_behaviour_header">Behaviour</string>
     <string name="settings_input_mode_header">Input Mode</string>
+    <string name="settings_info_header">Information</string>
 
     <string name="settings_method_enable_method_title">Enable Input Method</string>
     <string name="settings_method_enable_method_summary">Please enable \'FusionIME\'.</string>
@@ -64,6 +65,12 @@
     <string name="settings_input_mode_mozc_flick_mode_title">12-Key Flick Mode</string>
     <string name="settings_input_mode_syllables_key_layout_title">Syllables Key Layout</string>
     <string name="settings_input_mode_syllables_key_layout_summary">Choose Key Arrangement for Syllables or Iroha Layout.</string>
+
+    <string name="settings_info_app_info_title">App Info</string>
+    <string name="settings_info_version">Version&#160;</string>
+    <string name="settings_info_source_code_title">Source Code</string>
+    <string name="settings_info_contact_maintainer_title">Contact Maintainer</string>
+    <string name="settings_info_used_projectss_title">Used Projects</string>
 
     <string name="settings_dialog_keystroke_key_name">Key Name</string>
     <string name="settings_dialog_keystroke_key_code">Key Code</string>
