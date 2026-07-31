@@ -10,7 +10,7 @@ class SwipeInputEngine(
     context: Context,
     val listener: Listener
 ): SwipeListener {
-    val swipePredictor: SwipePredictor = SwipePredictor(context)
+    val swipePredictor: SwipePredictor = SwipePredictor(context, SwipePredictor.SearchEngineType.Beam)
 
     fun init() {
         swipePredictor.init()
@@ -38,14 +38,6 @@ class SwipeInputEngine(
     }
 
     override fun onSwipeMove(pointers: List<SwipeListener.Pointer>) {
-        val input = SwipeInput(
-            coordinates = pointers.map { PointF(it.x, it.y) },
-            timestamps = pointers.map { it.time },
-            touchedKeys = pointers.map { it.touchedKey }
-        )
-        val result = swipePredictor.predict(input)
-        val preview = result.firstOrNull()
-        if(preview != null) listener.onSwipePreview(preview.word)
     }
 
     interface Listener {

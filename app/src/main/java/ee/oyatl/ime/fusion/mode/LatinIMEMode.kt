@@ -529,7 +529,6 @@ abstract class LatinIMEMode(
     }
 
     override fun onSwipePreview(previewString: String) {
-        currentInputConnection?.setComposingText(previewString, 1)
     }
 
     override fun onSwipeResult(result: List<SwipePredictor.Result>) {

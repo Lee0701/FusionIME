@@ -8,9 +8,11 @@ import com.android.inputmethod.latin.DictionaryFactory
 import tribixbite.cleverkeys.SwipeInput
 import tribixbite.cleverkeys.SwipeTokenizer
 import tribixbite.cleverkeys.SwipeTrajectoryProcessor
+import tribixbite.cleverkeys.onnx.BeamSearchEngine
 import tribixbite.cleverkeys.onnx.EncoderWrapper
 import tribixbite.cleverkeys.onnx.GreedySearchEngine
 import tribixbite.cleverkeys.onnx.ModelLoader
+import tribixbite.cleverkeys.onnx.OrtDecoderSession
 import tribixbite.cleverkeys.onnx.TensorFactory
 import java.util.Locale
 import java.util.concurrent.locks.ReentrantReadWriteLock
@@ -18,12 +20,14 @@ import kotlin.concurrent.read
 import kotlin.concurrent.write
 
 class SwipePredictor(
-    context: Context
+    context: Context,
+    private val searchEngineType: SearchEngineType
 ) {
     val enableHardwareAcceleration = true
     val xnnPackThreads = 2
     val maxSequenceLength = 250
     val trajectoryFeatures = 6
+    val beamWidth = 6
     val maxLength = 20
     val encoderPath = "models/swipe_encoder_android.onnx"
     val decoderPath = "models/swipe_decoder_android.onnx"
@@ -37,10 +41,12 @@ class SwipePredictor(
 
     private var tensorFactory: TensorFactory? = null
     private var greedySearchEngine: GreedySearchEngine? = null
+    private var beamSearchEngine: BeamSearchEngine? = null
 
     private var isLoaded: Boolean = false
 
     private var encoderWrapper: EncoderWrapper? = null
+    private var ortDecoderSession: OrtDecoderSession? = null
     private var encoderSession: OrtSession? = null
     private var decoderSession: OrtSession? = null
 
@@ -61,7 +67,18 @@ class SwipePredictor(
             val encoderWrapper = EncoderWrapper(encoder.session, tensorFactory, ortEnvironment)
             this.encoderWrapper = encoderWrapper
 
-            this.greedySearchEngine = GreedySearchEngine(decoder.session, ortEnvironment, tokenizer, maxLength)
+            when (searchEngineType) {
+                SearchEngineType.Greedy -> {
+                    this.greedySearchEngine =
+                        GreedySearchEngine(decoder.session, ortEnvironment, tokenizer, maxLength)
+                }
+                SearchEngineType.Beam -> {
+                    val ortDecoderSession = OrtDecoderSession(decoder.session, ortEnvironment)
+                    this.ortDecoderSession = ortDecoderSession
+                    this.beamSearchEngine =
+                        BeamSearchEngine(ortDecoderSession, tokenizer, dictionary, beamWidth, maxLength)
+                }
+            }
 
             this.isLoaded = true
         }
@@ -72,16 +89,25 @@ class SwipePredictor(
             if(!isLoaded) return emptyList()
 
             val encoder = encoderWrapper ?: return emptyList()
-            val decoder = decoderSession ?: return emptyList()
-            val greedySearchEngine = greedySearchEngine ?: return emptyList()
 
             val features = trajectoryProcessor.extractFeatures(input, maxSequenceLength)
             val encoderResult = encoder.encode(features)
 
-            val firstDetectedKey = features.nearestKeys.firstOrNull { it in 4 .. 29 }?.let { 'a' + (it - 4) }
-
             val candidates = encoderResult.use { encoderResult ->
-                greedySearchEngine.search(encoderResult.memory, features.actualLength)
+                when (searchEngineType) {
+                    SearchEngineType.Greedy -> {
+                        val greedySearchEngine = greedySearchEngine ?: return emptyList()
+                        val results = greedySearchEngine.search(encoderResult.memory, features.actualLength)
+                        results.map { SearchResult(it.word, it.confidence) }
+                    }
+                    SearchEngineType.Beam -> {
+                        val beamSearchEngine = beamSearchEngine ?: return emptyList()
+                        val decoderSession = ortDecoderSession ?: return  emptyList()
+                        decoderSession.setMemory(encoderResult.memory)
+                        val results = beamSearchEngine.search(features.actualLength, false)
+                        results.map { SearchResult(it.word, it.confidence) }
+                    }
+                }
             }
 
             candidates
@@ -90,8 +116,17 @@ class SwipePredictor(
         }
     }
 
+    data class SearchResult(
+        val word: String,
+        val confidence: Float
+    )
+
     data class Result(
         val word: String,
         val score: Int
     )
+
+    enum class SearchEngineType {
+        Greedy, Beam
+    }
 }
