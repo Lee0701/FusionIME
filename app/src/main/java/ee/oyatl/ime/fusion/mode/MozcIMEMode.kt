@@ -14,6 +14,7 @@ import ee.oyatl.ime.candidate.VerticalScrollingCandidateView
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.layout.ExtKeyCode
 import ee.oyatl.ime.fusion.layout.LayoutExt
+import ee.oyatl.ime.fusion.layout.LayoutGodan
 import ee.oyatl.ime.fusion.layout.LayoutKana
 import ee.oyatl.ime.fusion.layout.LayoutRomaji
 import ee.oyatl.ime.fusion.layout.MobileKeyboard
@@ -304,6 +305,91 @@ abstract class MozcIMEMode(
         }
     }
 
+
+    class Godan(
+        listener: IMEMode.Listener,
+        candidateViewHeight: Int
+    ): MozcIMEMode(listener, candidateViewHeight) {
+        override val keyboardSpecification: KeyboardSpecification =
+            KeyboardSpecification.GODAN_KANA
+
+        override val textLayoutTable: LayoutTable =
+            LayoutTable.from(LayoutGodan.TABLE)
+
+        override val textKeyboardTemplate: KeyboardTemplate =
+            KeyboardTemplate.ByScreenMode(
+                mobile = KeyboardTemplate.Basic(
+                    configuration = LayoutGodan.mobileKeyboardConfiguration(),
+                    contentRows = emptyList()
+                )
+            )
+
+        override val keyLabels: Map<Int, String>
+            get() =
+                if(symbolState == Symbol.Text) super.keyLabels + LayoutGodan.LABELS
+                else super.keyLabels
+
+        private val flicks: MutableMap<Int, Int> = mutableMapOf()
+
+        override fun createTouchHandler(
+            keyboardView: TouchHandler.KeyboardViewInterface,
+            context: Context,
+            symbolState: Symbol
+        ): TouchHandler {
+            if(symbolState != Symbol.Text) {
+                return super.createTouchHandler(keyboardView, context, symbolState)
+            }
+
+            val preference = PreferenceManager.getDefaultSharedPreferences(context)
+            val defaultValue =
+                context.resources.getInteger(R.integer.flick_sensitivity_default).toFloat()
+            val flickSensitivity =
+                preference.getFloat("flick_sensitivity", defaultValue).toInt()
+
+            return FlickTouchHandler(
+                keyboardView,
+                flickSensitivity,
+                diagonal = false,
+                multiFlick = false,
+                sendOnUp = true
+            )
+        }
+
+        override fun onKeyDown(keyCode: Int, metaState: Int) {
+            val isFlick = keyCode and FlickKeyCode.FLAG_FLICK != 0
+            if(!isFlick) {
+                if(keyCode <= 0 || !keyCharacterMap.isPrintingKey(keyCode)) {
+                    return super.onKeyDown(keyCode, metaState)
+                }
+            } else if(symbolState != Symbol.Text) {
+                return super.onKeyDown(keyCode, metaState)
+            }
+        }
+
+        override fun onKeyUp(keyCode: Int, metaState: Int) {
+            val isFlick = keyCode and FlickKeyCode.FLAG_FLICK != 0
+
+            if(!isFlick) {
+                if(keyCode <= 0 || !keyCharacterMap.isPrintingKey(keyCode)) {
+                    return super.onKeyUp(keyCode, metaState)
+                }
+            }
+
+            if(isFlick) {
+                val code = keyCode and FlickKeyCode.MASK_KEYCODE
+                val direction = keyCode and FlickKeyCode.MASK_DIRECTION
+                flicks[code] = direction
+                return
+            }
+
+            val direction = flicks.remove(keyCode) ?: FlickKeyCode.DIRECTION_NONE
+            val mappedKey = keyCode or direction
+            val charCode = currentLayoutTable[mappedKey]?.forShiftState(shiftState)
+            val default = keyCharacterMap.get(keyCode, metaState)
+            onChar(charCode ?: default)
+        }
+    }
+
     class KanaJIS(
         listener: IMEMode.Listener,
         candidateViewHeight: Int
@@ -367,6 +453,7 @@ abstract class MozcIMEMode(
             return when(layout) {
                 Layout.RomajiQwerty -> RomajiQwerty(listener, candidateViewHeight, numberRow)
                 Layout.Kana12Key -> Kana12Key(listener, candidateViewHeight, flickMode)
+                Layout.Godan -> Godan(listener, candidateViewHeight)
                 Layout.KanaJIS -> KanaJIS(listener, candidateViewHeight)
                 Layout.KanaSyllables -> KanaSyllables(listener, candidateViewHeight, LayoutKana.KEYS_AIUEO, syllablesKeyLayout)
                 Layout.KanaIroha -> KanaSyllables(listener, candidateViewHeight, LayoutKana.KEYS_IROHA, syllablesKeyLayout)
@@ -387,6 +474,7 @@ abstract class MozcIMEMode(
             return when(layout) {
                 Layout.RomajiQwerty -> "あQ"
                 Layout.Kana12Key -> "あK"
+                Layout.Godan -> "あG"
                 Layout.KanaJIS -> "JIS"
                 Layout.KanaSyllables -> "あいう"
                 Layout.KanaIroha -> "いろは"
@@ -416,6 +504,7 @@ abstract class MozcIMEMode(
     ) {
         RomajiQwerty(R.string.mozc_layout_romaji_qwerty),
         Kana12Key(R.string.mozc_layout_kana_12key),
+        Godan(R.string.mozc_layout_godan),
         KanaJIS(R.string.mozc_layout_kana_jis),
         KanaSyllables(R.string.mozc_layout_kana_syllables),
         KanaIroha(R.string.mozc_layout_kana_iroha)
