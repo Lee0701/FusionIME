@@ -29,5 +29,6 @@ interface TouchHandler {
         val labels: Map<Int, String>
         val icons: Map<Int, Int>
         fun findKey(x: Int, y: Int): KeyInterface?
+        fun findKey(keyCode: Int): KeyInterface?
     }
 }

@@ -52,8 +52,6 @@ class ShiftStateManager(
             KeyEvent.KEYCODE_DEL -> onDeleteReleased(keyCode)
             KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.KEYCODE_SHIFT_RIGHT -> onShiftReleased(keyCode)
             else -> {
-                listener.onKeyDown(keyCode, metaState)
-                listener.onKeyUp(keyCode, metaState)
                 autoReleaseShift()
             }
         }

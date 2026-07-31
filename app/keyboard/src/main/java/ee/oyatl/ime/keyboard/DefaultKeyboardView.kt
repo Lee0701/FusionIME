@@ -177,6 +177,12 @@ class DefaultKeyboardView(
         }
     }
 
+    override fun findKey(keyCode: Int): TouchHandler.KeyInterface? {
+        return keySet.find { key ->
+            key.keyCode == keyCode
+        }
+    }
+
     data class CachedKey(
         override val keyCode: Int,
         val binding: KbdKeyBinding

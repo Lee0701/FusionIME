@@ -16,6 +16,8 @@ legacySupportV4 = "1.0.0"
 annotation = "1.10.0"
 preference = "1.2.1"
 desugarJdkLibs = "2.1.5"
+gson = "2.14.0"
+onnxruntimeAndroid = "1.28.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -33,6 +35,8 @@ androidx-legacy-support-v4 = { group = "androidx.legacy", name = "legacy-support
 androidx-annotation = { group = "androidx.annotation", name = "annotation", version.ref = "annotation" }
 androidx-preference = { group = "androidx.preference", name = "preference", version.ref = "preference" }
 desugar-jdk-libs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "desugarJdkLibs" }
+gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
+onnxruntime-android = { group = "com.microsoft.onnxruntime", name = "onnxruntime-android", version.ref = "onnxruntimeAndroid" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

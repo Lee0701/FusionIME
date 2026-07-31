@@ -43,11 +43,19 @@ import ee.oyatl.ime.fusion.layout.MobileKeyboard
 import ee.oyatl.ime.fusion.layout.MobileKeyboardRows
 import ee.oyatl.ime.fusion.layout.TabletKeyboard
 import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
+import ee.oyatl.ime.fusion.swipe.SwipeInputEngine
+import ee.oyatl.ime.keyboard.KeyboardState
+import ee.oyatl.ime.keyboard.listener.CompoundKeyboardListener
+import ee.oyatl.ime.keyboard.listener.KeyboardListener
+import ee.oyatl.ime.keyboard.listener.SwipeListener
+import ee.oyatl.ime.keyboard.touchhandler.SwipeTouchHandler
+import ee.oyatl.ime.keyboard.touchhandler.TouchHandler
+import tribixbite.cleverkeys.swipe.SwipePredictor
 import java.util.Locale
 
 abstract class LatinIMEMode(
     private val listener: IMEMode.Listener
-): CommonIMEMode(listener), ILatinIME {
+): CommonIMEMode(listener), ILatinIME, SwipeInputEngine.Listener {
     abstract val locale: Locale
     override var context: Context? = null
 
@@ -57,6 +65,8 @@ abstract class LatinIMEMode(
     private var richImm: RichInputMethodManager? = null
     override var keyboardSwitcher: KeyboardSwitcher? = null
     override var inputLogic: InputLogic? = null
+
+    private var swipeInputEngine: SwipeInputEngine? = null
 
     private val keyboardParams: KeyboardParams = KeyboardParams().apply {
         mOccupiedWidth = 1
@@ -82,6 +92,9 @@ abstract class LatinIMEMode(
         KeyboardSwitcher.init(this)
         keyboardSwitcher = KeyboardSwitcher.getInstance()
         inputLogic = InputLogic(this, this, dictionaryFacilitator)
+
+        this.swipeInputEngine = SwipeInputEngine(context, this)
+        this.swipeInputEngine?.init()
     }
 
     override fun onStart(inputConnection: InputConnection, editorInfo: EditorInfo) {
@@ -489,6 +502,50 @@ abstract class LatinIMEMode(
     override fun enableHardwareAcceleration(): Boolean {
         val context = this.context
         return context is InputMethodService && context.enableHardwareAcceleration()
+    }
+
+    override fun createKeyboardListener(
+        context: Context,
+        params: ee.oyatl.ime.keyboard.KeyboardParams
+    ): KeyboardListener {
+        return CompoundKeyboardListener(
+            object: SwipeListener.Delegate() {
+                override fun onSwipeStart() = swipeInputEngine?.onSwipeStart() ?: Unit
+                override fun onSwipeMove(pointers: List<SwipeListener.Pointer>) = swipeInputEngine?.onSwipeMove(pointers) ?: Unit
+                override fun onSwipeEnd(pointers: List<SwipeListener.Pointer>) = swipeInputEngine?.onSwipeEnd(pointers) ?: Unit
+            }
+        ) + super.createKeyboardListener(context, params)
+    }
+
+    override fun createTouchHandler(
+        keyboardView: TouchHandler.KeyboardViewInterface,
+        context: Context,
+        symbolState: KeyboardState.Symbol
+    ): TouchHandler {
+        if(symbolState == KeyboardState.Symbol.Text) {
+            return SwipeTouchHandler(keyboardView)
+        }
+        return super.createTouchHandler(keyboardView, context, symbolState)
+    }
+
+    override fun onSwipePreview(previewString: String) {
+        currentInputConnection?.setComposingText(previewString, 1)
+    }
+
+    override fun onSwipeResult(result: List<SwipePredictor.Result>) {
+        val candidates = result.mapIndexed { index, result ->
+            val suggestedWordInfo = SuggestedWords.SuggestedWordInfo(
+                result.word,
+                null,
+                result.score,
+                SuggestedWords.SuggestedWordInfo.KIND_COMPLETION,
+                null,
+                SuggestedWords.SuggestedWordInfo.NOT_AN_INDEX,
+                if(index == 0) SuggestedWords.SuggestedWordInfo.MAX_SCORE else SuggestedWords.SuggestedWordInfo.NOT_A_CONFIDENCE
+            )
+            LatinCandidate(index, suggestedWordInfo)
+        }
+        submitCandidates(candidates)
     }
 
     data class LatinCandidate(
