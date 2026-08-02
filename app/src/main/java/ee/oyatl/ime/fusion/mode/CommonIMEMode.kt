@@ -34,6 +34,7 @@ import ee.oyatl.ime.keyboard.KeyboardView
 import ee.oyatl.ime.keyboard.LayoutTable
 import ee.oyatl.ime.keyboard.SwitcherKeyboardView
 import ee.oyatl.ime.keyboard.listener.CompoundKeyboardListener
+import ee.oyatl.ime.keyboard.listener.InputOnKeyUp
 import ee.oyatl.ime.keyboard.listener.KeyFeedbackManager
 import ee.oyatl.ime.keyboard.listener.KeyboardListener
 import ee.oyatl.ime.keyboard.listener.ShiftStateManager
@@ -306,8 +307,9 @@ abstract class CommonIMEMode(
 
     open fun createKeyboardListener(context: Context, params: KeyboardParams): KeyboardListener {
         return CompoundKeyboardListener(
+            KeyFeedbackManager(context, params),
             ShiftStateManager(this, params),
-            KeyFeedbackManager(context, params)
+            InputOnKeyUp(this)
         )
     }
 
@@ -356,7 +358,7 @@ abstract class CommonIMEMode(
         }
     }
 
-    override fun onKeyDown(keyCode: Int, metaState: Int) {
+    override fun onKeyDown(keyCode: Int, metaState: Int): Boolean {
         if(keyCode == KeyEvent.KEYCODE_SHIFT_LEFT || keyCode == KeyEvent.KEYCODE_SHIFT_RIGHT) {
             shiftState = KeyboardState.Shift.Pressed
         } else if(keyCode == KeyEvent.KEYCODE_CAPS_LOCK) {
@@ -387,13 +389,15 @@ abstract class CommonIMEMode(
             onSpecial(keyCode)
         }
         updateInputView()
+        return true
     }
 
-    override fun onKeyUp(keyCode: Int, metaState: Int) {
+    override fun onKeyUp(keyCode: Int, metaState: Int): Boolean {
         if(keyCode == KeyEvent.KEYCODE_SHIFT_LEFT || keyCode == KeyEvent.KEYCODE_SHIFT_RIGHT) {
             shiftState = KeyboardState.Shift.Released
         }
         updateInputView()
+        return true
     }
 
     protected fun submitCandidates(candidates: List<CandidateView.Candidate>) {

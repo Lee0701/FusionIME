@@ -40,21 +40,35 @@ class ShiftStateManager(
         KeyboardState.Shift.Locked -> KeyEvent.META_CAPS_LOCK_ON
     }
 
-    override fun onKeyDown(keyCode: Int, metaState: Int) {
+    override fun onKeyDown(keyCode: Int, metaState: Int): Boolean {
         when(keyCode and FlickKeyCode.MASK_KEYCODE) {
-            KeyEvent.KEYCODE_DEL -> onDeletePressed(keyCode)
-            KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.KEYCODE_SHIFT_RIGHT -> onShiftPressed(keyCode)
+            KeyEvent.KEYCODE_DEL -> {
+                onDeletePressed(keyCode)
+                return true
+            }
+            KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.KEYCODE_SHIFT_RIGHT -> {
+                onShiftPressed(keyCode)
+                return true
+            }
+            else -> {
+                return false
+            }
         }
     }
 
-    override fun onKeyUp(keyCode: Int, metaState: Int) {
+    override fun onKeyUp(keyCode: Int, metaState: Int): Boolean {
         when(keyCode and FlickKeyCode.MASK_KEYCODE) {
-            KeyEvent.KEYCODE_DEL -> onDeleteReleased(keyCode)
-            KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.KEYCODE_SHIFT_RIGHT -> onShiftReleased(keyCode)
+            KeyEvent.KEYCODE_DEL -> {
+                onDeleteReleased(keyCode)
+                return true
+            }
+            KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.KEYCODE_SHIFT_RIGHT -> {
+                onShiftReleased(keyCode)
+                return true
+            }
             else -> {
-                listener.onKeyDown(keyCode, metaState)
-                listener.onKeyUp(keyCode, metaState)
                 autoReleaseShift()
+                return false
             }
         }
     }

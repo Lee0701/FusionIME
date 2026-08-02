@@ -271,7 +271,7 @@ abstract class MozcIMEMode(
             }
         }
 
-        override fun onKeyDown(keyCode: Int, metaState: Int) {
+        override fun onKeyDown(keyCode: Int, metaState: Int): Boolean {
             val isFlick = keyCode and FlickKeyCode.FLAG_FLICK != 0
             if(!isFlick) {
                 if(keyCode <= 0 || !keyCharacterMap.isPrintingKey(keyCode)) {
@@ -280,9 +280,10 @@ abstract class MozcIMEMode(
             } else if(symbolState != Symbol.Text) {
                 return super.onKeyDown(keyCode, metaState)
             }
+            return false
         }
 
-        override fun onKeyUp(keyCode: Int, metaState: Int) {
+        override fun onKeyUp(keyCode: Int, metaState: Int): Boolean {
             val isFlick = keyCode and FlickKeyCode.FLAG_FLICK != 0
             if(!isFlick) {
                 if(keyCode <= 0 || !keyCharacterMap.isPrintingKey(keyCode)) {
@@ -301,6 +302,7 @@ abstract class MozcIMEMode(
                 onChar(charCode ?: default)
                 this.flicks -= keyCode
             }
+            return false
         }
     }
 
