@@ -34,6 +34,7 @@ import ee.oyatl.ime.keyboard.KeyboardView
 import ee.oyatl.ime.keyboard.LayoutTable
 import ee.oyatl.ime.keyboard.SwitcherKeyboardView
 import ee.oyatl.ime.keyboard.listener.CompoundKeyboardListener
+import ee.oyatl.ime.keyboard.listener.DeleteRepeater
 import ee.oyatl.ime.keyboard.listener.InputOnKeyUp
 import ee.oyatl.ime.keyboard.listener.KeyFeedbackManager
 import ee.oyatl.ime.keyboard.listener.KeyboardListener
@@ -308,6 +309,7 @@ abstract class CommonIMEMode(
     open fun createKeyboardListener(context: Context, params: KeyboardParams): KeyboardListener {
         return CompoundKeyboardListener(
             KeyFeedbackManager(context, params),
+            DeleteRepeater(this, params),
             ShiftStateManager(this, params),
             InputOnKeyUp(this)
         )
