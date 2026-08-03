@@ -115,7 +115,7 @@ object LayoutKana {
         KeyEvent.KEYCODE_5 to "5k%jl",
         KeyEvent.KEYCODE_6 to "6n&mo",
         KeyEvent.KEYCODE_7 to "7qspr",
-        KeyEvent.KEYCODE_8 to "8u%tv",
+        KeyEvent.KEYCODE_8 to "8u^tv",
         KeyEvent.KEYCODE_9 to "9xzwy",
         KeyEvent.KEYCODE_0 to "0/<+-",
         KeyEvent.KEYCODE_COMMA to "*****",
