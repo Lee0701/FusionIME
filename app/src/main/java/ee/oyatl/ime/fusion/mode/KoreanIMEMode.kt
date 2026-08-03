@@ -9,6 +9,7 @@ import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.hangul.HangulCombiner
 import ee.oyatl.ime.fusion.korean.BigramHanjaConverter
+import ee.oyatl.ime.fusion.korean.HangulPredictor
 import ee.oyatl.ime.fusion.korean.HanjaConverter
 import ee.oyatl.ime.fusion.korean.JeongUnHanjaConverter
 import ee.oyatl.ime.fusion.korean.UnigramHanjaConverter
@@ -359,7 +360,8 @@ abstract class KoreanIMEMode(
         companion object {
             fun parse(map: Map<String, String>): Params {
                 val layout = Layout.entries.find { it.name == map["layout"] } ?: Layout.Set2KS
-                val converterType = ConverterType.valueOf(map["converter"] ?: ConverterType.Word.name)
+//                val converterType = ConverterType.valueOf(map["converter"] ?: ConverterType.Word.name)
+                val converterType = ConverterType.HangulOnly
                 val correctOrders = (map["correct_orders"] ?: "false").toBoolean()
                 val numberRow = map["number_row"]?.toBoolean() ?: false
                 return Params(
@@ -384,13 +386,14 @@ abstract class KoreanIMEMode(
     }
 
     enum class ConverterType {
-        Word, Phrase, JeongUn;
+        Word, Phrase, JeongUn, HangulOnly;
 
         fun create(): HanjaConverter {
             return when(this) {
                 Word -> UnigramHanjaConverter()
                 Phrase -> BigramHanjaConverter()
                 JeongUn -> JeongUnHanjaConverter()
+                HangulOnly -> HangulPredictor()
             }
         }
     }
