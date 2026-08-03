@@ -62,6 +62,8 @@
     <string name="settings_input_mode_candidate_view_height_title">Candidate View Height</string>
     <string name="settings_input_mode_chinese_traditional_title">Chinese Traditional</string>
     <string name="settings_input_mode_mozc_flick_mode_title">12-Key Flick Mode</string>
+    <string name="settings_input_mode_mozc_flick_hint_title">Flick Hints</string>
+    <string name="settings_input_mode_mozc_flick_hint_summary">Show flick hints on 12-Key or GODAN layouts.</string>
     <string name="settings_input_mode_syllables_key_layout_title">Syllables Key Layout</string>
     <string name="settings_input_mode_syllables_key_layout_summary">Choose Key Arrangement for Syllables or Iroha Layout.</string>
 

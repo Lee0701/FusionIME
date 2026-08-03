@@ -43,10 +43,12 @@ class DefaultKeyboardView(
                     }
                     is KeyLabel.Flick -> {
                         if(label.text != null) it.binding.label.text = label.text
-                        if(label.up != null) it.binding.labelHintTop.text = label.up
-                        if(label.down != null) it.binding.labelHintBottom.text = label.down
-                        if(label.left != null) it.binding.labelHintLeft.text = label.left
-                        if(label.right != null) it.binding.labelHintRight.text = label.right
+                        if(label.showAsHint) {
+                            if(label.up != null) it.binding.labelHintTop.text = label.up
+                            if(label.down != null) it.binding.labelHintBottom.text = label.down
+                            if(label.left != null) it.binding.labelHintLeft.text = label.left
+                            if(label.right != null) it.binding.labelHintRight.text = label.right
+                        }
                     }
                 }
             }
