@@ -3,7 +3,6 @@ package ee.oyatl.ime.keyboard.listener
 import android.os.Handler
 import android.os.Looper
 import android.view.KeyEvent
-import ee.oyatl.ime.keyboard.FlickKeyCode
 import ee.oyatl.ime.keyboard.KeyboardParams
 import ee.oyatl.ime.keyboard.touchhandler.FlickDirection
 

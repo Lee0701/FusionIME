@@ -10,7 +10,6 @@ import android.os.VibratorManager
 import android.view.KeyEvent
 import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresPermission
-import ee.oyatl.ime.keyboard.FlickKeyCode
 import ee.oyatl.ime.keyboard.KeyboardParams
 import kotlin.math.min
 
