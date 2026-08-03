@@ -99,20 +99,12 @@ class DefaultKeyboardView(
                         view.layoutParams = createLayoutParams(item.width, keyHeight)
                         subRow.root.addView(view)
                     }
-                    is Keyboard.KeyItem.SpecialKey -> {
-                        val type = SpecialKeyType.ofKeyCode(item.keyCode) ?: SpecialKeyType.Default
-                        val themedInflater = LayoutInflater.from(ContextThemeWrapper(context, type.themeRes))
-                        val key = KbdKeyBinding.inflate(themedInflater)
-                        if(type.iconRes != null) key.icon.setImageResource(type.iconRes)
-                        keySet += CachedKey(item.keyCode, key)
-                        key.root.layoutParams = createLayoutParams(item.width, keyHeight)
-                        subRow.root.addView(key.root)
-                    }
                     is Keyboard.KeyItem.Key -> {
-                        val themedInflater = LayoutInflater.from(ContextThemeWrapper(context, R.style.Theme_FusionIME_Keyboard_Key))
+                        val themedInflater = LayoutInflater.from(ContextThemeWrapper(context, item.themeRes))
                         val key = KbdKeyBinding.inflate(themedInflater)
-                        keySet += CachedKey(item.keyCode, key)
+                        if(item.iconRes != 0) key.icon.setImageResource(item.iconRes)
                         if(item.keyCode < 0) key.label.text = (-item.keyCode).toChar().toString()
+                        keySet += CachedKey(item.keyCode, key)
                         key.root.layoutParams = createLayoutParams(item.width, keyHeight)
                         subRow.root.addView(key.root)
                     }
