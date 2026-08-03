@@ -178,7 +178,7 @@ abstract class KoreanIMEMode(
         listener: IMEMode.Listener
     ): Hangul2SetKSCompatible(converterType, numberRow, listener) {
         override val hangulCombiner: HangulCombiner = HangulCombiner(Hangul2Set.COMB_KS, correctOrders)
-        override val textLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + Hangul2Set.TABLE_KS)
+        override val textLayoutTable: LayoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + Hangul2Set.TABLE_KS)
     }
 
     /*
@@ -215,7 +215,7 @@ abstract class KoreanIMEMode(
     ): Hangul3Set390391(listener) {
         override val hangulCombiner: HangulCombiner = HangulCombiner(Hangul3Set.COMBINATION_390_391, correctOrders)
         override val hanjaConverter: HanjaConverter = converterType.create()
-        override val textLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + Hangul3Set.TABLE_390)
+        override val textLayoutTable: LayoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + Hangul3Set.TABLE_390)
         override val softKeyCodeMapper: SoftKeyCodeMapper get() = SoftKeyCodeMapper(mapOf(
             KeyEvent.KEYCODE_B to ExtKeyCode.KEYCODE_390_0,
             KeyEvent.KEYCODE_N to ExtKeyCode.KEYCODE_390_1,
@@ -231,7 +231,7 @@ abstract class KoreanIMEMode(
     ): Hangul3Set390391(listener) {
         override val hangulCombiner: HangulCombiner = HangulCombiner(Hangul3Set.COMBINATION_390_391, correctOrders)
         override val hanjaConverter: HanjaConverter = converterType.create()
-        override val textLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + Hangul3Set.TABLE_391)
+        override val textLayoutTable: LayoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + Hangul3Set.TABLE_391)
     }
 
     class Hangul3Set391Strict(
@@ -241,7 +241,7 @@ abstract class KoreanIMEMode(
     ): Hangul3Set390391(listener) {
         override val hangulCombiner: HangulCombiner = HangulCombiner(Hangul3Set.COMBINATION_391_STRICT, correctOrders)
         override val hanjaConverter: HanjaConverter = converterType.create()
-        override val textLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + Hangul3Set.TABLE_391_STRICT)
+        override val textLayoutTable: LayoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + Hangul3Set.TABLE_391_STRICT)
     }
 
     class HangulOld2Set(
@@ -251,7 +251,7 @@ abstract class KoreanIMEMode(
         listener: IMEMode.Listener
     ): Hangul2SetKSCompatible(converterType, numberRow, listener) {
         override val hangulCombiner: HangulCombiner = HangulCombiner(HangulOld.COMB_FULL, correctOrders)
-        override val textLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + HangulOld.TABLE_OLD_2SET)
+        override val textLayoutTable: LayoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + HangulOld.TABLE_OLD_2SET)
     }
 
     class HangulOld3Set393(
@@ -261,7 +261,7 @@ abstract class KoreanIMEMode(
     ): Hangul3Set390391(listener) {
         override val hangulCombiner: HangulCombiner = HangulCombiner(HangulOld.COMB_FULL, correctOrders)
         override val hanjaConverter: HanjaConverter = converterType.create()
-        override val textLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + HangulOld.TABLE_OLD_393)
+        override val textLayoutTable: LayoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + HangulOld.TABLE_OLD_393)
         override val softKeyCodeMapper: SoftKeyCodeMapper get() = SoftKeyCodeMapper(mapOf(
             KeyEvent.KEYCODE_B to ExtKeyCode.KEYCODE_390_0,
             KeyEvent.KEYCODE_N to ExtKeyCode.KEYCODE_390_1,

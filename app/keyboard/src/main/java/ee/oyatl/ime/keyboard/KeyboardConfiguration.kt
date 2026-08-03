@@ -23,7 +23,9 @@ data class KeyboardConfiguration(
         data class TemplateKey(
             val keyCode: Int,
             val width: Float = 1f,
-            val special: Boolean = false
+            val special: Boolean = false,
+            val label: String? = null,
+            val iconRes: Int? = null
         ): Item
     }
 }

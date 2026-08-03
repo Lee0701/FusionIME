@@ -1,6 +1,8 @@
 package ee.oyatl.ime.keyboard.touchhandler
 
-import ee.oyatl.ime.keyboard.FlickKeyCode
+import ee.oyatl.ime.keyboard.KeyLabel
+import ee.oyatl.ime.keyboard.KeyboardView
+import ee.oyatl.ime.keyboard.listener.FlickListener
 import ee.oyatl.ime.keyboard.popup.Popup
 import ee.oyatl.ime.keyboard.popup.PreviewPopup
 import kotlin.math.PI
@@ -9,7 +11,7 @@ import kotlin.math.pow
 import kotlin.math.sqrt
 
 class FlickTouchHandler(
-    override val keyboardView: TouchHandler.KeyboardViewInterface,
+    override val keyboardView: KeyboardView,
     val threshold: Int,
     val diagonal: Boolean = false,
     val multiFlick: Boolean = false,
@@ -51,13 +53,14 @@ class FlickTouchHandler(
                 val flicks = pointer.flicks.toMutableList()
                 if(direction != lastDirection && (multiFlick || flicks.isEmpty())) {
                     if(pointer.key != null && pointer.key.keyCode >= 0) {
-                        val keyCode = FlickKeyCode.FLAG_FLICK or direction.keyCodeFlag or pointer.key.keyCode
                         if(pointer.popup is PreviewPopup) {
-                            val newLabel = keyboardView.labels[direction.keyCodeFlag or pointer.key.keyCode]
-                            if(newLabel != null) pointer.popup.label = newLabel
+                            val newLabel = keyboardView.labels[pointer.key.keyCode]
+                            if(newLabel is KeyLabel.Flick) newLabel.forDirection(direction)?.let { pointer.popup.label = it }
                         }
-                        keyboardView.listener.onKeyDown(keyCode, 0)
-                        keyboardView.listener.onKeyUp(keyCode, 0)
+                        val listener = keyboardView.listener
+                        if(listener is FlickListener) {
+                            listener.onFlick(pointer.key.keyCode, direction)
+                        }
                     }
                     flicks += direction
                 }

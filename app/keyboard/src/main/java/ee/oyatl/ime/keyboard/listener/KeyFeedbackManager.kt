@@ -10,7 +10,6 @@ import android.os.VibratorManager
 import android.view.KeyEvent
 import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresPermission
-import ee.oyatl.ime.keyboard.FlickKeyCode
 import ee.oyatl.ime.keyboard.KeyboardParams
 import kotlin.math.min
 
@@ -27,8 +26,7 @@ class KeyFeedbackManager(
     private val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
     private var downTime: Long = 0
 
-    override fun onKeyDown(keyCode: Int, metaState: Int) {
-        if(keyCode >= 0 && keyCode and FlickKeyCode.FLAG_FLICK != 0) return
+    override fun onKeyDown(keyCode: Int, metaState: Int): Boolean {
         downTime = System.currentTimeMillis()
         if(params.vibrationDuration > 0) {
             vibrate(params.vibrationDuration)
@@ -42,15 +40,16 @@ class KeyFeedbackManager(
             }
             audioManager.playSoundEffect(fx, params.soundVolume)
         }
+        return false
     }
 
-    override fun onKeyUp(keyCode: Int, metaState: Int) {
-        if(keyCode >= 0 && keyCode and FlickKeyCode.FLAG_FLICK != 0) return
+    override fun onKeyUp(keyCode: Int, metaState: Int): Boolean {
         val diff = System.currentTimeMillis() - downTime
         if(params.vibrationDuration > 0) {
             val duration = params.vibrationDuration / 5f * min(diff / 100f, 1f)
             vibrate(duration.toLong())
         }
+        return false
     }
 
     override fun onReset() = Unit
