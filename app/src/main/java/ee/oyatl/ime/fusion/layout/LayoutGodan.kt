@@ -1,7 +1,7 @@
 package ee.oyatl.ime.fusion.layout
 
 import android.view.KeyEvent
-import ee.oyatl.ime.keyboard.FlickKeyCode
+import ee.oyatl.ime.keyboard.KeyLabel
 import ee.oyatl.ime.keyboard.KeyboardConfiguration
 
 /**
@@ -64,178 +64,117 @@ object LayoutGodan {
         // Left: vowel + small tsu
         // Up: vowel + n
         // Right: small vowel / contracted sound
-        KeyEvent.KEYCODE_A or FlickKeyCode.DIRECTION_NONE to listOf('a'.code),
-        KeyEvent.KEYCODE_A or FlickKeyCode.DIRECTION_LEFT to listOf('$'.code),
-        KeyEvent.KEYCODE_A or FlickKeyCode.DIRECTION_UP to listOf('<'.code),
-        KeyEvent.KEYCODE_A or FlickKeyCode.DIRECTION_RIGHT to listOf('#'.code),
+        KeyEvent.KEYCODE_A to listOf('a'.code, '<'.code, '1'.code, '$'.code, '#'.code),
+        KeyEvent.KEYCODE_I to listOf('i'.code, '>'.code, '4'.code, '%'.code, '+'.code),
+        KeyEvent.KEYCODE_U to listOf('u'.code, '{'.code, '7'.code, '&'.code, '^'.code),
+        KeyEvent.KEYCODE_E to listOf('e'.code, '}'.code, 0, '='.code, '_'.code),
+        KeyEvent.KEYCODE_O to listOf('o'.code, '~'.code, 0, '@'.code, '|'.code),
 
-        KeyEvent.KEYCODE_I or FlickKeyCode.DIRECTION_NONE to listOf('i'.code),
-        KeyEvent.KEYCODE_I or FlickKeyCode.DIRECTION_LEFT to listOf('%'.code),
-        KeyEvent.KEYCODE_I or FlickKeyCode.DIRECTION_UP to listOf('>'.code),
-        KeyEvent.KEYCODE_I or FlickKeyCode.DIRECTION_RIGHT to listOf('+'.code),
-
-        KeyEvent.KEYCODE_U or FlickKeyCode.DIRECTION_NONE to listOf('u'.code),
-        KeyEvent.KEYCODE_U or FlickKeyCode.DIRECTION_LEFT to listOf('&'.code),
-        KeyEvent.KEYCODE_U or FlickKeyCode.DIRECTION_UP to listOf('{'.code),
-        KeyEvent.KEYCODE_U or FlickKeyCode.DIRECTION_RIGHT to listOf('^'.code),
-
-        KeyEvent.KEYCODE_E or FlickKeyCode.DIRECTION_NONE to listOf('e'.code),
-        KeyEvent.KEYCODE_E or FlickKeyCode.DIRECTION_LEFT to listOf('='.code),
-        KeyEvent.KEYCODE_E or FlickKeyCode.DIRECTION_UP to listOf('}'.code),
-        KeyEvent.KEYCODE_E or FlickKeyCode.DIRECTION_RIGHT to listOf('_'.code),
-
-        KeyEvent.KEYCODE_O or FlickKeyCode.DIRECTION_NONE to listOf('o'.code),
-        KeyEvent.KEYCODE_O or FlickKeyCode.DIRECTION_LEFT to listOf('@'.code),
-        KeyEvent.KEYCODE_O or FlickKeyCode.DIRECTION_UP to listOf('~'.code),
-        KeyEvent.KEYCODE_O or FlickKeyCode.DIRECTION_RIGHT to listOf('|'.code),
-
-        KeyEvent.KEYCODE_K or FlickKeyCode.DIRECTION_NONE to listOf('k'.code),
-        KeyEvent.KEYCODE_H or FlickKeyCode.DIRECTION_NONE to listOf('h'.code),
-        KeyEvent.KEYCODE_S or FlickKeyCode.DIRECTION_NONE to listOf('s'.code),
-        KeyEvent.KEYCODE_M or FlickKeyCode.DIRECTION_NONE to listOf('m'.code),
-        KeyEvent.KEYCODE_T or FlickKeyCode.DIRECTION_NONE to listOf('t'.code),
-        KeyEvent.KEYCODE_Y or FlickKeyCode.DIRECTION_NONE to listOf('y'.code),
-        KeyEvent.KEYCODE_N or FlickKeyCode.DIRECTION_NONE to listOf('n'.code),
-        KeyEvent.KEYCODE_R or FlickKeyCode.DIRECTION_NONE to listOf('r'.code),
-        KeyEvent.KEYCODE_W or FlickKeyCode.DIRECTION_NONE to listOf('w'.code),
-
-        // GODAN auxiliary consonants and symbols.
-        KeyEvent.KEYCODE_K or FlickKeyCode.DIRECTION_UP to listOf('q'.code),
-        KeyEvent.KEYCODE_K or FlickKeyCode.DIRECTION_RIGHT to listOf('g'.code),
-
-        KeyEvent.KEYCODE_H or FlickKeyCode.DIRECTION_LEFT to listOf('p'.code),
-        KeyEvent.KEYCODE_H or FlickKeyCode.DIRECTION_UP to listOf('f'.code),
-        KeyEvent.KEYCODE_H or FlickKeyCode.DIRECTION_RIGHT to listOf('b'.code),
-
-        KeyEvent.KEYCODE_S or FlickKeyCode.DIRECTION_UP to listOf('j'.code),
-        KeyEvent.KEYCODE_S or FlickKeyCode.DIRECTION_RIGHT to listOf('z'.code),
-
-        KeyEvent.KEYCODE_M or FlickKeyCode.DIRECTION_LEFT to listOf('/'.code),
-        KeyEvent.KEYCODE_M or FlickKeyCode.DIRECTION_UP to listOf('l'.code),
-        KeyEvent.KEYCODE_M or FlickKeyCode.DIRECTION_RIGHT to listOf('-'.code),
-
-        KeyEvent.KEYCODE_T or FlickKeyCode.DIRECTION_UP to listOf('c'.code),
-        KeyEvent.KEYCODE_T or FlickKeyCode.DIRECTION_RIGHT to listOf('d'.code),
-
-        KeyEvent.KEYCODE_Y or FlickKeyCode.DIRECTION_LEFT to listOf('('.code),
-        KeyEvent.KEYCODE_Y or FlickKeyCode.DIRECTION_UP to listOf('x'.code),
-        KeyEvent.KEYCODE_Y or FlickKeyCode.DIRECTION_RIGHT to listOf(')'.code),
-
-        KeyEvent.KEYCODE_N or FlickKeyCode.DIRECTION_LEFT to listOf(':'.code),
-        KeyEvent.KEYCODE_N or FlickKeyCode.DIRECTION_RIGHT to listOf('・'.code),
-
-        KeyEvent.KEYCODE_R or FlickKeyCode.DIRECTION_UP to listOf('?'.code),
-        KeyEvent.KEYCODE_R or FlickKeyCode.DIRECTION_RIGHT to listOf('!'.code),
-
-        KeyEvent.KEYCODE_W or FlickKeyCode.DIRECTION_DOWN to listOf('v'.code),
-
+        // Keys with GODAN auxiliary consonants and symbols.
         // Telephone-layout numbers on downward flicks.
-        KeyEvent.KEYCODE_A or FlickKeyCode.DIRECTION_DOWN to listOf('1'.code),
-        KeyEvent.KEYCODE_K or FlickKeyCode.DIRECTION_DOWN to listOf('2'.code),
-        KeyEvent.KEYCODE_H or FlickKeyCode.DIRECTION_DOWN to listOf('3'.code),
-
-        KeyEvent.KEYCODE_I or FlickKeyCode.DIRECTION_DOWN to listOf('4'.code),
-        KeyEvent.KEYCODE_S or FlickKeyCode.DIRECTION_DOWN to listOf('5'.code),
-        KeyEvent.KEYCODE_M or FlickKeyCode.DIRECTION_DOWN to listOf('6'.code),
-
-        KeyEvent.KEYCODE_U or FlickKeyCode.DIRECTION_DOWN to listOf('7'.code),
-        KeyEvent.KEYCODE_T or FlickKeyCode.DIRECTION_DOWN to listOf('8'.code),
-        KeyEvent.KEYCODE_Y or FlickKeyCode.DIRECTION_DOWN to listOf('9'.code),
-
-        KeyEvent.KEYCODE_N or FlickKeyCode.DIRECTION_DOWN to listOf('0'.code),
-
-        KeyEvent.KEYCODE_R or FlickKeyCode.DIRECTION_DOWN to listOf('、'.code),
-        KeyEvent.KEYCODE_R or FlickKeyCode.DIRECTION_LEFT to listOf('。'.code),
-        KeyEvent.KEYCODE_W or FlickKeyCode.DIRECTION_LEFT to listOf('「'.code),
-        KeyEvent.KEYCODE_W or FlickKeyCode.DIRECTION_RIGHT to listOf('」'.code)
-
+        KeyEvent.KEYCODE_K to listOf('k'.code, 'q'.code, '2'.code, 0, 'g'.code),
+        KeyEvent.KEYCODE_H to listOf('h'.code, 'f'.code, '3'.code, 'p'.code, 'b'.code),
+        KeyEvent.KEYCODE_S to listOf('s'.code, 'j'.code, '5'.code, 0, 'z'.code),
+        KeyEvent.KEYCODE_M to listOf('m'.code, 'l'.code, '6'.code, '/'.code, '-'.code),
+        KeyEvent.KEYCODE_T to listOf('t'.code, 'c'.code, '8'.code, 0, 'd'.code),
+        KeyEvent.KEYCODE_Y to listOf('y'.code, 'x'.code, '9'.code, '('.code, ')'.code),
+        KeyEvent.KEYCODE_N to listOf('n'.code, 0, '0'.code, ':'.code, '・'.code),
+        KeyEvent.KEYCODE_R to listOf('r'.code, '?'.code, '、'.code, '。'.code, '!'.code),
+        KeyEvent.KEYCODE_W to listOf('w'.code, 0, 'v'.code, '「'.code, '」'.code),
     )
 
-    val LABELS: Map<Int, String> = mapOf(
-        KeyEvent.KEYCODE_A or FlickKeyCode.DIRECTION_NONE to "A",
-        KeyEvent.KEYCODE_A or FlickKeyCode.DIRECTION_LEFT to "あっ",
-        KeyEvent.KEYCODE_A or FlickKeyCode.DIRECTION_UP to "あん",
-        KeyEvent.KEYCODE_A or FlickKeyCode.DIRECTION_RIGHT to "ゃ",
-        KeyEvent.KEYCODE_A or FlickKeyCode.DIRECTION_DOWN to "1",
+    val LABELS: Map<Int, KeyLabel.Flick> = mapOf(
+        KeyEvent.KEYCODE_A to KeyLabel.Flick(
+            text =  "A",
+            left =  "あっ",
+            up =    "あん",
+            right = "ゃ",
+            down =  "1"
+        ),
+        KeyEvent.KEYCODE_I to KeyLabel.Flick(
+            text =  "I",
+            left =  "いっ",
+            up =    "いん",
+            right = "ぃ",
+            down =  "4"
+        ),
+        KeyEvent.KEYCODE_U to KeyLabel.Flick(
+            text =  "U",
+            left =  "うっ",
+            up =    "うん",
+            right = "ゅ",
+            down =  "7"
+        ),
+        KeyEvent.KEYCODE_E to KeyLabel.Flick(
+            text =  "E",
+            left =  "えっ",
+            up =    "えん",
+            right = "ぇ"
+        ),
+        KeyEvent.KEYCODE_O to KeyLabel.Flick(
+            text =  "O",
+            left =  "おっ",
+            up =    "おん",
+            right = "ょ"
+        ),
 
-        KeyEvent.KEYCODE_I or FlickKeyCode.DIRECTION_NONE to "I",
-        KeyEvent.KEYCODE_I or FlickKeyCode.DIRECTION_LEFT to "いっ",
-        KeyEvent.KEYCODE_I or FlickKeyCode.DIRECTION_UP to "いん",
-        KeyEvent.KEYCODE_I or FlickKeyCode.DIRECTION_RIGHT to "ぃ",
-        KeyEvent.KEYCODE_I or FlickKeyCode.DIRECTION_DOWN to "4",
-
-        KeyEvent.KEYCODE_U or FlickKeyCode.DIRECTION_NONE to "U",
-        KeyEvent.KEYCODE_U or FlickKeyCode.DIRECTION_LEFT to "うっ",
-        KeyEvent.KEYCODE_U or FlickKeyCode.DIRECTION_UP to "うん",
-        KeyEvent.KEYCODE_U or FlickKeyCode.DIRECTION_RIGHT to "ゅ",
-        KeyEvent.KEYCODE_U or FlickKeyCode.DIRECTION_DOWN to "7",
-
-        KeyEvent.KEYCODE_E or FlickKeyCode.DIRECTION_NONE to "E",
-        KeyEvent.KEYCODE_E or FlickKeyCode.DIRECTION_LEFT to "えっ",
-        KeyEvent.KEYCODE_E or FlickKeyCode.DIRECTION_UP to "えん",
-        KeyEvent.KEYCODE_E or FlickKeyCode.DIRECTION_RIGHT to "ぇ",
-
-        KeyEvent.KEYCODE_O or FlickKeyCode.DIRECTION_NONE to "O",
-        KeyEvent.KEYCODE_O or FlickKeyCode.DIRECTION_LEFT to "おっ",
-        KeyEvent.KEYCODE_O or FlickKeyCode.DIRECTION_UP to "おん",
-        KeyEvent.KEYCODE_O or FlickKeyCode.DIRECTION_RIGHT to "ょ",
-
-        KeyEvent.KEYCODE_K or FlickKeyCode.DIRECTION_NONE to "K",
-        KeyEvent.KEYCODE_K or FlickKeyCode.DIRECTION_UP to "Q",
-        KeyEvent.KEYCODE_K or FlickKeyCode.DIRECTION_RIGHT to "G",
-
-        KeyEvent.KEYCODE_H or FlickKeyCode.DIRECTION_NONE to "H",
-        KeyEvent.KEYCODE_H or FlickKeyCode.DIRECTION_LEFT to "P",
-        KeyEvent.KEYCODE_H or FlickKeyCode.DIRECTION_UP to "F",
-        KeyEvent.KEYCODE_H or FlickKeyCode.DIRECTION_RIGHT to "B",
-
-        KeyEvent.KEYCODE_S or FlickKeyCode.DIRECTION_NONE to "S",
-        KeyEvent.KEYCODE_S or FlickKeyCode.DIRECTION_UP to "J",
-        KeyEvent.KEYCODE_S or FlickKeyCode.DIRECTION_RIGHT to "Z",
-
-        KeyEvent.KEYCODE_M or FlickKeyCode.DIRECTION_NONE to "M",
-        KeyEvent.KEYCODE_M or FlickKeyCode.DIRECTION_LEFT to "/",
-        KeyEvent.KEYCODE_M or FlickKeyCode.DIRECTION_UP to "L",
-        KeyEvent.KEYCODE_M or FlickKeyCode.DIRECTION_RIGHT to "−",
-
-        KeyEvent.KEYCODE_T or FlickKeyCode.DIRECTION_NONE to "T",
-        KeyEvent.KEYCODE_T or FlickKeyCode.DIRECTION_UP to "C",
-        KeyEvent.KEYCODE_T or FlickKeyCode.DIRECTION_RIGHT to "D",
-
-        KeyEvent.KEYCODE_Y or FlickKeyCode.DIRECTION_NONE to "Y",
-        KeyEvent.KEYCODE_Y or FlickKeyCode.DIRECTION_LEFT to "（",
-        KeyEvent.KEYCODE_Y or FlickKeyCode.DIRECTION_UP to "X",
-        KeyEvent.KEYCODE_Y or FlickKeyCode.DIRECTION_RIGHT to "）",
-
-        KeyEvent.KEYCODE_N or FlickKeyCode.DIRECTION_NONE to "N",
-        KeyEvent.KEYCODE_N or FlickKeyCode.DIRECTION_LEFT to "：",
-        KeyEvent.KEYCODE_N or FlickKeyCode.DIRECTION_RIGHT to "・",
-
-        KeyEvent.KEYCODE_R or FlickKeyCode.DIRECTION_NONE to "R",
-        KeyEvent.KEYCODE_R or FlickKeyCode.DIRECTION_UP to "？",
-        KeyEvent.KEYCODE_R or FlickKeyCode.DIRECTION_RIGHT to "！",
-
-        KeyEvent.KEYCODE_W or FlickKeyCode.DIRECTION_NONE to "W",
-        KeyEvent.KEYCODE_W or FlickKeyCode.DIRECTION_DOWN to "V",
-
-        KeyEvent.KEYCODE_A or FlickKeyCode.DIRECTION_DOWN to "1",
-        KeyEvent.KEYCODE_K or FlickKeyCode.DIRECTION_DOWN to "2",
-        KeyEvent.KEYCODE_H or FlickKeyCode.DIRECTION_DOWN to "3",
-
-        KeyEvent.KEYCODE_I or FlickKeyCode.DIRECTION_DOWN to "4",
-        KeyEvent.KEYCODE_S or FlickKeyCode.DIRECTION_DOWN to "5",
-        KeyEvent.KEYCODE_M or FlickKeyCode.DIRECTION_DOWN to "6",
-
-        KeyEvent.KEYCODE_U or FlickKeyCode.DIRECTION_DOWN to "7",
-        KeyEvent.KEYCODE_T or FlickKeyCode.DIRECTION_DOWN to "8",
-        KeyEvent.KEYCODE_Y or FlickKeyCode.DIRECTION_DOWN to "9",
-
-        KeyEvent.KEYCODE_N or FlickKeyCode.DIRECTION_DOWN to "0",
-
-        KeyEvent.KEYCODE_R or FlickKeyCode.DIRECTION_DOWN to "、",
-        KeyEvent.KEYCODE_R or FlickKeyCode.DIRECTION_LEFT to "。",
-        KeyEvent.KEYCODE_W or FlickKeyCode.DIRECTION_LEFT to "「",
-        KeyEvent.KEYCODE_W or FlickKeyCode.DIRECTION_RIGHT to "」",
-
+        KeyEvent.KEYCODE_K to KeyLabel.Flick(
+            text =  "K",
+            up =    "Q",
+            right = "G",
+            down =  "2"
+        ),
+        KeyEvent.KEYCODE_H to KeyLabel.Flick(
+            text =  "H",
+            left =  "P",
+            up =    "F",
+            right = "B",
+            down =  "3"
+        ),
+        KeyEvent.KEYCODE_S to KeyLabel.Flick(
+            text =  "S",
+            up =    "J",
+            right = "Z",
+            down =  "5"
+        ),
+        KeyEvent.KEYCODE_M to KeyLabel.Flick(
+            text =  "M",
+            left =  "／",
+            up =    "L",
+            right = "ー",
+            down =  "6"
+        ),
+        KeyEvent.KEYCODE_T to KeyLabel.Flick(
+            text =  "T",
+            up =    "C",
+            right = "D",
+            down =  "8"
+        ),
+        KeyEvent.KEYCODE_Y to KeyLabel.Flick(
+            text =  "Y",
+            left =  "（",
+            up =    "X",
+            right = "）",
+            down =  "9"
+        ),
+        KeyEvent.KEYCODE_N to KeyLabel.Flick(
+            text =  "N",
+            left =  "：",
+            right = "・",
+            down =  "0"
+        ),
+        KeyEvent.KEYCODE_R to KeyLabel.Flick(
+            text =  "R",
+            left =  "。",
+            up =    "？",
+            right = "！",
+            down =  "、"
+        ),
+        KeyEvent.KEYCODE_W to KeyLabel.Flick(
+            text =  "W",
+            left =  "「",
+            right = "」",
+            down =  "V"
+        ),
     )
 }

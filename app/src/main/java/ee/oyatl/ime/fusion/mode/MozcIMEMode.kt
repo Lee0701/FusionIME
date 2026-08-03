@@ -307,7 +307,7 @@ abstract class MozcIMEMode(
             KeyboardSpecification.GODAN_KANA
 
         override val textLayoutTable: LayoutTable =
-            LayoutTable.from(LayoutGodan.TABLE)
+            LayoutTable.fromFlick4Dirs(LayoutGodan.TABLE)
 
         override val textKeyboardTemplate: KeyboardTemplate =
             KeyboardTemplate.ByScreenMode(
@@ -317,15 +317,15 @@ abstract class MozcIMEMode(
                 )
             )
 
-        override val keyLabels: Map<Int, String>
+        override val keyLabels: Map<Int, KeyLabel>
             get() =
                 if(symbolState == Symbol.Text) super.keyLabels + LayoutGodan.LABELS
                 else super.keyLabels
 
-        private val flicks: MutableMap<Int, Int> = mutableMapOf()
+        private val flicks: MutableMap<Int, FlickDirection> = mutableMapOf()
 
         override fun createTouchHandler(
-            keyboardView: TouchHandler.KeyboardViewInterface,
+            keyboardView: KeyboardView,
             context: Context,
             symbolState: Symbol
         ): TouchHandler {
@@ -348,38 +348,31 @@ abstract class MozcIMEMode(
             )
         }
 
-        override fun onKeyDown(keyCode: Int, metaState: Int) {
-            val isFlick = keyCode and FlickKeyCode.FLAG_FLICK != 0
-            if(!isFlick) {
-                if(keyCode <= 0 || !keyCharacterMap.isPrintingKey(keyCode)) {
-                    return super.onKeyDown(keyCode, metaState)
-                }
-            } else if(symbolState != Symbol.Text) {
+        override fun onKeyDown(keyCode: Int, metaState: Int): Boolean {
+            if(keyCode <= 0 || !keyCharacterMap.isPrintingKey(keyCode)) {
                 return super.onKeyDown(keyCode, metaState)
             }
+            return false
         }
 
-        override fun onKeyUp(keyCode: Int, metaState: Int) {
-            val isFlick = keyCode and FlickKeyCode.FLAG_FLICK != 0
-
-            if(!isFlick) {
-                if(keyCode <= 0 || !keyCharacterMap.isPrintingKey(keyCode)) {
-                    return super.onKeyUp(keyCode, metaState)
-                }
+        override fun onKeyUp(keyCode: Int, metaState: Int): Boolean {
+            if(keyCode <= 0 || !keyCharacterMap.isPrintingKey(keyCode)) {
+                return super.onKeyUp(keyCode, metaState)
             }
-
-            if(isFlick) {
-                val code = keyCode and FlickKeyCode.MASK_KEYCODE
-                val direction = keyCode and FlickKeyCode.MASK_DIRECTION
-                flicks[code] = direction
-                return
+            val direction = flicks.remove(keyCode)
+            when(val item = currentLayoutTable[keyCode]) {
+                is LayoutTable.FlickItem -> onChar(item.forFlickDirection(direction))
+                else -> onChar(item?.normal ?: keyCharacterMap.get(keyCode, metaState))
             }
+            return false
+        }
 
-            val direction = flicks.remove(keyCode) ?: FlickKeyCode.DIRECTION_NONE
-            val mappedKey = keyCode or direction
-            val charCode = currentLayoutTable[mappedKey]?.forShiftState(shiftState)
-            val default = keyCharacterMap.get(keyCode, metaState)
-            onChar(charCode ?: default)
+        override fun onFlick(keyCode: Int, direction: FlickDirection): Boolean {
+            if(symbolState != Symbol.Text) {
+                return super.onFlick(keyCode, direction)
+            }
+            flicks[keyCode] = direction
+            return false
         }
     }
 
