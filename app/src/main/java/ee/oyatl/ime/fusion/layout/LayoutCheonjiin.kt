@@ -1,6 +1,7 @@
 package ee.oyatl.ime.fusion.layout
 
 import android.view.KeyEvent
+import ee.oyatl.ime.keyboard.KeyLabel
 import ee.oyatl.ime.keyboard.KeyboardConfiguration
 import ee.oyatl.ime.keyboard.touchhandler.FlickDirection
 
@@ -28,48 +29,67 @@ object LayoutCheonjiin {
     )
 
     val LABELS = mapOf(
-        KeyEvent.KEYCODE_1 to "ㅣ",
-        KeyEvent.KEYCODE_2 to "ㆍ",
-        KeyEvent.KEYCODE_3 to "ㅡ",
-        KeyEvent.KEYCODE_4 to "ㄱㅋ",
-        KeyEvent.KEYCODE_5 to "ㄴㄹ",
-        KeyEvent.KEYCODE_6 to "ㄷㅌ",
-        KeyEvent.KEYCODE_7 to "ㅂㅍ",
-        KeyEvent.KEYCODE_8 to "ㅅㅎ",
-        KeyEvent.KEYCODE_9 to "ㅈㅊ",
-        KeyEvent.KEYCODE_0 to "ㅇㅁ"
-    ) + mapOf(
-        flickLabel(KeyEvent.KEYCODE_1, FlickDirection.Left) to "ㅓ",
-        flickLabel(KeyEvent.KEYCODE_1, FlickDirection.Up) to "ㅕ",
-        flickLabel(KeyEvent.KEYCODE_1, FlickDirection.Right) to "ㅏ",
-        flickLabel(KeyEvent.KEYCODE_1, FlickDirection.Down) to "ㅑ",
-        flickLabel(KeyEvent.KEYCODE_2, FlickDirection.Left) to "ㅓ",
-        flickLabel(KeyEvent.KEYCODE_2, FlickDirection.Up) to "ㅗ",
-        flickLabel(KeyEvent.KEYCODE_2, FlickDirection.Right) to "ㅏ",
-        flickLabel(KeyEvent.KEYCODE_2, FlickDirection.Down) to "ㅜ",
-        flickLabel(KeyEvent.KEYCODE_3, FlickDirection.Left) to "ㅠ",
-        flickLabel(KeyEvent.KEYCODE_3, FlickDirection.Up) to "ㅗ",
-        flickLabel(KeyEvent.KEYCODE_3, FlickDirection.Right) to "ㅛ",
-        flickLabel(KeyEvent.KEYCODE_3, FlickDirection.Down) to "ㅜ",
-        flickLabel(KeyEvent.KEYCODE_4, FlickDirection.Left) to "ㄱ",
-        flickLabel(KeyEvent.KEYCODE_4, FlickDirection.Right) to "ㅋ",
-        flickLabel(KeyEvent.KEYCODE_4, FlickDirection.Down) to "ㄲ",
-        flickLabel(KeyEvent.KEYCODE_5, FlickDirection.Left) to "ㄴ",
-        flickLabel(KeyEvent.KEYCODE_5, FlickDirection.Right) to "ㄹ",
-        flickLabel(KeyEvent.KEYCODE_6, FlickDirection.Left) to "ㄷ",
-        flickLabel(KeyEvent.KEYCODE_6, FlickDirection.Right) to "ㅌ",
-        flickLabel(KeyEvent.KEYCODE_6, FlickDirection.Down) to "ㄸ",
-        flickLabel(KeyEvent.KEYCODE_7, FlickDirection.Left) to "ㅂ",
-        flickLabel(KeyEvent.KEYCODE_7, FlickDirection.Right) to "ㅍ",
-        flickLabel(KeyEvent.KEYCODE_7, FlickDirection.Down) to "ㅃ",
-        flickLabel(KeyEvent.KEYCODE_8, FlickDirection.Left) to "ㅅ",
-        flickLabel(KeyEvent.KEYCODE_8, FlickDirection.Right) to "ㅎ",
-        flickLabel(KeyEvent.KEYCODE_8, FlickDirection.Down) to "ㅆ",
-        flickLabel(KeyEvent.KEYCODE_9, FlickDirection.Left) to "ㅈ",
-        flickLabel(KeyEvent.KEYCODE_9, FlickDirection.Right) to "ㅊ",
-        flickLabel(KeyEvent.KEYCODE_9, FlickDirection.Down) to "ㅉ",
-        flickLabel(KeyEvent.KEYCODE_0, FlickDirection.Left) to "ㅇ",
-        flickLabel(KeyEvent.KEYCODE_0, FlickDirection.Right) to "ㅁ"
+        KeyEvent.KEYCODE_1 to KeyLabel.Flick(
+            text = "ㅣ",
+            up = "ㅕ",
+            down = "ㅑ",
+            left = "ㅓ",
+            right = "ㅏ"
+        ),
+        KeyEvent.KEYCODE_2 to KeyLabel.Flick(
+            text = "ㆍ",
+            up = "ㅗ",
+            down = "ㅜ",
+            left = "ㅓ",
+            right = "ㅏ"
+        ),
+        KeyEvent.KEYCODE_3 to KeyLabel.Flick(
+            text = "ㅡ",
+            up = "ㅗ",
+            down = "ㅜ",
+            left = "ㅠ",
+            right = "ㅛ"
+        ),
+        KeyEvent.KEYCODE_4 to KeyLabel.Flick(
+            text = "ㄱㅋ",
+            down = "ㄲ",
+            left = "ㄱ",
+            right = "ㅋ"
+        ),
+        KeyEvent.KEYCODE_5 to KeyLabel.Flick(
+            text = "ㄴㄹ",
+            left = "ㄴ",
+            right = "ㄹ"
+        ),
+        KeyEvent.KEYCODE_6 to KeyLabel.Flick(
+            text = "ㄷㅌ",
+            down = "ㄸ",
+            left = "ㄷ",
+            right = "ㅌ"
+        ),
+        KeyEvent.KEYCODE_7 to KeyLabel.Flick(
+            text = "ㅂㅍ",
+            down = "ㅃ",
+            left = "ㅂ",
+            right = "ㅍ"
+        ),
+        KeyEvent.KEYCODE_8 to KeyLabel.Flick(
+            text = "ㅅㅎ",
+            down = "ㅆ",
+            left = "ㅅ",
+            right = "ㅎ"
+        ),
+        KeyEvent.KEYCODE_9 to KeyLabel.Flick(
+            text = "ㅈㅊ",
+            down = "ㅉ",
+            left = "ㅈ",
+            right = "ㅊ"
+        ),
+        KeyEvent.KEYCODE_0 to KeyLabel.Flick(
+            text = "ㅇㅁ",
+            left = "ㅇ",
+            right = "ㅁ"
+        )
     )
 
     val CONSONANT_FLICK_INDICES = mapOf(
@@ -127,8 +147,4 @@ object LayoutCheonjiin {
             )
         )
     )
-
-    private fun flickLabel(keyCode: Int, direction: FlickDirection): Int {
-        return keyCode or direction.keyCodeFlag
-    }
 }

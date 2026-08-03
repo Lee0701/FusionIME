@@ -31,10 +31,11 @@ import ee.oyatl.ime.fusion.layout.LayoutExt
 import ee.oyatl.ime.fusion.layout.LayoutQwerty
 import ee.oyatl.ime.fusion.layout.TabletKeyboard
 import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
+import ee.oyatl.ime.keyboard.KeyLabel
 import ee.oyatl.ime.keyboard.touchhandler.FlickTouchHandler
 import ee.oyatl.ime.keyboard.touchhandler.TouchHandler
-import ee.oyatl.ime.keyboard.FlickKeyCode
 import ee.oyatl.ime.keyboard.KeyboardState
+import ee.oyatl.ime.keyboard.KeyboardView
 import ee.oyatl.ime.keyboard.touchhandler.FlickDirection
 import java.util.Locale
 import java.util.concurrent.Executors
@@ -211,8 +212,8 @@ abstract class KoreanIMEMode(
             configuration = LayoutCheonjiin.KEYBOARD_CONFIGURATION,
             contentRows = LayoutCheonjiin.CONTENT_ROWS
         )
-        override val textLayoutTable: LayoutTable = LayoutTable.from(LayoutCheonjiin.TABLE)
-        override val keyLabels: Map<Int, String>
+        override val textLayoutTable: LayoutTable = LayoutTable.fromShiftStates(LayoutCheonjiin.TABLE)
+        override val keyLabels: Map<Int, KeyLabel>
             get() =
                 if(symbolState == KeyboardState.Symbol.Text) {
                     super.keyLabels + LayoutCheonjiin.LABELS
@@ -221,7 +222,7 @@ abstract class KoreanIMEMode(
                 }
         private val flickDirections: MutableMap<Int, FlickDirection> = mutableMapOf()
         override fun createTouchHandler(
-            keyboardView: TouchHandler.KeyboardViewInterface,
+            keyboardView: KeyboardView,
             context: Context,
             symbolState: KeyboardState.Symbol
         ): TouchHandler {
@@ -244,48 +245,36 @@ abstract class KoreanIMEMode(
             )
         }
 
-        override fun onKeyDown(keyCode: Int, metaState: Int) {
+        override fun onKeyDown(keyCode: Int, metaState: Int): Boolean {
             if(symbolState != KeyboardState.Symbol.Text) {
                 super.onKeyDown(keyCode, metaState)
-                return
+                return false
             }
-        
-            val isFlick = keyCode and FlickKeyCode.FLAG_FLICK != 0
-            if(isFlick) {
-                val physicalKey = keyCode and FlickKeyCode.MASK_KEYCODE
-                val direction = FlickDirection.valueOfKeycode(keyCode)
-                if(direction != null) {
-                    flickDirections[physicalKey] = direction
-                }
-                return
-            }
-        
+
             if(keyCode <= 0 || !keyCharacterMap.isPrintingKey(keyCode)) {
                 super.onKeyDown(keyCode, metaState)
             }
+            return false
         }
-        override fun onKeyUp(keyCode: Int, metaState: Int) {
+
+        override fun onKeyUp(keyCode: Int, metaState: Int): Boolean {
             if(symbolState != KeyboardState.Symbol.Text) {
                 super.onKeyUp(keyCode, metaState)
-                return
-            }
-            val isFlick = keyCode and FlickKeyCode.FLAG_FLICK != 0
-            if(isFlick) {
-                return
+                return false
             }
             if(keyCode <= 0 || !keyCharacterMap.isPrintingKey(keyCode)) {
                 super.onKeyUp(keyCode, metaState)
-                return
+                return false
             }
             val sourceInput = LayoutCheonjiin.TABLE[keyCode]?.firstOrNull()
             if(sourceInput == null) {
                 super.onKeyUp(keyCode, metaState)
-                return
+                return false
             }
             val direction = flickDirections.remove(keyCode)
             if(direction == null) {
                 onChar(sourceInput)
-                return
+                return false
             }
             val consonantIndex =
                 LayoutCheonjiin.CONSONANT_FLICK_INDICES[keyCode]?.get(direction)
@@ -309,6 +298,13 @@ abstract class KoreanIMEMode(
             }
             applyCombinerResult(result)
             updateInputView()
+
+            return false
+        }
+
+        override fun onFlick(keyCode: Int, direction: FlickDirection): Boolean {
+            flickDirections[keyCode] = direction
+            return false
         }
 
         override fun onSpecial(keyCode: Int) {
