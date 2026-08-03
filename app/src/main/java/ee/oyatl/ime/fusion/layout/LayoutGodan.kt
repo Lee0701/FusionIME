@@ -48,7 +48,7 @@ object LayoutGodan {
             listOf(
                 TemplateKey(KeyEvent.KEYCODE_SYM, special = true, merge = TemplateKey.Merge.Up),
                 TemplateKey(KeyEvent.KEYCODE_O),
-                TemplateKey(KeyEvent.KEYCODE_LANGUAGE_SWITCH, special = true),
+                KeyboardConfiguration.Item.Spacer(width = 1f),
                 TemplateKey(KeyEvent.KEYCODE_W),
                 TemplateKey(KeyEvent.KEYCODE_ENTER, special = true, merge = TemplateKey.Merge.Up)
             )
