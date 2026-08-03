@@ -101,6 +101,7 @@ class DefaultKeyboardView(
                     is Keyboard.KeyItem.Key -> {
                         val themedInflater = LayoutInflater.from(ContextThemeWrapper(context, item.themeRes))
                         val key = KbdKeyBinding.inflate(themedInflater)
+                        key.bkg.setImageResource(item.bkgRes)
                         if(item.iconRes != 0) key.icon.setImageResource(item.iconRes)
                         if(item.keyCode < 0) key.label.text = (-item.keyCode).toChar().toString()
                         keySet += CachedKey(item.keyCode, key)
@@ -166,6 +167,10 @@ class DefaultKeyboardView(
         return keySet.find { key ->
             key.rect.contains(x, y)
         }
+    }
+
+    override fun findKeys(keyCode: Int): List<TouchHandler.KeyInterface> {
+        return keySet.filter { it.keyCode == keyCode }
     }
 
     data class CachedKey(

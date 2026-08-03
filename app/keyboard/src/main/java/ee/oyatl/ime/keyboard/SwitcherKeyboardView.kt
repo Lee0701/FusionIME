@@ -51,4 +51,6 @@ class SwitcherKeyboardView(
         x: Int,
         y: Int
     ): TouchHandler.KeyInterface? = null
+
+    override fun findKeys(keyCode: Int): List<TouchHandler.KeyInterface> = emptyList()
 }

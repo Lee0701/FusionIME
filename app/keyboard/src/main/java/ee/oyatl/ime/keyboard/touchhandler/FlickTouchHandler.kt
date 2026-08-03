@@ -29,7 +29,7 @@ class FlickTouchHandler(
         val popup = key?.let { keyboardView.popupManager.createPreviewPopup(key) }
         val pointer = Pointer(pointerId, x, y, x, y, key, popup)
         if(key != null) {
-            key.onPressed()
+            keyboardView.findKeys(key.keyCode).forEach { it.onPressed() }
             keyboardView.listener.onKeyDown(key.keyCode, 0)
         }
         popup?.show()
@@ -75,7 +75,7 @@ class FlickTouchHandler(
         val pointer = pointers[pointerId] ?: return
         val key = pointer.key
         if(key != null) {
-            key.onReleased()
+            keyboardView.findKeys(key.keyCode).forEach { it.onReleased() }
             if(pointer.flicks.isEmpty() || sendOnUp) keyboardView.listener.onKeyUp(key.keyCode, 0)
         }
         pointer.popup?.hide()

@@ -4,6 +4,8 @@ import android.view.KeyEvent
 import ee.oyatl.ime.keyboard.KeyLabel
 import ee.oyatl.ime.keyboard.KeyboardConfiguration
 
+import ee.oyatl.ime.keyboard.KeyboardConfiguration.Item.TemplateKey
+
 /**
  * Gboard-style GODAN layout.
  *
@@ -12,45 +14,43 @@ import ee.oyatl.ime.keyboard.KeyboardConfiguration
  * This table only maps taps and flicks to the ASCII key codes expected by Mozc.
  */
 object LayoutGodan {
-    private fun key(code: Int, width: Float = 1f, special: Boolean = false) =
-        KeyboardConfiguration.Item.TemplateKey(code, width, special)
     fun mobileKeyboardConfiguration(): KeyboardConfiguration {
     return KeyboardConfiguration(
         listOf(
             listOf(
-                key(KeyEvent.KEYCODE_NUM, special = true),
-                key(KeyEvent.KEYCODE_A),
-                key(KeyEvent.KEYCODE_K),
-                key(KeyEvent.KEYCODE_H),
-                key(KeyEvent.KEYCODE_DEL, special = true)
+                TemplateKey(KeyEvent.KEYCODE_NUM, special = true),
+                TemplateKey(KeyEvent.KEYCODE_A),
+                TemplateKey(KeyEvent.KEYCODE_K),
+                TemplateKey(KeyEvent.KEYCODE_H),
+                TemplateKey(KeyEvent.KEYCODE_DEL, special = true)
             ),
             listOf(
-                key(KeyEvent.KEYCODE_DPAD_LEFT, special = true),
-                key(KeyEvent.KEYCODE_I),
-                key(KeyEvent.KEYCODE_S),
-                key(KeyEvent.KEYCODE_M),
-                key(KeyEvent.KEYCODE_DPAD_RIGHT, special = true)
+                TemplateKey(KeyEvent.KEYCODE_DPAD_LEFT, special = true),
+                TemplateKey(KeyEvent.KEYCODE_I),
+                TemplateKey(KeyEvent.KEYCODE_S),
+                TemplateKey(KeyEvent.KEYCODE_M),
+                TemplateKey(KeyEvent.KEYCODE_DPAD_RIGHT, special = true)
             ),
             listOf(
-                key(KeyEvent.KEYCODE_LANGUAGE_SWITCH, special = true),
-                key(KeyEvent.KEYCODE_U),
-                key(KeyEvent.KEYCODE_T),
-                key(KeyEvent.KEYCODE_Y),
-                key(KeyEvent.KEYCODE_SPACE, special = true)
+                TemplateKey(KeyEvent.KEYCODE_LANGUAGE_SWITCH, special = true),
+                TemplateKey(KeyEvent.KEYCODE_U),
+                TemplateKey(KeyEvent.KEYCODE_T),
+                TemplateKey(KeyEvent.KEYCODE_Y),
+                TemplateKey(KeyEvent.KEYCODE_SPACE, special = true)
             ),
             listOf(
-                key(KeyEvent.KEYCODE_SYM, special = true),
-                key(KeyEvent.KEYCODE_E),
-                key(KeyEvent.KEYCODE_N),
-                key(KeyEvent.KEYCODE_R),
-                key(KeyEvent.KEYCODE_ENTER, special = true)
+                TemplateKey(KeyEvent.KEYCODE_SYM, special = true, merge = TemplateKey.Merge.Down, iconRes = 0),
+                TemplateKey(KeyEvent.KEYCODE_E),
+                TemplateKey(KeyEvent.KEYCODE_N),
+                TemplateKey(KeyEvent.KEYCODE_R),
+                TemplateKey(KeyEvent.KEYCODE_ENTER, special = true, merge = TemplateKey.Merge.Down, iconRes = 0)
             ),
             listOf(
-                key(KeyEvent.KEYCODE_SYM, special = true),
-                key(KeyEvent.KEYCODE_O),
-                key(KeyEvent.KEYCODE_LANGUAGE_SWITCH, special = true),
-                key(KeyEvent.KEYCODE_W),
-                key(KeyEvent.KEYCODE_ENTER, special = true)
+                TemplateKey(KeyEvent.KEYCODE_SYM, special = true, merge = TemplateKey.Merge.Up),
+                TemplateKey(KeyEvent.KEYCODE_O),
+                TemplateKey(KeyEvent.KEYCODE_LANGUAGE_SWITCH, special = true),
+                TemplateKey(KeyEvent.KEYCODE_W),
+                TemplateKey(KeyEvent.KEYCODE_ENTER, special = true, merge = TemplateKey.Merge.Up)
             )
         )
     )
