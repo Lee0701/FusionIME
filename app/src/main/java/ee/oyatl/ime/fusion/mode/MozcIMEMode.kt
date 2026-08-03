@@ -25,6 +25,7 @@ import ee.oyatl.ime.keyboard.FlickKeyCode
 import ee.oyatl.ime.keyboard.KeyboardConfiguration
 import ee.oyatl.ime.keyboard.KeyboardState.Symbol
 import ee.oyatl.ime.keyboard.KeyboardTemplate
+import ee.oyatl.ime.keyboard.KeyboardView
 import ee.oyatl.ime.keyboard.LayoutTable
 import ee.oyatl.ime.keyboard.SoftKeyCodeMapper
 import ee.oyatl.ime.keyboard.listener.FlickListener
@@ -252,7 +253,7 @@ abstract class MozcIMEMode(
         private val flicks: MutableMap<Int, FlickDirection> = mutableMapOf()
 
         override fun createTouchHandler(
-            keyboardView: TouchHandler.KeyboardViewInterface,
+            keyboardView: KeyboardView,
             context: Context,
             symbolState: Symbol
         ): TouchHandler {

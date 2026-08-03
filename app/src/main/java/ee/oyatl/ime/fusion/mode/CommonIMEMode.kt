@@ -289,7 +289,7 @@ abstract class CommonIMEMode(
 
     override fun getInputView(): View? {
         updateInputView()
-        return keyboardView
+        return keyboardView as? View
     }
 
     protected fun updateInputView() {
@@ -323,7 +323,7 @@ abstract class CommonIMEMode(
     }
 
     open fun createTouchHandler(
-        keyboardView: TouchHandler.KeyboardViewInterface,
+        keyboardView: KeyboardView,
         context: Context,
         symbolState: KeyboardState.Symbol
     ): TouchHandler {

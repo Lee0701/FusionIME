@@ -9,6 +9,7 @@ import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
+import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatTextView
 import ee.oyatl.ime.keyboard.databinding.KbdKeyBinding
@@ -26,7 +27,7 @@ import kotlin.math.roundToInt
 class DefaultKeyboardView(
     context: Context,
     attrs: AttributeSet?
-): KeyboardView(context, attrs), TouchHandler.KeyboardViewInterface {
+): FrameLayout(context, attrs), KeyboardView {
     override val rect: Rect = Rect()
     override val location: IntArray = IntArray(2)
     private val keySet: MutableSet<CachedKey> = mutableSetOf()
