@@ -158,6 +158,7 @@ abstract class CangjieIMEMode(
     abstract class QwertyCompatible(
         fullWidth: Boolean,
         numberRow: Boolean,
+        cursorKeys: Boolean,
         listener: IMEMode.Listener
     ): CangjieQuick(fullWidth, listener) {
         override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
@@ -165,7 +166,7 @@ abstract class CangjieIMEMode(
                 configuration = KeyboardConfiguration(
                     if(numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
                     MobileKeyboard.alphabetic(),
-                    MobileKeyboard.bottom()
+                    MobileKeyboard.bottom(dpad = cursorKeys)
                 ),
                 contentRows = (if(numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.DEFAULT
             ),
@@ -183,21 +184,24 @@ abstract class CangjieIMEMode(
     class Cangjie(
         fullWidth: Boolean,
         numberRow: Boolean,
+        cursorKeys: Boolean,
         listener: IMEMode.Listener
-    ): QwertyCompatible(fullWidth, numberRow, listener) {
+    ): QwertyCompatible(fullWidth, numberRow, cursorKeys, listener) {
         override val inputMode: Int = TableLoader.CANGJIE
     }
 
     class Quick(
         fullWidth: Boolean,
         numberRow: Boolean,
+        cursorKeys: Boolean,
         listener: IMEMode.Listener
-    ): QwertyCompatible(fullWidth, numberRow, listener) {
+    ): QwertyCompatible(fullWidth, numberRow, cursorKeys, listener) {
         override val inputMode: Int = TableLoader.QUICK
     }
 
     class Dayi3(
         override val fullWidth: Boolean,
+        cursorKeys: Boolean,
         listener: IMEMode.Listener
     ): CangjieIMEMode(listener) {
         override val inputMode: Int = TableLoader.DAYI3
@@ -206,7 +210,7 @@ abstract class CangjieIMEMode(
                 configuration = KeyboardConfiguration(
                     MobileKeyboard.numbers(),
                     MobileKeyboard.alphabetic(semicolon = true, shiftDeleteWidth = 1f, shift = false),
-                    MobileKeyboard.bottom(ExtKeyCode.KEYCODE_PERIOD_COMMA, KeyEvent.KEYCODE_SLASH)
+                    MobileKeyboard.bottom(left = ExtKeyCode.KEYCODE_PERIOD_COMMA, right = KeyEvent.KEYCODE_SLASH, dpad = cursorKeys)
                 ),
                 contentRows = MobileKeyboardRows.NUMBERS + MobileKeyboardRows.HALF_GRID
             ),
@@ -226,15 +230,16 @@ abstract class CangjieIMEMode(
     data class Params(
         val layout: Layout,
         val fullWidth: Boolean,
-        val numberRow: Boolean
+        val numberRow: Boolean,
+        val cursorKeys: Boolean
     ): IMEMode.Params {
         override val type: String = TYPE
 
         override fun create(listener: IMEMode.Listener): IMEMode {
             return when(layout) {
-                Layout.Cangjie -> Cangjie(fullWidth, numberRow, listener)
-                Layout.Quick -> Quick(fullWidth, numberRow, listener)
-                Layout.Dayi3 -> Dayi3(fullWidth, listener)
+                Layout.Cangjie -> Cangjie(fullWidth, numberRow, cursorKeys, listener)
+                Layout.Quick -> Quick(fullWidth, numberRow, cursorKeys, listener)
+                Layout.Dayi3 -> Dayi3(fullWidth, cursorKeys, listener)
             }
         }
 
@@ -257,10 +262,12 @@ abstract class CangjieIMEMode(
                 val layout = Layout.entries.find { it.name == map["layout"] } ?: Layout.Cangjie
                 val fullWidth = map["full_width"].toBoolean()
                 val numberRow = map["number_row"]?.toBoolean() ?: false
+                val cursorKeys = map["cursor_keys"]?.toBoolean() ?: false
                 return Params(
                     layout = layout,
                     fullWidth = fullWidth,
-                    numberRow = numberRow
+                    numberRow = numberRow,
+                    cursorKeys = cursorKeys
                 )
             }
         }

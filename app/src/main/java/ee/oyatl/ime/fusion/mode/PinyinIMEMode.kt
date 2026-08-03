@@ -43,7 +43,8 @@ import java.util.Locale
 class PinyinIMEMode(
     listener: IMEMode.Listener,
     val chineseTraditional: Boolean,
-    numberRow: Boolean
+    numberRow: Boolean,
+    cursorKeys: Boolean
 ): CommonIMEMode(listener), DecodingInfo.IMEStateHolder {
     /**
      * Connection used to bind the decoding service.
@@ -90,7 +91,7 @@ class PinyinIMEMode(
             configuration = KeyboardConfiguration(
                 if(numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
                 MobileKeyboard.alphabetic(),
-                MobileKeyboard.bottom()
+                MobileKeyboard.bottom(dpad = cursorKeys)
             ),
             contentRows = (if(numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.DEFAULT,
             softKeyCodeMapper = softKeyCodeMapper
@@ -913,12 +914,13 @@ class PinyinIMEMode(
 
     class Params(
         val chineseTraditional: Boolean,
-        val numberRow: Boolean
+        val numberRow: Boolean,
+        val cursorKeys: Boolean
     ): IMEMode.Params {
         override val type: String = TYPE
 
         override fun create(listener: IMEMode.Listener): IMEMode {
-            return PinyinIMEMode(listener, chineseTraditional, numberRow)
+            return PinyinIMEMode(listener, chineseTraditional, numberRow, cursorKeys)
         }
 
         override fun getLabel(context: Context): String {
@@ -943,8 +945,9 @@ class PinyinIMEMode(
         companion object {
             fun parse(map: Map<String, String>): Params {
                 val numberRow = map["number_row"]?.toBoolean() ?: false
+                val cursorKeys = map["cursor_keys"]?.toBoolean() ?: false
                 val chineseTraditional = map["chinese_traditional"]?.toBoolean() ?: false
-                return Params(chineseTraditional, numberRow)
+                return Params(chineseTraditional, numberRow, cursorKeys)
             }
         }
     }

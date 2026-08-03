@@ -52,6 +52,8 @@ abstract class InputModeDetailsFragment: PreferenceFragmentCompat() {
             addPreferencesFromResource(R.xml.pref_input_mode_latin)
             if(Feature.NumberRow.availableInCurrentVersion)
                 addPreferencesFromResource(R.xml.pref_input_mode_number_row)
+            if(Feature.CursorKeys.availableInCurrentVersion)
+                addPreferencesFromResource(R.xml.pref_input_mode_cursor_keys)
         }
     }
 
@@ -61,6 +63,8 @@ abstract class InputModeDetailsFragment: PreferenceFragmentCompat() {
             addPreferencesFromResource(R.xml.pref_input_mode_korean_layout)
             if(Feature.NumberRow.availableInCurrentVersion)
                 addPreferencesFromResource(R.xml.pref_input_mode_number_row)
+            if(Feature.CursorKeys.availableInCurrentVersion)
+                addPreferencesFromResource(R.xml.pref_input_mode_cursor_keys)
             if(Feature.BigramHanjaConverter.availableInCurrentVersion)
                 addPreferencesFromResource(R.xml.pref_input_mode_korean_converter)
         }
@@ -83,6 +87,8 @@ abstract class InputModeDetailsFragment: PreferenceFragmentCompat() {
             addPreferencesFromResource(R.xml.pref_input_mode_pinyin)
             if(Feature.NumberRow.availableInCurrentVersion)
                 addPreferencesFromResource(R.xml.pref_input_mode_number_row)
+            if(Feature.CursorKeys.availableInCurrentVersion)
+                addPreferencesFromResource(R.xml.pref_input_mode_cursor_keys)
         }
     }
 
@@ -92,6 +98,8 @@ abstract class InputModeDetailsFragment: PreferenceFragmentCompat() {
             addPreferencesFromResource(R.xml.pref_input_mode_viet)
             if(Feature.NumberRow.availableInCurrentVersion)
                 addPreferencesFromResource(R.xml.pref_input_mode_number_row)
+            if(Feature.CursorKeys.availableInCurrentVersion)
+                addPreferencesFromResource(R.xml.pref_input_mode_cursor_keys)
         }
     }
 
@@ -101,8 +109,9 @@ abstract class InputModeDetailsFragment: PreferenceFragmentCompat() {
             addPreferencesFromResource(R.xml.pref_input_mode_cangjie_layout)
             if(Feature.NumberRow.availableInCurrentVersion)
                 addPreferencesFromResource(R.xml.pref_input_mode_number_row)
+            if(Feature.CursorKeys.availableInCurrentVersion)
+                addPreferencesFromResource(R.xml.pref_input_mode_cursor_keys)
             addPreferencesFromResource(R.xml.pref_input_mode_cangjie_extra)
-
         }
     }
 

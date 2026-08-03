@@ -19,6 +19,7 @@ import java.util.Locale
 abstract class VietIMEMode(
     listener: IMEMode.Listener,
     numberRow: Boolean,
+    cursorKeys: Boolean
 ): CommonIMEMode(listener) {
 
     override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
@@ -26,7 +27,7 @@ abstract class VietIMEMode(
             configuration = KeyboardConfiguration(
                 if(numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
                 MobileKeyboard.alphabetic(),
-                MobileKeyboard.bottom()
+                MobileKeyboard.bottom(dpad = cursorKeys)
             ),
             contentRows = (if(numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.DEFAULT
         ),
@@ -42,15 +43,17 @@ abstract class VietIMEMode(
 
     class Qwerty(
         listener: IMEMode.Listener,
-        numberRow: Boolean
-    ): VietIMEMode(listener, numberRow) {
+        numberRow: Boolean,
+        cursorKeys: Boolean
+    ): VietIMEMode(listener, numberRow, cursorKeys) {
         override val keyboardMode: String = "q"
     }
 
     class Telex(
         listener: IMEMode.Listener,
-        numberRow: Boolean
-    ): VietIMEMode(listener, numberRow) {
+        numberRow: Boolean,
+        cursorKeys: Boolean
+    ): VietIMEMode(listener, numberRow, cursorKeys) {
         override val keyboardMode: String = "t"
     }
 
@@ -133,14 +136,15 @@ abstract class VietIMEMode(
 
     data class Params(
         val layout: Layout,
-        val numberRow: Boolean
+        val numberRow: Boolean,
+        val cursorKeys: Boolean
     ): IMEMode.Params {
         override val type: String = TYPE
 
         override fun create(listener: IMEMode.Listener): IMEMode {
             return when(layout) {
-                Layout.Qwerty -> Qwerty(listener, numberRow)
-                Layout.Telex -> Telex(listener, numberRow)
+                Layout.Qwerty -> Qwerty(listener, numberRow, cursorKeys)
+                Layout.Telex -> Telex(listener, numberRow, cursorKeys)
             }
         }
 
@@ -163,9 +167,11 @@ abstract class VietIMEMode(
             fun parse(map: Map<String, String>): Params {
                 val layout = Layout.entries.find { it.name == map["layout"] } ?: Layout.Qwerty
                 val numberRow = map["number_row"]?.toBoolean() ?: false
+                val cursorKeys = map["cursor_keys"]?.toBoolean() ?: false
                 return Params(
                     layout = layout,
-                    numberRow = numberRow
+                    numberRow = numberRow,
+                    cursorKeys = cursorKeys
                 )
             }
         }

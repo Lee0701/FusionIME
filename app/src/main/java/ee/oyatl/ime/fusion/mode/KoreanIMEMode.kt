@@ -148,6 +148,7 @@ abstract class KoreanIMEMode(
     abstract class Hangul2SetKSCompatible(
         converterType: ConverterType,
         numberRow: Boolean,
+        cursorKeys: Boolean,
         listener: IMEMode.Listener
     ): KoreanIMEMode(listener) {
         override val hanjaConverter: HanjaConverter = converterType.create()
@@ -156,7 +157,7 @@ abstract class KoreanIMEMode(
                 configuration = KeyboardConfiguration(
                     if(numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
                     MobileKeyboard.alphabetic(),
-                    MobileKeyboard.bottom()
+                    MobileKeyboard.bottom(dpad = cursorKeys)
                 ),
                 contentRows = (if(numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.KS
             ),
@@ -175,8 +176,9 @@ abstract class KoreanIMEMode(
         correctOrders: Boolean,
         converterType: ConverterType,
         numberRow: Boolean,
+        cursorKeys: Boolean,
         listener: IMEMode.Listener
-    ): Hangul2SetKSCompatible(converterType, numberRow, listener) {
+    ): Hangul2SetKSCompatible(converterType, numberRow, cursorKeys, listener) {
         override val hangulCombiner: HangulCombiner = HangulCombiner(Hangul2Set.COMB_KS, correctOrders)
         override val textLayoutTable: LayoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + Hangul2Set.TABLE_KS)
     }
@@ -184,14 +186,17 @@ abstract class KoreanIMEMode(
     /*
      * Common part for 390 and 391
      */
-    abstract class Hangul3Set390391(listener: IMEMode.Listener): KoreanIMEMode(listener) {
+    abstract class Hangul3Set390391(
+        cursorKeys: Boolean,
+        listener: IMEMode.Listener
+    ): KoreanIMEMode(listener) {
         open val softKeyCodeMapper: SoftKeyCodeMapper get() = SoftKeyCodeMapper()
         override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
             mobile = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
                     MobileKeyboard.numbers(),
                     MobileKeyboard.alphabetic(semicolon = true, shiftDeleteWidth = 1f),
-                    MobileKeyboard.bottom(ExtKeyCode.KEYCODE_PERIOD_COMMA, KeyEvent.KEYCODE_SLASH)
+                    MobileKeyboard.bottom(left = ExtKeyCode.KEYCODE_PERIOD_COMMA, right = KeyEvent.KEYCODE_SLASH, dpad = cursorKeys)
                 ),
                 contentRows = MobileKeyboardRows.NUMBERS + MobileKeyboardRows.SEMICOLON_QUOTE,
                 softKeyCodeMapper = softKeyCodeMapper
@@ -211,8 +216,9 @@ abstract class KoreanIMEMode(
     class Hangul3Set390(
         correctOrders: Boolean,
         converterType: ConverterType,
+        cursorKeys: Boolean,
         listener: IMEMode.Listener
-    ): Hangul3Set390391(listener) {
+    ): Hangul3Set390391(cursorKeys, listener) {
         override val hangulCombiner: HangulCombiner = HangulCombiner(Hangul3Set.COMBINATION_390_391, correctOrders)
         override val hanjaConverter: HanjaConverter = converterType.create()
         override val textLayoutTable: LayoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + Hangul3Set.TABLE_390)
@@ -227,8 +233,9 @@ abstract class KoreanIMEMode(
     class Hangul3Set391(
         correctOrders: Boolean,
         converterType: ConverterType,
+        cursorKeys: Boolean,
         listener: IMEMode.Listener
-    ): Hangul3Set390391(listener) {
+    ): Hangul3Set390391(cursorKeys, listener) {
         override val hangulCombiner: HangulCombiner = HangulCombiner(Hangul3Set.COMBINATION_390_391, correctOrders)
         override val hanjaConverter: HanjaConverter = converterType.create()
         override val textLayoutTable: LayoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + Hangul3Set.TABLE_391)
@@ -237,8 +244,9 @@ abstract class KoreanIMEMode(
     class Hangul3Set391Strict(
         correctOrders: Boolean,
         converterType: ConverterType,
+        cursorKeys: Boolean,
         listener: IMEMode.Listener
-    ): Hangul3Set390391(listener) {
+    ): Hangul3Set390391(cursorKeys, listener) {
         override val hangulCombiner: HangulCombiner = HangulCombiner(Hangul3Set.COMBINATION_391_STRICT, correctOrders)
         override val hanjaConverter: HanjaConverter = converterType.create()
         override val textLayoutTable: LayoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + Hangul3Set.TABLE_391_STRICT)
@@ -248,8 +256,9 @@ abstract class KoreanIMEMode(
         correctOrders: Boolean,
         converterType: ConverterType,
         numberRow: Boolean,
+        cursorKeys: Boolean,
         listener: IMEMode.Listener
-    ): Hangul2SetKSCompatible(converterType, numberRow, listener) {
+    ): Hangul2SetKSCompatible(converterType, numberRow, cursorKeys, listener) {
         override val hangulCombiner: HangulCombiner = HangulCombiner(HangulOld.COMB_FULL, correctOrders)
         override val textLayoutTable: LayoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + HangulOld.TABLE_OLD_2SET)
     }
@@ -257,8 +266,9 @@ abstract class KoreanIMEMode(
     class HangulOld3Set393(
         correctOrders: Boolean,
         converterType: ConverterType,
+        cursorKeys: Boolean,
         listener: IMEMode.Listener
-    ): Hangul3Set390391(listener) {
+    ): Hangul3Set390391(cursorKeys, listener) {
         override val hangulCombiner: HangulCombiner = HangulCombiner(HangulOld.COMB_FULL, correctOrders)
         override val hanjaConverter: HanjaConverter = converterType.create()
         override val textLayoutTable: LayoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + HangulOld.TABLE_OLD_393)
@@ -296,18 +306,19 @@ abstract class KoreanIMEMode(
         val layout: Layout,
         val correctOrders: Boolean,
         val converterType: ConverterType,
-        val numberRow: Boolean
+        val numberRow: Boolean,
+        val cursorKeys: Boolean
     ): IMEMode.Params {
         override val type: String = TYPE
 
         override fun create(listener: IMEMode.Listener): IMEMode {
             return when(layout) {
-                Layout.Set2KS -> Hangul2SetKS(correctOrders, converterType, numberRow, listener)
-                Layout.Set3390 -> Hangul3Set390(correctOrders, converterType, listener)
-                Layout.Set3391 -> Hangul3Set391(correctOrders, converterType, listener)
-                Layout.Set3391Strict -> Hangul3Set391Strict(correctOrders, converterType, listener)
-                Layout.Set2Old -> HangulOld2Set(correctOrders, converterType, numberRow, listener)
-                Layout.Set3Old393 -> HangulOld3Set393(correctOrders, converterType, listener)
+                Layout.Set2KS -> Hangul2SetKS(correctOrders, converterType, numberRow, cursorKeys, listener)
+                Layout.Set3390 -> Hangul3Set390(correctOrders, converterType, cursorKeys, listener)
+                Layout.Set3391 -> Hangul3Set391(correctOrders, converterType, cursorKeys, listener)
+                Layout.Set3391Strict -> Hangul3Set391Strict(correctOrders, converterType, cursorKeys, listener)
+                Layout.Set2Old -> HangulOld2Set(correctOrders, converterType, numberRow, cursorKeys, listener)
+                Layout.Set3Old393 -> HangulOld3Set393(correctOrders, converterType, cursorKeys, listener)
             }
         }
 
@@ -362,11 +373,13 @@ abstract class KoreanIMEMode(
                 val converterType = ConverterType.valueOf(map["converter"] ?: ConverterType.Word.name)
                 val correctOrders = (map["correct_orders"] ?: "false").toBoolean()
                 val numberRow = map["number_row"]?.toBoolean() ?: false
+                val cursorKeys = map["cursor_keys"]?.toBoolean() ?: false
                 return Params(
                     layout = layout,
                     converterType = converterType,
                     correctOrders = correctOrders,
-                    numberRow = numberRow
+                    numberRow = numberRow,
+                    cursorKeys = cursorKeys
                 )
             }
         }
