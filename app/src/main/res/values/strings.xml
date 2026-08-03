@@ -117,6 +117,7 @@
 
     <string name="mozc_layout_romaji_qwerty">Romaji QWERTY</string>
     <string name="mozc_layout_kana_12key">Kana 12-Key</string>
+    <string name="mozc_layout_godan">GODAN</string>
     <string name="mozc_layout_kana_jis">Kana JIS</string>
     <string name="mozc_layout_kana_syllables">Kana Syllables</string>
     <string name="mozc_layout_kana_iroha">Kana Iroha</string>
