@@ -11,7 +11,6 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.LinearLayout
-import androidx.appcompat.widget.AppCompatTextView
 import ee.oyatl.ime.keyboard.databinding.KbdKeyBinding
 import ee.oyatl.ime.keyboard.databinding.KbdKeyboardBinding
 import ee.oyatl.ime.keyboard.databinding.KbdRowBinding
@@ -32,25 +31,24 @@ class DefaultKeyboardView(
     override val location: IntArray = IntArray(2)
     private val keySet: MutableSet<CachedKey> = mutableSetOf()
 
-    override var labels: Map<Int, String> = mapOf()
+    override var labels: Map<Int, KeyLabel> = mapOf()
         set(value) {
             field = value
             keySet.forEach {
-                val label = value[it.keyCode]
-                if(label != null) it.binding.label.text = label
-                FLICK_LABEL_MAP.entries.forEach { (dir, id) ->
-                    val label = value[it.keyCode or dir]
-                    if(label != null) it.binding.root.findViewById<AppCompatTextView>(id).text = label
+                val label = value[it.keyCode] ?: return@forEach
+                when(label) {
+                    is KeyLabel.Default -> {
+                        if(label.text != null) it.binding.label.text = label.text
+                        if(label.icon != null) it.binding.icon.setImageResource(label.icon)
+                    }
+                    is KeyLabel.Flick -> {
+                        if(label.text != null) it.binding.label.text = label.text
+                        if(label.up != null) it.binding.labelHintTop.text = label.up
+                        if(label.down != null) it.binding.labelHintBottom.text = label.down
+                        if(label.left != null) it.binding.labelHintLeft.text = label.left
+                        if(label.right != null) it.binding.labelHintRight.text = label.right
+                    }
                 }
-            }
-        }
-
-    override var icons: Map<Int, Int> = mapOf()
-        set(value) {
-            field = value
-            keySet.forEach {
-                val icon = value[it.keyCode]
-                if(icon != null) it.binding.icon.setImageResource(icon)
             }
         }
 
@@ -202,14 +200,5 @@ class DefaultKeyboardView(
         ).apply {
             weight = width
         }
-    }
-
-    companion object {
-        val FLICK_LABEL_MAP = mapOf(
-            FlickKeyCode.DIRECTION_LEFT to R.id.label_hint_left,
-            FlickKeyCode.DIRECTION_RIGHT to R.id.label_hint_right,
-            FlickKeyCode.DIRECTION_UP to R.id.label_hint_top,
-            FlickKeyCode.DIRECTION_DOWN to R.id.label_hint_bottom,
-        )
     }
 }

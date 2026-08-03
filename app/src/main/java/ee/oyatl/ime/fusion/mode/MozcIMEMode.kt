@@ -21,7 +21,7 @@ import ee.oyatl.ime.fusion.layout.MobileKeyboardRows
 import ee.oyatl.ime.fusion.layout.TabletKeyboard
 import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
 import ee.oyatl.ime.fusion.mozc.InputConnectionRenderer
-import ee.oyatl.ime.keyboard.FlickKeyCode
+import ee.oyatl.ime.keyboard.KeyLabel
 import ee.oyatl.ime.keyboard.KeyboardConfiguration
 import ee.oyatl.ime.keyboard.KeyboardState.Symbol
 import ee.oyatl.ime.keyboard.KeyboardTemplate
@@ -239,13 +239,13 @@ abstract class MozcIMEMode(
         )
 
         // Remove flick labels if toggle only mode
-        val keyLabels12Key: Map<Int, String> =
-            if(flickMode == FlickMode.ToggleOnly) LayoutKana.LABELS_12KEY.filter { (k, v) ->
-                (k and FlickKeyCode.MASK_DIRECTION) == FlickKeyCode.DIRECTION_NONE
+        val keyLabels12Key: Map<Int, KeyLabel> =
+            if(flickMode == FlickMode.ToggleOnly) LayoutKana.LABELS_12KEY.mapValues { (k, v) ->
+                KeyLabel.Default(v.text)
             }
             else LayoutKana.LABELS_12KEY
 
-        override val keyLabels: Map<Int, String>
+        override val keyLabels: Map<Int, KeyLabel>
             get() =
                 if(symbolState == Symbol.Text) super.keyLabels + keyLabels12Key
                 else super.keyLabels

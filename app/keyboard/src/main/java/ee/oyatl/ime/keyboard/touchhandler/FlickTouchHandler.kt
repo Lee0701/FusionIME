@@ -1,5 +1,6 @@
 package ee.oyatl.ime.keyboard.touchhandler
 
+import ee.oyatl.ime.keyboard.KeyLabel
 import ee.oyatl.ime.keyboard.KeyboardView
 import ee.oyatl.ime.keyboard.listener.FlickListener
 import ee.oyatl.ime.keyboard.popup.Popup
@@ -53,8 +54,8 @@ class FlickTouchHandler(
                 if(direction != lastDirection && (multiFlick || flicks.isEmpty())) {
                     if(pointer.key != null && pointer.key.keyCode >= 0) {
                         if(pointer.popup is PreviewPopup) {
-                            val newLabel = keyboardView.labels[direction.keyCodeFlag or pointer.key.keyCode]
-                            if(newLabel != null) pointer.popup.label = newLabel
+                            val newLabel = keyboardView.labels[pointer.key.keyCode]
+                            if(newLabel is KeyLabel.Flick) newLabel.forDirection(direction)?.let { pointer.popup.label = it }
                         }
                         val listener = keyboardView.listener
                         if(listener is FlickListener) {

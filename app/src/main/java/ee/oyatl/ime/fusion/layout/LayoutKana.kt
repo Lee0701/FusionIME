@@ -1,7 +1,7 @@
 package ee.oyatl.ime.fusion.layout
 
 import android.view.KeyEvent
-import ee.oyatl.ime.keyboard.FlickKeyCode
+import ee.oyatl.ime.keyboard.KeyLabel
 import ee.oyatl.ime.keyboard.KeyboardConfiguration
 import kotlin.math.ceil
 
@@ -122,74 +122,87 @@ object LayoutKana {
         KeyEvent.KEYCODE_PERIOD to "#?>,!"
     )
 
-    val LABELS_12KEY: Map<Int, String> = mapOf(
-        KeyEvent.KEYCODE_1 or FlickKeyCode.DIRECTION_NONE  to "あ",
-        KeyEvent.KEYCODE_1 or FlickKeyCode.DIRECTION_LEFT  to "い",
-        KeyEvent.KEYCODE_1 or FlickKeyCode.DIRECTION_UP    to "う",
-        KeyEvent.KEYCODE_1 or FlickKeyCode.DIRECTION_RIGHT to "え",
-        KeyEvent.KEYCODE_1 or FlickKeyCode.DIRECTION_DOWN  to "お",
-
-        KeyEvent.KEYCODE_2 or FlickKeyCode.DIRECTION_NONE  to "か",
-        KeyEvent.KEYCODE_2 or FlickKeyCode.DIRECTION_LEFT  to "き",
-        KeyEvent.KEYCODE_2 or FlickKeyCode.DIRECTION_UP    to "く",
-        KeyEvent.KEYCODE_2 or FlickKeyCode.DIRECTION_RIGHT to "け",
-        KeyEvent.KEYCODE_2 or FlickKeyCode.DIRECTION_DOWN  to "こ",
-
-        KeyEvent.KEYCODE_3 or FlickKeyCode.DIRECTION_NONE  to "さ",
-        KeyEvent.KEYCODE_3 or FlickKeyCode.DIRECTION_LEFT  to "し",
-        KeyEvent.KEYCODE_3 or FlickKeyCode.DIRECTION_UP    to "す",
-        KeyEvent.KEYCODE_3 or FlickKeyCode.DIRECTION_RIGHT to "せ",
-        KeyEvent.KEYCODE_3 or FlickKeyCode.DIRECTION_DOWN  to "そ",
-
-        KeyEvent.KEYCODE_4 or FlickKeyCode.DIRECTION_NONE  to "た",
-        KeyEvent.KEYCODE_4 or FlickKeyCode.DIRECTION_LEFT  to "ち",
-        KeyEvent.KEYCODE_4 or FlickKeyCode.DIRECTION_UP    to "つ",
-        KeyEvent.KEYCODE_4 or FlickKeyCode.DIRECTION_RIGHT to "て",
-        KeyEvent.KEYCODE_4 or FlickKeyCode.DIRECTION_DOWN  to "と",
-
-        KeyEvent.KEYCODE_5 or FlickKeyCode.DIRECTION_NONE  to "な",
-        KeyEvent.KEYCODE_5 or FlickKeyCode.DIRECTION_LEFT  to "に",
-        KeyEvent.KEYCODE_5 or FlickKeyCode.DIRECTION_UP    to "ぬ",
-        KeyEvent.KEYCODE_5 or FlickKeyCode.DIRECTION_RIGHT to "ね",
-        KeyEvent.KEYCODE_5 or FlickKeyCode.DIRECTION_DOWN  to "の",
-
-        KeyEvent.KEYCODE_6 or FlickKeyCode.DIRECTION_NONE  to "は",
-        KeyEvent.KEYCODE_6 or FlickKeyCode.DIRECTION_LEFT  to "ひ",
-        KeyEvent.KEYCODE_6 or FlickKeyCode.DIRECTION_UP    to "ふ",
-        KeyEvent.KEYCODE_6 or FlickKeyCode.DIRECTION_RIGHT to "へ",
-        KeyEvent.KEYCODE_6 or FlickKeyCode.DIRECTION_DOWN  to "ほ",
-
-        KeyEvent.KEYCODE_7 or FlickKeyCode.DIRECTION_NONE  to "ま",
-        KeyEvent.KEYCODE_7 or FlickKeyCode.DIRECTION_LEFT  to "み",
-        KeyEvent.KEYCODE_7 or FlickKeyCode.DIRECTION_UP    to "む",
-        KeyEvent.KEYCODE_7 or FlickKeyCode.DIRECTION_RIGHT to "め",
-        KeyEvent.KEYCODE_7 or FlickKeyCode.DIRECTION_DOWN  to "も",
-
-        KeyEvent.KEYCODE_8 or FlickKeyCode.DIRECTION_NONE  to "や",
-        KeyEvent.KEYCODE_8 or FlickKeyCode.DIRECTION_LEFT  to "（",
-        KeyEvent.KEYCODE_8 or FlickKeyCode.DIRECTION_UP    to "ゆ",
-        KeyEvent.KEYCODE_8 or FlickKeyCode.DIRECTION_RIGHT to "）",
-        KeyEvent.KEYCODE_8 or FlickKeyCode.DIRECTION_DOWN  to "よ",
-
-        KeyEvent.KEYCODE_9 or FlickKeyCode.DIRECTION_NONE  to "ら",
-        KeyEvent.KEYCODE_9 or FlickKeyCode.DIRECTION_LEFT  to "り",
-        KeyEvent.KEYCODE_9 or FlickKeyCode.DIRECTION_UP    to "る",
-        KeyEvent.KEYCODE_9 or FlickKeyCode.DIRECTION_RIGHT to "れ",
-        KeyEvent.KEYCODE_9 or FlickKeyCode.DIRECTION_DOWN  to "ろ",
-
-        KeyEvent.KEYCODE_0 or FlickKeyCode.DIRECTION_NONE  to "わ",
-        KeyEvent.KEYCODE_0 or FlickKeyCode.DIRECTION_LEFT  to "を",
-        KeyEvent.KEYCODE_0 or FlickKeyCode.DIRECTION_UP    to "ん",
-        KeyEvent.KEYCODE_0 or FlickKeyCode.DIRECTION_RIGHT to "ー",
-        KeyEvent.KEYCODE_0 or FlickKeyCode.DIRECTION_DOWN  to "～",
-
-        KeyEvent.KEYCODE_COMMA or FlickKeyCode.DIRECTION_NONE to "゛゜",
-
-        KeyEvent.KEYCODE_PERIOD or FlickKeyCode.DIRECTION_NONE  to "、",
-        KeyEvent.KEYCODE_PERIOD or FlickKeyCode.DIRECTION_LEFT  to "。",
-        KeyEvent.KEYCODE_PERIOD or FlickKeyCode.DIRECTION_UP    to "？",
-        KeyEvent.KEYCODE_PERIOD or FlickKeyCode.DIRECTION_RIGHT to "！",
-        KeyEvent.KEYCODE_PERIOD or FlickKeyCode.DIRECTION_DOWN  to "…"
+    val LABELS_12KEY: Map<Int, KeyLabel.Flick> = mapOf(
+        KeyEvent.KEYCODE_1 to KeyLabel.Flick(
+            text =  "あ",
+            left =  "い",
+            up =    "う",
+            right = "え",
+            down =  "お"
+        ),
+        KeyEvent.KEYCODE_2 to KeyLabel.Flick(
+            text =  "か",
+            left =  "き",
+            up =    "く",
+            right = "け",
+            down =  "こ"
+        ),
+        KeyEvent.KEYCODE_3 to KeyLabel.Flick(
+            text =  "さ",
+            left =  "し",
+            up =    "す",
+            right = "せ",
+            down =  "そ"
+        ),
+        KeyEvent.KEYCODE_4 to KeyLabel.Flick(
+            text =  "た",
+            left =  "ち",
+            up =    "つ",
+            right = "て",
+            down =  "と"
+        ),
+        KeyEvent.KEYCODE_5 to KeyLabel.Flick(
+            text =  "な",
+            left =  "に",
+            up =    "ぬ",
+            right = "ね",
+            down =  "の"
+        ),
+        KeyEvent.KEYCODE_6 to KeyLabel.Flick(
+            text =  "は",
+            left =  "ひ",
+            up =    "ふ",
+            right = "へ",
+            down =  "ほ"
+        ),
+        KeyEvent.KEYCODE_7 to KeyLabel.Flick(
+            text =  "ま",
+            left =  "み",
+            up =    "む",
+            right = "め",
+            down =  "も"
+        ),
+        KeyEvent.KEYCODE_8 to KeyLabel.Flick(
+            text =  "や",
+            left =  "（",
+            up =    "ゆ",
+            right = "）",
+            down =  "よ"
+        ),
+        KeyEvent.KEYCODE_9 to KeyLabel.Flick(
+            text =  "ら",
+            left =  "り",
+            up =    "る",
+            right = "れ",
+            down =  "ろ"
+        ),
+        KeyEvent.KEYCODE_0 to KeyLabel.Flick(
+            text =  "わ",
+            left =  "を",
+            up =    "ん",
+            right = "ー",
+            down =  "～"
+        ),
+        KeyEvent.KEYCODE_COMMA to KeyLabel.Flick(
+            text =  "゛゜",
+        ),
+        KeyEvent.KEYCODE_PERIOD to KeyLabel.Flick(
+            text =  "、",
+            left =  "。",
+            up =    "？",
+            right = "！",
+            down =  "…"
+        )
     )
 
     val TABLE_JIS = mapOf(

@@ -25,6 +25,7 @@ import ee.oyatl.ime.fusion.layout.NumberKeyboard
 import ee.oyatl.ime.fusion.layout.TabletKeyboard
 import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
 import ee.oyatl.ime.keyboard.DefaultKeyboardView
+import ee.oyatl.ime.keyboard.KeyLabel
 import ee.oyatl.ime.keyboard.KeyboardConfiguration
 import ee.oyatl.ime.keyboard.KeyboardParams
 import ee.oyatl.ime.keyboard.KeyboardState
@@ -104,12 +105,13 @@ abstract class CommonIMEMode(
         KeyboardState.Symbol.Number -> numberLayoutTable
     }
 
-    open val keyLabels: Map<Int, String>
+    open val keyLabels: Map<Int, KeyLabel>
         get() = currentLayoutTable.map.mapValues { (_, v) ->
-            when(v) {
+            val str = when(v) {
                 is LayoutTable.DefaultItem -> v.forShiftState(shiftState)
                 else -> v.normal
             }.toChar().toString()
+            KeyLabel.Default(str)
         }
 
     protected var keyboardView: KeyboardView? = null
@@ -299,17 +301,16 @@ abstract class CommonIMEMode(
             keyboardView.state = symbolState
         }
         if(keyboardView != null) {
-            keyboardView.labels = this.keyLabels
             val shiftIcon = when(shiftState) {
                 KeyboardState.Shift.Released -> ee.oyatl.ime.keyboard.R.drawable.keyic_shift
                 KeyboardState.Shift.Pressed -> ee.oyatl.ime.keyboard.R.drawable.keyic_shift_pressed
                 KeyboardState.Shift.Locked -> ee.oyatl.ime.keyboard.R.drawable.keyic_shift_locked
             }
             val icons = mapOf(
-                KeyEvent.KEYCODE_SHIFT_LEFT to shiftIcon,
-                KeyEvent.KEYCODE_SHIFT_RIGHT to shiftIcon
+                KeyEvent.KEYCODE_SHIFT_LEFT to KeyLabel.Default(icon = shiftIcon),
+                KeyEvent.KEYCODE_SHIFT_RIGHT to KeyLabel.Default(icon = shiftIcon)
             )
-            keyboardView.icons = icons
+            keyboardView.labels = icons + this.keyLabels
         }
     }
 

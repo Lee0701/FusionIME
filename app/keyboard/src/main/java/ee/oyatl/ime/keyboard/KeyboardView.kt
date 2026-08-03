@@ -11,8 +11,7 @@ interface KeyboardView {
     val listener: KeyboardListener
     val popupManager: PopupManager
 
-    var labels: Map<Int, String>
-    var icons: Map<Int, Int>
+    var labels: Map<Int, KeyLabel>
 
     fun onReset()
     fun findKey(x: Int, y: Int): KeyInterface?
