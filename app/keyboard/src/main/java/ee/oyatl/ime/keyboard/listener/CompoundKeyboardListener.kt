@@ -1,18 +1,27 @@
 package ee.oyatl.ime.keyboard.listener
 
-import ee.oyatl.ime.keyboard.listener.KeyboardListener
+import ee.oyatl.ime.keyboard.touchhandler.FlickDirection
 
 class CompoundKeyboardListener(
     val listeners: List<KeyboardListener>
-): KeyboardListener {
+): KeyboardListener, FlickListener {
     constructor(vararg listeners: KeyboardListener): this(listeners.toList())
 
-    override fun onKeyDown(keyCode: Int, metaState: Int) {
-        listeners.forEach { it.onKeyDown(keyCode, metaState) }
+    override fun onKeyDown(keyCode: Int, metaState: Int): Boolean {
+        return listeners.any { it.onKeyDown(keyCode, metaState) }
     }
 
-    override fun onKeyUp(keyCode: Int, metaState: Int) {
-        listeners.forEach { it.onKeyUp(keyCode, metaState) }
+    override fun onKeyUp(keyCode: Int, metaState: Int): Boolean {
+        return listeners.any { it.onKeyUp(keyCode, metaState) }
+    }
+
+    override fun onFlick(
+        keyCode: Int,
+        direction: FlickDirection
+    ): Boolean {
+        return listeners
+            .filterIsInstance<FlickListener>()
+            .any { it.onFlick(keyCode, direction) }
     }
 
     override fun onReset() {
