@@ -14,8 +14,8 @@ interface IMEMode {
     fun createCandidateView(context: Context): View
     fun getInputView(): View?
 
-    fun onKeyDown(keyCode: Int, metaState: Int)
-    fun onKeyUp(keyCode: Int, metaState: Int)
+    fun onKeyDown(keyCode: Int, metaState: Int): Boolean
+    fun onKeyUp(keyCode: Int, metaState: Int): Boolean
 
     fun updateSelection(
         oldSelStart: Int, oldSelEnd: Int,
