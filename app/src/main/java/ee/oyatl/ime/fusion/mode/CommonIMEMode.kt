@@ -25,7 +25,6 @@ import ee.oyatl.ime.fusion.layout.NumberKeyboard
 import ee.oyatl.ime.fusion.layout.TabletKeyboard
 import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
 import ee.oyatl.ime.keyboard.DefaultKeyboardView
-import ee.oyatl.ime.keyboard.FlickKeyCode
 import ee.oyatl.ime.keyboard.KeyboardConfiguration
 import ee.oyatl.ime.keyboard.KeyboardParams
 import ee.oyatl.ime.keyboard.KeyboardState
@@ -35,6 +34,7 @@ import ee.oyatl.ime.keyboard.LayoutTable
 import ee.oyatl.ime.keyboard.SwitcherKeyboardView
 import ee.oyatl.ime.keyboard.listener.CompoundKeyboardListener
 import ee.oyatl.ime.keyboard.listener.DeleteRepeater
+import ee.oyatl.ime.keyboard.listener.FlickListener
 import ee.oyatl.ime.keyboard.listener.InputOnKeyUp
 import ee.oyatl.ime.keyboard.listener.KeyFeedbackManager
 import ee.oyatl.ime.keyboard.listener.KeyboardListener
@@ -48,11 +48,11 @@ import kotlin.math.roundToInt
 
 abstract class CommonIMEMode(
     private val listener: IMEMode.Listener
-): IMEMode, KeyboardListener, CandidateView.Listener {
+): IMEMode, KeyboardListener, FlickListener, CandidateView.Listener {
     protected val keyCharacterMap: KeyCharacterMap = KeyCharacterMap.load(KeyCharacterMap.VIRTUAL_KEYBOARD)
 
-    open val textLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY)
-    open val symbolLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutSymbol.TABLE_G)
+    open val textLayoutTable: LayoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY)
+    open val symbolLayoutTable: LayoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutSymbol.TABLE_G)
     open val numberLayoutTable: LayoutTable = LayoutTable(mapOf())
 
     open val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
@@ -105,7 +105,12 @@ abstract class CommonIMEMode(
     }
 
     open val keyLabels: Map<Int, String>
-        get() = currentLayoutTable.map.mapValues { (_, v) -> v.forShiftState(shiftState).toChar().toString() }
+        get() = currentLayoutTable.map.mapValues { (_, v) ->
+            when(v) {
+                is LayoutTable.DefaultItem -> v.forShiftState(shiftState)
+                else -> v.normal
+            }.toChar().toString()
+        }
 
     protected var keyboardView: KeyboardView? = null
     protected var candidateView: CandidateView? = null
@@ -142,7 +147,9 @@ abstract class CommonIMEMode(
                 shiftState = KeyboardState.Shift.Released
                 keyboardView?.onReset()
             }
-            else -> util?.sendDownUpKeyEvents(keyCode)
+            else -> {
+                util?.sendDownUpKeyEvents(keyCode)
+            }
         }
     }
 
@@ -368,25 +375,9 @@ abstract class CommonIMEMode(
         } else if(keyCode < 0) {
             onChar(-keyCode)
         } else if(keyCode > KeyEvent.getMaxKeyCode() || keyCharacterMap.isPrintingKey(keyCode)) {
-            val maskedKeyCode = keyCode and FlickKeyCode.MASK_KEYCODE
-            val default = keyCharacterMap.get(maskedKeyCode, metaState)
-            if(keyCode and FlickKeyCode.FLAG_FLICK != 0) {
-                val direction = FlickDirection.valueOfKeycode(keyCode)
-                when(defaultFlickActions[direction]) {
-                    FlickAction.Default -> onChar(
-                        currentLayoutTable[maskedKeyCode]?.forShiftState(shiftState) ?: default)
-                    FlickAction.Shifted -> onChar(
-                        currentLayoutTable[maskedKeyCode]?.forShiftState(KeyboardState.Shift.Pressed) ?: default)
-                    FlickAction.Symbol -> onChar(
-                        symbolLayoutTable[maskedKeyCode]?.forShiftState(shiftState) ?: default)
-                    FlickAction.ShiftedSymbol -> onChar(
-                        symbolLayoutTable[maskedKeyCode]?.forShiftState(KeyboardState.Shift.Pressed) ?: default)
-                    else -> Unit
-                }
-            } else {
-                onChar(
-                    currentLayoutTable[keyCode]?.forShiftState(shiftState) ?: default)
-            }
+            val item = currentLayoutTable[keyCode]
+            if(item is LayoutTable.DefaultItem) onChar(item.forShiftState(shiftState))
+            else onChar(item?.normal ?: keyCharacterMap.get(keyCode, metaState))
         } else {
             onSpecial(keyCode)
         }
@@ -400,6 +391,19 @@ abstract class CommonIMEMode(
         }
         updateInputView()
         return true
+    }
+
+    override fun onFlick(keyCode: Int, direction: FlickDirection): Boolean {
+        val item = currentLayoutTable[keyCode]
+        val symbol = symbolLayoutTable[keyCode]
+        when(defaultFlickActions[direction]) {
+            FlickAction.Default -> if(item is LayoutTable.DefaultItem) onChar(item.forShiftState(shiftState))
+            FlickAction.Shifted -> if(item is LayoutTable.DefaultItem) onChar(item.forShiftState(KeyboardState.Shift.Pressed))
+            FlickAction.Symbol -> if(symbol is LayoutTable.DefaultItem) onChar(symbol.forShiftState(shiftState))
+            FlickAction.ShiftedSymbol -> if(symbol is LayoutTable.DefaultItem) onChar(symbol.forShiftState(KeyboardState.Shift.Pressed))
+            else -> Unit
+        }
+        return false
     }
 
     protected fun submitCandidates(candidates: List<CandidateView.Candidate>) {

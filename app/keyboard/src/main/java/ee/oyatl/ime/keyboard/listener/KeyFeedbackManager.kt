@@ -28,7 +28,6 @@ class KeyFeedbackManager(
     private var downTime: Long = 0
 
     override fun onKeyDown(keyCode: Int, metaState: Int): Boolean {
-        if(keyCode >= 0 && keyCode and FlickKeyCode.FLAG_FLICK != 0) return false
         downTime = System.currentTimeMillis()
         if(params.vibrationDuration > 0) {
             vibrate(params.vibrationDuration)
@@ -46,7 +45,6 @@ class KeyFeedbackManager(
     }
 
     override fun onKeyUp(keyCode: Int, metaState: Int): Boolean {
-        if(keyCode >= 0 && keyCode and FlickKeyCode.FLAG_FLICK != 0) return false
         val diff = System.currentTimeMillis() - downTime
         if(params.vibrationDuration > 0) {
             val duration = params.vibrationDuration / 5f * min(diff / 100f, 1f)

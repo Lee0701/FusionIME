@@ -1,5 +1,6 @@
 package ee.oyatl.ime.keyboard.listener
 
+import android.os.Handler
 import android.view.KeyEvent
 import ee.oyatl.ime.keyboard.FlickKeyCode
 import ee.oyatl.ime.keyboard.KeyboardParams
@@ -9,6 +10,8 @@ class ShiftStateManager(
     val listener: KeyboardListener,
     val params: KeyboardParams
 ): KeyboardListener {
+    val handler = Handler()
+
     var shiftState: KeyboardState.Shift = KeyboardState.Shift.Released
         set(value) {
             field = value
@@ -36,7 +39,7 @@ class ShiftStateManager(
     }
 
     override fun onKeyDown(keyCode: Int, metaState: Int): Boolean {
-        when(keyCode and FlickKeyCode.MASK_KEYCODE) {
+        when(keyCode) {
             KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.KEYCODE_SHIFT_RIGHT -> {
                 onShiftPressed(keyCode)
                 return true
@@ -48,13 +51,13 @@ class ShiftStateManager(
     }
 
     override fun onKeyUp(keyCode: Int, metaState: Int): Boolean {
-        when(keyCode and FlickKeyCode.MASK_KEYCODE) {
+        when(keyCode) {
             KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.KEYCODE_SHIFT_RIGHT -> {
                 onShiftReleased(keyCode)
                 return true
             }
             else -> {
-                autoReleaseShift()
+                handler.post { autoReleaseShift() }
                 return false
             }
         }

@@ -5,11 +5,12 @@ import android.os.Looper
 import android.view.KeyEvent
 import ee.oyatl.ime.keyboard.FlickKeyCode
 import ee.oyatl.ime.keyboard.KeyboardParams
+import ee.oyatl.ime.keyboard.touchhandler.FlickDirection
 
 class DeleteRepeater(
     val listener: KeyboardListener,
     val params: KeyboardParams
-): KeyboardListener {
+): KeyboardListener, FlickListener {
     private val handler = Handler(Looper.getMainLooper())
 
     override fun onReset() {
@@ -17,7 +18,7 @@ class DeleteRepeater(
     }
 
     override fun onKeyDown(keyCode: Int, metaState: Int): Boolean {
-        when(keyCode and FlickKeyCode.MASK_KEYCODE) {
+        when(keyCode) {
             KeyEvent.KEYCODE_DEL -> {
                 onDeletePressed(keyCode, metaState)
                 return true
@@ -27,12 +28,20 @@ class DeleteRepeater(
     }
 
     override fun onKeyUp(keyCode: Int, metaState: Int): Boolean {
-        when(keyCode and FlickKeyCode.MASK_KEYCODE) {
+        when(keyCode) {
             KeyEvent.KEYCODE_DEL -> {
                 onDeleteReleased(keyCode, metaState)
                 return true
             }
         }
+        return false
+    }
+
+    override fun onFlick(
+        keyCode: Int,
+        direction: FlickDirection
+    ): Boolean {
+        handler.removeCallbacksAndMessages(null)
         return false
     }
 

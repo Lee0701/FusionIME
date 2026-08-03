@@ -27,6 +27,8 @@ import ee.oyatl.ime.keyboard.KeyboardState.Symbol
 import ee.oyatl.ime.keyboard.KeyboardTemplate
 import ee.oyatl.ime.keyboard.LayoutTable
 import ee.oyatl.ime.keyboard.SoftKeyCodeMapper
+import ee.oyatl.ime.keyboard.listener.FlickListener
+import ee.oyatl.ime.keyboard.touchhandler.FlickDirection
 import ee.oyatl.ime.keyboard.touchhandler.FlickTouchHandler
 import ee.oyatl.ime.keyboard.touchhandler.TouchHandler
 import org.mozc.android.inputmethod.japanese.MozcUtil
@@ -200,7 +202,7 @@ abstract class MozcIMEMode(
         numberRow: Boolean
     ): MozcIMEMode(listener, candidateViewHeight) {
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.QWERTY_KANA
-        override val textLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutRomaji.TABLE_QWERTY)
+        override val textLayoutTable: LayoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutRomaji.TABLE_QWERTY)
         override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
             mobile = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
@@ -225,13 +227,15 @@ abstract class MozcIMEMode(
         listener: IMEMode.Listener,
         candidateViewHeight: Int,
         val flickMode: FlickMode
-    ): MozcIMEMode(listener, candidateViewHeight) {
-        // Remove flick mappings if toggle only mode
-        val layoutTable12Key: Map<Int, List<Int>> =
-            if(flickMode == FlickMode.ToggleOnly) LayoutKana.TABLE_12KEY.filter { (k, v) ->
-                (k and FlickKeyCode.MASK_DIRECTION) == FlickKeyCode.DIRECTION_NONE
-            }
-            else LayoutKana.TABLE_12KEY
+    ): MozcIMEMode(listener, candidateViewHeight), FlickListener {
+        override val keyboardSpecification: KeyboardSpecification = flickMode.keyboardSpecification
+        override val textLayoutTable: LayoutTable = LayoutTable.fromFlick4Dirs(LayoutKana.TABLE_12KEY.mapValues { (_, list) -> list.map { it.code } })
+        override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
+            mobile = KeyboardTemplate.Basic(
+                configuration = LayoutKana.mobileKeyboardConfiguration12Key(),
+                contentRows = LayoutKana.ROWS_12KEY
+            )
+        )
 
         // Remove flick labels if toggle only mode
         val keyLabels12Key: Map<Int, String> =
@@ -240,21 +244,12 @@ abstract class MozcIMEMode(
             }
             else LayoutKana.LABELS_12KEY
 
-        override val keyboardSpecification: KeyboardSpecification = flickMode.keyboardSpecification
-        override val textLayoutTable: LayoutTable = LayoutTable.from(layoutTable12Key)
-        override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
-            mobile = KeyboardTemplate.Basic(
-                configuration = LayoutKana.mobileKeyboardConfiguration12Key(),
-                contentRows = LayoutKana.ROWS_12KEY
-            )
-        )
-
         override val keyLabels: Map<Int, String>
             get() =
                 if(symbolState == Symbol.Text) super.keyLabels + keyLabels12Key
                 else super.keyLabels
 
-        private val flicks: MutableMap<Int, Int> = mutableMapOf()
+        private val flicks: MutableMap<Int, FlickDirection> = mutableMapOf()
 
         override fun createTouchHandler(
             keyboardView: TouchHandler.KeyboardViewInterface,
@@ -272,36 +267,31 @@ abstract class MozcIMEMode(
         }
 
         override fun onKeyDown(keyCode: Int, metaState: Int): Boolean {
-            val isFlick = keyCode and FlickKeyCode.FLAG_FLICK != 0
-            if(!isFlick) {
-                if(keyCode <= 0 || !keyCharacterMap.isPrintingKey(keyCode)) {
-                    return super.onKeyDown(keyCode, metaState)
-                }
-            } else if(symbolState != Symbol.Text) {
+            if(keyCode <= 0 || !keyCharacterMap.isPrintingKey(keyCode)) {
                 return super.onKeyDown(keyCode, metaState)
             }
             return false
         }
 
         override fun onKeyUp(keyCode: Int, metaState: Int): Boolean {
-            val isFlick = keyCode and FlickKeyCode.FLAG_FLICK != 0
-            if(!isFlick) {
-                if(keyCode <= 0 || !keyCharacterMap.isPrintingKey(keyCode)) {
-                    return super.onKeyUp(keyCode, metaState)
-                }
+            if(keyCode <= 0 || !keyCharacterMap.isPrintingKey(keyCode)) {
+                return super.onKeyUp(keyCode, metaState)
             }
-            if(isFlick) {
-                val code = keyCode and FlickKeyCode.MASK_KEYCODE
-                val direction = keyCode and FlickKeyCode.MASK_DIRECTION
-                this.flicks += code to direction
-            } else {
-                val direction = flicks[keyCode] ?: FlickKeyCode.DIRECTION_NONE
-                val key = if(flickMode == FlickMode.ToggleOnly) keyCode else keyCode or direction
-                val charCode = currentLayoutTable[key]?.forShiftState(shiftState)
-                val default = keyCharacterMap.get(keyCode, metaState)
-                onChar(charCode ?: default)
-                this.flicks -= keyCode
+            val direction = flicks[keyCode]
+            when(val item = currentLayoutTable[keyCode]) {
+                is LayoutTable.FlickItem -> onChar(item.forFlickDirection(direction))
+                else -> onChar(item?.normal ?: keyCharacterMap.get(keyCode, metaState))
             }
+            this.flicks -= keyCode
+            return false
+        }
+
+        override fun onFlick(
+            keyCode: Int,
+            direction: FlickDirection
+        ): Boolean {
+            if(flickMode == FlickMode.ToggleOnly) return false
+            this.flicks += keyCode to direction
             return false
         }
     }
@@ -311,7 +301,7 @@ abstract class MozcIMEMode(
         candidateViewHeight: Int
     ): MozcIMEMode(listener, candidateViewHeight) {
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.QWERTY_KANA_JIS
-        override val textLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutKana.TABLE_JIS)
+        override val textLayoutTable: LayoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutKana.TABLE_JIS)
         override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
             mobile = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
