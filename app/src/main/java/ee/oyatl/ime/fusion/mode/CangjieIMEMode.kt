@@ -68,8 +68,9 @@ abstract class CangjieIMEMode(
         if(candidate is CangjieCandidate) {
             wordComposer.consume(candidate.key.length)
         } else {
-            wordComposer.reset()
+            wordComposer.consume(candidate.text.length)
         }
+        wordComposer.moveCursor(wordComposer.composingText.length)
         renderInput()
     }
 
@@ -112,10 +113,10 @@ abstract class CangjieIMEMode(
                     val bestCandidate = bestCandidate
                     if(bestCandidate != null) onCandidateSelected(bestCandidate)
                 } else {
+                    onReset()
                     if(fullWidth) util?.sendKeyChar(0x3000.toChar())
                     else util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_SPACE)
                 }
-                onReset()
             }
             KeyEvent.KEYCODE_ENTER -> {
                 if(wordComposer.composingText.isNotEmpty()) onReset()
