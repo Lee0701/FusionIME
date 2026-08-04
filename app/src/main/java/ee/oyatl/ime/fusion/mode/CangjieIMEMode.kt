@@ -145,7 +145,7 @@ abstract class CangjieIMEMode(
                     wordComposer.moveCursorRelative(1)
                     renderInput()
                 } else {
-                    util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_DPAD_LEFT)
+                    util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_DPAD_RIGHT)
                 }
             }
             else -> super.onSpecial(keyCode)

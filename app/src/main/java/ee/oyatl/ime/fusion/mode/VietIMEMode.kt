@@ -143,7 +143,7 @@ abstract class VietIMEMode(
                     wordComposer.moveCursorRelative(1)
                     renderInputView()
                 } else {
-                    util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_DPAD_LEFT)
+                    util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_DPAD_RIGHT)
                 }
             }
             else -> super.onSpecial(keyCode)

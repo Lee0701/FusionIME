@@ -159,7 +159,11 @@ class ZhuyinIMEMode(
             wordComposer.moveCursorRelative(amount)
             renderResult()
         } else {
-            util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_DPAD_LEFT)
+            val keyCode =
+                if(amount < 0) KeyEvent.KEYCODE_DPAD_LEFT
+                else if(amount > 0) KeyEvent.KEYCODE_DPAD_RIGHT
+                else 0
+            if(keyCode != 0) util?.sendDownUpKeyEvents(keyCode)
         }
     }
 
