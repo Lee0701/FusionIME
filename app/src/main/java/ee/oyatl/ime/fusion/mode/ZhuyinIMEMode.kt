@@ -23,7 +23,8 @@ import ee.oyatl.ime.keyboard.LayoutTable
 import java.util.Locale
 
 class ZhuyinIMEMode(
-    listener: IMEMode.Listener
+    listener: IMEMode.Listener,
+    cursorKeys: Boolean
 ): CommonIMEMode(listener) {
     private val handler: Handler = Handler(Looper.getMainLooper()) { msg ->
         when(msg.what) {
@@ -40,7 +41,7 @@ class ZhuyinIMEMode(
             configuration = KeyboardConfiguration(
                 MobileKeyboard.numbers(),
                 MobileKeyboard.alphabetic(semicolon = true, shiftDeleteWidth = 1f, shift = false),
-                MobileKeyboard.bottom(KeyEvent.KEYCODE_MINUS, KeyEvent.KEYCODE_SLASH)
+                MobileKeyboard.bottom(left = KeyEvent.KEYCODE_MINUS, right = KeyEvent.KEYCODE_SLASH, dpad = cursorKeys)
             ),
             contentRows = MobileKeyboardRows.NUMBERS + MobileKeyboardRows.HALF_GRID
         ),
@@ -178,11 +179,13 @@ class ZhuyinIMEMode(
         override val text: CharSequence
     ): CandidateView.Candidate
 
-    class Params: IMEMode.Params {
+    class Params(
+        val cursorKeys: Boolean
+    ): IMEMode.Params {
         override val type: String = TYPE
 
         override fun create(listener: IMEMode.Listener): IMEMode {
-            return ZhuyinIMEMode(listener)
+            return ZhuyinIMEMode(listener, cursorKeys)
         }
 
         override fun getLabel(context: Context): String {
@@ -197,7 +200,8 @@ class ZhuyinIMEMode(
 
         companion object {
             fun parse(map: Map<String, String>): Params {
-                return Params()
+                val cursorKeys = map["cursor_keys"]?.toBoolean() ?: false
+                return Params(cursorKeys)
             }
         }
     }

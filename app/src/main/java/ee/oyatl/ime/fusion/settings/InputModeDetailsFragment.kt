@@ -12,6 +12,7 @@ import ee.oyatl.ime.fusion.mode.LatinIMEMode
 import ee.oyatl.ime.fusion.mode.MozcIMEMode
 import ee.oyatl.ime.fusion.mode.PinyinIMEMode
 import ee.oyatl.ime.fusion.mode.VietIMEMode
+import ee.oyatl.ime.fusion.mode.ZhuyinIMEMode
 
 abstract class InputModeDetailsFragment: PreferenceFragmentCompat() {
 
@@ -92,6 +93,14 @@ abstract class InputModeDetailsFragment: PreferenceFragmentCompat() {
         }
     }
 
+    class Zhuyin: InputModeDetailsFragment() {
+        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+            super.onCreatePreferences(savedInstanceState, rootKey)
+            if(Feature.CursorKeys.availableInCurrentVersion)
+                addPreferencesFromResource(R.xml.pref_input_mode_cursor_keys)
+        }
+    }
+
     class Viet: InputModeDetailsFragment() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             super.onCreatePreferences(savedInstanceState, rootKey)
@@ -126,6 +135,7 @@ abstract class InputModeDetailsFragment: PreferenceFragmentCompat() {
                 KoreanIMEMode.TYPE -> Korean()
                 MozcIMEMode.TYPE -> Mozc()
                 PinyinIMEMode.TYPE -> Pinyin()
+                ZhuyinIMEMode.TYPE -> Zhuyin()
                 VietIMEMode.TYPE -> Viet()
                 CangjieIMEMode.TYPE -> Cangjie()
                 else -> null
