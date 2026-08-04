@@ -130,6 +130,22 @@ abstract class VietIMEMode(
                     util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_DEL)
                 }
             }
+            KeyEvent.KEYCODE_DPAD_LEFT -> {
+                if(wordComposer.composingText.isNotEmpty()) {
+                    wordComposer.moveCursorRelative(-1)
+                    renderInputView()
+                } else {
+                    util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_DPAD_LEFT)
+                }
+            }
+            KeyEvent.KEYCODE_DPAD_RIGHT -> {
+                if(wordComposer.composingText.isNotEmpty()) {
+                    wordComposer.moveCursorRelative(1)
+                    renderInputView()
+                } else {
+                    util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_DPAD_LEFT)
+                }
+            }
             else -> super.onSpecial(keyCode)
         }
     }
