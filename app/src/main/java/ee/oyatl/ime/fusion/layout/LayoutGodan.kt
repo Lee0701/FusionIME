@@ -58,6 +58,7 @@ object LayoutGodan {
 
     val TABLE: Map<Int, List<Int>> = mapOf(
         // Main 14 Roman-letter keys.
+        // main, up, down, left, right
 
         // Vowel keys.
         // Tap: normal vowel
@@ -80,7 +81,7 @@ object LayoutGodan {
         KeyEvent.KEYCODE_Y to listOf('y'.code, 'x'.code, '9'.code, '('.code, ')'.code),
         KeyEvent.KEYCODE_N to listOf('n'.code, 0, '0'.code, ':'.code, '・'.code),
         KeyEvent.KEYCODE_R to listOf('r'.code, '?'.code, '、'.code, '。'.code, '!'.code),
-        KeyEvent.KEYCODE_W to listOf('w'.code, 0, 'v'.code, '「'.code, '」'.code),
+        KeyEvent.KEYCODE_W to listOf('w'.code, 'v'.code, 0, '「'.code, '」'.code),
     )
 
     val LABELS: Map<Int, KeyLabel.Flick> = mapOf(
@@ -173,8 +174,8 @@ object LayoutGodan {
         KeyEvent.KEYCODE_W to KeyLabel.Flick(
             text =  "W",
             left =  "「",
-            right = "」",
-            down =  "V"
+            up =  "V",
+            right = "」"
         ),
     )
 }
