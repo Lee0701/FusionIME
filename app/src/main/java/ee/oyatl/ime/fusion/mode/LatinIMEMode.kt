@@ -34,7 +34,9 @@ import com.android.inputmethod.latin.settings.SettingsValues
 import com.android.inputmethod.latin.utils.ScriptUtils
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.TripleCandidateView
+import ee.oyatl.ime.fusion.Feature
 import ee.oyatl.ime.fusion.R
+import ee.oyatl.ime.fusion.UnicodeConverter
 import ee.oyatl.ime.keyboard.KeyboardConfiguration
 import ee.oyatl.ime.keyboard.KeyboardTemplate
 import ee.oyatl.ime.keyboard.LayoutTable
@@ -46,7 +48,8 @@ import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
 import java.util.Locale
 
 abstract class LatinIMEMode(
-    private val listener: IMEMode.Listener
+    private val listener: IMEMode.Listener,
+    private val unicodeConversion: Boolean
 ): CommonIMEMode(listener), ILatinIME {
     abstract val locale: Locale
     override var context: Context? = null
@@ -72,6 +75,8 @@ abstract class LatinIMEMode(
     override val currentAutoCapsState: Int = 0
     override val currentRecapitalizeState: Int = 0
 
+    private var unicodeConverter: UnicodeConverter? = null
+
     override suspend fun onLoad(context: Context) {
         super.onLoad(context)
         this.context = context
@@ -82,6 +87,10 @@ abstract class LatinIMEMode(
         KeyboardSwitcher.init(this)
         keyboardSwitcher = KeyboardSwitcher.getInstance()
         inputLogic = InputLogic(this, this, dictionaryFacilitator)
+
+        if(Feature.UnicodeInput.availableInCurrentVersion && unicodeConversion) {
+            unicodeConverter = UnicodeConverter("U")
+        }
     }
 
     override fun onStart(inputConnection: InputConnection, editorInfo: EditorInfo) {
@@ -395,7 +404,8 @@ abstract class LatinIMEMode(
     fun setSuggestedWords(suggestedWords: SuggestedWords) {
         val wordList = (0 until suggestedWords.size()).map { suggestedWords.getInfo(it) }
         val candidates = wordList.mapIndexed { i, s -> LatinCandidate(i, s) }
-        submitCandidates(candidates)
+        val unicodeCandidate = unicodeConverter?.convert(suggestedWords.typedWordInfo.word).orEmpty()
+        submitCandidates(unicodeCandidate + candidates)
     }
 
     override fun setNeutralSuggestionStrip() {
@@ -501,8 +511,9 @@ abstract class LatinIMEMode(
     class Qwerty(
         override val locale: Locale,
         numberRow: Boolean,
+        unicodeConversion: Boolean,
         listener: IMEMode.Listener
-    ): LatinIMEMode(listener) {
+    ): LatinIMEMode(listener, unicodeConversion) {
         override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
             mobile = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
@@ -526,8 +537,9 @@ abstract class LatinIMEMode(
     class Dvorak(
         override val locale: Locale,
         numberRow: Boolean,
+        unicodeConversion: Boolean,
         listener: IMEMode.Listener
-    ): LatinIMEMode(listener) {
+    ): LatinIMEMode(listener, unicodeConversion) {
         override val textLayoutTable: LayoutTable = super.textLayoutTable.mapKeyCodes(LayoutLatin.KEYCODE_MAP_DVORAK)
         override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
             mobile = KeyboardTemplate.Basic(
@@ -552,8 +564,9 @@ abstract class LatinIMEMode(
     class Colemak(
         override val locale: Locale,
         numberRow: Boolean,
+        unicodeConversion: Boolean,
         listener: IMEMode.Listener
-    ): LatinIMEMode(listener) {
+    ): LatinIMEMode(listener, unicodeConversion) {
         override val textLayoutTable: LayoutTable = super.textLayoutTable.mapKeyCodes(LayoutLatin.KEYCODE_MAP_COLEMAK)
         override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
             mobile = KeyboardTemplate.Basic(
@@ -578,15 +591,16 @@ abstract class LatinIMEMode(
     data class Params(
         val locale: Locale = Locale.ENGLISH,
         val layout: Layout = Layout.Qwerty,
-        val numberRow: Boolean = false
+        val numberRow: Boolean = false,
+        val unicodeConversion: Boolean = false
     ): IMEMode.Params {
         override val type: String = TYPE
 
         override fun create(listener: IMEMode.Listener): LatinIMEMode {
             return when(layout) {
-                Layout.Qwerty -> Qwerty(locale, numberRow, listener)
-                Layout.Dvorak -> Dvorak(locale, numberRow, listener)
-                Layout.Colemak -> Colemak(locale, numberRow, listener)
+                Layout.Qwerty -> Qwerty(locale, numberRow, unicodeConversion, listener)
+                Layout.Dvorak -> Dvorak(locale, numberRow, unicodeConversion, listener)
+                Layout.Colemak -> Colemak(locale, numberRow, unicodeConversion, listener)
             }
         }
 
@@ -618,10 +632,12 @@ abstract class LatinIMEMode(
                     else Locale(localeName[0])
                 val layout = Layout.entries.find { it.name == map["layout"] } ?: Layout.Qwerty
                 val numberRow = map["number_row"]?.toBoolean() ?: false
+                val unicodeConversion = map["unicode_conversion"]?.toBoolean() ?: false
                 return Params(
                     locale = locale,
                     layout = layout,
-                    numberRow = numberRow
+                    numberRow = numberRow,
+                    unicodeConversion = unicodeConversion
                 )
             }
         }

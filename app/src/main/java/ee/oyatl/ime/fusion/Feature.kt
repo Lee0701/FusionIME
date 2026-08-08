@@ -10,6 +10,7 @@ enum class Feature(
     NumberRow(LocalDate.of(2026, 3, 15)),
     SplitKeyboard(LocalDate.of(2026, 3, 15)),
     TouchMode(LocalDate.of(2026, 4, 16)),
+    UnicodeInput(LocalDate.of(2026, 8, 7)),
     ;
 
     val availableInPaidVersion: Boolean get() =

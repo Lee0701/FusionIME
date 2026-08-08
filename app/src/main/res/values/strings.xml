@@ -56,6 +56,8 @@
     <string name="settings_input_mode_layout_title">Keyboard Layout</string>
     <string name="settings_input_mode_number_row_title">Number Row</string>
     <string name="settings_input_mode_number_row_summary">Always show top number row</string>
+    <string name="settings_input_mode_unicode_conversion_title">Unicode Conversion</string>
+    <string name="settings_input_mode_unicode_conversion_summary">Convert Unicode codepoints prefixed with \'u\'.</string>
     <string name="settings_input_mode_fullwidth_symbols_title">Full Width Symbols</string>
     <string name="settings_input_mode_correct_orders_title">Correct Jamo Orders</string>
     <string name="settings_input_mode_converter_title">Converter</string>
