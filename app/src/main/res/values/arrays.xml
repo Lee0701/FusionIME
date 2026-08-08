@@ -160,13 +160,17 @@
     </string-array>
 
     <string-array name="settings_input_mode_viet_layout_entries">
-        <item>@string/viet_layout_qwerty</item>
-        <item>@string/viet_layout_telex</item>
+        <item>@string/viet_layout_qwerty_nom</item>
+        <item>@string/viet_layout_qwerty_quoc_ngu</item>
+        <item>@string/viet_layout_telex_nom</item>
+        <item>@string/viet_layout_telex_quoc_ngu</item>
     </string-array>
 
     <string-array name="settings_input_mode_viet_layout_values">
-        <item>Qwerty</item>
-        <item>Telex</item>
+        <item>QwertyNom</item>
+        <item>QwertyQuocNgu</item>
+        <item>TelexNom</item>
+        <item>TelexQuocNgu</item>
     </string-array>
 
     <string-array name="settings_input_mode_cangjie_layout_entries">
