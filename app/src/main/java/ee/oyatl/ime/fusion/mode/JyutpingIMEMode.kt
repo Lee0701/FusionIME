@@ -22,6 +22,7 @@ import java.util.Locale
 
 class JyutpingIMEMode(
     numberRow: Boolean,
+    cursorKeys: Boolean,
     listener: IMEMode.Listener
 ): CommonIMEMode(listener) {
     override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
@@ -29,7 +30,7 @@ class JyutpingIMEMode(
             configuration = KeyboardConfiguration(
                 if(numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
                 MobileKeyboard.alphabetic(),
-                MobileKeyboard.bottom()
+                MobileKeyboard.bottom(dpad = cursorKeys)
             ),
             contentRows = (if(numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.DEFAULT
         ),
@@ -86,13 +87,30 @@ class JyutpingIMEMode(
             KeyEvent.KEYCODE_DEL -> {
                 if(wordComposer.composingText.isNotEmpty()) {
                     wordComposer.delete(1)
+                    renderInput()
                 } else {
+                    onReset()
                     util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_DEL)
+                }
+            }
+            KeyEvent.KEYCODE_DPAD_LEFT -> {
+                if(wordComposer.composingText.isNotEmpty()) {
+                    wordComposer.moveCursorRelative(-1)
+                    renderInput()
+                } else {
+                    util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_DPAD_LEFT)
+                }
+            }
+            KeyEvent.KEYCODE_DPAD_RIGHT -> {
+                if(wordComposer.composingText.isNotEmpty()) {
+                    wordComposer.moveCursorRelative(1)
+                    renderInput()
+                } else {
+                    util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_DPAD_RIGHT)
                 }
             }
             else -> super.onSpecial(keyCode)
         }
-        renderInput()
     }
 
     private fun renderInput() {
@@ -125,12 +143,13 @@ class JyutpingIMEMode(
     }
 
     class Params(
-        val numberRow: Boolean = false
+        val numberRow: Boolean = false,
+        val cursorKeys: Boolean
     ): IMEMode.Params {
         override val type: String = TYPE
 
         override fun create(listener: IMEMode.Listener): IMEMode {
-            return JyutpingIMEMode(numberRow, listener)
+            return JyutpingIMEMode(numberRow, cursorKeys, listener)
         }
 
         override fun getLabel(context: Context): String {
@@ -149,8 +168,10 @@ class JyutpingIMEMode(
         companion object {
             fun parse(map: Map<String, String>): Params {
                 val numberRow = map["number_row"]?.toBoolean() ?: false
+                val cursorKeys = map["cursor_keys"]?.toBoolean() ?: false
                 return Params(
-                    numberRow = numberRow
+                    numberRow = numberRow,
+                    cursorKeys = cursorKeys
                 )
             }
         }

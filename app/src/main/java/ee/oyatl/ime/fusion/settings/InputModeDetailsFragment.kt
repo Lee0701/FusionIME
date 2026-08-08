@@ -130,6 +130,8 @@ abstract class InputModeDetailsFragment: PreferenceFragmentCompat() {
             super.onCreatePreferences(savedInstanceState, rootKey)
             if(Feature.NumberRow.availableInCurrentVersion)
                 addPreferencesFromResource(R.xml.pref_input_mode_number_row)
+            if(Feature.CursorKeys.availableInCurrentVersion)
+                addPreferencesFromResource(R.xml.pref_input_mode_cursor_keys)
         }
     }
 
