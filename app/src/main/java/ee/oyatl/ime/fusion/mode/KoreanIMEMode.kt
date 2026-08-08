@@ -109,7 +109,7 @@ abstract class KoreanIMEMode(
                 } else if(wordComposer.composingText.isNotEmpty()) {
                     wordComposer.delete(1)
                 } else {
-                    currentInputConnection?.deleteSurroundingText(1, 0)
+                    util?.deleteSurroundingText(1, 0)
                 }
                 renderInputView()
             }

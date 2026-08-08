@@ -1,5 +1,6 @@
 package ee.oyatl.ime.fusion
 
+import android.os.Build
 import android.os.SystemClock
 import android.view.KeyCharacterMap
 import android.view.KeyEvent
@@ -115,4 +116,11 @@ class KeyEventUtil(
         }
     }
 
+    fun deleteSurroundingText(beforeLength: Int, afterLength: Int) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            currentInputConnection.deleteSurroundingTextInCodePoints(beforeLength, afterLength)
+        } else {
+            currentInputConnection.deleteSurroundingText(beforeLength, afterLength)
+        }
+    }
 }
