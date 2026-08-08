@@ -52,6 +52,8 @@ abstract class InputModeDetailsFragment: PreferenceFragmentCompat() {
             addPreferencesFromResource(R.xml.pref_input_mode_latin)
             if(Feature.NumberRow.availableInCurrentVersion)
                 addPreferencesFromResource(R.xml.pref_input_mode_number_row)
+            if(Feature.UnicodeInput.availableInCurrentVersion)
+                addPreferencesFromResource(R.xml.pref_input_mode_latin_unicode_conversion)
         }
     }
 
