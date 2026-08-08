@@ -360,8 +360,7 @@ abstract class KoreanIMEMode(
         companion object {
             fun parse(map: Map<String, String>): Params {
                 val layout = Layout.entries.find { it.name == map["layout"] } ?: Layout.Set2KS
-//                val converterType = ConverterType.valueOf(map["converter"] ?: ConverterType.Word.name)
-                val converterType = ConverterType.HangulOnly
+                val converterType = ConverterType.valueOf(map["converter"] ?: ConverterType.Word.name)
                 val correctOrders = (map["correct_orders"] ?: "false").toBoolean()
                 val numberRow = map["number_row"]?.toBoolean() ?: false
                 return Params(
