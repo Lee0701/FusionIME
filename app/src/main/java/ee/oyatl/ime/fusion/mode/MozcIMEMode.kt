@@ -11,6 +11,7 @@ import androidx.preference.PreferenceManager
 import com.google.common.base.Optional
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.VerticalScrollingCandidateView
+import ee.oyatl.ime.fusion.Feature
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.layout.ExtKeyCode
 import ee.oyatl.ime.fusion.layout.LayoutExt
@@ -203,24 +204,26 @@ abstract class MozcIMEMode(
         candidateViewHeight: Int,
         numberRow: Boolean
     ): MozcIMEMode(listener, candidateViewHeight) {
+        private val numberRow = Feature.NumberRow.availableInCurrentVersion && numberRow
+
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.QWERTY_KANA
         override val textLayoutTable: LayoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutRomaji.TABLE_QWERTY)
         override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
             mobile = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
-                    if(numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
+                    if(this.numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
                     MobileKeyboard.alphabetic(semicolon = true),
                     MobileKeyboard.bottom(dpad = true)
                 ),
-                contentRows = (if(numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.MINUS
+                contentRows = (if(this.numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.MINUS
             ),
             tablet = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
-                    if(numberRow) TabletKeyboard.numbers() else KeyboardConfiguration(),
+                    if(this.numberRow) TabletKeyboard.numbers() else KeyboardConfiguration(),
                     TabletKeyboard.alphabetic(semicolon = true),
                     TabletKeyboard.bottom()
                 ),
-                contentRows = (if(numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.MINUS
+                contentRows = (if(this.numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.MINUS
             )
         )
     }

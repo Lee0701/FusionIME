@@ -5,10 +5,11 @@ import android.os.Handler
 import android.os.Looper
 import android.view.KeyEvent
 import androidx.annotation.StringRes
-import com.android.inputmethod.zhuyin.WordComposer
 import com.diycircuits.cangjie.TableLoader
 import ee.oyatl.ime.candidate.CandidateView
+import ee.oyatl.ime.fusion.Feature
 import ee.oyatl.ime.fusion.R
+import ee.oyatl.ime.fusion.korean.WordComposer
 import ee.oyatl.ime.keyboard.KeyboardConfiguration
 import ee.oyatl.ime.keyboard.KeyboardState
 import ee.oyatl.ime.keyboard.KeyboardTemplate
@@ -65,19 +66,25 @@ abstract class CangjieIMEMode(
         val inputConnection = currentInputConnection ?: return
         inputConnection.commitText(candidate.text, 1)
         inputConnection.setComposingText("", 1)
-        onReset()
+        if(candidate is CangjieCandidate) {
+            wordComposer.consume(candidate.key.length)
+        } else {
+            wordComposer.consume(candidate.text.length)
+        }
+        wordComposer.moveCursor(wordComposer.composingText.length)
+        renderInput()
     }
 
     private fun updateSuggestions() {
         val table = table ?: return
         table.setInputMethod(inputMode)
-        val chars = (wordComposer.typedWord?.toString().orEmpty()
-            .map { keyMap[it] ?: it }.toCharArray() +
-                (0 until 5).map { 0.toChar() }).take(5)
+        val key = wordComposer.textBeforeCursor
+        val zeros = (0 until 5).map { 0.toChar() }
+        val chars = (key.map { keyMap[it] ?: it }.toCharArray() + zeros).take(5)
         val (c0, c1, c2, c3, c4) = chars
         table.searchCangjie(c0, c1, c2, c3, c4)
         val candidates = (0 until table.totalMatch())
-            .map { CangjieCandidate(table.getMatchChar(it).toString()) }
+            .map { CangjieCandidate(table.getMatchChar(it).toString(), key) }
         submitCandidates(candidates)
         bestCandidate = candidates.firstOrNull()
     }
@@ -88,13 +95,13 @@ abstract class CangjieIMEMode(
     }
 
     private fun renderInput() {
-        currentInputConnection?.setComposingText(wordComposer.typedWord?.toString().orEmpty(), 1)
+        currentInputConnection?.setComposingText(wordComposer.getSpannableSurfaceString(), 1)
         postUpdateSuggestions()
     }
 
     override fun onChar(codePoint: Int) {
         val char = getFullOrHalfWidthChar(codePoint)
-        wordComposer.add(char, intArrayOf(char))
+        wordComposer.commit(char.toChar().toString())
         table?.setInputMethod(TableLoader.CANGJIE)
         renderInput()
     }
@@ -102,18 +109,18 @@ abstract class CangjieIMEMode(
     override fun onSpecial(keyCode: Int) {
         when(keyCode) {
             KeyEvent.KEYCODE_SPACE -> {
-                if(wordComposer.typedWord?.isNotEmpty() == true) {
+                if(wordComposer.composingText.isNotEmpty()) {
                     updateSuggestions()
                     val bestCandidate = bestCandidate
                     if(bestCandidate != null) onCandidateSelected(bestCandidate)
                 } else {
+                    onReset()
                     if(fullWidth) util?.sendKeyChar(0x3000.toChar())
                     else util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_SPACE)
                 }
-                onReset()
             }
             KeyEvent.KEYCODE_ENTER -> {
-                if(wordComposer.typedWord?.isNotEmpty() == true) onReset()
+                if(wordComposer.composingText.isNotEmpty()) onReset()
                 else {
                     if (util?.sendDefaultEditorAction(true) != true)
                         currentInputConnection?.commitText("\n", 1)
@@ -121,10 +128,26 @@ abstract class CangjieIMEMode(
                 }
             }
             KeyEvent.KEYCODE_DEL -> {
-                if(wordComposer.typedWord?.isNotEmpty() == true) {
-                    wordComposer.deleteLast()
+                if(wordComposer.composingText.isNotEmpty()) {
+                    wordComposer.delete(1)
                 } else {
                     util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_DEL)
+                }
+            }
+            KeyEvent.KEYCODE_DPAD_LEFT -> {
+                if(wordComposer.composingText.isNotEmpty()) {
+                    wordComposer.moveCursorRelative(-1)
+                    renderInput()
+                } else {
+                    util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_DPAD_LEFT)
+                }
+            }
+            KeyEvent.KEYCODE_DPAD_RIGHT -> {
+                if(wordComposer.composingText.isNotEmpty()) {
+                    wordComposer.moveCursorRelative(1)
+                    renderInput()
+                } else {
+                    util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_DPAD_RIGHT)
                 }
             }
             else -> super.onSpecial(keyCode)
@@ -144,7 +167,8 @@ abstract class CangjieIMEMode(
     }
 
     data class CangjieCandidate(
-        override val text: CharSequence
+        override val text: CharSequence,
+        val key: CharSequence
     ): CandidateView.Candidate
 
     abstract class CangjieQuick(
@@ -158,24 +182,27 @@ abstract class CangjieIMEMode(
     abstract class QwertyCompatible(
         fullWidth: Boolean,
         numberRow: Boolean,
+        cursorKeys: Boolean,
         listener: IMEMode.Listener
     ): CangjieQuick(fullWidth, listener) {
+        private val numberRow = Feature.NumberRow.availableInCurrentVersion && numberRow
+        private val cursorKeys = Feature.CursorKeys.availableInCurrentVersion && cursorKeys
         override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
             mobile = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
-                    if(numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
+                    if(this.numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
                     MobileKeyboard.alphabetic(),
-                    MobileKeyboard.bottom()
+                    MobileKeyboard.bottom(dpad = this.cursorKeys)
                 ),
-                contentRows = (if(numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.DEFAULT
+                contentRows = (if(this.numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.DEFAULT
             ),
             tablet = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
-                    if(numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
-                    TabletKeyboard.alphabetic(delete = !numberRow),
+                    if(this.numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
+                    TabletKeyboard.alphabetic(delete = !this.numberRow),
                     TabletKeyboard.bottom()
                 ),
-                contentRows = (if(numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.DEFAULT
+                contentRows = (if(this.numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.DEFAULT
             )
         )
     }
@@ -183,30 +210,34 @@ abstract class CangjieIMEMode(
     class Cangjie(
         fullWidth: Boolean,
         numberRow: Boolean,
+        cursorKeys: Boolean,
         listener: IMEMode.Listener
-    ): QwertyCompatible(fullWidth, numberRow, listener) {
+    ): QwertyCompatible(fullWidth, numberRow, cursorKeys, listener) {
         override val inputMode: Int = TableLoader.CANGJIE
     }
 
     class Quick(
         fullWidth: Boolean,
         numberRow: Boolean,
+        cursorKeys: Boolean,
         listener: IMEMode.Listener
-    ): QwertyCompatible(fullWidth, numberRow, listener) {
+    ): QwertyCompatible(fullWidth, numberRow, cursorKeys, listener) {
         override val inputMode: Int = TableLoader.QUICK
     }
 
     class Dayi3(
         override val fullWidth: Boolean,
+        cursorKeys: Boolean,
         listener: IMEMode.Listener
     ): CangjieIMEMode(listener) {
         override val inputMode: Int = TableLoader.DAYI3
+        private val cursorKeys = Feature.CursorKeys.availableInCurrentVersion && cursorKeys
         override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
             mobile = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
                     MobileKeyboard.numbers(),
                     MobileKeyboard.alphabetic(semicolon = true, shiftDeleteWidth = 1f, shift = false),
-                    MobileKeyboard.bottom(ExtKeyCode.KEYCODE_PERIOD_COMMA, KeyEvent.KEYCODE_SLASH)
+                    MobileKeyboard.bottom(left = ExtKeyCode.KEYCODE_PERIOD_COMMA, right = KeyEvent.KEYCODE_SLASH, dpad = this.cursorKeys)
                 ),
                 contentRows = MobileKeyboardRows.NUMBERS + MobileKeyboardRows.HALF_GRID
             ),
@@ -226,15 +257,16 @@ abstract class CangjieIMEMode(
     data class Params(
         val layout: Layout,
         val fullWidth: Boolean,
-        val numberRow: Boolean
+        val numberRow: Boolean,
+        val cursorKeys: Boolean
     ): IMEMode.Params {
         override val type: String = TYPE
 
         override fun create(listener: IMEMode.Listener): IMEMode {
             return when(layout) {
-                Layout.Cangjie -> Cangjie(fullWidth, numberRow, listener)
-                Layout.Quick -> Quick(fullWidth, numberRow, listener)
-                Layout.Dayi3 -> Dayi3(fullWidth, listener)
+                Layout.Cangjie -> Cangjie(fullWidth, numberRow, cursorKeys, listener)
+                Layout.Quick -> Quick(fullWidth, numberRow, cursorKeys, listener)
+                Layout.Dayi3 -> Dayi3(fullWidth, cursorKeys, listener)
             }
         }
 
@@ -257,10 +289,12 @@ abstract class CangjieIMEMode(
                 val layout = Layout.entries.find { it.name == map["layout"] } ?: Layout.Cangjie
                 val fullWidth = map["full_width"].toBoolean()
                 val numberRow = map["number_row"]?.toBoolean() ?: false
+                val cursorKeys = map["cursor_keys"]?.toBoolean() ?: false
                 return Params(
                     layout = layout,
                     fullWidth = fullWidth,
-                    numberRow = numberRow
+                    numberRow = numberRow,
+                    cursorKeys = cursorKeys
                 )
             }
         }

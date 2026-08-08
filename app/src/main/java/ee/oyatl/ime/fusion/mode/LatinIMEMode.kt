@@ -34,6 +34,7 @@ import com.android.inputmethod.latin.settings.SettingsValues
 import com.android.inputmethod.latin.utils.ScriptUtils
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.TripleCandidateView
+import ee.oyatl.ime.fusion.Feature
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.keyboard.KeyboardConfiguration
 import ee.oyatl.ime.keyboard.KeyboardTemplate
@@ -501,24 +502,28 @@ abstract class LatinIMEMode(
     class Qwerty(
         override val locale: Locale,
         numberRow: Boolean,
+        cursorKeys: Boolean,
         listener: IMEMode.Listener
     ): LatinIMEMode(listener) {
+        private val numberRow = Feature.NumberRow.availableInCurrentVersion && numberRow
+        private val cursorKeys = Feature.CursorKeys.availableInCurrentVersion && cursorKeys
+
         override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
             mobile = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
-                    if(numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
+                    if(this.numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
                     MobileKeyboard.alphabetic(),
-                    MobileKeyboard.bottom()
+                    MobileKeyboard.bottom(dpad = this.cursorKeys)
                 ),
-                contentRows = (if(numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.DEFAULT
+                contentRows = (if(this.numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.DEFAULT
             ),
             tablet = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
-                    if(numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
-                    TabletKeyboard.alphabetic(delete = !numberRow),
+                    if(this.numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
+                    TabletKeyboard.alphabetic(delete = !this.numberRow),
                     TabletKeyboard.bottom()
                 ),
-                contentRows = (if(numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.DEFAULT
+                contentRows = (if(this.numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.DEFAULT
             )
         )
     }
@@ -526,25 +531,29 @@ abstract class LatinIMEMode(
     class Dvorak(
         override val locale: Locale,
         numberRow: Boolean,
+        cursorKeys: Boolean,
         listener: IMEMode.Listener
     ): LatinIMEMode(listener) {
+        private val numberRow = Feature.NumberRow.availableInCurrentVersion && numberRow
+        private val cursorKeys = Feature.CursorKeys.availableInCurrentVersion && cursorKeys
+
         override val textLayoutTable: LayoutTable = super.textLayoutTable.mapKeyCodes(LayoutLatin.KEYCODE_MAP_DVORAK)
         override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
             mobile = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
-                    if(numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
+                    if(this.numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
                     MobileKeyboard.alphabetic(semicolon = true),
-                    MobileKeyboard.bottom(KeyEvent.KEYCODE_X, KeyEvent.KEYCODE_SLASH)
+                    MobileKeyboard.bottom(left = KeyEvent.KEYCODE_X, right = KeyEvent.KEYCODE_SLASH, dpad = this.cursorKeys)
                 ),
-                contentRows = (if(numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.DVORAK
+                contentRows = (if(this.numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.DVORAK
             ),
             tablet = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
-                    if(numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
-                    TabletKeyboard.alphabetic(semicolon = true, delete = !numberRow),
+                    if(this.numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
+                    TabletKeyboard.alphabetic(semicolon = true, delete = !this.numberRow),
                     TabletKeyboard.bottom()
                 ),
-                contentRows = (if(numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.DVORAK
+                contentRows = (if(this.numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.DVORAK
             )
         )
     }
@@ -552,25 +561,29 @@ abstract class LatinIMEMode(
     class Colemak(
         override val locale: Locale,
         numberRow: Boolean,
+        cursorKeys: Boolean,
         listener: IMEMode.Listener
     ): LatinIMEMode(listener) {
+        private val numberRow = Feature.NumberRow.availableInCurrentVersion && numberRow
+        private val cursorKeys = Feature.CursorKeys.availableInCurrentVersion && cursorKeys
+
         override val textLayoutTable: LayoutTable = super.textLayoutTable.mapKeyCodes(LayoutLatin.KEYCODE_MAP_COLEMAK)
         override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
             mobile = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
-                    if(numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
+                    if(this.numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
                     MobileKeyboard.alphabetic(semicolon = true),
-                    MobileKeyboard.bottom()
+                    MobileKeyboard.bottom(dpad = this.cursorKeys)
                 ),
-                contentRows = (if(numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.SEMICOLON
+                contentRows = (if(this.numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.SEMICOLON
             ),
             tablet = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
-                    if(numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
-                    TabletKeyboard.alphabetic(semicolon = true, delete = !numberRow),
+                    if(this.numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
+                    TabletKeyboard.alphabetic(semicolon = true, delete = !this.numberRow),
                     TabletKeyboard.bottom()
                 ),
-                contentRows = (if(numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.SEMICOLON
+                contentRows = (if(this.numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.SEMICOLON
             )
         )
     }
@@ -578,15 +591,16 @@ abstract class LatinIMEMode(
     data class Params(
         val locale: Locale = Locale.ENGLISH,
         val layout: Layout = Layout.Qwerty,
-        val numberRow: Boolean = false
+        val numberRow: Boolean = false,
+        val cursorKeys: Boolean = false
     ): IMEMode.Params {
         override val type: String = TYPE
 
         override fun create(listener: IMEMode.Listener): LatinIMEMode {
             return when(layout) {
-                Layout.Qwerty -> Qwerty(locale, numberRow, listener)
-                Layout.Dvorak -> Dvorak(locale, numberRow, listener)
-                Layout.Colemak -> Colemak(locale, numberRow, listener)
+                Layout.Qwerty -> Qwerty(locale, numberRow, cursorKeys, listener)
+                Layout.Dvorak -> Dvorak(locale, numberRow, cursorKeys, listener)
+                Layout.Colemak -> Colemak(locale, numberRow, cursorKeys, listener)
             }
         }
 
@@ -618,10 +632,12 @@ abstract class LatinIMEMode(
                     else Locale(localeName[0])
                 val layout = Layout.entries.find { it.name == map["layout"] } ?: Layout.Qwerty
                 val numberRow = map["number_row"]?.toBoolean() ?: false
+                val cursorKeys = map["cursor_keys"]?.toBoolean() ?: false
                 return Params(
                     locale = locale,
                     layout = layout,
-                    numberRow = numberRow
+                    numberRow = numberRow,
+                    cursorKeys = cursorKeys
                 )
             }
         }

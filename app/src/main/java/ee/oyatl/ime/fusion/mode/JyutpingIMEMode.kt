@@ -3,6 +3,7 @@ package ee.oyatl.ime.fusion.mode
 import android.content.Context
 import android.view.KeyEvent
 import ee.oyatl.ime.candidate.CandidateView
+import ee.oyatl.ime.fusion.Feature
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.korean.WordComposer
 import ee.oyatl.ime.fusion.layout.MobileKeyboard
@@ -22,24 +23,28 @@ import java.util.Locale
 
 class JyutpingIMEMode(
     numberRow: Boolean,
+    cursorKeys: Boolean,
     listener: IMEMode.Listener
 ): CommonIMEMode(listener) {
+    private val numberRow = Feature.NumberRow.availableInCurrentVersion && numberRow
+    private val cursorKeys = Feature.CursorKeys.availableInCurrentVersion && cursorKeys
+
     override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
         mobile = KeyboardTemplate.Basic(
             configuration = KeyboardConfiguration(
-                if(numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
+                if(this.numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
                 MobileKeyboard.alphabetic(),
-                MobileKeyboard.bottom()
+                MobileKeyboard.bottom(dpad = this.cursorKeys)
             ),
-            contentRows = (if(numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.DEFAULT
+            contentRows = (if(this.numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.DEFAULT
         ),
         tablet = KeyboardTemplate.Basic(
             configuration = KeyboardConfiguration(
-                if(numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
-                TabletKeyboard.alphabetic(delete = !numberRow),
+                if(this.numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
+                TabletKeyboard.alphabetic(delete = !this.numberRow),
                 TabletKeyboard.bottom()
             ),
-            contentRows = (if(numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.DEFAULT
+            contentRows = (if(this.numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.DEFAULT
         )
     )
 
@@ -86,13 +91,30 @@ class JyutpingIMEMode(
             KeyEvent.KEYCODE_DEL -> {
                 if(wordComposer.composingText.isNotEmpty()) {
                     wordComposer.delete(1)
+                    renderInput()
                 } else {
+                    onReset()
                     util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_DEL)
+                }
+            }
+            KeyEvent.KEYCODE_DPAD_LEFT -> {
+                if(wordComposer.composingText.isNotEmpty()) {
+                    wordComposer.moveCursorRelative(-1)
+                    renderInput()
+                } else {
+                    util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_DPAD_LEFT)
+                }
+            }
+            KeyEvent.KEYCODE_DPAD_RIGHT -> {
+                if(wordComposer.composingText.isNotEmpty()) {
+                    wordComposer.moveCursorRelative(1)
+                    renderInput()
+                } else {
+                    util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_DPAD_RIGHT)
                 }
             }
             else -> super.onSpecial(keyCode)
         }
-        renderInput()
     }
 
     private fun renderInput() {
@@ -125,12 +147,13 @@ class JyutpingIMEMode(
     }
 
     class Params(
-        val numberRow: Boolean = false
+        val numberRow: Boolean = false,
+        val cursorKeys: Boolean
     ): IMEMode.Params {
         override val type: String = TYPE
 
         override fun create(listener: IMEMode.Listener): IMEMode {
-            return JyutpingIMEMode(numberRow, listener)
+            return JyutpingIMEMode(numberRow, cursorKeys, listener)
         }
 
         override fun getLabel(context: Context): String {
@@ -149,8 +172,10 @@ class JyutpingIMEMode(
         companion object {
             fun parse(map: Map<String, String>): Params {
                 val numberRow = map["number_row"]?.toBoolean() ?: false
+                val cursorKeys = map["cursor_keys"]?.toBoolean() ?: false
                 return Params(
-                    numberRow = numberRow
+                    numberRow = numberRow,
+                    cursorKeys = cursorKeys
                 )
             }
         }

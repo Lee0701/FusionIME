@@ -5,6 +5,7 @@ import android.view.KeyEvent
 import androidx.annotation.RawRes
 import androidx.annotation.StringRes
 import ee.oyatl.ime.candidate.CandidateView
+import ee.oyatl.ime.fusion.Feature
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.korean.WordComposer
 import ee.oyatl.ime.keyboard.KeyboardConfiguration
@@ -20,25 +21,28 @@ import java.util.Locale
 class VietIMEMode(
     listener: IMEMode.Listener,
     numberRow: Boolean,
+    cursorKeys: Boolean,
     val layout: Layout
 ): CommonIMEMode(listener) {
+    private val numberRow = Feature.NumberRow.availableInCurrentVersion && numberRow
+    private val cursorKeys = Feature.CursorKeys.availableInCurrentVersion && cursorKeys
 
     override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
         mobile = KeyboardTemplate.Basic(
             configuration = KeyboardConfiguration(
-                if(numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
+                if(this.numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
                 MobileKeyboard.alphabetic(),
-                MobileKeyboard.bottom()
+                MobileKeyboard.bottom(dpad = this.cursorKeys)
             ),
-            contentRows = (if(numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.DEFAULT
+            contentRows = (if(this.numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.DEFAULT
         ),
         tablet = KeyboardTemplate.Basic(
             configuration = KeyboardConfiguration(
-                if(numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
-                TabletKeyboard.alphabetic(delete = !numberRow),
+                if(this.numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
+                TabletKeyboard.alphabetic(delete = !this.numberRow),
                 TabletKeyboard.bottom()
             ),
-            contentRows = (if(numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.DEFAULT
+            contentRows = (if(this.numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.DEFAULT
         )
     )
 
@@ -120,18 +124,35 @@ class VietIMEMode(
                     util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_DEL)
                 }
             }
+            KeyEvent.KEYCODE_DPAD_LEFT -> {
+                if(wordComposer.composingText.isNotEmpty()) {
+                    wordComposer.moveCursorRelative(-1)
+                    renderInputView()
+                } else {
+                    util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_DPAD_LEFT)
+                }
+            }
+            KeyEvent.KEYCODE_DPAD_RIGHT -> {
+                if(wordComposer.composingText.isNotEmpty()) {
+                    wordComposer.moveCursorRelative(1)
+                    renderInputView()
+                } else {
+                    util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_DPAD_RIGHT)
+                }
+            }
             else -> super.onSpecial(keyCode)
         }
     }
 
     data class Params(
         val layout: Layout,
-        val numberRow: Boolean
+        val numberRow: Boolean,
+        val cursorKeys: Boolean
     ): IMEMode.Params {
         override val type: String = TYPE
 
         override fun create(listener: IMEMode.Listener): IMEMode {
-            return VietIMEMode(listener, numberRow, layout)
+            return VietIMEMode(listener, numberRow, cursorKeys, layout)
         }
 
         override fun getLabel(context: Context): String {
@@ -154,9 +175,11 @@ class VietIMEMode(
             fun parse(map: Map<String, String>): Params {
                 val layout = Layout.entries.find { it.name == map["layout"] } ?: Layout.QwertyNom
                 val numberRow = map["number_row"]?.toBoolean() ?: false
+                val cursorKeys = map["cursor_keys"]?.toBoolean() ?: false
                 return Params(
                     layout = layout,
-                    numberRow = numberRow
+                    numberRow = numberRow,
+                    cursorKeys = cursorKeys
                 )
             }
         }
