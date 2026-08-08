@@ -113,6 +113,17 @@ abstract class LatinIMEMode(
     override fun onCandidateSelected(candidate: CandidateView.Candidate) {
         if(candidate is LatinCandidate) {
             pickSuggestionManually(candidate.suggestedWordInfo)
+        } else if(candidate is UnicodeConverter.Candidate) {
+            val suggestionInfo = SuggestedWords.SuggestedWordInfo(
+                candidate.text.toString(),
+                null,
+                0,
+                0,
+                null,
+                0,
+                0
+            )
+            pickSuggestionManually(suggestionInfo)
         }
     }
 
