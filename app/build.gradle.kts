@@ -88,6 +88,7 @@ dependencies {
     implementation(project(":app:latin"))
     implementation(project(":app:viet"))
     implementation(project(":app:swipe"))
+    implementation(project(":app:jyutping"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

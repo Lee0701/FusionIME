@@ -1,10 +1,7 @@
 package ee.oyatl.ime.keyboard.listener
 
 import android.os.Handler
-import android.os.Looper
 import android.view.KeyEvent
-import ee.oyatl.ime.keyboard.FlickKeyCode
-import ee.oyatl.ime.keyboard.listener.KeyboardListener
 import ee.oyatl.ime.keyboard.KeyboardParams
 import ee.oyatl.ime.keyboard.KeyboardState
 
@@ -12,7 +9,7 @@ class ShiftStateManager(
     val listener: KeyboardListener,
     val params: KeyboardParams
 ): KeyboardListener {
-    private val handler = Handler(Looper.getMainLooper())
+    val handler = Handler()
 
     var shiftState: KeyboardState.Shift = KeyboardState.Shift.Released
         set(value) {
@@ -40,41 +37,33 @@ class ShiftStateManager(
         KeyboardState.Shift.Locked -> KeyEvent.META_CAPS_LOCK_ON
     }
 
-    override fun onKeyDown(keyCode: Int, metaState: Int) {
-        when(keyCode and FlickKeyCode.MASK_KEYCODE) {
-            KeyEvent.KEYCODE_DEL -> onDeletePressed(keyCode)
-            KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.KEYCODE_SHIFT_RIGHT -> onShiftPressed(keyCode)
+    override fun onKeyDown(keyCode: Int, metaState: Int): Boolean {
+        when(keyCode) {
+            KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.KEYCODE_SHIFT_RIGHT -> {
+                onShiftPressed(keyCode)
+                return true
+            }
+            else -> {
+                return false
+            }
         }
     }
 
-    override fun onKeyUp(keyCode: Int, metaState: Int) {
-        when(keyCode and FlickKeyCode.MASK_KEYCODE) {
-            KeyEvent.KEYCODE_DEL -> onDeleteReleased(keyCode)
-            KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.KEYCODE_SHIFT_RIGHT -> onShiftReleased(keyCode)
+    override fun onKeyUp(keyCode: Int, metaState: Int): Boolean {
+        when(keyCode) {
+            KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.KEYCODE_SHIFT_RIGHT -> {
+                onShiftReleased(keyCode)
+                return true
+            }
             else -> {
-                autoReleaseShift()
+                handler.post { autoReleaseShift() }
+                return false
             }
         }
     }
 
     override fun onReset() {
         shiftState = KeyboardState.Shift.Released
-    }
-
-    private fun repeat(code: Int) {
-        listener.onKeyDown(code, metaState)
-        listener.onKeyUp(code, metaState)
-        handler.postDelayed({ repeat(code) }, params.repeatInterval.toLong())
-    }
-
-    private fun onDeletePressed(code: Int) {
-        listener.onKeyDown(code, metaState)
-        handler.postDelayed({ repeat(code) }, params.repeatDelay.toLong())
-    }
-
-    private fun onDeleteReleased(code: Int) {
-        listener.onKeyUp(code, metaState)
-        handler.removeCallbacksAndMessages(null)
     }
 
     private fun onShiftPressed(code: Int) {
@@ -124,5 +113,4 @@ class ShiftStateManager(
             }
         }
     }
-
 }

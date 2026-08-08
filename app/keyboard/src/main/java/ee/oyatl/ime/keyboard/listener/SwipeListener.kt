@@ -9,8 +9,8 @@ interface SwipeListener: KeyboardListener {
         override fun onSwipeStart() = Unit
         override fun onSwipeEnd(pointers: List<Pointer>) = Unit
         override fun onSwipeMove(pointers: List<Pointer>) = Unit
-        override fun onKeyDown(keyCode: Int, metaState: Int) = Unit
-        override fun onKeyUp(keyCode: Int, metaState: Int) = Unit
+        override fun onKeyDown(keyCode: Int, metaState: Int): Boolean = false
+        override fun onKeyUp(keyCode: Int, metaState: Int): Boolean = false
         override fun onReset() = Unit
     }
 

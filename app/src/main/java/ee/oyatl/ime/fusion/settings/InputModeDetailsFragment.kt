@@ -7,11 +7,13 @@ import ee.oyatl.ime.fusion.Feature
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.mode.CangjieIMEMode
 import ee.oyatl.ime.fusion.mode.IMEMode
+import ee.oyatl.ime.fusion.mode.JyutpingIMEMode
 import ee.oyatl.ime.fusion.mode.KoreanIMEMode
 import ee.oyatl.ime.fusion.mode.LatinIMEMode
 import ee.oyatl.ime.fusion.mode.MozcIMEMode
 import ee.oyatl.ime.fusion.mode.PinyinIMEMode
 import ee.oyatl.ime.fusion.mode.VietIMEMode
+import ee.oyatl.ime.fusion.mode.ZhuyinIMEMode
 
 abstract class InputModeDetailsFragment: PreferenceFragmentCompat() {
 
@@ -52,6 +54,8 @@ abstract class InputModeDetailsFragment: PreferenceFragmentCompat() {
             addPreferencesFromResource(R.xml.pref_input_mode_latin)
             if(Feature.NumberRow.availableInCurrentVersion)
                 addPreferencesFromResource(R.xml.pref_input_mode_number_row)
+            if(Feature.CursorKeys.availableInCurrentVersion)
+                addPreferencesFromResource(R.xml.pref_input_mode_cursor_keys)
         }
     }
 
@@ -61,6 +65,8 @@ abstract class InputModeDetailsFragment: PreferenceFragmentCompat() {
             addPreferencesFromResource(R.xml.pref_input_mode_korean_layout)
             if(Feature.NumberRow.availableInCurrentVersion)
                 addPreferencesFromResource(R.xml.pref_input_mode_number_row)
+            if(Feature.CursorKeys.availableInCurrentVersion)
+                addPreferencesFromResource(R.xml.pref_input_mode_cursor_keys)
             if(Feature.BigramHanjaConverter.availableInCurrentVersion)
                 addPreferencesFromResource(R.xml.pref_input_mode_korean_converter)
         }
@@ -83,6 +89,16 @@ abstract class InputModeDetailsFragment: PreferenceFragmentCompat() {
             addPreferencesFromResource(R.xml.pref_input_mode_pinyin)
             if(Feature.NumberRow.availableInCurrentVersion)
                 addPreferencesFromResource(R.xml.pref_input_mode_number_row)
+            if(Feature.CursorKeys.availableInCurrentVersion)
+                addPreferencesFromResource(R.xml.pref_input_mode_cursor_keys)
+        }
+    }
+
+    class Zhuyin: InputModeDetailsFragment() {
+        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+            super.onCreatePreferences(savedInstanceState, rootKey)
+            if(Feature.CursorKeys.availableInCurrentVersion)
+                addPreferencesFromResource(R.xml.pref_input_mode_cursor_keys)
         }
     }
 
@@ -92,6 +108,8 @@ abstract class InputModeDetailsFragment: PreferenceFragmentCompat() {
             addPreferencesFromResource(R.xml.pref_input_mode_viet)
             if(Feature.NumberRow.availableInCurrentVersion)
                 addPreferencesFromResource(R.xml.pref_input_mode_number_row)
+            if(Feature.CursorKeys.availableInCurrentVersion)
+                addPreferencesFromResource(R.xml.pref_input_mode_cursor_keys)
         }
     }
 
@@ -101,8 +119,19 @@ abstract class InputModeDetailsFragment: PreferenceFragmentCompat() {
             addPreferencesFromResource(R.xml.pref_input_mode_cangjie_layout)
             if(Feature.NumberRow.availableInCurrentVersion)
                 addPreferencesFromResource(R.xml.pref_input_mode_number_row)
+            if(Feature.CursorKeys.availableInCurrentVersion)
+                addPreferencesFromResource(R.xml.pref_input_mode_cursor_keys)
             addPreferencesFromResource(R.xml.pref_input_mode_cangjie_extra)
+        }
+    }
 
+    class Jyutping: InputModeDetailsFragment() {
+        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+            super.onCreatePreferences(savedInstanceState, rootKey)
+            if(Feature.NumberRow.availableInCurrentVersion)
+                addPreferencesFromResource(R.xml.pref_input_mode_number_row)
+            if(Feature.CursorKeys.availableInCurrentVersion)
+                addPreferencesFromResource(R.xml.pref_input_mode_cursor_keys)
         }
     }
 
@@ -117,8 +146,10 @@ abstract class InputModeDetailsFragment: PreferenceFragmentCompat() {
                 KoreanIMEMode.TYPE -> Korean()
                 MozcIMEMode.TYPE -> Mozc()
                 PinyinIMEMode.TYPE -> Pinyin()
+                ZhuyinIMEMode.TYPE -> Zhuyin()
                 VietIMEMode.TYPE -> Viet()
                 CangjieIMEMode.TYPE -> Cangjie()
+                JyutpingIMEMode.TYPE -> Jyutping()
                 else -> null
             }
             fragment?.map += map

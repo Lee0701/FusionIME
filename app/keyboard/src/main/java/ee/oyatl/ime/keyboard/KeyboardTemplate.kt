@@ -20,7 +20,7 @@ interface KeyboardTemplate {
                         is KeyboardConfiguration.Item.ContentKey -> {
                             val rowIndex = keyCodeRows.size - item.rowId - 1
                             val keyCode = softKeyCodeMapper[keyCodeRows[rowIndex][item.index]]
-                            resultRow += Keyboard.KeyItem.NormalKey(keyCode)
+                            resultRow += Keyboard.KeyItem.Key(keyCode)
                         }
                         is KeyboardConfiguration.Item.ContentRow -> {
                             val rowIndex = keyCodeRows.size - item.rowId - 1
@@ -29,7 +29,7 @@ interface KeyboardTemplate {
                                     Keyboard.KeyItem.SplitSpacer(params.splitWidth)
                                 } else {
                                     val keyCode = softKeyCodeMapper[it]
-                                    Keyboard.KeyItem.NormalKey(keyCode)
+                                    Keyboard.KeyItem.Key(keyCode)
                                 }
                             }
                             resultRow += content
@@ -55,10 +55,25 @@ interface KeyboardTemplate {
         }
 
         private fun inflateKey(keyCode: Int, item: KeyboardConfiguration.Item.TemplateKey): Keyboard.KeyItem {
-            val result =
-                if(item.special) Keyboard.KeyItem.SpecialKey(keyCode, item.width)
-                else Keyboard.KeyItem.NormalKey(keyCode, item.width)
-            return result
+            return if(item.special) {
+                val type = SpecialKeyType.ofKeyCode(keyCode) ?: SpecialKeyType.Default
+                val iconRes = item.iconRes ?: type.iconRes ?: 0
+                val bkgRes = when(item.merge) {
+                    KeyboardConfiguration.Item.TemplateKey.Merge.Up -> R.drawable.key_bg_bottom
+                    KeyboardConfiguration.Item.TemplateKey.Merge.Down -> R.drawable.key_bg_top
+                    else -> R.drawable.key_bg
+                }
+                Keyboard.KeyItem.Key(
+                    keyCode,
+                    width = item.width,
+                    label = "",
+                    iconRes = iconRes,
+                    themeRes = type.themeRes,
+                    bkgRes = bkgRes
+                )
+            } else {
+                Keyboard.KeyItem.Key(keyCode, width = item.width)
+            }
         }
     }
 

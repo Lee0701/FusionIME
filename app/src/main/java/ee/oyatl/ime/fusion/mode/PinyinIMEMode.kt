@@ -22,6 +22,7 @@ import com.android.inputmethod.pinyin.PinyinIME.ImeState
 import com.android.inputmethod.pinyin.R
 import com.android.inputmethod.pinyin.Settings
 import ee.oyatl.ime.candidate.CandidateView
+import ee.oyatl.ime.fusion.Feature
 import ee.oyatl.ime.fusion.pinyin.CandidatesContainer
 import ee.oyatl.ime.fusion.pinyin.ComposingView
 import ee.oyatl.ime.fusion.pinyin.ComposingView.ComposingStatus
@@ -43,7 +44,8 @@ import java.util.Locale
 class PinyinIMEMode(
     listener: IMEMode.Listener,
     val chineseTraditional: Boolean,
-    numberRow: Boolean
+    numberRow: Boolean,
+    cursorKeys: Boolean
 ): CommonIMEMode(listener), DecodingInfo.IMEStateHolder {
     /**
      * Connection used to bind the decoding service.
@@ -85,28 +87,31 @@ class PinyinIMEMode(
         KeyEvent.KEYCODE_SHIFT_LEFT to KeyEvent.KEYCODE_APOSTROPHE
     ))
 
+    private val numberRow = Feature.NumberRow.availableInCurrentVersion && numberRow
+    private val cursorKeys = Feature.CursorKeys.availableInCurrentVersion && cursorKeys
+
     override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
         mobile = KeyboardTemplate.Basic(
             configuration = KeyboardConfiguration(
-                if(numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
+                if(this.numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
                 MobileKeyboard.alphabetic(),
-                MobileKeyboard.bottom()
+                MobileKeyboard.bottom(dpad = this.cursorKeys)
             ),
-            contentRows = (if(numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.DEFAULT,
+            contentRows = (if(this.numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.DEFAULT,
             softKeyCodeMapper = softKeyCodeMapper
         ),
         tablet = KeyboardTemplate.Basic(
             configuration = KeyboardConfiguration(
-                if(numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
-                TabletKeyboard.alphabetic(delete = !numberRow),
+                if(this.numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
+                TabletKeyboard.alphabetic(delete = !this.numberRow),
                 TabletKeyboard.bottom()
             ),
-            contentRows = (if(numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.DEFAULT,
+            contentRows = (if(this.numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.DEFAULT,
             softKeyCodeMapper = softKeyCodeMapper
         )
     )
 
-    override val textLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutExt.TABLE_CHINESE)
+    override val textLayoutTable: LayoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutExt.TABLE_CHINESE)
 
     override suspend fun onLoad(context: Context) {
         super.onLoad(context)
@@ -913,12 +918,13 @@ class PinyinIMEMode(
 
     class Params(
         val chineseTraditional: Boolean,
-        val numberRow: Boolean
+        val numberRow: Boolean,
+        val cursorKeys: Boolean
     ): IMEMode.Params {
         override val type: String = TYPE
 
         override fun create(listener: IMEMode.Listener): IMEMode {
-            return PinyinIMEMode(listener, chineseTraditional, numberRow)
+            return PinyinIMEMode(listener, chineseTraditional, numberRow, cursorKeys)
         }
 
         override fun getLabel(context: Context): String {
@@ -943,8 +949,9 @@ class PinyinIMEMode(
         companion object {
             fun parse(map: Map<String, String>): Params {
                 val numberRow = map["number_row"]?.toBoolean() ?: false
+                val cursorKeys = map["cursor_keys"]?.toBoolean() ?: false
                 val chineseTraditional = map["chinese_traditional"]?.toBoolean() ?: false
-                return Params(chineseTraditional, numberRow)
+                return Params(chineseTraditional, numberRow, cursorKeys)
             }
         }
     }

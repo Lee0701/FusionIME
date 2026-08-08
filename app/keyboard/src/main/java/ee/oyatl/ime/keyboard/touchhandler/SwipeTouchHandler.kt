@@ -3,10 +3,11 @@ package ee.oyatl.ime.keyboard.touchhandler
 import android.graphics.Rect
 import android.view.KeyCharacterMap
 import android.view.KeyEvent
+import ee.oyatl.ime.keyboard.KeyboardView
 import ee.oyatl.ime.keyboard.listener.SwipeListener
 
 class SwipeTouchHandler(
-    override val keyboardView: TouchHandler.KeyboardViewInterface
+    override val keyboardView: KeyboardView
 ): TouchHandler {
     val rect: Rect = Rect()
     val keyCharacterMap: KeyCharacterMap = KeyCharacterMap.load(KeyCharacterMap.VIRTUAL_KEYBOARD)
@@ -36,7 +37,7 @@ class SwipeTouchHandler(
 
     private fun setKeyboardDimens() {
         val keyCodes = KeyEvent.KEYCODE_A ..KeyEvent.KEYCODE_Z
-        val keySet = keyCodes.mapNotNull { keyboardView.findKey(it) }
+        val keySet = keyCodes.flatMap { keyboardView.findKeys(it) }
         val left = keySet.minOf { it.rect.left }
         val right = keySet.maxOf { it.rect.right }
         val top = keySet.minOf { it.rect.top }
