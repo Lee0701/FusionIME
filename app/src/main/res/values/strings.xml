@@ -5,6 +5,7 @@
     <string name="settings_appearance_header">Appearance</string>
     <string name="settings_behaviour_header">Behaviour</string>
     <string name="settings_input_mode_header">Input Mode</string>
+    <string name="settings_info_header">Information</string>
 
     <string name="settings_method_enable_method_title">Enable Input Method</string>
     <string name="settings_method_enable_method_summary">Please enable \'FusionIME\'.</string>
@@ -55,7 +56,9 @@
     <string name="settings_input_mode_locale_title">Language</string>
     <string name="settings_input_mode_layout_title">Keyboard Layout</string>
     <string name="settings_input_mode_number_row_title">Number Row</string>
-    <string name="settings_input_mode_number_row_summary">Always show top number row</string>
+    <string name="settings_input_mode_number_row_summary">Always show top number row.</string>
+    <string name="settings_input_mode_cursor_keys_title">Cursor Keys</string>
+    <string name="settings_input_mode_cursor_keys_summary">Always show cursor keys on supported layouts.</string>
     <string name="settings_input_mode_fullwidth_symbols_title">Full Width Symbols</string>
     <string name="settings_input_mode_correct_orders_title">Correct Jamo Orders</string>
     <string name="settings_input_mode_converter_title">Converter</string>
@@ -63,8 +66,16 @@
     <string name="settings_input_mode_chinese_traditional_title">Chinese Traditional</string>
     <string name="settings_input_mode_pinyin_spelling_title">Pinyin Input Style</string>
     <string name="settings_input_mode_mozc_flick_mode_title">12-Key Flick Mode</string>
+    <string name="settings_input_mode_mozc_flick_hint_title">Flick Hints</string>
+    <string name="settings_input_mode_mozc_flick_hint_summary">Show flick hints on 12-Key or GODAN layouts.</string>
     <string name="settings_input_mode_syllables_key_layout_title">Syllables Key Layout</string>
     <string name="settings_input_mode_syllables_key_layout_summary">Choose Key Arrangement for Syllables or Iroha Layout.</string>
+
+    <string name="settings_info_app_info_title">App Info</string>
+    <string name="settings_info_version">Version&#160;</string>
+    <string name="settings_info_source_code_title">Source Code</string>
+    <string name="settings_info_contact_maintainer_title">Contact Maintainer</string>
+    <string name="settings_info_used_projectss_title">Used Projects</string>
 
     <string name="settings_dialog_keystroke_key_name">Key Name</string>
     <string name="settings_dialog_keystroke_key_code">Key Code</string>
@@ -93,6 +104,7 @@
     <string name="input_mode_zhuyin">Bopomofo (Traditional Chinese)</string>
     <string name="input_mode_cangjie">Cangjie</string>
     <string name="input_mode_viet">Vietnamese</string>
+    <string name="input_mode_jyutping">Jyutping (Cantonese)</string>
 
     <string name="latin_locale_de">German</string>
     <string name="latin_locale_en">English</string>
@@ -118,6 +130,7 @@
 
     <string name="mozc_layout_romaji_qwerty">Romaji QWERTY</string>
     <string name="mozc_layout_kana_12key">Kana 12-Key</string>
+    <string name="mozc_layout_godan">GODAN</string>
     <string name="mozc_layout_kana_jis">Kana JIS</string>
     <string name="mozc_layout_kana_syllables">Kana Syllables</string>
     <string name="mozc_layout_kana_iroha">Kana Iroha</string>
@@ -148,7 +161,11 @@
     <string name="cangjie_layout_quick">Quick</string>
     <string name="cangjie_layout_dayi3">Dayi</string>
 
-    <string name="viet_layout_qwerty">QWERTY</string>
-    <string name="viet_layout_telex">Telex</string>
+    <string name="viet_layout_qwerty_nom">QWERTY (Han Nom)</string>
+    <string name="viet_layout_qwerty_quoc_ngu">QWERTY (Chu Quoc Ngu)</string>
+    <string name="viet_layout_telex_nom">Telex (Han Nom)</string>
+    <string name="viet_layout_telex_quoc_ngu">Telex (Chu Quoc Ngu)</string>
+
+    <string name="jyutping_layout_jyutping">Jyutping</string>
 
 </resources>

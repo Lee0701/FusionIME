@@ -5,9 +5,10 @@ import android.os.Handler
 import android.os.Looper
 import android.view.KeyEvent
 import com.android.inputmethod.zhuyin.TextEntryState
-import com.android.inputmethod.zhuyin.WordComposer
 import ee.oyatl.ime.candidate.CandidateView
+import ee.oyatl.ime.fusion.Feature
 import ee.oyatl.ime.fusion.R
+import ee.oyatl.ime.fusion.korean.WordComposer
 import ee.oyatl.ime.fusion.zhuyin.ChewingConverter
 import ee.oyatl.ime.keyboard.KeyboardConfiguration
 import ee.oyatl.ime.keyboard.KeyboardTemplate
@@ -23,8 +24,11 @@ import ee.oyatl.ime.keyboard.LayoutTable
 import java.util.Locale
 
 class ZhuyinIMEMode(
-    listener: IMEMode.Listener
+    listener: IMEMode.Listener,
+    cursorKeys: Boolean
 ): CommonIMEMode(listener) {
+    private val cursorKeys = Feature.CursorKeys.availableInCurrentVersion && cursorKeys
+
     private val handler: Handler = Handler(Looper.getMainLooper()) { msg ->
         when(msg.what) {
             MSG_UPDATE_SUGGESTIONS -> {
@@ -40,7 +44,7 @@ class ZhuyinIMEMode(
             configuration = KeyboardConfiguration(
                 MobileKeyboard.numbers(),
                 MobileKeyboard.alphabetic(semicolon = true, shiftDeleteWidth = 1f, shift = false),
-                MobileKeyboard.bottom(KeyEvent.KEYCODE_MINUS, KeyEvent.KEYCODE_SLASH)
+                MobileKeyboard.bottom(left = KeyEvent.KEYCODE_MINUS, right = KeyEvent.KEYCODE_SLASH, dpad = this.cursorKeys)
             ),
             contentRows = MobileKeyboardRows.NUMBERS + MobileKeyboardRows.HALF_GRID
         ),
@@ -53,8 +57,8 @@ class ZhuyinIMEMode(
             contentRows = TabletKeyboardRows.NUMBERS + TabletKeyboardRows.SEMICOLON_SLASH_MINUS
         )
     )
-    override val textLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutExt.TABLE_CHINESE + LayoutZhuyin.TABLE)
-    override val symbolLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutExt.TABLE_CHINESE + LayoutSymbol.TABLE_G)
+    override val textLayoutTable: LayoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutExt.TABLE_CHINESE + LayoutZhuyin.TABLE)
+    override val symbolLayoutTable: LayoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutExt.TABLE_CHINESE + LayoutSymbol.TABLE_G)
 
     private val wordComposer = WordComposer()
     private val converter: ChewingConverter = ChewingConverter()
@@ -76,22 +80,24 @@ class ZhuyinIMEMode(
         val inputConnection = currentInputConnection ?: return
         if(candidate is ZhuyinCandidate) {
             val text = candidate.text.toString().replace(" ", "")
+            wordComposer.consume(candidate.key.length)
+            wordComposer.moveCursor(wordComposer.composingText.length)
             inputConnection.commitText(text, 1)
-            onReset()
-            updateSuggestions()
+            renderResult()
         }
     }
 
     private fun renderResult() {
         val inputConnection = currentInputConnection ?: return
         postUpdateSuggestions()
-        inputConnection.setComposingText(wordComposer.typedWord ?: "", 1)
+        inputConnection.setComposingText(wordComposer.getSpannableSurfaceString(), 1)
     }
 
     private fun updateSuggestions() {
-        val codes = (0 until wordComposer.size()).mapNotNull { i -> wordComposer.getCodesAt(i).firstOrNull() }.toMutableList()
-        if(wordComposer.typedWord?.lastOrNull() !in LayoutZhuyin.TONE_MARKS) codes += ' '.code
-        val candidates = converter.getSuggestions(codes).mapIndexed { i, s -> ZhuyinCandidate(i, s) }
+        val key = wordComposer.textBeforeCursor
+        val codes = key.mapNotNull { LayoutZhuyin.CODES_MAP[it]?.code }.toMutableList()
+        if(key.lastOrNull() !in LayoutZhuyin.TONE_MARKS) codes += ' '.code
+        val candidates = converter.getSuggestions(codes).mapIndexed { i, s -> ZhuyinCandidate(i, s, key) }
         bestCandidate = candidates.getOrNull(0)
         submitCandidates(candidates)
     }
@@ -112,8 +118,7 @@ class ZhuyinIMEMode(
     }
 
     private fun handleSpace() {
-        val typedWord = wordComposer.typedWord ?: ""
-        if(typedWord.isNotEmpty()) {
+        if(wordComposer.composingText.isNotEmpty()) {
             if(bestCandidate != null) pickDefaultSuggestion()
             else onReset()
             renderResult()
@@ -122,7 +127,7 @@ class ZhuyinIMEMode(
     }
 
     private fun handleReturn() {
-        if(wordComposer.typedWord?.isNotEmpty() == true) {
+        if(wordComposer.composingText.isNotEmpty()) {
             if(bestCandidate != null) pickDefaultSuggestion()
             else onReset()
         } else {
@@ -135,10 +140,10 @@ class ZhuyinIMEMode(
     private fun handleBackspace() {
         val ic = currentInputConnection ?: return
         var deleteChar = false
-        if (wordComposer.typedWord?.isNotEmpty() == true) {
-            val length: Int = wordComposer.typedWord.length
+        if (wordComposer.composingText.isNotEmpty()) {
+            val length: Int = wordComposer.composingText.length
             if (length > 0) {
-                wordComposer.deleteLast()
+                wordComposer.delete(1)
             } else {
                 ic.deleteSurroundingText(1, 0)
             }
@@ -152,11 +157,23 @@ class ZhuyinIMEMode(
         renderResult()
     }
 
+    private fun handleDpad(amount: Int) {
+        if(wordComposer.composingText.isNotEmpty()) {
+            wordComposer.moveCursorRelative(amount)
+            renderResult()
+        } else {
+            val keyCode =
+                if(amount < 0) KeyEvent.KEYCODE_DPAD_LEFT
+                else if(amount > 0) KeyEvent.KEYCODE_DPAD_RIGHT
+                else 0
+            if(keyCode != 0) util?.sendDownUpKeyEvents(keyCode)
+        }
+    }
+
     override fun onChar(codePoint: Int) {
         val key = codePoint.toChar()
-        val value = LayoutZhuyin.CODES_MAP[key]?.code
-        if(value != null) {
-            wordComposer.add(codePoint, intArrayOf(value))
+        if(key in LayoutZhuyin.CODES_MAP) {
+            wordComposer.commit(key.toString())
             renderResult()
         } else {
             onReset()
@@ -169,20 +186,25 @@ class ZhuyinIMEMode(
             KeyEvent.KEYCODE_SPACE -> handleSpace()
             KeyEvent.KEYCODE_ENTER -> handleReturn()
             KeyEvent.KEYCODE_DEL -> handleBackspace()
+            KeyEvent.KEYCODE_DPAD_LEFT -> handleDpad(-1)
+            KeyEvent.KEYCODE_DPAD_RIGHT -> handleDpad(1)
             else -> super.onSpecial(keyCode)
         }
     }
 
     data class ZhuyinCandidate(
         val index: Int,
-        override val text: CharSequence
+        override val text: CharSequence,
+        val key: String
     ): CandidateView.Candidate
 
-    class Params: IMEMode.Params {
+    class Params(
+        val cursorKeys: Boolean
+    ): IMEMode.Params {
         override val type: String = TYPE
 
         override fun create(listener: IMEMode.Listener): IMEMode {
-            return ZhuyinIMEMode(listener)
+            return ZhuyinIMEMode(listener, cursorKeys)
         }
 
         override fun getLabel(context: Context): String {
@@ -197,7 +219,8 @@ class ZhuyinIMEMode(
 
         companion object {
             fun parse(map: Map<String, String>): Params {
-                return Params()
+                val cursorKeys = map["cursor_keys"]?.toBoolean() ?: false
+                return Params(cursorKeys)
             }
         }
     }

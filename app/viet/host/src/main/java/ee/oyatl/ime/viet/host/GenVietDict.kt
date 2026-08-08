@@ -16,9 +16,17 @@ fun loadData(dictionary: Dictionary, source: InputStream) {
     }
 }
 
-fun main(args: Array<String>) {
+fun generateDictionary(input: String, output: String) {
     val dictionary = Dictionary()
-    val names = args.map { "nom_$it.tsv" }
-    names.forEach { loadData(dictionary, File("data/$it").inputStream()) }
-    dictionary.write(DataOutputStream(File("app/viet/src/main/res/raw/viet.bin").outputStream()))
+    loadData(dictionary, File(input).inputStream())
+    dictionary.write(DataOutputStream(File(output).outputStream()))
+}
+
+fun main() {
+    val inDir = "data"
+    val outDir = "app/viet/src/main/res/raw"
+    File(outDir).mkdirs()
+    generateDictionary("$inDir/nom_quoc_ngu.tsv", "$outDir/nom_quoc_ngu.bin")
+    generateDictionary("$inDir/nom_qwerty.tsv", "$outDir/nom_qwerty.bin")
+    generateDictionary("$inDir/quoc_ngu_qwerty.tsv", "$outDir/quoc_ngu_qwerty.bin")
 }
