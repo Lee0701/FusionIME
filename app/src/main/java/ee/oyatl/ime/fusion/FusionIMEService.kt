@@ -79,7 +79,6 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
             IMEMode.Params.parse(item)
         }.toMutableList()
         if(params.isEmpty()) params += LatinIMEMode.Params()
-        params += JyutpingIMEMode.Params()
         params.forEach { p ->
             entries += IMEModeSwitcher.Entry(p.getShortLabel(this, params), p.create(this))
         }
