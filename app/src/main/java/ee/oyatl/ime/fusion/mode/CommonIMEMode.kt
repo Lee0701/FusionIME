@@ -45,6 +45,9 @@ import ee.oyatl.ime.keyboard.touchhandler.FlickDirection
 import ee.oyatl.ime.keyboard.touchhandler.FlickTouchHandler
 import ee.oyatl.ime.keyboard.touchhandler.SeekTouchHandler
 import ee.oyatl.ime.keyboard.touchhandler.TouchHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 abstract class CommonIMEMode(
@@ -408,9 +411,11 @@ abstract class CommonIMEMode(
     }
 
     protected fun submitCandidates(candidates: List<CandidateView.Candidate>) {
-        candidateView?.submitList(candidates)
-        val visible = candidates.isNotEmpty()
-        listener.onCandidateViewVisibilityChange(visible)
+        CoroutineScope(Dispatchers.Main).launch {
+            candidateView?.submitList(candidates)
+            val visible = candidates.isNotEmpty()
+            listener.onCandidateViewVisibilityChange(visible)
+        }
     }
 
     override fun updateSelection(

@@ -87,6 +87,7 @@ dependencies {
     implementation(project(":app:korean:hangul"))
     implementation(project(":app:latin"))
     implementation(project(":app:viet"))
+    implementation(project(":app:jyutping"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

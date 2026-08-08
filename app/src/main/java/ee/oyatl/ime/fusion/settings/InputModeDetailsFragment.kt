@@ -7,6 +7,7 @@ import ee.oyatl.ime.fusion.Feature
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.mode.CangjieIMEMode
 import ee.oyatl.ime.fusion.mode.IMEMode
+import ee.oyatl.ime.fusion.mode.JyutpingIMEMode
 import ee.oyatl.ime.fusion.mode.KoreanIMEMode
 import ee.oyatl.ime.fusion.mode.LatinIMEMode
 import ee.oyatl.ime.fusion.mode.MozcIMEMode
@@ -106,6 +107,14 @@ abstract class InputModeDetailsFragment: PreferenceFragmentCompat() {
         }
     }
 
+    class Jyutping: InputModeDetailsFragment() {
+        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+            super.onCreatePreferences(savedInstanceState, rootKey)
+            if(Feature.NumberRow.availableInCurrentVersion)
+                addPreferencesFromResource(R.xml.pref_input_mode_number_row)
+        }
+    }
+
     companion object {
         const val KEY_INPUT_MODE_DETAILS: String = "inputModeDetails"
         const val KEY_MAP: String = "map"
@@ -119,6 +128,7 @@ abstract class InputModeDetailsFragment: PreferenceFragmentCompat() {
                 PinyinIMEMode.TYPE -> Pinyin()
                 VietIMEMode.TYPE -> Viet()
                 CangjieIMEMode.TYPE -> Cangjie()
+                JyutpingIMEMode.TYPE -> Jyutping()
                 else -> null
             }
             fragment?.map += map
