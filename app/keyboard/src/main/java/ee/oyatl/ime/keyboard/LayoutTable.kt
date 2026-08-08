@@ -65,8 +65,11 @@ data class LayoutTable(
         }
         fun fromFlick4Dirs(map: Map<Int, List<Int>>): LayoutTable {
             return LayoutTable(map.mapNotNull { (key, arr) ->
-                if(arr.size == 5) key to FlickItem(arr[0], arr[1], arr[2], arr[3], arr[4])
-                else null
+                when (arr.size) {
+                    5 -> key to FlickItem(arr[0], arr[1], arr[2], arr[3], arr[4])
+                    1 -> key to FlickItem(arr[0], arr[0], arr[0], arr[0], arr[0])
+                    else -> null
+                }
             }.toMap())
         }
     }

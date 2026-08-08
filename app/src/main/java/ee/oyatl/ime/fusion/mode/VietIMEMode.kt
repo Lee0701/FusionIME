@@ -2,6 +2,7 @@ package ee.oyatl.ime.fusion.mode
 
 import android.content.Context
 import android.view.KeyEvent
+import androidx.annotation.RawRes
 import androidx.annotation.StringRes
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.fusion.Feature
@@ -14,13 +15,14 @@ import ee.oyatl.ime.fusion.layout.MobileKeyboardRows
 import ee.oyatl.ime.fusion.layout.TabletKeyboard
 import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
 import ee.oyatl.ime.viet.ChuQuocNguTableConverter
-import ee.oyatl.ime.viet.HanNomConverter
+import ee.oyatl.ime.viet.VietnameseConverter
 import java.util.Locale
 
-abstract class VietIMEMode(
+class VietIMEMode(
     listener: IMEMode.Listener,
     numberRow: Boolean,
-    cursorKeys: Boolean
+    cursorKeys: Boolean,
+    val layout: Layout
 ): CommonIMEMode(listener) {
     private val numberRow = Feature.NumberRow.availableInCurrentVersion && numberRow
     private val cursorKeys = Feature.CursorKeys.availableInCurrentVersion && cursorKeys
@@ -44,33 +46,17 @@ abstract class VietIMEMode(
         )
     )
 
-    class Qwerty(
-        listener: IMEMode.Listener,
-        numberRow: Boolean,
-        cursorKeys: Boolean
-    ): VietIMEMode(listener, numberRow, cursorKeys) {
-        override val keyboardMode: String = "q"
-    }
-
-    class Telex(
-        listener: IMEMode.Listener,
-        numberRow: Boolean,
-        cursorKeys: Boolean
-    ): VietIMEMode(listener, numberRow, cursorKeys) {
-        override val keyboardMode: String = "t"
-    }
-
-    abstract val keyboardMode: String
-
     private val wordComposer: WordComposer = WordComposer()
-    private var hanNomConverter: HanNomConverter? = null
+    private var converter: VietnameseConverter? = null
     private val chuQuocNguTableConverter: ChuQuocNguTableConverter = ChuQuocNguTableConverter()
 
-    private var bestCandidate: HanNomConverter.Candidate? = null
+    private var bestCandidate: VietnameseConverter.Candidate? = null
 
     override suspend fun onLoad(context: Context) {
         super.onLoad(context)
-        hanNomConverter = HanNomConverter(context)
+        if(layout.dictResId != 0) {
+            converter = VietnameseConverter(context, layout.dictResId)
+        }
     }
 
     override fun onReset() {
@@ -81,21 +67,26 @@ abstract class VietIMEMode(
 
     override fun onCandidateSelected(candidate: CandidateView.Candidate) {
         val inputConnection = currentInputConnection ?: return
-        if(candidate is HanNomConverter.Candidate) {
-            wordComposer.consume(candidate.key.length)
+        if(candidate is VietnameseConverter.Candidate) {
+            wordComposer.consume(candidate.src.keys.take(candidate.keyLength).sumOf { it.length })
             inputConnection.commitText(candidate.text, 1)
+            if(layout.insertSpaces && wordComposer.composingText.isNotEmpty()) {
+                inputConnection.commitText(" ", 1)
+            }
             renderInputView()
         }
     }
 
     private fun convert() {
-        val candidates = hanNomConverter?.convert(wordComposer.composingText, keyboardMode) ?: return
-        bestCandidate = candidates.firstOrNull() as? HanNomConverter.Candidate
+        val result = chuQuocNguTableConverter.convert(wordComposer.composingText, layout.keyboardMode)
+        val candidates = converter?.convert(result) ?: return
+        bestCandidate = candidates.firstOrNull() as? VietnameseConverter.Candidate
         submitCandidates(candidates)
     }
 
     private fun renderInputView() {
-        val composing = chuQuocNguTableConverter.convert(wordComposer.composingText, keyboardMode)
+        val result = chuQuocNguTableConverter.convert(wordComposer.composingText, layout.keyboardMode)
+        val composing = result.values.joinToString("")
         currentInputConnection?.setComposingText(composing, 1)
         convert()
     }
@@ -161,30 +152,28 @@ abstract class VietIMEMode(
         override val type: String = TYPE
 
         override fun create(listener: IMEMode.Listener): IMEMode {
-            return when(layout) {
-                Layout.Qwerty -> Qwerty(listener, numberRow, cursorKeys)
-                Layout.Telex -> Telex(listener, numberRow, cursorKeys)
-            }
+            return VietIMEMode(listener, numberRow, cursorKeys, layout)
         }
 
         override fun getLabel(context: Context): String {
             val localeName = Locale("vi").displayName
-            val layoutName = layout.name
+            val layoutName = context.getString(layout.nameKey)
             return "$localeName $layoutName"
         }
 
         override fun getShortLabel(context: Context, params: List<IMEMode.Params>): String {
             val vietParams = params.filterIsInstance<Params>().filterNot { it == this }
+            val localeHead = layout.labelHead
             // If this is the only Vietnamese mode
-            if(vietParams.isEmpty()) return "越"
+            if(vietParams.isEmpty()) return localeHead
             // If not, use specific layout name
             val layoutHead = layout.name.first()
-            return "越$layoutHead"
+            return "$localeHead$layoutHead"
         }
 
         companion object {
             fun parse(map: Map<String, String>): Params {
-                val layout = Layout.entries.find { it.name == map["layout"] } ?: Layout.Qwerty
+                val layout = Layout.entries.find { it.name == map["layout"] } ?: Layout.QwertyNom
                 val numberRow = map["number_row"]?.toBoolean() ?: false
                 val cursorKeys = map["cursor_keys"]?.toBoolean() ?: false
                 return Params(
@@ -197,10 +186,40 @@ abstract class VietIMEMode(
     }
 
     enum class Layout(
-        @StringRes val nameKey: Int
+        @StringRes val nameKey: Int,
+        val labelHead: String,
+        val keyboardMode: String,
+        @RawRes val dictResId: Int,
+        val insertSpaces: Boolean
     ) {
-        Qwerty(R.string.viet_layout_qwerty),
-        Telex(R.string.viet_layout_telex)
+        QwertyNom(
+            R.string.viet_layout_qwerty_nom,
+            "越",
+            "q",
+            ee.oyatl.ime.viet.R.raw.nom_qwerty,
+            false
+        ),
+        QwertyQuocNgu(
+            R.string.viet_layout_qwerty_quoc_ngu,
+            "Việt",
+            "q",
+            ee.oyatl.ime.viet.R.raw.quoc_ngu_qwerty,
+            true
+        ),
+        TelexNom(
+            R.string.viet_layout_telex_nom,
+            "越",
+            "t",
+            ee.oyatl.ime.viet.R.raw.nom_quoc_ngu,
+            false
+        ),
+        TelexQuocNgu(
+            R.string.viet_layout_telex_quoc_ngu,
+            "Việt",
+            "t",
+            0,
+            true
+        )
     }
 
     companion object {

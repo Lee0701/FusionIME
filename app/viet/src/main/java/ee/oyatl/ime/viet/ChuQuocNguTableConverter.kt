@@ -6,9 +6,10 @@ class ChuQuocNguTableConverter {
         "t" to ChuQuocNguTable.TELEX
     )
 
-    fun convert(text: String, mode: String): String {
+    fun convert(text: String, mode: String): Result {
         val table = modeTable[mode] ?: mapOf()
-        val result = mutableListOf<String>()
+        val keys = mutableListOf<String>()
+        val values = mutableListOf<String>()
         var i = 0
         while(i < text.length) {
             var found = false
@@ -17,17 +18,24 @@ class ChuQuocNguTableConverter {
                 val s = text.substring(i, i + k)
                 val r = table[s]
                 if(r != null) {
-                    result += r.toString()
+                    keys += s
+                    values += r.toString()
                     i += k
                     found = true
                     break
                 }
             }
             if(!found) {
-                result += text[i].toString()
+                keys += text[i].toString()
+                values += text[i].toString()
                 i += 1
             }
         }
-        return result.joinToString("")
+        return Result(keys, values)
     }
+
+    data class Result(
+        val keys: List<String>,
+        val values: List<String>
+    )
 }
