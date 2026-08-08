@@ -2,6 +2,7 @@ package ee.oyatl.ime.fusion.mode
 
 import android.content.Context
 import android.content.res.Resources
+import android.graphics.PointF
 import android.inputmethodservice.InputMethodService
 import android.view.KeyEvent
 import android.view.View
@@ -36,28 +37,28 @@ import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.TripleCandidateView
 import ee.oyatl.ime.fusion.Feature
 import ee.oyatl.ime.fusion.R
-import ee.oyatl.ime.keyboard.KeyboardConfiguration
-import ee.oyatl.ime.keyboard.KeyboardTemplate
-import ee.oyatl.ime.keyboard.LayoutTable
 import ee.oyatl.ime.fusion.layout.LayoutLatin
 import ee.oyatl.ime.fusion.layout.MobileKeyboard
 import ee.oyatl.ime.fusion.layout.MobileKeyboardRows
 import ee.oyatl.ime.fusion.layout.TabletKeyboard
 import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
-import ee.oyatl.ime.fusion.swipe.SwipeInputEngine
+import ee.oyatl.ime.keyboard.KeyboardConfiguration
 import ee.oyatl.ime.keyboard.KeyboardState
+import ee.oyatl.ime.keyboard.KeyboardTemplate
 import ee.oyatl.ime.keyboard.KeyboardView
+import ee.oyatl.ime.keyboard.LayoutTable
 import ee.oyatl.ime.keyboard.listener.CompoundKeyboardListener
 import ee.oyatl.ime.keyboard.listener.KeyboardListener
 import ee.oyatl.ime.keyboard.listener.SwipeListener
 import ee.oyatl.ime.keyboard.touchhandler.SwipeTouchHandler
 import ee.oyatl.ime.keyboard.touchhandler.TouchHandler
+import tribixbite.cleverkeys.SwipeInput
 import tribixbite.cleverkeys.swipe.SwipePredictor
 import java.util.Locale
 
 abstract class LatinIMEMode(
     private val listener: IMEMode.Listener
-): CommonIMEMode(listener), ILatinIME, SwipeInputEngine.Listener {
+): CommonIMEMode(listener), ILatinIME, SwipeListener {
     abstract val locale: Locale
     override var context: Context? = null
 
@@ -68,7 +69,8 @@ abstract class LatinIMEMode(
     override var keyboardSwitcher: KeyboardSwitcher? = null
     override var inputLogic: InputLogic? = null
 
-    private var swipeInputEngine: SwipeInputEngine? = null
+    private var swipePredictor: SwipePredictor? = null
+    private var swipePointers: List<SwipeListener.Pointer> = emptyList()
 
     private val keyboardParams: KeyboardParams = KeyboardParams().apply {
         mOccupiedWidth = 1
@@ -95,8 +97,8 @@ abstract class LatinIMEMode(
         keyboardSwitcher = KeyboardSwitcher.getInstance()
         inputLogic = InputLogic(this, this, dictionaryFacilitator)
 
-        this.swipeInputEngine = SwipeInputEngine(context, this)
-        this.swipeInputEngine?.init()
+        this.swipePredictor = SwipePredictor(context, SwipePredictor.SearchEngineType.Beam)
+        swipePredictor?.init()
     }
 
     override fun onStart(inputConnection: InputConnection, editorInfo: EditorInfo) {
@@ -360,7 +362,7 @@ abstract class LatinIMEMode(
     }
 
     override fun onUpdateBatchInput(batchPointers: InputPointers?) {
-        inputLogic?.onUpdateBatchInput(batchPointers)
+//        inputLogic?.onUpdateBatchInput(batchPointers)
     }
 
     override fun onEndBatchInput(batchPointers: InputPointers?) {
@@ -370,18 +372,6 @@ abstract class LatinIMEMode(
     override fun onCancelBatchInput() {
         inputLogic?.onCancelBatchInput(handler)
 //        mGestureConsumer.onGestureCompleted(batchPointers)
-    }
-
-    override fun onTailBatchInputResultShown(suggestedWords: SuggestedWords?) {
-    }
-
-    override fun showGesturePreviewAndSuggestionStrip(
-        suggestedWords: SuggestedWords,
-        dismissGestureFloatingPreviewText: Boolean
-    ) {
-    }
-
-    override fun onFinishSlidingInput() {
     }
 
     override fun onCancelInput() {
@@ -395,11 +385,20 @@ abstract class LatinIMEMode(
         callback: OnGetSuggestedWordsCallback?
     ) {
         val keyboard = dummyKeyboard
-        inputLogic?.getSuggestedWords(
-            settings?.current, keyboard,
-            keyboardSwitcher?.getKeyboardShiftMode() ?: WordComposer.CAPS_MODE_OFF,
-            inputStyle, sequenceNumber, callback
-        )
+        when(inputStyle) {
+            SuggestedWords.INPUT_STYLE_UPDATE_BATCH, SuggestedWords.INPUT_STYLE_TAIL_BATCH -> {
+                val pointers = this.swipePointers
+                callback ?: return
+                getSwipeSuggestedWords(pointers, inputStyle, sequenceNumber, callback)
+            }
+            else -> {
+                inputLogic?.getSuggestedWords(
+                    settings?.current, keyboard,
+                    keyboardSwitcher?.getKeyboardShiftMode() ?: WordComposer.CAPS_MODE_OFF,
+                    inputStyle, sequenceNumber, callback
+                )
+            }
+        }
     }
 
     override fun showSuggestionStrip(suggestedWords: SuggestedWords?) {
@@ -408,6 +407,20 @@ abstract class LatinIMEMode(
         } else {
             setSuggestedWords(suggestedWords)
         }
+    }
+
+    override fun onTailBatchInputResultShown(suggestedWords: SuggestedWords?) {
+    }
+
+    override fun showGesturePreviewAndSuggestionStrip(
+        suggestedWords: SuggestedWords,
+        dismissGestureFloatingPreviewText: Boolean
+    ) {
+        showSuggestionStrip(suggestedWords)
+    }
+
+    override fun onFinishSlidingInput() {
+        keyboardSwitcher?.onFinishSlidingInput(currentAutoCapsState, currentRecapitalizeState)
     }
 
     fun setSuggestedWords(suggestedWords: SuggestedWords) {
@@ -515,9 +528,9 @@ abstract class LatinIMEMode(
     ): KeyboardListener {
         return CompoundKeyboardListener(
             object: SwipeListener.Delegate() {
-                override fun onSwipeStart() = swipeInputEngine?.onSwipeStart() ?: Unit
-                override fun onSwipeMove(pointers: List<SwipeListener.Pointer>) = swipeInputEngine?.onSwipeMove(pointers) ?: Unit
-                override fun onSwipeEnd(pointers: List<SwipeListener.Pointer>) = swipeInputEngine?.onSwipeEnd(pointers) ?: Unit
+                override fun onSwipeStart() = this@LatinIMEMode.onSwipeStart() ?: Unit
+                override fun onSwipeMove(pointers: List<SwipeListener.Pointer>) = this@LatinIMEMode.onSwipeMove(pointers) ?: Unit
+                override fun onSwipeEnd(pointers: List<SwipeListener.Pointer>) = this@LatinIMEMode.onSwipeEnd(pointers) ?: Unit
             }
         ) + super.createKeyboardListener(context, params)
     }
@@ -533,15 +546,47 @@ abstract class LatinIMEMode(
         return super.createTouchHandler(keyboardView, context, symbolState)
     }
 
-    override fun onSwipeBegin() {
+    override fun onSwipeStart() {
+        onStartBatchInput()
     }
 
-    override fun onSwipePreview(previewString: String) {
+    override fun onSwipeEnd(pointers: List<SwipeListener.Pointer>) {
+        this.swipePointers = pointers
+        onEndBatchInput(InputPointers(0))
     }
 
-    override fun onSwipeResult(result: List<SwipePredictor.Result>) {
-        val candidates = result.mapIndexed { index, result ->
-            val suggestedWordInfo = SuggestedWords.SuggestedWordInfo(
+    override fun onSwipeMove(pointers: List<SwipeListener.Pointer>) {
+        this.swipePointers = pointers
+        onUpdateBatchInput(InputPointers(0))
+    }
+
+    private fun convertPointers(pointers: List<SwipeListener.Pointer>): InputPointers {
+        val inputPointers = InputPointers(pointers.size)
+        val startTime = pointers.firstOrNull()?.time ?: 0
+        pointers.forEach {
+            val x = it.rawX
+            val y = it.rawY
+            val time = (startTime - it.time).toInt()
+            inputPointers.addPointer(x, y, 0, time)
+        }
+        return inputPointers
+    }
+
+    private fun getSwipeSuggestedWords(
+        pointers: List<SwipeListener.Pointer>,
+        inputStyle: Int,
+        sequenceNumber: Int,
+        callback: OnGetSuggestedWordsCallback
+    ) {
+        val predictor = swipePredictor ?: return
+        val input = SwipeInput(
+            coordinates = pointers.map { PointF(it.x, it.y) },
+            timestamps = pointers.map { it.time },
+            touchedKeys = pointers.map { it.touchedKey }
+        )
+        val result = predictor.predict(input)
+        val suggestedWordInfoList = ArrayList(result.mapIndexed { index, result ->
+            SuggestedWords.SuggestedWordInfo(
                 result.word,
                 null,
                 result.score,
@@ -550,13 +595,15 @@ abstract class LatinIMEMode(
                 SuggestedWords.SuggestedWordInfo.NOT_AN_INDEX,
                 SuggestedWords.SuggestedWordInfo.NOT_A_CONFIDENCE
             )
-            LatinCandidate(index, suggestedWordInfo)
-        }
-        val first = candidates.firstOrNull()
-        first?.let { onTextInput(it.suggestedWordInfo.word) }
-        handler.post {
-            submitCandidates(candidates)
-        }
+        })
+        val typedWordInfo = suggestedWordInfoList.firstOrNull()
+        val suggestedWords = SuggestedWords(
+            suggestedWordInfoList, suggestedWordInfoList,
+            typedWordInfo, typedWordInfo != null,
+            false, false,
+            inputStyle, sequenceNumber
+        )
+        callback.onGetSuggestedWords(suggestedWords)
     }
 
     data class LatinCandidate(
