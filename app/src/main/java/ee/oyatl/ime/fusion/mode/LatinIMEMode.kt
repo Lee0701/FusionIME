@@ -34,6 +34,7 @@ import com.android.inputmethod.latin.settings.SettingsValues
 import com.android.inputmethod.latin.utils.ScriptUtils
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.TripleCandidateView
+import ee.oyatl.ime.fusion.Feature
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.keyboard.KeyboardConfiguration
 import ee.oyatl.ime.keyboard.KeyboardTemplate
@@ -504,22 +505,25 @@ abstract class LatinIMEMode(
         cursorKeys: Boolean,
         listener: IMEMode.Listener
     ): LatinIMEMode(listener) {
+        private val numberRow = Feature.NumberRow.availableInCurrentVersion && numberRow
+        private val cursorKeys = Feature.CursorKeys.availableInCurrentVersion && cursorKeys
+
         override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
             mobile = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
-                    if(numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
+                    if(this.numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
                     MobileKeyboard.alphabetic(),
-                    MobileKeyboard.bottom(dpad = cursorKeys)
+                    MobileKeyboard.bottom(dpad = this.cursorKeys)
                 ),
-                contentRows = (if(numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.DEFAULT
+                contentRows = (if(this.numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.DEFAULT
             ),
             tablet = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
-                    if(numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
-                    TabletKeyboard.alphabetic(delete = !numberRow),
+                    if(this.numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
+                    TabletKeyboard.alphabetic(delete = !this.numberRow),
                     TabletKeyboard.bottom()
                 ),
-                contentRows = (if(numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.DEFAULT
+                contentRows = (if(this.numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.DEFAULT
             )
         )
     }
@@ -530,23 +534,26 @@ abstract class LatinIMEMode(
         cursorKeys: Boolean,
         listener: IMEMode.Listener
     ): LatinIMEMode(listener) {
+        private val numberRow = Feature.NumberRow.availableInCurrentVersion && numberRow
+        private val cursorKeys = Feature.CursorKeys.availableInCurrentVersion && cursorKeys
+
         override val textLayoutTable: LayoutTable = super.textLayoutTable.mapKeyCodes(LayoutLatin.KEYCODE_MAP_DVORAK)
         override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
             mobile = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
-                    if(numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
+                    if(this.numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
                     MobileKeyboard.alphabetic(semicolon = true),
-                    MobileKeyboard.bottom(left = KeyEvent.KEYCODE_X, right = KeyEvent.KEYCODE_SLASH, dpad = cursorKeys)
+                    MobileKeyboard.bottom(left = KeyEvent.KEYCODE_X, right = KeyEvent.KEYCODE_SLASH, dpad = this.cursorKeys)
                 ),
-                contentRows = (if(numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.DVORAK
+                contentRows = (if(this.numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.DVORAK
             ),
             tablet = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
-                    if(numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
-                    TabletKeyboard.alphabetic(semicolon = true, delete = !numberRow),
+                    if(this.numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
+                    TabletKeyboard.alphabetic(semicolon = true, delete = !this.numberRow),
                     TabletKeyboard.bottom()
                 ),
-                contentRows = (if(numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.DVORAK
+                contentRows = (if(this.numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.DVORAK
             )
         )
     }
@@ -557,23 +564,26 @@ abstract class LatinIMEMode(
         cursorKeys: Boolean,
         listener: IMEMode.Listener
     ): LatinIMEMode(listener) {
+        private val numberRow = Feature.NumberRow.availableInCurrentVersion && numberRow
+        private val cursorKeys = Feature.CursorKeys.availableInCurrentVersion && cursorKeys
+
         override val textLayoutTable: LayoutTable = super.textLayoutTable.mapKeyCodes(LayoutLatin.KEYCODE_MAP_COLEMAK)
         override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
             mobile = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
-                    if(numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
+                    if(this.numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
                     MobileKeyboard.alphabetic(semicolon = true),
-                    MobileKeyboard.bottom(dpad = cursorKeys)
+                    MobileKeyboard.bottom(dpad = this.cursorKeys)
                 ),
-                contentRows = (if(numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.SEMICOLON
+                contentRows = (if(this.numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.SEMICOLON
             ),
             tablet = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
-                    if(numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
-                    TabletKeyboard.alphabetic(semicolon = true, delete = !numberRow),
+                    if(this.numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
+                    TabletKeyboard.alphabetic(semicolon = true, delete = !this.numberRow),
                     TabletKeyboard.bottom()
                 ),
-                contentRows = (if(numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.SEMICOLON
+                contentRows = (if(this.numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.SEMICOLON
             )
         )
     }

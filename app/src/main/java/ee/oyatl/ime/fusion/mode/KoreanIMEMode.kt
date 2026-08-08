@@ -6,6 +6,7 @@ import android.os.Looper
 import android.view.KeyEvent
 import androidx.annotation.StringRes
 import ee.oyatl.ime.candidate.CandidateView
+import ee.oyatl.ime.fusion.Feature
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.hangul.HangulCombiner
 import ee.oyatl.ime.fusion.korean.BigramHanjaConverter
@@ -151,23 +152,26 @@ abstract class KoreanIMEMode(
         cursorKeys: Boolean,
         listener: IMEMode.Listener
     ): KoreanIMEMode(listener) {
+        private val numberRow = Feature.NumberRow.availableInCurrentVersion && numberRow
+        private val cursorKeys = Feature.CursorKeys.availableInCurrentVersion && cursorKeys
+
         override val hanjaConverter: HanjaConverter = converterType.create()
         override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
             mobile = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
-                    if(numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
+                    if(this.numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
                     MobileKeyboard.alphabetic(),
-                    MobileKeyboard.bottom(dpad = cursorKeys)
+                    MobileKeyboard.bottom(dpad = this.cursorKeys)
                 ),
-                contentRows = (if(numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.KS
+                contentRows = (if(this.numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.KS
             ),
             tablet = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
-                    if(numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
-                    TabletKeyboard.alphabetic(delete = !numberRow),
+                    if(this.numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
+                    TabletKeyboard.alphabetic(delete = !this.numberRow),
                     TabletKeyboard.bottom()
                 ),
-                contentRows = (if(numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.KS
+                contentRows = (if(this.numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.KS
             )
         )
     }
@@ -190,13 +194,15 @@ abstract class KoreanIMEMode(
         cursorKeys: Boolean,
         listener: IMEMode.Listener
     ): KoreanIMEMode(listener) {
+        private val cursorKeys = Feature.CursorKeys.availableInCurrentVersion && cursorKeys
+
         open val softKeyCodeMapper: SoftKeyCodeMapper get() = SoftKeyCodeMapper()
         override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
             mobile = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
                     MobileKeyboard.numbers(),
                     MobileKeyboard.alphabetic(semicolon = true, shiftDeleteWidth = 1f),
-                    MobileKeyboard.bottom(left = ExtKeyCode.KEYCODE_PERIOD_COMMA, right = KeyEvent.KEYCODE_SLASH, dpad = cursorKeys)
+                    MobileKeyboard.bottom(left = ExtKeyCode.KEYCODE_PERIOD_COMMA, right = KeyEvent.KEYCODE_SLASH, dpad = this.cursorKeys)
                 ),
                 contentRows = MobileKeyboardRows.NUMBERS + MobileKeyboardRows.SEMICOLON_QUOTE,
                 softKeyCodeMapper = softKeyCodeMapper

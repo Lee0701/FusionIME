@@ -6,6 +6,7 @@ import android.os.Looper
 import android.view.KeyEvent
 import com.android.inputmethod.zhuyin.TextEntryState
 import ee.oyatl.ime.candidate.CandidateView
+import ee.oyatl.ime.fusion.Feature
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.korean.WordComposer
 import ee.oyatl.ime.fusion.zhuyin.ChewingConverter
@@ -26,6 +27,8 @@ class ZhuyinIMEMode(
     listener: IMEMode.Listener,
     cursorKeys: Boolean
 ): CommonIMEMode(listener) {
+    private val cursorKeys = Feature.CursorKeys.availableInCurrentVersion && cursorKeys
+
     private val handler: Handler = Handler(Looper.getMainLooper()) { msg ->
         when(msg.what) {
             MSG_UPDATE_SUGGESTIONS -> {
@@ -41,7 +44,7 @@ class ZhuyinIMEMode(
             configuration = KeyboardConfiguration(
                 MobileKeyboard.numbers(),
                 MobileKeyboard.alphabetic(semicolon = true, shiftDeleteWidth = 1f, shift = false),
-                MobileKeyboard.bottom(left = KeyEvent.KEYCODE_MINUS, right = KeyEvent.KEYCODE_SLASH, dpad = cursorKeys)
+                MobileKeyboard.bottom(left = KeyEvent.KEYCODE_MINUS, right = KeyEvent.KEYCODE_SLASH, dpad = this.cursorKeys)
             ),
             contentRows = MobileKeyboardRows.NUMBERS + MobileKeyboardRows.HALF_GRID
         ),

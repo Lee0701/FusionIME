@@ -3,6 +3,7 @@ package ee.oyatl.ime.fusion.mode
 import android.content.Context
 import android.view.KeyEvent
 import ee.oyatl.ime.candidate.CandidateView
+import ee.oyatl.ime.fusion.Feature
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.korean.WordComposer
 import ee.oyatl.ime.fusion.layout.MobileKeyboard
@@ -25,22 +26,25 @@ class JyutpingIMEMode(
     cursorKeys: Boolean,
     listener: IMEMode.Listener
 ): CommonIMEMode(listener) {
+    private val numberRow = Feature.NumberRow.availableInCurrentVersion && numberRow
+    private val cursorKeys = Feature.CursorKeys.availableInCurrentVersion && cursorKeys
+
     override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
         mobile = KeyboardTemplate.Basic(
             configuration = KeyboardConfiguration(
-                if(numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
+                if(this.numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
                 MobileKeyboard.alphabetic(),
-                MobileKeyboard.bottom(dpad = cursorKeys)
+                MobileKeyboard.bottom(dpad = this.cursorKeys)
             ),
-            contentRows = (if(numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.DEFAULT
+            contentRows = (if(this.numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.DEFAULT
         ),
         tablet = KeyboardTemplate.Basic(
             configuration = KeyboardConfiguration(
-                if(numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
-                TabletKeyboard.alphabetic(delete = !numberRow),
+                if(this.numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
+                TabletKeyboard.alphabetic(delete = !this.numberRow),
                 TabletKeyboard.bottom()
             ),
-            contentRows = (if(numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.DEFAULT
+            contentRows = (if(this.numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.DEFAULT
         )
     )
 
