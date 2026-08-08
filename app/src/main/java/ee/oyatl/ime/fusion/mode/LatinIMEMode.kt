@@ -122,6 +122,10 @@ abstract class LatinIMEMode(
         }
     }
 
+    override fun onKeyUp(keyCode: Int, metaState: Int): Boolean {
+        return super.onKeyUp(keyCode, metaState)
+    }
+
     override fun onChar(codePoint: Int) {
         if(codePoint != 0) onCodeInput(codePoint, 0, 0, false)
     }
@@ -178,7 +182,6 @@ abstract class LatinIMEMode(
     }
 
     override fun onUpdateMainDictionaryAvailability(isMainDictionaryAvailable: Boolean) {
-        val handler = handler ?: return
         if (handler.hasPendingWaitForDictionaryLoad()) {
             handler.cancelWaitForDictionaryLoad()
             handler.postResumeSuggestions(false /* shouldDelay */)
@@ -530,6 +533,9 @@ abstract class LatinIMEMode(
         return super.createTouchHandler(keyboardView, context, symbolState)
     }
 
+    override fun onSwipeBegin() {
+    }
+
     override fun onSwipePreview(previewString: String) {
     }
 
@@ -542,11 +548,15 @@ abstract class LatinIMEMode(
                 SuggestedWords.SuggestedWordInfo.KIND_COMPLETION,
                 null,
                 SuggestedWords.SuggestedWordInfo.NOT_AN_INDEX,
-                if(index == 0) SuggestedWords.SuggestedWordInfo.MAX_SCORE else SuggestedWords.SuggestedWordInfo.NOT_A_CONFIDENCE
+                SuggestedWords.SuggestedWordInfo.NOT_A_CONFIDENCE
             )
             LatinCandidate(index, suggestedWordInfo)
         }
-        submitCandidates(candidates)
+        val first = candidates.firstOrNull()
+        first?.let { onTextInput(it.suggestedWordInfo.word) }
+        handler.post {
+            submitCandidates(candidates)
+        }
     }
 
     data class LatinCandidate(

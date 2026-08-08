@@ -23,6 +23,7 @@ class SwipeInputEngine(
     override fun onReset() = Unit
 
     override fun onSwipeStart() {
+        listener.onSwipeBegin()
     }
 
     override fun onSwipeEnd(pointers: List<SwipeListener.Pointer>) {
@@ -41,6 +42,7 @@ class SwipeInputEngine(
     }
 
     interface Listener {
+        fun onSwipeBegin()
         fun onSwipePreview(previewString: String)
         fun onSwipeResult(result: List<SwipePredictor.Result>)
     }

@@ -64,6 +64,7 @@ class ShiftStateManager(
 
     override fun onReset() {
         shiftState = KeyboardState.Shift.Released
+        handler.removeCallbacksAndMessages(null)
     }
 
     private fun onShiftPressed(code: Int) {

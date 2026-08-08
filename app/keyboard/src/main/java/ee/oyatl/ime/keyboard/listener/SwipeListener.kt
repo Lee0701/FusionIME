@@ -15,6 +15,8 @@ interface SwipeListener: KeyboardListener {
     }
 
     data class Pointer(
+        val rawX: Int,
+        val rawY: Int,
         val x: Float,
         val y: Float,
         val time: Long,
