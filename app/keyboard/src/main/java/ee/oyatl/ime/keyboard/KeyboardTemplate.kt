@@ -58,7 +58,11 @@ interface KeyboardTemplate {
             return if(item.special) {
                 val type = SpecialKeyType.ofKeyCode(keyCode) ?: SpecialKeyType.Default
                 val iconRes = item.iconRes ?: type.iconRes ?: 0
-                val bkgRes = R.drawable.key_bg
+                val bkgRes = when(item.merge) {
+                    KeyboardConfiguration.Item.TemplateKey.Merge.Up -> R.drawable.key_bg_bottom
+                    KeyboardConfiguration.Item.TemplateKey.Merge.Down -> R.drawable.key_bg_top
+                    else -> R.drawable.key_bg
+                }
                 Keyboard.KeyItem.Key(
                     keyCode,
                     width = item.width,

@@ -15,4 +15,5 @@ interface KeyboardView {
 
     fun onReset()
     fun findKey(x: Int, y: Int): KeyInterface?
+    fun findKeys(keyCode: Int): List<KeyInterface>
 }
