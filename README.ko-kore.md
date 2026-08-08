@@ -46,6 +46,6 @@ GNU General Public License v3.0
 
 * [Cangjie](https://github.com/hilarycheng/another_android_cangjie): GNU General Public License v2.0
 * [Chewing](https://github.com/hiroshiyui/libchewingAndroidAppModule): GNU General Public License v3.0
-* [LatinIME](android.googlesource.com/platform/packages/inputmethods/LatinIME/): Apache License 2.0
+* [LatinIME](https://android.googlesource.com/platform/packages/inputmethods/LatinIME/): Apache License 2.0
 * [Mozc](https://github.com/google/mozc): BSD 3-Clause
-* [PinyinIME](android.googlesource.com/platform/packages/inputmethods/PinyinIME/): Apache License 2.0
+* [PinyinIME](https://android.googlesource.com/platform/packages/inputmethods/PinyinIME/): Apache License 2.0
