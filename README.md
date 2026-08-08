@@ -23,9 +23,11 @@ FusionIME packs various input methods for CJKV languages into one app.
 * Simplified & Traditional Chinese Pinyin
 * Traditional Chinese Zhuyin
 * Chinese Cangjie, Quick, Dayi
+* Cantonese Jyutping
 
 ### Japanese
-* Romaji QWERTY, Kana JIS, Kana Syllables
+* Romaji QWERTY, GODAN
+* Kana JIS, 12-Key(Toggle & Flick), Syllables, Iroha
 
 ### Korean
 * Hangul 2-Set
@@ -40,7 +42,7 @@ Supports Hanja conversion for both modern and middle Korean.
 Supports Han Nom conversion.
 
 ## Dictionary Data
-* Korean: [Korean Standard Dictionary](https://stdict.korean.go.kr), [libhangul](https://github.com/libhangul/libhangul/tree/main)
+* Korean: [Korean Standard Dictionary](https://stdict.korean.go.kr), [libhangul](https://github.com/libhangul/libhangul)
 * Vietnamese: [chunom.org](https://chunom.org/)
 
 ## License

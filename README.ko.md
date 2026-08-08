@@ -21,9 +21,11 @@ FusionIME는 한중일월(한자문화권) 언어를 위한 여러가지 입력 
 * 간체·번체 중국어 한어병음
 * 번체 중국어 주음부호
 * 창힐수입법, 속성수입법, 대이수입법
+* 광동어 월병
 
 ### 일본어
-* 로마자 QWERTY, 가나 JIS, 가나 오십음도
+* 로마자 QWERTY, GODAN
+* 가나 JIS, 12키(토글·플릭), 오십음도, 이로하순
 
 ### 한국어
 * 한국어 두벌식 표준
@@ -38,7 +40,7 @@ FusionIME는 한중일월(한자문화권) 언어를 위한 여러가지 입력 
 한놈 변환을 지원합니다.
 
 ## 사전 데이터
-* 한국어: [표준국어대사전](https://stdict.korean.go.kr), [libhangul](https://github.com/libhangul/libhangul/tree/main)
+* 한국어: [표준국어대사전](https://stdict.korean.go.kr), [libhangul](https://github.com/libhangul/libhangul)
 * 월남어: [chunom.org](https://chunom.org/)
 
 ## 라이선스

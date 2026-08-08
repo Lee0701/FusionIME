@@ -21,9 +21,11 @@ FusionIME는 韓中日越(漢子文化圈) 言語를 爲한 여러가지 入力�
 * 簡體·繁體 中國語 漢語拼音
 * 繁體 中國語 注音符號
 * 倉頡輸入法, 速成輸入法, 大易輸入法
+* 廣東語 粵拼
 
 ### 日本語
-* 로마字 QWERTY, 假名 JIS, 假名 五十音圖
+* 로마字 QWERTY, GODAN
+* 假名 JIS, 12키(토글·플릭), 五十音圖, 이로하順
 
 ### 韓國語
 * 韓國語 두벌式 標準
@@ -38,7 +40,7 @@ FusionIME는 韓中日越(漢子文化圈) 言語를 爲한 여러가지 入力�
 漢喃 變換을 支援합니다.
 
 ## 辭典 데이터
-* 韓國語: [標準國語大辭典](https://stdict.korean.go.kr), [libhangul](https://github.com/libhangul/libhangul/tree/main)
+* 韓國語: [標準國語大辭典](https://stdict.korean.go.kr), [libhangul](https://github.com/libhangul/libhangul)
 * 越南語: [chunom.org](https://chunom.org/)
 
 ## 라이선스
