@@ -1,8 +1,6 @@
 package ee.oyatl.ime.fusion.mode
 
 import android.content.Context
-import android.os.Handler
-import android.os.Looper
 import android.view.KeyEvent
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.fusion.R
@@ -13,6 +11,9 @@ import ee.oyatl.ime.fusion.layout.TabletKeyboard
 import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
 import ee.oyatl.ime.keyboard.KeyboardConfiguration
 import ee.oyatl.ime.keyboard.KeyboardTemplate
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.jyutping.jyutping.BinaryDictionaries
 import org.jyutping.jyutping.models.Researcher
 import org.jyutping.jyutping.models.Segmenter
@@ -44,16 +45,6 @@ class JyutpingIMEMode(
 
     private val wordComposer = WordComposer()
     private var bestCandidate: CandidateView.Candidate? = null
-
-    private val handler: Handler = Handler(Looper.getMainLooper()) { msg ->
-        when(msg.what) {
-            MSG_UPDATE_SUGGESTIONS -> {
-                updateSuggestions()
-                true
-            }
-            else -> false
-        }
-    }
 
     override suspend fun onLoad(context: Context) {
         super.onLoad(context)
@@ -110,8 +101,9 @@ class JyutpingIMEMode(
     }
 
     private fun postUpdateSuggestions() {
-        handler.removeMessages(MSG_UPDATE_SUGGESTIONS)
-        handler.sendMessageDelayed(handler.obtainMessage(MSG_UPDATE_SUGGESTIONS), 100)
+        CoroutineScope(Dispatchers.Default).launch {
+            updateSuggestions()
+        }
     }
 
     private fun updateSuggestions() {
@@ -172,6 +164,5 @@ class JyutpingIMEMode(
 
     companion object {
         const val TYPE: String = "jyutping"
-        const val MSG_UPDATE_SUGGESTIONS = 0
     }
 }
