@@ -63,6 +63,7 @@ class JyutpingIMEMode(
 
     override fun onReset() {
         super.onReset()
+        wordComposer.reset()
         bestCandidate = null
     }
 
@@ -81,6 +82,7 @@ class JyutpingIMEMode(
                 } else {
                     util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_SPACE)
                 }
+                onReset()
             }
             KeyEvent.KEYCODE_ENTER -> {
                 if(wordComposer.composingText.isNotEmpty()) onReset()
