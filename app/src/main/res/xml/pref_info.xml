@@ -47,6 +47,11 @@
             android:summary="Apache License 2.0"
             app:url="https://android.googlesource.com/platform/packages/inputmethods/PinyinIME" />
 
+        <ee.oyatl.ime.fusion.preference.OpenWebPreference
+            android:title="Jyutping"
+            android:summary="CC0 1.0 Universal"
+            app:url="https://github.com/yuetyam/jyutping-android" />
+
     </PreferenceCategory>
 
 </androidx.preference.PreferenceScreen>
