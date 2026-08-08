@@ -99,7 +99,7 @@
     <string name="settings_behaviour_hardware_language_key_summary">ハードウェアキーボードを使用するときに言語切り替えに使用するキーの組み合わせを設定します。</string>
     <string name="settings_behaviour_always_show_soft_keyboard_summary">ハードウェアキーボードが接続されている場合でも、ソフトキーボードを表示します。</string>
     <string name="settings_input_mode_add_description">入力モードを追加</string>
-    <string name="settings_input_mode_number_row_summary">最上位の数字列を常に表示</string>
+    <string name="settings_input_mode_number_row_summary">最上位の数字列を常に表示します。</string>
     <string name="screen_mode_tablet">タブレット</string>
     <string name="flick_action_symbol">記号</string>
     <string name="input_mode_pinyin">ピンイン（簡体字中国語）</string>
