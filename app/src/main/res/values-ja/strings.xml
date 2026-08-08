@@ -70,7 +70,7 @@
     <string name="korean_layout_hangul_2set_ks">ハングル２ボル式標準</string>
     <string name="korean_layout_hangul_3set_390">ハングル３ボル式３９０</string>
     <string name="korean_layout_hangul_3set_391">ハングル３ボル式最終</string>
-    <string name="korean_layout_hangul_3set_391_strict">ハングル３ボル式標準（厳密）</string>
+    <string name="korean_layout_hangul_3set_391_strict">ハングル３ボル式最終（厳密）</string>
     <string name="korean_layout_old_hangul_2set_ks">古ハングル２ボル式</string>
     <string name="korean_layout_old_hangul_3set_393">古ハングル３ボル式３９３</string>
     <string name="korean_converter_word">単語コンバーター</string>
@@ -105,12 +105,12 @@
     <string name="input_mode_pinyin">ピンイン（簡体字中国語）</string>
     <string name="latin_locale_pt_br">ポルトガル語（ブラジル）</string>
     <string name="settings_appearance_show_voice_input_button_title">音声入力ボタン表示</string>
-    <string name="settings_input_mode_mozc_flick_mode_title">ケータイ配列フリックモード</string>
+    <string name="settings_input_mode_mozc_flick_mode_title">12キーフリックモード</string>
     <string name="settings_input_mode_syllables_key_layout_title">音節表キーボード配列</string>
     <string name="settings_input_mode_syllables_key_layout_summary">五十音表やいろは配列でのキー配列を設定します。</string>
     <string name="mozc_layout_kana_iroha">かないろは順</string>
     <string name="mozc_syllables_key_layout_horizontal">横</string>
-    <string name="mozc_layout_kana_12key">かなケータイ配列</string>
+    <string name="mozc_layout_kana_12key">かな12キー</string>
     <string name="mozc_syllables_key_layout_vertical_left">縦（左から右）</string>
     <string name="mozc_syllables_key_layout_vertical_right">縦（右から左）</string>
     <string name="mozc_flick_mode_flick_toggle">フリック及びトグル</string>
@@ -132,4 +132,5 @@
     <string name="settings_input_mode_cursor_keys_title">カーソルキー</string>
     <string name="settings_info_version">バージョン </string>
     <string name="settings_info_source_code_title">ソースコード</string>
+    <string name="settings_input_mode_mozc_flick_hint_summary">12キーとGODANでフリックのヒントを表示します。</string>
 </resources>
