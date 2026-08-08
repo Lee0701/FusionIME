@@ -115,7 +115,7 @@ class JyutpingIMEMode(
     private fun updateSuggestions() {
         val keys = wordComposer.textBeforeCursor.mapNotNull { VirtualInputKey.matchVirtualInputKey(it) }
         val suggestions = Researcher.suggest(keys, Segmenter.segment(keys))
-        val candidates = suggestions.map { JyutpingCandidate(it.text, it.romanization, it.input) }
+        val candidates = suggestions.map { JyutpingCandidate(it.text, it.romanization, it.input) }.distinctBy { it.text }
         bestCandidate = candidates.firstOrNull()
         submitCandidates(candidates)
     }
