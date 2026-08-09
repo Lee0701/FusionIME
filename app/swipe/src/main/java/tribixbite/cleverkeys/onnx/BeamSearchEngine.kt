@@ -376,8 +376,8 @@ class BeamSearchEngine(
             }
         }
 
-        val prefix = partialWord.toString()
-        val isWord = dictionary.isInDictionary(prefix)
+//        val prefix = partialWord.toString()
+//        val isWord = dictionary.isInDictionary(prefix)
 
         // Only log trie status once when debug is enabled (avoid hot path overhead)
         if (debugLogger != null && !trieStatusLogged) {
@@ -392,7 +392,7 @@ class BeamSearchEngine(
                 continue
             }
             if (i == EOS_IDX) {
-                if (!isWord) logits[i] = Float.NEGATIVE_INFINITY
+//                if (!isWord) logits[i] = Float.NEGATIVE_INFINITY
                 continue
             }
         }

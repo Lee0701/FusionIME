@@ -3,9 +3,14 @@ package tribixbite.cleverkeys.swipe
 import ai.onnxruntime.OrtEnvironment
 import ai.onnxruntime.OrtSession
 import android.content.Context
+import com.android.inputmethod.keyboard.Keyboard
 import com.android.inputmethod.latin.Dictionary
 import com.android.inputmethod.latin.DictionaryFactory
-import com.android.inputmethod.latin.common.StringUtils
+import com.android.inputmethod.latin.NgramContext
+import com.android.inputmethod.latin.Suggest
+import com.android.inputmethod.latin.WordComposer
+import com.android.inputmethod.latin.common.Constants
+import com.android.inputmethod.latin.settings.SettingsValuesForSuggestion
 import tribixbite.cleverkeys.SwipeInput
 import tribixbite.cleverkeys.SwipeTokenizer
 import tribixbite.cleverkeys.SwipeTrajectoryProcessor
@@ -23,13 +28,14 @@ import kotlin.concurrent.write
 class SwipePredictor(
     context: Context,
     private val locale: Locale,
+    private val keyboard: Keyboard,
     private val searchEngineType: SearchEngineType
 ) {
     val enableHardwareAcceleration = true
     val xnnPackThreads = 2
     val maxSequenceLength = 250
     val trajectoryFeatures = 6
-    val beamWidth = 6
+    val beamWidth = 12
     val maxLength = 20
     val encoderPath = "models/swipe_encoder_android.onnx"
     val decoderPath = "models/swipe_decoder_android.onnx"
@@ -40,6 +46,7 @@ class SwipePredictor(
     private val modelLoader: ModelLoader = ModelLoader(context, ortEnvironment)
     private val trajectoryProcessor: SwipeTrajectoryProcessor = SwipeTrajectoryProcessor()
     private val dictionary: Dictionary = DictionaryFactory.createMainDictionaryFromManager(context, locale)
+    val wordComposer = WordComposer()
 
     private var tensorFactory: TensorFactory? = null
     private var greedySearchEngine: GreedySearchEngine? = null
@@ -113,17 +120,27 @@ class SwipePredictor(
             }
 
             candidates
-                .map { it.word }
-                .flatMap { listOf(it, it.uppercase(), StringUtils.capitalizeFirstCodePoint(it, locale)) }
-                .flatMap { listOf(it, "'$it", "$it'", it.dropLast(1) + "'" + it.takeLast(1), it.dropLast(2) + "'" + it.takeLast(2)) }
-                .mapNotNull { getResult(it) }
+                .flatMap { getResult(it.word) }
+                .distinctBy { it.word }
         }
     }
 
-    private fun getResult(text: String): Result? {
-        val freq = dictionary.getFrequency(text)
-        if(freq == Dictionary.NOT_A_PROBABILITY) return null
-        return Result(text, freq)
+    private fun getResult(text: String): List<Result> {
+        val codePoints = text.map { it.code }.toIntArray()
+        val coordinates = text.flatMap { listOf(Constants.NOT_A_COORDINATE, Constants.NOT_A_COORDINATE) }.toIntArray()
+        wordComposer.setComposingWord(codePoints, coordinates)
+        val suggestedWords = dictionary.getSuggestions(
+            wordComposer.composedDataSnapshot,
+            NgramContext.BEGINNING_OF_SENTENCE,
+            keyboard.proximityInfo.nativeProximityInfo,
+            SettingsValuesForSuggestion(false),
+            Suggest.SESSION_ID_GESTURE,
+            1.0f,
+            floatArrayOf(Dictionary.NOT_A_WEIGHT_OF_LANG_MODEL_VS_SPATIAL_MODEL)
+        )
+        return suggestedWords
+            .filter { it.isExactMatchWithIntentionalOmission }
+            .map { Result(it.word, it.mScore) }
     }
 
     data class SearchResult(
