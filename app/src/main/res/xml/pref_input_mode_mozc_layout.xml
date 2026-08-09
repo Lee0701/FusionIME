@@ -29,4 +29,14 @@
         android:title="@string/settings_input_mode_syllables_key_layout_title"
         android:summary="@string/settings_input_mode_syllables_key_layout_summary" />
 
+    <SwitchPreferenceCompat
+        android:key="kyujitai_enabled"
+        android:defaultValue="false"
+        android:title="@string/settings_kyujitai_enabled_title" />
+
+    <SwitchPreferenceCompat
+        android:key="katakana_enabled"
+        android:defaultValue="false"
+        android:title="@string/settings_katakana_enabled_title" />
+
 </androidx.preference.PreferenceScreen>

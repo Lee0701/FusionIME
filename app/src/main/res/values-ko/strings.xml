@@ -16,6 +16,8 @@
     <string name="settings_behaviour_haptic_feedback_title">키 진동</string>
     <string name="settings_behaviour_haptic_feedback_summary">키를 누르면 진동합니다.</string>
     <string name="settings_behaviour_vibration_duration_title">진동 지속 시간</string>
+    <string name="settings_kyujitai_enabled_title">구자체 변환</string>
+    <string name="settings_katakana_enabled_title">가타카나 입력</string>
     <string name="settings_method_choose_method_summary">\'FusionIME\'를 선택해 주세요.</string>
     <string name="settings_input_mode_locale_title">언어</string>
     <string name="input_mode_latin">라틴 문자</string>

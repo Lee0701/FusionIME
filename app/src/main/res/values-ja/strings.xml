@@ -45,6 +45,8 @@
     <string name="settings_dialog_keystroke_control">Control</string>
     <string name="settings_dialog_keystroke_alt">Alt</string>
     <string name="settings_dialog_keystroke_meta">Meta</string>
+    <string name="settings_kyujitai_enabled_title">旧字体変換</string>
+    <string name="settings_katakana_enabled_title">カタカナ入力</string>
     <string name="screen_mode_mobile">モバイル</string>
     <string name="touch_mode_seek">探す</string>
     <string name="touch_mode_flick">フリック</string>

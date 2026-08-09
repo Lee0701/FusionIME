@@ -83,6 +83,9 @@
     <string name="settings_dialog_keystroke_alt">Alt</string>
     <string name="settings_dialog_keystroke_meta">Meta</string>
 
+    <string name="settings_kyujitai_enabled_title">Kyujitai conversion</string>
+    <string name="settings_katakana_enabled_title">Katakana input</string>
+
     <string name="screen_mode_mobile">Mobile</string>
     <string name="screen_mode_tablet">Tablet</string>
     <string name="screen_mode_full">Full</string>

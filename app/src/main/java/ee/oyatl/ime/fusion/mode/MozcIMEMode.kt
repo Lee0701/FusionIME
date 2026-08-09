@@ -23,6 +23,7 @@ import ee.oyatl.ime.fusion.layout.MobileKeyboardRows
 import ee.oyatl.ime.fusion.layout.TabletKeyboard
 import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
 import ee.oyatl.ime.fusion.mozc.InputConnectionRenderer
+import ee.oyatl.ime.fusion.util.KyujitaiConverter
 import ee.oyatl.ime.keyboard.KeyLabel
 import ee.oyatl.ime.keyboard.KeyboardConfiguration
 import ee.oyatl.ime.keyboard.KeyboardState.Symbol
@@ -37,7 +38,6 @@ import ee.oyatl.ime.keyboard.touchhandler.TouchHandler
 import org.mozc.android.inputmethod.japanese.MozcUtil
 import org.mozc.android.inputmethod.japanese.PrimaryKeyCodeConverter
 import org.mozc.android.inputmethod.japanese.keyboard.Keyboard.KeyboardSpecification
-import org.mozc.android.inputmethod.japanese.protobuf.ProtoCandidateWindow.CandidateWord
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.Input.TouchEvent
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config
@@ -46,9 +46,46 @@ import org.mozc.android.inputmethod.japanese.session.SessionExecutor.EvaluationC
 import org.mozc.android.inputmethod.japanese.session.SessionHandlerFactory
 import java.util.Locale
 
+internal fun hiraganaToKatakana(text: String): String {
+    return buildString(text.length) {
+        for(character in text) {
+            when(character) {
+                in '\u3041'..'\u3096', in '\u309d'..'\u309e' ->
+                    append((character.code + 0x60).toChar())
+                else -> append(character)
+            }
+        }
+    }
+}
+
+private fun transformMozcText(
+    text: String,
+    kyujitaiEnabled: Boolean,
+    katakanaEnabled: Boolean
+): String {
+    val converted = KyujitaiConverter.encode(text, kyujitaiEnabled)
+    return if(katakanaEnabled) hiraganaToKatakana(converted) else converted
+}
+
+private fun KeyLabel.toKatakana(): KeyLabel {
+    return when(this) {
+        is KeyLabel.Default -> copy(text = text?.let(::hiraganaToKatakana))
+        is KeyLabel.Flick -> copy(
+            text = text?.let(::hiraganaToKatakana),
+            up = up?.let(::hiraganaToKatakana),
+            down = down?.let(::hiraganaToKatakana),
+            left = left?.let(::hiraganaToKatakana),
+            right = right?.let(::hiraganaToKatakana)
+        )
+        else -> this
+    }
+}
+
 abstract class MozcIMEMode(
     listener: IMEMode.Listener,
-    val candidateViewHeight: Int
+    val candidateViewHeight: Int,
+    private val kyujitaiEnabled: Boolean = false,
+    protected val katakanaEnabled: Boolean = false
 ): CommonIMEMode(listener) {
 
     private lateinit var resources: Resources
@@ -57,6 +94,7 @@ abstract class MozcIMEMode(
     private var primaryKeyCodeConverter: PrimaryKeyCodeConverter? = null
     private var sessionExecutor: SessionExecutor? = null
     private var inputConnectionRenderer: InputConnectionRenderer? = null
+    private var inputConnection: InputConnection? = null
 
     private val renderResultCallback = EvaluationCallback { command, triggeringKeyEvent ->
         if(!command.isPresent) return@EvaluationCallback
@@ -70,7 +108,18 @@ abstract class MozcIMEMode(
                     else 0
                 val candidates = output
                     .allCandidateWords.candidatesList
-                    .mapIndexed { i, candidate -> MozcCandidate(candidate, index == i) }
+                    .mapIndexed { i, candidate ->
+                        MozcCandidate(
+                            id = candidate.id,
+                            originalText = candidate.value,
+                            text = transformMozcText(
+                                candidate.value,
+                                kyujitaiEnabled,
+                                katakanaEnabled
+                            ),
+                            focused = index == i
+                        )
+                    }
                 submitCandidates(candidates)
             } else {
                 submitCandidates(emptyList())
@@ -82,6 +131,7 @@ abstract class MozcIMEMode(
 
     override suspend fun onLoad(context: Context) {
         super.onLoad(context)
+        KyujitaiConverter.initialize(context)
         primaryKeyCodeConverter = PrimaryKeyCodeConverter(context)
         sessionExecutor = SessionExecutor.getInstanceInitializedIfNecessary(SessionHandlerFactory(context), context)
         resources = context.resources
@@ -89,7 +139,10 @@ abstract class MozcIMEMode(
 
     override fun onStart(inputConnection: InputConnection, editorInfo: EditorInfo) {
         super.onStart(inputConnection, editorInfo)
-        inputConnectionRenderer = InputConnectionRenderer(inputConnection, editorInfo)
+        this.inputConnection = inputConnection
+        inputConnectionRenderer = InputConnectionRenderer(inputConnection, editorInfo) { text ->
+            transformMozcText(text, kyujitaiEnabled, katakanaEnabled)
+        }
         restartInput()
     }
 
@@ -104,8 +157,11 @@ abstract class MozcIMEMode(
         val sessionExecutor = this.sessionExecutor
         if(sessionExecutor != null) {
             sessionExecutor.switchInputFieldType(ProtoCommands.Context.InputFieldType.NORMAL)
+            val compositionMode =
+                if(katakanaEnabled) ProtoCommands.CompositionMode.FULL_KATAKANA
+                else ProtoCommands.CompositionMode.HIRAGANA
             sessionExecutor.switchInputMode(
-                Optional.absent(), ProtoCommands.CompositionMode.HIRAGANA, renderResultCallback)
+                Optional.absent(), compositionMode, renderResultCallback)
             sessionExecutor.setImposedConfig(
                 Config.newBuilder()
                     .setSessionKeymap(Config.SessionKeymap.MOBILE)
@@ -136,9 +192,19 @@ abstract class MozcIMEMode(
     }
 
     override fun onCandidateSelected(candidate: CandidateView.Candidate) {
-        if(candidate is MozcCandidate) {
+        if(candidate !is MozcCandidate) return
+
+        val convertedText = candidate.text.toString()
+        if(convertedText == candidate.originalText) {
             sessionExecutor?.submitCandidate(candidate.id, Optional.absent(), renderResultCallback)
+            return
         }
+
+        inputConnection?.commitText(convertedText, 1)
+        sessionExecutor?.resetContext()
+        sessionExecutor?.deleteSession()
+        submitCandidates(emptyList())
+        restartInput()
     }
 
     override fun onChar(codePoint: Int) {
@@ -186,24 +252,18 @@ abstract class MozcIMEMode(
 
     data class MozcCandidate(
         val id: Int,
+        val originalText: String,
         override val text: CharSequence,
         override val focused: Boolean
-    ): CandidateView.FocusableCandidate {
-        constructor(
-            mozcCandidate: CandidateWord,
-            focused: Boolean
-        ): this(
-            id = mozcCandidate.id,
-            text = mozcCandidate.value,
-            focused = focused
-        )
-    }
+    ): CandidateView.FocusableCandidate
 
     class RomajiQwerty(
         listener: IMEMode.Listener,
         candidateViewHeight: Int,
-        numberRow: Boolean
-    ): MozcIMEMode(listener, candidateViewHeight) {
+        numberRow: Boolean,
+        kyujitaiEnabled: Boolean,
+        katakanaEnabled: Boolean
+    ): MozcIMEMode(listener, candidateViewHeight, kyujitaiEnabled, katakanaEnabled) {
         private val numberRow = Feature.NumberRow.availableInCurrentVersion && numberRow
 
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.QWERTY_KANA
@@ -232,8 +292,15 @@ abstract class MozcIMEMode(
         listener: IMEMode.Listener,
         candidateViewHeight: Int,
         val flickMode: FlickMode,
-        val flickHint: Boolean
-    ): MozcIMEMode(listener, candidateViewHeight), FlickListener {
+        val flickHint: Boolean,
+        kyujitaiEnabled: Boolean,
+        katakanaEnabled: Boolean
+    ): MozcIMEMode(
+        listener,
+        candidateViewHeight,
+        kyujitaiEnabled,
+        katakanaEnabled
+    ), FlickListener {
         override val keyboardSpecification: KeyboardSpecification = flickMode.keyboardSpecification
         override val textLayoutTable: LayoutTable = LayoutTable.fromFlick4Dirs(LayoutKana.TABLE_12KEY.mapValues { (_, list) -> list.map { it.code } })
         override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
@@ -245,13 +312,16 @@ abstract class MozcIMEMode(
 
         // Remove flick labels if toggle only mode
         // Show them as hints only when option is on
-        private val keyLabels12Key: Map<Int, KeyLabel> =
-            if(flickMode == FlickMode.ToggleOnly) LayoutKana.LABELS_12KEY.mapValues { (k, v) ->
+        private val keyLabels12Key: Map<Int, KeyLabel> = (
+            if(flickMode == FlickMode.ToggleOnly) LayoutKana.LABELS_12KEY.mapValues { (_, v) ->
                 KeyLabel.Default(v.text)
             }
-            else LayoutKana.LABELS_12KEY.mapValues { (k, v) ->
+            else LayoutKana.LABELS_12KEY.mapValues { (_, v) ->
                 v.copy(showAsHint = flickHint)
             }
+        ).mapValues { (_, label) ->
+            if(katakanaEnabled) label.toKatakana() else label
+        }
 
         override val keyLabels: Map<Int, KeyLabel>
             get() =
@@ -309,8 +379,10 @@ abstract class MozcIMEMode(
     class Godan(
         listener: IMEMode.Listener,
         candidateViewHeight: Int,
-        val flickHint: Boolean
-    ): MozcIMEMode(listener, candidateViewHeight) {
+        val flickHint: Boolean,
+        kyujitaiEnabled: Boolean,
+        katakanaEnabled: Boolean
+    ): MozcIMEMode(listener, candidateViewHeight, kyujitaiEnabled, katakanaEnabled) {
         override val keyboardSpecification: KeyboardSpecification =
             KeyboardSpecification.GODAN_KANA
 
@@ -326,8 +398,9 @@ abstract class MozcIMEMode(
             )
 
         // Show flick hints only when option is on
-        private val keyLabelsGodan = LayoutGodan.LABELS.mapValues { (k, v) ->
-            v.copy(showAsHint = flickHint)
+        private val keyLabelsGodan = LayoutGodan.LABELS.mapValues { (_, label) ->
+            val labelWithHint = label.copy(showAsHint = flickHint)
+            if(katakanaEnabled) labelWithHint.toKatakana() else labelWithHint
         }
 
         override val keyLabels: Map<Int, KeyLabel>
@@ -391,8 +464,10 @@ abstract class MozcIMEMode(
 
     class KanaJIS(
         listener: IMEMode.Listener,
-        candidateViewHeight: Int
-    ): MozcIMEMode(listener, candidateViewHeight) {
+        candidateViewHeight: Int,
+        kyujitaiEnabled: Boolean,
+        katakanaEnabled: Boolean
+    ): MozcIMEMode(listener, candidateViewHeight, kyujitaiEnabled, katakanaEnabled) {
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.QWERTY_KANA_JIS
         override val textLayoutTable: LayoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutKana.TABLE_JIS)
         override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
@@ -424,8 +499,10 @@ abstract class MozcIMEMode(
         listener: IMEMode.Listener,
         candidateViewHeight: Int,
         keys: String,
-        keyLayout: LayoutKana.KeyLayout
-    ): MozcIMEMode(listener, candidateViewHeight) {
+        keyLayout: LayoutKana.KeyLayout,
+        kyujitaiEnabled: Boolean,
+        katakanaEnabled: Boolean
+    ): MozcIMEMode(listener, candidateViewHeight, kyujitaiEnabled, katakanaEnabled) {
         private val contentRows = LayoutKana.generateContentRows(keys, keyLayout)
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.TWELVE_KEY_FLICK_KANA
         override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
@@ -446,17 +523,37 @@ abstract class MozcIMEMode(
         val candidateViewHeight: Int = 2,
         val flickMode: FlickMode = FlickMode.FlickToggle,
         val flickHint: Boolean = false,
-        val syllablesKeyLayout: LayoutKana.KeyLayout
+        val syllablesKeyLayout: LayoutKana.KeyLayout,
+        val kyujitaiEnabled: Boolean = false,
+        val katakanaEnabled: Boolean = false
     ): IMEMode.Params {
         override val type: String = TYPE
         override fun create(listener: IMEMode.Listener): IMEMode {
             return when(layout) {
-                Layout.RomajiQwerty -> RomajiQwerty(listener, candidateViewHeight, numberRow)
-                Layout.Kana12Key -> Kana12Key(listener, candidateViewHeight, flickMode, flickHint)
-                Layout.Godan -> Godan(listener, candidateViewHeight, flickHint)
-                Layout.KanaJIS -> KanaJIS(listener, candidateViewHeight)
-                Layout.KanaSyllables -> KanaSyllables(listener, candidateViewHeight, LayoutKana.KEYS_AIUEO, syllablesKeyLayout)
-                Layout.KanaIroha -> KanaSyllables(listener, candidateViewHeight, LayoutKana.KEYS_IROHA, syllablesKeyLayout)
+                Layout.RomajiQwerty -> RomajiQwerty(
+                    listener, candidateViewHeight, numberRow,
+                    kyujitaiEnabled, katakanaEnabled
+                )
+                Layout.Kana12Key -> Kana12Key(
+                    listener, candidateViewHeight, flickMode, flickHint,
+                    kyujitaiEnabled, katakanaEnabled
+                )
+                Layout.Godan -> Godan(
+                    listener, candidateViewHeight, flickHint,
+                    kyujitaiEnabled, katakanaEnabled
+                )
+                Layout.KanaJIS -> KanaJIS(
+                    listener, candidateViewHeight,
+                    kyujitaiEnabled, katakanaEnabled
+                )
+                Layout.KanaSyllables -> KanaSyllables(
+                    listener, candidateViewHeight, LayoutKana.KEYS_AIUEO,
+                    syllablesKeyLayout, kyujitaiEnabled, katakanaEnabled
+                )
+                Layout.KanaIroha -> KanaSyllables(
+                    listener, candidateViewHeight, LayoutKana.KEYS_IROHA,
+                    syllablesKeyLayout, kyujitaiEnabled, katakanaEnabled
+                )
             }
         }
 
@@ -469,9 +566,9 @@ abstract class MozcIMEMode(
         override fun getShortLabel(context: Context, params: List<IMEMode.Params>): String {
             val mozcParams = params.filterIsInstance<Params>().filterNot { it == this }
             // If this is the only Mozc mode
-            if(mozcParams.isEmpty()) return "あ"
+            if(mozcParams.isEmpty()) return if(katakanaEnabled) "ア" else "あ"
             // If not, use specific layout name
-            return when(layout) {
+            val label = when(layout) {
                 Layout.RomajiQwerty -> "あQ"
                 Layout.Kana12Key -> "あK"
                 Layout.Godan -> "あG"
@@ -479,6 +576,7 @@ abstract class MozcIMEMode(
                 Layout.KanaSyllables -> "あいう"
                 Layout.KanaIroha -> "いろは"
             }
+            return if(katakanaEnabled) hiraganaToKatakana(label) else label
         }
 
         companion object {
@@ -489,13 +587,17 @@ abstract class MozcIMEMode(
                 val flickMode = FlickMode.valueOf(map["flick_mode"] ?: FlickMode.FlickToggle.name)
                 val flickHint = map["flick_hint"]?.toBoolean() ?: false
                 val syllablesKeyLayout = LayoutKana.KeyLayout.entries.find { it.name == map["syllables_key_layout"] } ?: LayoutKana.KeyLayout.Horizontal
+                val kyujitaiEnabled = map["kyujitai_enabled"]?.toBoolean() ?: false
+                val katakanaEnabled = map["katakana_enabled"]?.toBoolean() ?: false
                 return Params(
                     layout = layout,
                     candidateViewHeight = candidateViewHeight,
                     numberRow = numberRow,
                     flickMode = flickMode,
                     flickHint = flickHint,
-                    syllablesKeyLayout = syllablesKeyLayout
+                    syllablesKeyLayout = syllablesKeyLayout,
+                    kyujitaiEnabled = kyujitaiEnabled,
+                    katakanaEnabled = katakanaEnabled
                 )
             }
         }
