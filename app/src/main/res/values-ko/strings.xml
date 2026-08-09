@@ -105,6 +105,7 @@
     <string name="pinyin_chinese_simplified">간체</string>
     <string name="pinyin_chinese_traditional">번체</string>
     <string name="settings_appearance_show_voice_input_button_title">음성 입력 버튼 표시</string>
+    <string name="settings_clipboard_candidate_enabled_title">클립보드 후보</string>
     <string name="settings_input_mode_mozc_flick_mode_title">12키 플릭 모드</string>
     <string name="settings_input_mode_syllables_key_layout_title">음절 키보드 배열</string>
     <string name="settings_input_mode_syllables_key_layout_summary">오십음도나 이로하 배열에서 사용할 키 배열을 설정합니다.</string>

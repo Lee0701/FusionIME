@@ -35,6 +35,7 @@ class IMEModeSwitcher(
     private var inputView: FrameLayout? = null
     private var candidateView: CandidateViewWrapperBinding? = null
     private var tabs: List<ModeSwitcherTabBinding> = listOf()
+    private var clipboardText: String? = null
 
     private var inputConnection: InputConnection? = null
     private var editorInfo: EditorInfo? = null
@@ -64,6 +65,9 @@ class IMEModeSwitcher(
         val inflater = LayoutInflater.from(context)
         val candidateView = CandidateViewWrapperBinding.inflate(inflater)
         candidateView.tabViewFrame.addView(this.initTabBarView(context))
+        candidateView.clipboardCandidate.setOnClickListener {
+            clipboardText?.let(callback::onClipboardCandidateSelected)
+        }
         candidateView.closeButton.setOnClickListener { showTabBar() }
         @SuppressLint("ClickableViewAccessibility")
         candidateView.touchBlocker.setOnTouchListener { _, event ->
@@ -71,6 +75,7 @@ class IMEModeSwitcher(
             inputView?.dispatchTouchEvent(event) ?: false
         }
         this.candidateView = candidateView
+        updateClipboardCandidateView(candidateView)
         return candidateView.root
     }
 
@@ -117,8 +122,9 @@ class IMEModeSwitcher(
 
     fun showCandidates() {
         val candidateView = candidateView ?: return
+        candidateView.clipboardCandidate.stopScrolling()
         candidateView.candidateView.visibility = View.VISIBLE
-        candidateView.tabViewFrame.visibility = View.GONE
+        candidateView.idleView.visibility = View.GONE
         // Block touch events while view height is being changed
         candidateView.touchBlocker.visibility = View.VISIBLE
         handler.postDelayed({ candidateView.touchBlocker.visibility = View.GONE }, SWITCH_DELAY)
@@ -126,8 +132,41 @@ class IMEModeSwitcher(
 
     fun showTabBar() {
         val candidateView = candidateView ?: return
-        candidateView.tabViewFrame.visibility = View.VISIBLE
+        candidateView.idleView.visibility = View.VISIBLE
         candidateView.candidateView.visibility = View.GONE
+        updateClipboardScrolling(candidateView)
+    }
+
+    fun setClipboardCandidate(text: String?) {
+        clipboardText = text
+        candidateView?.let(::updateClipboardCandidateView)
+    }
+
+    private fun updateClipboardCandidateView(candidateView: CandidateViewWrapperBinding) {
+        var displayChanged = false
+        candidateView.clipboardCandidate.apply {
+            val newText = clipboardText.orEmpty()
+            if(text.toString() != newText) {
+                stopScrolling()
+                text = newText
+                displayChanged = true
+            }
+            val newVisibility = if(clipboardText == null) View.GONE else View.VISIBLE
+            if(visibility != newVisibility) {
+                visibility = newVisibility
+                displayChanged = true
+            }
+        }
+        if(displayChanged) updateClipboardScrolling(candidateView)
+    }
+
+    private fun updateClipboardScrolling(candidateView: CandidateViewWrapperBinding) {
+        val textView = candidateView.clipboardCandidate
+        if(clipboardText != null && candidateView.idleView.visibility == View.VISIBLE) {
+            textView.startScrolling()
+        } else {
+            textView.stopScrolling()
+        }
     }
 
     fun initTabBarView(context: Context): View {
@@ -163,6 +202,7 @@ class IMEModeSwitcher(
     interface Callback {
         fun onSwitchInputMode(index: Int)
         fun onSwitchInputMethod(id: String, subtype: InputMethodSubtype)
+        fun onClipboardCandidateSelected(text: String)
     }
 
     data class Entry(

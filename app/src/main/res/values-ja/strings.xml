@@ -105,6 +105,7 @@
     <string name="input_mode_pinyin">ピンイン（簡体字中国語）</string>
     <string name="latin_locale_pt_br">ポルトガル語（ブラジル）</string>
     <string name="settings_appearance_show_voice_input_button_title">音声入力ボタン表示</string>
+    <string name="settings_clipboard_candidate_enabled_title">クリップボード候補</string>
     <string name="settings_input_mode_mozc_flick_mode_title">12キーフリックモード</string>
     <string name="settings_input_mode_syllables_key_layout_title">音節表キーボード配列</string>
     <string name="settings_input_mode_syllables_key_layout_summary">五十音表やいろは配列でのキー配列を設定します。</string>

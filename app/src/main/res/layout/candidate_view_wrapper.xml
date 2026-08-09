@@ -34,10 +34,44 @@
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
-    <FrameLayout
-        android:id="@+id/tab_view_frame"
+    <LinearLayout
+        android:id="@+id/idle_view"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:id="@+id/tab_view_frame"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3" />
+
+        <ee.oyatl.ime.fusion.ClipboardMarqueeTextView
+            android:id="@+id/clipboard_candidate"
+            android:visibility="gone"
+            android:background="?backgroundColor"
+            android:theme="@style/Theme.FusionIME.TabBar.Item"
+            android:fillViewport="true"
+            android:clipToPadding="true"
+            android:scrollbars="none"
+            android:overScrollMode="never"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2">
+
+            <TextView
+                android:textColor="?foregroundColor"
+                android:textSize="16sp"
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+
+        </ee.oyatl.ime.fusion.ClipboardMarqueeTextView>
+
+    </LinearLayout>
 
     <ee.oyatl.ime.fusion.TouchBlockingFrameLayout
         android:id="@+id/touch_blocker"
