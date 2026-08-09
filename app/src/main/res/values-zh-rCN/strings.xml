@@ -1,2 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="settings_method_enable_method_summary">请启用 \"Fusion IME\"。</string>
+    <string name="settings_method_choose_method_title">选择输入方式</string>
+    <string name="settings_method_enable_method_title">启用输入方式</string>
+    <string name="settings_method_choose_method_summary">请选择 \"Fusion IME\"。</string>
+    <string name="settings_method_header">输入方式</string>
+    <string name="settings_appearance_header">外观</string>
+    <string name="settings_behaviour_header">动作</string>
+    <string name="msg_input_modes_limit_reached">请考虑使用免费版本以添加更多输入模式。</string>
+    <string name="settings_input_mode_header">输入模式</string>
+    <string name="settings_appearance_basic_title">基本</string>
+    <string name="settings_appearance_keyboard_height_landscape_title">键盘高度 (横向)</string>
+    <string name="settings_appearance_keyboard_height_portrait_title">键盘高度 ()</string>
+    <string name="settings_appearance_screen_mode_title">画面模式</string>
+    <string name="settings_info_header">信息</string>
+</resources>
