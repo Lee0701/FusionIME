@@ -71,6 +71,7 @@ abstract class LatinIMEMode(
 
     private var swipePredictor: SwipePredictor? = null
     private var swipePointers: List<SwipeListener.Pointer> = emptyList()
+    private var swipeLastUpdate: Long = 0L
 
     private val keyboardParams: KeyboardParams = KeyboardParams().apply {
         mOccupiedWidth = 1
@@ -362,7 +363,7 @@ abstract class LatinIMEMode(
     }
 
     override fun onUpdateBatchInput(batchPointers: InputPointers?) {
-//        inputLogic?.onUpdateBatchInput(batchPointers)
+        inputLogic?.onUpdateBatchInput(batchPointers)
     }
 
     override fun onEndBatchInput(batchPointers: InputPointers?) {
@@ -384,7 +385,6 @@ abstract class LatinIMEMode(
         sequenceNumber: Int,
         callback: OnGetSuggestedWordsCallback?
     ) {
-        val keyboard = dummyKeyboard
         when(inputStyle) {
             SuggestedWords.INPUT_STYLE_UPDATE_BATCH, SuggestedWords.INPUT_STYLE_TAIL_BATCH -> {
                 val pointers = this.swipePointers
@@ -393,7 +393,7 @@ abstract class LatinIMEMode(
             }
             else -> {
                 inputLogic?.getSuggestedWords(
-                    settings?.current, keyboard,
+                    settings?.current, dummyKeyboard,
                     keyboardSwitcher?.getKeyboardShiftMode() ?: WordComposer.CAPS_MODE_OFF,
                     inputStyle, sequenceNumber, callback
                 )
@@ -556,8 +556,12 @@ abstract class LatinIMEMode(
     }
 
     override fun onSwipeMove(pointers: List<SwipeListener.Pointer>) {
-        this.swipePointers = pointers
-        onUpdateBatchInput(InputPointers(0))
+        val now = System.currentTimeMillis()
+        if(now - swipeLastUpdate > SWIPE_UPDATE_INTERVAL) {
+            swipeLastUpdate = now
+            this.swipePointers = pointers
+            onUpdateBatchInput(InputPointers(0))
+        }
     }
 
     private fun convertPointers(pointers: List<SwipeListener.Pointer>): InputPointers {
@@ -596,10 +600,9 @@ abstract class LatinIMEMode(
                 SuggestedWords.SuggestedWordInfo.NOT_A_CONFIDENCE
             )
         })
-        val typedWordInfo = suggestedWordInfoList.firstOrNull()
         val suggestedWords = SuggestedWords(
             suggestedWordInfoList, suggestedWordInfoList,
-            typedWordInfo, typedWordInfo != null,
+            null, false,
             false, false,
             inputStyle, sequenceNumber
         )
@@ -767,5 +770,6 @@ abstract class LatinIMEMode(
 
     companion object {
         const val TYPE: String = "latin"
+        const val SWIPE_UPDATE_INTERVAL = 500
     }
 }
