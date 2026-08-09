@@ -43,6 +43,11 @@
             app:url="https://github.com/google/mozc" />
 
         <ee.oyatl.ime.fusion.preference.OpenWebPreference
+            android:title="kyujitai.js by hakatashi"
+            android:summary="MIT License"
+            app:url="https://github.com/hakatashi/kyujitai.js" />
+
+        <ee.oyatl.ime.fusion.preference.OpenWebPreference
             android:title="PinyinIME"
             android:summary="Apache License 2.0"
             app:url="https://android.googlesource.com/platform/packages/inputmethods/PinyinIME" />
