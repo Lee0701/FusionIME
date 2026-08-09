@@ -5,6 +5,7 @@ import ai.onnxruntime.OrtSession
 import android.content.Context
 import com.android.inputmethod.latin.Dictionary
 import com.android.inputmethod.latin.DictionaryFactory
+import com.android.inputmethod.latin.common.StringUtils
 import tribixbite.cleverkeys.SwipeInput
 import tribixbite.cleverkeys.SwipeTokenizer
 import tribixbite.cleverkeys.SwipeTrajectoryProcessor
@@ -21,7 +22,7 @@ import kotlin.concurrent.write
 
 class SwipePredictor(
     context: Context,
-    locale: Locale,
+    private val locale: Locale,
     private val searchEngineType: SearchEngineType
 ) {
     val enableHardwareAcceleration = true
@@ -112,9 +113,17 @@ class SwipePredictor(
             }
 
             candidates
-                .filter { dictionary.isInDictionary(it.word) }
-                .map { Result(it.word, dictionary.getFrequency(it.word)) }
+                .map { it.word }
+                .flatMap { listOf(it, it.uppercase(), StringUtils.capitalizeFirstCodePoint(it, locale)) }
+                .flatMap { listOf(it, "'$it", "$it'", it.dropLast(1) + "'" + it.takeLast(1), it.dropLast(2) + "'" + it.takeLast(2)) }
+                .mapNotNull { getResult(it) }
         }
+    }
+
+    private fun getResult(text: String): Result? {
+        val freq = dictionary.getFrequency(text)
+        if(freq == Dictionary.NOT_A_PROBABILITY) return null
+        return Result(text, freq)
     }
 
     data class SearchResult(
