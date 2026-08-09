@@ -98,7 +98,7 @@ abstract class LatinIMEMode(
         keyboardSwitcher = KeyboardSwitcher.getInstance()
         inputLogic = InputLogic(this, this, dictionaryFacilitator)
 
-        this.swipePredictor = SwipePredictor(context, SwipePredictor.SearchEngineType.Beam)
+        this.swipePredictor = SwipePredictor(context, locale, SwipePredictor.SearchEngineType.Beam)
         swipePredictor?.init()
     }
 

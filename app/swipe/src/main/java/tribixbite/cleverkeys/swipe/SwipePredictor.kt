@@ -21,6 +21,7 @@ import kotlin.concurrent.write
 
 class SwipePredictor(
     context: Context,
+    locale: Locale,
     private val searchEngineType: SearchEngineType
 ) {
     val enableHardwareAcceleration = true
@@ -37,7 +38,7 @@ class SwipePredictor(
     private val tokenizer: SwipeTokenizer = SwipeTokenizer()
     private val modelLoader: ModelLoader = ModelLoader(context, ortEnvironment)
     private val trajectoryProcessor: SwipeTrajectoryProcessor = SwipeTrajectoryProcessor()
-    private val dictionary: Dictionary = DictionaryFactory.createMainDictionaryFromManager(context, Locale.ENGLISH)
+    private val dictionary: Dictionary = DictionaryFactory.createMainDictionaryFromManager(context, locale)
 
     private var tensorFactory: TensorFactory? = null
     private var greedySearchEngine: GreedySearchEngine? = null
