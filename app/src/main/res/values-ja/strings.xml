@@ -46,7 +46,7 @@
     <string name="settings_dialog_keystroke_alt">Alt</string>
     <string name="settings_dialog_keystroke_meta">Meta</string>
     <string name="screen_mode_mobile">モバイル</string>
-    <string name="touch_mode_seek">探す</string>
+    <string name="touch_mode_seek">キー探索</string>
     <string name="touch_mode_flick">フリック</string>
     <string name="flick_action_none">動作なし</string>
     <string name="flick_action_default">文字</string>
