@@ -15,6 +15,7 @@ import ee.oyatl.ime.candidate.ScrollingCandidateView
 import ee.oyatl.ime.fusion.Feature
 import ee.oyatl.ime.fusion.FlickAction
 import ee.oyatl.ime.fusion.KeyEventUtil
+import ee.oyatl.ime.fusion.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.layout.LayoutExt
 import ee.oyatl.ime.fusion.layout.LayoutQwerty
@@ -22,6 +23,7 @@ import ee.oyatl.ime.fusion.layout.LayoutSymbol
 import ee.oyatl.ime.fusion.layout.MobileKeyboard
 import ee.oyatl.ime.fusion.layout.MobileKeyboardRows
 import ee.oyatl.ime.fusion.layout.NumberKeyboard
+import ee.oyatl.ime.fusion.layout.SymbolLayoutPresets
 import ee.oyatl.ime.fusion.layout.TabletKeyboard
 import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
 import ee.oyatl.ime.keyboard.DefaultKeyboardView
@@ -55,9 +57,12 @@ abstract class CommonIMEMode(
 ): IMEMode, KeyboardListener, FlickListener, CandidateView.Listener {
     protected val keyCharacterMap: KeyCharacterMap = KeyCharacterMap.load(KeyCharacterMap.VIRTUAL_KEYBOARD)
 
+    open var symbolLayoutPreset: KeyboardLayoutPreset = SymbolLayoutPresets.symbolG()
+    open var numberLayoutPreset: KeyboardLayoutPreset = SymbolLayoutPresets.number()
+
     open val textLayoutTable: LayoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY)
-    open val symbolLayoutTable: LayoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutSymbol.TABLE_G)
-    open val numberLayoutTable: LayoutTable = LayoutTable(mapOf())
+    open val symbolLayoutTable: LayoutTable get() = symbolLayoutPreset.layoutTable
+    open val numberLayoutTable: LayoutTable get() = numberLayoutPreset.layoutTable
 
     open val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
         mobile = KeyboardTemplate.Basic(
@@ -75,32 +80,8 @@ abstract class CommonIMEMode(
             contentRows = TabletKeyboardRows.DEFAULT
         )
     )
-    open val symbolKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
-        mobile = KeyboardTemplate.Basic(
-            configuration = KeyboardConfiguration(
-                MobileKeyboard.alphabetic(semicolon = true),
-                MobileKeyboard.bottom(languageKeyCode = KeyEvent.KEYCODE_NUM)
-            ),
-            contentRows = MobileKeyboardRows.SEMICOLON,
-        ),
-        tablet = KeyboardTemplate.Basic(
-            configuration = KeyboardConfiguration(
-                TabletKeyboard.alphabetic(semicolon = true),
-                TabletKeyboard.bottom(languageKeyCode = KeyEvent.KEYCODE_NUM)
-            ),
-            contentRows = TabletKeyboardRows.SEMICOLON
-        )
-    )
-    open val numberKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
-        mobile = KeyboardTemplate.Basic(
-            configuration = NumberKeyboard.mobile(),
-            contentRows = emptyList(),
-        ),
-        tablet = KeyboardTemplate.Basic(
-            configuration = NumberKeyboard.tablet(),
-            contentRows = emptyList(),
-        )
-    )
+    open val symbolKeyboardTemplate: KeyboardTemplate get() = symbolLayoutPreset.keyboardTemplate
+    open val numberKeyboardTemplate: KeyboardTemplate get() = numberLayoutPreset.keyboardTemplate
 
     val currentLayoutTable: LayoutTable get() = when(symbolState) {
         KeyboardState.Symbol.Text -> textLayoutTable
@@ -246,6 +227,10 @@ abstract class CommonIMEMode(
             repeatDelay = 300,
             repeatInterval = 30,
         )
+
+        val symbolLayoutTypeName = preference.getString("symbol_layout", null)
+        val symbolLayoutType = SymbolLayoutPresets.Type.entries.find { it.name == symbolLayoutTypeName } ?: SymbolLayoutPresets.Type.SymbolG
+        this.symbolLayoutPreset = symbolLayoutType.createPreset()
 
         val textKeyboardParams = params.copy()
         val symbolKeyboardParams = params.copy(shiftAutoRelease = false)
