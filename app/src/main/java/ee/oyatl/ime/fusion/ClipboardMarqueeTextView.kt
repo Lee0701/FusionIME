@@ -33,6 +33,16 @@ class ClipboardMarqueeTextView @JvmOverloads constructor(
         postDelayed(startRunnable, START_DELAY_MILLIS)
     }
 
+    override fun onFinishInflate() {
+        super.onFinishInflate()
+        contentTextView.setOnClickListener { performClick() }
+    }
+
+    override fun performClick(): Boolean {
+        super.performClick()
+        return true
+    }
+
     fun startScrolling() {
         if(scrollRequested) return
         scrollRequested = true
