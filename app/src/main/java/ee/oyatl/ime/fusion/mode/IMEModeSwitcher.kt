@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.os.Handler
 import android.os.Looper
+import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -67,6 +68,14 @@ class IMEModeSwitcher(
         candidateView.tabViewFrame.addView(this.initTabBarView(context))
         candidateView.clipboardCandidate.setOnClickListener {
             clipboardText?.let(callback::onClipboardCandidateSelected)
+        }
+        candidateView.clipboardCandidate.setOnLongClickListener {
+            it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+            candidateView.clipboardCandidate.showDeleteIcon()
+            if(!callback.onClipboardCandidateClearRequested()) {
+                candidateView.clipboardCandidate.showClipboardIcon()
+            }
+            true
         }
         candidateView.closeButton.setOnClickListener { showTabBar() }
         @SuppressLint("ClickableViewAccessibility")
@@ -149,6 +158,7 @@ class IMEModeSwitcher(
             if(text.toString() != newText) {
                 stopScrolling()
                 text = newText
+                showClipboardIcon()
                 displayChanged = true
             }
             val newVisibility = if(clipboardText == null) View.GONE else View.VISIBLE
@@ -203,6 +213,7 @@ class IMEModeSwitcher(
         fun onSwitchInputMode(index: Int)
         fun onSwitchInputMethod(id: String, subtype: InputMethodSubtype)
         fun onClipboardCandidateSelected(text: String)
+        fun onClipboardCandidateClearRequested(): Boolean
     }
 
     data class Entry(

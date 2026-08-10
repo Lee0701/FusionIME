@@ -1,5 +1,6 @@
 package ee.oyatl.ime.fusion
 
+import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.SharedPreferences
@@ -216,6 +217,23 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
         val editorInfo = currentInputEditorInfo ?: return
         if(!clipboardCandidateEnabled() || isSensitiveInputType(editorInfo.inputType)) return
         currentInputConnection?.commitText(text, 1)
+    }
+
+    override fun onClipboardCandidateClearRequested(): Boolean {
+        val editorInfo = currentInputEditorInfo ?: return false
+        if(!clipboardCandidateEnabled() || isSensitiveInputType(editorInfo.inputType)) return false
+        val cleared = try {
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                clipboardManager.clearPrimaryClip()
+            } else {
+                clipboardManager.setPrimaryClip(ClipData.newPlainText(null, ""))
+            }
+            true
+        } catch(_: SecurityException) {
+            false
+        }
+        if(cleared) imeModeSwitcher.setClipboardCandidate(null)
+        return cleared
     }
 
     override fun onCandidateViewVisibilityChange(visible: Boolean) {

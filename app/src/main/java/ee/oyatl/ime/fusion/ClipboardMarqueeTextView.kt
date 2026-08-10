@@ -5,8 +5,10 @@ import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
 import android.content.Context
 import android.util.AttributeSet
+import android.view.View
 import android.view.animation.LinearInterpolator
 import android.widget.HorizontalScrollView
+import android.widget.ImageView
 import android.widget.TextView
 
 class ClipboardMarqueeTextView @JvmOverloads constructor(
@@ -17,8 +19,14 @@ class ClipboardMarqueeTextView @JvmOverloads constructor(
     private var scrollRequested = false
     private var animator: ValueAnimator? = null
 
+    private val contentView: View
+        get() = getChildAt(0)
+
     private val contentTextView: TextView
-        get() = getChildAt(0) as TextView
+        get() = contentView.findViewById(R.id.clipboard_candidate_text)
+
+    private val contentIconView: ImageView
+        get() = contentView.findViewById(R.id.clipboard_candidate_icon)
 
     var text: CharSequence
         get() = contentTextView.text
@@ -35,12 +43,21 @@ class ClipboardMarqueeTextView @JvmOverloads constructor(
 
     override fun onFinishInflate() {
         super.onFinishInflate()
-        contentTextView.setOnClickListener { performClick() }
+        contentView.setOnClickListener { performClick() }
+        contentView.setOnLongClickListener { performLongClick() }
     }
 
     override fun performClick(): Boolean {
         super.performClick()
         return true
+    }
+
+    fun showClipboardIcon() {
+        contentIconView.setImageResource(R.drawable.content_paste_24)
+    }
+
+    fun showDeleteIcon() {
+        contentIconView.setImageResource(R.drawable.delete_24)
     }
 
     fun startScrolling() {
@@ -78,7 +95,7 @@ class ClipboardMarqueeTextView @JvmOverloads constructor(
         if(!scrollRequested || !isShown) return
 
         val availableWidth = width - paddingLeft - paddingRight
-        val overflow = (contentTextView.width - availableWidth).coerceAtLeast(0)
+        val overflow = (contentView.width - availableWidth).coerceAtLeast(0)
         if(overflow <= 0) return
 
         animator = ValueAnimator.ofInt(0, overflow).apply {

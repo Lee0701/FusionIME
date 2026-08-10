@@ -50,24 +50,46 @@
             android:id="@+id/clipboard_candidate"
             android:visibility="gone"
             android:background="?backgroundColor"
-            android:theme="@style/Theme.FusionIME.TabBar.Item"
+            android:theme="@style/Theme.FusionIME.Candidates"
+            android:contentDescription="@string/settings_clipboard_candidate_enabled_title"
             android:fillViewport="true"
             android:clipToPadding="true"
             android:scrollbars="none"
             android:overScrollMode="never"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="2">
 
-            <TextView
-                android:textColor="?foregroundColor"
-                android:textSize="16sp"
+            <LinearLayout
+                android:id="@+id/clipboard_candidate_content"
+                android:theme="@style/Theme.FusionIME.Candidates.Item"
+                android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:singleLine="true"
+                android:background="?android:selectableItemBackground"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/clipboard_candidate_icon"
+                    android:src="@drawable/content_paste_24"
+                    android:tint="?foregroundColor"
+                    android:importantForAccessibility="no"
+                    android:layout_marginEnd="6dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp" />
+
+                <TextView
+                    android:id="@+id/clipboard_candidate_text"
+                    android:textColor="?foregroundColor"
+                    android:textSize="18sp"
+                    android:gravity="center_vertical"
+                    android:singleLine="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
 
         </ee.oyatl.ime.fusion.ClipboardMarqueeTextView>
 
