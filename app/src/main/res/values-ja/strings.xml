@@ -26,7 +26,7 @@
     <string name="settings_behaviour_default_flick_action_up_title">デフォルトのフリックアクション（上方向）</string>
     <string name="settings_behaviour_hardware_title">ハードウェアキーボード</string>
     <string name="settings_behaviour_hardware_language_key_title">ハードウェアの言語キー</string>
-    <string name="settings_behaviour_always_show_soft_keyboard_title">常にソフトキーボードを表示する</string>
+    <string name="settings_behaviour_always_show_soft_keyboard_title">常にソフトキーボードを表示</string>
     <string name="settings_input_mode_select_type_title">タイプ選択</string>
     <string name="settings_input_mode_move_up_description">上に移動</string>
     <string name="settings_input_mode_move_down_description">下に移動</string>
@@ -56,7 +56,7 @@
     <string name="input_mode_latin">ラテン文字</string>
     <string name="input_mode_korean">韓国語</string>
     <string name="input_mode_mozc">Mozc（日本語）</string>
-    <string name="input_mode_zhuyin">住音符号（繁体字中国語）</string>
+    <string name="input_mode_zhuyin">注音符号（繁体字中国語）</string>
     <string name="input_mode_cangjie">倉頡輸入法</string>
     <string name="input_mode_viet">ベトナム語</string>
     <string name="latin_locale_de">ドイツ語</string>
@@ -64,9 +64,9 @@
     <string name="latin_locale_es">スペイン語</string>
     <string name="latin_locale_fr">フランス語</string>
     <string name="latin_locale_it">イタリア語</string>
-    <string name="latin_layout_qwerty">QWERTY配列</string>
-    <string name="latin_layout_dvorak">Dvorak配列</string>
-    <string name="latin_layout_colemak">Colemak配列</string>
+    <string name="latin_layout_qwerty">QWERTY</string>
+    <string name="latin_layout_dvorak">Dvorak</string>
+    <string name="latin_layout_colemak">Colemak</string>
     <string name="korean_layout_hangul_2set_ks">ハングル２ボル式標準</string>
     <string name="korean_layout_hangul_3set_390">ハングル３ボル式３９０</string>
     <string name="korean_layout_hangul_3set_391">ハングル３ボル式最終</string>
@@ -107,7 +107,7 @@
     <string name="settings_appearance_show_voice_input_button_title">音声入力ボタン表示</string>
     <string name="settings_input_mode_mozc_flick_mode_title">12キーフリックモード</string>
     <string name="settings_input_mode_syllables_key_layout_title">音節表キーボード配列</string>
-    <string name="settings_input_mode_syllables_key_layout_summary">五十音表やいろは配列でのキー配列を設定します。</string>
+    <string name="settings_input_mode_syllables_key_layout_summary">五十音表やいろは配列でのキー配列を選択します。</string>
     <string name="mozc_layout_kana_iroha">かないろは順</string>
     <string name="mozc_syllables_key_layout_horizontal">横</string>
     <string name="mozc_layout_kana_12key">かな12キー</string>
@@ -127,8 +127,8 @@
     <string name="settings_info_app_info_title">アプリ情報</string>
     <string name="settings_info_used_projectss_title">使用したプロジェクト</string>
     <string name="input_mode_jyutping">粤拼（広東語）</string>
-    <string name="mozc_layout_godan">GODAN</string>
-    <string name="settings_info_contact_maintainer_title">管理者の連絡先</string>
+    <string name="mozc_layout_godan">GODAN（五段）</string>
+    <string name="settings_info_contact_maintainer_title">開発者に連絡</string>
     <string name="settings_input_mode_cursor_keys_title">カーソルキー</string>
     <string name="settings_info_version">バージョン </string>
     <string name="settings_info_source_code_title">ソースコード</string>
