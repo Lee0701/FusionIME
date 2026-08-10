@@ -26,6 +26,11 @@ import javax.annotation.Nullable;
 
 public class InputConnectionRenderer {
 
+    @FunctionalInterface
+    public interface TextConverter {
+        String convert(String text);
+    }
+
     // Focused segment's attribute.
     static final CharacterStyle SPAN_CONVERT_HIGHLIGHT =
             new BackgroundColorSpan(0x66EF3566);
@@ -49,10 +54,15 @@ public class InputConnectionRenderer {
 
     private final InputConnection currentInputConnection;
     private final EditorInfo currentInputEditorInfo;
+    private final TextConverter committedTextConverter;
 
-    public InputConnectionRenderer(InputConnection currentInputConnection, EditorInfo currentInputEditorInfo) {
+    public InputConnectionRenderer(
+            InputConnection currentInputConnection,
+            EditorInfo currentInputEditorInfo,
+            TextConverter committedTextConverter) {
         this.currentInputConnection = currentInputConnection;
         this.currentInputEditorInfo = currentInputEditorInfo;
+        this.committedTextConverter = Preconditions.checkNotNull(committedTextConverter);
     }
 
     // Track the selection.
@@ -125,12 +135,12 @@ public class InputConnectionRenderer {
         }
     }
 
-    private static void maybeCommitText(ProtoCommands.Output output, InputConnection inputConnection) {
+    private void maybeCommitText(ProtoCommands.Output output, InputConnection inputConnection) {
         if (!output.hasResult()) {
             return;
         }
 
-        String outputText = output.getResult().getValue();
+        String outputText = committedTextConverter.convert(output.getResult().getValue());
         if (outputText.isEmpty()) {
             // Do nothing for an empty result string.
             return;

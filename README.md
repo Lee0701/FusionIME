@@ -50,4 +50,5 @@ GNU General Public License v3.0
 * [Chewing](https://github.com/hiroshiyui/libchewingAndroidAppModule): GNU General Public License v3.0
 * [LatinIME](https://android.googlesource.com/platform/packages/inputmethods/LatinIME/): Apache License 2.0
 * [Mozc](https://github.com/google/mozc): BSD 3-Clause
+* [kyujitai.js by hakatashi](https://github.com/hakatashi/kyujitai.js): MIT License (conversion data used by `app/src/main/assets/kyujitai.json`)
 * [PinyinIME](https://android.googlesource.com/platform/packages/inputmethods/PinyinIME/): Apache License 2.0
