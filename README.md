@@ -21,6 +21,7 @@ FusionIME packs various input methods for CJKV languages into one app.
 
 ### Chinese
 * Simplified & Traditional Chinese Pinyin
+  * Ziranma, Microsoft, Intelligent ABC, Pinyin Jiajia, Xiaohe, Sogou, Ziguang double pinyin
 * Traditional Chinese Zhuyin
 * Chinese Cangjie, Quick, Dayi
 * Cantonese Jyutping
