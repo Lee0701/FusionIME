@@ -35,7 +35,7 @@ object LayoutSymbol {
         KeyEvent.KEYCODE_M to listOf('?'.code, ']'.code)
     )
 
-    val TABLE_NA = mapOf(
+    val TABLE_N1 = mapOf(
         KeyEvent.KEYCODE_Q to listOf('1'.code, '%'.code),
         KeyEvent.KEYCODE_W to listOf('2'.code, '※'.code),
         KeyEvent.KEYCODE_E to listOf('3'.code, '='.code),
@@ -67,7 +67,7 @@ object LayoutSymbol {
         KeyEvent.KEYCODE_M to listOf('?'.code, ']'.code)
     )
 
-    val TABLE_NB = mapOf(
+    val TABLE_N2 = mapOf(
         KeyEvent.KEYCODE_Q to listOf('%'.code, '≠'.code),
         KeyEvent.KEYCODE_W to listOf('₩'.code, '≒'.code),
         KeyEvent.KEYCODE_E to listOf('='.code, '÷'.code),
@@ -99,7 +99,7 @@ object LayoutSymbol {
         KeyEvent.KEYCODE_M to listOf('?'.code, '»'.code)
     )
 
-    val TABLE_OA = mapOf(
+    val TABLE_O1 = mapOf(
         KeyEvent.KEYCODE_Q to listOf('1'.code, '!'.code),
         KeyEvent.KEYCODE_W to listOf('2'.code, '@'.code),
         KeyEvent.KEYCODE_E to listOf('3'.code, '#'.code),
@@ -130,7 +130,7 @@ object LayoutSymbol {
         KeyEvent.KEYCODE_M to listOf('"'.code, '」'.code)
     )
 
-    val TABLE_OB = mapOf(
+    val TABLE_O2 = mapOf(
         KeyEvent.KEYCODE_1 to listOf('1'.code, '①'.code),
         KeyEvent.KEYCODE_2 to listOf('2'.code, '②'.code),
         KeyEvent.KEYCODE_3 to listOf('3'.code, '③'.code),

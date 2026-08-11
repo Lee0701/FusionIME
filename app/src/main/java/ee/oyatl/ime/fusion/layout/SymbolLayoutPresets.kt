@@ -61,7 +61,7 @@ object SymbolLayoutPresets {
             )
         ),
         layoutTable = LayoutTable.fromShiftStates(
-            map = LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutSymbol.TABLE_NA
+            map = LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutSymbol.TABLE_N1
         )
     )
 
@@ -85,7 +85,7 @@ object SymbolLayoutPresets {
             )
         ),
         layoutTable = LayoutTable.fromShiftStates(
-            map = LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutSymbol.TABLE_NA
+            map = LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutSymbol.TABLE_N2
         )
     )
 
@@ -107,7 +107,7 @@ object SymbolLayoutPresets {
             )
         ),
         layoutTable = LayoutTable.fromShiftStates(
-            map = LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutSymbol.TABLE_OA
+            map = LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutSymbol.TABLE_O1
         )
     )
 
@@ -131,7 +131,7 @@ object SymbolLayoutPresets {
             )
         ),
         layoutTable = LayoutTable.fromShiftStates(
-            map = LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutSymbol.TABLE_OB
+            map = LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutSymbol.TABLE_O2
         )
     )
 
