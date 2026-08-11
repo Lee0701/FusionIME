@@ -9,17 +9,16 @@ import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.fusion.Feature
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.korean.WordComposer
-import ee.oyatl.ime.fusion.zhuyin.ChewingConverter
-import ee.oyatl.ime.keyboard.KeyboardConfiguration
-import ee.oyatl.ime.keyboard.KeyboardTemplate
+import ee.oyatl.ime.fusion.layout.LayoutExt
+import ee.oyatl.ime.fusion.layout.LayoutQwerty
 import ee.oyatl.ime.fusion.layout.LayoutZhuyin
 import ee.oyatl.ime.fusion.layout.MobileKeyboard
 import ee.oyatl.ime.fusion.layout.MobileKeyboardRows
-import ee.oyatl.ime.fusion.layout.LayoutExt
-import ee.oyatl.ime.fusion.layout.LayoutQwerty
-import ee.oyatl.ime.fusion.layout.LayoutSymbol
 import ee.oyatl.ime.fusion.layout.TabletKeyboard
 import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
+import ee.oyatl.ime.fusion.zhuyin.ChewingConverter
+import ee.oyatl.ime.keyboard.KeyboardConfiguration
+import ee.oyatl.ime.keyboard.KeyboardTemplate
 import ee.oyatl.ime.keyboard.LayoutTable
 import java.util.Locale
 
@@ -58,7 +57,6 @@ class ZhuyinIMEMode(
         )
     )
     override val textLayoutTable: LayoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutExt.TABLE_CHINESE + LayoutZhuyin.TABLE)
-    override val symbolLayoutTable: LayoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutExt.TABLE_CHINESE + LayoutSymbol.TABLE_G)
 
     private val wordComposer = WordComposer()
     private val converter: ChewingConverter = ChewingConverter()
@@ -67,6 +65,9 @@ class ZhuyinIMEMode(
 
     override suspend fun onLoad(context: Context) {
         super.onLoad(context)
+        symbolLayoutPreset = super.symbolLayoutPreset.copy(
+            layoutTable = super.symbolLayoutPreset.layoutTable + LayoutTable.fromShiftStates(LayoutExt.TABLE_CHINESE)
+        )
         converter.initialize(context)
     }
 

@@ -9,6 +9,10 @@ data class LayoutTable(
         return map[keyCode]
     }
 
+    operator fun plus(other: LayoutTable): LayoutTable {
+        return LayoutTable(this.map + other.map)
+    }
+
     fun mapKeyCodes(keyCodeMap: Map<Int, Int>): LayoutTable {
         // Convert from "QWERTY to LAYOUT" to "LAYOUT TO QWERTY" by swapping keys and values
         val revKeyCodeMap = keyCodeMap.map { (k, v) -> v to k }.toMap()

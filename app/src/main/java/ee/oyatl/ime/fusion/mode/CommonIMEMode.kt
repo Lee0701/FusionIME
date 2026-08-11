@@ -19,10 +19,8 @@ import ee.oyatl.ime.fusion.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.layout.LayoutExt
 import ee.oyatl.ime.fusion.layout.LayoutQwerty
-import ee.oyatl.ime.fusion.layout.LayoutSymbol
 import ee.oyatl.ime.fusion.layout.MobileKeyboard
 import ee.oyatl.ime.fusion.layout.MobileKeyboardRows
-import ee.oyatl.ime.fusion.layout.NumberKeyboard
 import ee.oyatl.ime.fusion.layout.SymbolLayoutPresets
 import ee.oyatl.ime.fusion.layout.TabletKeyboard
 import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
@@ -61,8 +59,6 @@ abstract class CommonIMEMode(
     open var numberLayoutPreset: KeyboardLayoutPreset = SymbolLayoutPresets.number()
 
     open val textLayoutTable: LayoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY)
-    open val symbolLayoutTable: LayoutTable get() = symbolLayoutPreset.layoutTable
-    open val numberLayoutTable: LayoutTable get() = numberLayoutPreset.layoutTable
 
     open val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
         mobile = KeyboardTemplate.Basic(
@@ -80,13 +76,11 @@ abstract class CommonIMEMode(
             contentRows = TabletKeyboardRows.DEFAULT
         )
     )
-    open val symbolKeyboardTemplate: KeyboardTemplate get() = symbolLayoutPreset.keyboardTemplate
-    open val numberKeyboardTemplate: KeyboardTemplate get() = numberLayoutPreset.keyboardTemplate
 
     val currentLayoutTable: LayoutTable get() = when(symbolState) {
         KeyboardState.Symbol.Text -> textLayoutTable
-        KeyboardState.Symbol.Symbol -> symbolLayoutTable
-        KeyboardState.Symbol.Number -> numberLayoutTable
+        KeyboardState.Symbol.Symbol -> symbolLayoutPreset.layoutTable
+        KeyboardState.Symbol.Number -> numberLayoutPreset.layoutTable
     }
 
     open val keyLabels: Map<Int, KeyLabel>
@@ -141,6 +135,10 @@ abstract class CommonIMEMode(
 
     override suspend fun onLoad(context: Context) {
         val preference = PreferenceManager.getDefaultSharedPreferences(context)
+
+        val symbolLayoutTypeName = preference.getString("symbol_layout", null)
+        val symbolLayoutType = SymbolLayoutPresets.Type.entries.find { it.name == symbolLayoutTypeName } ?: SymbolLayoutPresets.Type.G
+        this.symbolLayoutPreset = symbolLayoutType.createPreset()
 
         val flickActionUp = FlickAction.valueOf(preference.getString("default_flick_action_up", null) ?: FlickAction.Shifted.name)
         val flickActionDown = FlickAction.valueOf(preference.getString("default_flick_action_down", null) ?: FlickAction.Symbol.name)
@@ -228,17 +226,13 @@ abstract class CommonIMEMode(
             repeatInterval = 30,
         )
 
-        val symbolLayoutTypeName = preference.getString("symbol_layout", null)
-        val symbolLayoutType = SymbolLayoutPresets.Type.entries.find { it.name == symbolLayoutTypeName } ?: SymbolLayoutPresets.Type.G
-        this.symbolLayoutPreset = symbolLayoutType.createPreset()
-
         val textKeyboardParams = params.copy()
         val symbolKeyboardParams = params.copy(shiftAutoRelease = false)
         val numberKeyboardParams = params.copy(shiftAutoRelease = false, splitWidth = 0)
 
         val textKeyboard = textKeyboardTemplate.inflate(textKeyboardParams)
-        val symbolKeyboard = symbolKeyboardTemplate.inflate(symbolKeyboardParams)
-        val numberKeyboard = numberKeyboardTemplate.inflate(numberKeyboardParams)
+        val symbolKeyboard = symbolLayoutPreset.keyboardTemplate.inflate(symbolKeyboardParams)
+        val numberKeyboard = numberLayoutPreset.keyboardTemplate.inflate(numberKeyboardParams)
 
         val textKeyboardView = DefaultKeyboardView(context, null).also {
             it.keyboard = textKeyboard
@@ -384,7 +378,7 @@ abstract class CommonIMEMode(
 
     override fun onFlick(keyCode: Int, direction: FlickDirection): Boolean {
         val item = currentLayoutTable[keyCode]
-        val symbol = symbolLayoutTable[keyCode]
+        val symbol = symbolLayoutPreset.layoutTable[keyCode]
         when(defaultFlickActions[direction]) {
             FlickAction.Default -> if(item is LayoutTable.DefaultItem) onChar(item.forShiftState(shiftState))
             FlickAction.Shifted -> if(item is LayoutTable.DefaultItem) onChar(item.forShiftState(KeyboardState.Shift.Pressed))
