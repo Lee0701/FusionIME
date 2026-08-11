@@ -15,6 +15,7 @@ import android.view.inputmethod.InputConnection
 import android.view.inputmethod.InputMethodManager
 import android.view.inputmethod.InputMethodSubtype
 import android.widget.FrameLayout
+import androidx.core.view.isVisible
 import androidx.preference.PreferenceManager
 import ee.oyatl.ime.fusion.databinding.CandidateViewWrapperBinding
 import ee.oyatl.ime.fusion.databinding.ModeSwitcherTabBarBinding
@@ -77,7 +78,15 @@ class IMEModeSwitcher(
             }
             true
         }
-        candidateView.closeButton.setOnClickListener { showTabBar() }
+        candidateView.closeButton.setOnClickListener {
+            if(candidateView.idleView.isVisible && candidateView.clipboardCandidate.isVisible) {
+                candidateView.clipboardCandidate.showDeleteIcon()
+                if(!callback.onClipboardCandidateClearRequested()) {
+                    candidateView.clipboardCandidate.showClipboardIcon()
+                }
+            }
+            else showTabBar()
+        }
         @SuppressLint("ClickableViewAccessibility")
         candidateView.touchBlocker.setOnTouchListener { _, event ->
             // Intercept touch events to input view while blocking
