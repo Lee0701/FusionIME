@@ -14,6 +14,7 @@
 
     <string name="settings_appearance_basic_title">Basic</string>
     <string name="settings_appearance_screen_mode_title">Screen Mode</string>
+    <string name="settings_appearance_symbol_layout_title">Symbol Layout</string>
     <string name="settings_appearance_keyboard_height_portrait_title">Keyboard Height (Portrait)</string>
     <string name="settings_appearance_keyboard_height_landscape_title">Keyboard Height (Landscape)</string>
     <string name="settings_appearance_show_voice_input_button_title">Show Voice Input Button</string>
@@ -86,6 +87,12 @@
     <string name="screen_mode_mobile">Mobile</string>
     <string name="screen_mode_tablet">Tablet</string>
     <string name="screen_mode_full">Full</string>
+
+    <string name="symbol_layout_g">Type G</string>
+    <string name="symbol_layout_n1">Type N1</string>
+    <string name="symbol_layout_n2">Type N2</string>
+    <string name="symbol_layout_o1">Type O1</string>
+    <string name="symbol_layout_o2">Type O2</string>
 
     <string name="touch_mode_seek">Seek</string>
     <string name="touch_mode_flick">Flick</string>

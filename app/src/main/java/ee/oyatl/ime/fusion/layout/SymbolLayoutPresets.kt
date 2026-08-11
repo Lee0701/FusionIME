@@ -43,7 +43,7 @@ object SymbolLayoutPresets {
         )
     )
 
-    fun symbolNA(): KeyboardLayoutPreset = KeyboardLayoutPreset(
+    fun symbolN1(): KeyboardLayoutPreset = KeyboardLayoutPreset(
         keyboardTemplate = KeyboardTemplate.ByScreenMode(
             mobile = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
@@ -65,7 +65,7 @@ object SymbolLayoutPresets {
         )
     )
 
-    fun symbolNB(): KeyboardLayoutPreset = KeyboardLayoutPreset(
+    fun symbolN2(): KeyboardLayoutPreset = KeyboardLayoutPreset(
         keyboardTemplate = KeyboardTemplate.ByScreenMode(
             mobile = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
@@ -89,7 +89,7 @@ object SymbolLayoutPresets {
         )
     )
 
-    fun symbolOA(): KeyboardLayoutPreset = KeyboardLayoutPreset(
+    fun symbolO1(): KeyboardLayoutPreset = KeyboardLayoutPreset(
         keyboardTemplate = KeyboardTemplate.ByScreenMode(
             mobile = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
@@ -111,7 +111,7 @@ object SymbolLayoutPresets {
         )
     )
 
-    fun symbolOB(): KeyboardLayoutPreset = KeyboardLayoutPreset(
+    fun symbolO2(): KeyboardLayoutPreset = KeyboardLayoutPreset(
         keyboardTemplate = KeyboardTemplate.ByScreenMode(
             mobile = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
@@ -138,11 +138,11 @@ object SymbolLayoutPresets {
     enum class Type(
         val createPreset: () -> KeyboardLayoutPreset
     ) {
-        SymbolG({ symbolG() }),
-        SymbolNA({ symbolNA() }),
-        SymbolNB({ symbolNB() }),
-        SymbolOA({ symbolOA() }),
-        SymbolOB({ symbolOB() }),
+        G({ symbolG() }),
+        N1({ symbolN1() }),
+        N2({ symbolN2() }),
+        O1({ symbolO1() }),
+        O2({ symbolO2() }),
         ;
     }
 }

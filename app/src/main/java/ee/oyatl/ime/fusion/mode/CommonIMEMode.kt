@@ -229,7 +229,7 @@ abstract class CommonIMEMode(
         )
 
         val symbolLayoutTypeName = preference.getString("symbol_layout", null)
-        val symbolLayoutType = SymbolLayoutPresets.Type.entries.find { it.name == symbolLayoutTypeName } ?: SymbolLayoutPresets.Type.SymbolG
+        val symbolLayoutType = SymbolLayoutPresets.Type.entries.find { it.name == symbolLayoutTypeName } ?: SymbolLayoutPresets.Type.G
         this.symbolLayoutPreset = symbolLayoutType.createPreset()
 
         val textKeyboardParams = params.copy()
