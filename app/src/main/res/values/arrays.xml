@@ -208,4 +208,16 @@
         <item>Quick</item>
         <item>Dayi3</item>
     </string-array>
+
+    <string-array name="settings_input_mode_zhuyin_conversion_engine_entries">
+        <item>@string/zhuyin_conversion_engine_simple</item>
+        <item>@string/zhuyin_conversion_engine_chewing</item>
+        <item>@string/zhuyin_conversion_engine_fuzzy_chewing</item>
+    </string-array>
+
+    <string-array name="settings_input_mode_zhuyin_conversion_engine_values">
+        <item>SIMPLE_CONVERSION_ENGINE</item>
+        <item>CHEWING_CONVERSION_ENGINE</item>
+        <item>FUZZY_CHEWING_CONVERSION_ENGINE</item>
+    </string-array>
 </resources>
