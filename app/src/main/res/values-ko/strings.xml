@@ -52,8 +52,6 @@
     <string name="pinyin_spelling_ziguang">紫光 쌍병음</string>
     <string name="zhuyin_layout_zhuyin">주음부호</string>
     <string name="cangjie_layout_cangjie">창힐</string>
-    <string name="viet_layout_qwerty">QWERTY</string>
-    <string name="viet_layout_telex">텔렉스</string>
     <string name="settings_input_mode_select_type_title">유형 선택</string>
     <string name="settings_input_mode_layout_title">키보드 배열</string>
     <string name="input_mode_zhuyin">주음부호 (번체 중국어)</string>
@@ -92,7 +90,7 @@
     <string name="settings_appearance_split_keyboard_portrait_title">좌우분할 키보드 (세로 화면)</string>
     <string name="settings_appearance_split_ratio_landscape_title">좌우분할 간격 비율 (가로 화면)</string>
     <string name="settings_input_mode_number_row_title">숫자 열</string>
-    <string name="settings_input_mode_number_row_summary">최상단 숫자 열 항상 표시</string>
+    <string name="settings_input_mode_number_row_summary">최상단 숫자 열을 항상 표시합니다.</string>
     <string name="korean_layout_hangul_3set_391_strict">한글 세벌식 최종 (정석 강요)</string>
     <string name="korean_layout_old_hangul_3set_393">옛한글 세벌식 393</string>
     <string name="settings_behaviour_feedback_title">반응</string>
@@ -125,4 +123,21 @@
     <string name="mozc_flick_mode_flick_toggle">플릭 및 토글</string>
     <string name="mozc_flick_mode_toggle_only">토글 전용</string>
     <string name="mozc_flick_mode_flick_only">플릭 전용</string>
+    <string name="settings_info_header">정보</string>
+    <string name="settings_input_mode_mozc_flick_hint_title">플릭 문자 표시</string>
+    <string name="settings_info_app_info_title">앱 정보</string>
+    <string name="settings_info_version">버전 </string>
+    <string name="settings_info_source_code_title">소스 코드</string>
+    <string name="settings_info_contact_maintainer_title">개발자에게 연락하기</string>
+    <string name="settings_info_used_projectss_title">사용된 프로젝트</string>
+    <string name="mozc_layout_godan">GODAN (5단)</string>
+    <string name="viet_layout_qwerty_nom">QWERTY (한놈)</string>
+    <string name="viet_layout_qwerty_quoc_ngu">QWERTY (쯔꾸옥응으)</string>
+    <string name="viet_layout_telex_nom">텔렉스 (한놈)</string>
+    <string name="viet_layout_telex_quoc_ngu">텔렉스 (쯔꾸옥응으)</string>
+    <string name="jyutping_layout_jyutping">월병</string>
+    <string name="settings_input_mode_cursor_keys_title">커서 이동 키</string>
+    <string name="settings_input_mode_cursor_keys_summary">지원하는 배열에서 커서 이동 키를 표시합니다.</string>
+    <string name="settings_input_mode_mozc_flick_hint_summary">12키 및 GODAN 배열에서 플릭 방향별 문자를 표시합니다.</string>
+    <string name="input_mode_jyutping">월병 (광동어)</string>
 </resources>
