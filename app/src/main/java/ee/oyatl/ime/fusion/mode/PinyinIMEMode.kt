@@ -725,8 +725,9 @@ class PinyinIMEMode(
             || (keyChar == '\''.code && !decInfo.charBeforeCursorIsSeparator())
             || (((keyChar >= '0'.code && keyChar <= '9'.code) || keyChar == ' '.code) && ImeState.STATE_COMPOSING == imeState)
         ) {
-            decInfo.addSplChar(keyChar.toChar(), false)
-            chooseAndUpdate(-1)
+            if (decInfo.addSplChar(keyChar.toChar(), false)) {
+                chooseAndUpdate(-1)
+            }
         } else if (keyCode == KeyEvent.KEYCODE_DEL) {
             decInfo.prepareDeleteBeforeCursor()
             chooseAndUpdate(-1)

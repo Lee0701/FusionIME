@@ -145,13 +145,13 @@ class MatrixSearch {
 
   // The maximum length of the sentence candidates counted in chinese
   // characters
-  static const size_t kMaxSentenceLength = 16;
+  static const size_t kMaxSentenceLength = kMaxSearchSteps - 1;
 
   // The size of the matrix node pool.
-  static const size_t kMtrxNdPoolSize = 200;
+  static const size_t kMtrxNdPoolSize = kMaxNodeARow * kMaxRowNum;
 
   // The size of the DMI node pool.
-  static const size_t kDmiPoolSize = 800;
+  static const size_t kDmiPoolSize = 20 * kMaxRowNum;
 
   // Used to indicate whether this object has been initialized.
   bool inited_;
