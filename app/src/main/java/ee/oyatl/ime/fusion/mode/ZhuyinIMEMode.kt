@@ -121,8 +121,12 @@ class ZhuyinIMEMode(
 
     private fun handleSpace() {
         if(wordComposer.composingText.isNotEmpty()) {
-            if(bestCandidate != null) pickDefaultSuggestion()
-            else onReset()
+            if(wordComposer.textBeforeCursor.lastOrNull() !in LayoutZhuyin.TONE_MARKS)
+                wordComposer.commit('ˉ'.toString())
+            else if(bestCandidate != null)
+                pickDefaultSuggestion()
+            else
+                onReset()
             renderResult()
         }
         else currentInputConnection?.commitText(" ", 1)
