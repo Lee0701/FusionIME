@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="settings_input_mode_pinyin_spelling_title">拼音輸入方式</string>
+    <string name="pinyin_spelling_full">全拼</string>
+    <string name="pinyin_spelling_ziranma">自然碼雙拼</string>
+    <string name="pinyin_spelling_microsoft">微軟雙拼</string>
+    <string name="pinyin_spelling_smart_abc">智能ABC雙拼</string>
+    <string name="pinyin_spelling_jiajia">拼音加加雙拼</string>
+    <string name="pinyin_spelling_xiaohe">小鶴雙拼</string>
+    <string name="pinyin_spelling_sogou">搜狗雙拼</string>
+    <string name="pinyin_spelling_ziguang">紫光雙拼</string>
     <string name="settings_method_enable_method_summary">請啟用「Fusion IME」。</string>
     <string name="msg_input_modes_limit_reached">請考慮使用免費版本以添加更多輸入模式。</string>
     <string name="settings_method_choose_method_title">選擇輸入方式</string>
