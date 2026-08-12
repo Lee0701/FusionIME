@@ -49,7 +49,8 @@ class IMEModeSwitcher(
         val inputViewWrapper = inputViewWrapper ?: return@apply
         playTogether(
             ObjectAnimator.ofFloat(inputViewWrapper.keyboardView, "translationY", 200f),
-            ObjectAnimator.ofFloat(inputViewWrapper.keyboardView, "alpha", 0f)
+            ObjectAnimator.ofFloat(inputViewWrapper.keyboardView, "alpha", 0f),
+            ObjectAnimator.ofFloat(inputViewWrapper.expandButton, "rotation", 180f)
         )
         duration = EXPAND_COLLAPSE_DURATION
         interpolator = AccelerateDecelerateInterpolator()
@@ -67,7 +68,8 @@ class IMEModeSwitcher(
         val inputViewWrapper = inputViewWrapper ?: return@apply
         playTogether(
             ObjectAnimator.ofFloat(inputViewWrapper.keyboardView, "translationY", 0f),
-            ObjectAnimator.ofFloat(inputViewWrapper.keyboardView, "alpha", 1f)
+            ObjectAnimator.ofFloat(inputViewWrapper.keyboardView, "alpha", 1f),
+            ObjectAnimator.ofFloat(inputViewWrapper.expandButton, "rotation", 0f)
         )
         duration = EXPAND_COLLAPSE_DURATION
         interpolator = AccelerateDecelerateInterpolator()
