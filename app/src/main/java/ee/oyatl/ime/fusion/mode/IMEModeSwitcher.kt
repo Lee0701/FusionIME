@@ -53,7 +53,14 @@ class IMEModeSwitcher(
         )
         duration = EXPAND_COLLAPSE_DURATION
         interpolator = AccelerateDecelerateInterpolator()
-        doOnEnd { inputViewWrapper.keyboardView.visibility = View.INVISIBLE }
+        doOnStart {
+            animationIsRunning = true
+        }
+        doOnEnd {
+            inputViewWrapper.keyboardView.visibility = View.INVISIBLE
+            candidateViewExpanded = true
+            animationIsRunning = false
+        }
     }
 
     private val collapseAnimator get() = AnimatorSet().apply {
@@ -64,9 +71,18 @@ class IMEModeSwitcher(
         )
         duration = EXPAND_COLLAPSE_DURATION
         interpolator = AccelerateDecelerateInterpolator()
-        doOnStart { inputViewWrapper.keyboardView.visibility = View.VISIBLE }
+        doOnStart {
+            animationIsRunning = true
+            inputViewWrapper.keyboardView.visibility = View.VISIBLE
+            candidateViewExpanded = false
+        }
+        doOnEnd {
+            animationIsRunning = false
+        }
     }
 
+    private var candidateViewExpanded: Boolean = false
+    private var animationIsRunning: Boolean = false
 
     private var inputConnection: InputConnection? = null
     private var editorInfo: EditorInfo? = null
@@ -90,13 +106,16 @@ class IMEModeSwitcher(
         val inflater = LayoutInflater.from(context)
         val inputViewWrapper = InputViewWrapperBinding.inflate(inflater)
 
-        var expanded = false
         inputViewWrapper.tabViewFrame.addView(this.initTabBarView(context))
-        inputViewWrapper.closeButton.setOnClickListener { showTabBar() }
+        inputViewWrapper.closeButton.setOnClickListener {
+            if(animationIsRunning) return@setOnClickListener
+            collapseCandidateView()
+            showTabBar()
+        }
         inputViewWrapper.expandButton.setOnClickListener {
-            if(!expanded) expandCandidateView()
+            if(animationIsRunning) return@setOnClickListener
+            if(!candidateViewExpanded) expandCandidateView()
             else collapseCandidateView()
-            expanded = !expanded
         }
 
         @SuppressLint("ClickableViewAccessibility")
@@ -208,12 +227,10 @@ class IMEModeSwitcher(
     }
 
     fun expandCandidateView() {
-        if(expandAnimator.isRunning || collapseAnimator.isRunning) return
         expandAnimator.start()
     }
 
     fun collapseCandidateView() {
-        if(expandAnimator.isRunning || collapseAnimator.isRunning) return
         collapseAnimator.start()
     }
 
