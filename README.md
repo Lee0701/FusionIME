@@ -21,11 +21,14 @@ FusionIME packs various input methods for CJKV languages into one app.
 
 ### Chinese
 * Simplified & Traditional Chinese Pinyin
+  * Ziranma, Microsoft, Intelligent ABC, Pinyin Jiajia, Xiaohe, Sogou, Ziguang double pinyin
 * Traditional Chinese Zhuyin
 * Chinese Cangjie, Quick, Dayi
+* Cantonese Jyutping
 
 ### Japanese
-* Romaji QWERTY, Kana JIS, Kana Syllables
+* Romaji QWERTY, GODAN
+* Kana JIS, 12-Key(Toggle & Flick), Syllables, Iroha
 
 ### Korean
 * Hangul 2-Set
@@ -40,7 +43,7 @@ Supports Hanja conversion for both modern and middle Korean.
 Supports Han Nom conversion.
 
 ## Dictionary Data
-* Korean: [Korean Standard Dictionary](https://stdict.korean.go.kr), [libhangul](https://github.com/libhangul/libhangul/tree/main)
+* Korean: [Korean Standard Dictionary](https://stdict.korean.go.kr), [libhangul](https://github.com/libhangul/libhangul)
 * Vietnamese: [chunom.org](https://chunom.org/)
 
 ## License
@@ -48,6 +51,7 @@ GNU General Public License v3.0
 
 * [Cangjie](https://github.com/hilarycheng/another_android_cangjie): GNU General Public License v2.0
 * [Chewing](https://github.com/hiroshiyui/libchewingAndroidAppModule): GNU General Public License v3.0
-* [LatinIME](android.googlesource.com/platform/packages/inputmethods/LatinIME/): Apache License 2.0
+* [LatinIME](https://android.googlesource.com/platform/packages/inputmethods/LatinIME/): Apache License 2.0
 * [Mozc](https://github.com/google/mozc): BSD 3-Clause
-* [PinyinIME](android.googlesource.com/platform/packages/inputmethods/PinyinIME/): Apache License 2.0
+* [PinyinIME](https://android.googlesource.com/platform/packages/inputmethods/PinyinIME/): Apache License 2.0
+* [Jyutping](https://github.com/yuetyam/jyutping-android): CC0 1.0 Universal

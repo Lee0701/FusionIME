@@ -43,10 +43,12 @@ class DefaultKeyboardView(
                     }
                     is KeyLabel.Flick -> {
                         if(label.text != null) it.binding.label.text = label.text
-                        if(label.up != null) it.binding.labelHintTop.text = label.up
-                        if(label.down != null) it.binding.labelHintBottom.text = label.down
-                        if(label.left != null) it.binding.labelHintLeft.text = label.left
-                        if(label.right != null) it.binding.labelHintRight.text = label.right
+                        if(label.showAsHint) {
+                            if(label.up != null) it.binding.labelHintTop.text = label.up
+                            if(label.down != null) it.binding.labelHintBottom.text = label.down
+                            if(label.left != null) it.binding.labelHintLeft.text = label.left
+                            if(label.right != null) it.binding.labelHintRight.text = label.right
+                        }
                     }
                 }
             }
@@ -101,6 +103,7 @@ class DefaultKeyboardView(
                     is Keyboard.KeyItem.Key -> {
                         val themedInflater = LayoutInflater.from(ContextThemeWrapper(context, item.themeRes))
                         val key = KbdKeyBinding.inflate(themedInflater)
+                        key.bkg.setImageResource(item.bkgRes)
                         if(item.iconRes != 0) key.icon.setImageResource(item.iconRes)
                         if(item.keyCode < 0) key.label.text = (-item.keyCode).toChar().toString()
                         keySet += CachedKey(item.keyCode, key)
@@ -166,6 +169,10 @@ class DefaultKeyboardView(
         return keySet.find { key ->
             key.rect.contains(x, y)
         }
+    }
+
+    override fun findKeys(keyCode: Int): List<TouchHandler.KeyInterface> {
+        return keySet.filter { it.keyCode == keyCode }
     }
 
     data class CachedKey(

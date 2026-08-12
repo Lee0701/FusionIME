@@ -1,28 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="msg_input_modes_limit_reached">Please consider using paid version to add more input modes.</string>
-
     <string name="settings_method_header">Input Method</string>
     <string name="settings_appearance_header">Appearance</string>
     <string name="settings_behaviour_header">Behaviour</string>
     <string name="settings_input_mode_header">Input Mode</string>
-
+    <string name="settings_info_header">Information</string>
     <string name="settings_method_enable_method_title">Enable Input Method</string>
     <string name="settings_method_enable_method_summary">Please enable \'FusionIME\'.</string>
     <string name="settings_method_choose_method_title">Choose Input Method</string>
     <string name="settings_method_choose_method_summary">Please choose \'FusionIME\'.</string>
-
     <string name="settings_appearance_basic_title">Basic</string>
     <string name="settings_appearance_screen_mode_title">Screen Mode</string>
     <string name="settings_appearance_keyboard_height_portrait_title">Keyboard Height (Portrait)</string>
     <string name="settings_appearance_keyboard_height_landscape_title">Keyboard Height (Landscape)</string>
     <string name="settings_appearance_show_voice_input_button_title">Show Voice Input Button</string>
-
     <string name="settings_appearance_split_keyboard_title">Split Keyboard</string>
     <string name="settings_appearance_split_keyboard_portrait_title">Split Keyboard (Portrait)</string>
     <string name="settings_appearance_split_ratio_portrait_title">Split Ratio (Portrait)</string>
     <string name="settings_appearance_split_keyboard_landscape_title">Split Keyboard (Landscape)</string>
     <string name="settings_appearance_split_ratio_landscape_title">Split Ratio (Landscape)</string>
-
     <string name="settings_behaviour_feedback_title">Feedback</string>
     <string name="settings_behaviour_sound_feedback_title">Sound Feedback</string>
     <string name="settings_behaviour_sound_feedback_summary">Play sound effect on key press.</string>
@@ -31,31 +28,28 @@
     <string name="settings_behaviour_vibration_duration_title">Vibration Duration</string>
     <string name="settings_behaviour_preview_popup_title">Preview Popups</string>
     <string name="settings_behaviour_preview_popup_summary">Show preview popups on key press.</string>
-
     <string name="settings_behaviour_touch_title">Touch</string>
     <string name="settings_behaviour_touch_mode_title">Touch Mode</string>
     <string name="settings_behaviour_touch_mode_summary">Set keyboard touch behaviour.</string>
     <string name="settings_behaviour_flick_sensitivity_title">Flick Sensitivity</string>
     <string name="settings_behaviour_default_flick_action_up_title">Default Flick Action (Up)</string>
     <string name="settings_behaviour_default_flick_action_down_title">Default Flick Action (Down)</string>
-
     <string name="settings_behaviour_hardware_title">Hardware Keyboard</string>
     <string name="settings_behaviour_hardware_language_key_title">Hardware Language Key</string>
     <string name="settings_behaviour_hardware_language_key_summary">Set a key combination to use as language switch on hardware keyboard.</string>
     <string name="settings_behaviour_always_show_soft_keyboard_title">Always Show Soft Keyboard</string>
     <string name="settings_behaviour_always_show_soft_keyboard_summary">Show soft keyboard even if hardware keyboard is connected.</string>
-
     <string name="settings_input_mode_select_type_title">Select Type</string>
-
     <string name="settings_input_mode_add_description">Add Input Mode</string>
     <string name="settings_input_mode_move_up_description">Move Up</string>
     <string name="settings_input_mode_move_down_description">Move Down</string>
     <string name="settings_input_mode_remove_description">Remove</string>
-
     <string name="settings_input_mode_locale_title">Language</string>
     <string name="settings_input_mode_layout_title">Keyboard Layout</string>
     <string name="settings_input_mode_number_row_title">Number Row</string>
-    <string name="settings_input_mode_number_row_summary">Always show top number row</string>
+    <string name="settings_input_mode_number_row_summary">Always show top number row.</string>
+    <string name="settings_input_mode_cursor_keys_title">Cursor Keys</string>
+    <string name="settings_input_mode_cursor_keys_summary">Always show cursor keys on supported layouts.</string>
     <string name="settings_input_mode_fullwidth_symbols_title">Full Width Symbols</string>
     <string name="settings_input_mode_correct_orders_title">Correct Jamo Orders</string>
     <string name="settings_input_mode_converter_title">Converter</string>
@@ -63,29 +57,31 @@
     <string name="settings_input_mode_chinese_traditional_title">Chinese Traditional</string>
     <string name="settings_input_mode_pinyin_spelling_title">Pinyin Input Style</string>
     <string name="settings_input_mode_mozc_flick_mode_title">12-Key Flick Mode</string>
+    <string name="settings_input_mode_mozc_flick_hint_title">Flick Hints</string>
+    <string name="settings_input_mode_mozc_flick_hint_summary">Show flick hints on 12-Key or GODAN layouts.</string>
     <string name="settings_input_mode_syllables_key_layout_title">Syllables Key Layout</string>
-    <string name="settings_input_mode_syllables_key_layout_summary">Choose Key Arrangement for Syllables or Iroha Layout.</string>
-
+    <string name="settings_input_mode_syllables_key_layout_summary">Choose Key Arrangement for Gojuon or Iroha Layout.</string>
+    <string name="settings_info_app_info_title">App Info</string>
+    <string name="settings_info_version">Version </string>
+    <string name="settings_info_source_code_title">Source Code</string>
+    <string name="settings_info_contact_maintainer_title">Contact Maintainer</string>
+    <string name="settings_info_used_projectss_title">Used Projects</string>
     <string name="settings_dialog_keystroke_key_name">Key Name</string>
     <string name="settings_dialog_keystroke_key_code">Key Code</string>
     <string name="settings_dialog_keystroke_shift">Shift</string>
     <string name="settings_dialog_keystroke_control">Control</string>
     <string name="settings_dialog_keystroke_alt">Alt</string>
     <string name="settings_dialog_keystroke_meta">Meta</string>
-
     <string name="screen_mode_mobile">Mobile</string>
     <string name="screen_mode_tablet">Tablet</string>
     <string name="screen_mode_full">Full</string>
-
     <string name="touch_mode_seek">Seek</string>
     <string name="touch_mode_flick">Flick</string>
-
     <string name="flick_action_none">None</string>
     <string name="flick_action_default">Character</string>
     <string name="flick_action_shifted">Shifted Character</string>
     <string name="flick_action_symbol">Symbol</string>
     <string name="flick_action_shifted_symbol">Shifted Symbol</string>
-
     <string name="input_mode_latin">Latin</string>
     <string name="input_mode_korean">Korean</string>
     <string name="input_mode_mozc">Mozc (Japanese)</string>
@@ -93,18 +89,16 @@
     <string name="input_mode_zhuyin">Bopomofo (Traditional Chinese)</string>
     <string name="input_mode_cangjie">Cangjie</string>
     <string name="input_mode_viet">Vietnamese</string>
-
+    <string name="input_mode_jyutping">Jyutping (Cantonese)</string>
     <string name="latin_locale_de">German</string>
     <string name="latin_locale_en">English</string>
     <string name="latin_locale_es">Spanish</string>
     <string name="latin_locale_fr">French</string>
     <string name="latin_locale_it">Italian</string>
     <string name="latin_locale_pt_br">Portuguese (Brazil)</string>
-
     <string name="latin_layout_qwerty">QWERTY</string>
     <string name="latin_layout_dvorak">Dvorak</string>
     <string name="latin_layout_colemak">Colemak</string>
-
     <string name="korean_layout_hangul_2set_ks">Hangul 2-Set KS</string>
     <string name="korean_layout_cheonjiin">Cheonjiin 10-Key</string>
     <string name="korean_layout_hangul_3set_390">Hangul 3-Set 390</string>
@@ -112,25 +106,21 @@
     <string name="korean_layout_hangul_3set_391_strict">Hangul 3-Set Final (Strict)</string>
     <string name="korean_layout_old_hangul_2set_ks">Old Hangul 2-Set</string>
     <string name="korean_layout_old_hangul_3set_393">Old Hangul 3-Set 393</string>
-
     <string name="korean_converter_word">Word Converter</string>
     <string name="korean_converter_phrase">Phrase Converter</string>
     <string name="korean_converter_jeongun">Jeong-Un Converter</string>
-
     <string name="mozc_layout_romaji_qwerty">Romaji QWERTY</string>
     <string name="mozc_layout_kana_12key">Kana 12-Key</string>
+    <string name="mozc_layout_godan">GODAN</string>
     <string name="mozc_layout_kana_jis">Kana JIS</string>
     <string name="mozc_layout_kana_syllables">Kana Syllables</string>
     <string name="mozc_layout_kana_iroha">Kana Iroha</string>
-
     <string name="mozc_syllables_key_layout_horizontal">Horizontal</string>
     <string name="mozc_syllables_key_layout_vertical_left">Vertical (Left to Right)</string>
     <string name="mozc_syllables_key_layout_vertical_right">Vertical (Right to Left)</string>
-
     <string name="mozc_flick_mode_flick_toggle">Flick and Toggle</string>
     <string name="mozc_flick_mode_toggle_only">Toggle Only</string>
     <string name="mozc_flick_mode_flick_only">Flick Only</string>
-
     <string name="pinyin_layout_pinyin">Pinyin</string>
     <string name="pinyin_spelling_full">Full Pinyin</string>
     <string name="pinyin_spelling_ziranma">Ziranma Double Pinyin</string>
@@ -142,14 +132,13 @@
     <string name="pinyin_spelling_ziguang">Ziguang Double Pinyin</string>
     <string name="pinyin_chinese_simplified">Simplified</string>
     <string name="pinyin_chinese_traditional">Traditional</string>
-
     <string name="zhuyin_layout_zhuyin">Bopomofo</string>
-
     <string name="cangjie_layout_cangjie">Cangjie</string>
     <string name="cangjie_layout_quick">Quick</string>
     <string name="cangjie_layout_dayi3">Dayi</string>
-
-    <string name="viet_layout_qwerty">QWERTY</string>
-    <string name="viet_layout_telex">Telex</string>
-
+    <string name="viet_layout_qwerty_nom">QWERTY (Han Nom)</string>
+    <string name="viet_layout_qwerty_quoc_ngu">QWERTY (Chu Quoc Ngu)</string>
+    <string name="viet_layout_telex_nom">Telex (Han Nom)</string>
+    <string name="viet_layout_telex_quoc_ngu">Telex (Chu Quoc Ngu)</string>
+    <string name="jyutping_layout_jyutping">Jyutping</string>
 </resources>
