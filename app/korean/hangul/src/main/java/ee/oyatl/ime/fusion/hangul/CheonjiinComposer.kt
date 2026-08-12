@@ -229,6 +229,8 @@ class CheonjiinComposer(
         }
 
         private val VOWELS = mapOf(
+            listOf(VowelStroke.DOT) to 0x30fb,
+            listOf(VowelStroke.DOT, VowelStroke.DOT) to 0xff1a,
             listOf(VowelStroke.I) to 0x3163,
             listOf(VowelStroke.I, VowelStroke.DOT) to 0x314f,
             listOf(VowelStroke.I, VowelStroke.DOT, VowelStroke.DOT) to 0x3151,
