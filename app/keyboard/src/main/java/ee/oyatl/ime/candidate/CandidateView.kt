@@ -2,7 +2,7 @@ package ee.oyatl.ime.candidate
 
 interface CandidateView {
 
-    var listener: CandidateView.Listener?
+    var listener: Listener?
 
     fun submitList(list: List<Candidate>)
 

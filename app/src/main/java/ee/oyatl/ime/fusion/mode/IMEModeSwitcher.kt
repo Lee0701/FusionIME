@@ -1,5 +1,8 @@
 package ee.oyatl.ime.fusion.mode
 
+import android.animation.Animator
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
@@ -9,13 +12,18 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
 import android.view.inputmethod.InputMethodManager
 import android.view.inputmethod.InputMethodSubtype
-import android.widget.FrameLayout
+import androidx.core.animation.doOnEnd
+import androidx.core.animation.doOnStart
 import androidx.preference.PreferenceManager
-import ee.oyatl.ime.fusion.databinding.CandidateViewWrapperBinding
+import ee.oyatl.ime.candidate.CandidateView
+import ee.oyatl.ime.candidate.ExpandedCandidateView
+import ee.oyatl.ime.fusion.PreferenceUtil
+import ee.oyatl.ime.fusion.databinding.InputViewWrapperBinding
 import ee.oyatl.ime.fusion.databinding.ModeSwitcherTabBarBinding
 import ee.oyatl.ime.fusion.databinding.ModeSwitcherTabBinding
 
@@ -32,9 +40,33 @@ class IMEModeSwitcher(
     private val currentEntry: Entry get() = entries[currentModeIndex]
     val currentMode: IMEMode get() = currentEntry.imeMode
 
-    private var inputView: FrameLayout? = null
-    private var candidateView: CandidateViewWrapperBinding? = null
+    private var inputViewWrapper: InputViewWrapperBinding? = null
     private var tabs: List<ModeSwitcherTabBinding> = listOf()
+    var expandedCandidateView: CandidateView? = null
+        private set
+
+    private val expandAnimator: Animator get() = AnimatorSet().apply {
+        val inputViewWrapper = inputViewWrapper ?: return@apply
+        playTogether(
+            ObjectAnimator.ofFloat(inputViewWrapper.keyboardView, "translationY", 200f),
+            ObjectAnimator.ofFloat(inputViewWrapper.keyboardView, "alpha", 0f)
+        )
+        duration = EXPAND_COLLAPSE_DURATION
+        interpolator = AccelerateDecelerateInterpolator()
+        doOnEnd { inputViewWrapper.keyboardView.visibility = View.INVISIBLE }
+    }
+
+    private val collapseAnimator get() = AnimatorSet().apply {
+        val inputViewWrapper = inputViewWrapper ?: return@apply
+        playTogether(
+            ObjectAnimator.ofFloat(inputViewWrapper.keyboardView, "translationY", 0f),
+            ObjectAnimator.ofFloat(inputViewWrapper.keyboardView, "alpha", 1f)
+        )
+        duration = EXPAND_COLLAPSE_DURATION
+        interpolator = AccelerateDecelerateInterpolator()
+        doOnStart { inputViewWrapper.keyboardView.visibility = View.VISIBLE }
+    }
+
 
     private var inputConnection: InputConnection? = null
     private var editorInfo: EditorInfo? = null
@@ -55,23 +87,40 @@ class IMEModeSwitcher(
     }
 
     fun createInputView(): View {
-        val inputView = FrameLayout(context)
-        this.inputView = inputView
-        return inputView
-    }
-
-    fun createCandidateView(): View {
         val inflater = LayoutInflater.from(context)
-        val candidateView = CandidateViewWrapperBinding.inflate(inflater)
-        candidateView.tabViewFrame.addView(this.initTabBarView(context))
-        candidateView.closeButton.setOnClickListener { showTabBar() }
-        @SuppressLint("ClickableViewAccessibility")
-        candidateView.touchBlocker.setOnTouchListener { _, event ->
-            // Intercept touch events to input view while blocking
-            inputView?.dispatchTouchEvent(event) ?: false
+        val inputViewWrapper = InputViewWrapperBinding.inflate(inflater)
+
+        var expanded = false
+        inputViewWrapper.tabViewFrame.addView(this.initTabBarView(context))
+        inputViewWrapper.closeButton.setOnClickListener { showTabBar() }
+        inputViewWrapper.expandButton.setOnClickListener {
+            if(!expanded) expandCandidateView()
+            else collapseCandidateView()
+            expanded = !expanded
         }
-        this.candidateView = candidateView
-        return candidateView.root
+
+        @SuppressLint("ClickableViewAccessibility")
+        inputViewWrapper.touchBlocker.setOnTouchListener { _, event ->
+            // Intercept touch events to input view while blocking
+            inputViewWrapper.keyboardView.dispatchTouchEvent(event)
+        }
+
+        val expandedCandidateView = ExpandedCandidateView(context, null)
+        expandedCandidateView.layoutParams = ViewGroup.LayoutParams(
+            context.resources.displayMetrics.widthPixels,
+            PreferenceUtil.getKeyboardHeight(context)
+        )
+        expandedCandidateView.listener = object : CandidateView.Listener {
+            override fun onCandidateSelected(candidate: CandidateView.Candidate) {
+                val currentMode = currentMode
+                if(currentMode is CandidateView.Listener) currentMode.onCandidateSelected(candidate)
+            }
+        }
+        inputViewWrapper.expandedCandidateView.addView(expandedCandidateView)
+        this.expandedCandidateView = expandedCandidateView
+
+        this.inputViewWrapper = inputViewWrapper
+        return inputViewWrapper.root
     }
 
     fun resetInputViews() {
@@ -83,24 +132,23 @@ class IMEModeSwitcher(
     }
 
     private fun updateInputView() {
-        inputView?.removeAllViews()
-        val view = currentEntry.inputView ?: currentEntry.imeMode.createInputView(context)
-        currentEntry.inputView = view
-        (view.parent as ViewGroup?)?.removeView(view)
-        inputView?.addView(view)
+        val wrapper = inputViewWrapper ?: return
 
-        val alwaysShowSoftKeyboard = preference.getBoolean("always_show_soft_keyboard", false)
-        val hardwareKeyboard = context.resources.configuration.hardKeyboardHidden != Configuration.HARDKEYBOARDHIDDEN_YES
-        view.visibility = if(alwaysShowSoftKeyboard || !hardwareKeyboard) View.VISIBLE else View.GONE
-    }
+        wrapper.keyboardView.removeAllViews()
+        val inputView = currentEntry.inputView ?: currentEntry.imeMode.createInputView(context)
+        currentEntry.inputView = inputView
+        (inputView.parent as ViewGroup?)?.removeView(inputView)
+        wrapper.keyboardView.addView(inputView)
 
-    private fun updateCandidateView() {
-        val candidateView = candidateView ?: return
-        candidateView.candidateView.removeAllViews()
+        wrapper.candidateView.removeAllViews()
         val view = currentEntry.candidateView ?: currentEntry.imeMode.createCandidateView(context)
         currentEntry.candidateView = view
         (view.parent as ViewGroup?)?.removeView(view)
-        candidateView.candidateView.addView(view)
+        wrapper.candidateView.addView(view)
+
+        val alwaysShowSoftKeyboard = preference.getBoolean("always_show_soft_keyboard", false)
+        val hardwareKeyboard = context.resources.configuration.hardKeyboardHidden != Configuration.HARDKEYBOARDHIDDEN_YES
+        inputView.visibility = if(alwaysShowSoftKeyboard || !hardwareKeyboard) View.VISIBLE else View.GONE
     }
 
     fun switchMode(index: Int) {
@@ -109,25 +157,24 @@ class IMEModeSwitcher(
         currentEntry.imeMode.onFinish()
         currentModeIndex = index
         updateInputView()
-        updateCandidateView()
         currentEntry.imeMode.onStart(inputConnection, editorInfo)
         tabs.forEach { it.root.isSelected = false }
         tabs[index].root.isSelected = true
     }
 
     fun showCandidates() {
-        val candidateView = candidateView ?: return
-        candidateView.candidateView.visibility = View.VISIBLE
-        candidateView.tabViewFrame.visibility = View.GONE
+        val wrapper = inputViewWrapper ?: return
+        wrapper.candidateView.visibility = View.VISIBLE
+        wrapper.tabViewFrame.visibility = View.GONE
         // Block touch events while view height is being changed
-        candidateView.touchBlocker.visibility = View.VISIBLE
-        handler.postDelayed({ candidateView.touchBlocker.visibility = View.GONE }, SWITCH_DELAY)
+        wrapper.touchBlocker.visibility = View.VISIBLE
+        handler.postDelayed({ wrapper.touchBlocker.visibility = View.GONE }, SWITCH_DELAY)
     }
 
     fun showTabBar() {
-        val candidateView = candidateView ?: return
-        candidateView.tabViewFrame.visibility = View.VISIBLE
-        candidateView.candidateView.visibility = View.GONE
+        val wrapper = inputViewWrapper ?: return
+        wrapper.tabViewFrame.visibility = View.VISIBLE
+        wrapper.candidateView.visibility = View.GONE
     }
 
     fun initTabBarView(context: Context): View {
@@ -160,6 +207,16 @@ class IMEModeSwitcher(
         return tabBar.root
     }
 
+    fun expandCandidateView() {
+        if(expandAnimator.isRunning || collapseAnimator.isRunning) return
+        expandAnimator.start()
+    }
+
+    fun collapseCandidateView() {
+        if(expandAnimator.isRunning || collapseAnimator.isRunning) return
+        collapseAnimator.start()
+    }
+
     interface Callback {
         fun onSwitchInputMode(index: Int)
         fun onSwitchInputMethod(id: String, subtype: InputMethodSubtype)
@@ -175,5 +232,6 @@ class IMEModeSwitcher(
 
     companion object {
         const val SWITCH_DELAY: Long = 10
+        const val EXPAND_COLLAPSE_DURATION: Long = 300
     }
 }
