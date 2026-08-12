@@ -76,9 +76,10 @@ class IMEModeSwitcher(
         doOnStart {
             animationIsRunning = true
             inputViewWrapper.keyboardView.visibility = View.VISIBLE
-            candidateViewExpanded = false
         }
         doOnEnd {
+            inputViewWrapper.keyboardView.requestLayout()
+            candidateViewExpanded = false
             animationIsRunning = false
         }
     }
