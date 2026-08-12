@@ -315,7 +315,7 @@ abstract class KoreanIMEMode(
 
         override fun onSpecial(keyCode: Int) {
             if(
-                keyCode == KeyEvent.KEYCODE_DPAD_RIGHT &&
+                keyCode == KeyEvent.KEYCODE_SPACE &&
                 hangulCombiner.canConfirmConsonantCycle(currentCombinerState)
             ) {
                 onChar(CheonjiinComposer.CONFIRM_INPUT)
