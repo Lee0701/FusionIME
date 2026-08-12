@@ -35,7 +35,7 @@ object PreferenceUtil {
     }
 
     fun getKeyboardHeight(context: Context): Int {
-        val rowHeightDIP = PreferenceUtil.getOrientationInteger(context, "keyboard_height")
+        val rowHeightDIP = getOrientationInteger(context, "keyboard_height")
         return (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, rowHeightDIP, context.resources.displayMetrics) * 4).roundToInt()
     }
 }

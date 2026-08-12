@@ -12,7 +12,6 @@ import android.view.WindowInsets.Type
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.view.inputmethod.InputMethodSubtype
-import android.widget.LinearLayout
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.view.WindowCompat
 import androidx.preference.PreferenceManager
@@ -21,7 +20,6 @@ import com.android.inputmethod.latin.settings.Settings
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.fusion.mode.IMEMode
 import ee.oyatl.ime.fusion.mode.IMEModeSwitcher
-import ee.oyatl.ime.fusion.mode.JyutpingIMEMode
 import ee.oyatl.ime.fusion.mode.LatinIMEMode
 import ee.oyatl.ime.fusion.mode.PinyinIMEMode
 import ee.oyatl.ime.fusion.preference.KeyStrokePreference

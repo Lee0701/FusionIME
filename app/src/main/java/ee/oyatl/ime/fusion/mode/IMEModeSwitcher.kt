@@ -9,6 +9,7 @@ import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.os.Handler
 import android.os.Looper
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +18,7 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
 import android.view.inputmethod.InputMethodManager
 import android.view.inputmethod.InputMethodSubtype
+import android.widget.FrameLayout
 import androidx.core.animation.doOnEnd
 import androidx.core.animation.doOnStart
 import androidx.preference.PreferenceManager
@@ -26,6 +28,7 @@ import ee.oyatl.ime.fusion.PreferenceUtil
 import ee.oyatl.ime.fusion.databinding.InputViewWrapperBinding
 import ee.oyatl.ime.fusion.databinding.ModeSwitcherTabBarBinding
 import ee.oyatl.ime.fusion.databinding.ModeSwitcherTabBinding
+import kotlin.math.ceil
 
 class IMEModeSwitcher(
     private val context: Context,
@@ -42,8 +45,8 @@ class IMEModeSwitcher(
 
     private var inputViewWrapper: InputViewWrapperBinding? = null
     private var tabs: List<ModeSwitcherTabBinding> = listOf()
-    var expandedCandidateView: CandidateView? = null
-        private set
+
+    val expandedCandidateView: ExpandedCandidateView? get() = inputViewWrapper?.expandedCandidateView
 
     private val expandAnimator: Animator get() = AnimatorSet().apply {
         val inputViewWrapper = inputViewWrapper ?: return@apply
@@ -127,19 +130,19 @@ class IMEModeSwitcher(
             inputViewWrapper.keyboardView.dispatchTouchEvent(event)
         }
 
-        val expandedCandidateView = ExpandedCandidateView(context, null)
-        expandedCandidateView.layoutParams = ViewGroup.LayoutParams(
+        // Make expanded candidate view 1dp shorter than keyboard view
+        // because actual keyboard size may be smaller
+        val oneDp = ceil(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1f, context.resources.displayMetrics)).toInt()
+        inputViewWrapper.expandedCandidateView.layoutParams = FrameLayout.LayoutParams(
             context.resources.displayMetrics.widthPixels,
-            PreferenceUtil.getKeyboardHeight(context)
+            PreferenceUtil.getKeyboardHeight(context) - oneDp
         )
-        expandedCandidateView.listener = object : CandidateView.Listener {
+        inputViewWrapper.expandedCandidateView.listener = object : CandidateView.Listener {
             override fun onCandidateSelected(candidate: CandidateView.Candidate) {
                 val currentMode = currentMode
                 if(currentMode is CandidateView.Listener) currentMode.onCandidateSelected(candidate)
             }
         }
-        inputViewWrapper.expandedCandidateView.addView(expandedCandidateView)
-        this.expandedCandidateView = expandedCandidateView
 
         this.inputViewWrapper = inputViewWrapper
         return inputViewWrapper.root
