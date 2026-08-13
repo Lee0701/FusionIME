@@ -11,7 +11,10 @@ class SeekTouchHandler(
     val pointers = mutableMapOf<Int, Pointer>()
 
     override fun onReset() {
-        pointers.values.forEach { it.key?.onReleased() }
+        pointers.values.forEach {
+            it.key?.onReleased()
+            it.popup?.hide()
+        }
         pointers.clear()
     }
 
