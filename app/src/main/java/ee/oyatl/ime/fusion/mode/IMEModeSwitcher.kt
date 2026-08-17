@@ -18,7 +18,6 @@ import androidx.preference.PreferenceManager
 import ee.oyatl.ime.fusion.databinding.CandidateViewWrapperBinding
 import ee.oyatl.ime.fusion.databinding.ModeSwitcherTabBarBinding
 import ee.oyatl.ime.fusion.databinding.ModeSwitcherTabBinding
-import ee.oyatl.ime.keyboard.PaleViewFilter
 
 class IMEModeSwitcher(
     private val context: Context,
@@ -36,8 +35,6 @@ class IMEModeSwitcher(
     private var inputView: FrameLayout? = null
     private var candidateView: CandidateViewWrapperBinding? = null
     private var tabs: List<ModeSwitcherTabBinding> = listOf()
-    private var tabBarContent: View? = null
-    private val tabBarFilter = PaleViewFilter()
 
     private var inputConnection: InputConnection? = null
     private var editorInfo: EditorInfo? = null
@@ -107,7 +104,6 @@ class IMEModeSwitcher(
     }
 
     fun switchMode(index: Int) {
-        tabBarFilter.clear()
         val inputConnection = this.inputConnection ?: return
         val editorInfo = this.editorInfo ?: return
         currentEntry.imeMode.onFinish()
@@ -117,14 +113,6 @@ class IMEModeSwitcher(
         currentEntry.imeMode.onStart(inputConnection, editorInfo)
         tabs.forEach { it.root.isSelected = false }
         tabs[index].root.isSelected = true
-    }
-
-    fun setTabsPale(active: Boolean) {
-        if(active) {
-            tabBarContent?.let(tabBarFilter::apply)
-        } else {
-            tabBarFilter.clear()
-        }
     }
 
     fun showCandidates() {
@@ -143,10 +131,8 @@ class IMEModeSwitcher(
     }
 
     fun initTabBarView(context: Context): View {
-        tabBarFilter.clear()
         val layoutInflater = LayoutInflater.from(context)
         val tabBar = ModeSwitcherTabBarBinding.inflate(layoutInflater, null, false)
-        tabBarContent = tabBar.content
         val showVoiceInputButton = preference.getBoolean("show_voice_input_button", false)
         tabBar.voiceInputButton.visibility = View.GONE
         if(showVoiceInputButton) {

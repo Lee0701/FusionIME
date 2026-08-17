@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewConfiguration
 import ee.oyatl.ime.keyboard.KeyboardView
 import ee.oyatl.ime.keyboard.LongPressTable
-import ee.oyatl.ime.keyboard.PaleViewFilter
 import ee.oyatl.ime.keyboard.popup.SelectionPopup
 import kotlin.math.hypot
 
@@ -21,9 +20,7 @@ class LongPressTouchHandler(
     private val touchSlop = (keyboardView as? View)?.let {
         ViewConfiguration.get(it.context).scaledTouchSlop
     } ?: 0
-    private val keyboardRoot = keyboardView as? View
     private val pointers = mutableMapOf<Int, Pointer>()
-    private val keyboardFilter = PaleViewFilter()
     private var longPressActive = false
 
     init {
@@ -36,7 +33,7 @@ class LongPressTouchHandler(
             pointer.popup?.hide()
         }
         pointers.clear()
-        updateKeyboardFilter()
+        updateLongPressState()
         delegate.onReset()
     }
 
@@ -89,7 +86,7 @@ class LongPressTouchHandler(
         pointer.popup?.selectAt(rawX(x), rawY(y))
         val codePoint = pointer.popup?.selectedCodePoint
         pointer.popup?.hide()
-        updateKeyboardFilter()
+        updateLongPressState()
         if(codePoint != null) {
             keyboardView.listener.onKeyUp(-codePoint, 0)
         }
@@ -101,7 +98,7 @@ class LongPressTouchHandler(
             handler.removeCallbacks(pointer.activate)
             pointer.popup?.hide()
         }
-        updateKeyboardFilter()
+        updateLongPressState()
         delegate.onTouchCancel(pointerId)
     }
 
@@ -118,7 +115,7 @@ class LongPressTouchHandler(
         pointer.activated = true
         popup.show()
         popup.selectAt(rawX(pointer.downX), rawY(pointer.downY))
-        updateKeyboardFilter()
+        updateLongPressState()
     }
 
     private fun cancelActivation(pointer: Pointer) {
@@ -130,13 +127,8 @@ class LongPressTouchHandler(
     private fun rawX(x: Int): Int = keyboardView.location[0] + x
     private fun rawY(y: Int): Int = keyboardView.location[1] + y
 
-    private fun updateKeyboardFilter() {
+    private fun updateLongPressState() {
         val active = pointers.values.any(Pointer::activated)
-        if(active) {
-            keyboardRoot?.let(keyboardFilter::apply)
-        } else {
-            keyboardFilter.clear()
-        }
         if(active != longPressActive) {
             longPressActive = active
             onLongPressStateChanged(active)
