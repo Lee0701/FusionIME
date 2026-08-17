@@ -36,10 +36,17 @@ import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.TripleCandidateView
 import ee.oyatl.ime.fusion.Feature
 import ee.oyatl.ime.fusion.R
-import ee.oyatl.ime.keyboard.KeyboardConfiguration
-import ee.oyatl.ime.keyboard.KeyboardTemplate
-import ee.oyatl.ime.keyboard.LayoutTable
+import ee.oyatl.ime.fusion.layout.LayoutExt
 import ee.oyatl.ime.fusion.layout.LayoutLatin
+import ee.oyatl.ime.fusion.layout.LayoutQwerty
+import ee.oyatl.ime.keyboard.KeyboardConfiguration
+import ee.oyatl.ime.keyboard.KeyboardState
+import ee.oyatl.ime.keyboard.KeyboardTemplate
+import ee.oyatl.ime.keyboard.KeyboardView
+import ee.oyatl.ime.keyboard.LatinLongPressTable
+import ee.oyatl.ime.keyboard.LayoutTable
+import ee.oyatl.ime.keyboard.touchhandler.LongPressTouchHandler
+import ee.oyatl.ime.keyboard.touchhandler.TouchHandler
 import ee.oyatl.ime.fusion.layout.MobileKeyboard
 import ee.oyatl.ime.fusion.layout.MobileKeyboardRows
 import ee.oyatl.ime.fusion.layout.TabletKeyboard
@@ -100,6 +107,20 @@ abstract class LatinIMEMode(
             listener = this@LatinIMEMode
         }
         return candidateView as View
+    }
+
+    override fun createTouchHandler(
+        keyboardView: KeyboardView,
+        context: Context,
+        symbolState: KeyboardState.Symbol
+    ): TouchHandler {
+        val delegate = super.createTouchHandler(keyboardView, context, symbolState)
+        return LongPressTouchHandler(
+            keyboardView,
+            delegate,
+            LatinLongPressTable.Default,
+            listener::onLongPressStateChanged
+        )
     }
 
     override fun onCandidateSelected(candidate: CandidateView.Candidate) {
@@ -507,23 +528,68 @@ abstract class LatinIMEMode(
     ): LatinIMEMode(listener) {
         private val numberRow = Feature.NumberRow.availableInCurrentVersion && numberRow
         private val cursorKeys = Feature.CursorKeys.availableInCurrentVersion && cursorKeys
+        private val spanish = locale.language == "es"
+
+        override val textLayoutTable = LayoutTable.fromShiftStates(
+            LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY +
+                if(spanish) LayoutLatin.TABLE_SPANISH_QWERTY else emptyMap()
+        )
 
         override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
             mobile = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
                     if(this.numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
-                    MobileKeyboard.alphabetic(),
+                    MobileKeyboard.alphabetic(semicolon = spanish),
                     MobileKeyboard.bottom(dpad = this.cursorKeys)
                 ),
-                contentRows = (if(this.numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.DEFAULT
+                contentRows = (if(this.numberRow) MobileKeyboardRows.NUMBERS else listOf()) +
+                    if(spanish) MobileKeyboardRows.SEMICOLON else MobileKeyboardRows.DEFAULT
             ),
             tablet = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
                     if(this.numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
-                    TabletKeyboard.alphabetic(delete = !this.numberRow),
+                    TabletKeyboard.alphabetic(semicolon = spanish, delete = !this.numberRow),
                     TabletKeyboard.bottom()
                 ),
-                contentRows = (if(this.numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.DEFAULT
+                contentRows = (if(this.numberRow) TabletKeyboardRows.NUMBERS else listOf()) +
+                    if(spanish) TabletKeyboardRows.SEMICOLON else TabletKeyboardRows.DEFAULT
+            )
+        )
+    }
+
+    class Azerty(
+        override val locale: Locale,
+        numberRow: Boolean,
+        cursorKeys: Boolean,
+        listener: IMEMode.Listener
+    ): LatinIMEMode(listener) {
+        private val numberRow = Feature.NumberRow.availableInCurrentVersion && numberRow
+        private val cursorKeys = Feature.CursorKeys.availableInCurrentVersion && cursorKeys
+
+        override val textLayoutTable = LayoutTable.fromShiftStates(
+            LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + mapOf(
+                KeyEvent.KEYCODE_APOSTROPHE to listOf('\''.code, '?'.code)
+            )
+        ).mapKeyCodes(LayoutLatin.KEYCODE_MAP_AZERTY)
+
+        override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
+            mobile = KeyboardTemplate.Basic(
+                configuration = KeyboardConfiguration(
+                    if(this.numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
+                    MobileKeyboard.alphabetic(semicolon = true),
+                    MobileKeyboard.bottom(dpad = this.cursorKeys)
+                ),
+                contentRows = (if(this.numberRow) MobileKeyboardRows.NUMBERS else listOf()) +
+                    MobileKeyboardRows.SEMICOLON
+            ),
+            tablet = KeyboardTemplate.Basic(
+                configuration = KeyboardConfiguration(
+                    if(this.numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
+                    TabletKeyboard.alphabetic(semicolon = true, delete = !this.numberRow),
+                    TabletKeyboard.bottom()
+                ),
+                contentRows = (if(this.numberRow) TabletKeyboardRows.NUMBERS else listOf()) +
+                    TabletKeyboardRows.SEMICOLON
             )
         )
     }
@@ -599,6 +665,7 @@ abstract class LatinIMEMode(
         override fun create(listener: IMEMode.Listener): LatinIMEMode {
             return when(layout) {
                 Layout.Qwerty -> Qwerty(locale, numberRow, cursorKeys, listener)
+                Layout.Azerty -> Azerty(locale, numberRow, cursorKeys, listener)
                 Layout.Dvorak -> Dvorak(locale, numberRow, cursorKeys, listener)
                 Layout.Colemak -> Colemak(locale, numberRow, cursorKeys, listener)
             }
@@ -630,7 +697,8 @@ abstract class LatinIMEMode(
                 val locale =
                     if(localeName.size == 2) Locale(localeName[0], localeName[1])
                     else Locale(localeName[0])
-                val layout = Layout.entries.find { it.name == map["layout"] } ?: Layout.Qwerty
+                val defaultLayout = if(locale.language == "fr") Layout.Azerty else Layout.Qwerty
+                val layout = Layout.entries.find { it.name == map["layout"] } ?: defaultLayout
                 val numberRow = map["number_row"]?.toBoolean() ?: false
                 val cursorKeys = map["cursor_keys"]?.toBoolean() ?: false
                 return Params(
@@ -647,6 +715,7 @@ abstract class LatinIMEMode(
         @StringRes val nameKey: Int
     ) {
         Qwerty(R.string.latin_layout_qwerty),
+        Azerty(R.string.latin_layout_azerty),
         Dvorak(R.string.latin_layout_dvorak),
         Colemak(R.string.latin_layout_colemak)
     }

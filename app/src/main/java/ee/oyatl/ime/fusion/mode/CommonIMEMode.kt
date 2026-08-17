@@ -259,19 +259,19 @@ abstract class CommonIMEMode(
             it.keyboard = textKeyboard
             it.listener = createKeyboardListener(context, textKeyboardParams)
             it.touchHandler = createTouchHandler(it, context, KeyboardState.Symbol.Text)
-            if(params.previewPopups) it.popupManager = DefaultPopupManager(it, it)
+            it.popupManager = DefaultPopupManager(it, it, params.previewPopups)
         }
         val symbolKeyboardView = DefaultKeyboardView(context, null).also {
             it.keyboard = symbolKeyboard
             it.listener = createKeyboardListener(context, symbolKeyboardParams)
             it.touchHandler = createTouchHandler(it, context, KeyboardState.Symbol.Symbol)
-            if(params.previewPopups) it.popupManager = DefaultPopupManager(it, it)
+            it.popupManager = DefaultPopupManager(it, it, params.previewPopups)
         }
         val numberKeyboardView = DefaultKeyboardView(context, null).also {
             it.keyboard = numberKeyboard
             it.listener = createKeyboardListener(context, numberKeyboardParams)
             it.touchHandler = createTouchHandler(it, context, KeyboardState.Symbol.Number)
-            if(params.previewPopups) it.popupManager = DefaultPopupManager(it, it)
+            it.popupManager = DefaultPopupManager(it, it, params.previewPopups)
         }
 
         updateInputView()

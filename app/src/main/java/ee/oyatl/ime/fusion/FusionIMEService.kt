@@ -183,6 +183,10 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
         else imeModeSwitcher.showTabBar()
     }
 
+    override fun onLongPressStateChanged(active: Boolean) {
+        imeModeSwitcher.setTabsPale(active)
+    }
+
     override fun onUpdateSelection(
         oldSelStart: Int,
         oldSelEnd: Int,

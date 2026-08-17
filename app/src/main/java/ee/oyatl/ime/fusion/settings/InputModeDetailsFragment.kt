@@ -2,6 +2,7 @@ package ee.oyatl.ime.fusion.settings
 
 import android.os.Bundle
 import androidx.fragment.app.setFragmentResult
+import androidx.preference.ListPreference
 import androidx.preference.PreferenceFragmentCompat
 import ee.oyatl.ime.fusion.Feature
 import ee.oyatl.ime.fusion.R
@@ -52,6 +53,15 @@ abstract class InputModeDetailsFragment: PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             super.onCreatePreferences(savedInstanceState, rootKey)
             addPreferencesFromResource(R.xml.pref_input_mode_latin)
+            val locale = findPreference<ListPreference>("locale")
+            val layout = findPreference<ListPreference>("layout")
+            if(map["locale"] == "fr" && map["layout"] == null) {
+                layout?.value = LatinIMEMode.Layout.Azerty.name
+            }
+            locale?.setOnPreferenceChangeListener { _, value ->
+                if(value == "fr") layout?.value = LatinIMEMode.Layout.Azerty.name
+                true
+            }
             if(Feature.NumberRow.availableInCurrentVersion)
                 addPreferencesFromResource(R.xml.pref_input_mode_number_row)
             if(Feature.CursorKeys.availableInCurrentVersion)

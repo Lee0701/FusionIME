@@ -10,6 +10,7 @@ interface TouchHandler {
     fun onTouchDown(pointerId: Int, x: Int, y: Int)
     fun onTouchMove(pointerId: Int, x: Int, y: Int)
     fun onTouchUp(pointerId: Int, x: Int, y: Int)
+    fun onTouchCancel(pointerId: Int)
 
     interface KeyInterface {
         val keyCode: Int

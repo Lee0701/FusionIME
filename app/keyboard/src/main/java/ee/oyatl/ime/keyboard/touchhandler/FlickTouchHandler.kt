@@ -82,6 +82,14 @@ class FlickTouchHandler(
         pointers -= pointerId
     }
 
+    override fun onTouchCancel(pointerId: Int) {
+        val pointer = pointers.remove(pointerId) ?: return
+        pointer.key?.let { key ->
+            keyboardView.findKeys(key.keyCode).forEach { it.onReleased() }
+        }
+        pointer.popup?.hide()
+    }
+
     data class Pointer(
         val id: Int,
         val downX: Int,
