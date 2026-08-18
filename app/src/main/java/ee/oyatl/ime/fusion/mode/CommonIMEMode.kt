@@ -433,8 +433,12 @@ abstract class CommonIMEMode(
         if(candidates.isEmpty()) return false
         keyboardView.popupManager.removePopup(key)
         keyboardView.popupManager.showPopup(key) {
-            MoreKeysPopup(keyboardView, key, candidates) { this.onChar(it) }
+            MoreKeysPopup(keyboardView, key, candidates) {
+                this.onChar(it)
+                listener.onLongPressStateChanged(false)
+            }
         }
+        listener.onLongPressStateChanged(true)
         return true
     }
 
