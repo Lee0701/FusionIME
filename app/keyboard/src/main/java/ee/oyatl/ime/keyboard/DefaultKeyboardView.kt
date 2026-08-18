@@ -27,6 +27,8 @@ class DefaultKeyboardView(
     context: Context,
     attrs: AttributeSet?
 ): FrameLayout(context, attrs), KeyboardView {
+    override val view: View = this
+
     override val rect: Rect = Rect()
     override val location: IntArray = IntArray(2)
     private val keySet: MutableSet<CachedKey> = mutableSetOf()

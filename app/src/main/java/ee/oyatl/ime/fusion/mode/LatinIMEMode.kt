@@ -39,18 +39,15 @@ import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.layout.LayoutExt
 import ee.oyatl.ime.fusion.layout.LayoutLatin
 import ee.oyatl.ime.fusion.layout.LayoutQwerty
-import ee.oyatl.ime.keyboard.KeyboardConfiguration
-import ee.oyatl.ime.keyboard.KeyboardState
-import ee.oyatl.ime.keyboard.KeyboardTemplate
-import ee.oyatl.ime.keyboard.KeyboardView
-import ee.oyatl.ime.keyboard.LatinLongPressTable
-import ee.oyatl.ime.keyboard.LayoutTable
-import ee.oyatl.ime.keyboard.touchhandler.LongPressTouchHandler
-import ee.oyatl.ime.keyboard.touchhandler.TouchHandler
 import ee.oyatl.ime.fusion.layout.MobileKeyboard
 import ee.oyatl.ime.fusion.layout.MobileKeyboardRows
 import ee.oyatl.ime.fusion.layout.TabletKeyboard
 import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
+import ee.oyatl.ime.keyboard.KeyboardConfiguration
+import ee.oyatl.ime.keyboard.KeyboardTemplate
+import ee.oyatl.ime.keyboard.LatinLongPressTable
+import ee.oyatl.ime.keyboard.LayoutTable
+import ee.oyatl.ime.keyboard.LongPressTable
 import java.util.Locale
 
 abstract class LatinIMEMode(
@@ -58,6 +55,8 @@ abstract class LatinIMEMode(
 ): CommonIMEMode(listener), ILatinIME {
     abstract val locale: Locale
     override var context: Context? = null
+
+    override val longPressTable: LongPressTable = LatinLongPressTable.Default
 
     override val handler: LatinIME.UIHandler = LatinIME.UIHandler(this)
     private var dictionaryFacilitator: DictionaryFacilitator? = null
@@ -107,20 +106,6 @@ abstract class LatinIMEMode(
             listener = this@LatinIMEMode
         }
         return candidateView as View
-    }
-
-    override fun createTouchHandler(
-        keyboardView: KeyboardView,
-        context: Context,
-        symbolState: KeyboardState.Symbol
-    ): TouchHandler {
-        val delegate = super.createTouchHandler(keyboardView, context, symbolState)
-        return LongPressTouchHandler(
-            keyboardView,
-            delegate,
-            LatinLongPressTable.Default,
-            listener::onLongPressStateChanged
-        )
     }
 
     override fun onCandidateSelected(candidate: CandidateView.Candidate) {

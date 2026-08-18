@@ -1,12 +1,13 @@
 package ee.oyatl.ime.keyboard.touchhandler
 
 import android.view.KeyEvent
+import ee.oyatl.ime.keyboard.KeyboardParams
 import ee.oyatl.ime.keyboard.KeyboardView
-import ee.oyatl.ime.keyboard.popup.Popup
 import ee.oyatl.ime.keyboard.popup.PreviewPopup
 
 class SeekTouchHandler(
-    override val keyboardView: KeyboardView
+    override val keyboardView: KeyboardView,
+    private val keyboardParams: KeyboardParams
 ): TouchHandler {
     val pointers = mutableMapOf<Int, Pointer>()
 
@@ -17,13 +18,14 @@ class SeekTouchHandler(
 
     override fun onTouchDown(pointerId: Int, x: Int, y: Int) {
         val key = keyboardView.findKey(x, y)
-        val popup = key?.let { keyboardView.popupManager.createPreviewPopup(key) }
-        val pointer = Pointer(pointerId, x, y, key, popup)
+        val pointer = Pointer(pointerId, x, y, key)
         if(key != null) {
             keyboardView.findKeys(key.keyCode).forEach { it.onPressed() }
             keyboardView.listener.onKeyDown(key.keyCode, 0)
+            if(keyboardParams.previewPopups && key.label.isNotEmpty()) {
+                keyboardView.popupManager.showPopup(key) { PreviewPopup(keyboardView, key) }
+            }
         }
-        popup?.show()
         pointers += pointerId to pointer
     }
 
@@ -31,21 +33,12 @@ class SeekTouchHandler(
         val pointer = pointers[pointerId] ?: return
         val oldKey = pointer.key
         val newKey = keyboardView.findKey(x, y)
-        val popup = pointer.popup
         if(newKey != oldKey) {
             oldKey?.let { key -> keyboardView.findKeys(key.keyCode).forEach { it.onReleased() } }
             newKey?.let { key -> keyboardView.findKeys(key.keyCode).forEach { it.onPressed() } }
             if(oldKey?.keyCode == KeyEvent.KEYCODE_DEL) keyboardView.listener.onKeyUp(oldKey.keyCode, 0)
-            if(popup is PreviewPopup) {
-                if(newKey?.label?.isNotEmpty() == true) {
-                    if(!popup.isShown) popup.show()
-                    popup.label = newKey.label
-                    popup.position = keyboardView.popupManager.getPopupPosition(newKey)
-                    popup.update()
-                } else if(popup.isShown) {
-                    popup.hide()
-                }
-            }
+            if(oldKey != null) keyboardView.popupManager.removePopup(oldKey)
+            if(newKey != null) keyboardView.popupManager.showPopup(newKey) { PreviewPopup(keyboardView, newKey) }
         }
         val newPointer = pointer.copy(x = x, y = y, key = newKey)
         pointers += pointerId to newPointer
@@ -57,8 +50,8 @@ class SeekTouchHandler(
         if(key != null) {
             keyboardView.findKeys(key.keyCode).forEach { it.onReleased() }
             keyboardView.listener.onKeyUp(key.keyCode, 0)
+            keyboardView.popupManager.removePopup(key)
         }
-        pointer.popup?.hide()
         pointers -= pointerId
     }
 
@@ -66,15 +59,15 @@ class SeekTouchHandler(
         val pointer = pointers.remove(pointerId) ?: return
         pointer.key?.let { key ->
             keyboardView.findKeys(key.keyCode).forEach { it.onReleased() }
+            if(keyboardView.popupManager.getPopup(key) is PreviewPopup)
+                keyboardView.popupManager.removePopup(key)
         }
-        pointer.popup?.hide()
     }
 
     data class Pointer(
         val id: Int,
         val x: Int,
         val y: Int,
-        val key: KeyboardView.Key?,
-        val popup: Popup?
+        val key: KeyboardView.Key?
     )
 }

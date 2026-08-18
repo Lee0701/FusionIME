@@ -1,7 +1,6 @@
 package ee.oyatl.ime.keyboard.popup
 
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.GradientDrawable
 import android.util.TypedValue
 import android.view.Gravity
@@ -13,18 +12,20 @@ import androidx.appcompat.view.ContextThemeWrapper
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
+import androidx.core.graphics.drawable.toDrawable
 import ee.oyatl.ime.keyboard.KeyboardView
 import ee.oyatl.ime.keyboard.R
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
-class LongPressPopup(
-    private val parent: View,
+class MoreKeysPopup(
+    keyboardView: KeyboardView,
     key: KeyboardView.Key,
     private val candidates: List<Int>,
-    keyPreviewPosition: Pair<Int, Int>
+    override val listener: SelectionPopup.Listener
 ): SelectionPopup {
+    private val parent: View = keyboardView.view
     private val themedContext = ContextThemeWrapper(
         parent.context,
         R.style.Theme_FusionIME_Keyboard_Popup
@@ -41,20 +42,18 @@ class LongPressPopup(
         gravity = Gravity.CENTER_VERTICAL
     }
     override val isShown: Boolean get() = window.isShowing
-    override val selectedCodePoint: Int?
-        get() = candidates.getOrNull(selectedIndex)
 
     init {
-        val parentLocation = IntArray(2).also(parent::getLocationOnScreen)
+        val keyCenterX = key.rect.centerX()
+        val keyTop = keyboardView.rect.top - keyboardView.location[1] + key.location[1]
         val availableWidth = parent.width.takeIf { it > 0 }
             ?: parent.resources.displayMetrics.widthPixels
         val popupHeight = max(key.rect.height(), dp(48))
         itemWidth = min(max(1, key.rect.width()), max(1, availableWidth / candidates.size))
         val popupWidth = itemWidth * candidates.size
-        val parentLeft = parentLocation[0]
+        val parentLeft = keyboardView.location[0]
         val parentRight = parentLeft + availableWidth
         val maxPopupLeft = max(parentLeft, parentRight - popupWidth)
-        val keyCenterX = keyPreviewPosition.first + key.rect.width() / 2
         val preferredAnchor = candidates.lastIndex / 2
         val anchorIndex = candidates.indices
             .filter { index ->
@@ -66,7 +65,6 @@ class LongPressPopup(
         val alignedX = keyCenterX - anchorIndex * itemWidth - itemWidth / 2
         popupX = alignedX.coerceIn(parentLeft, maxPopupLeft)
         selectedIndex = anchorIndex
-        val keyTop = keyPreviewPosition.second + key.rect.height()
         popupY = keyTop - popupHeight
 
         view.background = roundedBackground(resolveColor(R.attr.backgroundColor))
@@ -85,7 +83,7 @@ class LongPressPopup(
         window.contentView = view
         window.width = popupWidth
         window.height = popupHeight
-        window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        window.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
         window.isClippingEnabled = false
         window.isTouchable = false
         window.isOutsideTouchable = false
@@ -106,6 +104,8 @@ class LongPressPopup(
 
     override fun hide() {
         window.dismiss()
+        val codePoint = candidates.getOrNull(selectedIndex)
+        if(codePoint != null) listener.onSelect(codePoint)
     }
 
     override fun update() {
@@ -120,7 +120,7 @@ class LongPressPopup(
         candidateViews.forEachIndexed { index, candidateView ->
             candidateView.background =
                 if(index == selectedIndex) roundedBackground(selectedColor)
-                else ColorDrawable(Color.TRANSPARENT)
+                else Color.TRANSPARENT.toDrawable()
         }
     }
 

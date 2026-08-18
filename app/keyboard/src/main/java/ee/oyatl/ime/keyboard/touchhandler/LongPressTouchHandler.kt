@@ -2,26 +2,21 @@ package ee.oyatl.ime.keyboard.touchhandler
 
 import android.os.Handler
 import android.os.Looper
-import android.view.View
 import android.view.ViewConfiguration
+import ee.oyatl.ime.keyboard.KeyboardParams
 import ee.oyatl.ime.keyboard.KeyboardView
-import ee.oyatl.ime.keyboard.LongPressTable
+import ee.oyatl.ime.keyboard.listener.LongPressListener
 import ee.oyatl.ime.keyboard.popup.SelectionPopup
 import kotlin.math.hypot
 
 class LongPressTouchHandler(
     override val keyboardView: KeyboardView,
     private val delegate: TouchHandler,
-    private val table: LongPressTable,
-    private val onLongPressStateChanged: (Boolean) -> Unit = {},
-    private val timeoutMillis: Long = ViewConfiguration.getLongPressTimeout().toLong()
+    private val params: KeyboardParams
 ): TouchHandler {
     private val handler = Handler(Looper.getMainLooper())
-    private val touchSlop = (keyboardView as? View)?.let {
-        ViewConfiguration.get(it.context).scaledTouchSlop
-    } ?: 0
+    private val touchSlop = ViewConfiguration.get(keyboardView.view.context).scaledTouchSlop
     private val pointers = mutableMapOf<Int, Pointer>()
-    private var longPressActive = false
 
     init {
         require(delegate.keyboardView === keyboardView)
@@ -30,23 +25,18 @@ class LongPressTouchHandler(
     override fun onReset() {
         pointers.values.forEach { pointer ->
             handler.removeCallbacks(pointer.activate)
-            pointer.popup?.hide()
         }
         pointers.clear()
-        updateLongPressState()
         delegate.onReset()
     }
 
     override fun onTouchDown(pointerId: Int, x: Int, y: Int) {
         delegate.onTouchDown(pointerId, x, y)
         val key = keyboardView.findKey(x, y) ?: return
-        val baseCodePoint = key.label.singleCodePointOrNull() ?: return
-        val candidates = table.candidatesFor(baseCodePoint)
-        if(candidates.isEmpty()) return
 
-        val pointer = Pointer(pointerId, x, y, key, candidates)
+        val pointer = Pointer(pointerId, x, y, key)
         pointers[pointerId] = pointer
-        handler.postDelayed(pointer.activate, timeoutMillis)
+        handler.postDelayed(pointer.activate, params.longPressDelay.toLong())
     }
 
     override fun onTouchMove(pointerId: Int, x: Int, y: Int) {
@@ -56,7 +46,9 @@ class LongPressTouchHandler(
             return
         }
         if(pointer.activated) {
-            pointer.popup?.selectAt(rawX(x), rawY(y))
+            val rawX = keyboardView.location[0] + x
+            val rawY = keyboardView.location[1] + y
+            pointer.popup?.selectAt(rawX, rawY)
             return
         }
 
@@ -82,40 +74,26 @@ class LongPressTouchHandler(
             delegate.onTouchUp(pointerId, x, y)
             return
         }
-
-        pointer.popup?.selectAt(rawX(x), rawY(y))
-        val codePoint = pointer.popup?.selectedCodePoint
-        pointer.popup?.hide()
-        updateLongPressState()
-        if(codePoint != null) {
-            keyboardView.listener.onKeyUp(-codePoint, 0)
-        }
+        keyboardView.popupManager.removePopup(pointer.key)
     }
 
     override fun onTouchCancel(pointerId: Int) {
         val pointer = pointers.remove(pointerId)
         if(pointer != null) {
             handler.removeCallbacks(pointer.activate)
-            pointer.popup?.hide()
         }
-        updateLongPressState()
         delegate.onTouchCancel(pointerId)
     }
 
     private fun activate(pointerId: Int) {
         val pointer = pointers[pointerId] ?: return
         if(pointer.cancelled || pointer.activated) return
-        val popup = keyboardView.popupManager.createLongPressPopup(
-            pointer.key,
-            pointer.candidates
-        ) ?: return
+        val listener = keyboardView.listener
+        if(listener !is LongPressListener) return
+        if(!listener.onKeyLongPress(pointer.key.keyCode, 0)) return
 
         delegate.onTouchCancel(pointerId)
-        pointer.popup = popup
         pointer.activated = true
-        popup.show()
-        popup.selectAt(rawX(pointer.downX), rawY(pointer.downY))
-        updateLongPressState()
     }
 
     private fun cancelActivation(pointer: Pointer) {
@@ -124,32 +102,15 @@ class LongPressTouchHandler(
         handler.removeCallbacks(pointer.activate)
     }
 
-    private fun rawX(x: Int): Int = keyboardView.location[0] + x
-    private fun rawY(y: Int): Int = keyboardView.location[1] + y
-
-    private fun updateLongPressState() {
-        val active = pointers.values.any(Pointer::activated)
-        if(active != longPressActive) {
-            longPressActive = active
-            onLongPressStateChanged(active)
-        }
-    }
-
-    private fun String.singleCodePointOrNull(): Int? {
-        if(isEmpty() || codePointCount(0, length) != 1) return null
-        return codePointAt(0)
-    }
-
     private inner class Pointer(
         val id: Int,
         val downX: Int,
         val downY: Int,
-        val key: KeyboardView.Key,
-        val candidates: List<Int>
+        val key: KeyboardView.Key
     ) {
         val activate = Runnable { activate(id) }
         var cancelled = false
         var activated = false
-        var popup: SelectionPopup? = null
+        val popup: SelectionPopup? get() = keyboardView.popupManager.getPopup(key) as? SelectionPopup
     }
 }

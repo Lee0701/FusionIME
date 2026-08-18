@@ -25,6 +25,7 @@ import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
 import ee.oyatl.ime.fusion.mozc.InputConnectionRenderer
 import ee.oyatl.ime.keyboard.KeyLabel
 import ee.oyatl.ime.keyboard.KeyboardConfiguration
+import ee.oyatl.ime.keyboard.KeyboardParams
 import ee.oyatl.ime.keyboard.KeyboardState.Symbol
 import ee.oyatl.ime.keyboard.KeyboardTemplate
 import ee.oyatl.ime.keyboard.KeyboardView
@@ -262,16 +263,13 @@ abstract class MozcIMEMode(
 
         override fun createTouchHandler(
             keyboardView: KeyboardView,
-            context: Context,
+            params: KeyboardParams,
             symbolState: Symbol
         ): TouchHandler {
             if(symbolState == Symbol.Text) {
-                val preference = PreferenceManager.getDefaultSharedPreferences(context)
-                val defaultValue = context.resources.getInteger(R.integer.flick_sensitivity_default).toFloat()
-                val flickSensitivity = preference.getFloat("flick_sensitivity", defaultValue).toInt()
-                return FlickTouchHandler(keyboardView, flickSensitivity, diagonal = false, multiFlick = false, sendOnUp = true)
+                return FlickTouchHandler(keyboardView, params, diagonal = false, multiFlick = false, sendOnUp = true)
             } else {
-                return super.createTouchHandler(keyboardView, context, symbolState)
+                return super.createTouchHandler(keyboardView, params, symbolState)
             }
         }
 
@@ -339,22 +337,15 @@ abstract class MozcIMEMode(
 
         override fun createTouchHandler(
             keyboardView: KeyboardView,
-            context: Context,
+            params: KeyboardParams,
             symbolState: Symbol
         ): TouchHandler {
             if(symbolState != Symbol.Text) {
-                return super.createTouchHandler(keyboardView, context, symbolState)
+                return super.createTouchHandler(keyboardView, params, symbolState)
             }
-
-            val preference = PreferenceManager.getDefaultSharedPreferences(context)
-            val defaultValue =
-                context.resources.getInteger(R.integer.flick_sensitivity_default).toFloat()
-            val flickSensitivity =
-                preference.getFloat("flick_sensitivity", defaultValue).toInt()
-
             return FlickTouchHandler(
                 keyboardView,
-                flickSensitivity,
+                params,
                 diagonal = false,
                 multiFlick = false,
                 sendOnUp = true

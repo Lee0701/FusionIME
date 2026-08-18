@@ -17,8 +17,8 @@
     </string-array>
 
     <string-array name="settings_behaviour_touch_mode_values">
-        <item>seek</item>
-        <item>flick</item>
+        <item>Seek</item>
+        <item>Flick</item>
     </string-array>
 
     <string-array name="settings_behaviour_default_flick_action_entries">
