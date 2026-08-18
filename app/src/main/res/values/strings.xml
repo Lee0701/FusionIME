@@ -56,6 +56,7 @@
     <string name="settings_input_mode_candidate_view_height_title">Candidate View Height</string>
     <string name="settings_input_mode_chinese_traditional_title">Chinese Traditional</string>
     <string name="settings_input_mode_pinyin_spelling_title">Pinyin Input Style</string>
+    <string name="settings_input_mode_zhuyin_conversion_engine_title">Conversion Engine</string>
     <string name="settings_input_mode_mozc_flick_mode_title">12-Key Flick Mode</string>
     <string name="settings_input_mode_mozc_flick_hint_title">Flick Hints</string>
     <string name="settings_input_mode_mozc_flick_hint_summary">Show flick hints on 12-Key or GODAN layouts.</string>
@@ -132,6 +133,9 @@
     <string name="pinyin_chinese_simplified">Simplified</string>
     <string name="pinyin_chinese_traditional">Traditional</string>
     <string name="zhuyin_layout_zhuyin">Bopomofo</string>
+    <string name="zhuyin_conversion_engine_simple">Simple</string>
+    <string name="zhuyin_conversion_engine_chewing">Chewing</string>
+    <string name="zhuyin_conversion_engine_fuzzy_chewing">Fuzzy Chewing</string>
     <string name="cangjie_layout_cangjie">Cangjie</string>
     <string name="cangjie_layout_quick">Quick</string>
     <string name="cangjie_layout_dayi3">Dayi</string>

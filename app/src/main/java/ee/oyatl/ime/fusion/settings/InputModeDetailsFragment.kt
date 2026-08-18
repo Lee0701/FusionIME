@@ -97,6 +97,7 @@ abstract class InputModeDetailsFragment: PreferenceFragmentCompat() {
     class Zhuyin: InputModeDetailsFragment() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             super.onCreatePreferences(savedInstanceState, rootKey)
+            addPreferencesFromResource(R.xml.pref_input_mode_zhuyin_engine)
             if(Feature.CursorKeys.availableInCurrentVersion)
                 addPreferencesFromResource(R.xml.pref_input_mode_cursor_keys)
         }

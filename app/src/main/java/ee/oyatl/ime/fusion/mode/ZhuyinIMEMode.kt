@@ -4,27 +4,28 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.view.KeyEvent
-import com.android.inputmethod.zhuyin.TextEntryState
+import com.miyabi_hiroshi.app.libchewing_android_app_module.ConversionEngines
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.fusion.Feature
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.korean.WordComposer
-import ee.oyatl.ime.fusion.zhuyin.ChewingConverter
-import ee.oyatl.ime.keyboard.KeyboardConfiguration
-import ee.oyatl.ime.keyboard.KeyboardTemplate
-import ee.oyatl.ime.fusion.layout.LayoutZhuyin
-import ee.oyatl.ime.fusion.layout.MobileKeyboard
-import ee.oyatl.ime.fusion.layout.MobileKeyboardRows
 import ee.oyatl.ime.fusion.layout.LayoutExt
 import ee.oyatl.ime.fusion.layout.LayoutQwerty
 import ee.oyatl.ime.fusion.layout.LayoutSymbol
+import ee.oyatl.ime.fusion.layout.LayoutZhuyin
+import ee.oyatl.ime.fusion.layout.MobileKeyboard
+import ee.oyatl.ime.fusion.layout.MobileKeyboardRows
 import ee.oyatl.ime.fusion.layout.TabletKeyboard
 import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
+import ee.oyatl.ime.fusion.zhuyin.ChewingConverter
+import ee.oyatl.ime.keyboard.KeyboardConfiguration
+import ee.oyatl.ime.keyboard.KeyboardTemplate
 import ee.oyatl.ime.keyboard.LayoutTable
 import java.util.Locale
 
 class ZhuyinIMEMode(
     listener: IMEMode.Listener,
+    conversionEngine: ConversionEngines,
     cursorKeys: Boolean
 ): CommonIMEMode(listener) {
     private val cursorKeys = Feature.CursorKeys.availableInCurrentVersion && cursorKeys
@@ -61,7 +62,7 @@ class ZhuyinIMEMode(
     override val symbolLayoutTable: LayoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutExt.TABLE_CHINESE + LayoutSymbol.TABLE_G)
 
     private val wordComposer = WordComposer()
-    private val converter: ChewingConverter = ChewingConverter()
+    private val converter: ChewingConverter = ChewingConverter(conversionEngine)
 
     private var bestCandidate: ZhuyinCandidate? = null
 
@@ -119,8 +120,12 @@ class ZhuyinIMEMode(
 
     private fun handleSpace() {
         if(wordComposer.composingText.isNotEmpty()) {
-            if(bestCandidate != null) pickDefaultSuggestion()
-            else onReset()
+            if(wordComposer.textBeforeCursor.lastOrNull() !in LayoutZhuyin.TONE_MARKS)
+                wordComposer.commit('ˉ'.toString())
+            else if(bestCandidate != null)
+                pickDefaultSuggestion()
+            else
+                onReset()
             renderResult()
         }
         else currentInputConnection?.commitText(" ", 1)
@@ -150,7 +155,6 @@ class ZhuyinIMEMode(
         } else {
             deleteChar = true
         }
-        TextEntryState.backspace()
         if (deleteChar) {
             util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_DEL)
         }
@@ -199,12 +203,13 @@ class ZhuyinIMEMode(
     ): CandidateView.Candidate
 
     class Params(
+        val conversionEngine: ConversionEngines,
         val cursorKeys: Boolean
     ): IMEMode.Params {
         override val type: String = TYPE
 
         override fun create(listener: IMEMode.Listener): IMEMode {
-            return ZhuyinIMEMode(listener, cursorKeys)
+            return ZhuyinIMEMode(listener, conversionEngine, cursorKeys)
         }
 
         override fun getLabel(context: Context): String {
@@ -219,8 +224,13 @@ class ZhuyinIMEMode(
 
         companion object {
             fun parse(map: Map<String, String>): Params {
+                val conversionEngine = ConversionEngines.entries.find { it.name == map["conversion_engine"] }
+                    ?: ConversionEngines.FUZZY_CHEWING_CONVERSION_ENGINE
                 val cursorKeys = map["cursor_keys"]?.toBoolean() ?: false
-                return Params(cursorKeys)
+                return Params(
+                    conversionEngine = conversionEngine,
+                    cursorKeys = cursorKeys
+                )
             }
         }
     }

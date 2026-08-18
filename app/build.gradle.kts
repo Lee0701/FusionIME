@@ -80,7 +80,6 @@ dependencies {
     implementation(project(":app:keyboard"))
     implementation(project(":app:mozc"))
     implementation(project(":app:pinyin"))
-    implementation(project(":app:zhuyin"))
     implementation(project(":app:chewing"))
     implementation(project(":app:cangjie"))
     implementation(project(":app:korean"))
