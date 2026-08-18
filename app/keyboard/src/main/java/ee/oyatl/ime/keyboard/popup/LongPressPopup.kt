@@ -13,15 +13,15 @@ import androidx.appcompat.view.ContextThemeWrapper
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
+import ee.oyatl.ime.keyboard.KeyboardView
 import ee.oyatl.ime.keyboard.R
-import ee.oyatl.ime.keyboard.touchhandler.TouchHandler
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
 class LongPressPopup(
     private val parent: View,
-    key: TouchHandler.KeyInterface,
+    key: KeyboardView.Key,
     private val candidates: List<Int>,
     keyPreviewPosition: Pair<Int, Int>
 ): SelectionPopup {

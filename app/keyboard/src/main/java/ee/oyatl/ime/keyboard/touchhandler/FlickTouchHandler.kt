@@ -96,7 +96,7 @@ class FlickTouchHandler(
         val downY: Int,
         val x: Int,
         val y: Int,
-        val key: TouchHandler.KeyInterface?,
+        val key: KeyboardView.Key?,
         val popup: Popup?,
         val flicks: List<FlickDirection> = listOf()
     )

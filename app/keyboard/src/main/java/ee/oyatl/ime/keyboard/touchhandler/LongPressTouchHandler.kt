@@ -144,7 +144,7 @@ class LongPressTouchHandler(
         val id: Int,
         val downX: Int,
         val downY: Int,
-        val key: TouchHandler.KeyInterface,
+        val key: KeyboardView.Key,
         val candidates: List<Int>
     ) {
         val activate = Runnable { activate(id) }

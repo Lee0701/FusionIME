@@ -171,14 +171,14 @@ class DefaultKeyboardView(
         }
     }
 
-    override fun findKeys(keyCode: Int): List<TouchHandler.KeyInterface> {
+    override fun findKeys(keyCode: Int): List<KeyboardView.Key> {
         return keySet.filter { it.keyCode == keyCode }
     }
 
     data class CachedKey(
         override val keyCode: Int,
         val binding: KbdKeyBinding
-    ): TouchHandler.KeyInterface {
+    ): KeyboardView.Key {
         override val label: String get() = binding.label.text.toString()
         override val rect: Rect = Rect()
         override val location: IntArray = IntArray(2)

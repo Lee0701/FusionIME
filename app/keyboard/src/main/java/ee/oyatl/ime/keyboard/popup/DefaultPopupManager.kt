@@ -9,12 +9,12 @@ class DefaultPopupManager(
     private val keyboardView: KeyboardView,
     private val previewEnabled: Boolean = true
 ): PopupManager {
-    override fun getPopupPosition(key: TouchHandler.KeyInterface): Pair<Int, Int> {
+    override fun getPopupPosition(key: KeyboardView.Key): Pair<Int, Int> {
         val y = keyboardView.rect.top + key.location[1] - keyboardView.location[1] - key.rect.height()
         return key.rect.left to y
     }
 
-    override fun createPreviewPopup(key: TouchHandler.KeyInterface): Popup? {
+    override fun createPreviewPopup(key: KeyboardView.Key): Popup? {
         if(!previewEnabled) return null
         if(key.label.isNotEmpty()) {
             val popup = PreviewPopup(parent)
@@ -27,7 +27,7 @@ class DefaultPopupManager(
     }
 
     override fun createLongPressPopup(
-        key: TouchHandler.KeyInterface,
+        key: KeyboardView.Key,
         candidates: List<Int>
     ): SelectionPopup? {
         return if(candidates.isEmpty()) {
