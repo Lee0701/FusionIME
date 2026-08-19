@@ -18,7 +18,7 @@ import ee.oyatl.ime.keyboard.listener.EmptyListener
 import ee.oyatl.ime.keyboard.listener.KeyboardListener
 import ee.oyatl.ime.keyboard.popup.EmptyPopupManager
 import ee.oyatl.ime.keyboard.popup.PopupManager
-import ee.oyatl.ime.keyboard.touchhandler.CompoundTouchHandler
+import ee.oyatl.ime.keyboard.touchhandler.EmptyTouchHandler
 import ee.oyatl.ime.keyboard.touchhandler.TouchHandler
 import kotlin.math.max
 import kotlin.math.roundToInt
@@ -63,7 +63,7 @@ class DefaultKeyboardView(
         }
     override var listener: KeyboardListener = EmptyListener
     override var popupManager: PopupManager = EmptyPopupManager
-    var touchHandler: TouchHandler = CompoundTouchHandler(this)
+    var touchHandler: TouchHandler = EmptyTouchHandler
 
     init {
         viewTreeObserver.addOnGlobalLayoutListener {
@@ -72,7 +72,11 @@ class DefaultKeyboardView(
     }
 
     private fun setup(keyboard: Keyboard) {
-        val inflater = LayoutInflater.from(ContextThemeWrapper(context, R.style.Theme_FusionIME_Keyboard))
+        val themeId = when(keyboard.params.screenMode) {
+            KeyboardState.ScreenMode.MoreKeys -> R.style.Theme_FusionIME_Keyboard_MoreKeys
+            else -> R.style.Theme_FusionIME_Keyboard
+        }
+        val inflater = LayoutInflater.from(ContextThemeWrapper(context, themeId))
         val binding = KbdKeyboardBinding.inflate(inflater)
 
         keySet.clear()

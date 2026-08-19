@@ -11,7 +11,7 @@ import kotlin.math.pow
 import kotlin.math.sqrt
 
 class FlickTouchHandler(
-    override val keyboardView: KeyboardView,
+    val keyboardView: KeyboardView,
     private val keyboardParams: KeyboardParams,
     val diagonal: Boolean = false,
     val multiFlick: Boolean = false,

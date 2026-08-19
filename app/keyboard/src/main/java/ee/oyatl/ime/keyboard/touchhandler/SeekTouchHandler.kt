@@ -6,7 +6,7 @@ import ee.oyatl.ime.keyboard.KeyboardView
 import ee.oyatl.ime.keyboard.popup.PreviewPopup
 
 class SeekTouchHandler(
-    override val keyboardView: KeyboardView,
+    val keyboardView: KeyboardView,
     private val keyboardParams: KeyboardParams
 ): TouchHandler {
     val pointers = mutableMapOf<Int, Pointer>()

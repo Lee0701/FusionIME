@@ -10,17 +10,13 @@ import ee.oyatl.ime.keyboard.popup.SelectionPopup
 import kotlin.math.hypot
 
 class LongPressTouchHandler(
-    override val keyboardView: KeyboardView,
+    val keyboardView: KeyboardView,
     private val delegate: TouchHandler,
     private val params: KeyboardParams
 ): TouchHandler {
     private val handler = Handler(Looper.getMainLooper())
     private val touchSlop = ViewConfiguration.get(keyboardView.view.context).scaledTouchSlop
     private val pointers = mutableMapOf<Int, Pointer>()
-
-    init {
-        require(delegate.keyboardView === keyboardView)
-    }
 
     override fun onReset() {
         pointers.values.forEach { pointer ->

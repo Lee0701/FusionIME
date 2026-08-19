@@ -87,6 +87,7 @@ interface KeyboardTemplate {
                 KeyboardState.ScreenMode.Mobile -> mobile.inflate(params)
                 KeyboardState.ScreenMode.Tablet -> tablet.inflate(params)
                 KeyboardState.ScreenMode.Full -> full.inflate(params)
+                else -> mobile.inflate(params)
             }
         }
     }
