@@ -239,6 +239,13 @@ abstract class MozcIMEMode(
 
         private val flicks: MutableMap<Int, FlickDirection> = mutableMapOf()
 
+        override fun createKeyboardParams(context: Context, symbolState: Symbol): KeyboardParams {
+            val params = super.createKeyboardParams(context, symbolState)
+            // Never split 12-key based keyboard
+            if(symbolState == Symbol.Text) return params.copy(splitWidth = 0)
+            return params
+        }
+
         override fun createTouchHandler(
             keyboardView: KeyboardView,
             context: Context,
@@ -304,6 +311,13 @@ abstract class MozcIMEMode(
                 else super.keyLabels
 
         private val flicks: MutableMap<Int, FlickDirection> = mutableMapOf()
+
+        override fun createKeyboardParams(context: Context, symbolState: Symbol): KeyboardParams {
+            val params = super.createKeyboardParams(context, symbolState)
+            // Never split 12-key based keyboard
+            if(symbolState == Symbol.Text) return params.copy(splitWidth = 0)
+            return params
+        }
 
         override fun createTouchHandler(
             keyboardView: KeyboardView,
