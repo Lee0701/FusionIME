@@ -403,7 +403,6 @@ abstract class KoreanIMEMode(
     }
 
     companion object {
-        const val MSG_CONVERT = 0
         const val TYPE: String = "korean"
     }
 }

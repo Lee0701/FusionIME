@@ -1,8 +1,6 @@
 package ee.oyatl.ime.fusion.mode
 
 import android.content.Context
-import android.os.Handler
-import android.os.Looper
 import android.view.KeyEvent
 import androidx.annotation.StringRes
 import com.diycircuits.cangjie.TableLoader
@@ -22,24 +20,21 @@ import ee.oyatl.ime.fusion.layout.LayoutExt
 import ee.oyatl.ime.fusion.layout.LayoutQwerty
 import ee.oyatl.ime.fusion.layout.TabletKeyboard
 import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import java.util.Locale
 import kotlin.collections.plus
 
 abstract class CangjieIMEMode(
     listener: IMEMode.Listener
 ): CommonIMEMode(listener) {
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private var convertJob: Job? = null
+
     abstract val inputMode: Int
     abstract val fullWidth: Boolean
-
-    private val handler: Handler = Handler(Looper.getMainLooper()) { msg ->
-        when(msg.what) {
-            MSG_UPDATE_SUGGESTIONS -> {
-                updateSuggestions()
-                true
-            }
-            else -> false
-        }
-    }
 
     abstract val keyMap: Map<Char, Char>
 
@@ -75,23 +70,21 @@ abstract class CangjieIMEMode(
         renderInput()
     }
 
-    private fun updateSuggestions() {
-        val table = table ?: return
-        table.setInputMethod(inputMode)
-        val key = wordComposer.textBeforeCursor
-        val zeros = (0 until 5).map { 0.toChar() }
-        val chars = (key.map { keyMap[it] ?: it }.toCharArray() + zeros).take(5)
-        val (c0, c1, c2, c3, c4) = chars
-        table.searchCangjie(c0, c1, c2, c3, c4)
-        val candidates = (0 until table.totalMatch())
-            .map { CangjieCandidate(table.getMatchChar(it).toString(), key) }
-        submitCandidates(candidates)
-        bestCandidate = candidates.firstOrNull()
-    }
-
     private fun postUpdateSuggestions() {
-        handler.removeMessages(MSG_UPDATE_SUGGESTIONS)
-        handler.sendMessageDelayed(handler.obtainMessage(MSG_UPDATE_SUGGESTIONS), 100)
+        convertJob?.cancel()
+        convertJob = coroutineScope.launch {
+            val table = table ?: return@launch
+            table.setInputMethod(inputMode)
+            val key = wordComposer.textBeforeCursor
+            val zeros = (0 until 5).map { 0.toChar() }
+            val chars = (key.map { keyMap[it] ?: it }.toCharArray() + zeros).take(5)
+            val (c0, c1, c2, c3, c4) = chars
+            table.searchCangjie(c0, c1, c2, c3, c4)
+            val candidates = (0 until table.totalMatch())
+                .map { CangjieCandidate(table.getMatchChar(it).toString(), key) }
+            submitCandidates(candidates)
+            bestCandidate = candidates.firstOrNull()
+        }
     }
 
     private fun renderInput() {
@@ -110,9 +103,12 @@ abstract class CangjieIMEMode(
         when(keyCode) {
             KeyEvent.KEYCODE_SPACE -> {
                 if(wordComposer.composingText.isNotEmpty()) {
-                    updateSuggestions()
-                    val bestCandidate = bestCandidate
-                    if(bestCandidate != null) onCandidateSelected(bestCandidate)
+                    coroutineScope.launch {
+                        postUpdateSuggestions()
+                        convertJob?.join()
+                        val bestCandidate = bestCandidate
+                        if(bestCandidate != null) onCandidateSelected(bestCandidate)
+                    }
                 } else {
                     onReset()
                     if(fullWidth) util?.sendKeyChar(0x3000.toChar())
@@ -310,6 +306,5 @@ abstract class CangjieIMEMode(
 
     companion object {
         const val TYPE: String = "cangjie"
-        const val MSG_UPDATE_SUGGESTIONS = 0
     }
 }
