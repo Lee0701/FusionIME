@@ -178,40 +178,9 @@ abstract class CommonIMEMode(
     }
 
     override fun createInputView(context: Context): View {
-        val preference = PreferenceManager.getDefaultSharedPreferences(context)
-
-        val defaultScreenMode = context.resources.getString(R.string.screen_mode_default)
-        val screenMode = KeyboardState.ScreenMode.valueOf(preference.getString("screen_mode", null) ?: defaultScreenMode)
-        val rowHeightDIP = getOrientationInteger(context, "keyboard_height")
-        val height = (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, rowHeightDIP, context.resources.displayMetrics) * 4).roundToInt()
-        val split = Feature.SplitKeyboard.availableInCurrentVersion && getOrientationBoolean(context, "split_keyboard")
-        val splitRatio = if(split) getOrientationInteger(context, "split_ratio") else 0f
-        val splitWidthDIP = context.resources.configuration.screenWidthDp / 100f * splitRatio
-        val splitWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, splitWidthDIP, context.resources.displayMetrics).roundToInt()
-        val showPreviewPopup = preference.getBoolean("preview_popup", true)
-        val sound = preference.getBoolean("sound_feedback", true)
-        val haptic = preference.getBoolean("haptic_feedback", true)
-        val duration = preference.getFloat("vibration_duration", 10f).toLong()
-        val soundVolume = if(sound) 1f else 0f
-        val vibrationDuration = if(haptic) duration else 0L
-        val params = KeyboardParams(
-            screenMode = screenMode,
-            height = height,
-            splitWidth = splitWidth,
-            soundFeedback = false,
-            hapticFeedback = false,
-            soundVolume = soundVolume,
-            vibrationDuration = vibrationDuration,
-            previewPopups = showPreviewPopup,
-            shiftLockDelay = 300,
-            shiftAutoRelease = true,
-            repeatDelay = 300,
-            repeatInterval = 30,
-        )
-
-        val textKeyboardParams = params.copy()
-        val symbolKeyboardParams = params.copy(shiftAutoRelease = false)
-        val numberKeyboardParams = params.copy(shiftAutoRelease = false, splitWidth = 0)
+        val textKeyboardParams = createKeyboardParams(context, KeyboardState.Symbol.Text)
+        val symbolKeyboardParams = createKeyboardParams(context, KeyboardState.Symbol.Symbol)
+        val numberKeyboardParams = createKeyboardParams(context, KeyboardState.Symbol.Number)
 
         val textKeyboard = textLayoutPreset.keyboardTemplate.inflate(textKeyboardParams, textLayoutPreset.softKeyCodeMapper)
         val symbolKeyboard = symbolLayoutPreset.keyboardTemplate.inflate(symbolKeyboardParams, symbolLayoutPreset.softKeyCodeMapper)
@@ -221,19 +190,19 @@ abstract class CommonIMEMode(
             it.keyboard = textKeyboard
             it.listener = createKeyboardListener(context, textKeyboardParams)
             it.touchHandler = createTouchHandler(it, context, KeyboardState.Symbol.Text)
-            if(params.previewPopups) it.popupManager = DefaultPopupManager(it, it)
+            if(textKeyboardParams.previewPopups) it.popupManager = DefaultPopupManager(it, it)
         }
         val symbolKeyboardView = DefaultKeyboardView(context, null).also {
             it.keyboard = symbolKeyboard
             it.listener = createKeyboardListener(context, symbolKeyboardParams)
             it.touchHandler = createTouchHandler(it, context, KeyboardState.Symbol.Symbol)
-            if(params.previewPopups) it.popupManager = DefaultPopupManager(it, it)
+            if(symbolKeyboardParams.previewPopups) it.popupManager = DefaultPopupManager(it, it)
         }
         val numberKeyboardView = DefaultKeyboardView(context, null).also {
             it.keyboard = numberKeyboard
             it.listener = createKeyboardListener(context, numberKeyboardParams)
             it.touchHandler = createTouchHandler(it, context, KeyboardState.Symbol.Number)
-            if(params.previewPopups) it.popupManager = DefaultPopupManager(it, it)
+            if(numberKeyboardParams.previewPopups) it.popupManager = DefaultPopupManager(it, it)
         }
 
         updateInputView()
@@ -276,6 +245,48 @@ abstract class CommonIMEMode(
                 KeyEvent.KEYCODE_SHIFT_RIGHT to KeyLabel.Default(icon = shiftIcon)
             )
             keyboardView.labels = icons + this.keyLabels
+        }
+    }
+
+    open fun createKeyboardParams(
+        context: Context,
+        symbolState: KeyboardState.Symbol
+    ): KeyboardParams {
+        val preference = PreferenceManager.getDefaultSharedPreferences(context)
+
+        val defaultScreenMode = context.resources.getString(R.string.screen_mode_default)
+        val screenMode = KeyboardState.ScreenMode.valueOf(preference.getString("screen_mode", null) ?: defaultScreenMode)
+        val rowHeightDIP = getOrientationInteger(context, "keyboard_height")
+        val height = (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, rowHeightDIP, context.resources.displayMetrics) * 4).roundToInt()
+        val split = Feature.SplitKeyboard.availableInCurrentVersion && getOrientationBoolean(context, "split_keyboard")
+        val splitRatio = if(split) getOrientationInteger(context, "split_ratio") else 0f
+        val splitWidthDIP = context.resources.configuration.screenWidthDp / 100f * splitRatio
+        val splitWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, splitWidthDIP, context.resources.displayMetrics).roundToInt()
+        val showPreviewPopup = preference.getBoolean("preview_popup", true)
+        val sound = preference.getBoolean("sound_feedback", true)
+        val haptic = preference.getBoolean("haptic_feedback", true)
+        val duration = preference.getFloat("vibration_duration", 10f).toLong()
+        val soundVolume = if(sound) 1f else 0f
+        val vibrationDuration = if(haptic) duration else 0L
+        val params = KeyboardParams(
+            screenMode = screenMode,
+            height = height,
+            splitWidth = splitWidth,
+            soundFeedback = false,
+            hapticFeedback = false,
+            soundVolume = soundVolume,
+            vibrationDuration = vibrationDuration,
+            previewPopups = showPreviewPopup,
+            shiftLockDelay = 300,
+            shiftAutoRelease = true,
+            repeatDelay = 300,
+            repeatInterval = 30,
+        )
+
+        return when(symbolState) {
+            KeyboardState.Symbol.Text -> params
+            KeyboardState.Symbol.Symbol -> params.copy(shiftAutoRelease = false)
+            KeyboardState.Symbol.Number -> params.copy(shiftAutoRelease = false, splitWidth = 0)
         }
     }
 
