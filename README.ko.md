@@ -19,11 +19,14 @@ FusionIME는 한중일월(한자문화권) 언어를 위한 여러가지 입력 
 
 ### 중국어
 * 간체·번체 중국어 한어병음
+  * 자연마, 마이크로소프트, 지능 ABC, 병음가가, 소학, 수구, 자광 쌍병음
 * 번체 중국어 주음부호
 * 창힐수입법, 속성수입법, 대이수입법
+* 광동어 월병
 
 ### 일본어
-* 로마자 QWERTY, 가나 JIS, 가나 오십음도
+* 로마자 QWERTY, GODAN
+* 가나 JIS, 12키(토글·플릭), 오십음도, 이로하순
 
 ### 한국어
 * 한국어 두벌식 표준
@@ -38,7 +41,7 @@ FusionIME는 한중일월(한자문화권) 언어를 위한 여러가지 입력 
 한놈 변환을 지원합니다.
 
 ## 사전 데이터
-* 한국어: [표준국어대사전](https://stdict.korean.go.kr), [libhangul](https://github.com/libhangul/libhangul/tree/main)
+* 한국어: [표준국어대사전](https://stdict.korean.go.kr), [libhangul](https://github.com/libhangul/libhangul)
 * 월남어: [chunom.org](https://chunom.org/)
 
 ## 라이선스
@@ -49,3 +52,4 @@ GNU General Public License v3.0
 * [LatinIME](https://android.googlesource.com/platform/packages/inputmethods/LatinIME/): Apache License 2.0
 * [Mozc](https://github.com/google/mozc): BSD 3-Clause
 * [PinyinIME](https://android.googlesource.com/platform/packages/inputmethods/PinyinIME/): Apache License 2.0
+* [Jyutping](https://github.com/yuetyam/jyutping-android): CC0 1.0 Universal

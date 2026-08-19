@@ -145,8 +145,10 @@ class DictTrie : AtomDictBase {
   bool save_dict(FILE *fp);
 #endif  // ___BUILD_MODEL___
 
-  static const int kMaxMileStone = 100;
-  static const int kMaxParsingMark = 600;
+  static const int kMaxMileStone = 10 * kMaxSearchSteps;
+  static const int kMaxParsingMark = 8 * kMaxMileStone;
+  static_assert(kMaxParsingMark <= 0xffff,
+                "Parsing mark indexes must fit MileStone.mark_start");
   static const MileStoneHandle kFirstValidMileStoneHandle = 1;
 
   friend class DictParser;
