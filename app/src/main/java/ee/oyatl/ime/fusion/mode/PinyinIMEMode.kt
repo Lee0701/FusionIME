@@ -23,6 +23,7 @@ import com.android.inputmethod.pinyin.R
 import com.android.inputmethod.pinyin.Settings
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.fusion.Feature
+import ee.oyatl.ime.fusion.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.pinyin.CandidatesContainer
 import ee.oyatl.ime.fusion.pinyin.ComposingView
 import ee.oyatl.ime.fusion.pinyin.ComposingView.ComposingStatus
@@ -39,6 +40,8 @@ import ee.oyatl.ime.fusion.layout.MobileKeyboard
 import ee.oyatl.ime.fusion.layout.MobileKeyboardRows
 import ee.oyatl.ime.fusion.layout.TabletKeyboard
 import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
+import ee.oyatl.ime.fusion.layout.preset.LatinLayoutPresets
+import ee.oyatl.ime.fusion.layout.preset.PinyinLayoutPresets
 import ee.oyatl.ime.keyboard.SoftKeyCodeMapper
 import java.lang.ref.WeakReference
 import java.util.Locale
@@ -87,38 +90,10 @@ class PinyinIMEMode(
 
     private var isEnterNormalState = true
 
-    private val softKeyCodeMapper = SoftKeyCodeMapper(mapOf(
-        KeyEvent.KEYCODE_SHIFT_LEFT to KeyEvent.KEYCODE_APOSTROPHE
-    ))
-
     private val hasSemicolonKey = spelling.doublePinyinScheme?.acceptsFinal(';') == true
-    private val numberRow = Feature.NumberRow.availableInCurrentVersion && numberRow
-    private val cursorKeys = Feature.CursorKeys.availableInCurrentVersion && cursorKeys
-
-    override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
-        mobile = KeyboardTemplate.Basic(
-            configuration = KeyboardConfiguration(
-                if(this.numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
-                MobileKeyboard.alphabetic(semicolon = hasSemicolonKey),
-                MobileKeyboard.bottom(dpad = this.cursorKeys)
-            ),
-            contentRows = (if(this.numberRow) MobileKeyboardRows.NUMBERS else listOf()) +
-                    (if(hasSemicolonKey) MobileKeyboardRows.SEMICOLON else MobileKeyboardRows.DEFAULT),
-            softKeyCodeMapper = softKeyCodeMapper
-        ),
-        tablet = KeyboardTemplate.Basic(
-            configuration = KeyboardConfiguration(
-                if(this.numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
-                TabletKeyboard.alphabetic(semicolon = hasSemicolonKey, delete = !this.numberRow),
-                TabletKeyboard.bottom()
-            ),
-            contentRows = (if(this.numberRow) TabletKeyboardRows.NUMBERS else listOf()) +
-                    (if(hasSemicolonKey) TabletKeyboardRows.SEMICOLON else TabletKeyboardRows.DEFAULT),
-            softKeyCodeMapper = softKeyCodeMapper
-        )
+    override var textLayoutPreset: KeyboardLayoutPreset = PinyinLayoutPresets.pinyin(
+        LatinLayoutPresets.qwerty(semicolon = hasSemicolonKey)
     )
-
-    override val textLayoutTable: LayoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutExt.TABLE_CHINESE)
 
     override suspend fun onLoad(context: Context) {
         super.onLoad(context)

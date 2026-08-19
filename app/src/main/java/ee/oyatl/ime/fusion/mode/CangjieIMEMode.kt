@@ -8,6 +8,7 @@ import androidx.annotation.StringRes
 import com.diycircuits.cangjie.TableLoader
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.fusion.Feature
+import ee.oyatl.ime.fusion.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.korean.WordComposer
 import ee.oyatl.ime.keyboard.KeyboardConfiguration
@@ -22,6 +23,7 @@ import ee.oyatl.ime.fusion.layout.LayoutExt
 import ee.oyatl.ime.fusion.layout.LayoutQwerty
 import ee.oyatl.ime.fusion.layout.TabletKeyboard
 import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
+import ee.oyatl.ime.fusion.layout.preset.CangjieLayoutPresets
 import java.util.Locale
 import kotlin.collections.plus
 
@@ -171,58 +173,15 @@ abstract class CangjieIMEMode(
         val key: CharSequence
     ): CandidateView.Candidate
 
-    abstract class CangjieQuick(
+    class CangjieQuick(
         override val fullWidth: Boolean,
+        override val inputMode: Int,
+        numberRow: Boolean,
+        cursorKeys: Boolean,
         listener: IMEMode.Listener
     ): CangjieIMEMode(listener) {
-        override val textLayoutTable: LayoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutExt.TABLE_CHINESE + LayoutCangjie.TABLE_QWERTY)
         override val keyMap: Map<Char, Char> = LayoutCangjie.KEY_MAP_CANGJIE
-    }
-
-    abstract class QwertyCompatible(
-        fullWidth: Boolean,
-        numberRow: Boolean,
-        cursorKeys: Boolean,
-        listener: IMEMode.Listener
-    ): CangjieQuick(fullWidth, listener) {
-        private val numberRow = Feature.NumberRow.availableInCurrentVersion && numberRow
-        private val cursorKeys = Feature.CursorKeys.availableInCurrentVersion && cursorKeys
-        override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
-            mobile = KeyboardTemplate.Basic(
-                configuration = KeyboardConfiguration(
-                    if(this.numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
-                    MobileKeyboard.alphabetic(),
-                    MobileKeyboard.bottom(dpad = this.cursorKeys)
-                ),
-                contentRows = (if(this.numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.DEFAULT
-            ),
-            tablet = KeyboardTemplate.Basic(
-                configuration = KeyboardConfiguration(
-                    if(this.numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
-                    TabletKeyboard.alphabetic(delete = !this.numberRow),
-                    TabletKeyboard.bottom()
-                ),
-                contentRows = (if(this.numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.DEFAULT
-            )
-        )
-    }
-
-    class Cangjie(
-        fullWidth: Boolean,
-        numberRow: Boolean,
-        cursorKeys: Boolean,
-        listener: IMEMode.Listener
-    ): QwertyCompatible(fullWidth, numberRow, cursorKeys, listener) {
-        override val inputMode: Int = TableLoader.CANGJIE
-    }
-
-    class Quick(
-        fullWidth: Boolean,
-        numberRow: Boolean,
-        cursorKeys: Boolean,
-        listener: IMEMode.Listener
-    ): QwertyCompatible(fullWidth, numberRow, cursorKeys, listener) {
-        override val inputMode: Int = TableLoader.QUICK
+        override var textLayoutPreset: KeyboardLayoutPreset = CangjieLayoutPresets.cangjie(numberRow, cursorKeys)
     }
 
     class Dayi3(
@@ -231,26 +190,7 @@ abstract class CangjieIMEMode(
         listener: IMEMode.Listener
     ): CangjieIMEMode(listener) {
         override val inputMode: Int = TableLoader.DAYI3
-        private val cursorKeys = Feature.CursorKeys.availableInCurrentVersion && cursorKeys
-        override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
-            mobile = KeyboardTemplate.Basic(
-                configuration = KeyboardConfiguration(
-                    MobileKeyboard.numbers(),
-                    MobileKeyboard.alphabetic(semicolon = true, shiftDeleteWidth = 1f, shift = false),
-                    MobileKeyboard.bottom(left = ExtKeyCode.KEYCODE_PERIOD_COMMA, right = KeyEvent.KEYCODE_SLASH, dpad = this.cursorKeys)
-                ),
-                contentRows = MobileKeyboardRows.NUMBERS + MobileKeyboardRows.HALF_GRID
-            ),
-            tablet = KeyboardTemplate.Basic(
-                configuration = KeyboardConfiguration(
-                    TabletKeyboard.numbers(delete = true),
-                    TabletKeyboard.alphabetic(semicolon = true, rightShift = false, delete = false, spacerOnDelete = true),
-                    TabletKeyboard.bottom()
-                ),
-                contentRows = TabletKeyboardRows.NUMBERS + TabletKeyboardRows.SEMICOLON_SLASH
-            )
-        )
-        override val textLayoutTable: LayoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutExt.TABLE_CHINESE + LayoutCangjie.TABLE_DAYI3)
+        override var textLayoutPreset: KeyboardLayoutPreset = CangjieLayoutPresets.dayi3(cursorKeys)
         override val keyMap: Map<Char, Char> = LayoutCangjie.KEY_MAP_DAYI3
     }
 
@@ -264,8 +204,8 @@ abstract class CangjieIMEMode(
 
         override fun create(listener: IMEMode.Listener): IMEMode {
             return when(layout) {
-                Layout.Cangjie -> Cangjie(fullWidth, numberRow, cursorKeys, listener)
-                Layout.Quick -> Quick(fullWidth, numberRow, cursorKeys, listener)
+                Layout.Cangjie -> CangjieQuick(fullWidth, TableLoader.CANGJIE, numberRow, cursorKeys, listener)
+                Layout.Quick -> CangjieQuick(fullWidth, TableLoader.QUICK, numberRow, cursorKeys, listener)
                 Layout.Dayi3 -> Dayi3(fullWidth, cursorKeys, listener)
             }
         }

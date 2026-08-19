@@ -3,7 +3,7 @@ package ee.oyatl.ime.keyboard
 import ee.oyatl.ime.keyboard.touchhandler.FlickDirection
 
 data class LayoutTable(
-    val map: Map<Int, Item>
+    val map: Map<Int, Item> = emptyMap()
 ) {
     operator fun get(keyCode: Int): Item? {
         return map[keyCode]

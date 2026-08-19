@@ -1,7 +1,15 @@
-package ee.oyatl.ime.fusion.layout
+package ee.oyatl.ime.fusion.layout.preset
 
 import android.view.KeyEvent
 import ee.oyatl.ime.fusion.KeyboardLayoutPreset
+import ee.oyatl.ime.fusion.layout.LayoutExt
+import ee.oyatl.ime.fusion.layout.LayoutQwerty
+import ee.oyatl.ime.fusion.layout.LayoutSymbol
+import ee.oyatl.ime.fusion.layout.MobileKeyboard
+import ee.oyatl.ime.fusion.layout.MobileKeyboardRows
+import ee.oyatl.ime.fusion.layout.NumberKeyboard
+import ee.oyatl.ime.fusion.layout.TabletKeyboard
+import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
 import ee.oyatl.ime.keyboard.KeyboardConfiguration
 import ee.oyatl.ime.keyboard.KeyboardTemplate
 import ee.oyatl.ime.keyboard.LayoutTable
