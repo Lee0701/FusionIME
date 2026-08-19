@@ -1,8 +1,6 @@
 package ee.oyatl.ime.fusion.mode
 
 import android.content.Context
-import android.os.Handler
-import android.os.Looper
 import android.view.KeyEvent
 import androidx.annotation.StringRes
 import ee.oyatl.ime.candidate.CandidateView
@@ -14,37 +12,31 @@ import ee.oyatl.ime.fusion.korean.HanjaConverter
 import ee.oyatl.ime.fusion.korean.JeongUnHanjaConverter
 import ee.oyatl.ime.fusion.korean.UnigramHanjaConverter
 import ee.oyatl.ime.fusion.korean.WordComposer
-import ee.oyatl.ime.keyboard.SoftKeyCodeMapper
-import ee.oyatl.ime.keyboard.KeyboardConfiguration
-import ee.oyatl.ime.keyboard.KeyboardTemplate
+import ee.oyatl.ime.fusion.layout.ExtKeyCode
 import ee.oyatl.ime.fusion.layout.Hangul2Set
 import ee.oyatl.ime.fusion.layout.Hangul3Set
 import ee.oyatl.ime.fusion.layout.HangulOld
-import ee.oyatl.ime.keyboard.LayoutTable
-import ee.oyatl.ime.fusion.layout.ExtKeyCode
-import ee.oyatl.ime.fusion.layout.MobileKeyboard
-import ee.oyatl.ime.fusion.layout.MobileKeyboardRows
 import ee.oyatl.ime.fusion.layout.LayoutExt
 import ee.oyatl.ime.fusion.layout.LayoutQwerty
+import ee.oyatl.ime.fusion.layout.MobileKeyboard
+import ee.oyatl.ime.fusion.layout.MobileKeyboardRows
 import ee.oyatl.ime.fusion.layout.TabletKeyboard
 import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
+import ee.oyatl.ime.keyboard.KeyboardConfiguration
+import ee.oyatl.ime.keyboard.KeyboardTemplate
+import ee.oyatl.ime.keyboard.LayoutTable
+import ee.oyatl.ime.keyboard.SoftKeyCodeMapper
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import java.util.Locale
-import java.util.concurrent.Executors
 
 abstract class KoreanIMEMode(
     listener: IMEMode.Listener
 ): CommonIMEMode(listener) {
-    private val executor = Executors.newSingleThreadExecutor()
-
-    private val handler: Handler = Handler(Looper.getMainLooper()) { msg ->
-        when(msg.what) {
-            MSG_CONVERT -> {
-                convert()
-                true
-            }
-            else -> false
-        }
-    }
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private var convertJob: Job? = null
 
     protected abstract val hangulCombiner: HangulCombiner
     private var currentState = HangulCombiner.State.Initial
@@ -75,16 +67,12 @@ abstract class KoreanIMEMode(
         renderInputView()
     }
 
-    private fun convert() {
-        executor.execute {
-            val candidates = hanjaConverter.convert(wordComposer.textBeforeCursor)
-            handler.post { submitCandidates(candidates) }
-        }
-    }
-
     private fun postConvert() {
-        handler.removeMessages(MSG_CONVERT)
-        handler.sendMessageDelayed(handler.obtainMessage(MSG_CONVERT), 100)
+        convertJob?.cancel()
+        convertJob = coroutineScope.launch {
+            val candidates = hanjaConverter.convert(wordComposer.textBeforeCursor)
+            submitCandidates(candidates)
+        }
     }
 
     private fun renderInputView() {
