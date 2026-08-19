@@ -14,6 +14,7 @@ import ee.oyatl.ime.keyboard.KeyboardConfiguration
 import ee.oyatl.ime.keyboard.KeyboardTemplate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.jyutping.jyutping.BinaryDictionaries
 import org.jyutping.jyutping.models.Researcher
@@ -26,6 +27,9 @@ class JyutpingIMEMode(
     cursorKeys: Boolean,
     listener: IMEMode.Listener
 ): CommonIMEMode(listener) {
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private var convertJob: Job? = null
+
     private val numberRow = Feature.NumberRow.availableInCurrentVersion && numberRow
     private val cursorKeys = Feature.CursorKeys.availableInCurrentVersion && cursorKeys
 
@@ -71,14 +75,17 @@ class JyutpingIMEMode(
     override fun onSpecial(keyCode: Int) {
         when(keyCode) {
             KeyEvent.KEYCODE_SPACE -> {
-                if(wordComposer.composingText.isNotEmpty()) {
-                    updateSuggestions()
-                    val bestCandidate = bestCandidate
-                    if(bestCandidate != null) onCandidateSelected(bestCandidate)
-                } else {
-                    util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_SPACE)
+                coroutineScope.launch {
+                    if(wordComposer.composingText.isNotEmpty()) {
+                        postUpdateSuggestions()
+                        convertJob?.join()
+                        val bestCandidate = bestCandidate
+                        if(bestCandidate != null) onCandidateSelected(bestCandidate)
+                    } else {
+                        util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_SPACE)
+                    }
+                    onReset()
                 }
-                onReset()
             }
             KeyEvent.KEYCODE_ENTER -> {
                 if(wordComposer.composingText.isNotEmpty()) onReset()
@@ -123,17 +130,14 @@ class JyutpingIMEMode(
     }
 
     private fun postUpdateSuggestions() {
-        CoroutineScope(Dispatchers.Default).launch {
-            updateSuggestions()
+        convertJob?.cancel()
+        convertJob = coroutineScope.launch {
+            val keys = wordComposer.textBeforeCursor.mapNotNull { VirtualInputKey.matchVirtualInputKey(it) }
+            val suggestions = Researcher.suggest(keys, Segmenter.segment(keys))
+            val candidates = suggestions.map { JyutpingCandidate(it.text, it.romanization, it.input) }.distinctBy { it.text }
+            bestCandidate = candidates.firstOrNull()
+            submitCandidates(candidates)
         }
-    }
-
-    private fun updateSuggestions() {
-        val keys = wordComposer.textBeforeCursor.mapNotNull { VirtualInputKey.matchVirtualInputKey(it) }
-        val suggestions = Researcher.suggest(keys, Segmenter.segment(keys))
-        val candidates = suggestions.map { JyutpingCandidate(it.text, it.romanization, it.input) }.distinctBy { it.text }
-        bestCandidate = candidates.firstOrNull()
-        submitCandidates(candidates)
     }
 
     override fun onCandidateSelected(candidate: CandidateView.Candidate) {
