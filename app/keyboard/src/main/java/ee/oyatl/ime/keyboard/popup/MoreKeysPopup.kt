@@ -89,10 +89,10 @@ class MoreKeysPopup(
                     )
                 }
             ), keyboardParams)
+            it.labels = candidates
+                .mapIndexed { i, codePoint -> i to KeyLabel.Default(codePoint.toChar().toString()) }
+                .toMap()
         }
-        contentView.labels = candidates
-            .mapIndexed { i, codePoint -> i to KeyLabel.Default(codePoint.toChar().toString()) }
-            .toMap()
 
         window.contentView = view
         window.width = popupWidth
@@ -104,7 +104,7 @@ class MoreKeysPopup(
     }
 
     override fun selectAt(rawX: Int, rawY: Int) {
-        candidates.indices.flatMap { contentView.findKeys(it) }.forEach { it.onReleased() }
+        candidates.indices.flatMap(contentView::findKeys).forEach { it.onReleased() }
         val x = (rawX - contentView.location[0]).coerceIn(0, popupWidth - 1)
         val y = (rawY - contentView.location[1]).coerceIn(0, popupHeight - 1)
         val key = contentView.findKey(x, y) ?: return
@@ -114,6 +114,7 @@ class MoreKeysPopup(
 
     override fun show() {
         window.showAtLocation(parent, Gravity.TOP or Gravity.LEFT, popupX, popupY)
+        contentView.findKeys(selectedIndex).firstOrNull()?.onPressed()
     }
 
     override fun hide() {
