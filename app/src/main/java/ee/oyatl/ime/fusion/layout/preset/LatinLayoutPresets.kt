@@ -2,7 +2,7 @@ package ee.oyatl.ime.fusion.layout.preset
 
 import android.view.KeyEvent
 import ee.oyatl.ime.fusion.Feature
-import ee.oyatl.ime.fusion.KeyboardLayoutPreset
+import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.layout.LayoutExt
 import ee.oyatl.ime.fusion.layout.LayoutLatin
 import ee.oyatl.ime.fusion.layout.LayoutQwerty

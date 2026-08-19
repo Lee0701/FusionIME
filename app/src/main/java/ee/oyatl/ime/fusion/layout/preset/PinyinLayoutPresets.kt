@@ -1,6 +1,6 @@
 package ee.oyatl.ime.fusion.layout.preset
 
-import ee.oyatl.ime.fusion.KeyboardLayoutPreset
+import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.layout.LayoutExt
 import ee.oyatl.ime.fusion.layout.LayoutPinyin
 import ee.oyatl.ime.keyboard.LayoutTable

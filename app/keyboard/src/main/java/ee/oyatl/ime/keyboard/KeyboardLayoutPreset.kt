@@ -1,8 +1,4 @@
-package ee.oyatl.ime.fusion
-
-import ee.oyatl.ime.keyboard.KeyboardTemplate
-import ee.oyatl.ime.keyboard.LayoutTable
-import ee.oyatl.ime.keyboard.SoftKeyCodeMapper
+package ee.oyatl.ime.keyboard
 
 data class KeyboardLayoutPreset(
     val keyboardTemplate: KeyboardTemplate,

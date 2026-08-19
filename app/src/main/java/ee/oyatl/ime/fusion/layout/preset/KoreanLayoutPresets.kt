@@ -2,7 +2,7 @@ package ee.oyatl.ime.fusion.layout.preset
 
 import android.view.KeyEvent
 import ee.oyatl.ime.fusion.Feature
-import ee.oyatl.ime.fusion.KeyboardLayoutPreset
+import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.layout.ExtKeyCode
 import ee.oyatl.ime.fusion.layout.Hangul3Set
 import ee.oyatl.ime.fusion.layout.HangulOld

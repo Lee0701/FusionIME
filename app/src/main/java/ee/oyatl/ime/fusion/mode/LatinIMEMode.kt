@@ -34,7 +34,7 @@ import com.android.inputmethod.latin.settings.SettingsValues
 import com.android.inputmethod.latin.utils.ScriptUtils
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.TripleCandidateView
-import ee.oyatl.ime.fusion.KeyboardLayoutPreset
+import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.layout.preset.LatinLayoutPresets
 import java.util.Locale

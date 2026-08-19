@@ -22,8 +22,7 @@ import com.android.inputmethod.pinyin.PinyinIME.ImeState
 import com.android.inputmethod.pinyin.R
 import com.android.inputmethod.pinyin.Settings
 import ee.oyatl.ime.candidate.CandidateView
-import ee.oyatl.ime.fusion.Feature
-import ee.oyatl.ime.fusion.KeyboardLayoutPreset
+import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.pinyin.CandidatesContainer
 import ee.oyatl.ime.fusion.pinyin.ComposingView
 import ee.oyatl.ime.fusion.pinyin.ComposingView.ComposingStatus
@@ -31,18 +30,8 @@ import ee.oyatl.ime.fusion.pinyin.DecodingInfo
 import ee.oyatl.ime.fusion.pinyin.DoublePinyinComposer
 import ee.oyatl.ime.fusion.pinyin.DoublePinyinScheme
 import ee.oyatl.ime.fusion.pinyin.OnGestureListener
-import ee.oyatl.ime.keyboard.KeyboardConfiguration
-import ee.oyatl.ime.keyboard.KeyboardTemplate
-import ee.oyatl.ime.keyboard.LayoutTable
-import ee.oyatl.ime.fusion.layout.LayoutExt
-import ee.oyatl.ime.fusion.layout.LayoutQwerty
-import ee.oyatl.ime.fusion.layout.MobileKeyboard
-import ee.oyatl.ime.fusion.layout.MobileKeyboardRows
-import ee.oyatl.ime.fusion.layout.TabletKeyboard
-import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
 import ee.oyatl.ime.fusion.layout.preset.LatinLayoutPresets
 import ee.oyatl.ime.fusion.layout.preset.PinyinLayoutPresets
-import ee.oyatl.ime.keyboard.SoftKeyCodeMapper
 import java.lang.ref.WeakReference
 import java.util.Locale
 
