@@ -64,14 +64,17 @@ object KoreanLayoutPresets {
         )
     }
 
-    fun threeSet393(): KeyboardLayoutPreset {
+    fun threeSet393(
+        cursorKeys: Boolean = false
+    ): KeyboardLayoutPreset {
+        val cursorKeys = Feature.CursorKeys.availableInCurrentVersion && cursorKeys
         return KeyboardLayoutPreset(
             keyboardTemplate = KeyboardTemplate.ByScreenMode(
                 mobile = KeyboardTemplate.Basic(
                     configuration = KeyboardConfiguration(
                         MobileKeyboard.numbers(),
                         MobileKeyboard.alphabetic(semicolon = true, shiftDeleteWidth = 1f),
-                        MobileKeyboard.bottom(ExtKeyCode.KEYCODE_PERIOD_COMMA, KeyEvent.KEYCODE_SLASH)
+                        MobileKeyboard.bottom(ExtKeyCode.KEYCODE_PERIOD_COMMA, KeyEvent.KEYCODE_SLASH, dpad = cursorKeys)
                     ),
                     contentRows = MobileKeyboardRows.NUMBERS + MobileKeyboardRows.SEMICOLON_QUOTE
                 ),
