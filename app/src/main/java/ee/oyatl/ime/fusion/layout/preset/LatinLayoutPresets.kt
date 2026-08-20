@@ -49,6 +49,47 @@ object LatinLayoutPresets {
         )
     }
 
+    fun spanishQwerty(
+        numberRow: Boolean = false,
+        cursorKeys: Boolean = false
+    ): KeyboardLayoutPreset {
+        val qwerty = qwerty(true, numberRow, cursorKeys)
+        val layoutTable = qwerty.layoutTable + LayoutTable.fromShiftStates(LayoutLatin.TABLE_SPANISH_QWERTY)
+        return qwerty.copy(
+            layoutTable = layoutTable
+        )
+    }
+
+    fun azerty(
+        numberRow: Boolean = false,
+        cursorKeys: Boolean = false
+    ): KeyboardLayoutPreset {
+        val numberRow = Feature.NumberRow.availableInCurrentVersion && numberRow
+        val cursorKeys = Feature.CursorKeys.availableInCurrentVersion && cursorKeys
+        return KeyboardLayoutPreset(
+            keyboardTemplate = KeyboardTemplate.ByScreenMode(
+                mobile = KeyboardTemplate.Basic(
+                    configuration = KeyboardConfiguration(
+                        if(numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
+                        MobileKeyboard.alphabetic(semicolon = true),
+                        MobileKeyboard.bottom(dpad = cursorKeys)
+                    ),
+                    contentRows = (if(numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.SEMICOLON
+                ),
+                tablet = KeyboardTemplate.Basic(
+                    configuration = KeyboardConfiguration(
+                        if(numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
+                        TabletKeyboard.alphabetic(semicolon = true, delete = !numberRow),
+                        TabletKeyboard.bottom()
+                    ),
+                    contentRows = (if(numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.SEMICOLON
+                )
+            ),
+            layoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutLatin.TABLE_AZERTY),
+            softKeyCodeMapper = SoftKeyCodeMapper.Basic(LayoutLatin.KEYCODE_MAP_AZERTY)
+        )
+    }
+
     fun dvorak(
         numberRow: Boolean = false,
         cursorKeys: Boolean = false

@@ -34,9 +34,11 @@ import com.android.inputmethod.latin.settings.SettingsValues
 import com.android.inputmethod.latin.utils.ScriptUtils
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.TripleCandidateView
-import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.layout.preset.LatinLayoutPresets
+import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
+import ee.oyatl.ime.keyboard.LatinLongPressTable
+import ee.oyatl.ime.keyboard.LongPressTable
 import java.util.Locale
 
 class LatinIMEMode(
@@ -45,6 +47,8 @@ class LatinIMEMode(
     override var textLayoutPreset: KeyboardLayoutPreset
 ): CommonIMEMode(listener), ILatinIME {
     override var context: Context? = null
+
+    override val longPressTable: LongPressTable = LatinLongPressTable.Default
 
     override val handler: LatinIME.UIHandler = LatinIME.UIHandler(this)
     private var dictionaryFacilitator: DictionaryFacilitator? = null
@@ -503,7 +507,11 @@ class LatinIMEMode(
 
         override fun create(listener: IMEMode.Listener): LatinIMEMode {
             val textLayoutPreset = when(layout) {
-                Layout.Qwerty -> LatinLayoutPresets.qwerty(false, numberRow, cursorKeys)
+                Layout.Qwerty -> when(locale.language) {
+                    "es" -> LatinLayoutPresets.spanishQwerty(numberRow, cursorKeys)
+                    else -> LatinLayoutPresets.qwerty(false, numberRow, cursorKeys)
+                }
+                Layout.Azerty -> LatinLayoutPresets.azerty(numberRow, cursorKeys)
                 Layout.Dvorak -> LatinLayoutPresets.dvorak(numberRow, cursorKeys)
                 Layout.Colemak -> LatinLayoutPresets.colemak(numberRow, cursorKeys)
             }
@@ -536,7 +544,8 @@ class LatinIMEMode(
                 val locale =
                     if(localeName.size == 2) Locale(localeName[0], localeName[1])
                     else Locale(localeName[0])
-                val layout = Layout.entries.find { it.name == map["layout"] } ?: Layout.Qwerty
+                val defaultLayout = if(locale.language == "fr") Layout.Azerty else Layout.Qwerty
+                val layout = Layout.entries.find { it.name == map["layout"] } ?: defaultLayout
                 val numberRow = map["number_row"]?.toBoolean() ?: false
                 val cursorKeys = map["cursor_keys"]?.toBoolean() ?: false
                 return Params(
@@ -553,6 +562,7 @@ class LatinIMEMode(
         @StringRes val nameKey: Int
     ) {
         Qwerty(R.string.latin_layout_qwerty),
+        Azerty(R.string.latin_layout_azerty),
         Dvorak(R.string.latin_layout_dvorak),
         Colemak(R.string.latin_layout_colemak)
     }

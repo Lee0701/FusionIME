@@ -33,8 +33,8 @@
     </string-array>
 
     <string-array name="settings_behaviour_touch_mode_values">
-        <item>seek</item>
-        <item>flick</item>
+        <item>Seek</item>
+        <item>Flick</item>
     </string-array>
 
     <string-array name="settings_behaviour_default_flick_action_entries">
@@ -95,12 +95,14 @@
 
     <string-array name="settings_input_mode_latin_layout_entries">
         <item>@string/latin_layout_qwerty</item>
+        <item>@string/latin_layout_azerty</item>
         <item>@string/latin_layout_dvorak</item>
         <item>@string/latin_layout_colemak</item>
     </string-array>
 
     <string-array name="settings_input_mode_latin_layout_values">
         <item>Qwerty</item>
+        <item>Azerty</item>
         <item>Dvorak</item>
         <item>Colemak</item>
     </string-array>

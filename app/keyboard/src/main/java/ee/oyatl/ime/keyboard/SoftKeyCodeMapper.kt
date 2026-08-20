@@ -39,6 +39,7 @@ interface SoftKeyCodeMapper {
                 KeyboardState.ScreenMode.Mobile -> mobile[params, keyCode]
                 KeyboardState.ScreenMode.Tablet -> tablet[params, keyCode]
                 KeyboardState.ScreenMode.Full -> full[params, keyCode]
+                else -> mobile[params, keyCode]
             }
         }
     }

@@ -95,6 +95,7 @@ interface KeyboardTemplate {
                 KeyboardState.ScreenMode.Mobile -> mobile.inflate(params, softKeyCodeMapper)
                 KeyboardState.ScreenMode.Tablet -> tablet.inflate(params, softKeyCodeMapper)
                 KeyboardState.ScreenMode.Full -> full.inflate(params, softKeyCodeMapper)
+                else -> mobile.inflate(params, softKeyCodeMapper)
             }
         }
     }

@@ -27,6 +27,7 @@ interface IMEMode {
         fun onLanguageSwitch()
         fun onRequestHideSelf(flags: Int)
         fun onCandidateViewVisibilityChange(visible: Boolean)
+        fun onLongPressStateChanged(active: Boolean)
     }
 
     interface Params {
