@@ -12,7 +12,10 @@ class SeekTouchHandler(
     val pointers = mutableMapOf<Int, Pointer>()
 
     override fun onReset() {
-        pointers.values.forEach { it.key?.onReleased() }
+        keyboardView.popupManager.clearPopups()
+        pointers.values.forEach {
+            it.key?.onReleased()
+        }
         pointers.clear()
     }
 

@@ -7,6 +7,10 @@ object LayoutLatin {
         KeyEvent.KEYCODE_SEMICOLON to listOf('ñ'.code, 'Ñ'.code)
     )
 
+    val TABLE_AZERTY = mapOf(
+        KeyEvent.KEYCODE_APOSTROPHE to listOf('\''.code, '?'.code)
+    )
+
     val KEYCODE_MAP_AZERTY = mapOf(
         KeyEvent.KEYCODE_Q to KeyEvent.KEYCODE_A,
         KeyEvent.KEYCODE_W to KeyEvent.KEYCODE_Z,

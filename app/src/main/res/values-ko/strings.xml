@@ -140,4 +140,8 @@
     <string name="settings_input_mode_cursor_keys_summary">지원하는 배열에서 커서 이동 키를 표시합니다.</string>
     <string name="settings_input_mode_mozc_flick_hint_summary">12키 및 GODAN 배열에서 플릭 방향별 문자를 표시합니다.</string>
     <string name="input_mode_jyutping">월병 (광동어)</string>
+    <string name="settings_input_mode_zhuyin_conversion_engine_title">변환 엔진</string>
+    <string name="zhuyin_conversion_engine_fuzzy_chewing">부분 일치 Chewing 변환기</string>
+    <string name="zhuyin_conversion_engine_simple">단순 변환기</string>
+    <string name="zhuyin_conversion_engine_chewing">Chewing 변환기</string>
 </resources>
