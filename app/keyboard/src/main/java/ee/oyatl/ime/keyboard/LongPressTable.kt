@@ -1,7 +1,7 @@
 package ee.oyatl.ime.keyboard
 
 class LongPressTable(
-    private val map: Map<Int, List<Int>>,
+    private val map: Map<Int, List<Int>> = emptyMap(),
     private val uppercaseOverrides: Map<Int, Int> = emptyMap()
 ) {
     fun candidatesFor(baseCodePoint: Int): List<Int> {

@@ -12,6 +12,7 @@ import ee.oyatl.ime.fusion.layout.TabletKeyboard
 import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
 import ee.oyatl.ime.keyboard.KeyboardConfiguration
 import ee.oyatl.ime.keyboard.KeyboardTemplate
+import ee.oyatl.ime.keyboard.LatinLongPressTable
 import ee.oyatl.ime.keyboard.LayoutTable
 import ee.oyatl.ime.keyboard.SoftKeyCodeMapper
 
@@ -44,8 +45,8 @@ object LatinLayoutPresets {
                             (if(semicolon) TabletKeyboardRows.SEMICOLON else TabletKeyboardRows.DEFAULT)
                 )
             ),
-            layoutTable = LayoutTable
-                .fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY)
+            layoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY),
+            longPressTable = LatinLongPressTable.Default
         )
     }
 
@@ -86,6 +87,7 @@ object LatinLayoutPresets {
                 )
             ),
             layoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutLatin.TABLE_AZERTY),
+            longPressTable = LatinLongPressTable.Default,
             softKeyCodeMapper = SoftKeyCodeMapper.Basic(LayoutLatin.KEYCODE_MAP_AZERTY)
         )
     }
@@ -115,8 +117,8 @@ object LatinLayoutPresets {
                     contentRows = (if(numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.DVORAK
                 )
             ),
-            layoutTable = LayoutTable
-                .fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY),
+            layoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY),
+            longPressTable = LatinLongPressTable.Default,
             softKeyCodeMapper = SoftKeyCodeMapper.Basic(LayoutLatin.KEYCODE_MAP_DVORAK)
         )
     }
@@ -146,8 +148,8 @@ object LatinLayoutPresets {
                     contentRows = (if(numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.SEMICOLON
                 )
             ),
-            layoutTable = LayoutTable
-                .fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY),
+            layoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY),
+            longPressTable = LatinLongPressTable.Default,
             softKeyCodeMapper = SoftKeyCodeMapper.Basic(LayoutLatin.KEYCODE_MAP_COLEMAK)
         )
     }

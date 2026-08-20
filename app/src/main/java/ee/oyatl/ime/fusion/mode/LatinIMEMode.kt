@@ -48,8 +48,6 @@ class LatinIMEMode(
 ): CommonIMEMode(listener), ILatinIME {
     override var context: Context? = null
 
-    override val longPressTable: LongPressTable = LatinLongPressTable.Default
-
     override val handler: LatinIME.UIHandler = LatinIME.UIHandler(this)
     private var dictionaryFacilitator: DictionaryFacilitator? = null
     override var settings: Settings? = null

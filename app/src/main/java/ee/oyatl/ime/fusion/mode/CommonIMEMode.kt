@@ -57,16 +57,14 @@ abstract class CommonIMEMode(
     open var symbolLayoutPreset: KeyboardLayoutPreset = SymbolLayoutPresets.symbolG()
     open var numberLayoutPreset: KeyboardLayoutPreset = SymbolLayoutPresets.number()
 
-    open val longPressTable: LongPressTable = LongPressTable(mapOf())
-
-    val currentLayoutTable: LayoutTable get() = when(symbolState) {
-        KeyboardState.Symbol.Text -> textLayoutPreset.layoutTable
-        KeyboardState.Symbol.Symbol -> symbolLayoutPreset.layoutTable
-        KeyboardState.Symbol.Number -> numberLayoutPreset.layoutTable
+    val currentLayoutPreset: KeyboardLayoutPreset  get() = when(symbolState) {
+        KeyboardState.Symbol.Text -> textLayoutPreset
+        KeyboardState.Symbol.Symbol -> symbolLayoutPreset
+        KeyboardState.Symbol.Number -> numberLayoutPreset
     }
 
     open val keyLabels: Map<Int, KeyLabel>
-        get() = currentLayoutTable.map.mapValues { (_, v) ->
+        get() = currentLayoutPreset.layoutTable.map.mapValues { (_, v) ->
             val str = when(v) {
                 is LayoutTable.DefaultItem -> v.forShiftState(shiftState)
                 else -> v.normal
@@ -358,7 +356,7 @@ abstract class CommonIMEMode(
         } else if(keyCode < 0) {
             onChar(-keyCode)
         } else if(keyCode > KeyEvent.getMaxKeyCode() || keyCharacterMap.isPrintingKey(keyCode)) {
-            val item = currentLayoutTable[keyCode]
+            val item = currentLayoutPreset.layoutTable[keyCode]
             if(item is LayoutTable.DefaultItem) onChar(item.forShiftState(shiftState))
             else onChar(item?.normal ?: keyCharacterMap.get(keyCode, metaState))
         } else {
@@ -377,7 +375,7 @@ abstract class CommonIMEMode(
     }
 
     override fun onFlick(keyCode: Int, direction: FlickDirection): Boolean {
-        val item = currentLayoutTable[keyCode]
+        val item = currentLayoutPreset.layoutTable[keyCode]
         val symbol = symbolLayoutPreset.layoutTable[keyCode]
         when(defaultFlickActions[direction]) {
             FlickAction.Default -> if(item is LayoutTable.DefaultItem) onChar(item.forShiftState(shiftState))
@@ -392,9 +390,9 @@ abstract class CommonIMEMode(
     override fun onKeyLongPress(keyCode: Int, metaState: Int): Boolean {
         val keyboardView = keyboardView ?: return false
         val key = keyboardView.findKeys(keyCode).firstOrNull() ?: return false
-        val item = currentLayoutTable[keyCode] ?: return false
+        val item = currentLayoutPreset.layoutTable[keyCode] ?: return false
         val baseChar = if(item is LayoutTable.DefaultItem) item.forShiftState(shiftState) else item.normal
-        val candidates = longPressTable.candidatesFor(baseChar)
+        val candidates = currentLayoutPreset.longPressTable.candidatesFor(baseChar)
         if(candidates.isEmpty()) return false
         keyboardView.popupManager.removePopup(key)
         keyboardView.popupManager.showPopup(key) {
