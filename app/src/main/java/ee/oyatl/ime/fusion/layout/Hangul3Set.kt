@@ -3,6 +3,22 @@ package ee.oyatl.ime.fusion.layout
 import android.view.KeyEvent
 
 object Hangul3Set {
+    val KEYCODE_MAP_390_MOBILE = mapOf(
+        KeyEvent.KEYCODE_B to ExtKeyCode.KEYCODE_390_0,
+        KeyEvent.KEYCODE_N to ExtKeyCode.KEYCODE_390_1,
+        KeyEvent.KEYCODE_M to ExtKeyCode.KEYCODE_390_2,
+        KeyEvent.KEYCODE_APOSTROPHE to ExtKeyCode.KEYCODE_390_3
+    )
+
+    val KEYCODE_MAP_393_MOBILE = mapOf(
+        KeyEvent.KEYCODE_B to ExtKeyCode.KEYCODE_390_0,
+        KeyEvent.KEYCODE_N to ExtKeyCode.KEYCODE_390_1,
+        KeyEvent.KEYCODE_M to ExtKeyCode.KEYCODE_390_2,
+        KeyEvent.KEYCODE_APOSTROPHE to ExtKeyCode.KEYCODE_390_3,
+        KeyEvent.KEYCODE_SLASH to ExtKeyCode.KEYCODE_PERIOD_COMMA,
+        ExtKeyCode.KEYCODE_PERIOD_COMMA to KeyEvent.KEYCODE_GRAVE
+    )
+
     val TABLE_390 = mapOf(
         KeyEvent.KEYCODE_GRAVE to listOf(0x60, 0x7e),
         KeyEvent.KEYCODE_1 to listOf(0x11c2, 0x11bd),

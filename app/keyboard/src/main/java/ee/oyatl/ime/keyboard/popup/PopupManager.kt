@@ -1,8 +1,10 @@
 package ee.oyatl.ime.keyboard.popup
 
-import ee.oyatl.ime.keyboard.touchhandler.TouchHandler
+import ee.oyatl.ime.keyboard.KeyboardView
 
 interface PopupManager {
-    fun getPopupPosition(key: TouchHandler.KeyInterface): Pair<Int, Int>
-    fun createPreviewPopup(key: TouchHandler.KeyInterface): Popup?
+    fun showPopup(key: KeyboardView.Key, initializer: () -> Popup): Popup?
+    fun getPopup(key: KeyboardView.Key): Popup?
+    fun removePopup(key: KeyboardView.Key): Popup?
+    fun clearPopups()
 }

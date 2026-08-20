@@ -4,7 +4,7 @@ import android.content.Context
 import android.view.KeyEvent
 import androidx.annotation.StringRes
 import ee.oyatl.ime.candidate.CandidateView
-import ee.oyatl.ime.fusion.Feature
+import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.hangul.HangulCombiner
 import ee.oyatl.ime.fusion.korean.BigramHanjaConverter
@@ -12,20 +12,14 @@ import ee.oyatl.ime.fusion.korean.HanjaConverter
 import ee.oyatl.ime.fusion.korean.JeongUnHanjaConverter
 import ee.oyatl.ime.fusion.korean.UnigramHanjaConverter
 import ee.oyatl.ime.fusion.korean.WordComposer
-import ee.oyatl.ime.fusion.layout.ExtKeyCode
+import ee.oyatl.ime.keyboard.SoftKeyCodeMapper
 import ee.oyatl.ime.fusion.layout.Hangul2Set
 import ee.oyatl.ime.fusion.layout.Hangul3Set
 import ee.oyatl.ime.fusion.layout.HangulOld
+import ee.oyatl.ime.keyboard.LayoutTable
 import ee.oyatl.ime.fusion.layout.LayoutExt
 import ee.oyatl.ime.fusion.layout.LayoutQwerty
-import ee.oyatl.ime.fusion.layout.MobileKeyboard
-import ee.oyatl.ime.fusion.layout.MobileKeyboardRows
-import ee.oyatl.ime.fusion.layout.TabletKeyboard
-import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
-import ee.oyatl.ime.keyboard.KeyboardConfiguration
-import ee.oyatl.ime.keyboard.KeyboardTemplate
-import ee.oyatl.ime.keyboard.LayoutTable
-import ee.oyatl.ime.keyboard.SoftKeyCodeMapper
+import ee.oyatl.ime.fusion.layout.preset.KoreanLayoutPresets
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -140,28 +134,10 @@ abstract class KoreanIMEMode(
         cursorKeys: Boolean,
         listener: IMEMode.Listener
     ): KoreanIMEMode(listener) {
-        private val numberRow = Feature.NumberRow.availableInCurrentVersion && numberRow
-        private val cursorKeys = Feature.CursorKeys.availableInCurrentVersion && cursorKeys
-
         override val hanjaConverter: HanjaConverter = converterType.create()
-        override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
-            mobile = KeyboardTemplate.Basic(
-                configuration = KeyboardConfiguration(
-                    if(this.numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
-                    MobileKeyboard.alphabetic(),
-                    MobileKeyboard.bottom(dpad = this.cursorKeys)
-                ),
-                contentRows = (if(this.numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.KS
-            ),
-            tablet = KeyboardTemplate.Basic(
-                configuration = KeyboardConfiguration(
-                    if(this.numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
-                    TabletKeyboard.alphabetic(delete = !this.numberRow),
-                    TabletKeyboard.bottom()
-                ),
-                contentRows = (if(this.numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.KS
-            )
-        )
+        abstract val layoutTable: LayoutTable
+        override var textLayoutPreset: KeyboardLayoutPreset =
+            KoreanLayoutPresets.ksCompatible(layoutTable, numberRow, cursorKeys)
     }
 
     class Hangul2SetKS(
@@ -172,7 +148,7 @@ abstract class KoreanIMEMode(
         listener: IMEMode.Listener
     ): Hangul2SetKSCompatible(converterType, numberRow, cursorKeys, listener) {
         override val hangulCombiner: HangulCombiner = HangulCombiner(Hangul2Set.COMB_KS, correctOrders)
-        override val textLayoutTable: LayoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + Hangul2Set.TABLE_KS)
+        override val layoutTable: LayoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + Hangul2Set.TABLE_KS)
     }
 
     /*
@@ -182,28 +158,12 @@ abstract class KoreanIMEMode(
         cursorKeys: Boolean,
         listener: IMEMode.Listener
     ): KoreanIMEMode(listener) {
-        private val cursorKeys = Feature.CursorKeys.availableInCurrentVersion && cursorKeys
-
-        open val softKeyCodeMapper: SoftKeyCodeMapper get() = SoftKeyCodeMapper()
-        override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
-            mobile = KeyboardTemplate.Basic(
-                configuration = KeyboardConfiguration(
-                    MobileKeyboard.numbers(),
-                    MobileKeyboard.alphabetic(semicolon = true, shiftDeleteWidth = 1f),
-                    MobileKeyboard.bottom(left = ExtKeyCode.KEYCODE_PERIOD_COMMA, right = KeyEvent.KEYCODE_SLASH, dpad = this.cursorKeys)
-                ),
-                contentRows = MobileKeyboardRows.NUMBERS + MobileKeyboardRows.SEMICOLON_QUOTE,
-                softKeyCodeMapper = softKeyCodeMapper
-            ),
-            tablet = KeyboardTemplate.Basic(
-                configuration = KeyboardConfiguration(
-                    TabletKeyboard.numbers(delete = true),
-                    TabletKeyboard.alphabetic(semicolon = true, delete = false),
-                    TabletKeyboard.bottom()
-                ),
-                contentRows = TabletKeyboardRows.NUMBERS + TabletKeyboardRows.SEMICOLON_QUOTE_SLASH,
-                softKeyCodeMapper = softKeyCodeMapper
-            )
+        abstract val softKeyCodeMapper: SoftKeyCodeMapper
+        abstract val layoutTable: LayoutTable
+        override var textLayoutPreset: KeyboardLayoutPreset = KoreanLayoutPresets.threeSet390391(
+            layoutTable,
+            softKeyCodeMapper,
+            cursorKeys
         )
     }
 
@@ -215,13 +175,11 @@ abstract class KoreanIMEMode(
     ): Hangul3Set390391(cursorKeys, listener) {
         override val hangulCombiner: HangulCombiner = HangulCombiner(Hangul3Set.COMBINATION_390_391, correctOrders)
         override val hanjaConverter: HanjaConverter = converterType.create()
-        override val textLayoutTable: LayoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + Hangul3Set.TABLE_390)
-        override val softKeyCodeMapper: SoftKeyCodeMapper get() = SoftKeyCodeMapper(mapOf(
-            KeyEvent.KEYCODE_B to ExtKeyCode.KEYCODE_390_0,
-            KeyEvent.KEYCODE_N to ExtKeyCode.KEYCODE_390_1,
-            KeyEvent.KEYCODE_M to ExtKeyCode.KEYCODE_390_2,
-            KeyEvent.KEYCODE_APOSTROPHE to ExtKeyCode.KEYCODE_390_3
-        ))
+        override val layoutTable: LayoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + Hangul3Set.TABLE_390)
+        override val softKeyCodeMapper: SoftKeyCodeMapper = SoftKeyCodeMapper.ByScreenMode(
+            mobile = SoftKeyCodeMapper.Basic(Hangul3Set.KEYCODE_MAP_390_MOBILE),
+            tablet = SoftKeyCodeMapper.Empty
+        )
     }
 
     class Hangul3Set391(
@@ -232,7 +190,8 @@ abstract class KoreanIMEMode(
     ): Hangul3Set390391(cursorKeys, listener) {
         override val hangulCombiner: HangulCombiner = HangulCombiner(Hangul3Set.COMBINATION_390_391, correctOrders)
         override val hanjaConverter: HanjaConverter = converterType.create()
-        override val textLayoutTable: LayoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + Hangul3Set.TABLE_391)
+        override val layoutTable: LayoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + Hangul3Set.TABLE_391)
+        override val softKeyCodeMapper: SoftKeyCodeMapper = SoftKeyCodeMapper.Empty
     }
 
     class Hangul3Set391Strict(
@@ -243,7 +202,8 @@ abstract class KoreanIMEMode(
     ): Hangul3Set390391(cursorKeys, listener) {
         override val hangulCombiner: HangulCombiner = HangulCombiner(Hangul3Set.COMBINATION_391_STRICT, correctOrders)
         override val hanjaConverter: HanjaConverter = converterType.create()
-        override val textLayoutTable: LayoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + Hangul3Set.TABLE_391_STRICT)
+        override val layoutTable: LayoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + Hangul3Set.TABLE_391_STRICT)
+        override val softKeyCodeMapper: SoftKeyCodeMapper = SoftKeyCodeMapper.Empty
     }
 
     class HangulOld2Set(
@@ -254,7 +214,7 @@ abstract class KoreanIMEMode(
         listener: IMEMode.Listener
     ): Hangul2SetKSCompatible(converterType, numberRow, cursorKeys, listener) {
         override val hangulCombiner: HangulCombiner = HangulCombiner(HangulOld.COMB_FULL, correctOrders)
-        override val textLayoutTable: LayoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + HangulOld.TABLE_OLD_2SET)
+        override val layoutTable: LayoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + HangulOld.TABLE_OLD_2SET)
     }
 
     class HangulOld3Set393(
@@ -262,38 +222,10 @@ abstract class KoreanIMEMode(
         converterType: ConverterType,
         cursorKeys: Boolean,
         listener: IMEMode.Listener
-    ): Hangul3Set390391(cursorKeys, listener) {
+    ): KoreanIMEMode(listener) {
         override val hangulCombiner: HangulCombiner = HangulCombiner(HangulOld.COMB_FULL, correctOrders)
         override val hanjaConverter: HanjaConverter = converterType.create()
-        override val textLayoutTable: LayoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + HangulOld.TABLE_OLD_393)
-        override val softKeyCodeMapper: SoftKeyCodeMapper get() = SoftKeyCodeMapper(mapOf(
-            KeyEvent.KEYCODE_B to ExtKeyCode.KEYCODE_390_0,
-            KeyEvent.KEYCODE_N to ExtKeyCode.KEYCODE_390_1,
-            KeyEvent.KEYCODE_M to ExtKeyCode.KEYCODE_390_2,
-            KeyEvent.KEYCODE_APOSTROPHE to ExtKeyCode.KEYCODE_390_3,
-            KeyEvent.KEYCODE_SLASH to ExtKeyCode.KEYCODE_PERIOD_COMMA,
-            ExtKeyCode.KEYCODE_PERIOD_COMMA to KeyEvent.KEYCODE_GRAVE
-        ))
-        override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
-            mobile = KeyboardTemplate.Basic(
-                configuration = KeyboardConfiguration(
-                    MobileKeyboard.numbers(),
-                    MobileKeyboard.alphabetic(semicolon = true, shiftDeleteWidth = 1f),
-                    MobileKeyboard.bottom(ExtKeyCode.KEYCODE_PERIOD_COMMA, KeyEvent.KEYCODE_SLASH)
-                ),
-                contentRows = MobileKeyboardRows.NUMBERS + MobileKeyboardRows.SEMICOLON_QUOTE,
-                softKeyCodeMapper = softKeyCodeMapper
-            ),
-            tablet = KeyboardTemplate.Basic(
-                configuration = KeyboardConfiguration(
-                    TabletKeyboard.numbers(delete = true),
-                    TabletKeyboard.alphabetic(semicolon = true, delete = false, spacerOnDelete = false),
-                    TabletKeyboard.bottom()
-                ),
-                contentRows = TabletKeyboardRows.HANGUL_OLD_393,
-                softKeyCodeMapper = SoftKeyCodeMapper()
-            )
-        )
+        override var textLayoutPreset: KeyboardLayoutPreset = KoreanLayoutPresets.threeSet393()
     }
 
     data class Params(
