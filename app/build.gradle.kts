@@ -31,13 +31,8 @@ configure<ApplicationExtension> {
 
     flavorDimensions += "edition"
     productFlavors {
-        create("paid") {
-            isDefault = true
-            dimension = "edition"
-            applicationIdSuffix = ""
-            buildConfigField("boolean", "IS_PAID", "true")
-        }
         create("free") {
+            isDefault = true
             dimension = "edition"
             applicationIdSuffix = ".free"
             buildConfigField("boolean", "IS_PAID", "false")
@@ -102,10 +97,6 @@ tasks.register("printVersionName") {
 
 tasks.register("printPackageName") {
     println(android.defaultConfig.applicationId)
-}
-
-tasks.register("printPaidPackageNameSuffix") {
-    println(android.productFlavors["paid"].applicationIdSuffix)
 }
 
 tasks.register("printFreePackageNameSuffix") {
