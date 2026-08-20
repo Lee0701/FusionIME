@@ -116,7 +116,7 @@ jobs:
 
     strategy:
       matrix:
-        edition: [free, paid]
+        edition: [free]
 
     steps:
       - name: Cache Gradle packages
