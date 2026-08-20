@@ -89,35 +89,35 @@ class ZhuyinIMEMode(
         }
         val bestCandidate = bestCandidate
         if(bestCandidate != null) onCandidateSelected(bestCandidate)
+        else onReset()
     }
 
     private fun handleSpace() {
         if(wordComposer.composingText.isNotEmpty()) {
-            if(wordComposer.textBeforeCursor.lastOrNull() !in LayoutZhuyin.TONE_MARKS)
+            if(wordComposer.textBeforeCursor.lastOrNull() !in LayoutZhuyin.TONE_MARKS) {
                 wordComposer.commit('ˉ'.toString())
-            else if(bestCandidate != null)
+                renderResult()
+            } else {
                 pickDefaultSuggestion()
-            else
-                onReset()
+            }
+        }
+        else {
+            currentInputConnection?.commitText(" ", 1)
             renderResult()
         }
-        else currentInputConnection?.commitText(" ", 1)
     }
 
     private fun handleReturn() {
         if(wordComposer.composingText.isNotEmpty()) {
-            if(bestCandidate != null) pickDefaultSuggestion()
-            else onReset()
+            pickDefaultSuggestion()
         } else {
             if (util?.sendDefaultEditorAction(true) != true)
                 currentInputConnection?.commitText("\n", 1)
         }
-        renderResult()
     }
 
     private fun handleBackspace() {
         val ic = currentInputConnection ?: return
-        var deleteChar = false
         if (wordComposer.composingText.isNotEmpty()) {
             val length: Int = wordComposer.composingText.length
             if (length > 0) {
@@ -126,9 +126,6 @@ class ZhuyinIMEMode(
                 ic.deleteSurroundingText(1, 0)
             }
         } else {
-            deleteChar = true
-        }
-        if (deleteChar) {
             util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_DEL)
         }
         renderResult()
