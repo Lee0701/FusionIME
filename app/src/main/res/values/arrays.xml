@@ -11,6 +11,22 @@
 <!--        <item>Full</item>-->
     </string-array>
 
+    <string-array name="settings_appearance_symbol_layout_entries">
+        <item>@string/symbol_layout_g</item>
+        <item>@string/symbol_layout_n1</item>
+        <item>@string/symbol_layout_n2</item>
+        <item>@string/symbol_layout_o1</item>
+        <item>@string/symbol_layout_o2</item>
+    </string-array>
+
+    <string-array name="settings_appearance_symbol_layout_values">
+        <item>G</item>
+        <item>N1</item>
+        <item>N2</item>
+        <item>O1</item>
+        <item>O2</item>
+    </string-array>
+
     <string-array name="settings_behaviour_touch_mode_entries">
         <item>@string/touch_mode_seek</item>
         <item>@string/touch_mode_flick</item>

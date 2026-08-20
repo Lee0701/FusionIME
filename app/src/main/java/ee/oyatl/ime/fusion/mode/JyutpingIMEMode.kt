@@ -3,15 +3,11 @@ package ee.oyatl.ime.fusion.mode
 import android.content.Context
 import android.view.KeyEvent
 import ee.oyatl.ime.candidate.CandidateView
-import ee.oyatl.ime.fusion.Feature
+import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.korean.WordComposer
-import ee.oyatl.ime.fusion.layout.MobileKeyboard
-import ee.oyatl.ime.fusion.layout.MobileKeyboardRows
-import ee.oyatl.ime.fusion.layout.TabletKeyboard
-import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
-import ee.oyatl.ime.keyboard.KeyboardConfiguration
-import ee.oyatl.ime.keyboard.KeyboardTemplate
+import ee.oyatl.ime.fusion.layout.preset.JyutpingLayoutPresets
+import ee.oyatl.ime.fusion.layout.preset.LatinLayoutPresets
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -22,32 +18,9 @@ import org.jyutping.jyutping.models.VirtualInputKey
 import java.util.Locale
 
 class JyutpingIMEMode(
-    numberRow: Boolean,
-    cursorKeys: Boolean,
+    override var textLayoutPreset: KeyboardLayoutPreset,
     listener: IMEMode.Listener
 ): CommonIMEMode(listener) {
-    private val numberRow = Feature.NumberRow.availableInCurrentVersion && numberRow
-    private val cursorKeys = Feature.CursorKeys.availableInCurrentVersion && cursorKeys
-
-    override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
-        mobile = KeyboardTemplate.Basic(
-            configuration = KeyboardConfiguration(
-                if(this.numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
-                MobileKeyboard.alphabetic(),
-                MobileKeyboard.bottom(dpad = this.cursorKeys)
-            ),
-            contentRows = (if(this.numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.DEFAULT
-        ),
-        tablet = KeyboardTemplate.Basic(
-            configuration = KeyboardConfiguration(
-                if(this.numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
-                TabletKeyboard.alphabetic(delete = !this.numberRow),
-                TabletKeyboard.bottom()
-            ),
-            contentRows = (if(this.numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.DEFAULT
-        )
-    )
-
     private val wordComposer = WordComposer()
     private var bestCandidate: CandidateView.Candidate? = null
 
@@ -153,7 +126,8 @@ class JyutpingIMEMode(
         override val type: String = TYPE
 
         override fun create(listener: IMEMode.Listener): IMEMode {
-            return JyutpingIMEMode(numberRow, cursorKeys, listener)
+            val textLayoutPreset = JyutpingLayoutPresets.jyutping(LatinLayoutPresets.qwerty(false, numberRow, cursorKeys))
+            return JyutpingIMEMode(textLayoutPreset, listener)
         }
 
         override fun getLabel(context: Context): String {
