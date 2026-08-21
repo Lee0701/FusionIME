@@ -44,6 +44,11 @@
             app:defaultValue="false"
             app:title="@string/settings_appearance_show_voice_input_button_title" />
 
+        <SwitchPreferenceCompat
+            android:key="clipboard_candidate_enabled"
+            app:defaultValue="true"
+            app:title="@string/settings_clipboard_candidate_enabled_title" />
+
     </androidx.preference.PreferenceCategory>
 
 </androidx.preference.PreferenceScreen>
