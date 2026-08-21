@@ -1,6 +1,8 @@
 package ee.oyatl.ime.keyboard.touchhandler
 
-import ee.oyatl.ime.keyboard.FlickKeyCode
+import ee.oyatl.ime.keyboard.KeyLabel
+import ee.oyatl.ime.keyboard.KeyboardView
+import ee.oyatl.ime.keyboard.listener.FlickListener
 import ee.oyatl.ime.keyboard.popup.Popup
 import ee.oyatl.ime.keyboard.popup.PreviewPopup
 import kotlin.math.PI
@@ -9,7 +11,7 @@ import kotlin.math.pow
 import kotlin.math.sqrt
 
 class FlickTouchHandler(
-    override val keyboardView: TouchHandler.KeyboardViewInterface,
+    override val keyboardView: KeyboardView,
     val threshold: Int,
     val diagonal: Boolean = false,
     val multiFlick: Boolean = false,
@@ -18,7 +20,10 @@ class FlickTouchHandler(
     val pointers = mutableMapOf<Int, Pointer>()
 
     override fun onReset() {
-        pointers.values.forEach { it.key?.onReleased() }
+        pointers.values.forEach {
+            it.key?.onReleased()
+            it.popup?.hide()
+        }
         pointers.clear()
     }
 
@@ -27,7 +32,7 @@ class FlickTouchHandler(
         val popup = key?.let { keyboardView.popupManager.createPreviewPopup(key) }
         val pointer = Pointer(pointerId, x, y, x, y, key, popup)
         if(key != null) {
-            key.onPressed()
+            keyboardView.findKeys(key.keyCode).forEach { it.onPressed() }
             keyboardView.listener.onKeyDown(key.keyCode, 0)
         }
         popup?.show()
@@ -51,13 +56,14 @@ class FlickTouchHandler(
                 val flicks = pointer.flicks.toMutableList()
                 if(direction != lastDirection && (multiFlick || flicks.isEmpty())) {
                     if(pointer.key != null && pointer.key.keyCode >= 0) {
-                        val keyCode = FlickKeyCode.FLAG_FLICK or direction.keyCodeFlag or pointer.key.keyCode
                         if(pointer.popup is PreviewPopup) {
-                            val newLabel = keyboardView.labels[direction.keyCodeFlag or pointer.key.keyCode]
-                            if(newLabel != null) pointer.popup.label = newLabel
+                            val newLabel = keyboardView.labels[pointer.key.keyCode]
+                            if(newLabel is KeyLabel.Flick) newLabel.forDirection(direction)?.let { pointer.popup.label = it }
                         }
-                        keyboardView.listener.onKeyDown(keyCode, 0)
-                        keyboardView.listener.onKeyUp(keyCode, 0)
+                        val listener = keyboardView.listener
+                        if(listener is FlickListener) {
+                            listener.onFlick(pointer.key.keyCode, direction)
+                        }
                     }
                     flicks += direction
                 }
@@ -72,7 +78,7 @@ class FlickTouchHandler(
         val pointer = pointers[pointerId] ?: return
         val key = pointer.key
         if(key != null) {
-            key.onReleased()
+            keyboardView.findKeys(key.keyCode).forEach { it.onReleased() }
             if(pointer.flicks.isEmpty() || sendOnUp) keyboardView.listener.onKeyUp(key.keyCode, 0)
         }
         pointer.popup?.hide()

@@ -20,6 +20,7 @@ import com.android.inputmethod.latin.RichInputMethodManager
 import com.android.inputmethod.latin.settings.Settings
 import ee.oyatl.ime.fusion.mode.IMEMode
 import ee.oyatl.ime.fusion.mode.IMEModeSwitcher
+import ee.oyatl.ime.fusion.mode.JyutpingIMEMode
 import ee.oyatl.ime.fusion.mode.LatinIMEMode
 import ee.oyatl.ime.fusion.mode.PinyinIMEMode
 import ee.oyatl.ime.fusion.preference.KeyStrokePreference

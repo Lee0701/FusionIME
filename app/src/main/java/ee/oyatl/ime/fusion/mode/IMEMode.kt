@@ -14,8 +14,8 @@ interface IMEMode {
     fun createCandidateView(context: Context): View
     fun getInputView(): View?
 
-    fun onKeyDown(keyCode: Int, metaState: Int)
-    fun onKeyUp(keyCode: Int, metaState: Int)
+    fun onKeyDown(keyCode: Int, metaState: Int): Boolean
+    fun onKeyUp(keyCode: Int, metaState: Int): Boolean
 
     fun updateSelection(
         oldSelStart: Int, oldSelEnd: Int,
@@ -52,6 +52,7 @@ interface IMEMode {
                     ZhuyinIMEMode.TYPE -> ZhuyinIMEMode.Params.parse(map)
                     CangjieIMEMode.TYPE -> CangjieIMEMode.Params.parse(map)
                     VietIMEMode.TYPE -> VietIMEMode.Params.parse(map)
+                    JyutpingIMEMode.TYPE -> JyutpingIMEMode.Params.parse(map)
                     else -> null
                 }
             }

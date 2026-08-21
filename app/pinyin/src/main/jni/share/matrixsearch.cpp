@@ -452,9 +452,10 @@ size_t MatrixSearch::search(const char *py, size_t py_len) {
   // Get spelling ids and starting positions.
   get_spl_start_id();
 
-  // If there are too many spellings, remove the last letter until the spelling
-  // number is acceptable.
-  while (spl_id_num_ > 9) {
+  // Keep the engine within the spelling arrays without discarding ordinary
+  // input. One spelling needs at least one input character, so this is only a
+  // defensive fallback after the raw input length check above.
+  while (spl_id_num_ > kMaxSentenceLength) {
     py_len--;
     reset_search(py_len, false, false, false);
     pys_[py_len] = '\0';
@@ -1140,13 +1141,13 @@ void MatrixSearch::prepare_candidates() {
   // lemma. Remove the lemma candidate in this case.
   char16 fullsent[kMaxLemmaSize + 1];
   char16 *pfullsent = NULL;
-  uint16 sent_len;
+  uint16 sent_len = 0;
   pfullsent = get_candidate0(fullsent, kMaxLemmaSize + 1, &sent_len, true);
 
   // If the unfixed part contains more than one ids, it is not necessary to
   // check whether a lemma's string is the same to the unfixed part of the full
   // sentence candidate, so, set it to NULL;
-  if (sent_len > kMaxLemmaSize)
+  if (NULL == pfullsent || sent_len > kMaxLemmaSize)
     pfullsent = NULL;
 
   lpi_total_ = 0;
