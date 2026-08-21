@@ -6,6 +6,7 @@ import ee.oyatl.ime.fusion.dictionary.manager.DictionaryCache
 import ee.oyatl.ime.newdict.DiskHanjaDictionary
 import ee.oyatl.ime.newdict.DiskNGramDictionary
 import ee.oyatl.ime.newdict.DiskTrieDictionary
+import kotlinx.coroutines.yield
 
 class BigramHanjaConverter: HanjaConverter {
     private lateinit var indexDict: DiskTrieDictionary
@@ -27,7 +28,7 @@ class BigramHanjaConverter: HanjaConverter {
         }
     }
 
-    override fun convert(text: String): List<CandidateView.Candidate> {
+    override suspend fun convert(text: String): List<CandidateView.Candidate> {
         return convert(CompoundCandidate(listOf()), text, 0)
             .asSequence()
             .sortedByDescending { it.score }
@@ -39,7 +40,8 @@ class BigramHanjaConverter: HanjaConverter {
             .toList()
     }
 
-    fun convert(context: CompoundCandidate, text: String, depth: Int): List<CompoundCandidate> {
+    suspend fun convert(context: CompoundCandidate, text: String, depth: Int): List<CompoundCandidate> {
+        yield()
         if(text.isEmpty() || depth > 4) return listOf(context)
         val current = (1 .. text.length)
             .flatMap { l -> indexDict.get(text.take(l)) }

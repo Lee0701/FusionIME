@@ -12,6 +12,7 @@
     <string name="settings_method_choose_method_summary">Please choose \'FusionIME\'.</string>
     <string name="settings_appearance_basic_title">Basic</string>
     <string name="settings_appearance_screen_mode_title">Screen Mode</string>
+    <string name="settings_appearance_symbol_layout_title">Symbol Layout</string>
     <string name="settings_appearance_keyboard_height_portrait_title">Keyboard Height (Portrait)</string>
     <string name="settings_appearance_keyboard_height_landscape_title">Keyboard Height (Landscape)</string>
     <string name="settings_appearance_show_voice_input_button_title">Show Voice Input Button</string>
@@ -56,6 +57,7 @@
     <string name="settings_input_mode_candidate_view_height_title">Candidate View Height</string>
     <string name="settings_input_mode_chinese_traditional_title">Chinese Traditional</string>
     <string name="settings_input_mode_pinyin_spelling_title">Pinyin Input Style</string>
+    <string name="settings_input_mode_zhuyin_conversion_engine_title">Conversion Engine</string>
     <string name="settings_input_mode_mozc_flick_mode_title">12-Key Flick Mode</string>
     <string name="settings_input_mode_mozc_flick_hint_title">Flick Hints</string>
     <string name="settings_input_mode_mozc_flick_hint_summary">Show flick hints on 12-Key or GODAN layouts.</string>
@@ -75,6 +77,11 @@
     <string name="screen_mode_mobile">Mobile</string>
     <string name="screen_mode_tablet">Tablet</string>
     <string name="screen_mode_full">Full</string>
+    <string name="symbol_layout_g">Type G</string>
+    <string name="symbol_layout_n1">Type N1</string>
+    <string name="symbol_layout_n2">Type N2</string>
+    <string name="symbol_layout_o1">Type O1</string>
+    <string name="symbol_layout_o2">Type O2</string>
     <string name="touch_mode_seek">Seek</string>
     <string name="touch_mode_flick">Flick</string>
     <string name="flick_action_none">None</string>
@@ -97,6 +104,7 @@
     <string name="latin_locale_it">Italian</string>
     <string name="latin_locale_pt_br">Portuguese (Brazil)</string>
     <string name="latin_layout_qwerty">QWERTY</string>
+    <string name="latin_layout_azerty">AZERTY</string>
     <string name="latin_layout_dvorak">Dvorak</string>
     <string name="latin_layout_colemak">Colemak</string>
     <string name="korean_layout_hangul_2set_ks">Hangul 2-Set KS</string>
@@ -132,6 +140,9 @@
     <string name="pinyin_chinese_simplified">Simplified</string>
     <string name="pinyin_chinese_traditional">Traditional</string>
     <string name="zhuyin_layout_zhuyin">Bopomofo</string>
+    <string name="zhuyin_conversion_engine_simple">Simple</string>
+    <string name="zhuyin_conversion_engine_chewing">Chewing</string>
+    <string name="zhuyin_conversion_engine_fuzzy_chewing">Fuzzy Chewing</string>
     <string name="cangjie_layout_cangjie">Cangjie</string>
     <string name="cangjie_layout_quick">Quick</string>
     <string name="cangjie_layout_dayi3">Dayi</string>

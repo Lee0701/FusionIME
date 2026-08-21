@@ -8,6 +8,6 @@ sealed interface KeyboardState {
         Text, Symbol, Number
     }
     enum class ScreenMode: KeyboardState {
-        Mobile, Tablet, Full
+        Mobile, Tablet, Full, MoreKeys
     }
 }

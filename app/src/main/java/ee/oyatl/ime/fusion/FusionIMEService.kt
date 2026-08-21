@@ -24,6 +24,7 @@ import ee.oyatl.ime.fusion.mode.LatinIMEMode
 import ee.oyatl.ime.fusion.mode.PinyinIMEMode
 import ee.oyatl.ime.fusion.preference.KeyStrokePreference
 import ee.oyatl.ime.fusion.settings.InputModeSettingsFragment
+import ee.oyatl.ime.keyboard.PaleViewFilter
 import ee.oyatl.ime.keyboard.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -35,6 +36,7 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
     private lateinit var preference: SharedPreferences
     private lateinit var imeModeSwitcher: IMEModeSwitcher
     private var imeView: View? = null
+    private val imeViewFilter = PaleViewFilter()
     private var hardwareLanguageKeyStroke: KeyStrokePreference.KeyStroke = KeyStrokePreference.KeyStroke()
 
     override fun onCreate() {
@@ -52,6 +54,7 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
     }
 
     override fun onDestroy() {
+        imeViewFilter.clear()
         super.onDestroy()
         onUnload()
     }
@@ -100,6 +103,7 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
     }
 
     fun onResetViews() {
+        imeViewFilter.clear()
         imeModeSwitcher.resetInputViews()
         imeModeSwitcher.resetCandidateViews()
         setInputView(onCreateInputView())
@@ -181,6 +185,14 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
     override fun onExpandedCandidates(candidates: List<CandidateView.Candidate>) {
         imeModeSwitcher.expandedCandidateView?.submitList(candidates)
         if(candidates.isEmpty()) imeModeSwitcher.collapseCandidateView()
+    }
+
+    override fun onLongPressStateChanged(active: Boolean) {
+        if(active) {
+            imeView?.let(imeViewFilter::apply)
+        } else {
+            imeViewFilter.clear()
+        }
     }
 
     override fun onUpdateSelection(

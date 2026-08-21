@@ -1,45 +1,31 @@
 package ee.oyatl.ime.fusion.mode
 
 import android.content.Context
-import android.os.Handler
-import android.os.Looper
 import android.view.KeyEvent
 import androidx.annotation.StringRes
 import com.diycircuits.cangjie.TableLoader
 import ee.oyatl.ime.candidate.CandidateView
-import ee.oyatl.ime.fusion.Feature
+import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.korean.WordComposer
-import ee.oyatl.ime.keyboard.KeyboardConfiguration
 import ee.oyatl.ime.keyboard.KeyboardState
-import ee.oyatl.ime.keyboard.KeyboardTemplate
-import ee.oyatl.ime.keyboard.LayoutTable
-import ee.oyatl.ime.fusion.layout.ExtKeyCode
-import ee.oyatl.ime.fusion.layout.MobileKeyboard
-import ee.oyatl.ime.fusion.layout.MobileKeyboardRows
 import ee.oyatl.ime.fusion.layout.LayoutCangjie
-import ee.oyatl.ime.fusion.layout.LayoutExt
-import ee.oyatl.ime.fusion.layout.LayoutQwerty
-import ee.oyatl.ime.fusion.layout.TabletKeyboard
-import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
+import ee.oyatl.ime.fusion.layout.preset.CangjieLayoutPresets
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import java.util.Locale
 import kotlin.collections.plus
 
 abstract class CangjieIMEMode(
     listener: IMEMode.Listener
 ): CommonIMEMode(listener) {
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private var convertJob: Job? = null
+
     abstract val inputMode: Int
     abstract val fullWidth: Boolean
-
-    private val handler: Handler = Handler(Looper.getMainLooper()) { msg ->
-        when(msg.what) {
-            MSG_UPDATE_SUGGESTIONS -> {
-                updateSuggestions()
-                true
-            }
-            else -> false
-        }
-    }
 
     abstract val keyMap: Map<Char, Char>
 
@@ -75,23 +61,21 @@ abstract class CangjieIMEMode(
         renderInput()
     }
 
-    private fun updateSuggestions() {
-        val table = table ?: return
-        table.setInputMethod(inputMode)
-        val key = wordComposer.textBeforeCursor
-        val zeros = (0 until 5).map { 0.toChar() }
-        val chars = (key.map { keyMap[it] ?: it }.toCharArray() + zeros).take(5)
-        val (c0, c1, c2, c3, c4) = chars
-        table.searchCangjie(c0, c1, c2, c3, c4)
-        val candidates = (0 until table.totalMatch())
-            .map { CangjieCandidate(table.getMatchChar(it).toString(), key) }
-        submitCandidates(candidates)
-        bestCandidate = candidates.firstOrNull()
-    }
-
     private fun postUpdateSuggestions() {
-        handler.removeMessages(MSG_UPDATE_SUGGESTIONS)
-        handler.sendMessageDelayed(handler.obtainMessage(MSG_UPDATE_SUGGESTIONS), 100)
+        convertJob?.cancel()
+        convertJob = coroutineScope.launch {
+            val table = table ?: return@launch
+            table.setInputMethod(inputMode)
+            val key = wordComposer.textBeforeCursor
+            val zeros = (0 until 5).map { 0.toChar() }
+            val chars = (key.map { keyMap[it] ?: it }.toCharArray() + zeros).take(5)
+            val (c0, c1, c2, c3, c4) = chars
+            table.searchCangjie(c0, c1, c2, c3, c4)
+            val candidates = (0 until table.totalMatch())
+                .map { CangjieCandidate(table.getMatchChar(it).toString(), key) }
+            submitCandidates(candidates)
+            bestCandidate = candidates.firstOrNull()
+        }
     }
 
     private fun renderInput() {
@@ -110,9 +94,12 @@ abstract class CangjieIMEMode(
         when(keyCode) {
             KeyEvent.KEYCODE_SPACE -> {
                 if(wordComposer.composingText.isNotEmpty()) {
-                    updateSuggestions()
-                    val bestCandidate = bestCandidate
-                    if(bestCandidate != null) onCandidateSelected(bestCandidate)
+                    coroutineScope.launch {
+                        postUpdateSuggestions()
+                        convertJob?.join()
+                        val bestCandidate = bestCandidate
+                        if(bestCandidate != null) onCandidateSelected(bestCandidate)
+                    }
                 } else {
                     onReset()
                     if(fullWidth) util?.sendKeyChar(0x3000.toChar())
@@ -171,58 +158,15 @@ abstract class CangjieIMEMode(
         val key: CharSequence
     ): CandidateView.Candidate
 
-    abstract class CangjieQuick(
+    class CangjieQuick(
         override val fullWidth: Boolean,
+        override val inputMode: Int,
+        numberRow: Boolean,
+        cursorKeys: Boolean,
         listener: IMEMode.Listener
     ): CangjieIMEMode(listener) {
-        override val textLayoutTable: LayoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutExt.TABLE_CHINESE + LayoutCangjie.TABLE_QWERTY)
         override val keyMap: Map<Char, Char> = LayoutCangjie.KEY_MAP_CANGJIE
-    }
-
-    abstract class QwertyCompatible(
-        fullWidth: Boolean,
-        numberRow: Boolean,
-        cursorKeys: Boolean,
-        listener: IMEMode.Listener
-    ): CangjieQuick(fullWidth, listener) {
-        private val numberRow = Feature.NumberRow.availableInCurrentVersion && numberRow
-        private val cursorKeys = Feature.CursorKeys.availableInCurrentVersion && cursorKeys
-        override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
-            mobile = KeyboardTemplate.Basic(
-                configuration = KeyboardConfiguration(
-                    if(this.numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
-                    MobileKeyboard.alphabetic(),
-                    MobileKeyboard.bottom(dpad = this.cursorKeys)
-                ),
-                contentRows = (if(this.numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.DEFAULT
-            ),
-            tablet = KeyboardTemplate.Basic(
-                configuration = KeyboardConfiguration(
-                    if(this.numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
-                    TabletKeyboard.alphabetic(delete = !this.numberRow),
-                    TabletKeyboard.bottom()
-                ),
-                contentRows = (if(this.numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.DEFAULT
-            )
-        )
-    }
-
-    class Cangjie(
-        fullWidth: Boolean,
-        numberRow: Boolean,
-        cursorKeys: Boolean,
-        listener: IMEMode.Listener
-    ): QwertyCompatible(fullWidth, numberRow, cursorKeys, listener) {
-        override val inputMode: Int = TableLoader.CANGJIE
-    }
-
-    class Quick(
-        fullWidth: Boolean,
-        numberRow: Boolean,
-        cursorKeys: Boolean,
-        listener: IMEMode.Listener
-    ): QwertyCompatible(fullWidth, numberRow, cursorKeys, listener) {
-        override val inputMode: Int = TableLoader.QUICK
+        override var textLayoutPreset: KeyboardLayoutPreset = CangjieLayoutPresets.cangjie(numberRow, cursorKeys)
     }
 
     class Dayi3(
@@ -231,26 +175,7 @@ abstract class CangjieIMEMode(
         listener: IMEMode.Listener
     ): CangjieIMEMode(listener) {
         override val inputMode: Int = TableLoader.DAYI3
-        private val cursorKeys = Feature.CursorKeys.availableInCurrentVersion && cursorKeys
-        override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
-            mobile = KeyboardTemplate.Basic(
-                configuration = KeyboardConfiguration(
-                    MobileKeyboard.numbers(),
-                    MobileKeyboard.alphabetic(semicolon = true, shiftDeleteWidth = 1f, shift = false),
-                    MobileKeyboard.bottom(left = ExtKeyCode.KEYCODE_PERIOD_COMMA, right = KeyEvent.KEYCODE_SLASH, dpad = this.cursorKeys)
-                ),
-                contentRows = MobileKeyboardRows.NUMBERS + MobileKeyboardRows.HALF_GRID
-            ),
-            tablet = KeyboardTemplate.Basic(
-                configuration = KeyboardConfiguration(
-                    TabletKeyboard.numbers(delete = true),
-                    TabletKeyboard.alphabetic(semicolon = true, rightShift = false, delete = false, spacerOnDelete = true),
-                    TabletKeyboard.bottom()
-                ),
-                contentRows = TabletKeyboardRows.NUMBERS + TabletKeyboardRows.SEMICOLON_SLASH
-            )
-        )
-        override val textLayoutTable: LayoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutExt.TABLE_CHINESE + LayoutCangjie.TABLE_DAYI3)
+        override var textLayoutPreset: KeyboardLayoutPreset = CangjieLayoutPresets.dayi3(cursorKeys)
         override val keyMap: Map<Char, Char> = LayoutCangjie.KEY_MAP_DAYI3
     }
 
@@ -264,8 +189,8 @@ abstract class CangjieIMEMode(
 
         override fun create(listener: IMEMode.Listener): IMEMode {
             return when(layout) {
-                Layout.Cangjie -> Cangjie(fullWidth, numberRow, cursorKeys, listener)
-                Layout.Quick -> Quick(fullWidth, numberRow, cursorKeys, listener)
+                Layout.Cangjie -> CangjieQuick(fullWidth, TableLoader.CANGJIE, numberRow, cursorKeys, listener)
+                Layout.Quick -> CangjieQuick(fullWidth, TableLoader.QUICK, numberRow, cursorKeys, listener)
                 Layout.Dayi3 -> Dayi3(fullWidth, cursorKeys, listener)
             }
         }
@@ -310,6 +235,5 @@ abstract class CangjieIMEMode(
 
     companion object {
         const val TYPE: String = "cangjie"
-        const val MSG_UPDATE_SUGGESTIONS = 0
     }
 }

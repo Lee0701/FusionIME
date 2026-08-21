@@ -29,6 +29,7 @@ interface IMEMode {
         fun onRequestHideSelf(flags: Int)
         fun onCandidateViewVisibilityChange(visible: Boolean)
         fun onExpandedCandidates(candidates: List<CandidateView.Candidate>)
+        fun onLongPressStateChanged(active: Boolean)
     }
 
     interface Params {

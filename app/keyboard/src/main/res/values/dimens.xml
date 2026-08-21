@@ -12,4 +12,7 @@
     <dimen name="candidate_extra_width">60dp</dimen>
 
     <dimen name="mode_tab_width">64dp</dimen>
+
+    <dimen name="more_keys_popup_height">48dp</dimen>
+    <dimen name="more_keys_popup_bg_radius">10dp</dimen>
 </resources>

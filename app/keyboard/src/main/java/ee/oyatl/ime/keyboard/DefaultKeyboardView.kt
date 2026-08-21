@@ -18,7 +18,7 @@ import ee.oyatl.ime.keyboard.listener.EmptyListener
 import ee.oyatl.ime.keyboard.listener.KeyboardListener
 import ee.oyatl.ime.keyboard.popup.EmptyPopupManager
 import ee.oyatl.ime.keyboard.popup.PopupManager
-import ee.oyatl.ime.keyboard.touchhandler.CompoundTouchHandler
+import ee.oyatl.ime.keyboard.touchhandler.EmptyTouchHandler
 import ee.oyatl.ime.keyboard.touchhandler.TouchHandler
 import kotlin.math.max
 import kotlin.math.roundToInt
@@ -27,6 +27,8 @@ class DefaultKeyboardView(
     context: Context,
     attrs: AttributeSet?
 ): FrameLayout(context, attrs), KeyboardView {
+    override val view: View = this
+
     override val rect: Rect = Rect()
     override val location: IntArray = IntArray(2)
     private val keySet: MutableSet<CachedKey> = mutableSetOf()
@@ -61,7 +63,7 @@ class DefaultKeyboardView(
         }
     override var listener: KeyboardListener = EmptyListener
     override var popupManager: PopupManager = EmptyPopupManager
-    var touchHandler: TouchHandler = CompoundTouchHandler(this)
+    var touchHandler: TouchHandler = EmptyTouchHandler
 
     init {
         viewTreeObserver.addOnGlobalLayoutListener {
@@ -70,7 +72,11 @@ class DefaultKeyboardView(
     }
 
     private fun setup(keyboard: Keyboard) {
-        val inflater = LayoutInflater.from(ContextThemeWrapper(context, R.style.Theme_FusionIME_Keyboard))
+        val themeId = when(keyboard.params.screenMode) {
+            KeyboardState.ScreenMode.MoreKeys -> R.style.Theme_FusionIME_Keyboard_MoreKeys
+            else -> R.style.Theme_FusionIME_Keyboard
+        }
+        val inflater = LayoutInflater.from(ContextThemeWrapper(context, themeId))
         val binding = KbdKeyboardBinding.inflate(inflater)
 
         keySet.clear()
@@ -123,6 +129,7 @@ class DefaultKeyboardView(
 
     override fun onReset() {
         listener.onReset()
+        touchHandler.onReset()
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -171,14 +178,14 @@ class DefaultKeyboardView(
         }
     }
 
-    override fun findKeys(keyCode: Int): List<TouchHandler.KeyInterface> {
+    override fun findKeys(keyCode: Int): List<KeyboardView.Key> {
         return keySet.filter { it.keyCode == keyCode }
     }
 
     data class CachedKey(
         override val keyCode: Int,
         val binding: KbdKeyBinding
-    ): TouchHandler.KeyInterface {
+    ): KeyboardView.Key {
         override val label: String get() = binding.label.text.toString()
         override val rect: Rect = Rect()
         override val location: IntArray = IntArray(2)
