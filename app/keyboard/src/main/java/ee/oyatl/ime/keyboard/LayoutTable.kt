@@ -3,10 +3,14 @@ package ee.oyatl.ime.keyboard
 import ee.oyatl.ime.keyboard.touchhandler.FlickDirection
 
 data class LayoutTable(
-    val map: Map<Int, Item>
+    val map: Map<Int, Item> = emptyMap()
 ) {
     operator fun get(keyCode: Int): Item? {
         return map[keyCode]
+    }
+
+    operator fun plus(other: LayoutTable): LayoutTable {
+        return LayoutTable(this.map + other.map)
     }
 
     fun mapKeyCodes(keyCodeMap: Map<Int, Int>): LayoutTable {
@@ -65,8 +69,11 @@ data class LayoutTable(
         }
         fun fromFlick4Dirs(map: Map<Int, List<Int>>): LayoutTable {
             return LayoutTable(map.mapNotNull { (key, arr) ->
-                if(arr.size == 5) key to FlickItem(arr[0], arr[1], arr[2], arr[3], arr[4])
-                else null
+                when (arr.size) {
+                    5 -> key to FlickItem(arr[0], arr[1], arr[2], arr[3], arr[4])
+                    1 -> key to FlickItem(arr[0], arr[0], arr[0], arr[0], arr[0])
+                    else -> null
+                }
             }.toMap())
         }
     }

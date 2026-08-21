@@ -10,6 +10,7 @@ enum class Feature(
     NumberRow(LocalDate.of(2026, 3, 15)),
     SplitKeyboard(LocalDate.of(2026, 3, 15)),
     TouchMode(LocalDate.of(2026, 4, 16)),
+    CursorKeys(LocalDate.of(2026, 8, 3)),
     ;
 
     val availableInPaidVersion: Boolean get() =
@@ -21,8 +22,7 @@ enum class Feature(
         else availableInFreeVersion
 
     companion object {
-        @Suppress("SENSELESS_COMPARISON")
-        val paidVersion: Boolean = BuildConfig.IS_PAID
+        val paidVersion: Boolean = true
         val autoUnlockMonths: Long = 6
     }
 }

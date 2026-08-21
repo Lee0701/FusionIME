@@ -13,6 +13,14 @@
             android:title="@string/settings_appearance_screen_mode_title"
             app:useSimpleSummaryProvider="true" />
 
+        <ListPreference
+            android:key="symbol_layout"
+            android:entries="@array/settings_appearance_symbol_layout_entries"
+            android:entryValues="@array/settings_appearance_symbol_layout_values"
+            android:defaultValue="G"
+            android:title="@string/settings_appearance_symbol_layout_title"
+            app:useSimpleSummaryProvider="true" />
+
         <ee.oyatl.ime.fusion.preference.SliderPreference
             app:key="keyboard_height_portrait"
             app:valueFrom="30.0"

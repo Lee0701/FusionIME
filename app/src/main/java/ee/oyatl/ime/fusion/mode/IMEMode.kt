@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
+import ee.oyatl.ime.candidate.CandidateView
 
 interface IMEMode {
 
@@ -27,6 +28,8 @@ interface IMEMode {
         fun onLanguageSwitch()
         fun onRequestHideSelf(flags: Int)
         fun onCandidateViewVisibilityChange(visible: Boolean)
+        fun onExpandedCandidates(candidates: List<CandidateView.Candidate>)
+        fun onLongPressStateChanged(active: Boolean)
     }
 
     interface Params {
@@ -52,6 +55,7 @@ interface IMEMode {
                     ZhuyinIMEMode.TYPE -> ZhuyinIMEMode.Params.parse(map)
                     CangjieIMEMode.TYPE -> CangjieIMEMode.Params.parse(map)
                     VietIMEMode.TYPE -> VietIMEMode.Params.parse(map)
+                    JyutpingIMEMode.TYPE -> JyutpingIMEMode.Params.parse(map)
                     else -> null
                 }
             }

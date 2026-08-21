@@ -15,6 +15,8 @@ class SwitcherKeyboardView(
     context: Context,
     attrs: AttributeSet?
 ): FrameLayout(context, attrs), KeyboardView {
+    override val view: View = this
+
     var map: Map<KeyboardState, KeyboardView> = mapOf()
         set(value) {
             field = value
@@ -42,13 +44,19 @@ class SwitcherKeyboardView(
         map.values.forEach { it.onReset() }
     }
 
-    override val rect: Rect = Rect()
-    override val location: IntArray = intArrayOf()
-    override val listener: KeyboardListener = EmptyListener
-    override val popupManager: PopupManager = EmptyPopupManager
+    override val rect: Rect get() = currentView.rect
+    override val location: IntArray get() = currentView.location
+    override val listener: KeyboardListener get() = currentView.listener
+    override val popupManager: PopupManager get() = currentView.popupManager
 
     override fun findKey(
         x: Int,
         y: Int
-    ): TouchHandler.KeyInterface? = null
+    ): KeyboardView.Key? {
+        return currentView.findKey(x, y)
+    }
+
+    override fun findKeys(keyCode: Int): List<KeyboardView.Key> {
+        return currentView.findKeys(keyCode)
+    }
 }

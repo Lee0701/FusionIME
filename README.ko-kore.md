@@ -4,7 +4,7 @@
 [데모版 다운로드](https://play.google.com/store/apps/details?id=ee.oyatl.ime.fusion.free)
 
 # FusionIME
-FusionIME는 韓中日越(漢子文化圈) 言語를 爲한 여러가지 入力方式을 單一 앱으로 提供합니다.
+FusionIME는 韓中日越(漢字文化圈) 言語를 爲한 여러가지 入力方式을 單一 앱으로 提供합니다.
 
 ## 機能
 * 앱間 轉換 없이 多國語로 入力할 수 있습니다. 統一된 스타일과 테마로 支援하는 모든 言語를 使用할 수 있습니다.
@@ -19,11 +19,14 @@ FusionIME는 韓中日越(漢子文化圈) 言語를 爲한 여러가지 入力�
 
 ### 中國語
 * 簡體·繁體 中國語 漢語拼音
+  * 自然碼, 마이크로소프트, 智能 ABC, 拼音加加, 小鶴, 搜狗, 紫光 雙拼音
 * 繁體 中國語 注音符號
 * 倉頡輸入法, 速成輸入法, 大易輸入法
+* 廣東語 粵拼
 
 ### 日本語
-* 로마字 QWERTY, 假名 JIS, 假名 五十音圖
+* 로마字 QWERTY, GODAN
+* 假名 JIS, 12키(토글·플릭), 五十音圖, 이로하順
 
 ### 韓國語
 * 韓國語 두벌式 標準
@@ -38,7 +41,7 @@ FusionIME는 韓中日越(漢子文化圈) 言語를 爲한 여러가지 入力�
 漢喃 變換을 支援합니다.
 
 ## 辭典 데이터
-* 韓國語: [標準國語大辭典](https://stdict.korean.go.kr), [libhangul](https://github.com/libhangul/libhangul/tree/main)
+* 韓國語: [標準國語大辭典](https://stdict.korean.go.kr), [libhangul](https://github.com/libhangul/libhangul)
 * 越南語: [chunom.org](https://chunom.org/)
 
 ## 라이선스
@@ -46,6 +49,7 @@ GNU General Public License v3.0
 
 * [Cangjie](https://github.com/hilarycheng/another_android_cangjie): GNU General Public License v2.0
 * [Chewing](https://github.com/hiroshiyui/libchewingAndroidAppModule): GNU General Public License v3.0
-* [LatinIME](android.googlesource.com/platform/packages/inputmethods/LatinIME/): Apache License 2.0
+* [LatinIME](https://android.googlesource.com/platform/packages/inputmethods/LatinIME/): Apache License 2.0
 * [Mozc](https://github.com/google/mozc): BSD 3-Clause
-* [PinyinIME](android.googlesource.com/platform/packages/inputmethods/PinyinIME/): Apache License 2.0
+* [PinyinIME](https://android.googlesource.com/platform/packages/inputmethods/PinyinIME/): Apache License 2.0
+* [Jyutping](https://github.com/yuetyam/jyutping-android): CC0 1.0 Universal
