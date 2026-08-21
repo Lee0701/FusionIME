@@ -13,8 +13,8 @@ configure<ApplicationExtension> {
         applicationId = "ee.oyatl.ime.fusion"
         minSdk = 21
         targetSdk = 36
-        versionCode = 17
-        versionName = "20260725-17-e602c6e"
+        versionCode = 18
+        versionName = "20260821-18-797124c"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -31,13 +31,8 @@ configure<ApplicationExtension> {
 
     flavorDimensions += "edition"
     productFlavors {
-        create("paid") {
-            isDefault = true
-            dimension = "edition"
-            applicationIdSuffix = ""
-            buildConfigField("boolean", "IS_PAID", "true")
-        }
         create("free") {
+            isDefault = true
             dimension = "edition"
             applicationIdSuffix = ".free"
             buildConfigField("boolean", "IS_PAID", "false")
@@ -102,10 +97,6 @@ tasks.register("printVersionName") {
 
 tasks.register("printPackageName") {
     println(android.defaultConfig.applicationId)
-}
-
-tasks.register("printPaidPackageNameSuffix") {
-    println(android.productFlavors["paid"].applicationIdSuffix)
 }
 
 tasks.register("printFreePackageNameSuffix") {
