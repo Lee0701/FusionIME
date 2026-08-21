@@ -23,14 +23,4 @@
         </LinearLayout>
     </HorizontalScrollView>
 
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/voice_input_button"
-        android:src="@drawable/mic_24"
-        android:theme="@style/Theme.FusionIME.Keyboard"
-        android:background="?background"
-        android:padding="4dp"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="center" />
-
 </LinearLayout>
