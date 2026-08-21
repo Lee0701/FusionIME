@@ -81,7 +81,7 @@ class PinyinIMEMode(
 
     private val hasSemicolonKey = spelling.doublePinyinScheme?.acceptsFinal(';') == true
     override var textLayoutPreset: KeyboardLayoutPreset = PinyinLayoutPresets.pinyin(
-        LatinLayoutPresets.qwerty(semicolon = hasSemicolonKey)
+        LatinLayoutPresets.qwerty(hasSemicolonKey, numberRow, cursorKeys)
     )
 
     override suspend fun onLoad(context: Context) {

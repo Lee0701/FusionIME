@@ -7,6 +7,8 @@ import androidx.annotation.StringRes
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.korean.WordComposer
+import ee.oyatl.ime.fusion.layout.preset.LatinLayoutPresets
+import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
 import ee.oyatl.ime.viet.ChuQuocNguTableConverter
 import ee.oyatl.ime.viet.VietnameseConverter
 import java.util.Locale
@@ -20,6 +22,8 @@ class VietIMEMode(
     private val wordComposer: WordComposer = WordComposer()
     private var converter: VietnameseConverter? = null
     private val chuQuocNguTableConverter: ChuQuocNguTableConverter = ChuQuocNguTableConverter()
+
+    override var textLayoutPreset: KeyboardLayoutPreset = LatinLayoutPresets.qwerty(false, numberRow, cursorKeys)
 
     private var bestCandidate: VietnameseConverter.Candidate? = null
 
