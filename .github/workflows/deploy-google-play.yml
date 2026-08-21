@@ -1,6 +1,9 @@
 name: Deploy to Google Play
 
 on:
+  push:
+    branches:
+      - production
   workflow_dispatch:
 
 concurrency:
