@@ -11,14 +11,30 @@
 <!--        <item>Full</item>-->
     </string-array>
 
+    <string-array name="settings_appearance_symbol_layout_entries">
+        <item>@string/symbol_layout_g</item>
+        <item>@string/symbol_layout_n1</item>
+        <item>@string/symbol_layout_n2</item>
+        <item>@string/symbol_layout_o1</item>
+        <item>@string/symbol_layout_o2</item>
+    </string-array>
+
+    <string-array name="settings_appearance_symbol_layout_values">
+        <item>G</item>
+        <item>N1</item>
+        <item>N2</item>
+        <item>O1</item>
+        <item>O2</item>
+    </string-array>
+
     <string-array name="settings_behaviour_touch_mode_entries">
         <item>@string/touch_mode_seek</item>
         <item>@string/touch_mode_flick</item>
     </string-array>
 
     <string-array name="settings_behaviour_touch_mode_values">
-        <item>seek</item>
-        <item>flick</item>
+        <item>Seek</item>
+        <item>Flick</item>
     </string-array>
 
     <string-array name="settings_behaviour_default_flick_action_entries">
@@ -79,12 +95,14 @@
 
     <string-array name="settings_input_mode_latin_layout_entries">
         <item>@string/latin_layout_qwerty</item>
+        <item>@string/latin_layout_azerty</item>
         <item>@string/latin_layout_dvorak</item>
         <item>@string/latin_layout_colemak</item>
     </string-array>
 
     <string-array name="settings_input_mode_latin_layout_values">
         <item>Qwerty</item>
+        <item>Azerty</item>
         <item>Dvorak</item>
         <item>Colemak</item>
     </string-array>
@@ -209,5 +227,17 @@
         <item>Cangjie</item>
         <item>Quick</item>
         <item>Dayi3</item>
+    </string-array>
+
+    <string-array name="settings_input_mode_zhuyin_conversion_engine_entries">
+        <item>@string/zhuyin_conversion_engine_simple</item>
+        <item>@string/zhuyin_conversion_engine_chewing</item>
+        <item>@string/zhuyin_conversion_engine_fuzzy_chewing</item>
+    </string-array>
+
+    <string-array name="settings_input_mode_zhuyin_conversion_engine_values">
+        <item>SIMPLE_CONVERSION_ENGINE</item>
+        <item>CHEWING_CONVERSION_ENGINE</item>
+        <item>FUZZY_CHEWING_CONVERSION_ENGINE</item>
     </string-array>
 </resources>
