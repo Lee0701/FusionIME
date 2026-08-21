@@ -5,6 +5,7 @@
 
     <style name="Theme.FusionIME.Keyboard">
         <item name="background">@color/keyboard_bg_dark</item>
+        <item name="backgroundColor">@color/keyboard_bg_dark</item>
     </style>
 
     <style name="Theme.FusionIME.Keyboard.MoreKeys">

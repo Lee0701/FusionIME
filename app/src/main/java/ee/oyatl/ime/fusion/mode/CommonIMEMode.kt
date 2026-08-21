@@ -15,6 +15,9 @@ import ee.oyatl.ime.candidate.ScrollingCandidateView
 import ee.oyatl.ime.fusion.Feature
 import ee.oyatl.ime.fusion.FlickAction
 import ee.oyatl.ime.fusion.KeyEventUtil
+import ee.oyatl.ime.fusion.PreferenceUtil
+import ee.oyatl.ime.fusion.PreferenceUtil.getOrientationBoolean
+import ee.oyatl.ime.fusion.PreferenceUtil.getOrientationInteger
 import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.layout.preset.SymbolLayoutPresets
@@ -148,32 +151,6 @@ abstract class CommonIMEMode(
     override fun onReset() {
         currentInputConnection?.finishComposingText()
         submitCandidates(emptyList())
-    }
-
-    private fun getOrientationSuffix(context: Context): String {
-        val landscape = context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
-        val suffix = if(landscape) "_landscape" else "_portrait"
-        return suffix
-    }
-
-    private fun getOrientationInteger(context: Context, key: String): Float {
-        val preference = PreferenceManager.getDefaultSharedPreferences(context)
-        val suffix = getOrientationSuffix(context)
-        @SuppressLint("DiscouragedApi")
-        val defaultId = context.resources.getIdentifier("${key}${suffix}_default", "integer", context.packageName)
-        val defaultValue = context.resources.getInteger(defaultId).toFloat()
-        val value = preference.getFloat("${key}${suffix}", defaultValue)
-        return value
-    }
-
-    private fun getOrientationBoolean(context: Context, key: String): Boolean {
-        val preference = PreferenceManager.getDefaultSharedPreferences(context)
-        val suffix = getOrientationSuffix(context)
-        @SuppressLint("DiscouragedApi")
-        val defaultId = context.resources.getIdentifier("${key}${suffix}_default", "bool", context.packageName)
-        val defaultValue = context.resources.getBoolean(defaultId)
-        val value = preference.getBoolean("${key}${suffix}", defaultValue)
-        return value
     }
 
     override fun createInputView(context: Context): View {
@@ -410,6 +387,7 @@ abstract class CommonIMEMode(
     protected fun submitCandidates(candidates: List<CandidateView.Candidate>) {
         CoroutineScope(Dispatchers.Main).launch {
             candidateView?.submitList(candidates)
+            listener.onExpandedCandidates(candidates)
             val visible = candidates.isNotEmpty()
             listener.onCandidateViewVisibilityChange(visible)
         }
