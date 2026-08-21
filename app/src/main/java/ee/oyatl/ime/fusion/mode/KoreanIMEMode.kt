@@ -178,6 +178,7 @@ abstract class KoreanIMEMode(
 
     class Cheonjiin(
         correctOrders: Boolean,
+        val flickHint: Boolean,
         converterType: ConverterType,
         listener: IMEMode.Listener
     ): KoreanIMEMode(converterType, listener) {
@@ -188,7 +189,9 @@ abstract class KoreanIMEMode(
         override val keyLabels: Map<Int, KeyLabel>
             get() =
                 if(symbolState == KeyboardState.Symbol.Text) {
-                    super.keyLabels + LayoutCheonjiin.LABELS
+                    super.keyLabels + LayoutCheonjiin.LABELS.mapValues { (k, v) ->
+                        v.copy(showAsHint = flickHint)
+                    }
                 } else {
                     super.keyLabels
                 }
@@ -365,14 +368,15 @@ abstract class KoreanIMEMode(
         val correctOrders: Boolean,
         val converterType: ConverterType,
         val numberRow: Boolean,
-        val cursorKeys: Boolean
+        val cursorKeys: Boolean,
+        val flickHint: Boolean
     ): IMEMode.Params {
         override val type: String = TYPE
 
         override fun create(listener: IMEMode.Listener): IMEMode {
             return when(layout) {
                 Layout.Set2KS -> Hangul2SetKS(correctOrders, numberRow, cursorKeys, converterType, listener)
-                Layout.Cheonjiin -> Cheonjiin(correctOrders, converterType, listener)
+                Layout.Cheonjiin -> Cheonjiin(correctOrders, flickHint, converterType, listener)
                 Layout.Set3390 -> Hangul3Set390(correctOrders, cursorKeys, converterType, listener)
                 Layout.Set3391 -> Hangul3Set391(correctOrders, cursorKeys, converterType, listener)
                 Layout.Set3391Strict -> Hangul3Set391Strict(correctOrders, cursorKeys, converterType, listener)
@@ -434,12 +438,14 @@ abstract class KoreanIMEMode(
                 val correctOrders = (map["correct_orders"] ?: "false").toBoolean()
                 val numberRow = map["number_row"]?.toBoolean() ?: false
                 val cursorKeys = map["cursor_keys"]?.toBoolean() ?: false
+                val flickHint = map["flick_hint"]?.toBoolean() ?: false
                 return Params(
                     layout = layout,
                     converterType = converterType,
                     correctOrders = correctOrders,
                     numberRow = numberRow,
-                    cursorKeys = cursorKeys
+                    cursorKeys = cursorKeys,
+                    flickHint = flickHint
                 )
             }
         }

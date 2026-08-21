@@ -63,6 +63,8 @@
     <string name="settings_input_mode_mozc_flick_hint_summary">Show flick hints on 12-Key or GODAN layouts.</string>
     <string name="settings_input_mode_syllables_key_layout_title">Syllables Key Layout</string>
     <string name="settings_input_mode_syllables_key_layout_summary">Choose Key Arrangement for Gojuon or Iroha Layout.</string>
+    <string name="settings_input_mode_korean_flick_hint_title">Flick Hints</string>
+    <string name="settings_input_mode_korean_flick_hint_summary">Show flick hints on 12-Key layouts.</string>
     <string name="settings_info_app_info_title">App Info</string>
     <string name="settings_info_version">Version </string>
     <string name="settings_info_source_code_title">Source Code</string>
