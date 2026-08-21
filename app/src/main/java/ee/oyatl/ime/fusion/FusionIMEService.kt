@@ -16,19 +16,19 @@ import android.view.WindowInsets.Type
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.view.inputmethod.InputMethodSubtype
-import android.widget.LinearLayout
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.view.WindowCompat
 import androidx.preference.PreferenceManager
 import com.android.inputmethod.latin.RichInputMethodManager
 import com.android.inputmethod.latin.settings.Settings
+import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.fusion.mode.IMEMode
 import ee.oyatl.ime.fusion.mode.IMEModeSwitcher
-import ee.oyatl.ime.fusion.mode.JyutpingIMEMode
 import ee.oyatl.ime.fusion.mode.LatinIMEMode
 import ee.oyatl.ime.fusion.mode.PinyinIMEMode
 import ee.oyatl.ime.fusion.preference.KeyStrokePreference
 import ee.oyatl.ime.fusion.settings.InputModeSettingsFragment
+import ee.oyatl.ime.keyboard.PaleViewFilter
 import ee.oyatl.ime.keyboard.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -41,6 +41,7 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
     private lateinit var imeModeSwitcher: IMEModeSwitcher
     private lateinit var clipboardManager: ClipboardManager
     private var imeView: View? = null
+    private val imeViewFilter = PaleViewFilter()
     private var hardwareLanguageKeyStroke: KeyStrokePreference.KeyStroke = KeyStrokePreference.KeyStroke()
     private var inputViewActive = false
     private var clipboardListenerRegistered = false
@@ -68,6 +69,7 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
         inputViewActive = false
         updateClipboardListenerRegistration()
         clipboardHandler.removeCallbacksAndMessages(null)
+        imeViewFilter.clear()
         onUnload()
         super.onDestroy()
     }
@@ -118,17 +120,14 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
     }
 
     fun onResetViews() {
+        imeViewFilter.clear()
         imeModeSwitcher.resetInputViews()
         imeModeSwitcher.resetCandidateViews()
         setInputView(onCreateInputView())
     }
 
     override fun onCreateInputView(): View {
-        val imeView = LinearLayout(this)
-        imeView.orientation = LinearLayout.VERTICAL
-        imeView.addView(imeModeSwitcher.createCandidateView())
-        imeView.addView(imeModeSwitcher.createInputView())
-
+        val imeView = imeModeSwitcher.createInputView()
         onSwitchInputMode(0)
         this.imeView = imeView
         return imeView
@@ -241,6 +240,19 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
         else imeModeSwitcher.showTabBar()
     }
 
+    override fun onExpandedCandidates(candidates: List<CandidateView.Candidate>) {
+        imeModeSwitcher.expandedCandidateView?.submitList(candidates)
+        if(candidates.isEmpty()) imeModeSwitcher.collapseCandidateView()
+    }
+
+    override fun onLongPressStateChanged(active: Boolean) {
+        if(active) {
+            imeView?.let(imeViewFilter::apply)
+        } else {
+            imeViewFilter.clear()
+        }
+    }
+
     override fun onUpdateSelection(
         oldSelStart: Int,
         oldSelEnd: Int,
@@ -318,6 +330,7 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
             windowInsets
         }
     }
+
     companion object {
         private const val PREF_CLIPBOARD_CANDIDATE_ENABLED = "clipboard_candidate_enabled"
     }

@@ -22,27 +22,22 @@ import com.android.inputmethod.pinyin.PinyinIME.ImeState
 import com.android.inputmethod.pinyin.R
 import com.android.inputmethod.pinyin.Settings
 import ee.oyatl.ime.candidate.CandidateView
-import ee.oyatl.ime.fusion.Feature
+import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.pinyin.CandidatesContainer
 import ee.oyatl.ime.fusion.pinyin.ComposingView
 import ee.oyatl.ime.fusion.pinyin.ComposingView.ComposingStatus
 import ee.oyatl.ime.fusion.pinyin.DecodingInfo
+import ee.oyatl.ime.fusion.pinyin.DoublePinyinComposer
+import ee.oyatl.ime.fusion.pinyin.DoublePinyinScheme
 import ee.oyatl.ime.fusion.pinyin.OnGestureListener
-import ee.oyatl.ime.keyboard.KeyboardConfiguration
-import ee.oyatl.ime.keyboard.KeyboardTemplate
-import ee.oyatl.ime.keyboard.LayoutTable
-import ee.oyatl.ime.fusion.layout.LayoutExt
-import ee.oyatl.ime.fusion.layout.LayoutQwerty
-import ee.oyatl.ime.fusion.layout.MobileKeyboard
-import ee.oyatl.ime.fusion.layout.MobileKeyboardRows
-import ee.oyatl.ime.fusion.layout.TabletKeyboard
-import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
-import ee.oyatl.ime.keyboard.SoftKeyCodeMapper
+import ee.oyatl.ime.fusion.layout.preset.LatinLayoutPresets
+import ee.oyatl.ime.fusion.layout.preset.PinyinLayoutPresets
 import java.lang.ref.WeakReference
 import java.util.Locale
 
 class PinyinIMEMode(
     listener: IMEMode.Listener,
+    val spelling: Spelling,
     val chineseTraditional: Boolean,
     numberRow: Boolean,
     cursorKeys: Boolean
@@ -64,6 +59,7 @@ class PinyinIMEMode(
      * result, etc.
      */
     private val decInfo: DecodingInfo = DecodingInfo(this)
+    private val doublePinyinComposer = spelling.doublePinyinScheme?.let(::DoublePinyinComposer)
 
     /**
      * The floating container which contains the composing view. If necessary,
@@ -83,35 +79,10 @@ class PinyinIMEMode(
 
     private var isEnterNormalState = true
 
-    private val softKeyCodeMapper = SoftKeyCodeMapper(mapOf(
-        KeyEvent.KEYCODE_SHIFT_LEFT to KeyEvent.KEYCODE_APOSTROPHE
-    ))
-
-    private val numberRow = Feature.NumberRow.availableInCurrentVersion && numberRow
-    private val cursorKeys = Feature.CursorKeys.availableInCurrentVersion && cursorKeys
-
-    override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
-        mobile = KeyboardTemplate.Basic(
-            configuration = KeyboardConfiguration(
-                if(this.numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
-                MobileKeyboard.alphabetic(),
-                MobileKeyboard.bottom(dpad = this.cursorKeys)
-            ),
-            contentRows = (if(this.numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.DEFAULT,
-            softKeyCodeMapper = softKeyCodeMapper
-        ),
-        tablet = KeyboardTemplate.Basic(
-            configuration = KeyboardConfiguration(
-                if(this.numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
-                TabletKeyboard.alphabetic(delete = !this.numberRow),
-                TabletKeyboard.bottom()
-            ),
-            contentRows = (if(this.numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.DEFAULT,
-            softKeyCodeMapper = softKeyCodeMapper
-        )
+    private val hasSemicolonKey = spelling.doublePinyinScheme?.acceptsFinal(';') == true
+    override var textLayoutPreset: KeyboardLayoutPreset = PinyinLayoutPresets.pinyin(
+        LatinLayoutPresets.qwerty(hasSemicolonKey, numberRow, cursorKeys)
     )
-
-    override val textLayoutTable: LayoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutExt.TABLE_CHINESE)
 
     override suspend fun onLoad(context: Context) {
         super.onLoad(context)
@@ -195,6 +166,9 @@ class PinyinIMEMode(
             in 'a'.code..'z'.code -> {
                 processKeyCode(codePoint - 'a'.code + KeyEvent.KEYCODE_A)
             }
+            ';'.code -> {
+                processKeyCode(KeyEvent.KEYCODE_SEMICOLON)
+            }
             '\''.code -> {
                 processKeyCode(KeyEvent.KEYCODE_APOSTROPHE)
             }
@@ -261,6 +235,8 @@ class PinyinIMEMode(
             keyChar = '.'.code
         } else if (keyCode == KeyEvent.KEYCODE_SPACE) {
             keyChar = ' '.code
+        } else if(keyCode == KeyEvent.KEYCODE_SEMICOLON) {
+            keyChar = ';'.code
         } else if (keyCode == KeyEvent.KEYCODE_APOSTROPHE) {
             keyChar = '\''.code
         }
@@ -358,8 +334,14 @@ class PinyinIMEMode(
         // change to input state.
         if (keyChar >= 'a'.code && keyChar <= 'z'.code && !event.isAltPressed) {
             if (!realAction) return true
-            decInfo.addSplChar(keyChar.toChar(), true)
-            chooseAndUpdate(-1)
+            val composer = doublePinyinComposer
+            if(composer != null) {
+                composer.reset()
+                applyDoublePinyinEdit(composer.type(keyChar.toChar(), false), true)
+            } else {
+                decInfo.addSplChar(keyChar.toChar(), true)
+                chooseAndUpdate(-1)
+            }
             return true
         } else if (keyCode == KeyEvent.KEYCODE_DEL) {
             if (!realAction) return true
@@ -433,7 +415,7 @@ class PinyinIMEMode(
             }
         }
 
-        if (keyChar >= 'a'.code && keyChar <= 'z'.code || keyChar == '\''.code
+        if (keyChar >= 'a'.code && keyChar <= 'z'.code || keyChar == ';'.code || keyChar == '\''.code
             && !decInfo.charBeforeCursorIsSeparator() || keyCode == KeyEvent.KEYCODE_DEL
         ) {
             if (!realAction) return true
@@ -544,8 +526,14 @@ class PinyinIMEMode(
         // change to input state.
         if (keyChar >= 'a'.code && keyChar <= 'z'.code) {
             changeToStateInput(true)
-            decInfo.addSplChar(keyChar.toChar(), true)
-            chooseAndUpdate(-1)
+            val composer = doublePinyinComposer
+            if(composer != null) {
+                composer.reset()
+                applyDoublePinyinEdit(composer.type(keyChar.toChar(), false), true)
+            } else {
+                decInfo.addSplChar(keyChar.toChar(), true)
+                chooseAndUpdate(-1)
+            }
         } else if (keyChar == ','.code || keyChar == '.'.code) {
             inputCommaPeriod("", keyChar, true, ImeState.STATE_IDLE)
         } else if (keyCode == KeyEvent.KEYCODE_DPAD_UP || keyCode == KeyEvent.KEYCODE_DPAD_DOWN || keyCode == KeyEvent.KEYCODE_DPAD_LEFT || keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
@@ -721,12 +709,35 @@ class PinyinIMEMode(
             return true
         }
 
+        val composer = doublePinyinComposer
+        if(composer != null) {
+            val typedChar = keyChar.toChar()
+            when {
+                composer.canType(typedChar) -> {
+                    val prependSeparator = decInfo.length() > 0 && !decInfo.charBeforeCursorIsSeparator()
+                    applyDoublePinyinEdit(composer.type(typedChar, prependSeparator))
+                    return true
+                }
+                keyCode == KeyEvent.KEYCODE_DEL -> {
+                    val edit = composer.backspace()
+                    if(edit != null) applyDoublePinyinEdit(edit)
+                    else {
+                        decInfo.prepareDeleteBeforeCursor()
+                        chooseAndUpdate(-1)
+                    }
+                    return true
+                }
+                keyChar == '\''.code -> composer.reset()
+            }
+        }
+
         if ((keyChar >= 'a'.code && keyChar <= 'z'.code)
             || (keyChar == '\''.code && !decInfo.charBeforeCursorIsSeparator())
             || (((keyChar >= '0'.code && keyChar <= '9'.code) || keyChar == ' '.code) && ImeState.STATE_COMPOSING == imeState)
         ) {
-            decInfo.addSplChar(keyChar.toChar(), false)
-            chooseAndUpdate(-1)
+            if (decInfo.addSplChar(keyChar.toChar(), false)) {
+                chooseAndUpdate(-1)
+            }
         } else if (keyCode == KeyEvent.KEYCODE_DEL) {
             decInfo.prepareDeleteBeforeCursor()
             chooseAndUpdate(-1)
@@ -783,6 +794,7 @@ class PinyinIMEMode(
     }
 
     private fun resetToIdleState(resetInlineText: Boolean) {
+        doublePinyinComposer?.reset()
         if (ImeState.STATE_IDLE == imeState) return
 
         imeState = ImeState.STATE_IDLE
@@ -794,6 +806,7 @@ class PinyinIMEMode(
     }
 
     private fun chooseAndUpdate(candId: Int) {
+        if(candId >= 0) doublePinyinComposer?.reset()
         if (ImeState.STATE_PREDICT != imeState) {
             // Get result candidate list, if choice_id < 0, do a new decoding.
             // If choice_id >=0, select the candidate, and get the new candidate
@@ -860,6 +873,17 @@ class PinyinIMEMode(
         }
     }
 
+    private fun applyDoublePinyinEdit(edit: DoublePinyinComposer.Edit, resetInput: Boolean = false) {
+        repeat(edit.removeBeforeCursor) {
+            decInfo.prepareDeleteBeforeCursor()
+            decInfo.chooseDecodingCandidate(-1)
+        }
+        edit.append.forEachIndexed { index, ch ->
+            decInfo.addSplChar(ch, resetInput && index == 0)
+        }
+        chooseAndUpdate(-1)
+    }
+
     private fun startPinyinDecoderService(context: Context): Boolean {
         if (decInfo.mIPinyinDecoderService is Stub) {
             val pinyinDecoderServiceConnection = pinyinDecoderServiceConnection?.get() ?: PinyinDecoderServiceConnection()
@@ -917,6 +941,7 @@ class PinyinIMEMode(
     ): CandidateView.Candidate
 
     class Params(
+        val spelling: Spelling = Spelling.FullPinyin,
         val chineseTraditional: Boolean,
         val numberRow: Boolean,
         val cursorKeys: Boolean
@@ -924,12 +949,22 @@ class PinyinIMEMode(
         override val type: String = TYPE
 
         override fun create(listener: IMEMode.Listener): IMEMode {
-            return PinyinIMEMode(listener, chineseTraditional, numberRow, cursorKeys)
+            return PinyinIMEMode(listener, spelling, chineseTraditional, numberRow, cursorKeys)
         }
 
         override fun getLabel(context: Context): String {
             val localeName = Locale.SIMPLIFIED_CHINESE.displayName
-            val layoutName = context.resources.getString(ee.oyatl.ime.fusion.R.string.pinyin_layout_pinyin)
+            val spellingLabelId = when(spelling) {
+                Spelling.FullPinyin -> ee.oyatl.ime.fusion.R.string.pinyin_layout_pinyin
+                Spelling.Ziranma -> ee.oyatl.ime.fusion.R.string.pinyin_spelling_ziranma
+                Spelling.Microsoft -> ee.oyatl.ime.fusion.R.string.pinyin_spelling_microsoft
+                Spelling.SmartABC -> ee.oyatl.ime.fusion.R.string.pinyin_spelling_smart_abc
+                Spelling.Jiajia -> ee.oyatl.ime.fusion.R.string.pinyin_spelling_jiajia
+                Spelling.Xiaohe -> ee.oyatl.ime.fusion.R.string.pinyin_spelling_xiaohe
+                Spelling.Sogou -> ee.oyatl.ime.fusion.R.string.pinyin_spelling_sogou
+                Spelling.Ziguang -> ee.oyatl.ime.fusion.R.string.pinyin_spelling_ziguang
+            }
+            val layoutName = context.resources.getString(spellingLabelId)
             val chineseLabelId =
                 if(chineseTraditional) ee.oyatl.ime.fusion.R.string.pinyin_chinese_traditional
                 else ee.oyatl.ime.fusion.R.string.pinyin_chinese_simplified
@@ -939,10 +974,11 @@ class PinyinIMEMode(
 
         override fun getShortLabel(context: Context, params: List<IMEMode.Params>): String {
             val pinyinParams = params.filterIsInstance<Params>().filterNot { it == this }
-            return if(pinyinParams.isEmpty()) "拼音"
-            else {
-                if(chineseTraditional) "繁拼"
-                else "简拼"
+            return if(pinyinParams.isEmpty()) {
+                if(spelling.isDoublePinyin) "双拼" else "拼音"
+            } else {
+                val script = if(chineseTraditional) "繁" else "简"
+                if(spelling.isDoublePinyin) "$script${spelling.shortLabel}" else "${script}拼"
             }
         }
 
@@ -951,9 +987,29 @@ class PinyinIMEMode(
                 val numberRow = map["number_row"]?.toBoolean() ?: false
                 val cursorKeys = map["cursor_keys"]?.toBoolean() ?: false
                 val chineseTraditional = map["chinese_traditional"]?.toBoolean() ?: false
-                return Params(chineseTraditional, numberRow, cursorKeys)
+                val spelling = Spelling.entries.firstOrNull {
+                    it.name == map["pinyin_spelling"]
+                } ?: Spelling.FullPinyin
+                return Params(spelling, chineseTraditional, numberRow, cursorKeys)
             }
         }
+    }
+
+    enum class Spelling(
+        val doublePinyinScheme: DoublePinyinScheme? = null,
+        val shortLabel: String = ""
+    ) {
+        FullPinyin,
+        Ziranma(DoublePinyinScheme.Ziranma, "自"),
+        Microsoft(DoublePinyinScheme.Microsoft, "微"),
+        SmartABC(DoublePinyinScheme.SmartABC, "ABC"),
+        Jiajia(DoublePinyinScheme.Jiajia, "加"),
+        Xiaohe(DoublePinyinScheme.Xiaohe, "鹤"),
+        Sogou(DoublePinyinScheme.Sogou, "搜"),
+        Ziguang(DoublePinyinScheme.Ziguang, "紫");
+
+        val isDoublePinyin: Boolean
+            get() = doublePinyinScheme != null
     }
 
     companion object {

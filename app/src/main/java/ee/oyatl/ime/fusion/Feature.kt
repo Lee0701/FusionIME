@@ -22,8 +22,7 @@ enum class Feature(
         else availableInFreeVersion
 
     companion object {
-        @Suppress("SENSELESS_COMPARISON")
-        val paidVersion: Boolean = BuildConfig.IS_PAID
+        val paidVersion: Boolean = true
         val autoUnlockMonths: Long = 6
     }
 }
