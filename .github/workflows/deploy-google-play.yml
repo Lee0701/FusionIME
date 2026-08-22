@@ -1,6 +1,9 @@
 name: Deploy to Google Play
 
 on:
+  push:
+    branches:
+      - production
   workflow_dispatch:
 
 concurrency:
@@ -116,7 +119,7 @@ jobs:
 
     strategy:
       matrix:
-        edition: [free, paid]
+        edition: [free]
 
     steps:
       - name: Cache Gradle packages

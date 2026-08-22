@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/candidate_view_height">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:theme="@style/Theme.FusionIME.Candidates"
+            android:background="?backgroundColor"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/expand_button"
+                android:background="@android:color/transparent"
+                android:src="@drawable/arrow_drop_down_24"
+                android:padding="4dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/close_button"
+                android:background="@android:color/transparent"
+                android:src="@drawable/close_24"
+                android:padding="4dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center" />
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/candidate_view"
+            android:layout_marginHorizontal="32dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <FrameLayout
+            android:id="@+id/tab_view_frame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <ee.oyatl.ime.fusion.TouchBlockingFrameLayout
+            android:id="@+id/touch_blocker"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ee.oyatl.ime.candidate.ExpandedCandidateView
+            android:id="@+id/expanded_candidate_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <FrameLayout
+            android:id="@+id/keyboard_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </FrameLayout>
+
+</LinearLayout>

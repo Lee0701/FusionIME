@@ -199,7 +199,7 @@ abstract class MozcIMEMode(
     ): MozcIMEMode(listener, candidateViewHeight) {
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.QWERTY_KANA
         override var textLayoutPreset: KeyboardLayoutPreset = JapaneseLayoutPresets.romajiQwertyCompatible(
-            LatinLayoutPresets.qwerty(semicolon = true))
+            LatinLayoutPresets.qwerty(true, numberRow, true))
     }
 
     class Kana12Key(
