@@ -136,14 +136,10 @@ class VietIMEMode(
             return "$localeName $layoutName"
         }
 
-        override fun getShortLabel(context: Context, params: List<IMEMode.Params>): String {
-            val vietParams = params.filterIsInstance<Params>().filterNot { it == this }
+        override fun getShortLabels(context: Context): List<String> {
             val localeHead = layout.labelHead
-            // If this is the only Vietnamese mode
-            if(vietParams.isEmpty()) return localeHead
-            // If not, use specific layout name
             val layoutHead = layout.name.first()
-            return "$localeHead$layoutHead"
+            return listOf(localeHead, "$localeHead$layoutHead")
         }
 
         companion object {

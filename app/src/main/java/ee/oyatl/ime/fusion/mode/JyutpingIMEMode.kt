@@ -140,11 +140,8 @@ class JyutpingIMEMode(
             return "$localeName $layoutName"
         }
 
-        override fun getShortLabel(
-            context: Context,
-            params: List<IMEMode.Params>
-        ): String {
-            return "粵拼"
+        override fun getShortLabels(context: Context): List<String> {
+            return listOf("粵拼")
         }
 
         companion object {

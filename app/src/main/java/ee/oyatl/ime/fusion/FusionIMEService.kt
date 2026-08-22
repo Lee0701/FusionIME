@@ -82,7 +82,10 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
         }.toMutableList()
         if(params.isEmpty()) params += LatinIMEMode.Params()
         params.forEach { p ->
-            entries += IMEModeSwitcher.Entry(p.getShortLabel(this, params), p.create(this))
+            val labels = p.getShortLabels(this)
+            val others = params.filterNot { it == p }.flatMap { it.getShortLabels(this) }.toSet()
+            val shortLabel = labels.firstOrNull { it !in others } ?: labels.last()
+            entries += IMEModeSwitcher.Entry(shortLabel, p.create(this))
         }
         imeModeSwitcher = IMEModeSwitcher(this, entries, this)
     }
