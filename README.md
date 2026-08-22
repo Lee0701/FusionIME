@@ -1,9 +1,7 @@
 
 [한국어](https://github.com/Lee0701/FusionIME/blob/main/README.ko.md) · [韓國語](https://github.com/Lee0701/FusionIME/blob/main/README.ko-kore.md)
 
-<a href="https://play.google.com/store/apps/details?id=ee.oyatl.ime.fusion"><img src="https://raw.githubusercontent.com/pioug/google-play-badges/refs/heads/main/svg/en.svg" width="150"></a>
-
-[Demo Version](https://play.google.com/store/apps/details?id=ee.oyatl.ime.fusion.free)
+<a href="https://play.google.com/store/apps/details?id=ee.oyatl.ime.fusion.free"><img src="https://raw.githubusercontent.com/pioug/google-play-badges/refs/heads/main/svg/en.svg" width="150"></a>
 
 # FusionIME
 FusionIME packs various input methods for CJKV languages into one app.
