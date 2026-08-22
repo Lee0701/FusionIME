@@ -3,6 +3,7 @@ package ee.oyatl.ime.fusion.mode
 import android.content.Context
 import android.content.res.Resources
 import android.inputmethodservice.InputMethodService
+import android.view.KeyCharacterMap
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -105,7 +106,13 @@ class LatinIMEMode(
     }
 
     override fun onChar(codePoint: Int) {
-        if(codePoint != 0) onCodeInput(codePoint, 0, 0, false)
+        if(codePoint == 0) return
+        if(codePoint and KeyCharacterMap.COMBINING_ACCENT != 0) {
+            val event = Event.createDeadEvent(codePoint and KeyCharacterMap.COMBINING_ACCENT_MASK, 0, null)
+            onEvent(event)
+            return
+        }
+        onCodeInput(codePoint, 0, 0, false)
     }
 
     override fun onSpecial(keyCode: Int) {
@@ -510,6 +517,7 @@ class LatinIMEMode(
                     else -> LatinLayoutPresets.qwerty(false, numberRow, cursorKeys)
                 }
                 Layout.Azerty -> LatinLayoutPresets.azerty(numberRow, cursorKeys)
+                Layout.Qwertz -> LatinLayoutPresets.qwertz(numberRow, cursorKeys)
                 Layout.Dvorak -> LatinLayoutPresets.dvorak(numberRow, cursorKeys)
                 Layout.Colemak -> LatinLayoutPresets.colemak(numberRow, cursorKeys)
             }
@@ -561,6 +569,7 @@ class LatinIMEMode(
     ) {
         Qwerty(R.string.latin_layout_qwerty),
         Azerty(R.string.latin_layout_azerty),
+        Qwertz(R.string.latin_layout_qwertz),
         Dvorak(R.string.latin_layout_dvorak),
         Colemak(R.string.latin_layout_colemak)
     }

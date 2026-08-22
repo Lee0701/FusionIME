@@ -1,14 +1,39 @@
 package ee.oyatl.ime.fusion.layout
 
+import android.view.KeyCharacterMap
 import android.view.KeyEvent
 
 object LayoutLatin {
+    const val COMB = KeyCharacterMap.COMBINING_ACCENT
+
     val TABLE_SPANISH_QWERTY = mapOf(
         KeyEvent.KEYCODE_SEMICOLON to listOf('ñ'.code, 'Ñ'.code)
     )
 
     val TABLE_AZERTY = mapOf(
         KeyEvent.KEYCODE_APOSTROPHE to listOf('\''.code, '?'.code)
+    )
+
+    val TABLE_GERMAN_QWERTZ = mapOf(
+        KeyEvent.KEYCODE_GRAVE to listOf(COMB or '^'.code, '°'.code),
+        KeyEvent.KEYCODE_SLASH to listOf('ß'.code, '?'.code),
+        KeyEvent.KEYCODE_EQUALS to listOf(COMB or '´'.code, COMB or '`'.code),
+        KeyEvent.KEYCODE_LEFT_BRACKET to listOf('ü'.code, 'Ü'.code),
+        KeyEvent.KEYCODE_RIGHT_BRACKET to listOf('+'.code, '*'.code),
+        KeyEvent.KEYCODE_SEMICOLON to listOf('ö'.code, 'Ö'.code),
+        KeyEvent.KEYCODE_BACKSLASH to listOf('#'.code, '\''.code),
+        KeyEvent.KEYCODE_COMMA to listOf(','.code, ';'.code),
+        KeyEvent.KEYCODE_PERIOD to listOf('.'.code, ':'.code),
+        KeyEvent.KEYCODE_1 to listOf('1'.code, '!'.code),
+        KeyEvent.KEYCODE_2 to listOf('2'.code, '"'.code),
+        KeyEvent.KEYCODE_3 to listOf('3'.code, '§'.code),
+        KeyEvent.KEYCODE_4 to listOf('4'.code, '$'.code),
+        KeyEvent.KEYCODE_5 to listOf('5'.code, '%'.code),
+        KeyEvent.KEYCODE_6 to listOf('6'.code, '&'.code),
+        KeyEvent.KEYCODE_7 to listOf('7'.code, '/'.code),
+        KeyEvent.KEYCODE_8 to listOf('8'.code, '('.code),
+        KeyEvent.KEYCODE_9 to listOf('9'.code, ')'.code),
+        KeyEvent.KEYCODE_0 to listOf('0'.code, '='.code),
     )
 
     val KEYCODE_MAP_AZERTY = mapOf(
@@ -41,6 +66,40 @@ object LayoutLatin {
         KeyEvent.KEYCODE_B to KeyEvent.KEYCODE_B,
         KeyEvent.KEYCODE_N to KeyEvent.KEYCODE_N,
         KeyEvent.KEYCODE_M to KeyEvent.KEYCODE_APOSTROPHE,
+    )
+
+    val KEYCODE_MAP_QWERTZ = mapOf(
+        KeyEvent.KEYCODE_MINUS to KeyEvent.KEYCODE_SLASH,
+        KeyEvent.KEYCODE_SLASH to KeyEvent.KEYCODE_MINUS,
+
+        KeyEvent.KEYCODE_Q to KeyEvent.KEYCODE_Q,
+        KeyEvent.KEYCODE_W to KeyEvent.KEYCODE_W,
+        KeyEvent.KEYCODE_E to KeyEvent.KEYCODE_E,
+        KeyEvent.KEYCODE_R to KeyEvent.KEYCODE_R,
+        KeyEvent.KEYCODE_T to KeyEvent.KEYCODE_T,
+        KeyEvent.KEYCODE_Y to KeyEvent.KEYCODE_Z,
+        KeyEvent.KEYCODE_U to KeyEvent.KEYCODE_U,
+        KeyEvent.KEYCODE_I to KeyEvent.KEYCODE_I,
+        KeyEvent.KEYCODE_O to KeyEvent.KEYCODE_O,
+        KeyEvent.KEYCODE_P to KeyEvent.KEYCODE_P,
+
+        KeyEvent.KEYCODE_A to KeyEvent.KEYCODE_Q,
+        KeyEvent.KEYCODE_S to KeyEvent.KEYCODE_S,
+        KeyEvent.KEYCODE_D to KeyEvent.KEYCODE_D,
+        KeyEvent.KEYCODE_F to KeyEvent.KEYCODE_F,
+        KeyEvent.KEYCODE_G to KeyEvent.KEYCODE_G,
+        KeyEvent.KEYCODE_H to KeyEvent.KEYCODE_H,
+        KeyEvent.KEYCODE_J to KeyEvent.KEYCODE_J,
+        KeyEvent.KEYCODE_K to KeyEvent.KEYCODE_K,
+        KeyEvent.KEYCODE_L to KeyEvent.KEYCODE_L,
+
+        KeyEvent.KEYCODE_Z to KeyEvent.KEYCODE_Y,
+        KeyEvent.KEYCODE_X to KeyEvent.KEYCODE_X,
+        KeyEvent.KEYCODE_C to KeyEvent.KEYCODE_C,
+        KeyEvent.KEYCODE_V to KeyEvent.KEYCODE_V,
+        KeyEvent.KEYCODE_B to KeyEvent.KEYCODE_B,
+        KeyEvent.KEYCODE_N to KeyEvent.KEYCODE_N,
+        KeyEvent.KEYCODE_M to KeyEvent.KEYCODE_M,
     )
 
     val KEYCODE_MAP_DVORAK = mapOf(

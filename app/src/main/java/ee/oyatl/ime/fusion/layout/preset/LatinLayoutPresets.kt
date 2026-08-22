@@ -92,6 +92,17 @@ object LatinLayoutPresets {
         )
     }
 
+    fun qwertz(
+        numberRow: Boolean = false,
+        cursorKeys: Boolean = false
+    ): KeyboardLayoutPreset {
+        val qwerty = qwerty(false, numberRow, cursorKeys)
+        return qwerty.copy(
+            layoutTable = qwerty.layoutTable + LayoutTable.fromShiftStates(LayoutLatin.TABLE_GERMAN_QWERTZ),
+            softKeyCodeMapper = SoftKeyCodeMapper.Basic(LayoutLatin.KEYCODE_MAP_QWERTZ)
+        )
+    }
+
     fun dvorak(
         numberRow: Boolean = false,
         cursorKeys: Boolean = false
