@@ -325,7 +325,9 @@ abstract class CommonIMEMode(
         if(keyCode == KeyEvent.KEYCODE_SHIFT_LEFT || keyCode == KeyEvent.KEYCODE_SHIFT_RIGHT) {
             shiftState = KeyboardState.Shift.Pressed
         } else if(keyCode == KeyEvent.KEYCODE_CAPS_LOCK) {
-            shiftState = KeyboardState.Shift.Locked
+            shiftState =
+                if(metaState and KeyEvent.META_CAPS_LOCK_ON == 0) KeyboardState.Shift.Locked
+                else KeyboardState.Shift.Released
         } else if(keyCode < 0) {
             onChar(-keyCode)
         } else if(keyCode > KeyEvent.getMaxKeyCode() || keyCharacterMap.isPrintingKey(keyCode)) {
