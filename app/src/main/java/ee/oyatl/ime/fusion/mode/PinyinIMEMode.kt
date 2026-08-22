@@ -972,14 +972,10 @@ class PinyinIMEMode(
             return "$localeName $layoutName ($chinese)"
         }
 
-        override fun getShortLabel(context: Context, params: List<IMEMode.Params>): String {
-            val pinyinParams = params.filterIsInstance<Params>().filterNot { it == this }
-            return if(pinyinParams.isEmpty()) {
-                if(spelling.isDoublePinyin) "双拼" else "拼音"
-            } else {
-                val script = if(chineseTraditional) "繁" else "简"
-                if(spelling.isDoublePinyin) "$script${spelling.shortLabel}" else "${script}拼"
-            }
+        override fun getShortLabels(context: Context): List<String> {
+            val script = if(chineseTraditional) "繁" else "简"
+            if(!spelling.isDoublePinyin) return listOf("拼音", "${script}拼")
+            else return listOf("双拼", "$script${spelling.shortLabel}")
         }
 
         companion object {
