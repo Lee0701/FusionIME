@@ -486,7 +486,7 @@ public class Convert {
 					hkchar = true;
 					continue;
 				}
-				str = str.toLowerCase();
+				str = str.toUpperCase();
 				index = str.indexOf('\t');
 				if (index < 0) index = str.lastIndexOf(' ');
 				if (index > 0) {
@@ -558,7 +558,7 @@ public class Convert {
 							System.out.print("  0, ");
 						}
 					}
-					System.out.println(((int) ca.get(count1).c) + ", " + (ca.get(count1).hk ? 1 : 0) + ", " + (l + 1) + ", ");
+					System.out.println(((int) ca.get(count1).c) + ", " + (ca.get(count1).hk ? 1 : 0) + ", " + (l + 1) + ",");
 				}
 			}
 
