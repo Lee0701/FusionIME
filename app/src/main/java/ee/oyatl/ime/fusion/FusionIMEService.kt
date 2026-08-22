@@ -150,8 +150,6 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
         val translatedEvent = cloneEvent(event, logicalKey)
         pressedKeys += event.keyCode to logicalKey
 
-        println("$logicalKey, $translatedEvent")
-
         if(event.isSystem || event.isCtrlPressed || event.isAltPressed || event.isMetaPressed) {
             currentInputConnection.sendKeyEvent(translatedEvent)
             return true

@@ -3,6 +3,11 @@ package ee.oyatl.ime.fusion.layout
 object ExtKeyCode {
     const val KEYCODE_PERIOD_COMMA = 501
     const val KEYCODE_COMMA_PERIOD = 502
+    const val KEYCODE_EXT_COMMA = 503
+    const val KEYCODE_EXT_PERIOD = 503
+    const val KEYCODE_APOSTROPHE_QUESTION = 505
+
+    const val KEYCODE_OEM_8 = 510
 
     const val KEYCODE_390_0 = 600
     const val KEYCODE_390_1 = 601

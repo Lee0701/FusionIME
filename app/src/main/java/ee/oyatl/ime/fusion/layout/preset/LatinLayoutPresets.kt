@@ -69,7 +69,7 @@ object LatinLayoutPresets {
         val qwerty = qwerty(true, numberRow, cursorKeys)
         return qwerty.copy(
             layoutTable = qwerty.layoutTable + LayoutTable.fromShiftStates(LayoutLatin.TABLE_AZERTY),
-            softKeyCodeMapper = SoftKeyCodeMapper.Basic(LayoutLatin.KEYCODE_MAP_AZERTY),
+            softKeyCodeMapper = SoftKeyCodeMapper.Basic(LayoutLatin.KEYCODE_MAP_AZERTY + LayoutLatin.SOFT_KEYCODE_MAP_AZERTY),
             hardKeyCodeMapper = HardKeyCodeMapper(LayoutLatin.KEYCODE_MAP_AZERTY)
         )
     }
