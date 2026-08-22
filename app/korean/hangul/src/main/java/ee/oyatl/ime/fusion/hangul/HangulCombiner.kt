@@ -3,8 +3,8 @@ package ee.oyatl.ime.fusion.hangul
 class HangulCombiner(
     private val jamoCombinationTable: Map<Pair<Int, Int>, Int>,
     private val correctOrders: Boolean
-) {
-    fun combine(state: Combiner.State, input: Int): Combiner.Result {
+): Combiner {
+    override fun combine(state: Combiner.State, input: Int): Combiner.Result {
         if(state !is State) {
             return Combiner.Result(emptyList(), State())
         }

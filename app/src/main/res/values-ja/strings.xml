@@ -69,6 +69,7 @@
     <string name="latin_layout_dvorak">Dvorak</string>
     <string name="latin_layout_colemak">Colemak</string>
     <string name="korean_layout_hangul_2set_ks">ハングル２ボル式標準</string>
+    <string name="korean_layout_cheonjiin">ハングル天地人10キー</string>
     <string name="korean_layout_hangul_3set_390">ハングル３ボル式３９０</string>
     <string name="korean_layout_hangul_3set_391">ハングル３ボル式最終</string>
     <string name="korean_layout_hangul_3set_391_strict">ハングル３ボル式最終（厳密）</string>

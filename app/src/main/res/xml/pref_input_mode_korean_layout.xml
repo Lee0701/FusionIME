@@ -14,4 +14,9 @@
         android:key="correct_orders"
         android:title="@string/settings_input_mode_correct_orders_title" />
 
+    <SwitchPreferenceCompat
+        android:key="flick_hint"
+        android:title="@string/settings_input_mode_korean_flick_hint_title"
+        android:summary="@string/settings_input_mode_korean_flick_hint_summary" />
+
 </androidx.preference.PreferenceScreen>

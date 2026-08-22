@@ -3,9 +3,12 @@ package ee.oyatl.ime.fusion.mode
 import android.content.Context
 import android.view.KeyEvent
 import androidx.annotation.StringRes
+import androidx.preference.PreferenceManager
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.R
+import ee.oyatl.ime.fusion.hangul.CheonjiinComposer
+import ee.oyatl.ime.fusion.hangul.Combiner
 import ee.oyatl.ime.fusion.hangul.HangulCombiner
 import ee.oyatl.ime.fusion.korean.BigramHanjaConverter
 import ee.oyatl.ime.fusion.korean.HanjaConverter
@@ -16,10 +19,20 @@ import ee.oyatl.ime.keyboard.SoftKeyCodeMapper
 import ee.oyatl.ime.fusion.layout.Hangul2Set
 import ee.oyatl.ime.fusion.layout.Hangul3Set
 import ee.oyatl.ime.fusion.layout.HangulOld
+import ee.oyatl.ime.fusion.layout.LayoutCheonjiin
 import ee.oyatl.ime.keyboard.LayoutTable
 import ee.oyatl.ime.fusion.layout.LayoutExt
 import ee.oyatl.ime.fusion.layout.LayoutQwerty
+import ee.oyatl.ime.fusion.layout.TabletKeyboard
+import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
+import ee.oyatl.ime.keyboard.KeyLabel
+import ee.oyatl.ime.keyboard.touchhandler.FlickTouchHandler
+import ee.oyatl.ime.keyboard.touchhandler.TouchHandler
+import ee.oyatl.ime.keyboard.KeyboardState
+import ee.oyatl.ime.keyboard.KeyboardView
+import ee.oyatl.ime.keyboard.touchhandler.FlickDirection
 import ee.oyatl.ime.fusion.layout.preset.KoreanLayoutPresets
+import ee.oyatl.ime.keyboard.KeyboardParams
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -33,8 +46,9 @@ abstract class KoreanIMEMode(
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private var convertJob: Job? = null
 
-    protected abstract val hangulCombiner: HangulCombiner
-    private var currentState = HangulCombiner.State.Initial
+    protected abstract val hangulCombiner: Combiner
+    private var currentState: Combiner.State = HangulCombiner.State.Initial
+    protected val currentCombinerState: Combiner.State get() = currentState
 
     private val wordComposer: WordComposer = WordComposer()
     private val hanjaConverter: HanjaConverter = converterType.create()
@@ -76,9 +90,11 @@ abstract class KoreanIMEMode(
     }
 
     override fun onChar(codePoint: Int) {
-        val result = hangulCombiner.combine(currentState, codePoint)
-        if(result.textToCommit.isNotEmpty()) currentState = HangulCombiner.State.Initial
-        if(result.newState.combined.isNotEmpty()) currentState = result.newState as HangulCombiner.State
+        applyCombinerResult(hangulCombiner.combine(currentState, codePoint))
+    }
+
+    protected fun applyCombinerResult(result: Combiner.Result) {
+        currentState = result.newState
         result.textToCommit.forEach { text -> wordComposer.commit(text.toString()) }
         wordComposer.compose(currentState.combined.toString())
         renderInputView()
@@ -87,8 +103,9 @@ abstract class KoreanIMEMode(
     override fun onSpecial(keyCode: Int) {
         when(keyCode) {
             KeyEvent.KEYCODE_DEL -> {
-                if(currentState != HangulCombiner.State.Initial) {
-                    currentState = currentState.previous as HangulCombiner.State
+                val previous = currentState.previous
+                if(previous != null) {
+                    currentState = previous
                     wordComposer.compose(currentState.combined.toString())
                 } else if(wordComposer.composingText.isNotEmpty()) {
                     wordComposer.delete(1)
@@ -104,6 +121,10 @@ abstract class KoreanIMEMode(
             KeyEvent.KEYCODE_ENTER -> {
                 onReset()
                 util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_ENTER)
+            }
+            KeyEvent.KEYCODE_NUM -> {
+                onReset()
+                super.onSpecial(keyCode)
             }
             KeyEvent.KEYCODE_DPAD_LEFT -> {
                 currentState = HangulCombiner.State.Initial
@@ -153,6 +174,118 @@ abstract class KoreanIMEMode(
     ): Hangul2SetKSCompatible(numberRow, cursorKeys, converterType, listener) {
         override val hangulCombiner: HangulCombiner = HangulCombiner(Hangul2Set.COMB_KS, correctOrders)
         override val layoutTable: LayoutTable get() = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + Hangul2Set.TABLE_KS)
+    }
+
+    class Cheonjiin(
+        correctOrders: Boolean,
+        val flickHint: Boolean,
+        converterType: ConverterType,
+        listener: IMEMode.Listener
+    ): KoreanIMEMode(converterType, listener) {
+        override val hangulCombiner: CheonjiinComposer = CheonjiinComposer(
+            HangulCombiner(Hangul2Set.COMB_KS, correctOrders)
+        )
+        override var textLayoutPreset: KeyboardLayoutPreset = KoreanLayoutPresets.cheonjiin()
+        override val keyLabels: Map<Int, KeyLabel>
+            get() =
+                if(symbolState == KeyboardState.Symbol.Text) {
+                    super.keyLabels + LayoutCheonjiin.LABELS.mapValues { (k, v) ->
+                        v.copy(showAsHint = flickHint)
+                    }
+                } else {
+                    super.keyLabels
+                }
+        private val flickDirections: MutableMap<Int, FlickDirection> = mutableMapOf()
+        override fun createTouchHandler(
+            keyboardView: KeyboardView,
+            params: KeyboardParams,
+            symbolState: KeyboardState.Symbol
+        ): TouchHandler {
+            if(symbolState != KeyboardState.Symbol.Text) {
+                return super.createTouchHandler(keyboardView, params, symbolState)
+            }
+
+            return FlickTouchHandler(
+                keyboardView,
+                params,
+                diagonal = false,
+                multiFlick = false,
+                sendOnUp = true
+            )
+        }
+
+        override fun onKeyDown(keyCode: Int, metaState: Int): Boolean {
+            if(symbolState != KeyboardState.Symbol.Text) {
+                super.onKeyDown(keyCode, metaState)
+                return false
+            }
+
+            if(keyCode <= 0 || !keyCharacterMap.isPrintingKey(keyCode)) {
+                super.onKeyDown(keyCode, metaState)
+            }
+            return false
+        }
+
+        override fun onKeyUp(keyCode: Int, metaState: Int): Boolean {
+            if(symbolState != KeyboardState.Symbol.Text) {
+                super.onKeyUp(keyCode, metaState)
+                return false
+            }
+            if(keyCode <= 0 || !keyCharacterMap.isPrintingKey(keyCode)) {
+                super.onKeyUp(keyCode, metaState)
+                return false
+            }
+            val sourceInput = LayoutCheonjiin.TABLE[keyCode]?.firstOrNull()
+            if(sourceInput == null) {
+                super.onKeyUp(keyCode, metaState)
+                return false
+            }
+            val direction = flickDirections.remove(keyCode)
+            if(direction == null) {
+                onChar(sourceInput)
+                return false
+            }
+            val consonantIndex =
+                LayoutCheonjiin.CONSONANT_FLICK_INDICES[keyCode]?.get(direction)
+            val vowel =
+                LayoutCheonjiin.VOWEL_FLICK_OUTPUTS[keyCode]?.get(direction)
+            val result = when {
+                consonantIndex != null -> hangulCombiner.selectConsonant(
+                    currentCombinerState,
+                    sourceInput,
+                    consonantIndex
+                )
+                vowel != null -> hangulCombiner.selectCompletedVowel(
+                    currentCombinerState,
+                    sourceInput,
+                    vowel
+                )
+                else -> hangulCombiner.cancelFlick(
+                    currentCombinerState,
+                    sourceInput
+                )
+            }
+            applyCombinerResult(result)
+            updateInputView()
+
+            return false
+        }
+
+        override fun onFlick(keyCode: Int, direction: FlickDirection): Boolean {
+            flickDirections[keyCode] = direction
+            return false
+        }
+
+        override fun onSpecial(keyCode: Int) {
+            if(
+                keyCode == KeyEvent.KEYCODE_SPACE &&
+                hangulCombiner.canConfirmConsonantCycle(currentCombinerState)
+            ) {
+                onChar(CheonjiinComposer.CONFIRM_INPUT)
+            } else {
+                super.onSpecial(keyCode)
+            }
+        }
     }
 
     /*
@@ -235,13 +368,15 @@ abstract class KoreanIMEMode(
         val correctOrders: Boolean,
         val converterType: ConverterType,
         val numberRow: Boolean,
-        val cursorKeys: Boolean
+        val cursorKeys: Boolean,
+        val flickHint: Boolean
     ): IMEMode.Params {
         override val type: String = TYPE
 
         override fun create(listener: IMEMode.Listener): IMEMode {
             return when(layout) {
                 Layout.Set2KS -> Hangul2SetKS(correctOrders, numberRow, cursorKeys, converterType, listener)
+                Layout.Cheonjiin -> Cheonjiin(correctOrders, flickHint, converterType, listener)
                 Layout.Set3390 -> Hangul3Set390(correctOrders, cursorKeys, converterType, listener)
                 Layout.Set3391 -> Hangul3Set391(correctOrders, cursorKeys, converterType, listener)
                 Layout.Set3391Strict -> Hangul3Set391Strict(correctOrders, cursorKeys, converterType, listener)
@@ -262,7 +397,7 @@ abstract class KoreanIMEMode(
             if(koreanParams.isEmpty()) {
                 return when(layout) {
                     // For modern Hangul layouts
-                    Layout.Set2KS, Layout.Set3390, Layout.Set3391, Layout.Set3391Strict -> "한"
+                    Layout.Set2KS, Layout.Cheonjiin, Layout.Set3390, Layout.Set3391, Layout.Set3391Strict -> "한"
                     // For old Hangul layouts
                     Layout.Set2Old, Layout.Set3Old393 -> "ᄒᆞ"
                 }
@@ -271,6 +406,7 @@ abstract class KoreanIMEMode(
             return when(layout) {
                 // For 2-set layouts
                 Layout.Set2KS -> "한2"
+                Layout.Cheonjiin -> "천"
                 Layout.Set3390, Layout.Set3391, Layout.Set3391Strict -> {
                     // Find if there are any other 3-set layouts
                     val korean3SetParams = koreanParams.filter { it.layout in setOf(Layout.Set3390, Layout.Set3391, Layout.Set3391Strict) }
@@ -302,12 +438,14 @@ abstract class KoreanIMEMode(
                 val correctOrders = (map["correct_orders"] ?: "false").toBoolean()
                 val numberRow = map["number_row"]?.toBoolean() ?: false
                 val cursorKeys = map["cursor_keys"]?.toBoolean() ?: false
+                val flickHint = map["flick_hint"]?.toBoolean() ?: false
                 return Params(
                     layout = layout,
                     converterType = converterType,
                     correctOrders = correctOrders,
                     numberRow = numberRow,
-                    cursorKeys = cursorKeys
+                    cursorKeys = cursorKeys,
+                    flickHint = flickHint
                 )
             }
         }
@@ -317,6 +455,7 @@ abstract class KoreanIMEMode(
         @StringRes val nameKey: Int
     ) {
         Set2KS(R.string.korean_layout_hangul_2set_ks),
+        Cheonjiin(R.string.korean_layout_cheonjiin),
         Set3390(R.string.korean_layout_hangul_3set_390),
         Set3391(R.string.korean_layout_hangul_3set_391),
         Set3391Strict(R.string.korean_layout_hangul_3set_391_strict),

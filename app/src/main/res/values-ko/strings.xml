@@ -34,6 +34,7 @@
     <string name="latin_layout_dvorak">드보락</string>
     <string name="latin_layout_colemak">콜맥</string>
     <string name="korean_layout_hangul_2set_ks">한글 두벌식 표준</string>
+    <string name="korean_layout_cheonjiin">한글 천지인 10키</string>
     <string name="korean_layout_hangul_3set_390">한글 세벌식 390</string>
     <string name="korean_layout_hangul_3set_391">한글 세벌식 최종</string>
     <string name="korean_layout_old_hangul_2set_ks">옛한글 두벌식</string>

@@ -6,6 +6,7 @@ import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.layout.ExtKeyCode
 import ee.oyatl.ime.fusion.layout.Hangul3Set
 import ee.oyatl.ime.fusion.layout.HangulOld
+import ee.oyatl.ime.fusion.layout.LayoutCheonjiin
 import ee.oyatl.ime.fusion.layout.LayoutExt
 import ee.oyatl.ime.fusion.layout.LayoutQwerty
 import ee.oyatl.ime.fusion.layout.MobileKeyboard
@@ -93,6 +94,16 @@ object KoreanLayoutPresets {
                 mobile = SoftKeyCodeMapper.Basic(Hangul3Set.KEYCODE_MAP_393_MOBILE),
                 tablet = SoftKeyCodeMapper.Empty
             )
+        )
+    }
+
+    fun cheonjiin(): KeyboardLayoutPreset {
+        return KeyboardLayoutPreset(
+            keyboardTemplate = KeyboardTemplate.Basic(
+                configuration = LayoutCheonjiin.KEYBOARD_CONFIGURATION,
+                contentRows = LayoutCheonjiin.CONTENT_ROWS
+            ),
+            layoutTable = LayoutTable.fromShiftStates(LayoutCheonjiin.TABLE),
         )
     }
 }
