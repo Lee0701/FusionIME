@@ -59,6 +59,7 @@ class IMEModeSwitcher(
         interpolator = AccelerateDecelerateInterpolator()
         doOnStart {
             animationIsRunning = true
+            inputViewWrapper.expandedCandidateView.visibility = View.VISIBLE
         }
         doOnEnd {
             inputViewWrapper.keyboardView.visibility = View.INVISIBLE
@@ -81,6 +82,7 @@ class IMEModeSwitcher(
             inputViewWrapper.keyboardView.visibility = View.VISIBLE
         }
         doOnEnd {
+            inputViewWrapper.expandedCandidateView.visibility = View.GONE
             inputViewWrapper.keyboardView.requestLayout()
             candidateViewExpanded = false
             animationIsRunning = false
