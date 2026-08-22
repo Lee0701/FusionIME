@@ -39,6 +39,22 @@ object LayoutLatin {
         ExtKeyCode.KEYCODE_APOSTROPHE_QUESTION to listOf('\''.code, '?'.code)
     )
 
+    val TABLE_AZERTY_ALTGR = mapOf(
+        KeyEvent.KEYCODE_2 to listOf(COMB or '~'.code),
+        KeyEvent.KEYCODE_3 to listOf('#'.code),
+        KeyEvent.KEYCODE_4 to listOf('{'.code),
+        KeyEvent.KEYCODE_5 to listOf('['.code),
+        KeyEvent.KEYCODE_6 to listOf('|'.code),
+        KeyEvent.KEYCODE_7 to listOf(COMB or '`'.code),
+        KeyEvent.KEYCODE_8 to listOf('\\'.code),
+        KeyEvent.KEYCODE_9 to listOf('^'.code),
+        KeyEvent.KEYCODE_0 to listOf('@'.code),
+        KeyEvent.KEYCODE_LEFT_BRACKET to listOf(']'.code),
+        KeyEvent.KEYCODE_EQUALS to listOf('}'.code),
+        KeyEvent.KEYCODE_E to listOf('€'.code),
+        KeyEvent.KEYCODE_SEMICOLON to listOf('¤'.code),
+    )
+
     val TABLE_GERMAN_QWERTZ = mapOf(
         KeyEvent.KEYCODE_BACKSLASH to listOf(COMB or '^'.code, '°'.code, COMB or '^'.code),
         KeyEvent.KEYCODE_LEFT_BRACKET to listOf('ß'.code, '?'.code, 'ß'.code),
@@ -60,6 +76,20 @@ object LayoutLatin {
         KeyEvent.KEYCODE_8 to listOf('8'.code, '('.code, '8'.code),
         KeyEvent.KEYCODE_9 to listOf('9'.code, ')'.code, '9'.code),
         KeyEvent.KEYCODE_0 to listOf('0'.code, '='.code, '0'.code),
+    )
+
+    val TABLE_GERMAN_QWERTZ_ALTGR = mapOf(
+        KeyEvent.KEYCODE_2 to listOf('²'.code),
+        KeyEvent.KEYCODE_3 to listOf('³'.code),
+        KeyEvent.KEYCODE_7 to listOf('{'.code),
+        KeyEvent.KEYCODE_8 to listOf('['.code),
+        KeyEvent.KEYCODE_9 to listOf(']'.code),
+        KeyEvent.KEYCODE_0 to listOf('}'.code),
+        KeyEvent.KEYCODE_E to listOf('€'.code),
+        KeyEvent.KEYCODE_M to listOf('µ'.code),
+        KeyEvent.KEYCODE_Q to listOf('@'.code),
+        KeyEvent.KEYCODE_EQUALS to listOf('~'.code),
+        KeyEvent.KEYCODE_LEFT_BRACKET to listOf('\\'.code, 'ẞ'.code),
     )
 
     val KEYCODE_MAP_AZERTY = mapOf(

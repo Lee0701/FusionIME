@@ -150,7 +150,10 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
         val translatedEvent = cloneEvent(event, logicalKey)
         pressedKeys += event.keyCode to logicalKey
 
-        if(event.isSystem || event.isCtrlPressed || event.isAltPressed || event.isMetaPressed) {
+        val isAltGraphPressed = (event.metaState and KeyEvent.META_ALT_RIGHT_ON != 0) &&
+                imeModeSwitcher.currentMode.isAltGraphCapable()
+
+        if(event.isSystem || event.isCtrlPressed || (event.isAltPressed && !isAltGraphPressed) || event.isMetaPressed) {
             currentInputConnection.sendKeyEvent(translatedEvent)
             return true
         }
@@ -169,7 +172,10 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
             ?: imeModeSwitcher.currentMode.translateKeyCode(event.keyCode)
         val translatedEvent = cloneEvent(event, logicalKey)
 
-        if(event.isSystem || event.isCtrlPressed || event.isAltPressed || event.isMetaPressed) {
+        val isAltGraphPressed = (event.metaState and KeyEvent.META_ALT_RIGHT_ON != 0) &&
+                imeModeSwitcher.currentMode.isAltGraphCapable()
+
+        if(event.isSystem || event.isCtrlPressed || (event.isAltPressed && !isAltGraphPressed) || event.isMetaPressed) {
             currentInputConnection.sendKeyEvent(translatedEvent)
             return true
         }

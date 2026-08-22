@@ -331,9 +331,14 @@ abstract class CommonIMEMode(
         } else if(keyCode < 0) {
             onChar(-keyCode)
         } else if(keyCode > KeyEvent.getMaxKeyCode() || keyCharacterMap.isPrintingKey(keyCode)) {
-            val item = currentLayoutPreset.layoutTable[keyCode]
+            val altGrPressed = metaState and KeyEvent.META_ALT_RIGHT_ON != 0
+            val table =
+                if(altGrPressed) currentLayoutPreset.altGraphTable ?: currentLayoutPreset.layoutTable
+                else currentLayoutPreset.layoutTable
+            val item = table[keyCode]
             if(item is LayoutTable.DefaultItem) onChar(item.forShiftState(shiftState))
-            else onChar(item?.normal ?: keyCharacterMap.get(keyCode, metaState))
+            else if(item != null) onChar(item.normal)
+            else if(!altGrPressed) onChar(keyCharacterMap.get(keyCode, metaState))
         } else {
             onSpecial(keyCode)
         }
@@ -349,6 +354,14 @@ abstract class CommonIMEMode(
         return true
     }
 
+    override fun translateKeyCode(keyCode: Int): Int {
+        return currentLayoutPreset.hardKeyCodeMapper[keyCode]
+    }
+
+    override fun isAltGraphCapable(): Boolean {
+        return currentLayoutPreset.altGraphTable != null
+    }
+
     override fun onFlick(keyCode: Int, direction: FlickDirection): Boolean {
         val item = currentLayoutPreset.layoutTable[keyCode]
         val symbol = symbolLayoutPreset.layoutTable[keyCode]
@@ -360,10 +373,6 @@ abstract class CommonIMEMode(
             else -> Unit
         }
         return false
-    }
-
-    override fun translateKeyCode(keyCode: Int): Int {
-        return currentLayoutPreset.hardKeyCodeMapper[keyCode]
     }
 
     override fun onKeyLongPress(keyCode: Int, metaState: Int): Boolean {
