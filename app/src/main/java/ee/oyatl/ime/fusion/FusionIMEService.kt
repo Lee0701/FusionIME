@@ -38,6 +38,7 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
     private var imeView: View? = null
     private val imeViewFilter = PaleViewFilter()
     private var hardwareLanguageKeyStroke: KeyStrokePreference.KeyStroke = KeyStrokePreference.KeyStroke()
+    private val pressedKeys: MutableMap<Int, Int> = mutableMapOf()
 
     override fun onCreate() {
         super.onCreate()
@@ -144,18 +145,57 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
             onLanguageSwitch()
             return true
         }
-        if(event.isSystem || event.isCtrlPressed || event.isAltPressed || event.isMetaPressed)
-            return super.onKeyDown(keyCode, event)
-        imeModeSwitcher.currentMode.onKeyDown(keyCode, event.metaState)
+
+        val logicalKey = imeModeSwitcher.currentMode.translateKeyCode(event.keyCode)
+        val translatedEvent = cloneEvent(event, logicalKey)
+        pressedKeys += event.keyCode to logicalKey
+
+        println("$logicalKey, $translatedEvent")
+
+        if(event.isSystem || event.isCtrlPressed || event.isAltPressed || event.isMetaPressed) {
+            currentInputConnection.sendKeyEvent(translatedEvent)
+            return true
+        }
+
+        val result = imeModeSwitcher.currentMode.onKeyDown(logicalKey, translatedEvent.metaState)
+        if(!result) {
+            currentInputConnection.sendKeyEvent(translatedEvent)
+        }
         return true
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
         if(hardwareLanguageKeyStroke.matches(event)) return true
-        if(event.isSystem || event.isCtrlPressed || event.isAltPressed || event.isMetaPressed)
-            return super.onKeyUp(keyCode, event)
-        imeModeSwitcher.currentMode.onKeyUp(keyCode, event.metaState)
+
+        val logicalKey = pressedKeys.remove(event.keyCode)
+            ?: imeModeSwitcher.currentMode.translateKeyCode(event.keyCode)
+        val translatedEvent = cloneEvent(event, logicalKey)
+
+        if(event.isSystem || event.isCtrlPressed || event.isAltPressed || event.isMetaPressed) {
+            currentInputConnection.sendKeyEvent(translatedEvent)
+            return true
+        }
+
+        val result = imeModeSwitcher.currentMode.onKeyUp(logicalKey, translatedEvent.metaState)
+        if(!result) {
+            currentInputConnection.sendKeyEvent(translatedEvent)
+        }
         return true
+    }
+
+    private fun cloneEvent(event: KeyEvent, keyCode: Int): KeyEvent {
+        return KeyEvent(
+            event.downTime,
+            event.eventTime,
+            event.action,
+            keyCode,
+            event.repeatCount,
+            event.metaState,
+            event.deviceId,
+            event.scanCode,
+            event.flags,
+            event.source
+        )
     }
 
     override fun onLanguageSwitch() {

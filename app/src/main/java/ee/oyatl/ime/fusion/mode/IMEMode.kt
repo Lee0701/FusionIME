@@ -17,6 +17,7 @@ interface IMEMode {
 
     fun onKeyDown(keyCode: Int, metaState: Int): Boolean
     fun onKeyUp(keyCode: Int, metaState: Int): Boolean
+    fun translateKeyCode(keyCode: Int): Int
 
     fun updateSelection(
         oldSelStart: Int, oldSelEnd: Int,

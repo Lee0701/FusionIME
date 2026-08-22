@@ -1,8 +1,6 @@
 package ee.oyatl.ime.fusion.mode
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.content.res.Configuration
 import android.util.TypedValue
 import android.view.KeyCharacterMap
 import android.view.KeyEvent
@@ -15,7 +13,6 @@ import ee.oyatl.ime.candidate.ScrollingCandidateView
 import ee.oyatl.ime.fusion.Feature
 import ee.oyatl.ime.fusion.FlickAction
 import ee.oyatl.ime.fusion.KeyEventUtil
-import ee.oyatl.ime.fusion.PreferenceUtil
 import ee.oyatl.ime.fusion.PreferenceUtil.getOrientationBoolean
 import ee.oyatl.ime.fusion.PreferenceUtil.getOrientationInteger
 import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
@@ -28,7 +25,6 @@ import ee.oyatl.ime.keyboard.KeyboardParams
 import ee.oyatl.ime.keyboard.KeyboardState
 import ee.oyatl.ime.keyboard.KeyboardView
 import ee.oyatl.ime.keyboard.LayoutTable
-import ee.oyatl.ime.keyboard.LongPressTable
 import ee.oyatl.ime.keyboard.SwitcherKeyboardView
 import ee.oyatl.ime.keyboard.TouchMode
 import ee.oyatl.ime.keyboard.listener.CompoundKeyboardListener
@@ -362,6 +358,10 @@ abstract class CommonIMEMode(
             else -> Unit
         }
         return false
+    }
+
+    override fun translateKeyCode(keyCode: Int): Int {
+        return currentLayoutPreset.hardKeyCodeMapper[keyCode]
     }
 
     override fun onKeyLongPress(keyCode: Int, metaState: Int): Boolean {

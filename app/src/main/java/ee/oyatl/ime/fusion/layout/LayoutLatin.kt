@@ -15,13 +15,14 @@ object LayoutLatin {
     )
 
     val TABLE_GERMAN_QWERTZ = mapOf(
-        KeyEvent.KEYCODE_GRAVE to listOf(COMB or '^'.code, '°'.code),
-        KeyEvent.KEYCODE_SLASH to listOf('ß'.code, '?'.code),
-        KeyEvent.KEYCODE_EQUALS to listOf(COMB or '´'.code, COMB or '`'.code),
-        KeyEvent.KEYCODE_LEFT_BRACKET to listOf('ü'.code, 'Ü'.code),
-        KeyEvent.KEYCODE_RIGHT_BRACKET to listOf('+'.code, '*'.code),
-        KeyEvent.KEYCODE_SEMICOLON to listOf('ö'.code, 'Ö'.code),
-        KeyEvent.KEYCODE_BACKSLASH to listOf('#'.code, '\''.code),
+        KeyEvent.KEYCODE_BACKSLASH to listOf(COMB or '^'.code, '°'.code),
+        KeyEvent.KEYCODE_LEFT_BRACKET to listOf('ß'.code, '?'.code),
+        KeyEvent.KEYCODE_RIGHT_BRACKET to listOf(COMB or '´'.code, COMB or '`'.code),
+        KeyEvent.KEYCODE_SEMICOLON to listOf('ü'.code, 'Ü'.code),
+        KeyEvent.KEYCODE_EQUALS to listOf('+'.code, '*'.code),
+        KeyEvent.KEYCODE_GRAVE to listOf('ö'.code, 'Ö'.code),
+        KeyEvent.KEYCODE_APOSTROPHE to listOf('ä'.code, 'Ä'.code),
+        KeyEvent.KEYCODE_SLASH to listOf('#'.code, '\''.code),
         KeyEvent.KEYCODE_COMMA to listOf(','.code, ';'.code),
         KeyEvent.KEYCODE_PERIOD to listOf('.'.code, ':'.code),
         KeyEvent.KEYCODE_1 to listOf('1'.code, '!'.code),
@@ -69,7 +70,13 @@ object LayoutLatin {
     )
 
     val KEYCODE_MAP_QWERTZ = mapOf(
-        KeyEvent.KEYCODE_MINUS to KeyEvent.KEYCODE_SLASH,
+        KeyEvent.KEYCODE_GRAVE to KeyEvent.KEYCODE_BACKSLASH,
+        KeyEvent.KEYCODE_MINUS to KeyEvent.KEYCODE_LEFT_BRACKET,
+        KeyEvent.KEYCODE_EQUALS to KeyEvent.KEYCODE_RIGHT_BRACKET,
+        KeyEvent.KEYCODE_LEFT_BRACKET to KeyEvent.KEYCODE_SEMICOLON,
+        KeyEvent.KEYCODE_RIGHT_BRACKET to KeyEvent.KEYCODE_EQUALS,
+        KeyEvent.KEYCODE_SEMICOLON to KeyEvent.KEYCODE_GRAVE,
+        KeyEvent.KEYCODE_BACKSLASH to KeyEvent.KEYCODE_SLASH,
         KeyEvent.KEYCODE_SLASH to KeyEvent.KEYCODE_MINUS,
 
         KeyEvent.KEYCODE_Q to KeyEvent.KEYCODE_Q,
@@ -83,7 +90,7 @@ object LayoutLatin {
         KeyEvent.KEYCODE_O to KeyEvent.KEYCODE_O,
         KeyEvent.KEYCODE_P to KeyEvent.KEYCODE_P,
 
-        KeyEvent.KEYCODE_A to KeyEvent.KEYCODE_Q,
+        KeyEvent.KEYCODE_A to KeyEvent.KEYCODE_A,
         KeyEvent.KEYCODE_S to KeyEvent.KEYCODE_S,
         KeyEvent.KEYCODE_D to KeyEvent.KEYCODE_D,
         KeyEvent.KEYCODE_F to KeyEvent.KEYCODE_F,

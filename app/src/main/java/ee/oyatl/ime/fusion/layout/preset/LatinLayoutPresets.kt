@@ -10,6 +10,7 @@ import ee.oyatl.ime.fusion.layout.MobileKeyboard
 import ee.oyatl.ime.fusion.layout.MobileKeyboardRows
 import ee.oyatl.ime.fusion.layout.TabletKeyboard
 import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
+import ee.oyatl.ime.keyboard.HardKeyCodeMapper
 import ee.oyatl.ime.keyboard.KeyboardConfiguration
 import ee.oyatl.ime.keyboard.KeyboardTemplate
 import ee.oyatl.ime.keyboard.LatinLongPressTable
@@ -68,7 +69,8 @@ object LatinLayoutPresets {
         val qwerty = qwerty(true, numberRow, cursorKeys)
         return qwerty.copy(
             layoutTable = qwerty.layoutTable + LayoutTable.fromShiftStates(LayoutLatin.TABLE_AZERTY),
-            softKeyCodeMapper = SoftKeyCodeMapper.Basic(LayoutLatin.KEYCODE_MAP_AZERTY)
+            softKeyCodeMapper = SoftKeyCodeMapper.Basic(LayoutLatin.KEYCODE_MAP_AZERTY),
+            hardKeyCodeMapper = HardKeyCodeMapper(LayoutLatin.KEYCODE_MAP_AZERTY)
         )
     }
 
@@ -79,7 +81,8 @@ object LatinLayoutPresets {
         val qwerty = qwerty(false, numberRow, cursorKeys)
         return qwerty.copy(
             layoutTable = qwerty.layoutTable + LayoutTable.fromShiftStates(LayoutLatin.TABLE_GERMAN_QWERTZ),
-            softKeyCodeMapper = SoftKeyCodeMapper.Basic(LayoutLatin.KEYCODE_MAP_QWERTZ)
+            softKeyCodeMapper = SoftKeyCodeMapper.Basic(LayoutLatin.KEYCODE_MAP_QWERTZ),
+            hardKeyCodeMapper = HardKeyCodeMapper(LayoutLatin.KEYCODE_MAP_QWERTZ)
         )
     }
 
