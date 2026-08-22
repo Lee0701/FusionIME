@@ -326,7 +326,7 @@ abstract class CommonIMEMode(
             shiftState = KeyboardState.Shift.Pressed
         } else if(keyCode == KeyEvent.KEYCODE_CAPS_LOCK) {
             shiftState =
-                if(metaState and KeyEvent.META_CAPS_LOCK_ON == 0) KeyboardState.Shift.Locked
+                if(shiftState != KeyboardState.Shift.Locked) KeyboardState.Shift.Locked
                 else KeyboardState.Shift.Released
         } else if(keyCode < 0) {
             onChar(-keyCode)
