@@ -116,6 +116,7 @@
     <string name="korean_converter_word">Word Converter</string>
     <string name="korean_converter_phrase">Phrase Converter</string>
     <string name="korean_converter_jeongun">Jeong-Un Converter</string>
+    <string name="korean_converter_hangul_only">Hangul-Only Predictor</string>
     <string name="mozc_layout_romaji_qwerty">Romaji QWERTY</string>
     <string name="mozc_layout_kana_12key">Kana 12-Key</string>
     <string name="mozc_layout_godan">GODAN</string>

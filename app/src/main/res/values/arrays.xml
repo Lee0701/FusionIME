@@ -129,12 +129,14 @@
         <item>@string/korean_converter_word</item>
         <item>@string/korean_converter_phrase</item>
         <item>@string/korean_converter_jeongun</item>
+        <item>@string/korean_converter_hangul_only</item>
     </string-array>
 
     <string-array name="settings_input_mode_korean_converter_values">
         <item>Word</item>
         <item>Phrase</item>
         <item>JeongUn</item>
+        <item>HangulOnly</item>
     </string-array>
 
     <string-array name="settings_input_mode_mozc_layout_entries">
