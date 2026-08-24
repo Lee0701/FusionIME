@@ -4,7 +4,7 @@ object ExtKeyCode {
     const val KEYCODE_PERIOD_COMMA = 501
     const val KEYCODE_COMMA_PERIOD = 502
     const val KEYCODE_EXT_COMMA = 503
-    const val KEYCODE_EXT_PERIOD = 503
+    const val KEYCODE_EXT_PERIOD = 504
     const val KEYCODE_APOSTROPHE_QUESTION = 505
 
     const val KEYCODE_OEM_8 = 510
