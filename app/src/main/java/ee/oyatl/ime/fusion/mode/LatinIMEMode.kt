@@ -38,8 +38,6 @@ import ee.oyatl.ime.candidate.TripleCandidateView
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.layout.preset.LatinLayoutPresets
 import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
-import ee.oyatl.ime.keyboard.LatinLongPressTable
-import ee.oyatl.ime.keyboard.LongPressTable
 import java.util.Locale
 
 class LatinIMEMode(
@@ -532,8 +530,11 @@ class LatinIMEMode(
 
         override fun getShortLabels(context: Context): List<String> {
             val localeLabel = locale.language.replaceFirstChar { it.uppercase() }
-            val layoutLabel = layout.name.first().toString()
-            return listOf(localeLabel, "$localeLabel$layoutLabel")
+            val layoutHead = layout.name.first().toString()
+            val layoutTail = layout.name.last().toString()
+            val labels = listOf(localeLabel, "$localeLabel$layoutHead")
+            if(layoutHead == "Q") return labels + listOf("$localeLabel$layoutHead$layoutTail")
+            return labels
         }
 
         companion object {
