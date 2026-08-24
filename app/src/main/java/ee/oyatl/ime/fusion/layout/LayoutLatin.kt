@@ -130,6 +130,11 @@ object LayoutLatin {
         KeyEvent.KEYCODE_Z to KeyEvent.KEYCODE_Y,
     )
 
+    val SOFT_KEYCODE_MAP_DEUTSCH_QWERTZ = mapOf(
+        KeyEvent.KEYCODE_COMMA to ExtKeyCode.KEYCODE_PERIOD_COMMA,
+        KeyEvent.KEYCODE_PERIOD to KeyEvent.KEYCODE_LEFT_BRACKET,
+    )
+
     val KEYCODE_MAP_DVORAK = mapOf(
         KeyEvent.KEYCODE_MINUS to KeyEvent.KEYCODE_LEFT_BRACKET,
         KeyEvent.KEYCODE_EQUALS to KeyEvent.KEYCODE_RIGHT_BRACKET,

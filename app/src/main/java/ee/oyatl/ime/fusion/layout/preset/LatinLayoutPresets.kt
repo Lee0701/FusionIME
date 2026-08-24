@@ -88,6 +88,39 @@ object LatinLayoutPresets {
         )
     }
 
+    fun germanQwertz(
+        numberRow: Boolean = false,
+        cursorKeys: Boolean = false
+    ): KeyboardLayoutPreset {
+        val numberRow = Feature.NumberRow.availableInCurrentVersion && numberRow
+        val cursorKeys = Feature.CursorKeys.availableInCurrentVersion && cursorKeys
+        return KeyboardLayoutPreset(
+            keyboardTemplate = KeyboardTemplate.ByScreenMode(
+                mobile = KeyboardTemplate.Basic(
+                    configuration = KeyboardConfiguration(
+                        if(numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
+                        MobileKeyboard.alphabetic(semicolon = true),
+                        MobileKeyboard.bottom(dpad = cursorKeys)
+                    ),
+                    contentRows = (if(numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.GERMAN
+                ),
+                tablet = KeyboardTemplate.Basic(
+                    configuration = KeyboardConfiguration(
+                        if(numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
+                        TabletKeyboard.alphabetic(semicolon = true, delete = !numberRow),
+                        TabletKeyboard.bottom()
+                    ),
+                    contentRows = (if(numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.GERMAN
+                )
+            ),
+            layoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutLatin.TABLE_GERMAN_QWERTZ),
+            altGraphTable = LayoutTable.fromShiftStates(LayoutLatin.TABLE_GERMAN_QWERTZ_ALTGR),
+            longPressTable = LatinLongPressTable.Default,
+            softKeyCodeMapper = SoftKeyCodeMapper.Basic(LayoutLatin.KEYCODE_MAP_QWERTZ + LayoutLatin.SOFT_KEYCODE_MAP_DEUTSCH_QWERTZ),
+            hardKeyCodeMapper = HardKeyCodeMapper(LayoutLatin.KEYCODE_MAP_QWERTZ)
+        )
+    }
+
     fun dvorak(
         numberRow: Boolean = false,
         cursorKeys: Boolean = false

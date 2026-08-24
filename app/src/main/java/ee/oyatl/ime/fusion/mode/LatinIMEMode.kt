@@ -516,6 +516,7 @@ class LatinIMEMode(
                 }
                 Layout.Azerty -> LatinLayoutPresets.azerty(numberRow, cursorKeys)
                 Layout.Qwertz -> LatinLayoutPresets.qwertz(numberRow, cursorKeys)
+                Layout.Deutsch -> LatinLayoutPresets.germanQwertz(numberRow, cursorKeys)
                 Layout.Dvorak -> LatinLayoutPresets.dvorak(numberRow, cursorKeys)
                 Layout.Colemak -> LatinLayoutPresets.colemak(numberRow, cursorKeys)
             }
@@ -563,6 +564,7 @@ class LatinIMEMode(
         Qwerty(R.string.latin_layout_qwerty),
         Azerty(R.string.latin_layout_azerty),
         Qwertz(R.string.latin_layout_qwertz),
+        Deutsch(R.string.latin_layout_deutsch),
         Dvorak(R.string.latin_layout_dvorak),
         Colemak(R.string.latin_layout_colemak)
     }
