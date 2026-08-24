@@ -1,10 +1,14 @@
 package ee.oyatl.ime.fusion
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.inputmethodservice.InputMethodService
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.util.TypedValue
 import android.view.KeyEvent
 import android.view.View
@@ -35,13 +39,21 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
     private lateinit var preference: SharedPreferences
     private lateinit var imeModeSwitcher: IMEModeSwitcher
+    private lateinit var clipboardManager: ClipboardManager
     private var imeView: View? = null
     private val imeViewFilter = PaleViewFilter()
     private var hardwareLanguageKeyStroke: KeyStrokePreference.KeyStroke = KeyStrokePreference.KeyStroke()
+    private var inputViewActive = false
+    private var clipboardListenerRegistered = false
+    private val clipboardHandler = Handler(Looper.getMainLooper())
+    private val primaryClipChangedListener = ClipboardManager.OnPrimaryClipChangedListener {
+        clipboardHandler.post(::updateClipboardCandidate)
+    }
 
     override fun onCreate() {
         super.onCreate()
         preference = PreferenceManager.getDefaultSharedPreferences(this)
+        clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         onInit()
         onLoad()
         preference.registerOnSharedPreferenceChangeListener(this)
@@ -54,9 +66,12 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
     }
 
     override fun onDestroy() {
+        inputViewActive = false
+        updateClipboardListenerRegistration()
+        clipboardHandler.removeCallbacksAndMessages(null)
         imeViewFilter.clear()
-        super.onDestroy()
         onUnload()
+        super.onDestroy()
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
@@ -66,6 +81,8 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
         if(currentInputConnection != null && currentInputEditorInfo != null)
             imeModeSwitcher.onStart(currentInputConnection, currentInputEditorInfo)
         onResetViews()
+        updateClipboardListenerRegistration()
+        updateClipboardCandidate()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
@@ -118,6 +135,7 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
 
     override fun onStartInput(attribute: EditorInfo?, restarting: Boolean) {
         super.onStartInput(attribute, restarting)
+        imeModeSwitcher.setClipboardCandidate(null)
         if(attribute != null) {
             val cls = attribute.inputType and EditorInfo.TYPE_MASK_CLASS
             val variation = attribute.inputType and EditorInfo.TYPE_MASK_VARIATION
@@ -134,7 +152,24 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
         imeModeSwitcher.onStart(currentInputConnection, currentInputEditorInfo)
     }
 
+    override fun onStartInputView(info: EditorInfo?, restarting: Boolean) {
+        super.onStartInputView(info, restarting)
+        inputViewActive = true
+        updateClipboardListenerRegistration()
+        updateClipboardCandidate()
+    }
+
+    override fun onFinishInputView(finishingInput: Boolean) {
+        inputViewActive = false
+        updateClipboardListenerRegistration()
+        imeModeSwitcher.setClipboardCandidate(null)
+        super.onFinishInputView(finishingInput)
+    }
+
     override fun onFinishInput() {
+        inputViewActive = false
+        updateClipboardListenerRegistration()
+        imeModeSwitcher.setClipboardCandidate(null)
         imeModeSwitcher.onFinish()
         super.onFinishInput()
     }
@@ -175,6 +210,29 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
             @Suppress("DEPRECATION")
             if(token != null) imm.setInputMethodAndSubtype(token, id, subtype)
         }
+    }
+
+    override fun onClipboardCandidateSelected(text: String) {
+        val editorInfo = currentInputEditorInfo ?: return
+        if(!clipboardCandidateEnabled() || isSensitiveInputType(editorInfo.inputType)) return
+        currentInputConnection?.commitText(text, 1)
+    }
+
+    override fun onClipboardCandidateClearRequested(): Boolean {
+        val editorInfo = currentInputEditorInfo ?: return false
+        if(!clipboardCandidateEnabled() || isSensitiveInputType(editorInfo.inputType)) return false
+        val cleared = try {
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                clipboardManager.clearPrimaryClip()
+            } else {
+                clipboardManager.setPrimaryClip(ClipData.newPlainText(null, ""))
+            }
+            true
+        } catch(_: SecurityException) {
+            false
+        }
+        if(cleared) imeModeSwitcher.setClipboardCandidate(null)
+        return cleared
     }
 
     override fun onCandidateViewVisibilityChange(visible: Boolean) {
@@ -223,6 +281,29 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
         return true
     }
 
+    private fun updateClipboardListenerRegistration() {
+        val shouldRegister = inputViewActive && clipboardCandidateEnabled()
+        if(shouldRegister && !clipboardListenerRegistered) {
+            clipboardManager.addPrimaryClipChangedListener(primaryClipChangedListener)
+            clipboardListenerRegistered = true
+        } else if(!shouldRegister && clipboardListenerRegistered) {
+            clipboardManager.removePrimaryClipChangedListener(primaryClipChangedListener)
+            clipboardListenerRegistered = false
+        }
+    }
+
+    private fun updateClipboardCandidate() {
+        val editorInfo = currentInputEditorInfo
+        val text = if(inputViewActive && clipboardCandidateEnabled() && editorInfo != null) {
+            readClipboardCandidateText(clipboardManager, editorInfo.inputType)
+        } else null
+        imeModeSwitcher.setClipboardCandidate(text)
+    }
+
+    private fun clipboardCandidateEnabled(): Boolean {
+        return preference.getBoolean(PREF_CLIPBOARD_CANDIDATE_ENABLED, true)
+    }
+
     private fun updateNavigationBar() {
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM) return
         val window = window.window ?: return
@@ -248,5 +329,9 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
             }
             windowInsets
         }
+    }
+
+    companion object {
+        private const val PREF_CLIPBOARD_CANDIDATE_ENABLED = "clipboard_candidate_enabled"
     }
 }
