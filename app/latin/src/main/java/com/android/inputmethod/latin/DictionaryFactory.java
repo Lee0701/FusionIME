@@ -60,7 +60,12 @@ public final class DictionaryFactory {
                         new ReadOnlyBinaryDictionary(f.mFilename, f.mOffset, f.mLength,
                                 false /* useFullEditDistance */, locale, Dictionary.TYPE_MAIN);
                 if (readOnlyBinaryDictionary.isValidDictionary()) {
-                    dictList.add(readOnlyBinaryDictionary);
+                    if(locale.getLanguage().equals("ko")) {
+                        // Use NormalizedDictionary for Korean locale
+                        dictList.add(new NormalizedDictionary(readOnlyBinaryDictionary));
+                    } else {
+                        dictList.add(readOnlyBinaryDictionary);
+                    }
                 } else {
                     readOnlyBinaryDictionary.close();
                     // Prevent this dictionary to do any further harm.

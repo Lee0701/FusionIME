@@ -8,6 +8,7 @@ import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.hangul.HangulCombiner
 import ee.oyatl.ime.fusion.korean.BigramHanjaConverter
+import ee.oyatl.ime.fusion.korean.HangulPredictor
 import ee.oyatl.ime.fusion.korean.HanjaConverter
 import ee.oyatl.ime.fusion.korean.JeongUnHanjaConverter
 import ee.oyatl.ime.fusion.korean.UnigramHanjaConverter
@@ -23,14 +24,17 @@ import ee.oyatl.ime.fusion.layout.preset.KoreanLayoutPresets
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.launch
 import java.util.Locale
+import java.util.concurrent.Executors
 
 abstract class KoreanIMEMode(
     converterType: ConverterType,
     listener: IMEMode.Listener
 ): CommonIMEMode(listener) {
-    private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private val dispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
+    private val coroutineScope = CoroutineScope(dispatcher)
     private var convertJob: Job? = null
 
     protected abstract val hangulCombiner: HangulCombiner
@@ -297,13 +301,14 @@ abstract class KoreanIMEMode(
     }
 
     enum class ConverterType {
-        Word, Phrase, JeongUn;
+        Word, Phrase, JeongUn, HangulOnly;
 
         fun create(): HanjaConverter {
             return when(this) {
                 Word -> UnigramHanjaConverter()
                 Phrase -> BigramHanjaConverter()
                 JeongUn -> JeongUnHanjaConverter()
+                HangulOnly -> HangulPredictor()
             }
         }
     }
