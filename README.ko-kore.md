@@ -1,7 +1,5 @@
 
-<a href="https://play.google.com/store/apps/details?id=ee.oyatl.ime.fusion"><img src="https://raw.githubusercontent.com/pioug/google-play-badges/refs/heads/main/svg/ko.svg" width="150"></a>
-
-[데모版 다운로드](https://play.google.com/store/apps/details?id=ee.oyatl.ime.fusion.free)
+<a href="https://play.google.com/store/apps/details?id=ee.oyatl.ime.fusion.free"><img src="https://raw.githubusercontent.com/pioug/google-play-badges/refs/heads/main/svg/ko.svg" width="150"></a>
 
 # FusionIME
 FusionIME는 韓中日越(漢字文化圈) 言語를 爲한 여러가지 入力方式을 單一 앱으로 提供합니다.

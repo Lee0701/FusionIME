@@ -394,18 +394,14 @@ abstract class MozcIMEMode(
             return "$localeName $layoutName"
         }
 
-        override fun getShortLabel(context: Context, params: List<IMEMode.Params>): String {
-            val mozcParams = params.filterIsInstance<Params>().filterNot { it == this }
-            // If this is the only Mozc mode
-            if(mozcParams.isEmpty()) return "あ"
-            // If not, use specific layout name
+        override fun getShortLabels(context: Context): List<String> {
             return when(layout) {
-                Layout.RomajiQwerty -> "あQ"
-                Layout.Kana12Key -> "あK"
-                Layout.Godan -> "あG"
-                Layout.KanaJIS -> "JIS"
-                Layout.KanaSyllables -> "あいう"
-                Layout.KanaIroha -> "いろは"
+                Layout.RomajiQwerty -> listOf("あ", "あQ")
+                Layout.Kana12Key -> listOf("あ", "あK")
+                Layout.Godan -> listOf("あ", "あG")
+                Layout.KanaJIS -> listOf("あ", "JIS")
+                Layout.KanaSyllables -> listOf("あ", "あいう")
+                Layout.KanaIroha -> listOf("あ", "いろは")
             }
         }
 

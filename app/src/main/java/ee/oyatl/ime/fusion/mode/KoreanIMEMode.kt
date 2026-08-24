@@ -256,42 +256,14 @@ abstract class KoreanIMEMode(
             return "$localeName $layoutName"
         }
 
-        override fun getShortLabel(context: Context, params: List<IMEMode.Params>): String {
-            val koreanParams = params.filterIsInstance<Params>().filterNot { it == this }
-            // If this is the only Korean mode
-            if(koreanParams.isEmpty()) {
-                return when(layout) {
-                    // For modern Hangul layouts
-                    Layout.Set2KS, Layout.Set3390, Layout.Set3391, Layout.Set3391Strict -> "한"
-                    // For old Hangul layouts
-                    Layout.Set2Old, Layout.Set3Old393 -> "ᄒᆞ"
-                }
-            }
-            // If there are any other Korean modes
+        override fun getShortLabels(context: Context): List<String> {
             return when(layout) {
-                // For 2-set layouts
-                Layout.Set2KS -> "한2"
-                Layout.Set3390, Layout.Set3391, Layout.Set3391Strict -> {
-                    // Find if there are any other 3-set layouts
-                    val korean3SetParams = koreanParams.filter { it.layout in setOf(Layout.Set3390, Layout.Set3391, Layout.Set3391Strict) }
-                    // If this is the only mode with 3-set layout
-                    if(korean3SetParams.isEmpty()) "한3"
-                    // If not, use specific layout name
-                    else when(layout) {
-                        Layout.Set3390 -> "390"
-                        Layout.Set3391 -> "391"
-                        Layout.Set3391Strict -> "391"
-                    }
-                }
-                // For old Hangul layouts
-                Layout.Set2Old, Layout.Set3Old393 -> {
-                    val oldParams = koreanParams.filter { it.layout in setOf(Layout.Set2Old, Layout.Set3Old393) }
-                    if(oldParams.isEmpty()) "ᄒᆞ"
-                    else when(layout) {
-                        Layout.Set2Old -> "ᄒᆞ2"
-                        Layout.Set3Old393 -> "ᄒᆞ3"
-                    }
-                }
+                Layout.Set2KS -> listOf("한", "한2")
+                Layout.Set3390 -> listOf("한", "한3", "390")
+                Layout.Set3391 -> listOf("한", "한3", "391")
+                Layout.Set3391Strict -> listOf("한", "한3", "391", "391S")
+                Layout.Set2Old -> listOf("ᄒᆞ", "ᄒᆞ2")
+                Layout.Set3Old393 -> listOf("ᄒᆞ", "ᄒᆞ3", "393")
             }
         }
 
