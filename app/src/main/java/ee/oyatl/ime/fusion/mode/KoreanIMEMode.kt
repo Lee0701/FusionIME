@@ -24,14 +24,17 @@ import ee.oyatl.ime.fusion.layout.preset.KoreanLayoutPresets
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.launch
 import java.util.Locale
+import java.util.concurrent.Executors
 
 abstract class KoreanIMEMode(
     converterType: ConverterType,
     listener: IMEMode.Listener
 ): CommonIMEMode(listener) {
-    private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private val dispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
+    private val coroutineScope = CoroutineScope(dispatcher)
     private var convertJob: Job? = null
 
     protected abstract val hangulCombiner: HangulCombiner

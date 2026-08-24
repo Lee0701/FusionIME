@@ -37,7 +37,7 @@ class HangulPredictor: HanjaConverter, DictionaryFacilitator.DictionaryInitializ
         dummyKeyboard = KeyboardBuilder(context, params).build()
     }
 
-    override fun convert(text: String): List<CandidateView.Candidate> {
+    override suspend fun convert(text: String): List<CandidateView.Candidate> {
         val composer = WordComposer()
         val context = NgramContext.BEGINNING_OF_SENTENCE
         val keyboard = dummyKeyboard

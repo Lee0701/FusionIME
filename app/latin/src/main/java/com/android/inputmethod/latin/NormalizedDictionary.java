@@ -32,6 +32,7 @@ public class NormalizedDictionary extends Dictionary {
         composedData = new ComposedData(composedData.mInputPointers, composedData.mIsBatchMode, processInput(composedData.mTypedWord));
         ArrayList<SuggestedWords.SuggestedWordInfo> suggestions = mDictionary.getSuggestions(composedData, ngramContext, proximityInfoHandle, settingsValuesForSuggestion, sessionId, weightForLocale, inOutWeightOfLangModelVsSpatialModel);
         ArrayList<SuggestedWords.SuggestedWordInfo> result = new ArrayList<>();
+        if(suggestions == null) return result;
         for (SuggestedWords.SuggestedWordInfo info : suggestions) {
             result.add(new SuggestedWords.SuggestedWordInfo(processOutput(info.mWord), info.mPrevWordsContext,
                     info.mScore, info.mKindAndFlags, info.mSourceDict, info.mIndexOfTouchPointOfSecondWord, info.mAutoCommitFirstWordConfidence));
