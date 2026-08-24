@@ -70,7 +70,10 @@ object LatinLayoutPresets {
         return qwerty.copy(
             layoutTable = qwerty.layoutTable + LayoutTable.fromShiftStates(LayoutLatin.TABLE_AZERTY),
             altGraphTable = LayoutTable.fromShiftStates(LayoutLatin.TABLE_AZERTY_ALTGR),
-            softKeyCodeMapper = SoftKeyCodeMapper.Basic(LayoutLatin.KEYCODE_MAP_AZERTY + LayoutLatin.SOFT_KEYCODE_MAP_AZERTY),
+            softKeyCodeMapper = SoftKeyCodeMapper.ByScreenMode(
+                mobile = SoftKeyCodeMapper.Basic(LayoutLatin.KEYCODE_MAP_AZERTY + LayoutLatin.SOFT_KEYCODE_MAP_AZERTY),
+                tablet = SoftKeyCodeMapper.Basic(LayoutLatin.KEYCODE_MAP_AZERTY)
+            ),
             hardKeyCodeMapper = HardKeyCodeMapper(LayoutLatin.KEYCODE_MAP_AZERTY)
         )
     }
