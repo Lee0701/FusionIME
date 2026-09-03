@@ -11,6 +11,17 @@ object LayoutLatin {
     )
 
     val TABLE_AZERTY = mapOf(
+        ExtKeyCode.KEYCODE_EXT_1 to listOf('1'.code, '!'.code, '1'.code),
+        ExtKeyCode.KEYCODE_EXT_2 to listOf('2'.code, '@'.code, '2'.code),
+        ExtKeyCode.KEYCODE_EXT_3 to listOf('3'.code, '#'.code, '3'.code),
+        ExtKeyCode.KEYCODE_EXT_4 to listOf('4'.code, '$'.code, '4'.code),
+        ExtKeyCode.KEYCODE_EXT_5 to listOf('5'.code, '%'.code, '5'.code),
+        ExtKeyCode.KEYCODE_EXT_6 to listOf('6'.code, '^'.code, '6'.code),
+        ExtKeyCode.KEYCODE_EXT_7 to listOf('7'.code, '&'.code, '7'.code),
+        ExtKeyCode.KEYCODE_EXT_8 to listOf('8'.code, '*'.code, '8'.code),
+        ExtKeyCode.KEYCODE_EXT_9 to listOf('9'.code, '('.code, '9'.code),
+        ExtKeyCode.KEYCODE_EXT_0 to listOf('0'.code, ')'.code, '0'.code),
+
         KeyEvent.KEYCODE_1 to listOf('&'.code, '1'.code),
         KeyEvent.KEYCODE_2 to listOf('é'.code, '2'.code),
         KeyEvent.KEYCODE_3 to listOf('"'.code, '3'.code),
@@ -110,7 +121,20 @@ object LayoutLatin {
         KeyEvent.KEYCODE_Z to KeyEvent.KEYCODE_W,
     )
 
-    val SOFT_KEYCODE_MAP_AZERTY = mapOf(
+    val SOFT_KEYCODE_MAP_AZERTY_NUMBERS = mapOf(
+        KeyEvent.KEYCODE_1 to ExtKeyCode.KEYCODE_EXT_1,
+        KeyEvent.KEYCODE_2 to ExtKeyCode.KEYCODE_EXT_2,
+        KeyEvent.KEYCODE_3 to ExtKeyCode.KEYCODE_EXT_3,
+        KeyEvent.KEYCODE_4 to ExtKeyCode.KEYCODE_EXT_4,
+        KeyEvent.KEYCODE_5 to ExtKeyCode.KEYCODE_EXT_5,
+        KeyEvent.KEYCODE_6 to ExtKeyCode.KEYCODE_EXT_6,
+        KeyEvent.KEYCODE_7 to ExtKeyCode.KEYCODE_EXT_7,
+        KeyEvent.KEYCODE_8 to ExtKeyCode.KEYCODE_EXT_8,
+        KeyEvent.KEYCODE_9 to ExtKeyCode.KEYCODE_EXT_9,
+        KeyEvent.KEYCODE_0 to ExtKeyCode.KEYCODE_EXT_0,
+    )
+
+    val SOFT_KEYCODE_MAP_AZERTY_MOBILE = mapOf(
         KeyEvent.KEYCODE_COMMA to ExtKeyCode.KEYCODE_EXT_COMMA,
         KeyEvent.KEYCODE_PERIOD to ExtKeyCode.KEYCODE_EXT_PERIOD,
         KeyEvent.KEYCODE_M to ExtKeyCode.KEYCODE_APOSTROPHE_QUESTION,
