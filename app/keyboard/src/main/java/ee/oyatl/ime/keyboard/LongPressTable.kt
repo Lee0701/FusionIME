@@ -16,11 +16,11 @@ class LongPressTable(
 
     companion object {
         fun from(
-            map: Map<Int, List<Char>> = emptyMap(),
-            uppercaseOverrides: Map<Int, Int> = emptyMap()
+            map: Map<Char, List<Char>> = emptyMap(),
+            uppercaseOverrides: Map<Char, Char> = emptyMap()
         ): LongPressTable = LongPressTable(
-            map.mapValues { (_, v) -> v.map(Char::code) },
-            uppercaseOverrides
+            map.map { (k, v) -> k.code to v.map(Char::code) }.toMap(),
+            uppercaseOverrides.map { (k, v) -> k.code to v.code }.toMap()
         )
     }
 }

@@ -13,7 +13,7 @@ import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
 import ee.oyatl.ime.keyboard.HardKeyCodeMapper
 import ee.oyatl.ime.keyboard.KeyboardConfiguration
 import ee.oyatl.ime.keyboard.KeyboardTemplate
-import ee.oyatl.ime.fusion.layout.LatinLongPressTable
+import ee.oyatl.ime.fusion.layout.LatinMoreKeysTable
 import ee.oyatl.ime.keyboard.LayoutTable
 import ee.oyatl.ime.keyboard.LongPressTable
 import ee.oyatl.ime.keyboard.SoftKeyCodeMapper
@@ -48,7 +48,7 @@ object LatinLayoutPresets {
                 )
             ),
             layoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY),
-            longPressTable = LongPressTable.from(LatinLongPressTable.DEFAULT, LatinLongPressTable.DEFAULT_UPPERCASE_OVERRIDE)
+            longPressTable = LongPressTable.from(LatinMoreKeysTable.DEFAULT, LatinMoreKeysTable.DEFAULT_UPPERCASE_OVERRIDE)
         )
     }
 
@@ -125,7 +125,7 @@ object LatinLayoutPresets {
             ),
             layoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutLatin.TABLE_GERMAN_QWERTZ),
             altGraphTable = LayoutTable.fromShiftStates(LayoutLatin.TABLE_GERMAN_QWERTZ_ALTGR),
-            longPressTable = LongPressTable.from(LatinLongPressTable.DEFAULT, LatinLongPressTable.DEFAULT_UPPERCASE_OVERRIDE),
+            longPressTable = LongPressTable.from(LatinMoreKeysTable.DEFAULT, LatinMoreKeysTable.DEFAULT_UPPERCASE_OVERRIDE),
             softKeyCodeMapper = SoftKeyCodeMapper.Basic(LayoutLatin.KEYCODE_MAP_QWERTZ + LayoutLatin.SOFT_KEYCODE_MAP_DEUTSCH_QWERTZ),
             hardKeyCodeMapper = HardKeyCodeMapper(LayoutLatin.KEYCODE_MAP_QWERTZ)
         )
@@ -157,7 +157,7 @@ object LatinLayoutPresets {
                 )
             ),
             layoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY),
-            longPressTable = LongPressTable.from(LatinLongPressTable.DEFAULT, LatinLongPressTable.DEFAULT_UPPERCASE_OVERRIDE),
+            longPressTable = LongPressTable.from(LatinMoreKeysTable.DEFAULT, LatinMoreKeysTable.DEFAULT_UPPERCASE_OVERRIDE),
             softKeyCodeMapper = SoftKeyCodeMapper.Basic(LayoutLatin.KEYCODE_MAP_DVORAK)
         )
     }
@@ -188,7 +188,7 @@ object LatinLayoutPresets {
                 )
             ),
             layoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY),
-            longPressTable = LongPressTable.from(LatinLongPressTable.DEFAULT, LatinLongPressTable.DEFAULT_UPPERCASE_OVERRIDE),
+            longPressTable = LongPressTable.from(LatinMoreKeysTable.DEFAULT, LatinMoreKeysTable.DEFAULT_UPPERCASE_OVERRIDE),
             softKeyCodeMapper = SoftKeyCodeMapper.Basic(LayoutLatin.KEYCODE_MAP_COLEMAK)
         )
     }
