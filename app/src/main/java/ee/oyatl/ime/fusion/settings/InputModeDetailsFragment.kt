@@ -58,8 +58,12 @@ abstract class InputModeDetailsFragment: PreferenceFragmentCompat() {
             if(map["locale"] == "fr" && map["layout"] == null) {
                 layout?.value = LatinIMEMode.Layout.Azerty.name
             }
+            if(map["locale"] == "de" && map["layout"] == null) {
+                layout?.value = LatinIMEMode.Layout.Deutsch.name
+            }
             locale?.setOnPreferenceChangeListener { _, value ->
                 if(value == "fr") layout?.value = LatinIMEMode.Layout.Azerty.name
+                if(value == "de") layout?.value = LatinIMEMode.Layout.Deutsch.name
                 true
             }
             if(Feature.NumberRow.availableInCurrentVersion)

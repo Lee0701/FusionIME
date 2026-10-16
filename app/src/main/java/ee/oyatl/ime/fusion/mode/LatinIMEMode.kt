@@ -3,6 +3,7 @@ package ee.oyatl.ime.fusion.mode
 import android.content.Context
 import android.content.res.Resources
 import android.inputmethodservice.InputMethodService
+import android.view.KeyCharacterMap
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -37,8 +38,6 @@ import ee.oyatl.ime.candidate.TripleCandidateView
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.layout.preset.LatinLayoutPresets
 import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
-import ee.oyatl.ime.keyboard.LatinLongPressTable
-import ee.oyatl.ime.keyboard.LongPressTable
 import java.util.Locale
 
 class LatinIMEMode(
@@ -47,8 +46,6 @@ class LatinIMEMode(
     override var textLayoutPreset: KeyboardLayoutPreset
 ): CommonIMEMode(listener), ILatinIME {
     override var context: Context? = null
-
-    override val longPressTable: LongPressTable = LatinLongPressTable.Default
 
     override val handler: LatinIME.UIHandler = LatinIME.UIHandler(this)
     private var dictionaryFacilitator: DictionaryFacilitator? = null
@@ -107,7 +104,13 @@ class LatinIMEMode(
     }
 
     override fun onChar(codePoint: Int) {
-        if(codePoint != 0) onCodeInput(codePoint, 0, 0, false)
+        if(codePoint == 0) return
+        if(codePoint and KeyCharacterMap.COMBINING_ACCENT != 0) {
+            val event = Event.createDeadEvent(codePoint and KeyCharacterMap.COMBINING_ACCENT_MASK, 0, null)
+            onEvent(event)
+            return
+        }
+        onCodeInput(codePoint, 0, 0, false)
     }
 
     override fun onSpecial(keyCode: Int) {
@@ -512,6 +515,8 @@ class LatinIMEMode(
                     else -> LatinLayoutPresets.qwerty(false, numberRow, cursorKeys)
                 }
                 Layout.Azerty -> LatinLayoutPresets.azerty(numberRow, cursorKeys)
+                Layout.Qwertz -> LatinLayoutPresets.qwertz(numberRow, cursorKeys)
+                Layout.Deutsch -> LatinLayoutPresets.germanQwertz(numberRow, cursorKeys)
                 Layout.Dvorak -> LatinLayoutPresets.dvorak(numberRow, cursorKeys)
                 Layout.Colemak -> LatinLayoutPresets.colemak(numberRow, cursorKeys)
             }
@@ -526,8 +531,11 @@ class LatinIMEMode(
 
         override fun getShortLabels(context: Context): List<String> {
             val localeLabel = locale.language.replaceFirstChar { it.uppercase() }
-            val layoutLabel = layout.name.first().toString()
-            return listOf(localeLabel, "$localeLabel$layoutLabel")
+            val layoutHead = layout.name.first().toString()
+            val layoutTail = layout.name.last().toString()
+            val labels = listOf(localeLabel, "$localeLabel$layoutHead")
+            if(layoutHead == "Q") return labels + listOf("$localeLabel$layoutHead$layoutTail")
+            return labels
         }
 
         companion object {
@@ -555,6 +563,8 @@ class LatinIMEMode(
     ) {
         Qwerty(R.string.latin_layout_qwerty),
         Azerty(R.string.latin_layout_azerty),
+        Qwertz(R.string.latin_layout_qwertz),
+        Deutsch(R.string.latin_layout_deutsch),
         Dvorak(R.string.latin_layout_dvorak),
         Colemak(R.string.latin_layout_colemak)
     }
