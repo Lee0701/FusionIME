@@ -6,6 +6,7 @@ import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.layout.ExtKeyCode
 import ee.oyatl.ime.fusion.layout.Hangul3Set
 import ee.oyatl.ime.fusion.layout.HangulOld
+import ee.oyatl.ime.fusion.layout.LatinMoreKeysTable
 import ee.oyatl.ime.fusion.layout.LayoutExt
 import ee.oyatl.ime.fusion.layout.LayoutQwerty
 import ee.oyatl.ime.fusion.layout.MobileKeyboard
@@ -15,6 +16,7 @@ import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
 import ee.oyatl.ime.keyboard.KeyboardConfiguration
 import ee.oyatl.ime.keyboard.KeyboardTemplate
 import ee.oyatl.ime.keyboard.LayoutTable
+import ee.oyatl.ime.keyboard.LongPressTable
 import ee.oyatl.ime.keyboard.SoftKeyCodeMapper
 
 object KoreanLayoutPresets {
@@ -25,12 +27,27 @@ object KoreanLayoutPresets {
     ): KeyboardLayoutPreset {
         val numberRow = Feature.NumberRow.availableInCurrentVersion && numberRow
         val cursorKeys = Feature.CursorKeys.availableInCurrentVersion && cursorKeys
-        val preset = LatinLayoutPresets.qwerty(
-            numberRow = numberRow,
-            cursorKeys = cursorKeys
-        )
-        return preset.copy(
-            layoutTable = preset.layoutTable + layoutTable
+        return KeyboardLayoutPreset(
+            keyboardTemplate = KeyboardTemplate.ByScreenMode(
+                mobile = KeyboardTemplate.Basic(
+                    configuration = KeyboardConfiguration(
+                        if(numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
+                        MobileKeyboard.alphabetic(semicolon = false),
+                        MobileKeyboard.bottom(dpad = cursorKeys)
+                    ),
+                    contentRows = (if(numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.KS
+                ),
+                tablet = KeyboardTemplate.Basic(
+                    configuration = KeyboardConfiguration(
+                        if(numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
+                        TabletKeyboard.alphabetic(semicolon = false, delete = !numberRow),
+                        TabletKeyboard.bottom()
+                    ),
+                    contentRows = (if(numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.KS
+                )
+            ),
+            layoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY) + layoutTable,
+            longPressTable = LongPressTable.from(LatinMoreKeysTable.DEFAULT, LatinMoreKeysTable.DEFAULT_UPPERCASE_OVERRIDE)
         )
     }
 
