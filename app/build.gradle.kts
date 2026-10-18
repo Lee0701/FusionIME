@@ -7,12 +7,12 @@ plugins {
 
 configure<ApplicationExtension> {
     namespace = "ee.oyatl.ime.fusion"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "ee.oyatl.ime.fusion"
         minSdk = 21
-        targetSdk = 36
+        targetSdk = 37
         versionCode = 18
         versionName = "20260821-18-797124c"
 
