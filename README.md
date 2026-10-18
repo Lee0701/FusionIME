@@ -15,7 +15,7 @@ FusionIME packs various input methods for CJKV languages into one app.
 ## Supported Languages and Layouts
 ### Latin Languages
 * Languages: English, German, Spanish, French, Italian, Brazilian Portuguese
-* Layouts: QWERTY, Dvorak, Colemak
+* Layouts: QWERTY, QWERTZ, AZERTY, Dvorak, Colemak
 
 ### Chinese
 * Simplified & Traditional Chinese Pinyin
@@ -33,12 +33,12 @@ FusionIME packs various input methods for CJKV languages into one app.
 * Hangul 3-Set 390, 3-Set Final
 * Old Hangul 2-Set, 3-Set 393
 
-Supports Hanja conversion for both modern and middle Korean.
+Supports Hanja conversion for both modern and middle Korean. Supports Hangul-only prediction.
 
 ### Vietnamese
 * QWERTY, Telex
 
-Supports Han Nom conversion.
+Supports Chu Quoc Ngu and Han Nom conversion.
 
 ## Dictionary Data
 * Korean: [Korean Standard Dictionary](https://stdict.korean.go.kr), [libhangul](https://github.com/libhangul/libhangul)
