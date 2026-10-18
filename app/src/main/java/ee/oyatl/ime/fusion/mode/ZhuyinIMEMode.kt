@@ -123,7 +123,7 @@ class ZhuyinIMEMode(
             if (length > 0) {
                 wordComposer.delete(1)
             } else {
-                ic.deleteSurroundingText(1, 0)
+                util?.deleteSurroundingText(1, 0)
             }
         } else {
             util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_DEL)

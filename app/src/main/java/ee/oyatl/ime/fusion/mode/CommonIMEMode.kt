@@ -1,8 +1,6 @@
 package ee.oyatl.ime.fusion.mode
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.content.res.Configuration
 import android.util.TypedValue
 import android.view.KeyCharacterMap
 import android.view.KeyEvent
@@ -12,6 +10,7 @@ import android.view.inputmethod.InputConnection
 import androidx.preference.PreferenceManager
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.ScrollingCandidateView
+import ee.oyatl.ime.fusion.DimensionUtil
 import ee.oyatl.ime.fusion.Feature
 import ee.oyatl.ime.fusion.FlickAction
 import ee.oyatl.ime.fusion.KeyEventUtil

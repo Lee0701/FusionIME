@@ -62,6 +62,7 @@
         <item>@string/input_mode_cangjie</item>
         <item>@string/input_mode_viet</item>
         <item>@string/input_mode_jyutping</item>
+        <item>@string/input_mode_emoji</item>
     </string-array>
 
     <string-array name="settings_input_mode_type_values">
@@ -73,6 +74,7 @@
         <item>cangjie</item>
         <item>viet</item>
         <item>jyutping</item>
+        <item>emoji</item>
     </string-array>
 
     <string-array name="settings_input_mode_latin_locale_entries">

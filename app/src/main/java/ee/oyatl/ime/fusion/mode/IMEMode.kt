@@ -56,6 +56,7 @@ interface IMEMode {
                     CangjieIMEMode.TYPE -> CangjieIMEMode.Params.parse(map)
                     VietIMEMode.TYPE -> VietIMEMode.Params.parse(map)
                     JyutpingIMEMode.TYPE -> JyutpingIMEMode.Params.parse(map)
+                    EmojiIMEMode.TYPE -> EmojiIMEMode.Params.parse(map)
                     else -> null
                 }
             }
