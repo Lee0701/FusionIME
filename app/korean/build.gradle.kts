@@ -28,7 +28,6 @@ configure<LibraryExtension> {
 
     flavorDimensions += "edition"
     productFlavors {
-        register("paid")
         register("free")
     }
 
