@@ -7,24 +7,26 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
 import androidx.annotation.StringRes
+import androidx.preference.PreferenceManager
 import com.google.common.base.Optional
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.VerticalScrollingCandidateView
+import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.R
-import ee.oyatl.ime.fusion.mozc.InputConnectionRenderer
-import ee.oyatl.ime.keyboard.SoftKeyCodeMapper
-import ee.oyatl.ime.keyboard.KeyboardConfiguration
-import ee.oyatl.ime.keyboard.KeyboardTemplate
+import ee.oyatl.ime.fusion.layout.LayoutGodan
 import ee.oyatl.ime.fusion.layout.LayoutKana
-import ee.oyatl.ime.fusion.layout.LayoutRomaji
+import ee.oyatl.ime.fusion.layout.preset.JapaneseLayoutPresets
+import ee.oyatl.ime.fusion.layout.preset.LatinLayoutPresets
+import ee.oyatl.ime.fusion.mozc.InputConnectionRenderer
+import ee.oyatl.ime.keyboard.KeyLabel
+import ee.oyatl.ime.keyboard.KeyboardParams
+import ee.oyatl.ime.keyboard.KeyboardState.Symbol
+import ee.oyatl.ime.keyboard.KeyboardView
 import ee.oyatl.ime.keyboard.LayoutTable
-import ee.oyatl.ime.fusion.layout.ExtKeyCode
-import ee.oyatl.ime.fusion.layout.MobileKeyboard
-import ee.oyatl.ime.fusion.layout.MobileKeyboardRows
-import ee.oyatl.ime.fusion.layout.LayoutExt
-import ee.oyatl.ime.fusion.layout.TabletKeyboard
-import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
-import ee.oyatl.ime.keyboard.FlickKeyCode
+import ee.oyatl.ime.keyboard.listener.FlickListener
+import ee.oyatl.ime.keyboard.touchhandler.FlickDirection
+import ee.oyatl.ime.keyboard.touchhandler.FlickTouchHandler
+import ee.oyatl.ime.keyboard.touchhandler.TouchHandler
 import org.mozc.android.inputmethod.japanese.MozcUtil
 import org.mozc.android.inputmethod.japanese.PrimaryKeyCodeConverter
 import org.mozc.android.inputmethod.japanese.keyboard.Keyboard.KeyboardSpecification
@@ -105,6 +107,11 @@ abstract class MozcIMEMode(
                     .setIncognitoMode(passwordField)
                     .build()
             )
+            val keyboardSpecification = when(symbolState) {
+                Symbol.Text -> this.keyboardSpecification
+                Symbol.Symbol -> KeyboardSpecification.QWERTY_KANA
+                Symbol.Number -> KeyboardSpecification.NUMBER
+            }
             sessionExecutor.updateRequest(
                 MozcUtil.getRequestBuilder(resources, keyboardSpecification, resources.configuration).build(),
                 emptyList()
@@ -128,6 +135,10 @@ abstract class MozcIMEMode(
     }
 
     override fun onChar(codePoint: Int) {
+        if(symbolState == Symbol.Number) {
+            onReset()
+            return super.onChar(codePoint)
+        }
         val primaryKeyCodeConverter = primaryKeyCodeConverter ?: return
         val sessionExecutor = sessionExecutor ?: return
         val eventList = emptyList<TouchEvent>()
@@ -142,13 +153,26 @@ abstract class MozcIMEMode(
 
     override fun onSpecial(keyCode: Int) {
         when(keyCode) {
+            KeyEvent.KEYCODE_SYM, KeyEvent.KEYCODE_NUM -> {
+                super.onSpecial(keyCode)
+                onReset()
+                return
+            }
+        }
+        if(symbolState == Symbol.Number) {
+            onReset()
+            return super.onSpecial(keyCode)
+        }
+        val converter = primaryKeyCodeConverter ?: return super.onSpecial(keyCode)
+        when(keyCode) {
             KeyEvent.KEYCODE_SPACE -> onChar(' '.code)
-            KeyEvent.KEYCODE_ENTER -> onChar(primaryKeyCodeConverter?.keyCodeEnter ?: return)
-            KeyEvent.KEYCODE_DEL -> onChar(primaryKeyCodeConverter?.keyCodeBackspace ?: return)
-            KeyEvent.KEYCODE_DPAD_LEFT -> onChar(primaryKeyCodeConverter?.keyCodeLeft ?: return)
-            KeyEvent.KEYCODE_DPAD_RIGHT -> onChar(primaryKeyCodeConverter?.keyCodeRight ?: return)
-            KeyEvent.KEYCODE_DPAD_UP -> onChar(primaryKeyCodeConverter?.keyCodeUp ?: return)
-            KeyEvent.KEYCODE_DPAD_DOWN -> onChar(primaryKeyCodeConverter?.keyCodeDown ?: return)
+            KeyEvent.KEYCODE_ENTER -> onChar(converter.keyCodeEnter)
+            KeyEvent.KEYCODE_DEL -> onChar(converter.keyCodeBackspace)
+            KeyEvent.KEYCODE_TAB -> onChar(converter.keyCodeUndo)
+            KeyEvent.KEYCODE_DPAD_LEFT -> onChar(converter.keyCodeLeft)
+            KeyEvent.KEYCODE_DPAD_RIGHT -> onChar(converter.keyCodeRight)
+            KeyEvent.KEYCODE_DPAD_UP -> onChar(converter.keyCodeUp)
+            KeyEvent.KEYCODE_DPAD_DOWN -> onChar(converter.keyCodeDown)
             else -> super.onSpecial(keyCode)
         }
     }
@@ -174,25 +198,156 @@ abstract class MozcIMEMode(
         numberRow: Boolean
     ): MozcIMEMode(listener, candidateViewHeight) {
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.QWERTY_KANA
-        override val textLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutRomaji.TABLE_QWERTY)
-        override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
-            mobile = KeyboardTemplate.Basic(
-                configuration = KeyboardConfiguration(
-                    if(numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
-                    MobileKeyboard.alphabetic(semicolon = true),
-                    MobileKeyboard.bottom(dpad = true)
-                ),
-                contentRows = (if(numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.MINUS
-            ),
-            tablet = KeyboardTemplate.Basic(
-                configuration = KeyboardConfiguration(
-                    if(numberRow) TabletKeyboard.numbers() else KeyboardConfiguration(),
-                    TabletKeyboard.alphabetic(semicolon = true),
-                    TabletKeyboard.bottom()
-                ),
-                contentRows = (if(numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.MINUS
+        override var textLayoutPreset: KeyboardLayoutPreset = JapaneseLayoutPresets.romajiQwertyCompatible(
+            LatinLayoutPresets.qwerty(true, numberRow, true))
+    }
+
+    class Kana12Key(
+        listener: IMEMode.Listener,
+        candidateViewHeight: Int,
+        val flickMode: FlickMode,
+        val flickHint: Boolean
+    ): MozcIMEMode(listener, candidateViewHeight), FlickListener {
+        override val keyboardSpecification: KeyboardSpecification = flickMode.keyboardSpecification
+        override var textLayoutPreset: KeyboardLayoutPreset = JapaneseLayoutPresets.kana12Key()
+
+        // Remove flick labels if toggle only mode
+        // Show them as hints only when option is on
+        private val keyLabels12Key: Map<Int, KeyLabel> =
+            if(flickMode == FlickMode.ToggleOnly) LayoutKana.LABELS_12KEY.mapValues { (k, v) ->
+                KeyLabel.Default(v.text)
+            }
+            else LayoutKana.LABELS_12KEY.mapValues { (k, v) ->
+                v.copy(showAsHint = flickHint)
+            }
+
+        override val keyLabels: Map<Int, KeyLabel>
+            get() =
+                if(symbolState == Symbol.Text) super.keyLabels + keyLabels12Key
+                else super.keyLabels
+
+        private val flicks: MutableMap<Int, FlickDirection> = mutableMapOf()
+
+        override fun createKeyboardParams(context: Context, symbolState: Symbol): KeyboardParams {
+            val params = super.createKeyboardParams(context, symbolState)
+            // Never split 12-key based keyboard
+            if(symbolState == Symbol.Text) return params.copy(splitWidth = 0)
+            return params
+        }
+
+        override fun createTouchHandler(
+            keyboardView: KeyboardView,
+            params: KeyboardParams,
+            symbolState: Symbol
+        ): TouchHandler {
+            if(symbolState == Symbol.Text) {
+                return FlickTouchHandler(keyboardView, params, diagonal = false, multiFlick = false, sendOnUp = true)
+            } else {
+                return super.createTouchHandler(keyboardView, params, symbolState)
+            }
+        }
+
+        override fun onKeyDown(keyCode: Int, metaState: Int): Boolean {
+            if(keyCode <= 0 || !keyCharacterMap.isPrintingKey(keyCode)) {
+                return super.onKeyDown(keyCode, metaState)
+            }
+            return false
+        }
+
+        override fun onKeyUp(keyCode: Int, metaState: Int): Boolean {
+            if(keyCode <= 0 || !keyCharacterMap.isPrintingKey(keyCode)) {
+                return super.onKeyUp(keyCode, metaState)
+            }
+            val direction = flicks[keyCode]
+            when(val item = currentLayoutTable[keyCode]) {
+                is LayoutTable.FlickItem -> onChar(item.forFlickDirection(direction))
+                else -> onChar(item?.normal ?: keyCharacterMap.get(keyCode, metaState))
+            }
+            this.flicks -= keyCode
+            return false
+        }
+
+        override fun onFlick(
+            keyCode: Int,
+            direction: FlickDirection
+        ): Boolean {
+            if(flickMode == FlickMode.ToggleOnly) return false
+            this.flicks += keyCode to direction
+            return false
+        }
+    }
+
+
+    class Godan(
+        listener: IMEMode.Listener,
+        candidateViewHeight: Int,
+        val flickHint: Boolean
+    ): MozcIMEMode(listener, candidateViewHeight) {
+        override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.GODAN_KANA
+        override var textLayoutPreset: KeyboardLayoutPreset = JapaneseLayoutPresets.godan()
+
+        // Show flick hints only when option is on
+        private val keyLabelsGodan = LayoutGodan.LABELS.mapValues { (k, v) ->
+            v.copy(showAsHint = flickHint)
+        }
+
+        override val keyLabels: Map<Int, KeyLabel>
+            get() =
+                if(symbolState == Symbol.Text) super.keyLabels + keyLabelsGodan
+                else super.keyLabels
+
+        private val flicks: MutableMap<Int, FlickDirection> = mutableMapOf()
+
+        override fun createKeyboardParams(context: Context, symbolState: Symbol): KeyboardParams {
+            val params = super.createKeyboardParams(context, symbolState)
+            // Never split 12-key based keyboard
+            if(symbolState == Symbol.Text) return params.copy(splitWidth = 0)
+            return params
+        }
+
+        override fun createTouchHandler(
+            keyboardView: KeyboardView,
+            params: KeyboardParams,
+            symbolState: Symbol
+        ): TouchHandler {
+            if(symbolState != Symbol.Text) {
+                return super.createTouchHandler(keyboardView, params, symbolState)
+            }
+            return FlickTouchHandler(
+                keyboardView,
+                params,
+                diagonal = false,
+                multiFlick = false,
+                sendOnUp = true
             )
-        )
+        }
+
+        override fun onKeyDown(keyCode: Int, metaState: Int): Boolean {
+            if(keyCode <= 0 || !keyCharacterMap.isPrintingKey(keyCode)) {
+                return super.onKeyDown(keyCode, metaState)
+            }
+            return false
+        }
+
+        override fun onKeyUp(keyCode: Int, metaState: Int): Boolean {
+            if(keyCode <= 0 || !keyCharacterMap.isPrintingKey(keyCode)) {
+                return super.onKeyUp(keyCode, metaState)
+            }
+            val direction = flicks.remove(keyCode)
+            when(val item = currentLayoutTable[keyCode]) {
+                is LayoutTable.FlickItem -> onChar(item.forFlickDirection(direction))
+                else -> onChar(item?.normal ?: keyCharacterMap.get(keyCode, metaState))
+            }
+            return false
+        }
+
+        override fun onFlick(keyCode: Int, direction: FlickDirection): Boolean {
+            if(symbolState != Symbol.Text) {
+                return super.onFlick(keyCode, direction)
+            }
+            flicks[keyCode] = direction
+            return false
+        }
     }
 
     class KanaJIS(
@@ -200,60 +355,36 @@ abstract class MozcIMEMode(
         candidateViewHeight: Int
     ): MozcIMEMode(listener, candidateViewHeight) {
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.QWERTY_KANA_JIS
-        override val textLayoutTable: LayoutTable = LayoutTable.from(LayoutExt.TABLE + LayoutKana.TABLE_JIS)
-        override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
-            mobile = KeyboardTemplate.Basic(
-                configuration = KeyboardConfiguration(
-                    MobileKeyboard.numbers(),
-                    MobileKeyboard.alphabetic(semicolon = true, shiftDeleteWidth = 1f),
-                    MobileKeyboard.bottom(left = ExtKeyCode.KEYCODE_KANA_EQUALS, right = ExtKeyCode.KEYCODE_KANA_SLASH, dpad = true)
-                ),
-                contentRows = MobileKeyboardRows.JIS,
-                softKeyCodeMapper = SoftKeyCodeMapper(mapOf(
-                    KeyEvent.KEYCODE_MINUS to ExtKeyCode.KEYCODE_KANA_MINUS,
-                    KeyEvent.KEYCODE_APOSTROPHE to ExtKeyCode.KEYCODE_KANA_APOSTROPHE,
-                    KeyEvent.KEYCODE_LEFT_BRACKET to ExtKeyCode.KEYCODE_KANA_VOICED_MARK
-                ))
-            ),
-            tablet = KeyboardTemplate.Basic(
-                configuration = KeyboardConfiguration(
-                    TabletKeyboard.numbers(delete = true, spacerOnDelete = false),
-                    TabletKeyboard.alphabetic(semicolon = true, delete = false, spacerOnDelete = true),
-                    TabletKeyboard.bottom()
-                ),
-                contentRows = TabletKeyboardRows.JIS
-            )
-        )
+        override var textLayoutPreset: KeyboardLayoutPreset = JapaneseLayoutPresets.jis()
     }
 
     class KanaSyllables(
         listener: IMEMode.Listener,
-        candidateViewHeight: Int
+        candidateViewHeight: Int,
+        keys: String,
+        keyLayout: JapaneseLayoutPresets.KeyLayout
     ): MozcIMEMode(listener, candidateViewHeight) {
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.TWELVE_KEY_FLICK_KANA
-        override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
-            mobile = KeyboardTemplate.Basic(
-                configuration = LayoutKana.mobileKeyboardConfigurationSyllables(),
-                emptyList()
-            ),
-            tablet = KeyboardTemplate.Basic(
-                configuration = LayoutKana.tabletKeyboardConfigurationSyllables(),
-                emptyList()
-            )
-        )
+        override var textLayoutPreset: KeyboardLayoutPreset = JapaneseLayoutPresets.syllables(keys, keyLayout)
     }
 
     data class Params(
         val layout: Layout = Layout.RomajiQwerty,
         val numberRow: Boolean = false,
-        val candidateViewHeight: Int = 2
+        val candidateViewHeight: Int = 2,
+        val flickMode: FlickMode = FlickMode.FlickToggle,
+        val flickHint: Boolean = false,
+        val syllablesKeyLayout: JapaneseLayoutPresets.KeyLayout
     ): IMEMode.Params {
         override val type: String = TYPE
         override fun create(listener: IMEMode.Listener): IMEMode {
             return when(layout) {
                 Layout.RomajiQwerty -> RomajiQwerty(listener, candidateViewHeight, numberRow)
+                Layout.Kana12Key -> Kana12Key(listener, candidateViewHeight, flickMode, flickHint)
+                Layout.Godan -> Godan(listener, candidateViewHeight, flickHint)
                 Layout.KanaJIS -> KanaJIS(listener, candidateViewHeight)
-                Layout.KanaSyllables -> KanaSyllables(listener, candidateViewHeight)
+                Layout.KanaSyllables -> KanaSyllables(listener, candidateViewHeight, LayoutKana.KEYS_AIUEO, syllablesKeyLayout)
+                Layout.KanaIroha -> KanaSyllables(listener, candidateViewHeight, LayoutKana.KEYS_IROHA, syllablesKeyLayout)
             }
         }
 
@@ -263,15 +394,14 @@ abstract class MozcIMEMode(
             return "$localeName $layoutName"
         }
 
-        override fun getShortLabel(context: Context, params: List<IMEMode.Params>): String {
-            val mozcParams = params.filterIsInstance<Params>().filterNot { it == this }
-            // If this is the only Mozc mode
-            if(mozcParams.isEmpty()) return "あ"
-            // If not, use specific layout name
+        override fun getShortLabels(context: Context): List<String> {
             return when(layout) {
-                Layout.RomajiQwerty -> "あQ"
-                Layout.KanaJIS -> "JIS"
-                Layout.KanaSyllables -> "あいう"
+                Layout.RomajiQwerty -> listOf("あ", "あQ")
+                Layout.Kana12Key -> listOf("あ", "あK")
+                Layout.Godan -> listOf("あ", "あG")
+                Layout.KanaJIS -> listOf("あ", "JIS")
+                Layout.KanaSyllables -> listOf("あ", "あいう")
+                Layout.KanaIroha -> listOf("あ", "いろは")
             }
         }
 
@@ -280,10 +410,18 @@ abstract class MozcIMEMode(
                 val layout = Layout.entries.find { it.name == map["layout"] } ?: Layout.RomajiQwerty
                 val numberRow = map["number_row"]?.toBoolean() ?: false
                 val candidateViewHeight = map["candidate_view_height"]?.toFloatOrNull()?.toInt() ?: 2
+                val flickMode = FlickMode.valueOf(map["flick_mode"] ?: FlickMode.FlickToggle.name)
+                val flickHint = map["flick_hint"]?.toBoolean() ?: false
+                val syllablesKeyLayout =
+                    JapaneseLayoutPresets.KeyLayout.entries.find { it.name == map["syllables_key_layout"] }
+                        ?: JapaneseLayoutPresets.KeyLayout.Horizontal
                 return Params(
                     layout = layout,
                     candidateViewHeight = candidateViewHeight,
-                    numberRow = numberRow
+                    numberRow = numberRow,
+                    flickMode = flickMode,
+                    flickHint = flickHint,
+                    syllablesKeyLayout = syllablesKeyLayout
                 )
             }
         }
@@ -293,8 +431,19 @@ abstract class MozcIMEMode(
         @StringRes val nameKey: Int
     ) {
         RomajiQwerty(R.string.mozc_layout_romaji_qwerty),
+        Kana12Key(R.string.mozc_layout_kana_12key),
+        Godan(R.string.mozc_layout_godan),
         KanaJIS(R.string.mozc_layout_kana_jis),
-        KanaSyllables(R.string.mozc_layout_kana_syllables)
+        KanaSyllables(R.string.mozc_layout_kana_syllables),
+        KanaIroha(R.string.mozc_layout_kana_iroha)
+    }
+
+    enum class FlickMode(
+        val keyboardSpecification: KeyboardSpecification
+    ) {
+        FlickToggle(KeyboardSpecification.TWELVE_KEY_TOGGLE_FLICK_KANA),
+        ToggleOnly(KeyboardSpecification.TWELVE_KEY_TOGGLE_KANA),
+        FlickOnly(KeyboardSpecification.TWELVE_KEY_FLICK_KANA)
     }
 
     companion object {

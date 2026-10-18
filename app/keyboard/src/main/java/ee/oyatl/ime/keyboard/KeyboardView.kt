@@ -1,14 +1,30 @@
 package ee.oyatl.ime.keyboard
 
-import android.content.Context
-import android.util.AttributeSet
-import android.widget.FrameLayout
+import android.graphics.Rect
+import android.view.View
+import ee.oyatl.ime.keyboard.listener.KeyboardListener
+import ee.oyatl.ime.keyboard.popup.PopupManager
 
-abstract class KeyboardView(
-    context: Context,
-    attrs: AttributeSet?
-): FrameLayout(context, attrs) {
-    abstract fun onReset()
-    abstract fun setLabels(labels: Map<Int, String>)
-    abstract fun setIcons(icons: Map<Int, Int>)
+interface KeyboardView {
+    val view: View
+
+    val rect: Rect
+    val location: IntArray
+    val listener: KeyboardListener
+    val popupManager: PopupManager
+
+    var labels: Map<Int, KeyLabel>
+
+    fun onReset()
+    fun findKey(x: Int, y: Int): Key?
+    fun findKeys(keyCode: Int): List<Key>
+
+    interface Key {
+        val keyCode: Int
+        val label: String
+        val rect: Rect
+        val location: IntArray
+        fun onPressed()
+        fun onReleased()
+    }
 }

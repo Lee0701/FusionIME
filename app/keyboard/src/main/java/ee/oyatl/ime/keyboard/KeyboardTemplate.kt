@@ -3,14 +3,19 @@ package ee.oyatl.ime.keyboard
 import android.view.KeyEvent
 
 interface KeyboardTemplate {
-    fun inflate(params: KeyboardParams): Keyboard
+    fun inflate(
+        params: KeyboardParams,
+        softKeyCodeMapper: SoftKeyCodeMapper
+    ): Keyboard
 
     data class Basic(
         val configuration: KeyboardConfiguration,
-        val contentRows: List<String>,
-        val softKeyCodeMapper: SoftKeyCodeMapper = SoftKeyCodeMapper()
+        val contentRows: List<String>
     ): KeyboardTemplate {
-        override fun inflate(params: KeyboardParams): Keyboard {
+        override fun inflate(
+            params: KeyboardParams,
+            softKeyCodeMapper: SoftKeyCodeMapper
+        ): Keyboard {
             val keyCodeRows = contentRows.map { row -> row.map { SoftKeyCodeMapper.keyCharToKeyCode(it) } }
             val result = mutableListOf<List<Keyboard.KeyItem>>()
             configuration.rows.forEach { row ->
@@ -19,8 +24,8 @@ interface KeyboardTemplate {
                     when(item) {
                         is KeyboardConfiguration.Item.ContentKey -> {
                             val rowIndex = keyCodeRows.size - item.rowId - 1
-                            val keyCode = softKeyCodeMapper[keyCodeRows[rowIndex][item.index]]
-                            resultRow += Keyboard.KeyItem.NormalKey(keyCode)
+                            val keyCode = softKeyCodeMapper[params, keyCodeRows[rowIndex][item.index]]
+                            resultRow += Keyboard.KeyItem.Key(keyCode)
                         }
                         is KeyboardConfiguration.Item.ContentRow -> {
                             val rowIndex = keyCodeRows.size - item.rowId - 1
@@ -28,8 +33,8 @@ interface KeyboardTemplate {
                                 if(it == KeyEvent.KEYCODE_SPACE) {
                                     Keyboard.KeyItem.SplitSpacer(params.splitWidth)
                                 } else {
-                                    val keyCode = softKeyCodeMapper[it]
-                                    Keyboard.KeyItem.NormalKey(keyCode)
+                                    val keyCode = softKeyCodeMapper[params, it]
+                                    Keyboard.KeyItem.Key(keyCode)
                                 }
                             }
                             resultRow += content
@@ -38,7 +43,7 @@ interface KeyboardTemplate {
                             resultRow += Keyboard.KeyItem.Spacer(item.width)
                         }
                         is KeyboardConfiguration.Item.TemplateKey -> {
-                            val keyCode = softKeyCodeMapper[item.keyCode]
+                            val keyCode = softKeyCodeMapper[params, item.keyCode]
                             if(params.splitWidth != 0 && keyCode == KeyEvent.KEYCODE_SPACE) {
                                 resultRow += inflateKey(keyCode, item.copy(width = item.width / 2))
                                 resultRow += Keyboard.KeyItem.SplitSpacer(params.splitWidth)
@@ -55,10 +60,25 @@ interface KeyboardTemplate {
         }
 
         private fun inflateKey(keyCode: Int, item: KeyboardConfiguration.Item.TemplateKey): Keyboard.KeyItem {
-            val result =
-                if(item.special) Keyboard.KeyItem.SpecialKey(keyCode, item.width)
-                else Keyboard.KeyItem.NormalKey(keyCode, item.width)
-            return result
+            return if(item.special) {
+                val type = SpecialKeyType.ofKeyCode(keyCode) ?: SpecialKeyType.Default
+                val iconRes = item.iconRes ?: type.iconRes ?: 0
+                val bkgRes = when(item.merge) {
+                    KeyboardConfiguration.Item.TemplateKey.Merge.Up -> R.drawable.key_bg_bottom
+                    KeyboardConfiguration.Item.TemplateKey.Merge.Down -> R.drawable.key_bg_top
+                    else -> R.drawable.key_bg
+                }
+                Keyboard.KeyItem.Key(
+                    keyCode,
+                    width = item.width,
+                    label = "",
+                    iconRes = iconRes,
+                    themeRes = type.themeRes,
+                    bkgRes = bkgRes
+                )
+            } else {
+                Keyboard.KeyItem.Key(keyCode, width = item.width)
+            }
         }
     }
 
@@ -67,11 +87,15 @@ interface KeyboardTemplate {
         val tablet: KeyboardTemplate = mobile,
         val full: KeyboardTemplate = tablet
     ): KeyboardTemplate {
-        override fun inflate(params: KeyboardParams): Keyboard {
+        override fun inflate(
+            params: KeyboardParams,
+            softKeyCodeMapper: SoftKeyCodeMapper
+        ): Keyboard {
             return when(params.screenMode) {
-                KeyboardState.ScreenMode.Mobile -> mobile.inflate(params)
-                KeyboardState.ScreenMode.Tablet -> tablet.inflate(params)
-                KeyboardState.ScreenMode.Full -> full.inflate(params)
+                KeyboardState.ScreenMode.Mobile -> mobile.inflate(params, softKeyCodeMapper)
+                KeyboardState.ScreenMode.Tablet -> tablet.inflate(params, softKeyCodeMapper)
+                KeyboardState.ScreenMode.Full -> full.inflate(params, softKeyCodeMapper)
+                else -> mobile.inflate(params, softKeyCodeMapper)
             }
         }
     }

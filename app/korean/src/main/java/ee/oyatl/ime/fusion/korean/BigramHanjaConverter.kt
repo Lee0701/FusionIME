@@ -6,6 +6,7 @@ import ee.oyatl.ime.fusion.dictionary.manager.DictionaryCache
 import ee.oyatl.ime.newdict.DiskHanjaDictionary
 import ee.oyatl.ime.newdict.DiskNGramDictionary
 import ee.oyatl.ime.newdict.DiskTrieDictionary
+import kotlinx.coroutines.yield
 
 class BigramHanjaConverter: HanjaConverter {
     private lateinit var indexDict: DiskTrieDictionary
@@ -27,17 +28,20 @@ class BigramHanjaConverter: HanjaConverter {
         }
     }
 
-    override fun convert(text: String): List<CandidateView.Candidate> {
+    override suspend fun convert(text: String): List<CandidateView.Candidate> {
         return convert(CompoundCandidate(listOf()), text, 0)
+            .asSequence()
             .sortedByDescending { it.score }
             .distinctBy { it.text }
             .sortedByDescending { it.text.count { c -> c.code in 0x4e00 .. 0x9fff } }
             .sortedBy { it.candidates.size }
             .sortedByDescending { it.text.length }
             .filter { it.text.isNotEmpty() }
+            .toList()
     }
 
-    fun convert(context: CompoundCandidate, text: String, depth: Int): List<CompoundCandidate> {
+    suspend fun convert(context: CompoundCandidate, text: String, depth: Int): List<CompoundCandidate> {
+        yield()
         if(text.isEmpty() || depth > 4) return listOf(context)
         val current = (1 .. text.length)
             .flatMap { l -> indexDict.get(text.take(l)) }
@@ -53,7 +57,7 @@ class BigramHanjaConverter: HanjaConverter {
         return available.flatMap { word ->
             convert(CompoundCandidate(listOf(word)), text.drop(word.text.length), depth + 1)
                 .map { context.copy(candidates = context.candidates + it.candidates) }
-        }
+        } + context
     }
 
     data class CompoundCandidate(

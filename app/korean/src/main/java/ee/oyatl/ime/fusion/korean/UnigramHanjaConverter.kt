@@ -5,6 +5,7 @@ import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.fusion.dictionary.manager.DictionaryCache
 import ee.oyatl.ime.newdict.DiskHanjaDictionary
 import ee.oyatl.ime.newdict.DiskTrieDictionary
+import kotlinx.coroutines.yield
 
 class UnigramHanjaConverter: HanjaConverter {
     private lateinit var indexDict: DiskTrieDictionary
@@ -21,13 +22,15 @@ class UnigramHanjaConverter: HanjaConverter {
         }
     }
 
-    override fun convert(text: String): List<CandidateView.Candidate> {
-        val hanjaResult = (1 .. text.length).map { l ->
+    override suspend fun convert(text: String): List<CandidateView.Candidate> {
+        val hanjaResult = (1..text.length).flatMap { l ->
+            yield()
             indexDict.get(text.take(l))
                 .map { vocabDict.get(it) }
                 .filter { it.hanja.length == l }
                 .map { Candidate(it.hanja, it.frequency.toFloat(), it.extra) }
-        }.flatten()
+        }
+        yield()
         return hanjaResult
             .sortedByDescending { it.score }
             .distinctBy { it.text }

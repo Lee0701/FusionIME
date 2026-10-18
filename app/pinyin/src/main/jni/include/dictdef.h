@@ -56,7 +56,11 @@ const size_t kHalfSpellingIdNum = 29;
 // stored.
 // -1 is because that 0 is never used.
 const size_t kMaxSpellingNum = 512 - kHalfSpellingIdNum - 1;
-const size_t kMaxSearchSteps = 40;
+// Keep in sync with PinyinInputLimits.BUFFER_SIZE. The input length stays
+// below the 7-bit length fields in DictMatchInfo.
+const size_t kMaxSearchSteps = 121;
+static_assert(kMaxSearchSteps - 1 < (1 << 7),
+              "Pinyin input must fit the 7-bit DictMatchInfo lengths");
 
 // One character predicts its following characters.
 const size_t kMaxPredictSize = (kMaxLemmaSize - 1);

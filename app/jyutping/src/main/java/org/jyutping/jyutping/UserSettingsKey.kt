@@ -1,0 +1,32 @@
+package org.jyutping.jyutping
+
+@Suppress("ConstPropertyName")
+object UserSettingsKey {
+        const val InputMemoryDatabaseFileName: String = "memory.sqlite3"
+        const val MemoryMigration2026: String = "input_memory_migration2026"
+        const val PreferencesFileName: String = "org.jyutping.jyutping.settings"
+        const val LegacyCharacterStandard: String = "character_standard"
+        const val TraditionalCharacterStandard: String = "traditional_character_standard"
+        const val CharacterScriptVariant: String = "character_script_variant"
+        const val AudioFeedback: String = "audio_feedback"
+        const val HapticFeedback: String = "haptic_feedback"
+        const val PreferredInputMethodMode: String = "preferred_input_method_mode"
+        const val LatestInputMethodMode: String = "latest_input_method_mode"
+        const val KeyboardLayout: String = "keyboard_layout"
+        const val NumericLayout: String = "numeric_layout"
+        const val StrokeLayout: String = "stroke_layout"
+        const val KeyCase: String = "key_case"
+        const val KeyTextPreview: String = "key_preview"
+        const val HighContrast: String = "high_contrast"
+        const val GlobeKey: String = "globe_key"
+        const val LeftKey: String = "left_key"
+        const val RightKey: String = "right_key"
+        const val KeyHeightOffset: String = "key_height_offset"
+        const val ExtraBottomPadding: String = "bottom_padding"
+        const val CommentStyle: String = "comment_style"
+        const val CangjieVariant: String = "cangjie_variant"
+        const val Emoji: String = "emoji"
+        const val EnglishSuggestions = "english_suggestions"
+        const val InputMemory: String = "input_memory"
+        const val EmojiFrequent: String = "emoji_frequent"
+}

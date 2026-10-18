@@ -88,9 +88,9 @@ class EmojiIMEMode(
         util?.deleteSurroundingText(1, 0)
     }
 
-    override fun onKeyDown(keyCode: Int, metaState: Int) = Unit
+    override fun onKeyDown(keyCode: Int, metaState: Int): Boolean = false
 
-    override fun onKeyUp(keyCode: Int, metaState: Int) = Unit
+    override fun onKeyUp(keyCode: Int, metaState: Int): Boolean = false
 
     override fun updateSelection(
         oldSelStart: Int,
@@ -116,11 +116,8 @@ class EmojiIMEMode(
             return context.getString(R.string.input_mode_emoji)
         }
 
-        override fun getShortLabel(
-            context: Context,
-            params: List<IMEMode.Params>
-        ): String {
-            return "\uD83D\uDE00"
+        override fun getShortLabels(context: Context): List<String> {
+            return listOf("\uD83D\uDE00")
         }
 
         companion object {

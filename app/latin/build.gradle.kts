@@ -33,11 +33,6 @@ configure<LibraryExtension> {
 
     flavorDimensions += "edition"
     productFlavors {
-        register("paid") {
-            // Need to match with @string/authority
-            buildConfigField("String", "DICTIONARY_DOMAIN", "\"ee.oyatl.ime.fusion.latin.dictionarypack.aosp\"")
-            buildConfigField("String", "RESOURCE_PACKAGE_NAME", "\"ee.oyatl.ime.fusion\"")
-        }
         register("free") {
             // Need to match with @string/authority
             buildConfigField("String", "DICTIONARY_DOMAIN", "\"ee.oyatl.ime.fusion.free.latin.dictionarypack.aosp\"")

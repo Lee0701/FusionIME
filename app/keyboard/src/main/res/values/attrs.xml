@@ -2,6 +2,7 @@
 <resources>
     <attr name="backgroundColor" format="color" />
     <attr name="foregroundColor" format="color" />
+    <attr name="hintTextColor" format="color" />
 
     <declare-styleable name="kbd_keyboard">
         <attr name="backgroundColor" />

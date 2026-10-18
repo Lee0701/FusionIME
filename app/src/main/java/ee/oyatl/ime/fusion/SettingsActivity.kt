@@ -120,4 +120,10 @@ class SettingsActivity : AppCompatActivity(),
             addPreferencesFromResource(R.xml.pref_behaviour_hardware)
         }
     }
+
+    class InfoFragment : PreferenceFragmentCompat() {
+        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+            addPreferencesFromResource(R.xml.pref_info)
+        }
+    }
 }

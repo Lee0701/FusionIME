@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Vector;
 
 import ee.oyatl.ime.fusion.R;
+import ee.oyatl.ime.fusion.pinyin.PinyinInputLimits;
 
 /**
  * This class is used to separate the input method kernel in an individual
@@ -176,7 +177,13 @@ public class PinyinDecoderService extends Service {
         }
 
         public int imSearch(byte[] pyBuf, int pyLen) {
-            return nativeImSearch(pyBuf, pyLen);
+            if (pyBuf == null || pyLen < 0) {
+                return 0;
+            }
+            int safeLength = Math.min(
+                    Math.min(pyLen, pyBuf.length),
+                    PinyinInputLimits.MAX_INPUT_LENGTH);
+            return nativeImSearch(pyBuf, safeLength);
         }
 
         public int imDelSearch(int pos, boolean is_pos_in_splid,

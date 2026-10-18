@@ -14,14 +14,58 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/label"
-        tools:text="A"
-        android:textColor="?foregroundColor"
-        android:textSize="@dimen/key_text_size"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginVertical="@dimen/key_margin_vertical"
+        android:layout_marginHorizontal="@dimen/key_margin_horizontal">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/label_hint_left"
+            android:textColor="?hintTextColor"
+            android:textSize="@dimen/key_hint_text_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/label_hint_right"
+            android:textColor="?hintTextColor"
+            android:textSize="@dimen/key_hint_text_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/label_hint_top"
+            android:textColor="?hintTextColor"
+            android:textSize="@dimen/key_hint_text_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/label_hint_bottom"
+            android:textColor="?hintTextColor"
+            android:textSize="@dimen/key_hint_text_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/label"
+            tools:text="A"
+            android:textColor="?foregroundColor"
+            android:textSize="@dimen/key_text_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
+
+    </RelativeLayout>
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/icon"
