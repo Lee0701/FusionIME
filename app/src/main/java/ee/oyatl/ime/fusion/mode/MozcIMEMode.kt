@@ -259,7 +259,7 @@ abstract class MozcIMEMode(
                 return super.onKeyUp(keyCode, metaState)
             }
             val direction = flicks[keyCode]
-            when(val item = currentLayoutTable[keyCode]) {
+            when(val item = currentLayoutPreset.layoutTable[keyCode]) {
                 is LayoutTable.FlickItem -> onChar(item.forFlickDirection(direction))
                 else -> onChar(item?.normal ?: keyCharacterMap.get(keyCode, metaState))
             }
@@ -334,7 +334,7 @@ abstract class MozcIMEMode(
                 return super.onKeyUp(keyCode, metaState)
             }
             val direction = flicks.remove(keyCode)
-            when(val item = currentLayoutTable[keyCode]) {
+            when(val item = currentLayoutPreset.layoutTable[keyCode]) {
                 is LayoutTable.FlickItem -> onChar(item.forFlickDirection(direction))
                 else -> onChar(item?.normal ?: keyCharacterMap.get(keyCode, metaState))
             }
