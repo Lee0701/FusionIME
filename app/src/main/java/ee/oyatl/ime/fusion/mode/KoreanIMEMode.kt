@@ -52,6 +52,7 @@ abstract class KoreanIMEMode(
         super.onReset()
         wordComposer.reset()
         currentState = HangulCombiner.State.Initial
+        hanjaConverter.reset()
     }
 
     override fun onCandidateSelected(candidate: CandidateView.Candidate) {

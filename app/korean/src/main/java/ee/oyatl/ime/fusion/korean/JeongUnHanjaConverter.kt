@@ -12,6 +12,8 @@ class JeongUnHanjaConverter: HanjaConverter {
         dict = DiskDictionary(context.resources.openRawResource(R.raw.jeongun))
     }
 
+    override fun reset() = Unit
+
     override suspend fun convert(text: String): List<CandidateView.Candidate> {
         val result = (1 .. text.length).flatMap { l ->
             yield()

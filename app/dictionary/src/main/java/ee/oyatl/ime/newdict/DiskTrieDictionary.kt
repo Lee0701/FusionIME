@@ -3,11 +3,25 @@ package ee.oyatl.ime.newdict
 import java.io.InputStream
 import java.nio.ByteBuffer
 
-class DiskTrieDictionary(input: InputStream)
+open class DiskTrieDictionary(input: InputStream)
     : DiskDictionary<String, List<Int>> {
     override val data: ByteBuffer = ByteBuffer.wrap(input.readBytes())
 
     override fun get(key: String): List<Int> {
+        var p = getNode(key)
+        if(p == -1) return emptyList()
+        val children = data.getShort(p)
+        p += 2 + children*6
+        val entries = data.getShort(p)
+        p += 2
+        return (0 until entries).map {
+            val index = data.getInt(p)
+            p += 4
+            index
+        }
+    }
+
+    open fun getNode(key: String): Int {
         // root
         var p = data.getInt(data.capacity() - 4)
         for(c in key) {
@@ -20,18 +34,10 @@ class DiskTrieDictionary(input: InputStream)
                     p = addr
                     break
                 } else if(i == children - 1) {
-                    return listOf()
+                    return -1
                 }
             }
         }
-        val children = data.getShort(p)
-        p += 2 + children*6
-        val entries = data.getShort(p)
-        p += 2
-        return (0 until entries).map {
-            val index = data.getInt(p)
-            p += 4
-            index
-        }
+        return p
     }
 }
