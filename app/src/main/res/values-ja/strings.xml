@@ -112,6 +112,7 @@
     <string name="input_mode_pinyin">ピンイン（簡体字中国語）</string>
     <string name="latin_locale_pt_br">ポルトガル語（ブラジル）</string>
     <string name="settings_appearance_show_voice_input_button_title">音声入力ボタン表示</string>
+    <string name="settings_clipboard_candidate_enabled_title">クリップボード候補</string>
     <string name="settings_input_mode_mozc_flick_mode_title">12キーフリックモード</string>
     <string name="settings_input_mode_syllables_key_layout_title">音節表キーボード配列</string>
     <string name="settings_input_mode_syllables_key_layout_summary">五十音表やいろは配列でのキー配列を選択します。</string>
@@ -140,4 +141,15 @@
     <string name="settings_info_version">バージョン </string>
     <string name="settings_info_source_code_title">ソースコード</string>
     <string name="settings_input_mode_mozc_flick_hint_summary">12キーとGODANでフリックのヒントを表示します。</string>
+    <string name="settings_input_mode_zhuyin_conversion_engine_title">変換エンジン</string>
+    <string name="settings_appearance_symbol_layout_title">記号配列</string>
+    <string name="symbol_layout_n1">タイプN1</string>
+    <string name="symbol_layout_n2">タイプN2</string>
+    <string name="symbol_layout_o1">タイプO1</string>
+    <string name="symbol_layout_o2">タイプO2</string>
+    <string name="symbol_layout_g">タイプG</string>
+    <string name="latin_layout_azerty">AZERTY</string>
+    <string name="zhuyin_conversion_engine_simple">簡単</string>
+    <string name="zhuyin_conversion_engine_chewing">Chewing</string>
+    <string name="zhuyin_conversion_engine_fuzzy_chewing">部分一致Chewing</string>
 </resources>

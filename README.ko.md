@@ -1,7 +1,5 @@
 
-<a href="https://play.google.com/store/apps/details?id=ee.oyatl.ime.fusion"><img src="https://raw.githubusercontent.com/pioug/google-play-badges/refs/heads/main/svg/ko.svg" width="150"></a>
-
-[데모판 다운로드](https://play.google.com/store/apps/details?id=ee.oyatl.ime.fusion.free)
+<a href="https://play.google.com/store/apps/details?id=ee.oyatl.ime.fusion.free"><img src="https://raw.githubusercontent.com/pioug/google-play-badges/refs/heads/main/svg/ko.svg" width="150"></a>
 
 # FusionIME
 FusionIME는 한중일월(한자문화권) 언어를 위한 여러가지 입력 방식을 단일 앱으로 제공합니다.
