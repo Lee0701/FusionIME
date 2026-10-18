@@ -92,6 +92,10 @@ class EmojiIMEMode(
 
     override fun onKeyUp(keyCode: Int, metaState: Int): Boolean = false
 
+    override fun translateKeyCode(keyCode: Int): Int = keyCode
+
+    override fun isAltGraphCapable(): Boolean = false
+
     override fun updateSelection(
         oldSelStart: Int,
         oldSelEnd: Int,
