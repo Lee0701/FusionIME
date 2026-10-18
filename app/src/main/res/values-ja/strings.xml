@@ -152,4 +152,8 @@
     <string name="zhuyin_conversion_engine_simple">簡単</string>
     <string name="zhuyin_conversion_engine_chewing">Chewing</string>
     <string name="zhuyin_conversion_engine_fuzzy_chewing">部分一致Chewing</string>
+    <string name="korean_converter_hangul_only">ハングル専用コンバーター</string>
+    <string name="input_mode_emoji">絵文字</string>
+    <string name="latin_layout_qwertz">QWERTZ</string>
+    <string name="latin_layout_deutsch">独逸語</string>
 </resources>
