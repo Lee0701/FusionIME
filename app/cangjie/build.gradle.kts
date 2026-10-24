@@ -7,7 +7,7 @@ plugins {
 
 configure<LibraryExtension> {
     namespace = "com.diycircuits.cangjie"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         minSdk = 24
@@ -23,7 +23,6 @@ configure<LibraryExtension> {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"

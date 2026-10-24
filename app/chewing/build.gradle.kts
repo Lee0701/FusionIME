@@ -4,9 +4,7 @@ plugins {
 
 android {
     namespace = "com.miyabi_hiroshi.app.libchewing_android_app_module"
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk = 37
 
     defaultConfig {
         minSdk = 24
@@ -17,7 +15,6 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"

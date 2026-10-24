@@ -4,9 +4,7 @@ plugins {
 
 android {
     namespace = "org.jyutping.jyutping"
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk = 37
 
     defaultConfig {
         minSdk = 24
