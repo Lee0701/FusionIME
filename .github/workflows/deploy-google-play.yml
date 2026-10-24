@@ -41,14 +41,14 @@ jobs:
 
       - name: Checkout
         id: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           submodules: true
 
       - name: set up JDK 17
         id: setup_jdk
-        uses: actions/setup-java@v3.6.0
+        uses: actions/setup-java@v6
         with:
           distribution: 'adopt'
           java-version: '17'
@@ -59,7 +59,7 @@ jobs:
 
       - name: Setup Android SDK
         id: setup_android
-        uses: android-actions/setup-android@v2
+        uses: android-actions/setup-android@v4
 
       - name: Set timezone
         id: set_timezone
@@ -123,7 +123,7 @@ jobs:
 
     steps:
       - name: Cache Gradle packages
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ~/.gradle/caches
@@ -131,14 +131,14 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('gradle.properties', '**/*.gradle*', '**/gradle-wrapper.properties') }}
 
       - name: Cache Android SDK
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.android
           key: ${{ runner.os }}-android
 
       - name: Checkout
         id: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v7
         with:
           ref: ${{ github.ref_name }}
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -146,7 +146,7 @@ jobs:
 
       - name: set up JDK 17
         id: setup_jdk
-        uses: actions/setup-java@v3.6.0
+        uses: actions/setup-java@v6
         with:
           distribution: 'adopt'
           java-version: '17'
@@ -157,7 +157,7 @@ jobs:
 
       - name: Setup Android SDK
         id: setup_android
-        uses: android-actions/setup-android@v2
+        uses: android-actions/setup-android@v4
 
       - name: Generate capitalized edition name
         id: edition_name
