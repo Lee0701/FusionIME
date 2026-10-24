@@ -99,6 +99,7 @@ abstract class CangjieIMEMode(
                         convertJob?.join()
                         val bestCandidate = bestCandidate
                         if(bestCandidate != null) onCandidateSelected(bestCandidate)
+                        else onReset()
                     }
                 } else {
                     onReset()
