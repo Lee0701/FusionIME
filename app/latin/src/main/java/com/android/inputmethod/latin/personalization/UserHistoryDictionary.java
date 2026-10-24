@@ -18,6 +18,8 @@ package com.android.inputmethod.latin.personalization;
 
 import android.content.Context;
 
+import androidx.annotation.Keep;
+
 import com.android.inputmethod.annotations.ExternallyReferenced;
 import com.android.inputmethod.annotations.UsedForTesting;
 import com.android.inputmethod.latin.BinaryDictionary;
@@ -82,6 +84,7 @@ public class UserHistoryDictionary extends ExpandableBinaryDictionary {
     // Note: This method is called by {@link DictionaryFacilitator} using Java reflection.
     @SuppressWarnings("unused")
     @ExternallyReferenced
+    @Keep
     public static UserHistoryDictionary getDictionary(final Context context, final Locale locale,
             final File dictFile, final String dictNamePrefix, @Nullable final String account) {
         return PersonalizationHelper.getUserHistoryDictionary(context, locale, account);
