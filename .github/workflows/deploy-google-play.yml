@@ -161,7 +161,7 @@ jobs:
 
       - name: Generate capitalized edition name
         id: edition_name
-        uses: ASzc/change-string-case-action@v7
+        uses: ASzc/change-string-case-action@v8
         with:
           string: ${{ matrix.edition }}
 
