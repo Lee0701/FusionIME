@@ -25,6 +25,12 @@ configure<LibraryExtension> {
             )
         }
     }
+
+    flavorDimensions += "edition"
+    productFlavors {
+        register("free")
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -43,6 +49,7 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(project(":app:korean:hangul"))
+    implementation(project(":app:latin"))
     implementation(project(":app:dictionary"))
     implementation(project(":app:dictionary-manager"))
     implementation(project(":app:keyboard"))

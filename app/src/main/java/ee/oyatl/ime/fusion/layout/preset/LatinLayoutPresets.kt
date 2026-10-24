@@ -1,0 +1,195 @@
+package ee.oyatl.ime.fusion.layout.preset
+
+import android.view.KeyEvent
+import ee.oyatl.ime.fusion.Feature
+import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
+import ee.oyatl.ime.fusion.layout.LayoutExt
+import ee.oyatl.ime.fusion.layout.LayoutLatin
+import ee.oyatl.ime.fusion.layout.LayoutQwerty
+import ee.oyatl.ime.fusion.layout.MobileKeyboard
+import ee.oyatl.ime.fusion.layout.MobileKeyboardRows
+import ee.oyatl.ime.fusion.layout.TabletKeyboard
+import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
+import ee.oyatl.ime.keyboard.HardKeyCodeMapper
+import ee.oyatl.ime.keyboard.KeyboardConfiguration
+import ee.oyatl.ime.keyboard.KeyboardTemplate
+import ee.oyatl.ime.fusion.layout.LatinMoreKeysTable
+import ee.oyatl.ime.keyboard.LayoutTable
+import ee.oyatl.ime.keyboard.LongPressTable
+import ee.oyatl.ime.keyboard.SoftKeyCodeMapper
+
+object LatinLayoutPresets {
+    fun qwerty(
+        semicolon: Boolean = false,
+        numberRow: Boolean = false,
+        cursorKeys: Boolean = false
+    ): KeyboardLayoutPreset {
+        val numberRow = Feature.NumberRow.availableInCurrentVersion && numberRow
+        val cursorKeys = Feature.CursorKeys.availableInCurrentVersion && cursorKeys
+        return KeyboardLayoutPreset(
+            keyboardTemplate = KeyboardTemplate.ByScreenMode(
+                mobile = KeyboardTemplate.Basic(
+                    configuration = KeyboardConfiguration(
+                        if(numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
+                        MobileKeyboard.alphabetic(semicolon = semicolon),
+                        MobileKeyboard.bottom(dpad = cursorKeys)
+                    ),
+                    contentRows = (if(numberRow) MobileKeyboardRows.NUMBERS else listOf()) +
+                            (if(semicolon) MobileKeyboardRows.SEMICOLON else MobileKeyboardRows.DEFAULT)
+                ),
+                tablet = KeyboardTemplate.Basic(
+                    configuration = KeyboardConfiguration(
+                        if(numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
+                        TabletKeyboard.alphabetic(semicolon = semicolon, delete = !numberRow),
+                        TabletKeyboard.bottom()
+                    ),
+                    contentRows = (if(numberRow) TabletKeyboardRows.NUMBERS else listOf()) +
+                            (if(semicolon) TabletKeyboardRows.SEMICOLON else TabletKeyboardRows.DEFAULT)
+                )
+            ),
+            layoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY),
+            longPressTable = LongPressTable.from(LatinMoreKeysTable.DEFAULT, LatinMoreKeysTable.DEFAULT_UPPERCASE_OVERRIDE)
+        )
+    }
+
+    fun spanishQwerty(
+        numberRow: Boolean = false,
+        cursorKeys: Boolean = false
+    ): KeyboardLayoutPreset {
+        val qwerty = qwerty(true, numberRow, cursorKeys)
+        val layoutTable = qwerty.layoutTable + LayoutTable.fromShiftStates(LayoutLatin.TABLE_SPANISH_QWERTY)
+        return qwerty.copy(
+            layoutTable = layoutTable
+        )
+    }
+
+    fun azerty(
+        numberRow: Boolean = false,
+        cursorKeys: Boolean = false
+    ): KeyboardLayoutPreset {
+        val qwerty = qwerty(true, numberRow, cursorKeys)
+        return qwerty.copy(
+            layoutTable = qwerty.layoutTable + LayoutTable.fromShiftStates(LayoutLatin.TABLE_AZERTY),
+            altGraphTable = LayoutTable.fromShiftStates(LayoutLatin.TABLE_AZERTY_ALTGR),
+            softKeyCodeMapper = SoftKeyCodeMapper.ByScreenMode(
+                mobile = SoftKeyCodeMapper.Basic(LayoutLatin.KEYCODE_MAP_AZERTY
+                        + LayoutLatin.SOFT_KEYCODE_MAP_AZERTY_NUMBERS
+                        + LayoutLatin.SOFT_KEYCODE_MAP_AZERTY_MOBILE
+                ),
+                tablet = SoftKeyCodeMapper.Basic(LayoutLatin.KEYCODE_MAP_AZERTY
+                        + LayoutLatin.SOFT_KEYCODE_MAP_AZERTY_NUMBERS
+                ),
+                full = SoftKeyCodeMapper.Basic(LayoutLatin.KEYCODE_MAP_AZERTY)
+            ),
+            hardKeyCodeMapper = HardKeyCodeMapper(LayoutLatin.KEYCODE_MAP_AZERTY)
+        )
+    }
+
+    fun qwertz(
+        numberRow: Boolean = false,
+        cursorKeys: Boolean = false
+    ): KeyboardLayoutPreset {
+        val qwerty = qwerty(false, numberRow, cursorKeys)
+        return qwerty.copy(
+            layoutTable = qwerty.layoutTable + LayoutTable.fromShiftStates(LayoutLatin.TABLE_GERMAN_QWERTZ),
+            altGraphTable = LayoutTable.fromShiftStates(LayoutLatin.TABLE_GERMAN_QWERTZ_ALTGR),
+            softKeyCodeMapper = SoftKeyCodeMapper.Basic(LayoutLatin.KEYCODE_MAP_QWERTZ),
+            hardKeyCodeMapper = HardKeyCodeMapper(LayoutLatin.KEYCODE_MAP_QWERTZ)
+        )
+    }
+
+    fun germanQwertz(
+        numberRow: Boolean = false,
+        cursorKeys: Boolean = false
+    ): KeyboardLayoutPreset {
+        val numberRow = Feature.NumberRow.availableInCurrentVersion && numberRow
+        val cursorKeys = Feature.CursorKeys.availableInCurrentVersion && cursorKeys
+        return KeyboardLayoutPreset(
+            keyboardTemplate = KeyboardTemplate.ByScreenMode(
+                mobile = KeyboardTemplate.Basic(
+                    configuration = KeyboardConfiguration(
+                        if(numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
+                        MobileKeyboard.alphabetic(semicolon = true),
+                        MobileKeyboard.bottom(dpad = cursorKeys)
+                    ),
+                    contentRows = (if(numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.GERMAN
+                ),
+                tablet = KeyboardTemplate.Basic(
+                    configuration = KeyboardConfiguration(
+                        if(numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
+                        TabletKeyboard.alphabetic(semicolon = true, delete = !numberRow),
+                        TabletKeyboard.bottom()
+                    ),
+                    contentRows = (if(numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.GERMAN
+                )
+            ),
+            layoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutLatin.TABLE_GERMAN_QWERTZ),
+            altGraphTable = LayoutTable.fromShiftStates(LayoutLatin.TABLE_GERMAN_QWERTZ_ALTGR),
+            longPressTable = LongPressTable.from(LatinMoreKeysTable.DEFAULT, LatinMoreKeysTable.DEFAULT_UPPERCASE_OVERRIDE),
+            softKeyCodeMapper = SoftKeyCodeMapper.Basic(LayoutLatin.KEYCODE_MAP_QWERTZ + LayoutLatin.SOFT_KEYCODE_MAP_DEUTSCH_QWERTZ),
+            hardKeyCodeMapper = HardKeyCodeMapper(LayoutLatin.KEYCODE_MAP_QWERTZ)
+        )
+    }
+
+    fun dvorak(
+        numberRow: Boolean = false,
+        cursorKeys: Boolean = false
+    ): KeyboardLayoutPreset {
+        val numberRow = Feature.NumberRow.availableInCurrentVersion && numberRow
+        val cursorKeys = Feature.CursorKeys.availableInCurrentVersion && cursorKeys
+        return KeyboardLayoutPreset(
+            keyboardTemplate = KeyboardTemplate.ByScreenMode(
+                mobile = KeyboardTemplate.Basic(
+                    configuration = KeyboardConfiguration(
+                        if(numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
+                        MobileKeyboard.alphabetic(semicolon = true),
+                        MobileKeyboard.bottom(left = KeyEvent.KEYCODE_X, right = KeyEvent.KEYCODE_SLASH, dpad = cursorKeys)
+                    ),
+                    contentRows = (if(numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.DVORAK
+                ),
+                tablet = KeyboardTemplate.Basic(
+                    configuration = KeyboardConfiguration(
+                        if(numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
+                        TabletKeyboard.alphabetic(semicolon = true, delete = !numberRow),
+                        TabletKeyboard.bottom()
+                    ),
+                    contentRows = (if(numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.DVORAK
+                )
+            ),
+            layoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY),
+            longPressTable = LongPressTable.from(LatinMoreKeysTable.DEFAULT, LatinMoreKeysTable.DEFAULT_UPPERCASE_OVERRIDE),
+            softKeyCodeMapper = SoftKeyCodeMapper.Basic(LayoutLatin.KEYCODE_MAP_DVORAK)
+        )
+    }
+
+    fun colemak(
+        numberRow: Boolean = false,
+        cursorKeys: Boolean = false
+    ): KeyboardLayoutPreset {
+        val numberRow = Feature.NumberRow.availableInCurrentVersion && numberRow
+        val cursorKeys = Feature.CursorKeys.availableInCurrentVersion && cursorKeys
+        return KeyboardLayoutPreset(
+            keyboardTemplate = KeyboardTemplate.ByScreenMode(
+                mobile = KeyboardTemplate.Basic(
+                    configuration = KeyboardConfiguration(
+                        if(numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
+                        MobileKeyboard.alphabetic(semicolon = true),
+                        MobileKeyboard.bottom(dpad = cursorKeys)
+                    ),
+                    contentRows = (if(numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.SEMICOLON
+                ),
+                tablet = KeyboardTemplate.Basic(
+                    configuration = KeyboardConfiguration(
+                        if(numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
+                        TabletKeyboard.alphabetic(semicolon = true, delete = !numberRow),
+                        TabletKeyboard.bottom()
+                    ),
+                    contentRows = (if(numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.SEMICOLON
+                )
+            ),
+            layoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY),
+            longPressTable = LongPressTable.from(LatinMoreKeysTable.DEFAULT, LatinMoreKeysTable.DEFAULT_UPPERCASE_OVERRIDE),
+            softKeyCodeMapper = SoftKeyCodeMapper.Basic(LayoutLatin.KEYCODE_MAP_COLEMAK)
+        )
+    }
+}

@@ -112,6 +112,7 @@
     <string name="pinyin_chinese_simplified">간체</string>
     <string name="pinyin_chinese_traditional">번체</string>
     <string name="settings_appearance_show_voice_input_button_title">음성 입력 버튼 표시</string>
+    <string name="settings_clipboard_candidate_enabled_title">클립보드 후보</string>
     <string name="settings_input_mode_mozc_flick_mode_title">12키 플릭 모드</string>
     <string name="settings_input_mode_syllables_key_layout_title">음절 키보드 배열</string>
     <string name="settings_input_mode_syllables_key_layout_summary">오십음도나 이로하 배열에서 사용할 키 배열을 선택합니다.</string>
@@ -144,4 +145,15 @@
     <string name="zhuyin_conversion_engine_fuzzy_chewing">부분 일치 Chewing 변환기</string>
     <string name="zhuyin_conversion_engine_simple">단순 변환기</string>
     <string name="zhuyin_conversion_engine_chewing">Chewing 변환기</string>
+    <string name="settings_appearance_symbol_layout_title">기호 배열</string>
+    <string name="latin_layout_azerty">AZERTY</string>
+    <string name="symbol_layout_g">타입 G</string>
+    <string name="symbol_layout_n1">타입 N1</string>
+    <string name="symbol_layout_n2">타입 N2</string>
+    <string name="symbol_layout_o1">타입 O1</string>
+    <string name="symbol_layout_o2">타입 O2</string>
+    <string name="korean_converter_hangul_only">한글전용 예측기</string>
+    <string name="input_mode_emoji">에모지</string>
+    <string name="latin_layout_qwertz">QWERTZ</string>
+    <string name="latin_layout_deutsch">독일어</string>
 </resources>

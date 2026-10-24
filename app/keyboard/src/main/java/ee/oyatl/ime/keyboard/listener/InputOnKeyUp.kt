@@ -4,7 +4,7 @@ import ee.oyatl.ime.keyboard.touchhandler.FlickDirection
 
 class InputOnKeyUp(
     val listener: KeyboardListener
-): KeyboardListener, FlickListener {
+): KeyboardListener, FlickListener, LongPressListener {
     override fun onReset() = Unit
 
     override fun onKeyDown(keyCode: Int, metaState: Int): Boolean {
@@ -22,6 +22,11 @@ class InputOnKeyUp(
         direction: FlickDirection
     ): Boolean {
         return if(listener is FlickListener) listener.onFlick(keyCode, direction)
+        else false
+    }
+
+    override fun onKeyLongPress(keyCode: Int, metaState: Int): Boolean {
+        return if(listener is LongPressListener) listener.onKeyLongPress(keyCode, metaState)
         else false
     }
 }

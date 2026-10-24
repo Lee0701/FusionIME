@@ -13,12 +13,6 @@ object MobileKeyboardRows {
         "zxcvb nm"
     )
 
-    val MINUS: List<String> = listOf(
-        "qwert yuiop",
-        "asdfg hjkl-",
-        "zxcvb nm"
-    )
-
     val SEMICOLON_QUOTE: List<String> = listOf(
         "qwert yuiop",
         "asdfg hjkl;",
@@ -35,6 +29,12 @@ object MobileKeyboardRows {
         "qwert yuiop",
         "asdfg hjkl;",
         "zxcvb nm,./"
+    )
+
+    val GERMAN: List<String> = listOf(
+        "qwert yuiop[",
+        "asdfg hjkl;'",
+        "zxcvb nm"
     )
 
     val KS: List<String> = listOf(

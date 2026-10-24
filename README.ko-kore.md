@@ -1,7 +1,5 @@
 
-<a href="https://play.google.com/store/apps/details?id=ee.oyatl.ime.fusion"><img src="https://raw.githubusercontent.com/pioug/google-play-badges/refs/heads/main/svg/ko.svg" width="150"></a>
-
-[데모版 다운로드](https://play.google.com/store/apps/details?id=ee.oyatl.ime.fusion.free)
+<a href="https://play.google.com/store/apps/details?id=ee.oyatl.ime.fusion.free"><img src="https://raw.githubusercontent.com/pioug/google-play-badges/refs/heads/main/svg/ko.svg" width="150"></a>
 
 # FusionIME
 FusionIME는 韓中日越(漢字文化圈) 言語를 爲한 여러가지 入力方式을 單一 앱으로 提供합니다.
@@ -15,7 +13,7 @@ FusionIME는 韓中日越(漢字文化圈) 言語를 爲한 여러가지 入力�
 ## 支援하는 言語와 配列
 ### 라틴 系列 言語
 * 言語: 英語, 獨逸語, 西班牙語, 佛蘭西語, 伊太利語, 브라질 葡萄牙語
-* 配列: QWERTY, 드보락, 콜맥
+* 配列: QWERTY, QWERTZ, AZERTY, 드보락, 콜맥
 
 ### 中國語
 * 簡體·繁體 中國語 漢語拼音
@@ -33,12 +31,12 @@ FusionIME는 韓中日越(漢字文化圈) 言語를 爲한 여러가지 入力�
 * 韓國語 세벌式 390, 세벌式 最終
 * 옛한글 두벌式, 세벌式 393
 
-單語·語節單位 漢字變換과 正音 漢字變換을 支援합니다.
+單語·語節單位 漢字變換과 正音 漢字變換, 한글專用 單語豫測을 支援합니다.
 
 ### 越南語
 * QWERTY, 텔렉스
 
-漢喃 變換을 支援합니다.
+字國語 및 漢喃 變換을 支援합니다.
 
 ## 辭典 데이터
 * 韓國語: [標準國語大辭典](https://stdict.korean.go.kr), [libhangul](https://github.com/libhangul/libhangul)

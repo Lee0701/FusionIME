@@ -6,35 +6,43 @@ import android.view.View
 import android.view.animation.DecelerateInterpolator
 import android.widget.PopupWindow
 import androidx.appcompat.view.ContextThemeWrapper
-import androidx.appcompat.widget.AppCompatTextView
-import ee.oyatl.ime.keyboard.DefaultKeyboardView
+import ee.oyatl.ime.keyboard.KeyboardView
 import ee.oyatl.ime.keyboard.R
 import ee.oyatl.ime.keyboard.databinding.PopupPreviewBinding
 
 class PreviewPopup(
-    private val parent: View
+    keyboardView: KeyboardView,
+    key: KeyboardView.Key,
 ): Popup {
+    private val parent: View = keyboardView.view
     private val window: PopupWindow = PopupWindow(parent.context, null)
     private val binding = PopupPreviewBinding.inflate(LayoutInflater.from(
         ContextThemeWrapper(parent.context, R.style.Theme_FusionIME_Keyboard_Popup)))
     override val view: View get() = binding.root
     override val isShown: Boolean get() = window.isShowing
 
-    var label: String
-        get() = binding.label.text.toString()
-        set(v) {
-            binding.label.text = v
+    var label: String = key.label
+        set(value) {
+            field = value
+            update()
         }
 
-    var size: Pair<Int, Int>
-        get() = window.width to window.height
-        set(v) {
-            val (width, height) = v
-            window.width = width
-            window.height = height
+    var position: Pair<Int, Int> =
+        key.location[0] to keyboardView.rect.top - keyboardView.location[1] + key.location[1] - key.rect.height()
+        set(value) {
+            field = value
+            update()
         }
 
-    var position: Pair<Int, Int> = 0 to 0
+    var size: Pair<Int, Int> = key.rect.width() to key.rect.height() * 2
+        set(value) {
+            field = value
+            update()
+        }
+
+    init {
+        update()
+    }
 
     override fun show() {
         window.setBackgroundDrawable(null)
@@ -56,8 +64,9 @@ class PreviewPopup(
     }
 
     override fun update() {
-        val (x, y) = this.position
-        window.dismiss()
-        window.showAtLocation(parent, Gravity.TOP or Gravity.LEFT, x, y)
+        val (w, h) = size
+        val (x, y) = position
+        binding.label.text = label
+        window.update(x, y, w, h)
     }
 }

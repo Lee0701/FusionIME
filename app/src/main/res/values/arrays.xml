@@ -11,14 +11,30 @@
 <!--        <item>Full</item>-->
     </string-array>
 
+    <string-array name="settings_appearance_symbol_layout_entries">
+        <item>@string/symbol_layout_g</item>
+        <item>@string/symbol_layout_n1</item>
+        <item>@string/symbol_layout_n2</item>
+        <item>@string/symbol_layout_o1</item>
+        <item>@string/symbol_layout_o2</item>
+    </string-array>
+
+    <string-array name="settings_appearance_symbol_layout_values">
+        <item>G</item>
+        <item>N1</item>
+        <item>N2</item>
+        <item>O1</item>
+        <item>O2</item>
+    </string-array>
+
     <string-array name="settings_behaviour_touch_mode_entries">
         <item>@string/touch_mode_seek</item>
         <item>@string/touch_mode_flick</item>
     </string-array>
 
     <string-array name="settings_behaviour_touch_mode_values">
-        <item>seek</item>
-        <item>flick</item>
+        <item>Seek</item>
+        <item>Flick</item>
     </string-array>
 
     <string-array name="settings_behaviour_default_flick_action_entries">
@@ -46,6 +62,7 @@
         <item>@string/input_mode_cangjie</item>
         <item>@string/input_mode_viet</item>
         <item>@string/input_mode_jyutping</item>
+        <item>@string/input_mode_emoji</item>
     </string-array>
 
     <string-array name="settings_input_mode_type_values">
@@ -57,6 +74,7 @@
         <item>cangjie</item>
         <item>viet</item>
         <item>jyutping</item>
+        <item>emoji</item>
     </string-array>
 
     <string-array name="settings_input_mode_latin_locale_entries">
@@ -79,12 +97,18 @@
 
     <string-array name="settings_input_mode_latin_layout_entries">
         <item>@string/latin_layout_qwerty</item>
+        <item>@string/latin_layout_azerty</item>
+        <item>@string/latin_layout_qwertz</item>
+        <item>@string/latin_layout_deutsch</item>
         <item>@string/latin_layout_dvorak</item>
         <item>@string/latin_layout_colemak</item>
     </string-array>
 
     <string-array name="settings_input_mode_latin_layout_values">
         <item>Qwerty</item>
+        <item>Azerty</item>
+        <item>Qwertz</item>
+        <item>Deutsch</item>
         <item>Dvorak</item>
         <item>Colemak</item>
     </string-array>
@@ -111,12 +135,14 @@
         <item>@string/korean_converter_word</item>
         <item>@string/korean_converter_phrase</item>
         <item>@string/korean_converter_jeongun</item>
+        <item>@string/korean_converter_hangul_only</item>
     </string-array>
 
     <string-array name="settings_input_mode_korean_converter_values">
         <item>Word</item>
         <item>Phrase</item>
         <item>JeongUn</item>
+        <item>HangulOnly</item>
     </string-array>
 
     <string-array name="settings_input_mode_mozc_layout_entries">

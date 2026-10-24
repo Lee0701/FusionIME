@@ -2,9 +2,8 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:background="?backgroundColor"
+    android:background="?background"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:theme="@style/Theme.FusionIME.Keyboard">
+    android:layout_height="match_parent">
 
 </LinearLayout>
