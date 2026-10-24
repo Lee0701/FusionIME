@@ -20,6 +20,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseArray;
 
+import androidx.annotation.Keep;
+
 import com.android.inputmethod.annotations.UsedForTesting;
 import com.android.inputmethod.latin.SuggestedWords.SuggestedWordInfo;
 import com.android.inputmethod.latin.common.ComposedData;
@@ -50,6 +52,7 @@ import javax.annotation.Nonnull;
  * Implements a static, compacted, binary dictionary of standard words.
  */
 // TODO: All methods which should be locked need to have a suffix "Locked".
+@Keep
 public final class BinaryDictionary extends Dictionary {
     private static final String TAG = BinaryDictionary.class.getSimpleName();
 

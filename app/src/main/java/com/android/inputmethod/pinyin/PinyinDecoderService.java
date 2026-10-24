@@ -22,6 +22,8 @@ import android.content.res.AssetFileDescriptor;
 import android.os.IBinder;
 import android.util.Log;
 
+import androidx.annotation.Keep;
+
 import java.io.FileDescriptor;
 import java.io.IOException;
 import java.util.List;
@@ -34,6 +36,7 @@ import ee.oyatl.ime.fusion.pinyin.PinyinInputLimits;
  * This class is used to separate the input method kernel in an individual
  * service so that both IME and IME-syncer can use it.
  */
+@Keep
 public class PinyinDecoderService extends Service {
     native static boolean nativeImOpenDecoder(byte fn_sys_dict[],
             byte fn_usr_dict[]);
