@@ -26,7 +26,7 @@ jobs:
 
     steps:
       - name: Cache Gradle packages
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ~/.gradle/caches
@@ -34,7 +34,7 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('gradle.properties', '**/*.gradle*', '**/gradle-wrapper.properties') }}
 
       - name: Cache Android SDK
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.android
           key: ${{ runner.os }}-android
@@ -63,7 +63,7 @@ jobs:
 
       - name: Set timezone
         id: set_timezone
-        uses: szenius/set-timezone@v1.2
+        uses: szenius/set-timezone@v2.0
         with:
           timezoneMacos: "Asia/Seoul"
 
@@ -161,7 +161,7 @@ jobs:
 
       - name: Generate capitalized edition name
         id: edition_name
-        uses: ASzc/change-string-case-action@v6
+        uses: ASzc/change-string-case-action@v8
         with:
           string: ${{ matrix.edition }}
 
@@ -185,7 +185,7 @@ jobs:
 
       - name: Upload AAB
         id: upload_app_bundle
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: app-${{ steps.edition_name.outputs.lowercase }}-release
           path: app/build/outputs/bundle/${{ steps.edition_name.outputs.lowercase }}Release/app-${{ steps.edition_name.outputs.lowercase }}-release.aab
