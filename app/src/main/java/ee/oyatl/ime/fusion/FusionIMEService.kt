@@ -183,6 +183,7 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
             onLanguageSwitch()
             return true
         }
+        if(event.isSystem) return super.onKeyDown(keyCode, event)
 
         val logicalKey = imeModeSwitcher.currentMode.translateKeyCode(event.keyCode)
         val translatedEvent = cloneEvent(event, logicalKey)
@@ -205,6 +206,7 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
         if(hardwareLanguageKeyStroke.matches(event)) return true
+        if(event.isSystem) return super.onKeyUp(keyCode, event)
 
         val logicalKey = pressedKeys.remove(event.keyCode)
             ?: imeModeSwitcher.currentMode.translateKeyCode(event.keyCode)
