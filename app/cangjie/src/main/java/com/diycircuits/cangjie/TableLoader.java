@@ -1,5 +1,8 @@
 package com.diycircuits.cangjie;
 
+import androidx.annotation.Keep;
+
+@Keep
 public class TableLoader {
 
     public final static int QUICK   = 0;

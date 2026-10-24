@@ -11,7 +11,7 @@ configure<ApplicationExtension> {
 
     defaultConfig {
         applicationId = "ee.oyatl.ime.fusion"
-        minSdk = 21
+        minSdk = 24
         targetSdk = 37
         versionCode = 19
         versionName = "20261024-19-dc0ba46"
@@ -21,11 +21,13 @@ configure<ApplicationExtension> {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
 
