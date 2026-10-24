@@ -21,7 +21,7 @@ object CangjieLayoutPresets {
         numberRow: Boolean = false,
         cursorKeys: Boolean = false
     ): KeyboardLayoutPreset {
-        val qwerty = LatinLayoutPresets.qwerty(numberRow, cursorKeys)
+        val qwerty = LatinLayoutPresets.qwerty(false, numberRow, cursorKeys)
         val layoutTable = qwerty.layoutTable + LayoutTable.fromShiftStates(LayoutExt.TABLE_CHINESE + LayoutCangjie.TABLE_QWERTY)
         return qwerty.copy(
             layoutTable = layoutTable
