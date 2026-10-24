@@ -16,12 +16,15 @@
 
 package com.android.inputmethod.latin;
 
+import androidx.annotation.Keep;
+
 import com.android.inputmethod.latin.common.NativeSuggestOptions;
 import com.android.inputmethod.latin.define.DecoderSpecificConstants;
 import com.android.inputmethod.latin.utils.JniUtils;
 
 import java.util.Locale;
 
+@Keep
 public final class DicTraverseSession {
     static {
         JniUtils.loadNativeLibrary();

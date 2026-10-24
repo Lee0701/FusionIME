@@ -29,6 +29,8 @@
 
 package com.google.android.apps.inputmethod.libs.mozc.session;
 
+import androidx.annotation.Keep;
+
 import com.google.common.base.Preconditions;
 
 import org.mozc.android.inputmethod.japanese.MozcLog;
@@ -37,6 +39,7 @@ import org.mozc.android.inputmethod.japanese.MozcLog;
  * The wrapper for JNI Mozc server.
  *
  */
+@Keep
 public class MozcJNI {
   /**
    * Load the mozc native library. This method must be invoked before {@code evalCommand}.
