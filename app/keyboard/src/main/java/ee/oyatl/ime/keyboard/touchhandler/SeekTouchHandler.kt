@@ -40,8 +40,11 @@ class SeekTouchHandler(
             oldKey?.let { key -> keyboardView.findKeys(key.keyCode).forEach { it.onReleased() } }
             newKey?.let { key -> keyboardView.findKeys(key.keyCode).forEach { it.onPressed() } }
             if(oldKey?.keyCode == KeyEvent.KEYCODE_DEL) keyboardView.listener.onKeyUp(oldKey.keyCode, 0)
-            if(oldKey != null) keyboardView.popupManager.removePopup(oldKey)
-            if(newKey != null) keyboardView.popupManager.showPopup(newKey) { PreviewPopup(keyboardView, newKey) }
+            if(keyboardParams.previewPopups) {
+                if(oldKey != null) keyboardView.popupManager.removePopup(oldKey)
+                if(newKey != null && newKey.label.isNotEmpty())
+                    keyboardView.popupManager.showPopup(newKey) { PreviewPopup(keyboardView, newKey) }
+            }
         }
         val newPointer = pointer.copy(x = x, y = y, key = newKey)
         pointers += pointerId to newPointer
