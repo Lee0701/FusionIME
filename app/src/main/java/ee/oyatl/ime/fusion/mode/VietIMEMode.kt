@@ -7,7 +7,7 @@ import androidx.annotation.StringRes
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.korean.WordComposer
-import ee.oyatl.ime.fusion.layout.preset.LatinLayoutPresets
+import ee.oyatl.ime.fusion.layout.preset.VietLayoutPresets
 import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
 import ee.oyatl.ime.viet.ChuQuocNguTableConverter
 import ee.oyatl.ime.viet.VietnameseConverter
@@ -23,7 +23,7 @@ class VietIMEMode(
     private var converter: VietnameseConverter? = null
     private val chuQuocNguTableConverter: ChuQuocNguTableConverter = ChuQuocNguTableConverter()
 
-    override var textLayoutPreset: KeyboardLayoutPreset = LatinLayoutPresets.qwerty(false, numberRow, cursorKeys)
+    override var textLayoutPreset: KeyboardLayoutPreset = VietLayoutPresets.qwerty(numberRow, cursorKeys, layout.nomMode)
 
     private var bestCandidate: VietnameseConverter.Candidate? = null
 
@@ -160,13 +160,15 @@ class VietIMEMode(
         @StringRes val nameKey: Int,
         val labelHead: String,
         val keyboardMode: String,
+        val nomMode: Boolean,
         @RawRes val dictResId: Int,
-        val insertSpaces: Boolean
+        val insertSpaces: Boolean,
     ) {
         QwertyNom(
             R.string.viet_layout_qwerty_nom,
             "越",
             "q",
+            true,
             ee.oyatl.ime.viet.R.raw.nom_qwerty,
             false
         ),
@@ -174,6 +176,7 @@ class VietIMEMode(
             R.string.viet_layout_qwerty_quoc_ngu,
             "Việt",
             "q",
+            false,
             ee.oyatl.ime.viet.R.raw.quoc_ngu_qwerty,
             true
         ),
@@ -181,6 +184,7 @@ class VietIMEMode(
             R.string.viet_layout_telex_nom,
             "越",
             "t",
+            true,
             ee.oyatl.ime.viet.R.raw.nom_quoc_ngu,
             false
         ),
@@ -188,6 +192,7 @@ class VietIMEMode(
             R.string.viet_layout_telex_quoc_ngu,
             "Việt",
             "t",
+            false,
             0,
             true
         )
