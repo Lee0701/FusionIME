@@ -53,3 +53,4 @@ GNU General Public License v3.0
 * [Mozc](https://github.com/google/mozc): BSD 3-Clause
 * [PinyinIME](https://android.googlesource.com/platform/packages/inputmethods/PinyinIME/): Apache License 2.0
 * [Jyutping](https://github.com/yuetyam/jyutping-android): CC0 1.0 Universal
+* [Vietnamese AnySoftKeyboard](https://github.com/sh000gun/vietnamese-anysoftkeyboard): Apache License 2.0

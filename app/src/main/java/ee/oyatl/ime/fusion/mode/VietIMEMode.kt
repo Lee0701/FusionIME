@@ -12,7 +12,6 @@ import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
 import ee.oyatl.ime.viet.VietnameseConverter
 import net.sourceforge.vietpad.inputmethod.InputMethod
 import net.sourceforge.vietpad.inputmethod.KeyboardMode
-import net.sourceforge.vietpad.inputmethod.TelexIM
 import net.sourceforge.vietpad.inputmethod.VietKeyInput
 import java.util.Locale
 
