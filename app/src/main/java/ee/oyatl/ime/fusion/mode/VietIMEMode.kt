@@ -25,7 +25,8 @@ class VietIMEMode(
     private var converter: VietnameseConverter? = null
     private val inputMethod: InputMethod = layout.keyboardMode.createInputMethod()
 
-    override var textLayoutPreset: KeyboardLayoutPreset = LatinLayoutPresets.qwerty(false, numberRow, cursorKeys)
+    private val forcedNumberRow = layout.keyboardMode == KeyboardMode.VNI
+    override var textLayoutPreset: KeyboardLayoutPreset = LatinLayoutPresets.qwerty(false, forcedNumberRow || numberRow, cursorKeys)
 
     private var bestCandidate: VietnameseConverter.Candidate? = null
 
@@ -215,6 +216,20 @@ class VietIMEMode(
             R.string.viet_layout_telex_quoc_ngu,
             "Việt",
             KeyboardMode.Telex,
+            0,
+            true
+        ),
+        VNINom(
+            R.string.viet_layout_telex_nom,
+            "越",
+            KeyboardMode.VNI,
+            ee.oyatl.ime.viet.R.raw.nom_quoc_ngu,
+            false
+        ),
+        VNIQuocNgu(
+            R.string.viet_layout_telex_quoc_ngu,
+            "Việt",
+            KeyboardMode.VNI,
             0,
             true
         )
