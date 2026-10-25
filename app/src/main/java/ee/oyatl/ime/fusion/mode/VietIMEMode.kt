@@ -11,6 +11,7 @@ import ee.oyatl.ime.fusion.layout.preset.LatinLayoutPresets
 import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
 import ee.oyatl.ime.viet.VietnameseConverter
 import net.sourceforge.vietpad.inputmethod.InputMethod
+import net.sourceforge.vietpad.inputmethod.KeyboardMode
 import net.sourceforge.vietpad.inputmethod.TelexIM
 import net.sourceforge.vietpad.inputmethod.VietKeyInput
 import java.util.Locale
@@ -23,7 +24,7 @@ class VietIMEMode(
 ): CommonIMEMode(listener) {
     private val wordComposer: WordComposer = WordComposer()
     private var converter: VietnameseConverter? = null
-    private val inputMethod: InputMethod = TelexIM()
+    private val inputMethod: InputMethod = layout.keyboardMode.createInputMethod()
 
     override var textLayoutPreset: KeyboardLayoutPreset = LatinLayoutPresets.qwerty(false, numberRow, cursorKeys)
 
@@ -91,19 +92,19 @@ class VietIMEMode(
                         onCandidateSelected(bestCandidate)
                     } else {
                         onReset()
-                        util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_SPACE)
                     }
-                } else {
+                } else if(wordComposer.textBeforeCursor.isNotEmpty()) {
                     wordComposer.commit(" ")
                     renderInputView()
+                } else {
+                    onReset()
+                    util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_SPACE)
                 }
             }
             KeyEvent.KEYCODE_ENTER -> {
-                val bestCandidate = bestCandidate
-                if(bestCandidate != null) {
-                    onCandidateSelected(bestCandidate)
-                } else {
-                    onReset()
+                val send = wordComposer.composingText.isEmpty()
+                onReset()
+                if(send) {
                     if(util?.sendDefaultEditorAction(true) != true)
                         util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_ENTER)
                 }
@@ -186,35 +187,35 @@ class VietIMEMode(
     enum class Layout(
         @StringRes val nameKey: Int,
         val labelHead: String,
-        val keyboardMode: String,
+        val keyboardMode: KeyboardMode,
         @RawRes val dictResId: Int,
         val insertSpaces: Boolean
     ) {
         QwertyNom(
             R.string.viet_layout_qwerty_nom,
             "越",
-            "q",
+            KeyboardMode.Qwerty,
             ee.oyatl.ime.viet.R.raw.nom_qwerty,
             false
         ),
         QwertyQuocNgu(
             R.string.viet_layout_qwerty_quoc_ngu,
             "Việt",
-            "q",
+            KeyboardMode.Qwerty,
             ee.oyatl.ime.viet.R.raw.quoc_ngu_qwerty,
             true
         ),
         TelexNom(
             R.string.viet_layout_telex_nom,
             "越",
-            "t",
+            KeyboardMode.Telex,
             ee.oyatl.ime.viet.R.raw.nom_quoc_ngu,
             false
         ),
         TelexQuocNgu(
             R.string.viet_layout_telex_quoc_ngu,
             "Việt",
-            "t",
+            KeyboardMode.Telex,
             0,
             true
         )
