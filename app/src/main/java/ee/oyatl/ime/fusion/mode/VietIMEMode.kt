@@ -46,6 +46,7 @@ class VietIMEMode(
         val inputConnection = currentInputConnection ?: return
         if(candidate is VietnameseConverter.Candidate) {
             wordComposer.consume(candidate.src.length)
+            wordComposer.moveCursor(wordComposer.composingText.length)
             inputConnection.commitText(candidate.text, 1)
             if(layout.insertSpaces && wordComposer.composingText.isNotEmpty()) {
                 inputConnection.commitText(" ", 1)
@@ -55,7 +56,8 @@ class VietIMEMode(
     }
 
     private fun convert() {
-        val candidates = converter?.convert(wordComposer.textBeforeCursor) ?: return
+        val text = wordComposer.textBeforeCursor
+        val candidates = converter?.convert(text) ?: return
         bestCandidate = candidates.firstOrNull() as? VietnameseConverter.Candidate
         submitCandidates(candidates)
     }
@@ -68,12 +70,14 @@ class VietIMEMode(
 
     override fun onChar(codePoint: Int) {
         wordComposer.commit(codePoint.toChar().toString())
-        if(wordComposer.textBeforeCursor.length >= 2) {
+        val target = wordComposer.textBeforeCursor.split(' ').lastOrNull()
+        if(target != null && target.length >= 2) {
             val keyChar = codePoint.toChar()
-            val curChar = wordComposer.textBeforeCursor.last()
-            val curWord = wordComposer.textBeforeCursor.dropLast(1)
+            val curChar = target.last()
+            val curWord = target.dropLast(1)
             val vietnameseWord = keyTyped(keyChar, curChar, curWord)
-            wordComposer.replace(wordComposer.textBeforeCursor.length, vietnameseWord)
+            val newComposingText = wordComposer.textBeforeCursor.dropLast(target.length) + vietnameseWord
+            wordComposer.replace(wordComposer.textBeforeCursor.length, newComposingText)
         }
         renderInputView()
     }
@@ -81,18 +85,25 @@ class VietIMEMode(
     override fun onSpecial(keyCode: Int) {
         when(keyCode) {
             KeyEvent.KEYCODE_SPACE -> {
+                if(wordComposer.textBeforeCursor.lastOrNull() == ' ') {
+                    val bestCandidate = bestCandidate
+                    if(bestCandidate != null) {
+                        onCandidateSelected(bestCandidate)
+                    } else {
+                        onReset()
+                        util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_SPACE)
+                    }
+                } else {
+                    wordComposer.commit(" ")
+                    renderInputView()
+                }
+            }
+            KeyEvent.KEYCODE_ENTER -> {
                 val bestCandidate = bestCandidate
                 if(bestCandidate != null) {
                     onCandidateSelected(bestCandidate)
                 } else {
                     onReset()
-                    util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_SPACE)
-                }
-            }
-            KeyEvent.KEYCODE_ENTER -> {
-                val send = wordComposer.composingText.isEmpty()
-                onReset()
-                if(send) {
                     if(util?.sendDefaultEditorAction(true) != true)
                         util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_ENTER)
                 }

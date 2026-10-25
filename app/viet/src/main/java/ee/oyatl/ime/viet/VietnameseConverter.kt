@@ -13,18 +13,18 @@ class VietnameseConverter(
     fun convert(text: String): List<CandidateView.Candidate> {
         val result = (1 .. text.length).asSequence()
             .flatMap { l ->
-                dictionary.search(text.take(l))
-                    .map { Candidate(text, l, it.result, it.frequency.toFloat()) }
+                val key = text.take(l)
+                dictionary.search(key.replace(" ", ""))
+                    .map { Candidate(key, it.result, it.frequency.toFloat()) }
             }
             .sortedByDescending { it.score }
-            .sortedByDescending { it.keyLength }
+            .sortedByDescending { it.src.length }
             .distinctBy { it.text }.toList()
         return result
     }
 
     data class Candidate(
         val src: String,
-        val keyLength: Int,
         override val text: CharSequence,
         val score: Float
     ): CandidateView.Candidate
