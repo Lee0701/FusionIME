@@ -10,12 +10,11 @@ class VietnameseConverter(
 ) {
     private val dictionary: DiskDictionary = DiskDictionary(context.resources.openRawResource(dictResdId))
 
-    fun convert(src: ChuQuocNguTableConverter.Result): List<CandidateView.Candidate> {
-        val text = src.values.joinToString("")
+    fun convert(text: String): List<CandidateView.Candidate> {
         val result = (1 .. text.length).asSequence()
             .flatMap { l ->
                 dictionary.search(text.take(l))
-                    .map { Candidate(src, l, it.result, it.frequency.toFloat()) }
+                    .map { Candidate(text, l, it.result, it.frequency.toFloat()) }
             }
             .sortedByDescending { it.score }
             .sortedByDescending { it.keyLength }
@@ -24,7 +23,7 @@ class VietnameseConverter(
     }
 
     data class Candidate(
-        val src: ChuQuocNguTableConverter.Result,
+        val src: String,
         val keyLength: Int,
         override val text: CharSequence,
         val score: Float

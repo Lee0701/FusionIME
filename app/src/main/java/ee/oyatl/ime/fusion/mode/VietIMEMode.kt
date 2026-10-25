@@ -9,8 +9,10 @@ import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.korean.WordComposer
 import ee.oyatl.ime.fusion.layout.preset.LatinLayoutPresets
 import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
-import ee.oyatl.ime.viet.ChuQuocNguTableConverter
 import ee.oyatl.ime.viet.VietnameseConverter
+import net.sourceforge.vietpad.inputmethod.InputMethod
+import net.sourceforge.vietpad.inputmethod.TelexIM
+import net.sourceforge.vietpad.inputmethod.VietKeyInput
 import java.util.Locale
 
 class VietIMEMode(
@@ -21,7 +23,7 @@ class VietIMEMode(
 ): CommonIMEMode(listener) {
     private val wordComposer: WordComposer = WordComposer()
     private var converter: VietnameseConverter? = null
-    private val chuQuocNguTableConverter: ChuQuocNguTableConverter = ChuQuocNguTableConverter()
+    private val inputMethod: InputMethod = TelexIM()
 
     override var textLayoutPreset: KeyboardLayoutPreset = LatinLayoutPresets.qwerty(false, numberRow, cursorKeys)
 
@@ -43,7 +45,7 @@ class VietIMEMode(
     override fun onCandidateSelected(candidate: CandidateView.Candidate) {
         val inputConnection = currentInputConnection ?: return
         if(candidate is VietnameseConverter.Candidate) {
-            wordComposer.consume(candidate.src.keys.take(candidate.keyLength).sumOf { it.length })
+            wordComposer.consume(candidate.src.length)
             inputConnection.commitText(candidate.text, 1)
             if(layout.insertSpaces && wordComposer.composingText.isNotEmpty()) {
                 inputConnection.commitText(" ", 1)
@@ -53,21 +55,26 @@ class VietIMEMode(
     }
 
     private fun convert() {
-        val result = chuQuocNguTableConverter.convert(wordComposer.composingText, layout.keyboardMode)
-        val candidates = converter?.convert(result) ?: return
+        val candidates = converter?.convert(wordComposer.textBeforeCursor) ?: return
         bestCandidate = candidates.firstOrNull() as? VietnameseConverter.Candidate
         submitCandidates(candidates)
     }
 
     private fun renderInputView() {
-        val result = chuQuocNguTableConverter.convert(wordComposer.composingText, layout.keyboardMode)
-        val composing = result.values.joinToString("")
+        val composing = wordComposer.getSpannableSurfaceString()
         currentInputConnection?.setComposingText(composing, 1)
         convert()
     }
 
     override fun onChar(codePoint: Int) {
         wordComposer.commit(codePoint.toChar().toString())
+        if(wordComposer.textBeforeCursor.length >= 2) {
+            val keyChar = codePoint.toChar()
+            val curChar = wordComposer.textBeforeCursor.last()
+            val curWord = wordComposer.textBeforeCursor.dropLast(1)
+            val vietnameseWord = keyTyped(keyChar, curChar, curWord)
+            wordComposer.replace(wordComposer.textBeforeCursor.length, vietnameseWord)
+        }
         renderInputView()
     }
 
@@ -117,6 +124,15 @@ class VietIMEMode(
             }
             else -> super.onSpecial(keyCode)
         }
+    }
+
+    private fun keyTyped(keyChar: Char, curChar: Char, curWord: String): String {
+        val accent = inputMethod.getAccentMark(keyChar, curChar, curWord)
+        if(accent.isDigit()) {
+            val vietWord = VietKeyInput.toVietWord(curWord, accent)
+            if(vietWord != curWord) return vietWord
+        }
+        return curWord + keyChar
     }
 
     data class Params(
