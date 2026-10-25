@@ -67,7 +67,12 @@ class VietIMEMode(
     }
 
     override fun onChar(codePoint: Int) {
-        wordComposer.commit(codePoint.toChar().toString())
+        if(codePoint.toChar().lowercaseChar() in 'a' .. 'z') {
+            wordComposer.commit(codePoint.toChar().toString())
+        } else {
+            onReset()
+            util?.sendKeyChar(codePoint.toChar())
+        }
         renderInputView()
     }
 
