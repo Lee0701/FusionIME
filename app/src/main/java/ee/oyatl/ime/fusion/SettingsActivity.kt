@@ -1,5 +1,6 @@
 package ee.oyatl.ime.fusion
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -50,6 +51,8 @@ class SettingsActivity : AppCompatActivity(),
         }
         supportFragmentManager.addOnBackStackChangedListener(onBackStackChangedListener)
         onBackStackChangedListener.onBackStackChanged()
+
+        startActivity(Intent(this, InitialSettingsActivity::class.java))
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

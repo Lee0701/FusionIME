@@ -26,6 +26,11 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".InitialSettingsActivity"
+            android:exported="true"
+            android:label="@string/initial_settings_label" />
+
         <service
             android:name=".FusionIMEService"
             android:exported="true"
