@@ -17,10 +17,12 @@ class FlickTouchHandler(
     val multiFlick: Boolean = false,
     val sendOnUp: Boolean = false
 ): TouchHandler {
+    val touchCorrector: TouchCorrector = TouchCorrector(keyboardView)
     val pointers = mutableMapOf<Int, Pointer>()
 
     override fun onReset() {
         keyboardView.popupManager.clearPopups()
+        touchCorrector.reset()
         pointers.values.forEach {
             it.key?.onReleased()
         }
@@ -28,7 +30,7 @@ class FlickTouchHandler(
     }
 
     override fun onTouchDown(pointerId: Int, x: Int, y: Int) {
-        val key = keyboardView.findKey(x, y)
+        val key = touchCorrector.correct(x, y, true)
         val pointer = Pointer(pointerId, x, y, x, y, key)
         if(key != null) {
             keyboardView.findKeys(key.keyCode).forEach { it.onPressed() }

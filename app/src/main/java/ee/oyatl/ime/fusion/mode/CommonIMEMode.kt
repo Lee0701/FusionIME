@@ -14,12 +14,12 @@ import ee.oyatl.ime.fusion.FlickAction
 import ee.oyatl.ime.fusion.KeyEventUtil
 import ee.oyatl.ime.fusion.PreferenceUtil.getOrientationBoolean
 import ee.oyatl.ime.fusion.PreferenceUtil.getOrientationInteger
-import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.R
-import ee.oyatl.ime.fusion.layout.preset.SymbolLayoutPresets
 import ee.oyatl.ime.fusion.layout.preset.LatinLayoutPresets
+import ee.oyatl.ime.fusion.layout.preset.SymbolLayoutPresets
 import ee.oyatl.ime.keyboard.DefaultKeyboardView
 import ee.oyatl.ime.keyboard.KeyLabel
+import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
 import ee.oyatl.ime.keyboard.KeyboardParams
 import ee.oyatl.ime.keyboard.KeyboardState
 import ee.oyatl.ime.keyboard.KeyboardView
@@ -43,6 +43,7 @@ import ee.oyatl.ime.keyboard.touchhandler.SeekTouchHandler
 import ee.oyatl.ime.keyboard.touchhandler.TouchHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
@@ -132,7 +133,7 @@ abstract class CommonIMEMode(
         setPreferredKeyboard(editorInfo)
         shiftState = KeyboardState.Shift.Released
         updateInputView()
-        keyboardView?.onReset()
+        CoroutineScope(Dispatchers.Main).launch { keyboardView?.onReset() }
     }
 
     override fun onFinish() {
