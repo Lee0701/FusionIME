@@ -84,8 +84,8 @@
     <string name="symbol_layout_n2">Type N2</string>
     <string name="symbol_layout_o1">Type O1</string>
     <string name="symbol_layout_o2">Type O2</string>
-    <string name="keyboard_theme_static">Static Colors</string>
-    <string name="keyboard_theme_dynamic">Dynamic Colors</string>
+    <string name="keyboard_theme_static">Static Colours</string>
+    <string name="keyboard_theme_dynamic">Dynamic Colours</string>
     <string name="touch_mode_seek">Seek</string>
     <string name="touch_mode_flick">Flick</string>
     <string name="flick_action_none">None</string>
