@@ -9,17 +9,19 @@ import androidx.core.view.updatePadding
 import androidx.fragment.app.FragmentManager
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import com.google.android.material.snackbar.Snackbar
 import ee.oyatl.ime.fusion.databinding.SettingsActivityBinding
 import ee.oyatl.ime.fusion.util.InputMethodUtil
 
 private const val TITLE_TAG = "settingsActivityTitle"
 
-class SettingsActivity : AppCompatActivity(),
-    PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
+class SettingsActivity : AppCompatActivity(), PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
+
+    lateinit var binding: SettingsActivityBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = SettingsActivityBinding.inflate(layoutInflater)
+        binding = SettingsActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
@@ -55,6 +57,17 @@ class SettingsActivity : AppCompatActivity(),
 
         if(!InputMethodUtil.checkMethodSelected(this)) {
             startActivity(Intent(this, SetupWizardActivity::class.java))
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if(!InputMethodUtil.checkMethodSelected(this)) {
+            Snackbar.make(binding.root, R.string.setup_wizard_incomplete, Snackbar.LENGTH_INDEFINITE)
+                .setAction(R.string.setup_wizard_start) {
+                    startActivity(Intent(this, SetupWizardActivity::class.java))
+                }
+                .show()
         }
     }
 

@@ -156,6 +156,8 @@
     <string name="viet_layout_telex_nom">Telex (Han Nom)</string>
     <string name="viet_layout_telex_quoc_ngu">Telex (Chu Quoc Ngu)</string>
     <string name="jyutping_layout_jyutping">Jyutping</string>
+    <string name="setup_wizard_incomplete">Setup is incomplete.</string>
+    <string name="setup_wizard_start">Setup Wizard</string>
     <string name="setup_wizard_label">FusionIME Initial Settings Wizard</string>
     <string name="setup_wizard_welcome_label">Welcome</string>
     <string name="setup_wizard_welcome_title">Welcome!</string>
