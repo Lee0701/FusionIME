@@ -158,7 +158,7 @@
     <string name="jyutping_layout_jyutping">Jyutping</string>
     <string name="setup_wizard_incomplete">Setup is incomplete.</string>
     <string name="setup_wizard_start">Setup Wizard</string>
-    <string name="setup_wizard_label">FusionIME Initial Settings Wizard</string>
+    <string name="setup_wizard_label">FusionIME Setup Wizard</string>
     <string name="setup_wizard_welcome_label">Welcome</string>
     <string name="setup_wizard_welcome_title">Welcome!</string>
     <string name="setup_wizard_welcome_subtitle">Proceed to start using FusionIME.</string>
