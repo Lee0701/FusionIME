@@ -47,4 +47,49 @@ object KeyboardThemes {
             )
         )
     )
+
+    val StaticDark = KeyboardTheme(
+        backgroundColor = R.color.keyboard_bg_dark,
+        moreKeysBackground = R.drawable.more_keys_bg,
+        keyThemes = mapOf(
+            KeyType.Default to KeyTheme(
+                backgroundColor = R.color.key_bg_static_dark,
+                foregroundColor = R.color.white,
+                hintColor = R.color.gray
+            ),
+            KeyType.Modifier to KeyTheme(
+                backgroundColor = R.color.key_bg_static_dark_mod,
+                foregroundColor = R.color.white,
+                hintColor = R.color.gray
+            ),
+            KeyType.Return to KeyTheme(
+                backgroundColor = R.color.key_bg_static_dark_return,
+                foregroundColor = R.color.white,
+                hintColor = R.color.gray
+            ),
+        ),
+        popupTheme = PopupTheme(
+            backgroundColor = R.color.key_bg_dark_unpressed,
+            foregroundColor = R.color.white,
+            hintColor = R.color.gray
+        ),
+        candidatesTheme = CandidatesTheme(
+            backgroundColor = R.color.candidate_bg_dark,
+            itemThemes = mapOf(
+                CandidateItemType.Default to CandidateItemTheme(
+                    backgroundColor = R.color.transparent,
+                    foregroundColor = R.color.white,
+                    extraColor = R.color.white
+                )
+            )
+        ),
+        tabBarTheme = TabBarTheme(
+            backgroundColor = R.color.candidate_bg_dark,
+            itemTheme = TabBarItemTheme(
+                backgroundDrawable = R.drawable.mode_switcher_tab_background,
+                backgroundColor = R.color.tabbar_item_dark,
+                foregroundColor = R.color.white
+            )
+        )
+    )
 }

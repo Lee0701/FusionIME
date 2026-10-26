@@ -34,6 +34,7 @@ import kotlin.math.ceil
 import androidx.core.view.isVisible
 import androidx.core.widget.TextViewCompat
 import ee.oyatl.ime.theme.CandidateItemType
+import ee.oyatl.ime.theme.KeyboardTheme
 import ee.oyatl.ime.theme.KeyboardThemes
 
 class IMEModeSwitcher(
@@ -43,7 +44,7 @@ class IMEModeSwitcher(
 ) {
     val handler = Handler(Looper.getMainLooper())
 
-    val keyboardTheme = KeyboardThemes.StaticLight
+    val keyboardTheme: KeyboardTheme = PreferenceUtil.getKeyboardTheme(context)
 
     val size: Int get() = entries.size
     var currentModeIndex: Int = 0
@@ -211,6 +212,8 @@ class IMEModeSwitcher(
 
     private fun updateInputView() {
         val wrapper = inputViewWrapper ?: return
+
+        currentEntry.imeMode.keyboardTheme = keyboardTheme
 
         wrapper.keyboardView.removeAllViews()
         val inputView = currentEntry.inputView ?: currentEntry.imeMode.createInputView(context)

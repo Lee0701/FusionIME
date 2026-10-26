@@ -11,17 +11,21 @@ import ee.oyatl.ime.candidate.CandidateView.Candidate
 import ee.oyatl.ime.keyboard.databinding.CandidateItemBinding
 import ee.oyatl.ime.theme.CandidateItemType
 import ee.oyatl.ime.theme.KeyboardTheme
-import ee.oyatl.ime.theme.KeyboardThemes
 
 abstract class RecyclerCandidateView(
     context: Context,
     attributeSet: AttributeSet?
 ): RecyclerView(context, attributeSet), CandidateView {
 
+    override var keyboardTheme: KeyboardTheme? = null
+        set(value) {
+            field = value
+            initialize()
+        }
     override var listener: CandidateView.Listener? = null
 
-    init {
-        val keyboardTheme = KeyboardThemes.StaticLight
+    fun initialize() {
+        val keyboardTheme = keyboardTheme ?: return
         setBackgroundColor(context.getColor(keyboardTheme.candidatesTheme.backgroundColor))
 
         adapter = Adapter(keyboardTheme) { listener?.onCandidateSelected(it) }
@@ -29,7 +33,7 @@ abstract class RecyclerCandidateView(
     }
 
     override fun submitList(list: List<Candidate>) {
-        val adapter = this.adapter as Adapter
+        val adapter = this.adapter as? Adapter ?: return
         adapter.submitList(list)
         val focusedIndex = list.indexOfFirst { it is CandidateView.FocusableCandidate && it.focused }
         if(focusedIndex > -1) smoothScrollToPosition(focusedIndex)

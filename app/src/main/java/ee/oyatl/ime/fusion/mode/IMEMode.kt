@@ -5,8 +5,10 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
 import ee.oyatl.ime.candidate.CandidateView
+import ee.oyatl.ime.theme.KeyboardTheme
 
 interface IMEMode {
+    var keyboardTheme: KeyboardTheme?
 
     suspend fun onLoad(context: Context)
     fun onStart(inputConnection: InputConnection, editorInfo: EditorInfo)
