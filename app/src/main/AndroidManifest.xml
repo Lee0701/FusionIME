@@ -27,9 +27,9 @@
         </activity>
 
         <activity
-            android:name=".InitialSettingsActivity"
+            android:name=".SetupWizardActivity"
             android:exported="true"
-            android:label="@string/initial_settings_label" />
+            android:label="@string/setup_wizard_label" />
 
         <service
             android:name=".FusionIMEService"

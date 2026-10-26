@@ -1,4 +1,4 @@
-package ee.oyatl.ime.fusion.initial_settings
+package ee.oyatl.ime.fusion.setup
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,17 +7,17 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import ee.oyatl.ime.fusion.R
-import ee.oyatl.ime.fusion.databinding.FragmentInitialSettingsWelcomeBinding
+import ee.oyatl.ime.fusion.databinding.FragmentSetupWelcomeBinding
 
 class WelcomeFragment: Fragment() {
-    lateinit var binding: FragmentInitialSettingsWelcomeBinding
+    lateinit var binding: FragmentSetupWelcomeBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentInitialSettingsWelcomeBinding.inflate(inflater)
+        binding = FragmentSetupWelcomeBinding.inflate(inflater)
         return binding.root
     }
 

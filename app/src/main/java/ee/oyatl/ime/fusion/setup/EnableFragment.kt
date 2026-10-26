@@ -1,4 +1,4 @@
-package ee.oyatl.ime.fusion.initial_settings
+package ee.oyatl.ime.fusion.setup
 
 import android.content.Context
 import android.content.Intent
@@ -10,19 +10,18 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import ee.oyatl.ime.fusion.FusionIMEService
 import ee.oyatl.ime.fusion.R
-import ee.oyatl.ime.fusion.databinding.FragmentInitialSettingsEnableBinding
+import ee.oyatl.ime.fusion.databinding.FragmentSetupEnableBinding
 
 class EnableFragment: Fragment() {
-    lateinit var binding: FragmentInitialSettingsEnableBinding
+    lateinit var binding: FragmentSetupEnableBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentInitialSettingsEnableBinding.inflate(inflater)
+        binding = FragmentSetupEnableBinding.inflate(inflater)
         return binding.root
     }
 

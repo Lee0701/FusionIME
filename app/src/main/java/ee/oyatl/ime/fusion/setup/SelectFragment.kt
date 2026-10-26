@@ -1,4 +1,4 @@
-package ee.oyatl.ime.fusion.initial_settings
+package ee.oyatl.ime.fusion.setup
 
 import android.content.Context
 import android.os.Bundle
@@ -9,17 +9,17 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
-import ee.oyatl.ime.fusion.databinding.FragmentInitialSettingsSelectBinding
+import ee.oyatl.ime.fusion.databinding.FragmentSetupSelectBinding
 
 class SelectFragment: Fragment(), ViewTreeObserver.OnWindowFocusChangeListener {
-    lateinit var binding: FragmentInitialSettingsSelectBinding
+    lateinit var binding: FragmentSetupSelectBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentInitialSettingsSelectBinding.inflate(inflater)
+        binding = FragmentSetupSelectBinding.inflate(inflater)
         return binding.root
     }
 
@@ -34,6 +34,11 @@ class SelectFragment: Fragment(), ViewTreeObserver.OnWindowFocusChangeListener {
             activity?.finish()
         }
         view.viewTreeObserver.addOnWindowFocusChangeListener(this)
+    }
+
+    override fun onDestroyView() {
+        view?.viewTreeObserver?.removeOnWindowFocusChangeListener(this)
+        super.onDestroyView()
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {

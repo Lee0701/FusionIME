@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/initial_settings"
+    android:id="@+id/setup"
     app:startDestination="@id/welcome">
 
     <fragment
         android:id="@+id/welcome"
-        android:name="ee.oyatl.ime.fusion.initial_settings.WelcomeFragment"
-        android:label="@string/initial_settings_welcome_label">
+        android:name="ee.oyatl.ime.fusion.setup.WelcomeFragment"
+        android:label="@string/setup_wizard_welcome_label">
 
         <action
             android:id="@+id/action_welcome_to_enable"
@@ -16,8 +16,8 @@
 
     <fragment
         android:id="@+id/enable"
-        android:name="ee.oyatl.ime.fusion.initial_settings.EnableFragment"
-        android:label="@string/initial_settings_enable_label">
+        android:name="ee.oyatl.ime.fusion.setup.EnableFragment"
+        android:label="@string/setup_wizard_enable_label">
 
         <action
             android:id="@+id/action_enable_to_select"
@@ -26,8 +26,8 @@
 
     <fragment
         android:id="@+id/select"
-        android:name="ee.oyatl.ime.fusion.initial_settings.SelectFragment"
-        android:label="@string/initial_settings_select_label">
+        android:name="ee.oyatl.ime.fusion.setup.SelectFragment"
+        android:label="@string/setup_wizard_select_label">
 
     </fragment>
 

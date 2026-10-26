@@ -52,7 +52,7 @@ class SettingsActivity : AppCompatActivity(),
         supportFragmentManager.addOnBackStackChangedListener(onBackStackChangedListener)
         onBackStackChangedListener.onBackStackChanged()
 
-        startActivity(Intent(this, InitialSettingsActivity::class.java))
+        startActivity(Intent(this, SetupWizardActivity::class.java))
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

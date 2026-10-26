@@ -5,16 +5,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
-import ee.oyatl.ime.fusion.databinding.ActivityInitialSettingsBinding
+import ee.oyatl.ime.fusion.databinding.ActivitySetupWizardBinding
 
 private const val TITLE_TAG = "initialSettingsActivityTitle"
 
-class InitialSettingsActivity: AppCompatActivity() {
+class SetupWizardActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = ActivityInitialSettingsBinding.inflate(layoutInflater)
+        val binding = ActivitySetupWizardBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
