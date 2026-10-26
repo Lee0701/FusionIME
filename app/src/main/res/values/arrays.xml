@@ -27,6 +27,14 @@
         <item>O2</item>
     </string-array>
 
+    <string-array name="settings_appearance_keyboard_theme_entries">
+        <item>@string/keyboard_theme_static</item>
+    </string-array>
+
+    <string-array name="settings_appearance_keyboard_theme_values">
+        <item>Static</item>
+    </string-array>
+
     <string-array name="settings_behaviour_touch_mode_entries">
         <item>@string/touch_mode_seek</item>
         <item>@string/touch_mode_flick</item>
