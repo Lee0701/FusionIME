@@ -6,12 +6,11 @@ import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
-import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.os.Handler
 import android.os.Looper
-import android.view.HapticFeedbackConstants
 import android.util.TypedValue
+import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,6 +22,8 @@ import android.view.inputmethod.InputMethodSubtype
 import android.widget.FrameLayout
 import androidx.core.animation.doOnEnd
 import androidx.core.animation.doOnStart
+import androidx.core.view.isVisible
+import androidx.core.widget.TextViewCompat
 import androidx.preference.PreferenceManager
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.ExpandedCandidateView
@@ -30,21 +31,17 @@ import ee.oyatl.ime.fusion.PreferenceUtil
 import ee.oyatl.ime.fusion.databinding.InputViewWrapperBinding
 import ee.oyatl.ime.fusion.databinding.ModeSwitcherTabBarBinding
 import ee.oyatl.ime.fusion.databinding.ModeSwitcherTabBinding
-import kotlin.math.ceil
-import androidx.core.view.isVisible
-import androidx.core.widget.TextViewCompat
 import ee.oyatl.ime.theme.CandidateItemType
 import ee.oyatl.ime.theme.KeyboardTheme
-import ee.oyatl.ime.theme.KeyboardThemes
+import kotlin.math.ceil
 
 class IMEModeSwitcher(
     private val context: Context,
     val entries: List<Entry>,
+    var keyboardTheme: KeyboardTheme,
     private val callback: Callback
 ) {
     val handler = Handler(Looper.getMainLooper())
-
-    val keyboardTheme: KeyboardTheme = PreferenceUtil.getKeyboardTheme(context)
 
     val size: Int get() = entries.size
     var currentModeIndex: Int = 0

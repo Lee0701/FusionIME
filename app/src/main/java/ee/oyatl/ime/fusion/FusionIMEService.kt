@@ -105,7 +105,8 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
             val shortLabel = labels.firstOrNull { it !in others } ?: labels.last()
             entries += IMEModeSwitcher.Entry(shortLabel, p.create(this))
         }
-        imeModeSwitcher = IMEModeSwitcher(this, entries, this)
+        val keyboardTheme = PreferenceUtil.getKeyboardTheme(this)
+        imeModeSwitcher = IMEModeSwitcher(this, entries, keyboardTheme, this)
     }
 
     fun onLoad() {
@@ -125,6 +126,7 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
 
     fun onResetViews() {
         imeViewFilter.clear()
+        imeModeSwitcher.keyboardTheme = PreferenceUtil.getKeyboardTheme(this)
         imeModeSwitcher.resetInputViews()
         imeModeSwitcher.resetCandidateViews()
         setInputView(onCreateInputView())
