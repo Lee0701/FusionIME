@@ -13,7 +13,6 @@
 
     <TextView
         android:id="@+id/text"
-        android:textColor="?foregroundColor"
         android:textSize="18sp"
         android:layout_marginHorizontal="8dp"
         android:layout_width="wrap_content"
@@ -21,7 +20,6 @@
 
     <TextView
         android:id="@+id/extra"
-        android:textColor="?foregroundColor"
         android:textSize="12sp"
         android:ellipsize="end"
         android:gravity="center_horizontal"

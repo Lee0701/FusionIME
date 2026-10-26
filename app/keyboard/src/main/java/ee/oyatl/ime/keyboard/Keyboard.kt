@@ -1,5 +1,7 @@
 package ee.oyatl.ime.keyboard
 
+import ee.oyatl.ime.theme.KeyType
+
 data class Keyboard(
     val rows: List<List<KeyItem>>,
     val params: KeyboardParams
@@ -20,7 +22,7 @@ data class Keyboard(
             val iconRes: Int = 0,
             override val width: Float = 1f,
             val bkgRes: Int = R.drawable.key_bg,
-            val themeRes: Int = R.style.Theme_FusionIME_Keyboard_Key
+            val keyType: KeyType = KeyType.Default
         ): KeyItem
     }
 }

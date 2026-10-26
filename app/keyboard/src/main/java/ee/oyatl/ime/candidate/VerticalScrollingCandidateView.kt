@@ -17,7 +17,6 @@ class VerticalScrollingCandidateView(
     constructor(context: Context, attrs: AttributeSet?): this(context, attrs, 2)
 
     init {
-        setBackgroundColor(backgroundColor)
         layoutManager = FlexboxLayoutManager(
             context,
             FlexDirection.ROW,

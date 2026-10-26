@@ -73,7 +73,7 @@ interface KeyboardTemplate {
                     width = item.width,
                     label = "",
                     iconRes = iconRes,
-                    themeRes = type.themeRes,
+                    keyType = type.keyType,
                     bkgRes = bkgRes
                 )
             } else {

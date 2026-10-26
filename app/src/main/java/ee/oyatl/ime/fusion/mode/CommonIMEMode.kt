@@ -10,18 +10,17 @@ import android.view.inputmethod.InputConnection
 import androidx.preference.PreferenceManager
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.ScrollingCandidateView
-import ee.oyatl.ime.fusion.DimensionUtil
 import ee.oyatl.ime.fusion.Feature
 import ee.oyatl.ime.fusion.FlickAction
 import ee.oyatl.ime.fusion.KeyEventUtil
 import ee.oyatl.ime.fusion.PreferenceUtil.getOrientationBoolean
 import ee.oyatl.ime.fusion.PreferenceUtil.getOrientationInteger
-import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.R
-import ee.oyatl.ime.fusion.layout.preset.SymbolLayoutPresets
 import ee.oyatl.ime.fusion.layout.preset.LatinLayoutPresets
+import ee.oyatl.ime.fusion.layout.preset.SymbolLayoutPresets
 import ee.oyatl.ime.keyboard.DefaultKeyboardView
 import ee.oyatl.ime.keyboard.KeyLabel
+import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
 import ee.oyatl.ime.keyboard.KeyboardParams
 import ee.oyatl.ime.keyboard.KeyboardState
 import ee.oyatl.ime.keyboard.KeyboardView
@@ -43,6 +42,7 @@ import ee.oyatl.ime.keyboard.touchhandler.FlickTouchHandler
 import ee.oyatl.ime.keyboard.touchhandler.LongPressTouchHandler
 import ee.oyatl.ime.keyboard.touchhandler.SeekTouchHandler
 import ee.oyatl.ime.keyboard.touchhandler.TouchHandler
+import ee.oyatl.ime.theme.KeyboardThemes
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -157,19 +157,24 @@ abstract class CommonIMEMode(
         val symbolKeyboard = symbolLayoutPreset.keyboardTemplate.inflate(symbolKeyboardParams, symbolLayoutPreset.softKeyCodeMapper)
         val numberKeyboard = numberLayoutPreset.keyboardTemplate.inflate(numberKeyboardParams, symbolLayoutPreset.softKeyCodeMapper)
 
+        val keyboardTheme = KeyboardThemes.StaticLight
+
         val textKeyboardView = DefaultKeyboardView(context, null).also {
+            it.keyboardTheme = keyboardTheme
             it.keyboard = textKeyboard
             it.listener = createKeyboardListener(context, textKeyboardParams)
             it.touchHandler = createTouchHandler(it, textKeyboardParams, KeyboardState.Symbol.Text)
             it.popupManager = DefaultPopupManager()
         }
         val symbolKeyboardView = DefaultKeyboardView(context, null).also {
+            it.keyboardTheme = keyboardTheme
             it.keyboard = symbolKeyboard
             it.listener = createKeyboardListener(context, symbolKeyboardParams)
             it.touchHandler = createTouchHandler(it, symbolKeyboardParams, KeyboardState.Symbol.Symbol)
             it.popupManager = DefaultPopupManager()
         }
         val numberKeyboardView = DefaultKeyboardView(context, null).also {
+            it.keyboardTheme = keyboardTheme
             it.keyboard = numberKeyboard
             it.listener = createKeyboardListener(context, numberKeyboardParams)
             it.touchHandler = createTouchHandler(it, numberKeyboardParams, KeyboardState.Symbol.Number)

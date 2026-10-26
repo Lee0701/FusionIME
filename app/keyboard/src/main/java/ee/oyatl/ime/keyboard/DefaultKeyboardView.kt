@@ -2,6 +2,7 @@ package ee.oyatl.ime.keyboard
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.ColorStateList
 import android.graphics.Rect
 import android.os.Build
 import android.util.AttributeSet
@@ -11,6 +12,9 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.LinearLayout
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.view.ViewCompat
 import ee.oyatl.ime.keyboard.databinding.KbdKeyBinding
 import ee.oyatl.ime.keyboard.databinding.KbdKeyboardBinding
 import ee.oyatl.ime.keyboard.databinding.KbdRowBinding
@@ -20,6 +24,7 @@ import ee.oyatl.ime.keyboard.popup.EmptyPopupManager
 import ee.oyatl.ime.keyboard.popup.PopupManager
 import ee.oyatl.ime.keyboard.touchhandler.EmptyTouchHandler
 import ee.oyatl.ime.keyboard.touchhandler.TouchHandler
+import ee.oyatl.ime.theme.KeyboardTheme
 import kotlin.math.max
 import kotlin.math.roundToInt
 
@@ -41,7 +46,7 @@ class DefaultKeyboardView(
                 when(label) {
                     is KeyLabel.Default -> {
                         if(label.text != null) it.binding.label.text = label.text
-                        if(label.icon != null) it.binding.icon.setImageResource(label.icon)
+                        if(label.icon != null) it.binding.icon.setBackgroundResource(label.icon)
                     }
                     is KeyLabel.Flick -> {
                         if(label.text != null) it.binding.label.text = label.text
@@ -56,7 +61,8 @@ class DefaultKeyboardView(
             }
         }
 
-    var keyboard: Keyboard? = null
+    override var keyboardTheme: KeyboardTheme? = null
+    override var keyboard: Keyboard? = null
         set(value) {
             field = value
             if(value != null) setup(value)
@@ -72,12 +78,13 @@ class DefaultKeyboardView(
     }
 
     private fun setup(keyboard: Keyboard) {
-        val themeId = when(keyboard.params.screenMode) {
-            KeyboardState.ScreenMode.MoreKeys -> R.style.Theme_FusionIME_Keyboard_MoreKeys
-            else -> R.style.Theme_FusionIME_Keyboard
-        }
-        val inflater = LayoutInflater.from(ContextThemeWrapper(context, themeId))
+        val inflater = LayoutInflater.from(ContextThemeWrapper(
+            context, androidx.appcompat.R.style.Theme_AppCompat))
         val binding = KbdKeyboardBinding.inflate(inflater)
+        val keyboardTheme = keyboardTheme
+        if(keyboardTheme != null && keyboard.params.screenMode != KeyboardState.ScreenMode.MoreKeys) {
+            binding.root.setBackgroundColor(context.getColor(keyboardTheme.backgroundColor))
+        }
 
         keySet.clear()
 
@@ -107,11 +114,22 @@ class DefaultKeyboardView(
                         subRow.root.addView(view)
                     }
                     is Keyboard.KeyItem.Key -> {
-                        val themedInflater = LayoutInflater.from(ContextThemeWrapper(context, item.themeRes))
-                        val key = KbdKeyBinding.inflate(themedInflater)
-                        key.bkg.setImageResource(item.bkgRes)
-                        if(item.iconRes != 0) key.icon.setImageResource(item.iconRes)
+                        val key = KbdKeyBinding.inflate(inflater)
+                        if(item.iconRes != 0) key.icon.setBackgroundResource(item.iconRes)
                         if(item.keyCode < 0) key.label.text = (-item.keyCode).toChar().toString()
+
+                        val keyTheme = keyboardTheme?.keyThemes[item.keyType]
+                        if(keyTheme != null) {
+                            key.root.setBackgroundResource(item.bkgRes)
+                            key.root.backgroundTintList = context.getColorStateList(keyTheme.backgroundColor)
+                            key.icon.backgroundTintList = ColorStateList.valueOf(context.getColor(keyTheme.foregroundColor))
+                            key.label.setTextColor(context.getColor(keyTheme.foregroundColor))
+                            val hintColor = context.getColor(keyTheme.hintColor)
+                            listOf(key.labelHintTop, key.labelHintLeft, key.labelHintRight, key.labelHintBottom).forEach { label ->
+                                label.setTextColor(hintColor)
+                            }
+                        }
+
                         keySet += CachedKey(item.keyCode, key)
                         key.root.layoutParams = createLayoutParams(item.width, keyHeight)
                         subRow.root.addView(key.root)

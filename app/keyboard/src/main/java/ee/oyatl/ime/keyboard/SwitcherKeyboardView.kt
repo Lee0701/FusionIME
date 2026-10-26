@@ -10,6 +10,7 @@ import ee.oyatl.ime.keyboard.listener.KeyboardListener
 import ee.oyatl.ime.keyboard.popup.EmptyPopupManager
 import ee.oyatl.ime.keyboard.popup.PopupManager
 import ee.oyatl.ime.keyboard.touchhandler.TouchHandler
+import ee.oyatl.ime.theme.KeyboardTheme
 
 class SwitcherKeyboardView(
     context: Context,
@@ -34,6 +35,10 @@ class SwitcherKeyboardView(
 
     private val currentView: KeyboardView get() = map[state] ?: map.values.first()
 
+    override val keyboardTheme: KeyboardTheme?
+        get() = currentView.keyboardTheme
+    override val keyboard: Keyboard?
+        get() = currentView.keyboard
     override var labels: Map<Int, KeyLabel>
         get() = currentView.labels
         set(value) {

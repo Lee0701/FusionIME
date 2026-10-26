@@ -6,6 +6,7 @@ import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.os.Handler
 import android.os.Looper
@@ -31,6 +32,9 @@ import ee.oyatl.ime.fusion.databinding.ModeSwitcherTabBarBinding
 import ee.oyatl.ime.fusion.databinding.ModeSwitcherTabBinding
 import kotlin.math.ceil
 import androidx.core.view.isVisible
+import androidx.core.widget.TextViewCompat
+import ee.oyatl.ime.theme.CandidateItemType
+import ee.oyatl.ime.theme.KeyboardThemes
 
 class IMEModeSwitcher(
     private val context: Context,
@@ -38,6 +42,8 @@ class IMEModeSwitcher(
     private val callback: Callback
 ) {
     val handler = Handler(Looper.getMainLooper())
+
+    val keyboardTheme = KeyboardThemes.StaticLight
 
     val size: Int get() = entries.size
     var currentModeIndex: Int = 0
@@ -116,6 +122,19 @@ class IMEModeSwitcher(
     fun createInputView(): View {
         val inflater = LayoutInflater.from(context)
         val inputView = InputViewWrapperBinding.inflate(inflater)
+
+        val itemTheme = keyboardTheme.candidatesTheme.itemThemes.getValue(CandidateItemType.Default)
+        inputView.root.setBackgroundColor(context.getColor(keyboardTheme.candidatesTheme.backgroundColor))
+        inputView.clipboardCandidateText.setTextColor(context.getColor(itemTheme.foregroundColor))
+        TextViewCompat.setCompoundDrawableTintList(
+            inputView.clipboardCandidateText,
+            context.getColorStateList(itemTheme.foregroundColor)
+        )
+        inputView.clipboardCandidateCloseButton.imageTintList = context.getColorStateList(itemTheme.foregroundColor)
+        inputView.closeButton.imageTintList = context.getColorStateList(itemTheme.foregroundColor)
+        inputView.expandButton.imageTintList = context.getColorStateList(itemTheme.foregroundColor)
+        inputView.voiceInputButton.setBackgroundColor(context.getColor(keyboardTheme.backgroundColor))
+        inputView.voiceInputButton.imageTintList = context.getColorStateList(itemTheme.foregroundColor)
 
         inputView.tabViewFrame.addView(this.initTabBarView(context))
         inputView.closeButton.setOnClickListener {
@@ -250,7 +269,6 @@ class IMEModeSwitcher(
             if(text.toString() != newText) {
                 stopScrolling()
                 text = newText
-                showClipboardIcon()
                 displayChanged = true
             }
         }
@@ -265,10 +283,7 @@ class IMEModeSwitcher(
     }
 
     private fun hideClipboardCandidateView(inputView: InputViewWrapperBinding) {
-        inputView.clipboardCandidate.showDeleteIcon()
-        if(callback.onClipboardCandidateClearRequested()) {
-            inputView.clipboardCandidate.showClipboardIcon()
-        }
+        callback.onClipboardCandidateClearRequested()
     }
 
     private fun updateClipboardScrolling(inputView: InputViewWrapperBinding) {
@@ -285,6 +300,12 @@ class IMEModeSwitcher(
         val tabBar = ModeSwitcherTabBarBinding.inflate(layoutInflater, null, false)
         tabs = entries.mapIndexed { index, entry ->
             val tab = ModeSwitcherTabBinding.inflate(layoutInflater, tabBar.content, true)
+
+            val theme = keyboardTheme.tabBarTheme.itemTheme
+            tab.root.setBackgroundResource(theme.backgroundDrawable)
+            tab.root.backgroundTintList = context.getColorStateList(theme.backgroundColor)
+            tab.label.setTextColor(context.getColor(theme.foregroundColor))
+
             tab.label.text = entry.label
             tab.root.setOnClickListener {
                 callback.onSwitchInputMode(index)
