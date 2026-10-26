@@ -12,6 +12,7 @@
         android:minHeight="@dimen/candidate_view_height">
 
         <FrameLayout
+            android:id="@+id/buttons_view"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="match_parent">

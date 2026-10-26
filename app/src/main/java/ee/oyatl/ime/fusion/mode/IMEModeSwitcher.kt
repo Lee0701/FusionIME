@@ -121,8 +121,12 @@ class IMEModeSwitcher(
         val inflater = LayoutInflater.from(context)
         val inputView = InputViewWrapperBinding.inflate(inflater)
 
+        inputView.expandedCandidateView.keyboardTheme = keyboardTheme
+
         val itemTheme = keyboardTheme.candidatesTheme.itemThemes.getValue(CandidateItemType.Default)
-        inputView.root.setBackgroundColor(context.getColor(keyboardTheme.candidatesTheme.backgroundColor))
+        inputView.idleView.setBackgroundColor(context.getColor(keyboardTheme.tabBarTheme.backgroundColor))
+        inputView.buttonsView.setBackgroundColor(context.getColor(keyboardTheme.tabBarTheme.backgroundColor))
+        inputView.expandedCandidateView.setBackgroundColor(context.getColor(keyboardTheme.candidatesTheme.backgroundColor))
         inputView.clipboardCandidateText.setTextColor(context.getColor(itemTheme.foregroundColor))
         TextViewCompat.setCompoundDrawableTintList(
             inputView.clipboardCandidateText,

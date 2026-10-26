@@ -9,14 +9,12 @@ import android.inputmethodservice.InputMethodService
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
-import android.util.TypedValue
 import android.view.KeyEvent
 import android.view.View
 import android.view.WindowInsets.Type
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.view.inputmethod.InputMethodSubtype
-import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.view.WindowCompat
 import androidx.preference.PreferenceManager
 import com.android.inputmethod.latin.RichInputMethodManager
@@ -29,7 +27,7 @@ import ee.oyatl.ime.fusion.mode.PinyinIMEMode
 import ee.oyatl.ime.fusion.preference.KeyStrokePreference
 import ee.oyatl.ime.fusion.settings.InputModeSettingsFragment
 import ee.oyatl.ime.keyboard.PaleViewFilter
-import ee.oyatl.ime.keyboard.R
+import ee.oyatl.ime.theme.KeyboardTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -38,6 +36,7 @@ import org.json.JSONArray
 class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.Callback, SharedPreferences.OnSharedPreferenceChangeListener {
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
     private lateinit var preference: SharedPreferences
+    private lateinit var keyboardTheme: KeyboardTheme
     private lateinit var imeModeSwitcher: IMEModeSwitcher
     private lateinit var clipboardManager: ClipboardManager
     private var imeView: View? = null
@@ -105,7 +104,7 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
             val shortLabel = labels.firstOrNull { it !in others } ?: labels.last()
             entries += IMEModeSwitcher.Entry(shortLabel, p.create(this))
         }
-        val keyboardTheme = PreferenceUtil.getKeyboardTheme(this)
+        keyboardTheme = PreferenceUtil.getKeyboardTheme(this)
         imeModeSwitcher = IMEModeSwitcher(this, entries, keyboardTheme, this)
     }
 
@@ -126,7 +125,8 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
 
     fun onResetViews() {
         imeViewFilter.clear()
-        imeModeSwitcher.keyboardTheme = PreferenceUtil.getKeyboardTheme(this)
+        keyboardTheme = PreferenceUtil.getKeyboardTheme(this)
+        imeModeSwitcher.keyboardTheme = keyboardTheme
         imeModeSwitcher.resetInputViews()
         imeModeSwitcher.resetCandidateViews()
         setInputView(onCreateInputView())
@@ -366,7 +366,7 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
             val insets = windowInsets.getInsets(Type.systemBars() and Type.ime().inv())
             val darkMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
             // Update colors
-//            view.setBackgroundColor(typedValue.data)
+            imeView?.setBackgroundColor(getColor(keyboardTheme.backgroundColor))
             WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightNavigationBars = !darkMode
             // Apply bottom padding to root input view
             // Not applying to the decor view since different behaviours between devices
