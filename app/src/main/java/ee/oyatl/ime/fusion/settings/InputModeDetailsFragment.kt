@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.fragment.app.setFragmentResult
 import androidx.preference.ListPreference
 import androidx.preference.PreferenceFragmentCompat
-import ee.oyatl.ime.fusion.Feature
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.mode.CangjieIMEMode
 import ee.oyatl.ime.fusion.mode.IMEMode
@@ -66,10 +65,8 @@ abstract class InputModeDetailsFragment: PreferenceFragmentCompat() {
                 if(value == "de") layout?.value = LatinIMEMode.Layout.Deutsch.name
                 true
             }
-            if(Feature.NumberRow.availableInCurrentVersion)
-                addPreferencesFromResource(R.xml.pref_input_mode_number_row)
-            if(Feature.CursorKeys.availableInCurrentVersion)
-                addPreferencesFromResource(R.xml.pref_input_mode_cursor_keys)
+            addPreferencesFromResource(R.xml.pref_input_mode_number_row)
+            addPreferencesFromResource(R.xml.pref_input_mode_cursor_keys)
         }
     }
 
@@ -77,12 +74,9 @@ abstract class InputModeDetailsFragment: PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             super.onCreatePreferences(savedInstanceState, rootKey)
             addPreferencesFromResource(R.xml.pref_input_mode_korean_layout)
-            if(Feature.NumberRow.availableInCurrentVersion)
-                addPreferencesFromResource(R.xml.pref_input_mode_number_row)
-            if(Feature.CursorKeys.availableInCurrentVersion)
-                addPreferencesFromResource(R.xml.pref_input_mode_cursor_keys)
-            if(Feature.BigramHanjaConverter.availableInCurrentVersion)
-                addPreferencesFromResource(R.xml.pref_input_mode_korean_converter)
+            addPreferencesFromResource(R.xml.pref_input_mode_number_row)
+            addPreferencesFromResource(R.xml.pref_input_mode_cursor_keys)
+            addPreferencesFromResource(R.xml.pref_input_mode_korean_converter)
         }
     }
 
@@ -90,10 +84,8 @@ abstract class InputModeDetailsFragment: PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             super.onCreatePreferences(savedInstanceState, rootKey)
             addPreferencesFromResource(R.xml.pref_input_mode_mozc_layout)
-            if(Feature.NumberRow.availableInCurrentVersion)
-                addPreferencesFromResource(R.xml.pref_input_mode_number_row)
-            if(Feature.MozcCandidateHeight.availableInCurrentVersion)
-                addPreferencesFromResource(R.xml.pref_input_mode_mozc_candidate)
+            addPreferencesFromResource(R.xml.pref_input_mode_number_row)
+            addPreferencesFromResource(R.xml.pref_input_mode_mozc_candidate)
         }
     }
 
@@ -101,10 +93,8 @@ abstract class InputModeDetailsFragment: PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             super.onCreatePreferences(savedInstanceState, rootKey)
             addPreferencesFromResource(R.xml.pref_input_mode_pinyin)
-            if(Feature.NumberRow.availableInCurrentVersion)
-                addPreferencesFromResource(R.xml.pref_input_mode_number_row)
-            if(Feature.CursorKeys.availableInCurrentVersion)
-                addPreferencesFromResource(R.xml.pref_input_mode_cursor_keys)
+            addPreferencesFromResource(R.xml.pref_input_mode_number_row)
+            addPreferencesFromResource(R.xml.pref_input_mode_cursor_keys)
         }
     }
 
@@ -112,8 +102,7 @@ abstract class InputModeDetailsFragment: PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             super.onCreatePreferences(savedInstanceState, rootKey)
             addPreferencesFromResource(R.xml.pref_input_mode_zhuyin_engine)
-            if(Feature.CursorKeys.availableInCurrentVersion)
-                addPreferencesFromResource(R.xml.pref_input_mode_cursor_keys)
+            addPreferencesFromResource(R.xml.pref_input_mode_cursor_keys)
         }
     }
 
@@ -121,10 +110,8 @@ abstract class InputModeDetailsFragment: PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             super.onCreatePreferences(savedInstanceState, rootKey)
             addPreferencesFromResource(R.xml.pref_input_mode_viet)
-            if(Feature.NumberRow.availableInCurrentVersion)
-                addPreferencesFromResource(R.xml.pref_input_mode_number_row)
-            if(Feature.CursorKeys.availableInCurrentVersion)
-                addPreferencesFromResource(R.xml.pref_input_mode_cursor_keys)
+            addPreferencesFromResource(R.xml.pref_input_mode_number_row)
+            addPreferencesFromResource(R.xml.pref_input_mode_cursor_keys)
         }
     }
 
@@ -132,10 +119,8 @@ abstract class InputModeDetailsFragment: PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             super.onCreatePreferences(savedInstanceState, rootKey)
             addPreferencesFromResource(R.xml.pref_input_mode_cangjie_layout)
-            if(Feature.NumberRow.availableInCurrentVersion)
-                addPreferencesFromResource(R.xml.pref_input_mode_number_row)
-            if(Feature.CursorKeys.availableInCurrentVersion)
-                addPreferencesFromResource(R.xml.pref_input_mode_cursor_keys)
+            addPreferencesFromResource(R.xml.pref_input_mode_number_row)
+            addPreferencesFromResource(R.xml.pref_input_mode_cursor_keys)
             addPreferencesFromResource(R.xml.pref_input_mode_cangjie_extra)
         }
     }
@@ -143,10 +128,8 @@ abstract class InputModeDetailsFragment: PreferenceFragmentCompat() {
     class Jyutping: InputModeDetailsFragment() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             super.onCreatePreferences(savedInstanceState, rootKey)
-            if(Feature.NumberRow.availableInCurrentVersion)
-                addPreferencesFromResource(R.xml.pref_input_mode_number_row)
-            if(Feature.CursorKeys.availableInCurrentVersion)
-                addPreferencesFromResource(R.xml.pref_input_mode_cursor_keys)
+            addPreferencesFromResource(R.xml.pref_input_mode_number_row)
+            addPreferencesFromResource(R.xml.pref_input_mode_cursor_keys)
         }
     }
 

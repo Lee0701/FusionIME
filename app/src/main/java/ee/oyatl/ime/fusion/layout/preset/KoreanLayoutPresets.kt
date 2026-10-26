@@ -1,7 +1,6 @@
 package ee.oyatl.ime.fusion.layout.preset
 
 import android.view.KeyEvent
-import ee.oyatl.ime.fusion.Feature
 import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.layout.ExtKeyCode
 import ee.oyatl.ime.fusion.layout.Hangul3Set
@@ -25,8 +24,6 @@ object KoreanLayoutPresets {
         numberRow: Boolean = false,
         cursorKeys: Boolean = false
     ): KeyboardLayoutPreset {
-        val numberRow = Feature.NumberRow.availableInCurrentVersion && numberRow
-        val cursorKeys = Feature.CursorKeys.availableInCurrentVersion && cursorKeys
         return KeyboardLayoutPreset(
             keyboardTemplate = KeyboardTemplate.ByScreenMode(
                 mobile = KeyboardTemplate.Basic(
@@ -56,7 +53,6 @@ object KoreanLayoutPresets {
         softKeyCodeMapper: SoftKeyCodeMapper,
         cursorKeys: Boolean = false
     ): KeyboardLayoutPreset {
-        val cursorKeys = Feature.CursorKeys.availableInCurrentVersion && cursorKeys
         return KeyboardLayoutPreset(
             keyboardTemplate = KeyboardTemplate.ByScreenMode(
                 mobile = KeyboardTemplate.Basic(
@@ -84,7 +80,6 @@ object KoreanLayoutPresets {
     fun threeSet393(
         cursorKeys: Boolean = false
     ): KeyboardLayoutPreset {
-        val cursorKeys = Feature.CursorKeys.availableInCurrentVersion && cursorKeys
         return KeyboardLayoutPreset(
             keyboardTemplate = KeyboardTemplate.ByScreenMode(
                 mobile = KeyboardTemplate.Basic(
