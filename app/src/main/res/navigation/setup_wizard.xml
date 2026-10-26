@@ -11,7 +11,7 @@
 
         <action
             android:id="@+id/action_welcome_to_enable"
-            app:destination="@+id/enable" />
+            app:destination="@id/enable" />
     </fragment>
 
     <fragment
@@ -21,13 +21,23 @@
 
         <action
             android:id="@+id/action_enable_to_select"
-            app:destination="@+id/select" />
+            app:destination="@id/select" />
     </fragment>
 
     <fragment
         android:id="@+id/select"
         android:name="ee.oyatl.ime.fusion.setup.SelectFragment"
         android:label="@string/setup_wizard_select_label">
+
+        <action
+            android:id="@+id/action_select_to_languages"
+            app:destination="@id/languages" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/languages"
+        android:name="ee.oyatl.ime.fusion.setup.LanguagesFragment"
+        android:label="@string/setup_wizard_languages_label">
 
     </fragment>
 

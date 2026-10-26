@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import ee.oyatl.ime.fusion.databinding.SettingsActivityBinding
+import ee.oyatl.ime.fusion.util.InputMethodUtil
 
 private const val TITLE_TAG = "settingsActivityTitle"
 
@@ -52,7 +53,9 @@ class SettingsActivity : AppCompatActivity(),
         supportFragmentManager.addOnBackStackChangedListener(onBackStackChangedListener)
         onBackStackChangedListener.onBackStackChanged()
 
-        startActivity(Intent(this, SetupWizardActivity::class.java))
+        if(!InputMethodUtil.checkMethodSelected(this)) {
+            startActivity(Intent(this, SetupWizardActivity::class.java))
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

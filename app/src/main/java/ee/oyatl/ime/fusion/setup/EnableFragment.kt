@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.databinding.FragmentSetupEnableBinding
+import ee.oyatl.ime.fusion.util.InputMethodUtil
 
 class EnableFragment: Fragment() {
     lateinit var binding: FragmentSetupEnableBinding
@@ -41,15 +42,8 @@ class EnableFragment: Fragment() {
     }
 
     private fun updateButtons() {
-        val enabled = checkMethodEnabled()
+        val enabled = InputMethodUtil.checkMethodEnabled(context ?: return)
         binding.enable.isEnabled = !enabled
         binding.next.isEnabled = enabled
-    }
-
-    private fun checkMethodEnabled(): Boolean {
-        val context = context ?: return false
-        val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        val found = imm.enabledInputMethodList.find { it.packageName == context.packageName }
-        return found != null
     }
 }
