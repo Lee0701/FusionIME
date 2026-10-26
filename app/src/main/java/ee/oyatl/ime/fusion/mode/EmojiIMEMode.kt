@@ -10,8 +10,8 @@ import androidx.core.util.Consumer
 import androidx.emoji2.emojipicker.EmojiViewItem
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.ScrollingCandidateView
-import ee.oyatl.ime.fusion.DimensionUtil
-import ee.oyatl.ime.fusion.KeyEventUtil
+import ee.oyatl.ime.fusion.util.DimensionUtil
+import ee.oyatl.ime.fusion.util.KeyEventUtil
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.databinding.EmojiImeModeBinding
 

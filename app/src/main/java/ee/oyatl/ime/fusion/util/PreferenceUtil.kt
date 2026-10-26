@@ -1,4 +1,4 @@
-package ee.oyatl.ime.fusion
+package ee.oyatl.ime.fusion.util
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -7,7 +7,7 @@ import android.util.TypedValue
 import androidx.preference.PreferenceManager
 import kotlin.math.roundToInt
 
-object DimensionUtil {
+object PreferenceUtil {
     fun getOrientationSuffix(context: Context): String {
         val landscape = context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
         val suffix = if(landscape) "_landscape" else "_portrait"
@@ -36,7 +36,6 @@ object DimensionUtil {
 
     fun getKeyboardHeight(context: Context): Int {
         val rowHeightDIP = getOrientationInteger(context, "keyboard_height")
-        val height = (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, rowHeightDIP, context.resources.displayMetrics) * 4).roundToInt()
-        return height
+        return (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, rowHeightDIP, context.resources.displayMetrics) * 4).roundToInt()
     }
 }

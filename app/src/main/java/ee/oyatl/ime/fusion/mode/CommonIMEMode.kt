@@ -10,12 +10,11 @@ import android.view.inputmethod.InputConnection
 import androidx.preference.PreferenceManager
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.ScrollingCandidateView
-import ee.oyatl.ime.fusion.DimensionUtil
 import ee.oyatl.ime.fusion.Feature
 import ee.oyatl.ime.fusion.FlickAction
-import ee.oyatl.ime.fusion.KeyEventUtil
-import ee.oyatl.ime.fusion.PreferenceUtil.getOrientationBoolean
-import ee.oyatl.ime.fusion.PreferenceUtil.getOrientationInteger
+import ee.oyatl.ime.fusion.util.KeyEventUtil
+import ee.oyatl.ime.fusion.util.PreferenceUtil.getOrientationBoolean
+import ee.oyatl.ime.fusion.util.PreferenceUtil.getOrientationInteger
 import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.layout.preset.SymbolLayoutPresets
