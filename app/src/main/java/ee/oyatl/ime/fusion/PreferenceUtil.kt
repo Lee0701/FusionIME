@@ -44,7 +44,7 @@ object PreferenceUtil {
     fun getKeyboardTheme(context: Context): KeyboardTheme {
         val pref = PreferenceManager.getDefaultSharedPreferences(context)
         val key = pref.getString("keyboard_theme", null)
-        val themeSet = KeyboardThemeSet.entries.find { it.name == key } ?: KeyboardThemeSet.Static
+        val themeSet = KeyboardThemeSet.entries.find { it.name == key } ?: KeyboardThemeSet.Dynamic
         val darkMode = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
         return if(darkMode) themeSet.dark else themeSet.light
     }
