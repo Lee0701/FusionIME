@@ -1,7 +1,5 @@
 package ee.oyatl.ime.keyboard.touchhandler
 
-import ee.oyatl.ime.keyboard.KeyboardView
-
 object EmptyTouchHandler: TouchHandler {
     override fun onReset() = Unit
 
