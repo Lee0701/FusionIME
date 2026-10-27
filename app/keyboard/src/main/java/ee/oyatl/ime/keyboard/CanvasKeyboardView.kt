@@ -267,6 +267,7 @@ class CanvasKeyboardView(
 
     override fun onReset() {
         listener.onReset()
+        invalidate()
     }
 
     inner class CachedKey(
