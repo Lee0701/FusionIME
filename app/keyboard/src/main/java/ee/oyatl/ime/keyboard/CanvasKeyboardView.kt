@@ -50,10 +50,10 @@ class CanvasKeyboardView(
                     is KeyLabel.Flick -> {
                         if(label.text != null) it.label = label.text
                         if(label.showAsHint) {
-//                            if(label.up != null) it.binding.labelHintTop.text = label.up
-//                            if(label.down != null) it.binding.labelHintBottom.text = label.down
-//                            if(label.left != null) it.binding.labelHintLeft.text = label.left
-//                            if(label.right != null) it.binding.labelHintRight.text = label.right
+                            if(label.up != null) it.labelHintTop = label.up
+                            if(label.down != null) it.labelHintBottom = label.down
+                            if(label.left != null) it.labelHintLeft = label.left
+                            if(label.right != null) it.labelHintRight = label.right
                         }
                     }
                 }
@@ -187,6 +187,28 @@ class CanvasKeyboardView(
             val style = key.style ?: return@forEach
             val icon = key.icon
             val label = key.label
+            // Draw hint labels
+            val labelHints = listOf(
+                key.labelHintTop,
+                key.labelHintBottom,
+                key.labelHintLeft,
+                key.labelHintRight
+            )
+            val hintSize = context.resources.getDimension(R.dimen.key_hint_text_size)
+            val positions = listOf(
+                key.rect.centerX().toFloat() to key.rect.top + hintSize*3/2,
+                key.rect.centerX().toFloat() to key.rect.bottom - hintSize*2/3,
+                key.rect.left + hintSize to key.rect.centerY().toFloat() + hintSize/2,
+                key.rect.right - hintSize to key.rect.centerY().toFloat() + hintSize/2
+            )
+            labelHints.zip(positions).forEach { (label, position) ->
+                label ?: return@forEach
+                val (x, y) = position
+                textPaint.color = style.hintTextColor
+                textPaint.textSize = hintSize
+                canvas.drawText(label, x, y, textPaint)
+            }
+            // Draw icon
             if(icon != null) {
                 DrawableCompat.setTint(icon, style.foregroundColor)
                 val bitmap = icon.toBitmap()
@@ -194,6 +216,7 @@ class CanvasKeyboardView(
                 val y = key.rect.centerY() - bitmap.height / 2
                 canvas.drawBitmap(bitmap, x.toFloat(), y.toFloat(), bitmapPaint)
             }
+            // Draw main label
             if(label.isNotEmpty()) {
                 textPaint.textAlign = Paint.Align.CENTER
                 textPaint.color = style.foregroundColor
@@ -249,8 +272,12 @@ class CanvasKeyboardView(
     inner class CachedKey(
         override val keyCode: Int,
         override var label: String,
-        val style: KeyStyle?,
-        var icon: Drawable? = null
+        val style: KeyStyle? = null,
+        var icon: Drawable? = null,
+        var labelHintTop: String? = null,
+        var labelHintBottom: String? = null,
+        var labelHintLeft: String? = null,
+        var labelHintRight: String? = null
     ): KeyboardView.Key {
         override val rect: Rect = Rect()
         override val location: IntArray = IntArray(2)
@@ -270,7 +297,8 @@ class CanvasKeyboardView(
     data class KeyStyle(
         val background: Drawable,
         val backgroundColorStateList: ColorStateList,
-        val foregroundColor: Int
+        val foregroundColor: Int,
+        val hintTextColor: Int
     ) {
         companion object {
             fun fromTheme(context: Context, themeRes: Int): KeyStyle? {
@@ -281,10 +309,13 @@ class CanvasKeyboardView(
                 val backgroundColorStateList = ContextCompat.getColorStateList(keyContext, typedValue.resourceId) ?: ColorStateList(arrayOf(), intArrayOf())
                 keyContext.theme.resolveAttribute(R.attr.foregroundColor, typedValue, true)
                 val foregroundColor = ContextCompat.getColor(keyContext, typedValue.resourceId)
+                keyContext.theme.resolveAttribute(R.attr.hintTextColor, typedValue, true)
+                val hintTextColor = ContextCompat.getColor(keyContext, typedValue.resourceId)
                 return KeyStyle(
                     background,
                     backgroundColorStateList,
-                    foregroundColor
+                    foregroundColor,
+                    hintTextColor
                 )
             }
         }
