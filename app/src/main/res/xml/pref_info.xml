@@ -52,6 +52,11 @@
             android:summary="CC0 1.0 Universal"
             app:url="https://github.com/yuetyam/jyutping-android" />
 
+        <ee.oyatl.ime.fusion.preference.OpenWebPreference
+            android:title="Vietnamese AnySoftKeyboard"
+            android:summary="Apache License 2.0"
+            app:url="https://github.com/sh000gun/vietnamese-anysoftkeyboard" />
+
     </PreferenceCategory>
 
 </androidx.preference.PreferenceScreen>
