@@ -90,7 +90,7 @@ class LanguagesFragment: Fragment(), AdapterView.OnItemClickListener {
             script: String? = null
         ): Locale {
             val builder = Locale.Builder()
-            builder.setLanguageTag(language)
+            builder.setLanguage(language)
             if(region != null) builder.setRegion(region)
             if(script != null) builder.setScript(script)
             return builder.build()
