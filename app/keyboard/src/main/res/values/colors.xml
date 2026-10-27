@@ -2,6 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="gray">#FFA0A0A0</color>
 
     <color name="keyboard_bg_light">#f0f0f3</color>
     <color name="key_bg_light_unpressed">#ffffff</color>

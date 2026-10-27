@@ -3,21 +3,29 @@ package ee.oyatl.ime.fusion.korean
 import android.content.Context
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.fusion.dictionary.manager.DictionaryCache
+import ee.oyatl.ime.newdict.CachedDiskTrieDictionary
 import ee.oyatl.ime.newdict.DiskHanjaDictionary
 import ee.oyatl.ime.newdict.DiskNGramDictionary
 import ee.oyatl.ime.newdict.DiskTrieDictionary
+import kotlinx.coroutines.yield
 
-class BigramHanjaConverter: HanjaConverter {
+class BigramHanjaConverter(
+    val useCache: Boolean = true
+): HanjaConverter {
+    private var isLoaded: Boolean = false
     private lateinit var indexDict: DiskTrieDictionary
     private lateinit var vocabDict: DiskHanjaDictionary
     private lateinit var bigramDict: DiskNGramDictionary
+
+    val cache: MutableMap<String, List<SingleCandidate>> = mutableMapOf()
 
     override fun load(context: Context) {
         val indexDictId = R.raw.hanja_index
         val vocabDictId = R.raw.hanja_content
         val bigramDictId = R.raw.hanja_bigram
         indexDict = DictionaryCache.get(indexDictId) {
-            DiskTrieDictionary(context.resources.openRawResource(indexDictId))
+            if(useCache) CachedDiskTrieDictionary(context.resources.openRawResource(indexDictId))
+            else DiskTrieDictionary(context.resources.openRawResource(indexDictId))
         }
         vocabDict = DictionaryCache.get(vocabDictId) {
             DiskHanjaDictionary(context.resources.openRawResource(vocabDictId))
@@ -25,24 +33,36 @@ class BigramHanjaConverter: HanjaConverter {
         bigramDict = DictionaryCache.get(bigramDictId) {
             DiskNGramDictionary(context.resources.openRawResource(bigramDictId))
         }
+        isLoaded = true
     }
 
-    override fun convert(text: String): List<CandidateView.Candidate> {
+    override fun reset() {
+        if(!isLoaded) return
+        if(useCache) {
+            val indexDict = this.indexDict
+            if(indexDict is CachedDiskTrieDictionary) indexDict.clearCache()
+            cache.clear()
+        }
+    }
+
+    override suspend fun convert(text: String): List<CandidateView.Candidate> {
         return convert(CompoundCandidate(listOf()), text, 0)
+            .asSequence()
             .sortedByDescending { it.score }
             .distinctBy { it.text }
             .sortedByDescending { it.text.count { c -> c.code in 0x4e00 .. 0x9fff } }
             .sortedBy { it.candidates.size }
             .sortedByDescending { it.text.length }
             .filter { it.text.isNotEmpty() }
+            .toList()
     }
 
-    fun convert(context: CompoundCandidate, text: String, depth: Int): List<CompoundCandidate> {
+    suspend fun convert(context: CompoundCandidate, text: String, depth: Int): List<CompoundCandidate> {
+        yield()
         if(text.isEmpty() || depth > 4) return listOf(context)
-        val current = (1 .. text.length)
-            .flatMap { l -> indexDict.get(text.take(l)) }
-            .map { it to vocabDict.get(it) }
-            .map { (id, vocab) -> SingleCandidate(id, vocab.hanja, vocab.frequency.toFloat(), vocab.extra) }
+        val current =
+            if(useCache) cache.getOrPut(text) { convertSingle(text) }
+            else convertSingle(text)
         val available = if(depth == 0) {
             current
         } else {
@@ -53,7 +73,14 @@ class BigramHanjaConverter: HanjaConverter {
         return available.flatMap { word ->
             convert(CompoundCandidate(listOf(word)), text.drop(word.text.length), depth + 1)
                 .map { context.copy(candidates = context.candidates + it.candidates) }
-        }
+        } + context
+    }
+
+    private fun convertSingle(text: String): List<SingleCandidate> {
+        return (1 .. text.length)
+            .flatMap { l -> indexDict.get(text.take(l)) }
+            .map { it to vocabDict.get(it) }
+            .map { (id, vocab) -> SingleCandidate(id, vocab.hanja, vocab.frequency.toFloat(), vocab.extra) }
     }
 
     data class CompoundCandidate(

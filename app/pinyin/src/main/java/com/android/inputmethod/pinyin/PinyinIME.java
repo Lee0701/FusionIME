@@ -50,6 +50,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+import ee.oyatl.ime.fusion.pinyin.PinyinInputLimits;
+
 /**
  * Main class of the Pinyin input method.
  */
@@ -1505,11 +1507,6 @@ public class PinyinIME extends InputMethodService {
 
     public class DecodingInfo {
         /**
-         * Maximum length of the Pinyin string
-         */
-        private static final int PY_STRING_MAX = 28;
-
-        /**
          * Maximum number of candidates to display in one page.
          */
         private static final int MAX_PAGE_SIZE_DISPLAY = 10;
@@ -1650,11 +1647,16 @@ public class PinyinIME extends InputMethodService {
         }
 
         public boolean isSplStrFull() {
-            if (mSurface.length() >= PY_STRING_MAX - 1) return true;
-            return false;
+            return !PinyinInputLimits.INSTANCE.canApplyEdit(
+                    mSurface.length(), 0, 1);
         }
 
-        public void addSplChar(char ch, boolean reset) {
+        public boolean addSplChar(char ch, boolean reset) {
+            int currentLength = reset ? 0 : mSurface.length();
+            if (!PinyinInputLimits.INSTANCE.canApplyEdit(currentLength, 0, 1)) {
+                return false;
+            }
+
             if (reset) {
                 mSurface.delete(0, mSurface.length());
                 mSurfaceDecodedLen = 0;
@@ -1663,6 +1665,7 @@ public class PinyinIME extends InputMethodService {
             }
             mSurface.insert(mCursorPos, ch);
             mCursorPos++;
+            return true;
         }
 
         // Prepare to delete before cursor. We may delete a spelling char if
@@ -1779,7 +1782,7 @@ public class PinyinIME extends InputMethodService {
                         totalChoicesNum = 0;
                     } else {
                         if (mPyBuf == null)
-                            mPyBuf = new byte[PY_STRING_MAX];
+                            mPyBuf = new byte[PinyinInputLimits.BUFFER_SIZE];
                         for (int i = 0; i < length(); i++)
                             mPyBuf[i] = (byte) charAt(i);
                         mPyBuf[length()] = 0;

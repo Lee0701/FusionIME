@@ -1,58 +1,120 @@
 package ee.oyatl.ime.fusion.layout
 
 import android.view.KeyEvent
+import ee.oyatl.ime.keyboard.KeyLabel
 import ee.oyatl.ime.keyboard.KeyboardConfiguration
+import kotlin.math.ceil
 
 object LayoutKana {
-    val ROWS_SYLLABLES: List<String> = listOf(
-        "わらやまはなたさかあ",
-        "ゐり　みひにちしきい",
-        "　るゆむふぬつすくう",
-        "ゑれ　めへねてせけえ",
-        "をろよもほのとそこお"
-    )
+    const val KEYS_AIUEO = "あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもや　ゆ　よらりるれろわゐ　ゑを"
+    const val KEYS_IROHA = "いろはにほへとちりぬるをわかよたれそつねならむうゐのおくやまけふこえてあさきゆめみしゑひもせす　　　"
     const val BOTTOM_LEFT_SYLLABLES: String = "ん"
     const val BOTTOM_RIGHT_SYLLABLES: String = "*ー"
 
-    fun mobileKeyboardConfigurationSyllables(): KeyboardConfiguration {
-        val rows = ROWS_SYLLABLES.map { row ->
-            row.map { item -> when(item) {
-                '　' -> KeyboardConfiguration.Item.Spacer(width = 1f)
-                else -> KeyboardConfiguration.Item.TemplateKey(-item.code)
-            } }
-        }
-        val bottom = listOf(
-            KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_SYM, 1.5f, true),
-            KeyboardConfiguration.Item.TemplateKey(-BOTTOM_LEFT_SYLLABLES[0].code),
-            KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_LANGUAGE_SWITCH, 1f, true),
-            KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_SPACE, 2f),
-            KeyboardConfiguration.Item.TemplateKey(-BOTTOM_RIGHT_SYLLABLES[0].code),
-            KeyboardConfiguration.Item.TemplateKey(-BOTTOM_RIGHT_SYLLABLES[1].code),
-            KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_ENTER, 1.5f, true),
-            KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_DEL, 1f, true)
-        )
-        return KeyboardConfiguration(rows + listOf(bottom))
-    }
+    val ROWS_12KEY: List<String> = listOf(
+        "123",
+        "456",
+        "789",
+        ",0."
+    )
 
-    fun tabletKeyboardConfigurationSyllables(): KeyboardConfiguration {
-        val rows = ROWS_SYLLABLES.map { row ->
-            row.map { item -> when(item) {
-                '　' -> KeyboardConfiguration.Item.Spacer(width = 1f)
-                else -> KeyboardConfiguration.Item.TemplateKey(-item.code)
-            } }.toMutableList()
-        }
-        rows[0].add(0, KeyboardConfiguration.Item.TemplateKey(-BOTTOM_LEFT_SYLLABLES[0].code))
-        rows[0].add(KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_DEL, 1f, true))
-        rows[1].add(0, KeyboardConfiguration.Item.Spacer(1f))
-        rows[1].add(KeyboardConfiguration.Item.Spacer(1f))
-        rows[2].add(0, KeyboardConfiguration.Item.TemplateKey(-BOTTOM_RIGHT_SYLLABLES[0].code))
-        rows[2].add(KeyboardConfiguration.Item.TemplateKey(KeyEvent.KEYCODE_ENTER, 1f, true))
-        rows[3].add(0, KeyboardConfiguration.Item.Spacer(1f))
-        rows[3].add(KeyboardConfiguration.Item.Spacer(1f))
-        rows[4].add(0, KeyboardConfiguration.Item.TemplateKey(-BOTTOM_RIGHT_SYLLABLES[1].code))
-        rows[4].add(KeyboardConfiguration.Item.Spacer(1f))
-        return KeyboardConfiguration(rows) + TabletKeyboard.bottom()
-    }
+    val TABLE_12KEY = mapOf(
+        KeyEvent.KEYCODE_1 to "1;@_:",
+        KeyEvent.KEYCODE_2 to "2b|ac",
+        KeyEvent.KEYCODE_3 to "3e~df",
+        KeyEvent.KEYCODE_4 to $$"4h$gi",
+        KeyEvent.KEYCODE_5 to "5k%jl",
+        KeyEvent.KEYCODE_6 to "6n&mo",
+        KeyEvent.KEYCODE_7 to "7qspr",
+        KeyEvent.KEYCODE_8 to "8u^tv",
+        KeyEvent.KEYCODE_9 to "9xzwy",
+        KeyEvent.KEYCODE_0 to "0/<+-",
+        KeyEvent.KEYCODE_COMMA to "*****",
+        KeyEvent.KEYCODE_PERIOD to "#?>,!"
+    )
+
+    val LABELS_12KEY: Map<Int, KeyLabel.Flick> = mapOf(
+        KeyEvent.KEYCODE_1 to KeyLabel.Flick(
+            text =  "あ",
+            left =  "い",
+            up =    "う",
+            right = "え",
+            down =  "お"
+        ),
+        KeyEvent.KEYCODE_2 to KeyLabel.Flick(
+            text =  "か",
+            left =  "き",
+            up =    "く",
+            right = "け",
+            down =  "こ"
+        ),
+        KeyEvent.KEYCODE_3 to KeyLabel.Flick(
+            text =  "さ",
+            left =  "し",
+            up =    "す",
+            right = "せ",
+            down =  "そ"
+        ),
+        KeyEvent.KEYCODE_4 to KeyLabel.Flick(
+            text =  "た",
+            left =  "ち",
+            up =    "つ",
+            right = "て",
+            down =  "と"
+        ),
+        KeyEvent.KEYCODE_5 to KeyLabel.Flick(
+            text =  "な",
+            left =  "に",
+            up =    "ぬ",
+            right = "ね",
+            down =  "の"
+        ),
+        KeyEvent.KEYCODE_6 to KeyLabel.Flick(
+            text =  "は",
+            left =  "ひ",
+            up =    "ふ",
+            right = "へ",
+            down =  "ほ"
+        ),
+        KeyEvent.KEYCODE_7 to KeyLabel.Flick(
+            text =  "ま",
+            left =  "み",
+            up =    "む",
+            right = "め",
+            down =  "も"
+        ),
+        KeyEvent.KEYCODE_8 to KeyLabel.Flick(
+            text =  "や",
+            left =  "（",
+            up =    "ゆ",
+            right = "）",
+            down =  "よ"
+        ),
+        KeyEvent.KEYCODE_9 to KeyLabel.Flick(
+            text =  "ら",
+            left =  "り",
+            up =    "る",
+            right = "れ",
+            down =  "ろ"
+        ),
+        KeyEvent.KEYCODE_0 to KeyLabel.Flick(
+            text =  "わ",
+            left =  "を",
+            up =    "ん",
+            right = "ー",
+            down =  "～"
+        ),
+        KeyEvent.KEYCODE_COMMA to KeyLabel.Flick(
+            text =  "゛゜",
+        ),
+        KeyEvent.KEYCODE_PERIOD to KeyLabel.Flick(
+            text =  "、",
+            left =  "。",
+            up =    "？",
+            right = "！",
+            down =  "…"
+        )
+    )
 
     val TABLE_JIS = mapOf(
         KeyEvent.KEYCODE_GRAVE to listOf('ろ'.code),

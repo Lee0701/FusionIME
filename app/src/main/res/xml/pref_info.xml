@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory android:title="@string/settings_info_app_info_title">
+
+        <ee.oyatl.ime.fusion.preference.AppInfoPreference
+            android:title="@string/fusion_app_name" />
+
+        <ee.oyatl.ime.fusion.preference.OpenWebPreference
+            android:title="@string/settings_info_source_code_title"
+            android:summary="https://github.com/Lee0701/FusionIME"
+            app:url="https://github.com/Lee0701/FusionIME" />
+
+        <ee.oyatl.ime.fusion.preference.MailToPreference
+            android:title="@string/settings_info_contact_maintainer_title"
+            android:summary="hgl1002@naver.com"
+            app:address="mailto:hgl1002@naver.com" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/settings_info_used_projectss_title">
+
+        <ee.oyatl.ime.fusion.preference.OpenWebPreference
+            android:title="Cangjie"
+            android:summary="GNU General Public License v2.0"
+            app:url="https://github.com/hilarycheng/another_android_cangjie" />
+
+        <ee.oyatl.ime.fusion.preference.OpenWebPreference
+            android:title="Chewing"
+            android:summary="GNU General Public License v3.0"
+            app:url="https://github.com/hiroshiyui/libchewingAndroidAppModule" />
+
+        <ee.oyatl.ime.fusion.preference.OpenWebPreference
+            android:title="LatinIME"
+            android:summary="Apache License 2.0"
+            app:url="https://android.googlesource.com/platform/packages/inputmethods/LatinIME" />
+
+        <ee.oyatl.ime.fusion.preference.OpenWebPreference
+            android:title="Mozc"
+            android:summary="BSD 3-Clause"
+            app:url="https://github.com/google/mozc" />
+
+        <ee.oyatl.ime.fusion.preference.OpenWebPreference
+            android:title="PinyinIME"
+            android:summary="Apache License 2.0"
+            app:url="https://android.googlesource.com/platform/packages/inputmethods/PinyinIME" />
+
+        <ee.oyatl.ime.fusion.preference.OpenWebPreference
+            android:title="Jyutping"
+            android:summary="CC0 1.0 Universal"
+            app:url="https://github.com/yuetyam/jyutping-android" />
+
+    </PreferenceCategory>
+
+</androidx.preference.PreferenceScreen>

@@ -1,21 +1,36 @@
 package ee.oyatl.ime.fusion.mode
 
+import android.animation.Animator
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.os.Handler
 import android.os.Looper
+import android.view.HapticFeedbackConstants
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
+import android.view.inputmethod.InputMethodManager
+import android.view.inputmethod.InputMethodSubtype
 import android.widget.FrameLayout
+import androidx.core.animation.doOnEnd
+import androidx.core.animation.doOnStart
 import androidx.preference.PreferenceManager
-import ee.oyatl.ime.fusion.databinding.CandidateViewWrapperBinding
+import ee.oyatl.ime.candidate.CandidateView
+import ee.oyatl.ime.candidate.ExpandedCandidateView
+import ee.oyatl.ime.fusion.PreferenceUtil
+import ee.oyatl.ime.fusion.databinding.InputViewWrapperBinding
 import ee.oyatl.ime.fusion.databinding.ModeSwitcherTabBarBinding
 import ee.oyatl.ime.fusion.databinding.ModeSwitcherTabBinding
+import kotlin.math.ceil
+import androidx.core.view.isVisible
 
 class IMEModeSwitcher(
     private val context: Context,
@@ -30,9 +45,55 @@ class IMEModeSwitcher(
     private val currentEntry: Entry get() = entries[currentModeIndex]
     val currentMode: IMEMode get() = currentEntry.imeMode
 
-    private var inputView: FrameLayout? = null
-    private var candidateView: CandidateViewWrapperBinding? = null
+    private var inputViewWrapper: InputViewWrapperBinding? = null
     private var tabs: List<ModeSwitcherTabBinding> = listOf()
+    private var clipboardText: String? = null
+
+    val expandedCandidateView: ExpandedCandidateView? get() = inputViewWrapper?.expandedCandidateView
+
+    private val expandAnimator: Animator get() = AnimatorSet().apply {
+        val inputViewWrapper = inputViewWrapper ?: return@apply
+        playTogether(
+            ObjectAnimator.ofFloat(inputViewWrapper.keyboardView, "translationY", 200f),
+            ObjectAnimator.ofFloat(inputViewWrapper.keyboardView, "alpha", 0f),
+            ObjectAnimator.ofFloat(inputViewWrapper.expandButton, "rotation", 180f)
+        )
+        duration = EXPAND_COLLAPSE_DURATION
+        interpolator = AccelerateDecelerateInterpolator()
+        doOnStart {
+            animationIsRunning = true
+            inputViewWrapper.expandedCandidateView.visibility = View.VISIBLE
+        }
+        doOnEnd {
+            inputViewWrapper.keyboardView.visibility = View.INVISIBLE
+            candidateViewExpanded = true
+            animationIsRunning = false
+        }
+    }
+
+    private val collapseAnimator get() = AnimatorSet().apply {
+        val inputViewWrapper = inputViewWrapper ?: return@apply
+        playTogether(
+            ObjectAnimator.ofFloat(inputViewWrapper.keyboardView, "translationY", 0f),
+            ObjectAnimator.ofFloat(inputViewWrapper.keyboardView, "alpha", 1f),
+            ObjectAnimator.ofFloat(inputViewWrapper.expandButton, "rotation", 0f)
+        )
+        duration = EXPAND_COLLAPSE_DURATION
+        interpolator = AccelerateDecelerateInterpolator()
+        doOnStart {
+            animationIsRunning = true
+            inputViewWrapper.keyboardView.visibility = View.VISIBLE
+        }
+        doOnEnd {
+            inputViewWrapper.expandedCandidateView.visibility = View.GONE
+            inputViewWrapper.keyboardView.requestLayout()
+            candidateViewExpanded = false
+            animationIsRunning = false
+        }
+    }
+
+    private var candidateViewExpanded: Boolean = false
+    private var animationIsRunning: Boolean = false
 
     private var inputConnection: InputConnection? = null
     private var editorInfo: EditorInfo? = null
@@ -53,23 +114,72 @@ class IMEModeSwitcher(
     }
 
     fun createInputView(): View {
-        val inputView = FrameLayout(context)
-        this.inputView = inputView
-        return inputView
-    }
-
-    fun createCandidateView(): View {
         val inflater = LayoutInflater.from(context)
-        val candidateView = CandidateViewWrapperBinding.inflate(inflater)
-        candidateView.tabViewFrame.addView(this.initTabBarView(context))
-        candidateView.closeButton.setOnClickListener { showTabBar() }
-        @SuppressLint("ClickableViewAccessibility")
-        candidateView.touchBlocker.setOnTouchListener { _, event ->
-            // Intercept touch events to input view while blocking
-            inputView?.dispatchTouchEvent(event) ?: false
+        val inputView = InputViewWrapperBinding.inflate(inflater)
+
+        inputView.tabViewFrame.addView(this.initTabBarView(context))
+        inputView.closeButton.setOnClickListener {
+            if(animationIsRunning) return@setOnClickListener
+            collapseCandidateView()
+            showTabBar()
         }
-        this.candidateView = candidateView
-        return candidateView.root
+        inputView.expandButton.setOnClickListener {
+            if(animationIsRunning) return@setOnClickListener
+            if(!candidateViewExpanded) expandCandidateView()
+            else collapseCandidateView()
+        }
+
+        inputView.clipboardCandidate.setOnClickListener {
+            clipboardText?.let(callback::onClipboardCandidateSelected)
+        }
+        inputView.clipboardCandidate.setOnLongClickListener {
+            it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+            hideClipboardCandidateView(inputView)
+            true
+        }
+        inputView.clipboardCandidateCloseButton.setOnClickListener {
+            hideClipboardCandidateView(inputView)
+        }
+
+        @SuppressLint("ClickableViewAccessibility")
+        inputView.touchBlocker.setOnTouchListener { _, event ->
+            // Intercept touch events to input view while blocking
+            inputView.keyboardView.dispatchTouchEvent(event)
+        }
+
+        // Make expanded candidate view 1dp shorter than keyboard view
+        // because actual keyboard size may be smaller
+        val oneDp = ceil(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1f, context.resources.displayMetrics)).toInt()
+        inputView.expandedCandidateView.layoutParams = FrameLayout.LayoutParams(
+            context.resources.displayMetrics.widthPixels,
+            PreferenceUtil.getKeyboardHeight(context) - oneDp
+        )
+        inputView.expandedCandidateView.listener = object : CandidateView.Listener {
+            override fun onCandidateSelected(candidate: CandidateView.Candidate) {
+                val currentMode = currentMode
+                if(currentMode is CandidateView.Listener) currentMode.onCandidateSelected(candidate)
+            }
+        }
+
+        val showVoiceInputButton = preference.getBoolean("show_voice_input_button", false)
+        inputView.voiceInputButton.visibility = View.GONE
+        if(showVoiceInputButton) {
+            val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            val entry = imm.shortcutInputMethodsAndSubtypes?.entries?.firstOrNull()
+            if(entry != null) {
+                val shortcutIme = entry.key
+                val shortcutSubtype = entry.value.firstOrNull()
+                if(shortcutSubtype != null) {
+                    inputView.voiceInputButton.visibility = View.VISIBLE
+                    inputView.voiceInputButton.setOnClickListener {
+                        callback.onSwitchInputMethod(shortcutIme.id, shortcutSubtype)
+                    }
+                }
+            }
+        }
+
+        this.inputViewWrapper = inputView
+        return inputView.root
     }
 
     fun resetInputViews() {
@@ -81,24 +191,23 @@ class IMEModeSwitcher(
     }
 
     private fun updateInputView() {
-        inputView?.removeAllViews()
-        val view = currentEntry.inputView ?: currentEntry.imeMode.createInputView(context)
-        currentEntry.inputView = view
-        (view.parent as ViewGroup?)?.removeView(view)
-        inputView?.addView(view)
+        val wrapper = inputViewWrapper ?: return
 
-        val alwaysShowSoftKeyboard = preference.getBoolean("always_show_soft_keyboard", false)
-        val hardwareKeyboard = context.resources.configuration.hardKeyboardHidden != Configuration.HARDKEYBOARDHIDDEN_YES
-        view.visibility = if(alwaysShowSoftKeyboard || !hardwareKeyboard) View.VISIBLE else View.GONE
-    }
+        wrapper.keyboardView.removeAllViews()
+        val inputView = currentEntry.inputView ?: currentEntry.imeMode.createInputView(context)
+        currentEntry.inputView = inputView
+        (inputView.parent as ViewGroup?)?.removeView(inputView)
+        wrapper.keyboardView.addView(inputView)
 
-    private fun updateCandidateView() {
-        val candidateView = candidateView ?: return
-        candidateView.candidateView.removeAllViews()
+        wrapper.candidateView.removeAllViews()
         val view = currentEntry.candidateView ?: currentEntry.imeMode.createCandidateView(context)
         currentEntry.candidateView = view
         (view.parent as ViewGroup?)?.removeView(view)
-        candidateView.candidateView.addView(view)
+        wrapper.candidateView.addView(view)
+
+        val alwaysShowSoftKeyboard = preference.getBoolean("always_show_soft_keyboard", false)
+        val hardwareKeyboard = context.resources.configuration.hardKeyboardHidden != Configuration.HARDKEYBOARDHIDDEN_YES
+        inputView.visibility = if(alwaysShowSoftKeyboard || !hardwareKeyboard) View.VISIBLE else View.GONE
     }
 
     fun switchMode(index: Int) {
@@ -107,25 +216,68 @@ class IMEModeSwitcher(
         currentEntry.imeMode.onFinish()
         currentModeIndex = index
         updateInputView()
-        updateCandidateView()
         currentEntry.imeMode.onStart(inputConnection, editorInfo)
         tabs.forEach { it.root.isSelected = false }
         tabs[index].root.isSelected = true
     }
 
     fun showCandidates() {
-        val candidateView = candidateView ?: return
-        candidateView.candidateView.visibility = View.VISIBLE
-        candidateView.tabViewFrame.visibility = View.GONE
+        val inputView = inputViewWrapper ?: return
+        inputView.clipboardCandidate.stopScrolling()
+        inputView.candidateView.visibility = View.VISIBLE
+        inputView.idleView.visibility = View.GONE
         // Block touch events while view height is being changed
-        candidateView.touchBlocker.visibility = View.VISIBLE
-        handler.postDelayed({ candidateView.touchBlocker.visibility = View.GONE }, SWITCH_DELAY)
+        inputView.touchBlocker.visibility = View.VISIBLE
+        handler.postDelayed({ inputView.touchBlocker.visibility = View.GONE }, SWITCH_DELAY)
     }
 
     fun showTabBar() {
-        val candidateView = candidateView ?: return
-        candidateView.tabViewFrame.visibility = View.VISIBLE
-        candidateView.candidateView.visibility = View.GONE
+        val inputView = inputViewWrapper ?: return
+        inputView.idleView.visibility = View.VISIBLE
+        inputView.candidateView.visibility = View.GONE
+        updateClipboardScrolling(inputView)
+    }
+
+    fun setClipboardCandidate(text: String?) {
+        clipboardText = text
+        inputViewWrapper?.let(::updateClipboardCandidateView)
+    }
+
+    private fun updateClipboardCandidateView(inputView: InputViewWrapperBinding) {
+        var displayChanged = false
+        inputView.clipboardCandidate.apply {
+            val newText = clipboardText.orEmpty()
+            if(text.toString() != newText) {
+                stopScrolling()
+                text = newText
+                showClipboardIcon()
+                displayChanged = true
+            }
+        }
+        inputView.clipboardCandidateWrapper.apply {
+            val newVisibility = if(clipboardText == null) View.GONE else View.VISIBLE
+            if(visibility != newVisibility) {
+                visibility = newVisibility
+                displayChanged = true
+            }
+        }
+        if(displayChanged) updateClipboardScrolling(inputView)
+    }
+
+    private fun hideClipboardCandidateView(inputView: InputViewWrapperBinding) {
+        inputView.clipboardCandidate.showDeleteIcon()
+        if(callback.onClipboardCandidateClearRequested()) {
+            inputView.clipboardCandidate.showClipboardIcon()
+        }
+    }
+
+    private fun updateClipboardScrolling(inputView: InputViewWrapperBinding) {
+        val textView = inputView.clipboardCandidate
+        if(clipboardText != null && inputView.idleView.isVisible) {
+            textView.startScrolling()
+        } else {
+            textView.stopScrolling()
+        }
     }
 
     fun initTabBarView(context: Context): View {
@@ -142,8 +294,19 @@ class IMEModeSwitcher(
         return tabBar.root
     }
 
+    fun expandCandidateView() {
+        expandAnimator.start()
+    }
+
+    fun collapseCandidateView() {
+        collapseAnimator.start()
+    }
+
     interface Callback {
         fun onSwitchInputMode(index: Int)
+        fun onSwitchInputMethod(id: String, subtype: InputMethodSubtype)
+        fun onClipboardCandidateSelected(text: String)
+        fun onClipboardCandidateClearRequested(): Boolean
     }
 
     data class Entry(
@@ -156,5 +319,6 @@ class IMEModeSwitcher(
 
     companion object {
         const val SWITCH_DELAY: Long = 10
+        const val EXPAND_COLLAPSE_DURATION: Long = 300
     }
 }

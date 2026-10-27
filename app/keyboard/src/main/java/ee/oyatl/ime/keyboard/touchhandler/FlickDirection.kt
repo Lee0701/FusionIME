@@ -1,21 +1,19 @@
 package ee.oyatl.ime.keyboard.touchhandler
 
-import ee.oyatl.ime.keyboard.FlickKeyCode
 import kotlin.math.PI
 
 enum class FlickDirection(
     val angle: Double,
-    val diagonal: Boolean,
-    val keyCodeFlag: Int
+    val diagonal: Boolean
 ) {
-    Up(0.5 * PI, false, FlickKeyCode.DIRECTION_UP),
-    Down(1.5 * PI, false, FlickKeyCode.DIRECTION_DOWN),
-    Left(0.0 * PI, false, FlickKeyCode.DIRECTION_LEFT),
-    Right(1.0 * PI, false, FlickKeyCode.DIRECTION_RIGHT),
-    UpLeft(0.25 * PI, true, FlickKeyCode.DIRECTION_UP_LEFT),
-    UpRight(0.75 * PI, true, FlickKeyCode.DIRECTION_UP_RIGHT),
-    DownLeft(1.75 * PI, true, FlickKeyCode.DIRECTION_DOWN_LEFT),
-    DownRight(1.25 * PI, true, FlickKeyCode.DIRECTION_DOWN_RIGHT);
+    Up(0.5 * PI, false),
+    Down(1.5 * PI, false),
+    Left(0.0 * PI, false),
+    Right(1.0 * PI, false),
+    UpLeft(0.25 * PI, true),
+    UpRight(0.75 * PI, true),
+    DownLeft(1.75 * PI, true),
+    DownRight(1.25 * PI, true);
 
     fun contains(angle: Double, range: Double): Boolean {
         val start = this.angle - range / 2
@@ -24,12 +22,5 @@ enum class FlickDirection(
         val range1 = start + 2 * PI .. 2 * PI
         val range2 = 0.0 .. end - 2 * PI
         return angle in range || (start < -0.0 && angle in range1) || (end > 2 * PI && angle in range2)
-    }
-
-    companion object {
-        fun valueOfKeycode(keyCode: Int): FlickDirection? {
-            val direction = keyCode and FlickKeyCode.MASK_DIRECTION
-            return entries.find { it.keyCodeFlag == direction }
-        }
     }
 }

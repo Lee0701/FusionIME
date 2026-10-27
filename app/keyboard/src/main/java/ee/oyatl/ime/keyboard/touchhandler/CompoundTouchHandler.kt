@@ -1,12 +1,10 @@
 package ee.oyatl.ime.keyboard.touchhandler
 
-import ee.oyatl.ime.keyboard.KeyboardView
-
 class CompoundTouchHandler(
     override val keyboardView: KeyboardView,
     val touchHandlers: List<TouchHandler>
 ): TouchHandler {
-    constructor(keyboardView: KeyboardView, vararg touchHandlers: TouchHandler): this(keyboardView, touchHandlers.toList())
+    constructor(vararg touchHandlers: TouchHandler): this(touchHandlers.toList())
 
     override fun onReset() {
         touchHandlers.forEach { it.onReset() }
@@ -22,5 +20,9 @@ class CompoundTouchHandler(
 
     override fun onTouchUp(pointerId: Int, x: Int, y: Int) {
         touchHandlers.forEach { it.onTouchUp(pointerId, x, y) }
+    }
+
+    override fun onTouchCancel(pointerId: Int) {
+        touchHandlers.forEach { it.onTouchCancel(pointerId) }
     }
 }

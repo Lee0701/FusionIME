@@ -25,4 +25,10 @@
         app:key="mode_header"
         app:title="@string/settings_input_mode_header" />
 
+    <Preference
+        app:fragment="ee.oyatl.ime.fusion.SettingsActivity$InfoFragment"
+        app:icon="@drawable/info_24"
+        app:key="info_header"
+        app:title="@string/settings_info_header" />
+
 </PreferenceScreen>

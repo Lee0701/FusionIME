@@ -25,21 +25,21 @@
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/move_up"
-            android:src="@drawable/arrow_upward_alt_24px"
+            android:src="@drawable/arrow_upward_alt_24"
             android:contentDescription="@string/settings_input_mode_move_up_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/move_down"
-            android:src="@drawable/arrow_downward_alt_24px"
+            android:src="@drawable/arrow_downward_alt_24"
             android:contentDescription="@string/settings_input_mode_move_down_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/remove"
-            android:src="@drawable/delete_24px"
+            android:src="@drawable/delete_24"
             android:contentDescription="@string/settings_input_mode_remove_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />

@@ -1,8 +1,164 @@
 package ee.oyatl.ime.fusion.layout
 
+import android.view.KeyCharacterMap
 import android.view.KeyEvent
 
 object LayoutLatin {
+    const val COMB = KeyCharacterMap.COMBINING_ACCENT
+
+    val TABLE_SPANISH_QWERTY = mapOf(
+        KeyEvent.KEYCODE_SEMICOLON to listOf('ñ'.code, 'Ñ'.code)
+    )
+
+    val TABLE_AZERTY = mapOf(
+        ExtKeyCode.KEYCODE_EXT_1 to listOf('1'.code, '!'.code, '1'.code),
+        ExtKeyCode.KEYCODE_EXT_2 to listOf('2'.code, '@'.code, '2'.code),
+        ExtKeyCode.KEYCODE_EXT_3 to listOf('3'.code, '#'.code, '3'.code),
+        ExtKeyCode.KEYCODE_EXT_4 to listOf('4'.code, '$'.code, '4'.code),
+        ExtKeyCode.KEYCODE_EXT_5 to listOf('5'.code, '%'.code, '5'.code),
+        ExtKeyCode.KEYCODE_EXT_6 to listOf('6'.code, '^'.code, '6'.code),
+        ExtKeyCode.KEYCODE_EXT_7 to listOf('7'.code, '&'.code, '7'.code),
+        ExtKeyCode.KEYCODE_EXT_8 to listOf('8'.code, '*'.code, '8'.code),
+        ExtKeyCode.KEYCODE_EXT_9 to listOf('9'.code, '('.code, '9'.code),
+        ExtKeyCode.KEYCODE_EXT_0 to listOf('0'.code, ')'.code, '0'.code),
+
+        KeyEvent.KEYCODE_1 to listOf('&'.code, '1'.code),
+        KeyEvent.KEYCODE_2 to listOf('é'.code, '2'.code),
+        KeyEvent.KEYCODE_3 to listOf('"'.code, '3'.code),
+        KeyEvent.KEYCODE_4 to listOf('\''.code, '4'.code),
+        KeyEvent.KEYCODE_5 to listOf('('.code, '5'.code),
+        KeyEvent.KEYCODE_6 to listOf('-'.code, '6'.code),
+        KeyEvent.KEYCODE_7 to listOf('è'.code, '7'.code),
+        KeyEvent.KEYCODE_8 to listOf('_'.code, '8'.code),
+        KeyEvent.KEYCODE_9 to listOf('ç'.code, '9'.code),
+        KeyEvent.KEYCODE_0 to listOf('à'.code, '0'.code),
+
+        KeyEvent.KEYCODE_APOSTROPHE to listOf('²'.code),
+        KeyEvent.KEYCODE_LEFT_BRACKET to listOf(')'.code, '°'.code),
+        KeyEvent.KEYCODE_EQUALS to listOf('='.code, '+'.code),
+        KeyEvent.KEYCODE_RIGHT_BRACKET to listOf(COMB or '^'.code, COMB or '¨'.code),
+        KeyEvent.KEYCODE_SEMICOLON to listOf('$'.code, '£'.code),
+        KeyEvent.KEYCODE_GRAVE to listOf('ù'.code, '%'.code),
+        KeyEvent.KEYCODE_BACKSLASH to listOf('*'.code, 'µ'.code),
+        KeyEvent.KEYCODE_COMMA to listOf(','.code, '?'.code),
+        KeyEvent.KEYCODE_PERIOD to listOf(';'.code, '.'.code),
+        KeyEvent.KEYCODE_SLASH to listOf(':'.code, '/'.code),
+        ExtKeyCode.KEYCODE_OEM_8 to listOf('!'.code, '§'.code),
+
+        ExtKeyCode.KEYCODE_EXT_COMMA to listOf(','.code),
+        ExtKeyCode.KEYCODE_EXT_PERIOD to listOf('.'.code),
+        ExtKeyCode.KEYCODE_APOSTROPHE_QUESTION to listOf('\''.code, '?'.code)
+    )
+
+    val TABLE_AZERTY_ALTGR = mapOf(
+        KeyEvent.KEYCODE_2 to listOf(COMB or '~'.code),
+        KeyEvent.KEYCODE_3 to listOf('#'.code),
+        KeyEvent.KEYCODE_4 to listOf('{'.code),
+        KeyEvent.KEYCODE_5 to listOf('['.code),
+        KeyEvent.KEYCODE_6 to listOf('|'.code),
+        KeyEvent.KEYCODE_7 to listOf(COMB or '`'.code),
+        KeyEvent.KEYCODE_8 to listOf('\\'.code),
+        KeyEvent.KEYCODE_9 to listOf('^'.code),
+        KeyEvent.KEYCODE_0 to listOf('@'.code),
+        KeyEvent.KEYCODE_LEFT_BRACKET to listOf(']'.code),
+        KeyEvent.KEYCODE_EQUALS to listOf('}'.code),
+        KeyEvent.KEYCODE_E to listOf('€'.code),
+        KeyEvent.KEYCODE_SEMICOLON to listOf('¤'.code),
+    )
+
+    val TABLE_GERMAN_QWERTZ = mapOf(
+        KeyEvent.KEYCODE_BACKSLASH to listOf(COMB or '^'.code, '°'.code, COMB or '^'.code),
+        KeyEvent.KEYCODE_LEFT_BRACKET to listOf('ß'.code, '?'.code, 'ß'.code),
+        KeyEvent.KEYCODE_RIGHT_BRACKET to listOf(COMB or '´'.code, COMB or COMB or '`'.code),
+        KeyEvent.KEYCODE_SEMICOLON to listOf('ü'.code, 'Ü'.code, 'Ü'.code),
+        KeyEvent.KEYCODE_EQUALS to listOf('+'.code, '*'.code, '+'.code),
+        KeyEvent.KEYCODE_GRAVE to listOf('ö'.code, 'Ö'.code, 'Ö'.code),
+        KeyEvent.KEYCODE_APOSTROPHE to listOf('ä'.code, 'Ä'.code, 'Ä'.code),
+        KeyEvent.KEYCODE_SLASH to listOf('#'.code, '\''.code, '#'.code),
+        KeyEvent.KEYCODE_COMMA to listOf(','.code, ';'.code, ','.code),
+        KeyEvent.KEYCODE_PERIOD to listOf('.'.code, ':'.code, '.'.code),
+        KeyEvent.KEYCODE_1 to listOf('1'.code, '!'.code, '1'.code),
+        KeyEvent.KEYCODE_2 to listOf('2'.code, '"'.code, '2'.code),
+        KeyEvent.KEYCODE_3 to listOf('3'.code, '§'.code, '3'.code),
+        KeyEvent.KEYCODE_4 to listOf('4'.code, '$'.code, '4'.code),
+        KeyEvent.KEYCODE_5 to listOf('5'.code, '%'.code, '5'.code),
+        KeyEvent.KEYCODE_6 to listOf('6'.code, '&'.code, '6'.code),
+        KeyEvent.KEYCODE_7 to listOf('7'.code, '/'.code, '7'.code),
+        KeyEvent.KEYCODE_8 to listOf('8'.code, '('.code, '8'.code),
+        KeyEvent.KEYCODE_9 to listOf('9'.code, ')'.code, '9'.code),
+        KeyEvent.KEYCODE_0 to listOf('0'.code, '='.code, '0'.code),
+    )
+
+    val TABLE_GERMAN_QWERTZ_ALTGR = mapOf(
+        KeyEvent.KEYCODE_2 to listOf('²'.code),
+        KeyEvent.KEYCODE_3 to listOf('³'.code),
+        KeyEvent.KEYCODE_7 to listOf('{'.code),
+        KeyEvent.KEYCODE_8 to listOf('['.code),
+        KeyEvent.KEYCODE_9 to listOf(']'.code),
+        KeyEvent.KEYCODE_0 to listOf('}'.code),
+        KeyEvent.KEYCODE_E to listOf('€'.code),
+        KeyEvent.KEYCODE_M to listOf('µ'.code),
+        KeyEvent.KEYCODE_Q to listOf('@'.code),
+        KeyEvent.KEYCODE_EQUALS to listOf('~'.code),
+        KeyEvent.KEYCODE_LEFT_BRACKET to listOf('\\'.code, 'ẞ'.code),
+    )
+
+    val KEYCODE_MAP_AZERTY = mapOf(
+        KeyEvent.KEYCODE_GRAVE to KeyEvent.KEYCODE_APOSTROPHE,
+        KeyEvent.KEYCODE_MINUS to KeyEvent.KEYCODE_LEFT_BRACKET,
+        KeyEvent.KEYCODE_LEFT_BRACKET to KeyEvent.KEYCODE_RIGHT_BRACKET,
+        KeyEvent.KEYCODE_RIGHT_BRACKET to KeyEvent.KEYCODE_SEMICOLON,
+        KeyEvent.KEYCODE_SEMICOLON to KeyEvent.KEYCODE_M,
+        KeyEvent.KEYCODE_APOSTROPHE to KeyEvent.KEYCODE_GRAVE,
+        KeyEvent.KEYCODE_M to KeyEvent.KEYCODE_COMMA,
+        KeyEvent.KEYCODE_COMMA to KeyEvent.KEYCODE_PERIOD,
+        KeyEvent.KEYCODE_PERIOD to KeyEvent.KEYCODE_SLASH,
+        KeyEvent.KEYCODE_SLASH to ExtKeyCode.KEYCODE_OEM_8,
+
+        KeyEvent.KEYCODE_Q to KeyEvent.KEYCODE_A,
+        KeyEvent.KEYCODE_W to KeyEvent.KEYCODE_Z,
+        KeyEvent.KEYCODE_A to KeyEvent.KEYCODE_Q,
+        KeyEvent.KEYCODE_Z to KeyEvent.KEYCODE_W,
+    )
+
+    val SOFT_KEYCODE_MAP_AZERTY_NUMBERS = mapOf(
+        KeyEvent.KEYCODE_1 to ExtKeyCode.KEYCODE_EXT_1,
+        KeyEvent.KEYCODE_2 to ExtKeyCode.KEYCODE_EXT_2,
+        KeyEvent.KEYCODE_3 to ExtKeyCode.KEYCODE_EXT_3,
+        KeyEvent.KEYCODE_4 to ExtKeyCode.KEYCODE_EXT_4,
+        KeyEvent.KEYCODE_5 to ExtKeyCode.KEYCODE_EXT_5,
+        KeyEvent.KEYCODE_6 to ExtKeyCode.KEYCODE_EXT_6,
+        KeyEvent.KEYCODE_7 to ExtKeyCode.KEYCODE_EXT_7,
+        KeyEvent.KEYCODE_8 to ExtKeyCode.KEYCODE_EXT_8,
+        KeyEvent.KEYCODE_9 to ExtKeyCode.KEYCODE_EXT_9,
+        KeyEvent.KEYCODE_0 to ExtKeyCode.KEYCODE_EXT_0,
+    )
+
+    val SOFT_KEYCODE_MAP_AZERTY_MOBILE = mapOf(
+        KeyEvent.KEYCODE_COMMA to ExtKeyCode.KEYCODE_EXT_COMMA,
+        KeyEvent.KEYCODE_PERIOD to ExtKeyCode.KEYCODE_EXT_PERIOD,
+        KeyEvent.KEYCODE_M to ExtKeyCode.KEYCODE_APOSTROPHE_QUESTION,
+    )
+
+    val KEYCODE_MAP_QWERTZ = mapOf(
+        KeyEvent.KEYCODE_GRAVE to KeyEvent.KEYCODE_BACKSLASH,
+        KeyEvent.KEYCODE_MINUS to KeyEvent.KEYCODE_LEFT_BRACKET,
+        KeyEvent.KEYCODE_EQUALS to KeyEvent.KEYCODE_RIGHT_BRACKET,
+        KeyEvent.KEYCODE_LEFT_BRACKET to KeyEvent.KEYCODE_SEMICOLON,
+        KeyEvent.KEYCODE_RIGHT_BRACKET to KeyEvent.KEYCODE_EQUALS,
+        KeyEvent.KEYCODE_SEMICOLON to KeyEvent.KEYCODE_GRAVE,
+        KeyEvent.KEYCODE_BACKSLASH to KeyEvent.KEYCODE_SLASH,
+        KeyEvent.KEYCODE_SLASH to KeyEvent.KEYCODE_MINUS,
+
+        KeyEvent.KEYCODE_Y to KeyEvent.KEYCODE_Z,
+        KeyEvent.KEYCODE_Z to KeyEvent.KEYCODE_Y,
+    )
+
+    val SOFT_KEYCODE_MAP_DEUTSCH_QWERTZ = mapOf(
+        KeyEvent.KEYCODE_COMMA to ExtKeyCode.KEYCODE_PERIOD_COMMA,
+        KeyEvent.KEYCODE_PERIOD to KeyEvent.KEYCODE_LEFT_BRACKET,
+    )
+
     val KEYCODE_MAP_DVORAK = mapOf(
         KeyEvent.KEYCODE_MINUS to KeyEvent.KEYCODE_LEFT_BRACKET,
         KeyEvent.KEYCODE_EQUALS to KeyEvent.KEYCODE_RIGHT_BRACKET,

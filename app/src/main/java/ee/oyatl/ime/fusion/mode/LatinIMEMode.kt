@@ -3,6 +3,7 @@ package ee.oyatl.ime.fusion.mode
 import android.content.Context
 import android.content.res.Resources
 import android.inputmethodservice.InputMethodService
+import android.view.KeyCharacterMap
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -35,20 +36,15 @@ import com.android.inputmethod.latin.utils.ScriptUtils
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.TripleCandidateView
 import ee.oyatl.ime.fusion.R
-import ee.oyatl.ime.keyboard.KeyboardConfiguration
-import ee.oyatl.ime.keyboard.KeyboardTemplate
-import ee.oyatl.ime.keyboard.LayoutTable
-import ee.oyatl.ime.fusion.layout.LayoutLatin
-import ee.oyatl.ime.fusion.layout.MobileKeyboard
-import ee.oyatl.ime.fusion.layout.MobileKeyboardRows
-import ee.oyatl.ime.fusion.layout.TabletKeyboard
-import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
+import ee.oyatl.ime.fusion.layout.preset.LatinLayoutPresets
+import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
 import java.util.Locale
 
-abstract class LatinIMEMode(
-    private val listener: IMEMode.Listener
+class LatinIMEMode(
+    private val listener: IMEMode.Listener,
+    val locale: Locale,
+    override var textLayoutPreset: KeyboardLayoutPreset
 ): CommonIMEMode(listener), ILatinIME {
-    abstract val locale: Locale
     override var context: Context? = null
 
     override val handler: LatinIME.UIHandler = LatinIME.UIHandler(this)
@@ -108,7 +104,13 @@ abstract class LatinIMEMode(
     }
 
     override fun onChar(codePoint: Int) {
-        if(codePoint != 0) onCodeInput(codePoint, 0, 0, false)
+        if(codePoint == 0) return
+        if(codePoint and KeyCharacterMap.COMBINING_ACCENT != 0) {
+            val event = Event.createDeadEvent(codePoint and KeyCharacterMap.COMBINING_ACCENT_MASK, 0, null)
+            onEvent(event)
+            return
+        }
+        onCodeInput(codePoint, 0, 0, false)
     }
 
     override fun onSpecial(keyCode: Int) {
@@ -498,96 +500,27 @@ abstract class LatinIMEMode(
         override val text: CharSequence = suggestedWordInfo.word
     }
 
-    class Qwerty(
-        override val locale: Locale,
-        numberRow: Boolean,
-        listener: IMEMode.Listener
-    ): LatinIMEMode(listener) {
-        override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
-            mobile = KeyboardTemplate.Basic(
-                configuration = KeyboardConfiguration(
-                    if(numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
-                    MobileKeyboard.alphabetic(),
-                    MobileKeyboard.bottom()
-                ),
-                contentRows = (if(numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.DEFAULT
-            ),
-            tablet = KeyboardTemplate.Basic(
-                configuration = KeyboardConfiguration(
-                    if(numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
-                    TabletKeyboard.alphabetic(delete = !numberRow),
-                    TabletKeyboard.bottom()
-                ),
-                contentRows = (if(numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.DEFAULT
-            )
-        )
-    }
-
-    class Dvorak(
-        override val locale: Locale,
-        numberRow: Boolean,
-        listener: IMEMode.Listener
-    ): LatinIMEMode(listener) {
-        override val textLayoutTable: LayoutTable = super.textLayoutTable.mapKeyCodes(LayoutLatin.KEYCODE_MAP_DVORAK)
-        override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
-            mobile = KeyboardTemplate.Basic(
-                configuration = KeyboardConfiguration(
-                    if(numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
-                    MobileKeyboard.alphabetic(semicolon = true),
-                    MobileKeyboard.bottom(KeyEvent.KEYCODE_X, KeyEvent.KEYCODE_SLASH)
-                ),
-                contentRows = (if(numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.DVORAK
-            ),
-            tablet = KeyboardTemplate.Basic(
-                configuration = KeyboardConfiguration(
-                    if(numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
-                    TabletKeyboard.alphabetic(semicolon = true, delete = !numberRow),
-                    TabletKeyboard.bottom()
-                ),
-                contentRows = (if(numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.DVORAK
-            )
-        )
-    }
-
-    class Colemak(
-        override val locale: Locale,
-        numberRow: Boolean,
-        listener: IMEMode.Listener
-    ): LatinIMEMode(listener) {
-        override val textLayoutTable: LayoutTable = super.textLayoutTable.mapKeyCodes(LayoutLatin.KEYCODE_MAP_COLEMAK)
-        override val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
-            mobile = KeyboardTemplate.Basic(
-                configuration = KeyboardConfiguration(
-                    if(numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
-                    MobileKeyboard.alphabetic(semicolon = true),
-                    MobileKeyboard.bottom()
-                ),
-                contentRows = (if(numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.SEMICOLON
-            ),
-            tablet = KeyboardTemplate.Basic(
-                configuration = KeyboardConfiguration(
-                    if(numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
-                    TabletKeyboard.alphabetic(semicolon = true, delete = !numberRow),
-                    TabletKeyboard.bottom()
-                ),
-                contentRows = (if(numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.SEMICOLON
-            )
-        )
-    }
-
     data class Params(
         val locale: Locale = Locale.ENGLISH,
         val layout: Layout = Layout.Qwerty,
-        val numberRow: Boolean = false
+        val numberRow: Boolean = false,
+        val cursorKeys: Boolean = false
     ): IMEMode.Params {
         override val type: String = TYPE
 
         override fun create(listener: IMEMode.Listener): LatinIMEMode {
-            return when(layout) {
-                Layout.Qwerty -> Qwerty(locale, numberRow, listener)
-                Layout.Dvorak -> Dvorak(locale, numberRow, listener)
-                Layout.Colemak -> Colemak(locale, numberRow, listener)
+            val textLayoutPreset = when(layout) {
+                Layout.Qwerty -> when(locale.language) {
+                    "es" -> LatinLayoutPresets.spanishQwerty(numberRow, cursorKeys)
+                    else -> LatinLayoutPresets.qwerty(false, numberRow, cursorKeys)
+                }
+                Layout.Azerty -> LatinLayoutPresets.azerty(numberRow, cursorKeys)
+                Layout.Qwertz -> LatinLayoutPresets.qwertz(numberRow, cursorKeys)
+                Layout.Deutsch -> LatinLayoutPresets.germanQwertz(numberRow, cursorKeys)
+                Layout.Dvorak -> LatinLayoutPresets.dvorak(numberRow, cursorKeys)
+                Layout.Colemak -> LatinLayoutPresets.colemak(numberRow, cursorKeys)
             }
+            return LatinIMEMode(listener, locale, textLayoutPreset)
         }
 
         override fun getLabel(context: Context): String {
@@ -596,18 +529,13 @@ abstract class LatinIMEMode(
             return "$localeName $layoutName"
         }
 
-        override fun getShortLabel(context: Context, params: List<IMEMode.Params>): String {
-            val latinParams = params.filterIsInstance<Params>().filterNot { it == this }
+        override fun getShortLabels(context: Context): List<String> {
             val localeLabel = locale.language.replaceFirstChar { it.uppercase() }
-            // If this is the only Latin modes, use locale name
-            if(latinParams.isEmpty()) return localeLabel
-            // Find if there are any other Latin mode with same locale but different layout
-            val localeParams = latinParams.filter { it.locale == this.locale && it.layout != this.layout }
-            // If this is the only Latin mode with same locale, use locale name
-            if(localeParams.isEmpty()) return localeLabel
-            // Use locale and layout name
-            val layoutLabel = layout.name.first().toString()
-            return "$localeLabel$layoutLabel"
+            val layoutHead = layout.name.first().toString()
+            val layoutTail = layout.name.last().toString()
+            val labels = listOf(localeLabel, "$localeLabel$layoutHead")
+            if(layoutHead == "Q") return labels + listOf("$localeLabel$layoutHead$layoutTail")
+            return labels
         }
 
         companion object {
@@ -616,12 +544,15 @@ abstract class LatinIMEMode(
                 val locale =
                     if(localeName.size == 2) Locale(localeName[0], localeName[1])
                     else Locale(localeName[0])
-                val layout = Layout.entries.find { it.name == map["layout"] } ?: Layout.Qwerty
+                val defaultLayout = if(locale.language == "fr") Layout.Azerty else Layout.Qwerty
+                val layout = Layout.entries.find { it.name == map["layout"] } ?: defaultLayout
                 val numberRow = map["number_row"]?.toBoolean() ?: false
+                val cursorKeys = map["cursor_keys"]?.toBoolean() ?: false
                 return Params(
                     locale = locale,
                     layout = layout,
-                    numberRow = numberRow
+                    numberRow = numberRow,
+                    cursorKeys = cursorKeys
                 )
             }
         }
@@ -631,6 +562,9 @@ abstract class LatinIMEMode(
         @StringRes val nameKey: Int
     ) {
         Qwerty(R.string.latin_layout_qwerty),
+        Azerty(R.string.latin_layout_azerty),
+        Qwertz(R.string.latin_layout_qwertz),
+        Deutsch(R.string.latin_layout_deutsch),
         Dvorak(R.string.latin_layout_dvorak),
         Colemak(R.string.latin_layout_colemak)
     }

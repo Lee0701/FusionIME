@@ -18,7 +18,7 @@ import ee.oyatl.ime.keyboard.listener.EmptyListener
 import ee.oyatl.ime.keyboard.listener.KeyboardListener
 import ee.oyatl.ime.keyboard.popup.EmptyPopupManager
 import ee.oyatl.ime.keyboard.popup.PopupManager
-import ee.oyatl.ime.keyboard.touchhandler.CompoundTouchHandler
+import ee.oyatl.ime.keyboard.touchhandler.EmptyTouchHandler
 import ee.oyatl.ime.keyboard.touchhandler.TouchHandler
 import kotlin.math.max
 import kotlin.math.roundToInt
@@ -27,10 +27,34 @@ class DefaultKeyboardView(
     context: Context,
     attrs: AttributeSet?
 ): FrameLayout(context, attrs), KeyboardView {
-    override val view: View get() = this
+    override val view: View = this
+
     override val rect: Rect = Rect()
     override val location: IntArray = IntArray(2)
     private val keySet: MutableSet<CachedKey> = mutableSetOf()
+
+    override var labels: Map<Int, KeyLabel> = mapOf()
+        set(value) {
+            field = value
+            keySet.forEach {
+                val label = value[it.keyCode] ?: return@forEach
+                when(label) {
+                    is KeyLabel.Default -> {
+                        if(label.text != null) it.binding.label.text = label.text
+                        if(label.icon != null) it.binding.icon.setImageResource(label.icon)
+                    }
+                    is KeyLabel.Flick -> {
+                        if(label.text != null) it.binding.label.text = label.text
+                        if(label.showAsHint) {
+                            if(label.up != null) it.binding.labelHintTop.text = label.up
+                            if(label.down != null) it.binding.labelHintBottom.text = label.down
+                            if(label.left != null) it.binding.labelHintLeft.text = label.left
+                            if(label.right != null) it.binding.labelHintRight.text = label.right
+                        }
+                    }
+                }
+            }
+        }
 
     var keyboard: Keyboard? = null
         set(value) {
@@ -39,7 +63,7 @@ class DefaultKeyboardView(
         }
     override var listener: KeyboardListener = EmptyListener
     override var popupManager: PopupManager = EmptyPopupManager
-    var touchHandler: TouchHandler = CompoundTouchHandler(this)
+    var touchHandler: TouchHandler = EmptyTouchHandler
 
     init {
         viewTreeObserver.addOnGlobalLayoutListener {
@@ -48,7 +72,11 @@ class DefaultKeyboardView(
     }
 
     private fun setup(keyboard: Keyboard) {
-        val inflater = LayoutInflater.from(ContextThemeWrapper(context, R.style.Theme_FusionIME_Keyboard))
+        val themeId = when(keyboard.params.screenMode) {
+            KeyboardState.ScreenMode.MoreKeys -> R.style.Theme_FusionIME_Keyboard_MoreKeys
+            else -> R.style.Theme_FusionIME_Keyboard
+        }
+        val inflater = LayoutInflater.from(ContextThemeWrapper(context, themeId))
         val binding = KbdKeyboardBinding.inflate(inflater)
 
         keySet.clear()
@@ -78,20 +106,13 @@ class DefaultKeyboardView(
                         view.layoutParams = createLayoutParams(item.width, keyHeight)
                         subRow.root.addView(view)
                     }
-                    is Keyboard.KeyItem.SpecialKey -> {
-                        val type = SpecialKeyType.ofKeyCode(item.keyCode) ?: SpecialKeyType.Default
-                        val themedInflater = LayoutInflater.from(ContextThemeWrapper(context, type.themeRes))
-                        val key = KbdKeyBinding.inflate(themedInflater)
-                        if(type.iconRes != null) key.icon.setImageResource(type.iconRes)
-                        keySet += CachedKey(item.keyCode, key)
-                        key.root.layoutParams = createLayoutParams(item.width, keyHeight)
-                        subRow.root.addView(key.root)
-                    }
                     is Keyboard.KeyItem.Key -> {
-                        val themedInflater = LayoutInflater.from(ContextThemeWrapper(context, R.style.Theme_FusionIME_Keyboard_Key))
+                        val themedInflater = LayoutInflater.from(ContextThemeWrapper(context, item.themeRes))
                         val key = KbdKeyBinding.inflate(themedInflater)
-                        keySet += CachedKey(item.keyCode, key)
+                        key.bkg.setImageResource(item.bkgRes)
+                        if(item.iconRes != 0) key.icon.setImageResource(item.iconRes)
                         if(item.keyCode < 0) key.label.text = (-item.keyCode).toChar().toString()
+                        keySet += CachedKey(item.keyCode, key)
                         key.root.layoutParams = createLayoutParams(item.width, keyHeight)
                         subRow.root.addView(key.root)
                     }
@@ -108,6 +129,7 @@ class DefaultKeyboardView(
 
     override fun onReset() {
         listener.onReset()
+        touchHandler.onReset()
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -156,18 +178,8 @@ class DefaultKeyboardView(
         }
     }
 
-    override fun setLabels(labels: Map<Int, String>) {
-        keySet.forEach {
-            val label = labels[it.keyCode]
-            if(label != null) it.binding.label.text = label
-        }
-    }
-
-    override fun setIcons(icons: Map<Int, Int>) {
-        keySet.forEach {
-            val icon = icons[it.keyCode]
-            if(icon != null) it.binding.icon.setImageResource(icon)
-        }
+    override fun findKeys(keyCode: Int): List<KeyboardView.Key> {
+        return keySet.filter { it.keyCode == keyCode }
     }
 
     data class CachedKey(

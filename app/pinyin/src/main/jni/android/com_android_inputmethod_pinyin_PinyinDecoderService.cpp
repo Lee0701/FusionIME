@@ -34,6 +34,9 @@ using namespace ime_pinyin;
 
 #define RET_BUF_LEN 256
 
+static_assert(kMaxSearchSteps <= RET_BUF_LEN,
+              "The JNI return buffer must hold the complete Pinyin string");
+
 static char16 retbuf[RET_BUF_LEN];
 static char16 (*predict_buf)[kMaxPredictSize + 1] = NULL;
 static size_t predict_len;
@@ -99,14 +102,22 @@ JNIEXPORT jboolean JNICALL nativeImCloseDecoder(JNIEnv* env, jclass jclazz) {
 
 JNIEXPORT jint JNICALL nativeImSearch(JNIEnv* env, jclass jclazz,
                                       jbyteArray pybuf, jint pylen) {
+  if (NULL == pybuf || pylen < 0)
+    return 0;
+
+  jsize pybuf_len = (*env).GetArrayLength(pybuf);
+  if (pylen > pybuf_len)
+    pylen = pybuf_len;
+  if (pylen > static_cast<jint>(kMaxSearchSteps - 1))
+    pylen = static_cast<jint>(kMaxSearchSteps - 1);
+
   jbyte *array_body = (*env).GetByteArrayElements(pybuf, 0);
 
   jint jret = 0;
   if (NULL != array_body) {
     jret = im_search((const char*)array_body, pylen);
+    (*env).ReleaseByteArrayElements(pybuf, array_body, JNI_ABORT);
   }
-
-  (*env).ReleaseByteArrayElements(pybuf, array_body, 0);
 
   return jret;
 }

@@ -7,10 +7,10 @@ plugins {
 
 configure<LibraryExtension> {
     namespace = "ee.oyatl.ime.viet"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
-        minSdk = 21
+        minSdk = 24
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -18,7 +18,6 @@ configure<LibraryExtension> {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -44,6 +43,7 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(project(":app:dictionary"))
+    implementation(project(":app:dictionary-manager"))
     implementation(project(":app:keyboard"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

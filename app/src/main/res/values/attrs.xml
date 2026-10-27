@@ -5,4 +5,12 @@
         <attr name="stepSize" format="float" />
         <attr name="valueTo" format="float" />
     </declare-styleable>
+
+    <declare-styleable name="OpenWebPreference">
+        <attr name="url" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="MailToPreference">
+        <attr name="address" format="string" />
+    </declare-styleable>
 </resources>

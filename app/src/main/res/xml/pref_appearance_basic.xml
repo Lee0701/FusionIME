@@ -13,6 +13,14 @@
             android:title="@string/settings_appearance_screen_mode_title"
             app:useSimpleSummaryProvider="true" />
 
+        <ListPreference
+            android:key="symbol_layout"
+            android:entries="@array/settings_appearance_symbol_layout_entries"
+            android:entryValues="@array/settings_appearance_symbol_layout_values"
+            android:defaultValue="G"
+            android:title="@string/settings_appearance_symbol_layout_title"
+            app:useSimpleSummaryProvider="true" />
+
         <ee.oyatl.ime.fusion.preference.SliderPreference
             app:key="keyboard_height_portrait"
             app:valueFrom="30.0"
@@ -30,6 +38,16 @@
             app:defaultValue="@integer/keyboard_height_landscape_default"
             app:title="@string/settings_appearance_keyboard_height_landscape_title"
             app:useSimpleSummaryProvider="true" />
+
+        <SwitchPreferenceCompat
+            android:key="show_voice_input_button"
+            app:defaultValue="false"
+            app:title="@string/settings_appearance_show_voice_input_button_title" />
+
+        <SwitchPreferenceCompat
+            android:key="clipboard_candidate_enabled"
+            app:defaultValue="true"
+            app:title="@string/settings_clipboard_candidate_enabled_title" />
 
     </androidx.preference.PreferenceCategory>
 

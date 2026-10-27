@@ -11,10 +11,12 @@ interface KeyboardView {
     val location: IntArray
     val listener: KeyboardListener
     val popupManager: PopupManager
-    fun findKey(x: Int, y: Int): Key?
+
+    var labels: Map<Int, KeyLabel>
+
     fun onReset()
-    fun setLabels(labels: Map<Int, String>)
-    fun setIcons(icons: Map<Int, Int>)
+    fun findKey(x: Int, y: Int): Key?
+    fun findKeys(keyCode: Int): List<Key>
 
     interface Key {
         val keyCode: Int
