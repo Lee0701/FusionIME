@@ -1,7 +1,6 @@
 package ee.oyatl.ime.keyboard.touchhandler
 
 class CompoundTouchHandler(
-    override val keyboardView: KeyboardView,
     val touchHandlers: List<TouchHandler>
 ): TouchHandler {
     constructor(vararg touchHandlers: TouchHandler): this(touchHandlers.toList())

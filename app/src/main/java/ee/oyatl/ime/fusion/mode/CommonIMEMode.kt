@@ -18,6 +18,7 @@ import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.layout.preset.SymbolLayoutPresets
 import ee.oyatl.ime.fusion.layout.preset.LatinLayoutPresets
+import ee.oyatl.ime.keyboard.CanvasKeyboardView
 import ee.oyatl.ime.keyboard.DefaultKeyboardView
 import ee.oyatl.ime.keyboard.KeyLabel
 import ee.oyatl.ime.keyboard.KeyboardParams

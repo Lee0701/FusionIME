@@ -5,11 +5,8 @@ import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
-import ee.oyatl.ime.keyboard.listener.EmptyListener
 import ee.oyatl.ime.keyboard.listener.KeyboardListener
-import ee.oyatl.ime.keyboard.popup.EmptyPopupManager
 import ee.oyatl.ime.keyboard.popup.PopupManager
-import ee.oyatl.ime.keyboard.touchhandler.TouchHandler
 
 class SwitcherKeyboardView(
     context: Context,
@@ -47,6 +44,10 @@ class SwitcherKeyboardView(
         y: Int
     ): KeyboardView.Key? = null
 
+    override fun findKeys(keyCode: Int): List<KeyboardView.Key> {
+        return currentView.findKeys(keyCode)
+    }
+
     override var labels: Map<Int, KeyLabel>
         get() = currentView.labels
         set(value) {
@@ -55,21 +56,5 @@ class SwitcherKeyboardView(
 
     override fun onReset() {
         map.values.forEach { it.onReset() }
-    }
-
-    override val rect: Rect get() = currentView.rect
-    override val location: IntArray get() = currentView.location
-    override val listener: KeyboardListener get() = currentView.listener
-    override val popupManager: PopupManager get() = currentView.popupManager
-
-    override fun findKey(
-        x: Int,
-        y: Int
-    ): KeyboardView.Key? {
-        return currentView.findKey(x, y)
-    }
-
-    override fun findKeys(keyCode: Int): List<KeyboardView.Key> {
-        return currentView.findKeys(keyCode)
     }
 }

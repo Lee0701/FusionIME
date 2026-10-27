@@ -12,6 +12,7 @@ import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
@@ -21,7 +22,7 @@ import ee.oyatl.ime.keyboard.listener.EmptyListener
 import ee.oyatl.ime.keyboard.listener.KeyboardListener
 import ee.oyatl.ime.keyboard.popup.EmptyPopupManager
 import ee.oyatl.ime.keyboard.popup.PopupManager
-import ee.oyatl.ime.keyboard.touchhandler.CompoundTouchHandler
+import ee.oyatl.ime.keyboard.touchhandler.EmptyTouchHandler
 import ee.oyatl.ime.keyboard.touchhandler.TouchHandler
 import kotlin.math.max
 import kotlin.math.roundToInt
@@ -36,6 +37,29 @@ class CanvasKeyboardView(
     override val location: IntArray = IntArray(2)
     private val keySet: MutableSet<CachedKey> = mutableSetOf()
 
+    override var labels: Map<Int, KeyLabel> = mapOf()
+        set(value) {
+            field = value
+            keySet.forEach {
+                val label = value[it.keyCode] ?: return@forEach
+                when(label) {
+                    is KeyLabel.Default -> {
+                        if(label.text != null) it.label = label.text
+                        if(label.icon != null) it.icon = AppCompatResources.getDrawable(context, label.icon)
+                    }
+                    is KeyLabel.Flick -> {
+                        if(label.text != null) it.label = label.text
+                        if(label.showAsHint) {
+//                            if(label.up != null) it.binding.labelHintTop.text = label.up
+//                            if(label.down != null) it.binding.labelHintBottom.text = label.down
+//                            if(label.left != null) it.binding.labelHintLeft.text = label.left
+//                            if(label.right != null) it.binding.labelHintRight.text = label.right
+                        }
+                    }
+                }
+            }
+        }
+
     var keyboard: Keyboard? = null
         set(value) {
             field = value
@@ -43,7 +67,7 @@ class CanvasKeyboardView(
         }
     override var listener: KeyboardListener = EmptyListener
     override var popupManager: PopupManager = EmptyPopupManager
-    var touchHandler: TouchHandler = CompoundTouchHandler(this)
+    var touchHandler: TouchHandler = EmptyTouchHandler
 
     private val keyboardBackground: Drawable
     private val specialKeyStyles: Map<SpecialKeyType?, KeyStyle>
@@ -89,12 +113,13 @@ class CanvasKeyboardView(
                 val width = (unitWidth * item.width).toInt()
                 when(item) {
                     is Keyboard.KeyItem.Key -> {
-                        val isSpecialKey = item is Keyboard.KeyItem.SpecialKey
-                        val specialKeyType = if(isSpecialKey) SpecialKeyType.ofKeyCode(item.keyCode) else null
-                        val iconRes = specialKeyType?.iconRes
-                        val icon = if(iconRes != null) ContextCompat.getDrawable(context, iconRes) else null
+                        val icon = if(item.iconRes != 0) ContextCompat.getDrawable(context, item.iconRes) else null
                         val label = if(item.keyCode < 0) (-item.keyCode).toChar().toString() else ""
-                        val style = specialKeyStyles[specialKeyType]
+                        val background = AppCompatResources.getDrawable(context, item.bkgRes)
+                        val style = KeyStyle.fromTheme(context, item.themeRes)?.let {
+                            if(background != null) it.copy(background = background)
+                            else it
+                        }
                         val key = CachedKey(item.keyCode, label, style, icon)
                         key.rect.set(x, y, x + width, y + rowHeight)
                         keySet += key
@@ -131,6 +156,10 @@ class CanvasKeyboardView(
         return keySet.find { key ->
             key.rect.contains(x, y)
         }
+    }
+
+    override fun findKeys(keyCode: Int): List<KeyboardView.Key> {
+        return keySet.filter { it.keyCode == keyCode }
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -215,22 +244,6 @@ class CanvasKeyboardView(
 
     override fun onReset() {
         listener.onReset()
-    }
-
-    override fun setLabels(labels: Map<Int, String>) {
-        keySet.forEach {
-            val label = labels[it.keyCode]
-            if(label != null) it.label = label
-        }
-        invalidate()
-    }
-
-    override fun setIcons(icons: Map<Int, Int>) {
-        keySet.forEach {
-            val id = icons[it.keyCode]
-            if(id != null) it.icon = ContextCompat.getDrawable(context, id)
-        }
-        invalidate()
     }
 
     inner class CachedKey(
