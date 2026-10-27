@@ -239,6 +239,7 @@ abstract class CommonIMEMode(
         val soundVolume = if(sound) 1f else 0f
         val vibrationDuration = if(haptic) duration else 0L
         val touchMode = TouchMode.entries.find { it.name == preference.getString("touch_mode", null) } ?: TouchMode.Seek
+        val touchCorrection = preference.getBoolean("touch_correction", true)
         val defaultFlickSensitivity = context.resources.getInteger(R.integer.flick_sensitivity_default).toFloat()
         val flickSensitivity = preference.getFloat("flick_sensitivity", defaultFlickSensitivity).toInt()
         val params = KeyboardParams(
@@ -250,6 +251,7 @@ abstract class CommonIMEMode(
             soundVolume = soundVolume,
             vibrationDuration = vibrationDuration,
             touchMode = touchMode,
+            touchCorrection = touchCorrection,
             flickSensitivity = flickSensitivity,
             longPressDelay = 300,
             shiftLockDelay = 300,

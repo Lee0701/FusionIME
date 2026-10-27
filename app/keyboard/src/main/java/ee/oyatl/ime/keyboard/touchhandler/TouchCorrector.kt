@@ -39,22 +39,23 @@ class TouchCorrector(
 
     fun correct(x: Int, y: Int, learn: Boolean): KeyboardView.Key? {
         val key = keyboardView.findKey(x, y) ?: return null
+        val keyCode = key.keyCode
 
-        if(key.keyCode !in keyCodes) {
+        if(keyCode !in keyCodes) {
             return key
         }
 
         val tap = Tap(x.toFloat(), y.toFloat())
         val scores = spatialModel.scores(tap)
         val map = keyGeom.zip(scores.toList()).associate { (geom, score) -> geom.char to score }
-        val correctedCode = map.entries.maxByOrNull { it.value }?.key?.code ?: key.keyCode
-        val correction = key.keyCode != correctedCode
+        val correctedCode = map.entries.maxByOrNull { it.value }?.key?.code ?: keyCode
+        val correction = keyCode != correctedCode
 
         if(learn && !correction && hypot(
                 (x - key.rect.centerX()) / key.rect.width().toFloat(),
                 (y - key.rect.centerY()) / key.rect.height().toFloat()
             ) <= 1.3f) {
-            spatialModel.learn(key.keyCode.toChar(), tap)
+            spatialModel.learn(keyCode.toChar(), tap)
         }
 
         return keyboardView.findKeys(correctedCode).firstOrNull()
