@@ -1,7 +1,6 @@
 package ee.oyatl.ime.fusion.layout.preset
 
 import android.view.KeyEvent
-import ee.oyatl.ime.fusion.Feature
 import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.layout.ExtKeyCode
 import ee.oyatl.ime.fusion.layout.LayoutCangjie
@@ -21,7 +20,7 @@ object CangjieLayoutPresets {
         numberRow: Boolean = false,
         cursorKeys: Boolean = false
     ): KeyboardLayoutPreset {
-        val qwerty = LatinLayoutPresets.qwerty(numberRow, cursorKeys)
+        val qwerty = LatinLayoutPresets.qwerty(false, numberRow, cursorKeys)
         val layoutTable = qwerty.layoutTable + LayoutTable.fromShiftStates(LayoutExt.TABLE_CHINESE + LayoutCangjie.TABLE_QWERTY)
         return qwerty.copy(
             layoutTable = layoutTable
@@ -31,7 +30,6 @@ object CangjieLayoutPresets {
     fun dayi3(
         cursorKeys: Boolean = false
     ): KeyboardLayoutPreset {
-        val cursorKeys = Feature.CursorKeys.availableInCurrentVersion && cursorKeys
         return KeyboardLayoutPreset(
             keyboardTemplate = KeyboardTemplate.ByScreenMode(
                 mobile = KeyboardTemplate.Basic(
