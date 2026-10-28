@@ -7,7 +7,7 @@ import androidx.annotation.StringRes
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.korean.WordComposer
-import ee.oyatl.ime.fusion.layout.preset.LatinLayoutPresets
+import ee.oyatl.ime.fusion.layout.preset.VietLayoutPresets
 import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
 import ee.oyatl.ime.viet.VietnameseConverter
 import net.sourceforge.vietpad.inputmethod.InputMethod
@@ -26,7 +26,7 @@ class VietIMEMode(
     private val inputMethod: InputMethod = layout.keyboardMode.createInputMethod()
 
     private val forcedNumberRow = layout.keyboardMode == KeyboardMode.VNI
-    override var textLayoutPreset: KeyboardLayoutPreset = LatinLayoutPresets.qwerty(false, forcedNumberRow || numberRow, cursorKeys)
+    override var textLayoutPreset: KeyboardLayoutPreset = VietLayoutPresets.qwerty(forcedNumberRow || numberRow, cursorKeys, layout.nomMode)
 
     private var bestCandidate: VietnameseConverter.Candidate? = null
 
@@ -188,13 +188,15 @@ class VietIMEMode(
         @StringRes val nameKey: Int,
         val labelHead: String,
         val keyboardMode: KeyboardMode,
+        val nomMode: Boolean,
         @RawRes val dictResId: Int,
-        val insertSpaces: Boolean
+        val insertSpaces: Boolean,
     ) {
         QwertyNom(
             R.string.viet_layout_qwerty_nom,
             "越",
             KeyboardMode.Qwerty,
+            true,
             ee.oyatl.ime.viet.R.raw.nom_qwerty,
             false
         ),
@@ -202,6 +204,7 @@ class VietIMEMode(
             R.string.viet_layout_qwerty_quoc_ngu,
             "Việt",
             KeyboardMode.Qwerty,
+            false,
             ee.oyatl.ime.viet.R.raw.quoc_ngu_qwerty,
             true
         ),
@@ -209,6 +212,7 @@ class VietIMEMode(
             R.string.viet_layout_telex_nom,
             "越",
             KeyboardMode.Telex,
+            true,
             ee.oyatl.ime.viet.R.raw.nom_quoc_ngu,
             false
         ),
@@ -216,6 +220,7 @@ class VietIMEMode(
             R.string.viet_layout_telex_quoc_ngu,
             "Việt",
             KeyboardMode.Telex,
+            false,
             0,
             true
         ),
@@ -223,6 +228,7 @@ class VietIMEMode(
             R.string.viet_layout_telex_nom,
             "越",
             KeyboardMode.VNI,
+            true,
             ee.oyatl.ime.viet.R.raw.nom_quoc_ngu,
             false
         ),
@@ -230,6 +236,7 @@ class VietIMEMode(
             R.string.viet_layout_telex_quoc_ngu,
             "Việt",
             KeyboardMode.VNI,
+            false,
             0,
             true
         )

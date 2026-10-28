@@ -2,7 +2,7 @@ package ee.oyatl.ime.keyboard.listener
 
 import ee.oyatl.ime.keyboard.touchhandler.FlickDirection
 
-class CompoundKeyboardListener(
+class SerialKeyboardListener(
     val listeners: List<KeyboardListener>
 ): KeyboardListener, FlickListener, LongPressListener {
     constructor(vararg listeners: KeyboardListener): this(listeners.toList())

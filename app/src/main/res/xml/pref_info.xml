@@ -57,6 +57,10 @@
             android:summary="Apache License 2.0"
             app:url="https://github.com/sh000gun/vietnamese-anysoftkeyboard" />
 
+        <ee.oyatl.ime.fusion.preference.OpenWebPreference
+            android:title="TrueTap Keyboard"
+            app:url="https://github.com/RedZero13/TrueTap-Keyboard" />
+
     </PreferenceCategory>
 
 </androidx.preference.PreferenceScreen>

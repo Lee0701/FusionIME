@@ -9,10 +9,14 @@ class SeekTouchHandler(
     val keyboardView: KeyboardView,
     private val keyboardParams: KeyboardParams
 ): TouchHandler {
+    val touchCorrector: TouchCorrector? =
+        if(keyboardParams.touchCorrection) TouchCorrector(keyboardView)
+        else null
     val pointers = mutableMapOf<Int, Pointer>()
 
     override fun onReset() {
         keyboardView.popupManager.clearPopups()
+        touchCorrector?.reset()
         pointers.values.forEach {
             it.key?.onReleased()
         }
@@ -20,7 +24,7 @@ class SeekTouchHandler(
     }
 
     override fun onTouchDown(pointerId: Int, x: Int, y: Int) {
-        val key = keyboardView.findKey(x, y)
+        val key = touchCorrector?.correct(x, y, true) ?: keyboardView.findKey(x, y)
         val pointer = Pointer(pointerId, x, y, key)
         if(key != null) {
             keyboardView.findKeys(key.keyCode).forEach { it.onPressed() }
@@ -35,13 +39,16 @@ class SeekTouchHandler(
     override fun onTouchMove(pointerId: Int, x: Int, y: Int) {
         val pointer = pointers[pointerId] ?: return
         val oldKey = pointer.key
-        val newKey = keyboardView.findKey(x, y)
+        val newKey = touchCorrector?.correct(x, y, false) ?: keyboardView.findKey(x, y)
         if(newKey != oldKey) {
             oldKey?.let { key -> keyboardView.findKeys(key.keyCode).forEach { it.onReleased() } }
             newKey?.let { key -> keyboardView.findKeys(key.keyCode).forEach { it.onPressed() } }
             if(oldKey?.keyCode == KeyEvent.KEYCODE_DEL) keyboardView.listener.onKeyUp(oldKey.keyCode, 0)
-            if(oldKey != null) keyboardView.popupManager.removePopup(oldKey)
-            if(newKey != null) keyboardView.popupManager.showPopup(newKey) { PreviewPopup(keyboardView, newKey) }
+            if(keyboardParams.previewPopups) {
+                if(oldKey != null) keyboardView.popupManager.removePopup(oldKey)
+                if(newKey != null && newKey.label.isNotEmpty())
+                    keyboardView.popupManager.showPopup(newKey) { PreviewPopup(keyboardView, newKey) }
+            }
         }
         val newPointer = pointer.copy(x = x, y = y, key = newKey)
         pointers += pointerId to newPointer
