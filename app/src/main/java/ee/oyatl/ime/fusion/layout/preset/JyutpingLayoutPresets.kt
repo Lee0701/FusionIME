@@ -2,7 +2,7 @@ package ee.oyatl.ime.fusion.layout.preset
 
 import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.layout.LayoutExt
-import ee.oyatl.ime.keyboard.LayoutTable
+import ee.oyatl.ime.keyboard.core.LayoutTable
 
 object JyutpingLayoutPresets {
     fun jyutping(

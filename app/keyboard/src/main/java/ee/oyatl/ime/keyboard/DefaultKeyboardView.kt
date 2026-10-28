@@ -12,6 +12,8 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.LinearLayout
+import ee.oyatl.ime.keyboard.core.KeyLabel
+import ee.oyatl.ime.keyboard.core.KeyboardState
 import ee.oyatl.ime.keyboard.databinding.KbdKeyBinding
 import ee.oyatl.ime.keyboard.databinding.KbdKeyboardBinding
 import ee.oyatl.ime.keyboard.databinding.KbdRowBinding
@@ -38,15 +40,16 @@ class DefaultKeyboardView(
     override var labels: Map<Int, KeyLabel> = mapOf()
         set(value) {
             field = value
-            keySet.forEach {
-                val label = value[it.keyCode] ?: return@forEach
-                if(label.text != null) it.binding.label.text = label.text
-                if(label.icon != null) it.binding.icon.setBackgroundResource(label.icon)
+            keySet.forEach { key ->
+                val label = value[key.keyCode] ?: return@forEach
+                val (text, icon) = label
+                if(text != null) key.binding.label.text = text
+                if(icon != null) key.binding.icon.setBackgroundResource(icon)
                 if(label.showFlickHint) {
-                    if(label.up != null) it.binding.labelHintTop.text = label.up
-                    if(label.down != null) it.binding.labelHintBottom.text = label.down
-                    if(label.left != null) it.binding.labelHintLeft.text = label.left
-                    if(label.right != null) it.binding.labelHintRight.text = label.right
+                    if(label.up != null) key.binding.labelHintTop.text = label.up
+                    if(label.down != null) key.binding.labelHintBottom.text = label.down
+                    if(label.left != null) key.binding.labelHintLeft.text = label.left
+                    if(label.right != null) key.binding.labelHintRight.text = label.right
                 }
             }
         }

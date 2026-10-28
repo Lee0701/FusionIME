@@ -8,7 +8,7 @@ import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.korean.WordComposer
-import ee.oyatl.ime.keyboard.KeyboardState
+import ee.oyatl.ime.keyboard.core.KeyboardState
 import ee.oyatl.ime.fusion.layout.LayoutCangjie
 import ee.oyatl.ime.fusion.layout.preset.CangjieLayoutPresets
 import kotlinx.coroutines.CoroutineScope

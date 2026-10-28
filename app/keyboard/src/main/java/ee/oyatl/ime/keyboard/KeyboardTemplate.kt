@@ -1,6 +1,7 @@
 package ee.oyatl.ime.keyboard
 
 import android.view.KeyEvent
+import ee.oyatl.ime.keyboard.core.KeyboardState
 
 interface KeyboardTemplate {
     fun inflate(

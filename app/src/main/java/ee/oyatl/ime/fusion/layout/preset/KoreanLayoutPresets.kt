@@ -14,7 +14,7 @@ import ee.oyatl.ime.fusion.layout.TabletKeyboard
 import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
 import ee.oyatl.ime.keyboard.KeyboardConfiguration
 import ee.oyatl.ime.keyboard.KeyboardTemplate
-import ee.oyatl.ime.keyboard.LayoutTable
+import ee.oyatl.ime.keyboard.core.LayoutTable
 import ee.oyatl.ime.keyboard.LongPressTable
 import ee.oyatl.ime.keyboard.SoftKeyCodeMapper
 

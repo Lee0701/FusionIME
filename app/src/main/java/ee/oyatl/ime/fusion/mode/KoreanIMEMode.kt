@@ -17,12 +17,11 @@ import ee.oyatl.ime.keyboard.SoftKeyCodeMapper
 import ee.oyatl.ime.fusion.layout.Hangul2Set
 import ee.oyatl.ime.fusion.layout.Hangul3Set
 import ee.oyatl.ime.fusion.layout.HangulOld
-import ee.oyatl.ime.keyboard.LayoutTable
+import ee.oyatl.ime.keyboard.core.LayoutTable
 import ee.oyatl.ime.fusion.layout.LayoutExt
 import ee.oyatl.ime.fusion.layout.LayoutQwerty
 import ee.oyatl.ime.fusion.layout.preset.KoreanLayoutPresets
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.launch

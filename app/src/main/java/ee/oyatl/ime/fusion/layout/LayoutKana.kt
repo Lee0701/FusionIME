@@ -1,9 +1,7 @@
 package ee.oyatl.ime.fusion.layout
 
 import android.view.KeyEvent
-import ee.oyatl.ime.keyboard.KeyLabel
-import ee.oyatl.ime.keyboard.KeyboardConfiguration
-import kotlin.math.ceil
+import ee.oyatl.ime.keyboard.core.KeyLabel
 
 object LayoutKana {
     const val KEYS_AIUEO = "あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもや　ゆ　よらりるれろわゐ　ゑを"

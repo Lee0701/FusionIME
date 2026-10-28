@@ -1,6 +1,6 @@
 package ee.oyatl.ime.keyboard.listener
 
-import ee.oyatl.ime.keyboard.touchhandler.FlickDirection
+import ee.oyatl.ime.keyboard.core.FlickDirection
 
 class ParallelKeyboardListener(
     val listeners: List<KeyboardListener>

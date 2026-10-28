@@ -1,19 +1,17 @@
 package ee.oyatl.ime.keyboard.popup
 
-import android.graphics.Color
 import android.view.Gravity
 import android.view.View
 import android.widget.PopupWindow
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.core.graphics.drawable.toDrawable
 import ee.oyatl.ime.keyboard.DefaultKeyboardView
-import ee.oyatl.ime.keyboard.KeyLabel
+import ee.oyatl.ime.keyboard.core.KeyLabel
 import ee.oyatl.ime.keyboard.Keyboard
 import ee.oyatl.ime.keyboard.KeyboardParams
-import ee.oyatl.ime.keyboard.KeyboardState
 import ee.oyatl.ime.keyboard.KeyboardView
 import ee.oyatl.ime.keyboard.R
 import ee.oyatl.ime.keyboard.TouchMode
+import ee.oyatl.ime.keyboard.core.KeyboardState
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min

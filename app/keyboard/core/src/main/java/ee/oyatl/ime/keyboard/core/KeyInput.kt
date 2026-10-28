@@ -1,6 +1,4 @@
-package ee.oyatl.ime.keyboard
-
-import ee.oyatl.ime.keyboard.touchhandler.FlickDirection
+package ee.oyatl.ime.keyboard.core
 
 data class KeyInput(
     val keyCode: Int,

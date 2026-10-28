@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.drawable.toDrawable
+import ee.oyatl.ime.keyboard.core.KeyLabel
 import ee.oyatl.ime.keyboard.listener.EmptyListener
 import ee.oyatl.ime.keyboard.listener.KeyboardListener
 import ee.oyatl.ime.keyboard.popup.EmptyPopupManager
@@ -39,15 +40,16 @@ class CanvasKeyboardView(
     override var labels: Map<Int, KeyLabel> = mapOf()
         set(value) {
             field = value
-            keySet.forEach {
-                val label = value[it.keyCode] ?: return@forEach
-                if(label.text != null) it.label = label.text
-                if(label.icon != null) it.icon = AppCompatResources.getDrawable(context, label.icon)
+            keySet.forEach { key ->
+                val label = value[key.keyCode] ?: return@forEach
+                val (text, icon) = label
+                if(text != null) key.label = text
+                if(icon != null) key.icon = AppCompatResources.getDrawable(context, icon)
                 if(label.showFlickHint) {
-                    if(label.up != null) it.labelHintTop = label.up
-                    if(label.down != null) it.labelHintBottom = label.down
-                    if(label.left != null) it.labelHintLeft = label.left
-                    if(label.right != null) it.labelHintRight = label.right
+                    if(label.up != null) key.labelHintTop = label.up
+                    if(label.down != null) key.labelHintBottom = label.down
+                    if(label.left != null) key.labelHintLeft = label.left
+                    if(label.right != null) key.labelHintRight = label.right
                 }
             }
         }

@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.android.application)
+    kotlin("plugin.serialization") version(libs.versions.kotlin)
 }
 
 configure<ApplicationExtension> {
@@ -75,6 +76,7 @@ dependencies {
     implementation(libs.protobuf.java)
     implementation(libs.androidx.preference)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
+    implementation(project(":app:keyboard:core"))
     implementation(project(":app:keyboard"))
     implementation(project(":app:mozc"))
     implementation(project(":app:pinyin"))

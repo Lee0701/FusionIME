@@ -2,7 +2,7 @@ package ee.oyatl.ime.keyboard.listener
 
 import android.view.KeyEvent
 import ee.oyatl.ime.keyboard.KeyboardParams
-import ee.oyatl.ime.keyboard.KeyboardState
+import ee.oyatl.ime.keyboard.core.KeyboardState
 
 class ShiftStateManager(
     val listener: KeyboardListener,

@@ -1,5 +1,7 @@
 package ee.oyatl.ime.keyboard
 
+import ee.oyatl.ime.keyboard.core.KeyboardState
+
 data class KeyboardParams(
     val screenMode: KeyboardState.ScreenMode,
     val height: Int,

@@ -4,7 +4,7 @@ import android.os.Handler
 import android.os.Looper
 import android.view.KeyEvent
 import ee.oyatl.ime.keyboard.KeyboardParams
-import ee.oyatl.ime.keyboard.touchhandler.FlickDirection
+import ee.oyatl.ime.keyboard.core.FlickDirection
 
 class DeleteRepeater(
     val listener: KeyboardListener,

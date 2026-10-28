@@ -2,6 +2,7 @@
 agp = "9.4.1"
 kotlin = "2.4.21"
 coreKtx = "1.19.1"
+kotaml = "0.112.0"
 junit = "4.13.2"
 junitVersion = "1.3.0"
 espressoCore = "3.7.0"
@@ -37,6 +38,7 @@ androidx-preference = { group = "androidx.preference", name = "preference", vers
 desugar-jdk-libs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "desugarJdkLibs" }
 androidx-emoji2-emojipicker = { group = "androidx.emoji2", name = "emoji2-emojipicker", version.ref = "emoji2Emojipicker" }
 androidx-navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment", version.ref = "navigationFragment" }
+kotaml-core = { module = "io.heapy.kotaml:kotaml", version.ref = "kotaml" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

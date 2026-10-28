@@ -17,13 +17,13 @@ import ee.oyatl.ime.fusion.layout.LayoutKana
 import ee.oyatl.ime.fusion.layout.preset.JapaneseLayoutPresets
 import ee.oyatl.ime.fusion.layout.preset.LatinLayoutPresets
 import ee.oyatl.ime.fusion.mozc.InputConnectionRenderer
-import ee.oyatl.ime.keyboard.KeyInput
-import ee.oyatl.ime.keyboard.KeyLabel
+import ee.oyatl.ime.keyboard.core.KeyInput
+import ee.oyatl.ime.keyboard.core.KeyLabel
 import ee.oyatl.ime.keyboard.KeyboardParams
-import ee.oyatl.ime.keyboard.KeyboardState.Symbol
+import ee.oyatl.ime.keyboard.core.KeyboardState.Symbol
 import ee.oyatl.ime.keyboard.KeyboardView
 import ee.oyatl.ime.keyboard.listener.FlickListener
-import ee.oyatl.ime.keyboard.touchhandler.FlickDirection
+import ee.oyatl.ime.keyboard.core.FlickDirection
 import ee.oyatl.ime.keyboard.touchhandler.FlickTouchHandler
 import ee.oyatl.ime.keyboard.touchhandler.TouchHandler
 import org.mozc.android.inputmethod.japanese.MozcUtil

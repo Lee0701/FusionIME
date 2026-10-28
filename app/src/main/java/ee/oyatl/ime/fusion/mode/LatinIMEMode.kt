@@ -39,7 +39,7 @@ import ee.oyatl.ime.candidate.TripleCandidateView
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.layout.preset.LatinLayoutPresets
 import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
-import ee.oyatl.ime.keyboard.KeyboardState
+import ee.oyatl.ime.keyboard.core.KeyboardState
 import java.util.Locale
 
 class LatinIMEMode(

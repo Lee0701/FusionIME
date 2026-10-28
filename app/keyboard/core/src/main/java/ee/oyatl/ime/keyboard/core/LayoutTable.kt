@@ -1,7 +1,9 @@
-package ee.oyatl.ime.keyboard
+package ee.oyatl.ime.keyboard.core
 
-import ee.oyatl.ime.keyboard.touchhandler.FlickDirection
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class LayoutTable(
     val map: Map<Int, Item> = emptyMap()
 ) {
@@ -41,15 +43,22 @@ data class LayoutTable(
         return LayoutTable(map.mapKeys { (key, _) -> revKeyCodeMap[key] ?: key })
     }
 
+    @Serializable
     sealed interface Item {
+        @SerialName("output")
+        @Serializable
         data class Output(
             val char: Int
         ): Item
+        @SerialName("shift")
+        @Serializable
         data class ShiftState(
             val normal: Item? = null,
             val shifted: Item? = null,
             val locked: Item? = null
         ): Item
+        @SerialName("flick")
+        @Serializable
         data class Flick(
             val normal: Item? = null,
             val up: Item? = null,

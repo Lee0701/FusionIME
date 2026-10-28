@@ -1,7 +1,7 @@
 package ee.oyatl.ime.fusion.layout
 
 import android.view.KeyEvent
-import ee.oyatl.ime.keyboard.KeyLabel
+import ee.oyatl.ime.keyboard.core.KeyLabel
 import ee.oyatl.ime.keyboard.KeyboardConfiguration
 
 import ee.oyatl.ime.keyboard.KeyboardConfiguration.Item.TemplateKey

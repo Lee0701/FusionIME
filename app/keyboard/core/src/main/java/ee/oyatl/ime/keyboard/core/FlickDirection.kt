@@ -1,7 +1,9 @@
-package ee.oyatl.ime.keyboard.touchhandler
+package ee.oyatl.ime.keyboard.core
 
+import kotlinx.serialization.Serializable
 import kotlin.math.PI
 
+@Serializable
 enum class FlickDirection(
     val angle: Double,
     val diagonal: Boolean

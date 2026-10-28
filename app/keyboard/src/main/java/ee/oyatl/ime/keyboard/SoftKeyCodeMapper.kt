@@ -1,6 +1,7 @@
 package ee.oyatl.ime.keyboard
 
 import android.view.KeyCharacterMap
+import ee.oyatl.ime.keyboard.core.KeyboardState
 
 interface SoftKeyCodeMapper {
     operator fun get(

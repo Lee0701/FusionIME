@@ -13,7 +13,7 @@ import ee.oyatl.ime.fusion.layout.LayoutExt
 import ee.oyatl.ime.fusion.layout.LayoutZhuyin
 import ee.oyatl.ime.fusion.layout.preset.ZhuyinLayoutPresets
 import ee.oyatl.ime.fusion.zhuyin.ChewingConverter
-import ee.oyatl.ime.keyboard.LayoutTable
+import ee.oyatl.ime.keyboard.core.LayoutTable
 import java.util.Locale
 
 class ZhuyinIMEMode(
