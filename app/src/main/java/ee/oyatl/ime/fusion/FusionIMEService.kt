@@ -374,7 +374,10 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
             val insets = windowInsets.getInsets(Type.systemBars() and Type.ime().inv())
             // Apply bottom padding to root input view
             // Not applying to the decor view since different behaviours between devices
+            val imeView = imeView
+            // Workaround for some devices that applies bottom padding also for navbar buttons
             imeView?.setPadding(0, 0, 0, insets.bottom)
+            view.setPadding(0, 0, 0, if(imeView != null) 0 else insets.bottom)
             WindowInsetsCompat.CONSUMED
         }
     }
