@@ -1,7 +1,10 @@
 package ee.oyatl.ime.candidate
 
+import ee.oyatl.ime.theme.KeyboardTheme
+
 interface CandidateView {
 
+    var keyboardTheme: KeyboardTheme?
     var listener: Listener?
 
     fun submitList(list: List<Candidate>)

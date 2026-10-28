@@ -135,7 +135,7 @@ class JyutpingIMEMode(
         }
 
         override fun getLabel(context: Context): String {
-            val localeName = Locale("zh", "HK").displayName
+            val localeName = Locale.Builder().setLanguage("zh").setRegion("HK").build().displayName
             val layoutName = context.getString(R.string.jyutping_layout_jyutping)
             return "$localeName $layoutName"
         }

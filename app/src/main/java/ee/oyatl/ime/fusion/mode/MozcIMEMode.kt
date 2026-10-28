@@ -122,6 +122,7 @@ abstract class MozcIMEMode(
 
     override fun createCandidateView(context: Context): View {
         val candidateView = VerticalScrollingCandidateView(context, null, candidateViewHeight).apply {
+            keyboardTheme = this@MozcIMEMode.keyboardTheme
             listener = this@MozcIMEMode
         }
         this.candidateView = candidateView

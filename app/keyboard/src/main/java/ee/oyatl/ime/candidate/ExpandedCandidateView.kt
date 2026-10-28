@@ -13,7 +13,6 @@ class ExpandedCandidateView(
     attrs: AttributeSet?
 ): RecyclerCandidateView(context, attrs) {
     init {
-        setBackgroundColor(backgroundColor)
         layoutManager = FlexboxLayoutManager(
             context,
             FlexDirection.ROW,
