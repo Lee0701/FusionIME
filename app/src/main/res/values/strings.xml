@@ -160,5 +160,7 @@
     <string name="viet_layout_qwerty_quoc_ngu">QWERTY (Chu Quoc Ngu)</string>
     <string name="viet_layout_telex_nom">Telex (Han Nom)</string>
     <string name="viet_layout_telex_quoc_ngu">Telex (Chu Quoc Ngu)</string>
+    <string name="viet_layout_vni_nom">VNI (Han Nom)</string>
+    <string name="viet_layout_vni_quoc_ngu">VNI (Chu Quoc Ngu)</string>
     <string name="jyutping_layout_jyutping">Jyutping</string>
 </resources>
