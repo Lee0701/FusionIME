@@ -6,6 +6,7 @@ import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardTemplate
 import ee.oyatl.ime.fusion.keyboard.core.LayoutTable
 import ee.oyatl.ime.fusion.keyboard.core.LongPressTable
+import ee.oyatl.ime.fusion.keyboard.core.SoftKeyCodeMapper
 import ee.oyatl.ime.fusion.layout.LayoutExt
 import ee.oyatl.ime.fusion.layout.LayoutQwerty
 import ee.oyatl.ime.fusion.layout.LayoutSymbol
@@ -36,14 +37,14 @@ object SymbolLayoutPresets {
             mobile = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
                     MobileKeyboard.alphabetic(semicolon = true),
-                    MobileKeyboard.bottom(languageKeyCode = KeyCode.KEYCODE_NUM)
+                    MobileKeyboard.bottom()
                 ),
                 contentRows = MobileKeyboardRows.SEMICOLON,
             ),
             tablet = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
                     TabletKeyboard.alphabetic(semicolon = true),
-                    TabletKeyboard.bottom(languageKeyCode = KeyCode.KEYCODE_NUM)
+                    TabletKeyboard.bottom()
                 ),
                 contentRows = TabletKeyboardRows.SEMICOLON
             )
@@ -53,7 +54,8 @@ object SymbolLayoutPresets {
         ),
         longPressTable = LongPressTable.from(
             SymbolMoreKeysTable.DEFAULT
-        )
+        ),
+        softKeyCodeMapper = softKeyCodeMapper()
     )
 
     fun symbolN1(): KeyboardLayoutPreset = KeyboardLayoutPreset(
@@ -61,14 +63,14 @@ object SymbolLayoutPresets {
             mobile = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
                     MobileKeyboard.alphabetic(semicolon = true),
-                    MobileKeyboard.bottom(languageKeyCode = KeyCode.KEYCODE_NUM)
+                    MobileKeyboard.bottom()
                 ),
                 contentRows = MobileKeyboardRows.SEMICOLON,
             ),
             tablet = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
                     TabletKeyboard.alphabetic(semicolon = true),
-                    TabletKeyboard.bottom(languageKeyCode = KeyCode.KEYCODE_NUM)
+                    TabletKeyboard.bottom()
                 ),
                 contentRows = TabletKeyboardRows.SEMICOLON
             )
@@ -78,7 +80,8 @@ object SymbolLayoutPresets {
         ),
         longPressTable = LongPressTable.from(
             SymbolMoreKeysTable.DEFAULT
-        )
+        ),
+        softKeyCodeMapper = softKeyCodeMapper()
     )
 
     fun symbolN2(): KeyboardLayoutPreset = KeyboardLayoutPreset(
@@ -87,7 +90,7 @@ object SymbolLayoutPresets {
                 configuration = KeyboardConfiguration(
                     MobileKeyboard.numbers(),
                     MobileKeyboard.alphabetic(semicolon = true),
-                    MobileKeyboard.bottom(languageKeyCode = KeyCode.KEYCODE_NUM)
+                    MobileKeyboard.bottom()
                 ),
                 contentRows = MobileKeyboardRows.NUMBERS + MobileKeyboardRows.SEMICOLON,
             ),
@@ -95,7 +98,7 @@ object SymbolLayoutPresets {
                 configuration = KeyboardConfiguration(
                     TabletKeyboard.numbers(delete = true),
                     TabletKeyboard.alphabetic(semicolon = true),
-                    TabletKeyboard.bottom(languageKeyCode = KeyCode.KEYCODE_NUM)
+                    TabletKeyboard.bottom()
                 ),
                 contentRows = TabletKeyboardRows.NUMBERS + TabletKeyboardRows.SEMICOLON
             )
@@ -105,7 +108,8 @@ object SymbolLayoutPresets {
         ),
         longPressTable = LongPressTable.from(
             SymbolMoreKeysTable.DEFAULT
-        )
+        ),
+        softKeyCodeMapper = softKeyCodeMapper()
     )
 
     fun symbolO1(): KeyboardLayoutPreset = KeyboardLayoutPreset(
@@ -113,14 +117,14 @@ object SymbolLayoutPresets {
             mobile = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
                     MobileKeyboard.alphabetic(),
-                    MobileKeyboard.bottom(languageKeyCode = KeyCode.KEYCODE_NUM)
+                    MobileKeyboard.bottom()
                 ),
                 contentRows = MobileKeyboardRows.DEFAULT,
             ),
             tablet = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
                     TabletKeyboard.alphabetic(),
-                    TabletKeyboard.bottom(languageKeyCode = KeyCode.KEYCODE_NUM)
+                    TabletKeyboard.bottom()
                 ),
                 contentRows = TabletKeyboardRows.DEFAULT
             )
@@ -130,7 +134,8 @@ object SymbolLayoutPresets {
         ),
         longPressTable = LongPressTable.from(
             SymbolMoreKeysTable.DEFAULT
-        )
+        ),
+        softKeyCodeMapper = softKeyCodeMapper()
     )
 
     fun symbolO2(): KeyboardLayoutPreset = KeyboardLayoutPreset(
@@ -139,7 +144,7 @@ object SymbolLayoutPresets {
                 configuration = KeyboardConfiguration(
                     MobileKeyboard.numbers(),
                     MobileKeyboard.alphabetic(),
-                    MobileKeyboard.bottom(languageKeyCode = KeyCode.KEYCODE_NUM)
+                    MobileKeyboard.bottom()
                 ),
                 contentRows = MobileKeyboardRows.NUMBERS + MobileKeyboardRows.DEFAULT,
             ),
@@ -147,7 +152,7 @@ object SymbolLayoutPresets {
                 configuration = KeyboardConfiguration(
                     TabletKeyboard.numbers(delete = true),
                     TabletKeyboard.alphabetic(),
-                    TabletKeyboard.bottom(languageKeyCode = KeyCode.KEYCODE_NUM)
+                    TabletKeyboard.bottom()
                 ),
                 contentRows = TabletKeyboardRows.NUMBERS + TabletKeyboardRows.DEFAULT
             )
@@ -157,8 +162,13 @@ object SymbolLayoutPresets {
         ),
         longPressTable = LongPressTable.from(
             SymbolMoreKeysTable.DEFAULT
-        )
+        ),
+        softKeyCodeMapper = softKeyCodeMapper()
     )
+
+    fun softKeyCodeMapper(): SoftKeyCodeMapper {
+        return SoftKeyCodeMapper.Basic(LayoutSymbol.KEYCODE_MAP_SYMBOLS)
+    }
 
     enum class Type(
         val createPreset: () -> KeyboardLayoutPreset

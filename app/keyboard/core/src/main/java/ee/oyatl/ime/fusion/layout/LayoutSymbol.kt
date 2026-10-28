@@ -182,4 +182,8 @@ object LayoutSymbol {
         KeyCode.KEYCODE_N to listOf('-'.code, '「'.code),
         KeyCode.KEYCODE_M to listOf('"'.code, '」'.code)
     )
+
+    val KEYCODE_MAP_SYMBOLS = mapOf(
+        KeyCode.KEYCODE_LANGUAGE_SWITCH to KeyCode.KEYCODE_NUM
+    )
 }

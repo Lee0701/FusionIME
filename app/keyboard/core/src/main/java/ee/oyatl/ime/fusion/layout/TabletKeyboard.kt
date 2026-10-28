@@ -4,14 +4,12 @@ import ee.oyatl.ime.fusion.keyboard.core.KeyCode
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardConfiguration
 
 object TabletKeyboard {
-    fun bottom(
-        languageKeyCode: Int = KeyCode.KEYCODE_LANGUAGE_SWITCH
-    ): KeyboardConfiguration {
+    fun bottom(): KeyboardConfiguration {
         return KeyboardConfiguration(
             listOf(
                 listOf(
                     KeyboardConfiguration.Item.TemplateKey(KeyCode.KEYCODE_SYM, 1.5f, true),
-                    KeyboardConfiguration.Item.TemplateKey(languageKeyCode, 1f, true),
+                    KeyboardConfiguration.Item.TemplateKey(KeyCode.KEYCODE_LANGUAGE_SWITCH, 1f, true),
                     KeyboardConfiguration.Item.TemplateKey(KeyCode.KEYCODE_SPACE, 5f),
                     KeyboardConfiguration.Item.TemplateKey(KeyCode.KEYCODE_DPAD_LEFT, 1f, true),
                     KeyboardConfiguration.Item.TemplateKey(KeyCode.KEYCODE_DPAD_RIGHT, 1f, true),

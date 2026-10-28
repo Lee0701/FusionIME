@@ -7,14 +7,13 @@ object MobileKeyboard {
     fun bottom(
         left: Int = KeyCode.KEYCODE_COMMA,
         right: Int = KeyCode.KEYCODE_PERIOD,
-        dpad: Boolean = false,
-        languageKeyCode: Int = KeyCode.KEYCODE_LANGUAGE_SWITCH
+        dpad: Boolean = false
     ): KeyboardConfiguration {
         val row = mutableListOf<KeyboardConfiguration.Item>()
         row += listOf(
             KeyboardConfiguration.Item.TemplateKey(KeyCode.KEYCODE_SYM, 1.5f, true),
             KeyboardConfiguration.Item.TemplateKey(left),
-            KeyboardConfiguration.Item.TemplateKey(languageKeyCode, 1f, true)
+            KeyboardConfiguration.Item.TemplateKey(KeyCode.KEYCODE_LANGUAGE_SWITCH, 1f, true)
         )
         val spaceWidth = if(dpad) 2f else 4f
         row += KeyboardConfiguration.Item.TemplateKey(KeyCode.KEYCODE_SPACE, spaceWidth)
