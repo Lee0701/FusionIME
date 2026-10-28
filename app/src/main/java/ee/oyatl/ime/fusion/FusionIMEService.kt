@@ -90,6 +90,7 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         onResetViews()
+        updateNavigationBar()
     }
 
     fun onInit() {
