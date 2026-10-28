@@ -256,7 +256,6 @@ class CanvasKeyboardView(
     }
 
     override fun onReset() {
-        listener.onReset()
         invalidate()
     }
 

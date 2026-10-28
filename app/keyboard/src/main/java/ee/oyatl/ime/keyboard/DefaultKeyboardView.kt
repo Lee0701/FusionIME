@@ -146,7 +146,6 @@ class DefaultKeyboardView(
     }
 
     override fun onReset() {
-        listener.onReset()
         touchHandler.onReset()
     }
 

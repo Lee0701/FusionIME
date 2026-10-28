@@ -99,10 +99,6 @@ class LatinIMEMode(
         updateAutoCapsState()
     }
 
-    override fun onReset() {
-        super.onReset()
-    }
-
     override fun createCandidateView(context: Context): View {
         candidateView = TripleCandidateView(context, null).apply {
             keyboardTheme = this@LatinIMEMode.keyboardTheme
@@ -125,6 +121,7 @@ class LatinIMEMode(
             return
         }
         onCodeInput(codePoint, 0, 0, false)
+        updateAutoCapsState()
     }
 
     override fun onSpecial(keyCode: Int) {
@@ -140,6 +137,7 @@ class LatinIMEMode(
             }
             else -> super.onSpecial(keyCode)
         }
+        updateAutoCapsState()
     }
 
     override fun updateSelection(
@@ -159,13 +157,14 @@ class LatinIMEMode(
     }
 
     private fun updateAutoCapsState() {
+        if(symbolState != KeyboardState.Symbol.Text) return
         if(shiftState == KeyboardState.Shift.Locked) return
         if(currentAutoCapsState != Constants.TextUtils.CAP_MODE_OFF) {
             shiftState = KeyboardState.Shift.AutoShifted
         } else {
             shiftState = KeyboardState.Shift.Released
         }
-        super.updateInputView()
+        updateInputView()
     }
 
     fun loadSettings() {
@@ -347,7 +346,6 @@ class LatinIMEMode(
             )
         updateStateAfterInputTransaction(completeInputTransaction)
         keyboardSwitcher.onEvent(event, currentAutoCapsState, currentRecapitalizeState)
-        updateAutoCapsState()
     }
 
     override fun onTextInput(rawText: String?) {
