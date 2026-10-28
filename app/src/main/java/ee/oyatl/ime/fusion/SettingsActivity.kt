@@ -21,6 +21,7 @@ private const val TITLE_TAG = "settingsActivityTitle"
 class SettingsActivity : AppCompatActivity(), PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
 
     lateinit var binding: SettingsActivityBinding
+    private var snackbar: Snackbar? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,11 +76,16 @@ class SettingsActivity : AppCompatActivity(), PreferenceFragmentCompat.OnPrefere
     override fun onResume() {
         super.onResume()
         if(!InputMethodUtil.checkMethodSelected(this)) {
-            Snackbar.make(binding.root, R.string.setup_wizard_incomplete, Snackbar.LENGTH_INDEFINITE)
-                .setAction(R.string.setup_wizard_start) {
-                    startActivity(Intent(this, SetupWizardActivity::class.java))
-                }
-                .show()
+            if(snackbar == null) {
+                snackbar = Snackbar
+                    .make(binding.root, R.string.setup_wizard_incomplete, Snackbar.LENGTH_INDEFINITE)
+                    .setAction(R.string.setup_wizard_start) {
+                        startActivity(Intent(this, SetupWizardActivity::class.java))
+                    }
+                snackbar?.show()
+            }
+        } else {
+            snackbar?.dismiss()
         }
     }
 
