@@ -26,13 +26,14 @@ import ee.oyatl.ime.keyboard.KeyboardView
 import ee.oyatl.ime.keyboard.LayoutTable
 import ee.oyatl.ime.keyboard.SwitcherKeyboardView
 import ee.oyatl.ime.keyboard.TouchMode
-import ee.oyatl.ime.keyboard.listener.CompoundKeyboardListener
+import ee.oyatl.ime.keyboard.listener.SerialKeyboardListener
 import ee.oyatl.ime.keyboard.listener.DeleteRepeater
 import ee.oyatl.ime.keyboard.listener.FlickListener
 import ee.oyatl.ime.keyboard.listener.InputOnKeyUp
 import ee.oyatl.ime.keyboard.listener.KeyFeedbackManager
 import ee.oyatl.ime.keyboard.listener.KeyboardListener
 import ee.oyatl.ime.keyboard.listener.LongPressListener
+import ee.oyatl.ime.keyboard.listener.ParallelKeyboardListener
 import ee.oyatl.ime.keyboard.listener.ShiftStateManager
 import ee.oyatl.ime.keyboard.popup.DefaultPopupManager
 import ee.oyatl.ime.keyboard.popup.MoreKeysPopup
@@ -269,11 +270,13 @@ abstract class CommonIMEMode(
         context: Context,
         params: KeyboardParams
     ): KeyboardListener {
-        return CompoundKeyboardListener(
+        return SerialKeyboardListener(
             KeyFeedbackManager(context, params),
             DeleteRepeater(this, params),
-            ShiftStateManager(this, params),
-            InputOnKeyUp(this)
+            ParallelKeyboardListener(
+                InputOnKeyUp(this, ignoreKeyCodes = ShiftStateManager.KEY_CODES),
+                ShiftStateManager(this, params)
+            )
         )
     }
 

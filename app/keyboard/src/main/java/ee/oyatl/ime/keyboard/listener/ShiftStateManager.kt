@@ -1,6 +1,5 @@
 package ee.oyatl.ime.keyboard.listener
 
-import android.os.Handler
 import android.view.KeyEvent
 import ee.oyatl.ime.keyboard.KeyboardParams
 import ee.oyatl.ime.keyboard.KeyboardState
@@ -9,8 +8,6 @@ class ShiftStateManager(
     val listener: KeyboardListener,
     val params: KeyboardParams
 ): KeyboardListener {
-    val handler = Handler()
-
     var shiftState: KeyboardState.Shift = KeyboardState.Shift.Released
         set(value) {
             field = value
@@ -44,7 +41,7 @@ class ShiftStateManager(
                 return true
             }
             else -> {
-                return false
+                return true
             }
         }
     }
@@ -56,8 +53,8 @@ class ShiftStateManager(
                 return true
             }
             else -> {
-                handler.post { autoReleaseShift() }
-                return false
+                autoReleaseShift()
+                return true
             }
         }
     }
@@ -112,5 +109,13 @@ class ShiftStateManager(
                 inputWhileShifted = true
             }
         }
+    }
+
+    companion object {
+        val KEY_CODES = setOf(
+            KeyEvent.KEYCODE_SHIFT_LEFT,
+            KeyEvent.KEYCODE_SHIFT_RIGHT,
+            KeyEvent.KEYCODE_CAPS_LOCK
+        )
     }
 }
