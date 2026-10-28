@@ -18,6 +18,7 @@ import ee.oyatl.ime.fusion.layout.LayoutKana
 import ee.oyatl.ime.fusion.layout.preset.JapaneseLayoutPresets
 import ee.oyatl.ime.fusion.layout.preset.LatinLayoutPresets
 import ee.oyatl.ime.fusion.mozc.InputConnectionRenderer
+import ee.oyatl.ime.keyboard.KeyInput
 import ee.oyatl.ime.keyboard.KeyLabel
 import ee.oyatl.ime.keyboard.KeyboardParams
 import ee.oyatl.ime.keyboard.KeyboardState.Symbol
@@ -259,13 +260,10 @@ abstract class MozcIMEMode(
             if(keyCode <= 0 || !keyCharacterMap.isPrintingKey(keyCode)) {
                 return super.onKeyUp(keyCode, metaState)
             }
-            val direction = flicks[keyCode]
-            when(val item = currentLayoutPreset.layoutTable[keyCode]) {
-                is LayoutTable.FlickItem -> onChar(item.forFlickDirection(direction))
-                else -> onChar(item?.normal ?: keyCharacterMap.get(keyCode, metaState))
-            }
-            this.flicks -= keyCode
-            return false
+            val input = KeyInput(keyCode, shiftState, flicks.remove(keyCode))
+            val text = currentLayoutPreset.layoutTable[input] ?: return false
+            onChar(text)
+            return true
         }
 
         override fun onFlick(
@@ -334,12 +332,10 @@ abstract class MozcIMEMode(
             if(keyCode <= 0 || !keyCharacterMap.isPrintingKey(keyCode)) {
                 return super.onKeyUp(keyCode, metaState)
             }
-            val direction = flicks.remove(keyCode)
-            when(val item = currentLayoutPreset.layoutTable[keyCode]) {
-                is LayoutTable.FlickItem -> onChar(item.forFlickDirection(direction))
-                else -> onChar(item?.normal ?: keyCharacterMap.get(keyCode, metaState))
-            }
-            return false
+            val input = KeyInput(keyCode, shiftState, flicks.remove(keyCode))
+            val text = currentLayoutPreset.layoutTable[input] ?: return false
+            onChar(text)
+            return true
         }
 
         override fun onFlick(keyCode: Int, direction: FlickDirection): Boolean {
