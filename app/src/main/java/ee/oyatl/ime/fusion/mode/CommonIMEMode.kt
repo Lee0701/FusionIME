@@ -14,20 +14,18 @@ import ee.oyatl.ime.fusion.FlickAction
 import ee.oyatl.ime.fusion.KeyEventUtil
 import ee.oyatl.ime.fusion.PreferenceUtil.getOrientationBoolean
 import ee.oyatl.ime.fusion.PreferenceUtil.getOrientationInteger
-import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.R
-import ee.oyatl.ime.fusion.layout.preset.SymbolLayoutPresets
 import ee.oyatl.ime.fusion.layout.preset.LatinLayoutPresets
+import ee.oyatl.ime.fusion.layout.preset.SymbolLayoutPresets
 import ee.oyatl.ime.keyboard.CanvasKeyboardView
-import ee.oyatl.ime.keyboard.DefaultKeyboardView
 import ee.oyatl.ime.keyboard.KeyLabel
+import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
 import ee.oyatl.ime.keyboard.KeyboardParams
 import ee.oyatl.ime.keyboard.KeyboardState
 import ee.oyatl.ime.keyboard.KeyboardView
 import ee.oyatl.ime.keyboard.LayoutTable
 import ee.oyatl.ime.keyboard.SwitcherKeyboardView
 import ee.oyatl.ime.keyboard.TouchMode
-import ee.oyatl.ime.keyboard.listener.SerialKeyboardListener
 import ee.oyatl.ime.keyboard.listener.DeleteRepeater
 import ee.oyatl.ime.keyboard.listener.FlickListener
 import ee.oyatl.ime.keyboard.listener.InputOnKeyUp
@@ -35,6 +33,7 @@ import ee.oyatl.ime.keyboard.listener.KeyFeedbackManager
 import ee.oyatl.ime.keyboard.listener.KeyboardListener
 import ee.oyatl.ime.keyboard.listener.LongPressListener
 import ee.oyatl.ime.keyboard.listener.ParallelKeyboardListener
+import ee.oyatl.ime.keyboard.listener.SerialKeyboardListener
 import ee.oyatl.ime.keyboard.listener.ShiftStateManager
 import ee.oyatl.ime.keyboard.popup.DefaultPopupManager
 import ee.oyatl.ime.keyboard.popup.MoreKeysPopup
@@ -138,7 +137,7 @@ abstract class CommonIMEMode(
         setPreferredKeyboard(editorInfo)
         shiftState = KeyboardState.Shift.Released
         updateInputView()
-        keyboardView?.onReset()
+        CoroutineScope(Dispatchers.Main).launch { keyboardView?.onReset() }
     }
 
     override fun onFinish() {
@@ -245,6 +244,7 @@ abstract class CommonIMEMode(
         val soundVolume = if(sound) 1f else 0f
         val vibrationDuration = if(haptic) duration else 0L
         val touchMode = TouchMode.entries.find { it.name == preference.getString("touch_mode", null) } ?: TouchMode.Seek
+        val touchCorrection = preference.getBoolean("touch_correction", true)
         val defaultFlickSensitivity = context.resources.getInteger(R.integer.flick_sensitivity_default).toFloat()
         val flickSensitivity = preference.getFloat("flick_sensitivity", defaultFlickSensitivity).toInt()
         val params = KeyboardParams(
@@ -256,6 +256,7 @@ abstract class CommonIMEMode(
             soundVolume = soundVolume,
             vibrationDuration = vibrationDuration,
             touchMode = touchMode,
+            touchCorrection = touchCorrection,
             flickSensitivity = flickSensitivity,
             longPressDelay = 300,
             shiftLockDelay = 300,

@@ -52,6 +52,10 @@
             android:summary="CC0 1.0 Universal"
             app:url="https://github.com/yuetyam/jyutping-android" />
 
+        <ee.oyatl.ime.fusion.preference.OpenWebPreference
+            android:title="TrueTap Keyboard"
+            app:url="https://github.com/RedZero13/TrueTap-Keyboard" />
+
     </PreferenceCategory>
 
 </androidx.preference.PreferenceScreen>
