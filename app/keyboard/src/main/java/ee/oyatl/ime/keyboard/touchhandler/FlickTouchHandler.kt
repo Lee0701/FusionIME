@@ -64,7 +64,7 @@ class FlickTouchHandler(
                         val popup = keyboardView.popupManager.getPopup(pointer.key)
                         if(popup is PreviewPopup) {
                             val newLabel = keyboardView.labels[pointer.key.keyCode]
-                            if(newLabel is KeyLabel.Flick) newLabel.forDirection(direction)?.let { popup.label = it }
+                            newLabel?.forDirection(direction)?.let { popup.label = it }
                         }
                         val listener = keyboardView.listener
                         if(listener is FlickListener) {

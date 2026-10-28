@@ -94,7 +94,7 @@ class MoreKeysPopup(
                 }
             ), keyboardParams)
             it.labels = candidates
-                .mapIndexed { i, codePoint -> i to KeyLabel.Default(codePoint.toChar().toString()) }
+                .mapIndexed { i, codePoint -> i to KeyLabel(codePoint.toChar().toString()) }
                 .toMap()
         }
 

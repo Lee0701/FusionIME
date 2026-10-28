@@ -12,9 +12,6 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.LinearLayout
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.DrawableCompat
-import androidx.core.view.ViewCompat
 import ee.oyatl.ime.keyboard.databinding.KbdKeyBinding
 import ee.oyatl.ime.keyboard.databinding.KbdKeyboardBinding
 import ee.oyatl.ime.keyboard.databinding.KbdRowBinding
@@ -43,20 +40,13 @@ class DefaultKeyboardView(
             field = value
             keySet.forEach {
                 val label = value[it.keyCode] ?: return@forEach
-                when(label) {
-                    is KeyLabel.Default -> {
-                        if(label.text != null) it.binding.label.text = label.text
-                        if(label.icon != null) it.binding.icon.setBackgroundResource(label.icon)
-                    }
-                    is KeyLabel.Flick -> {
-                        if(label.text != null) it.binding.label.text = label.text
-                        if(label.showAsHint) {
-                            if(label.up != null) it.binding.labelHintTop.text = label.up
-                            if(label.down != null) it.binding.labelHintBottom.text = label.down
-                            if(label.left != null) it.binding.labelHintLeft.text = label.left
-                            if(label.right != null) it.binding.labelHintRight.text = label.right
-                        }
-                    }
+                if(label.text != null) it.binding.label.text = label.text
+                if(label.icon != null) it.binding.icon.setBackgroundResource(label.icon)
+                if(label.showFlickHint) {
+                    if(label.up != null) it.binding.labelHintTop.text = label.up
+                    if(label.down != null) it.binding.labelHintBottom.text = label.down
+                    if(label.left != null) it.binding.labelHintLeft.text = label.left
+                    if(label.right != null) it.binding.labelHintRight.text = label.right
                 }
             }
         }

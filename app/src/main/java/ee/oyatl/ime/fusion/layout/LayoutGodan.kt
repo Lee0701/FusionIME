@@ -84,94 +84,94 @@ object LayoutGodan {
         KeyEvent.KEYCODE_W to listOf('w'.code, 'v'.code, 0, '「'.code, '」'.code),
     )
 
-    val LABELS: Map<Int, KeyLabel.Flick> = mapOf(
-        KeyEvent.KEYCODE_A to KeyLabel.Flick(
+    val LABELS: Map<Int, KeyLabel> = mapOf(
+        KeyEvent.KEYCODE_A to KeyLabel(
             text =  "A",
             left =  "あっ",
             up =    "あん",
             right = "ゃ",
             down =  "1"
         ),
-        KeyEvent.KEYCODE_I to KeyLabel.Flick(
+        KeyEvent.KEYCODE_I to KeyLabel(
             text =  "I",
             left =  "いっ",
             up =    "いん",
             right = "ぃ",
             down =  "4"
         ),
-        KeyEvent.KEYCODE_U to KeyLabel.Flick(
+        KeyEvent.KEYCODE_U to KeyLabel(
             text =  "U",
             left =  "うっ",
             up =    "うん",
             right = "ゅ",
             down =  "7"
         ),
-        KeyEvent.KEYCODE_E to KeyLabel.Flick(
+        KeyEvent.KEYCODE_E to KeyLabel(
             text =  "E",
             left =  "えっ",
             up =    "えん",
             right = "ぇ"
         ),
-        KeyEvent.KEYCODE_O to KeyLabel.Flick(
+        KeyEvent.KEYCODE_O to KeyLabel(
             text =  "O",
             left =  "おっ",
             up =    "おん",
             right = "ょ"
         ),
 
-        KeyEvent.KEYCODE_K to KeyLabel.Flick(
+        KeyEvent.KEYCODE_K to KeyLabel(
             text =  "K",
             up =    "Q",
             right = "G",
             down =  "2"
         ),
-        KeyEvent.KEYCODE_H to KeyLabel.Flick(
+        KeyEvent.KEYCODE_H to KeyLabel(
             text =  "H",
             left =  "P",
             up =    "F",
             right = "B",
             down =  "3"
         ),
-        KeyEvent.KEYCODE_S to KeyLabel.Flick(
+        KeyEvent.KEYCODE_S to KeyLabel(
             text =  "S",
             up =    "J",
             right = "Z",
             down =  "5"
         ),
-        KeyEvent.KEYCODE_M to KeyLabel.Flick(
+        KeyEvent.KEYCODE_M to KeyLabel(
             text =  "M",
             left =  "／",
             up =    "L",
             right = "ー",
             down =  "6"
         ),
-        KeyEvent.KEYCODE_T to KeyLabel.Flick(
+        KeyEvent.KEYCODE_T to KeyLabel(
             text =  "T",
             up =    "C",
             right = "D",
             down =  "8"
         ),
-        KeyEvent.KEYCODE_Y to KeyLabel.Flick(
+        KeyEvent.KEYCODE_Y to KeyLabel(
             text =  "Y",
             left =  "（",
             up =    "X",
             right = "）",
             down =  "9"
         ),
-        KeyEvent.KEYCODE_N to KeyLabel.Flick(
+        KeyEvent.KEYCODE_N to KeyLabel(
             text =  "N",
             left =  "：",
             right = "・",
             down =  "0"
         ),
-        KeyEvent.KEYCODE_R to KeyLabel.Flick(
+        KeyEvent.KEYCODE_R to KeyLabel(
             text =  "R",
             left =  "。",
             up =    "？",
             right = "！",
             down =  "、"
         ),
-        KeyEvent.KEYCODE_W to KeyLabel.Flick(
+        KeyEvent.KEYCODE_W to KeyLabel(
             text =  "W",
             left =  "「",
             up =  "V",

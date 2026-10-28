@@ -70,7 +70,7 @@ abstract class CommonIMEMode(
         get() = currentLayoutPreset.layoutTable.map.mapValues { (k, _) ->
             val input = KeyInput(k, shiftState, null)
             val text = currentLayoutPreset.layoutTable[input]?.toChar()?.toString()
-            KeyLabel.Default(text)
+            KeyLabel(text)
         }
 
     protected var keyboardView: KeyboardView? = null
@@ -222,8 +222,8 @@ abstract class CommonIMEMode(
                 KeyboardState.Shift.AutoShifted -> ee.oyatl.ime.keyboard.R.drawable.keyic_shift_pressed
             }
             val icons = mapOf(
-                KeyEvent.KEYCODE_SHIFT_LEFT to KeyLabel.Default(icon = shiftIcon),
-                KeyEvent.KEYCODE_SHIFT_RIGHT to KeyLabel.Default(icon = shiftIcon)
+                KeyEvent.KEYCODE_SHIFT_LEFT to KeyLabel(icon = shiftIcon),
+                KeyEvent.KEYCODE_SHIFT_RIGHT to KeyLabel(icon = shiftIcon)
             )
             keyboardView.labels = icons + this.keyLabels
         }

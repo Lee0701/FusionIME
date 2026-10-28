@@ -33,81 +33,81 @@ object LayoutKana {
         KeyEvent.KEYCODE_PERIOD to "#?>,!"
     )
 
-    val LABELS_12KEY: Map<Int, KeyLabel.Flick> = mapOf(
-        KeyEvent.KEYCODE_1 to KeyLabel.Flick(
+    val LABELS_12KEY: Map<Int, KeyLabel> = mapOf(
+        KeyEvent.KEYCODE_1 to KeyLabel(
             text =  "あ",
             left =  "い",
             up =    "う",
             right = "え",
             down =  "お"
         ),
-        KeyEvent.KEYCODE_2 to KeyLabel.Flick(
+        KeyEvent.KEYCODE_2 to KeyLabel(
             text =  "か",
             left =  "き",
             up =    "く",
             right = "け",
             down =  "こ"
         ),
-        KeyEvent.KEYCODE_3 to KeyLabel.Flick(
+        KeyEvent.KEYCODE_3 to KeyLabel(
             text =  "さ",
             left =  "し",
             up =    "す",
             right = "せ",
             down =  "そ"
         ),
-        KeyEvent.KEYCODE_4 to KeyLabel.Flick(
+        KeyEvent.KEYCODE_4 to KeyLabel(
             text =  "た",
             left =  "ち",
             up =    "つ",
             right = "て",
             down =  "と"
         ),
-        KeyEvent.KEYCODE_5 to KeyLabel.Flick(
+        KeyEvent.KEYCODE_5 to KeyLabel(
             text =  "な",
             left =  "に",
             up =    "ぬ",
             right = "ね",
             down =  "の"
         ),
-        KeyEvent.KEYCODE_6 to KeyLabel.Flick(
+        KeyEvent.KEYCODE_6 to KeyLabel(
             text =  "は",
             left =  "ひ",
             up =    "ふ",
             right = "へ",
             down =  "ほ"
         ),
-        KeyEvent.KEYCODE_7 to KeyLabel.Flick(
+        KeyEvent.KEYCODE_7 to KeyLabel(
             text =  "ま",
             left =  "み",
             up =    "む",
             right = "め",
             down =  "も"
         ),
-        KeyEvent.KEYCODE_8 to KeyLabel.Flick(
+        KeyEvent.KEYCODE_8 to KeyLabel(
             text =  "や",
             left =  "（",
             up =    "ゆ",
             right = "）",
             down =  "よ"
         ),
-        KeyEvent.KEYCODE_9 to KeyLabel.Flick(
+        KeyEvent.KEYCODE_9 to KeyLabel(
             text =  "ら",
             left =  "り",
             up =    "る",
             right = "れ",
             down =  "ろ"
         ),
-        KeyEvent.KEYCODE_0 to KeyLabel.Flick(
+        KeyEvent.KEYCODE_0 to KeyLabel(
             text =  "わ",
             left =  "を",
             up =    "ん",
             right = "ー",
             down =  "～"
         ),
-        KeyEvent.KEYCODE_COMMA to KeyLabel.Flick(
+        KeyEvent.KEYCODE_COMMA to KeyLabel(
             text =  "゛゜",
         ),
-        KeyEvent.KEYCODE_PERIOD to KeyLabel.Flick(
+        KeyEvent.KEYCODE_PERIOD to KeyLabel(
             text =  "、",
             left =  "。",
             up =    "？",

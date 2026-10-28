@@ -7,7 +7,6 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
 import androidx.annotation.StringRes
-import androidx.preference.PreferenceManager
 import com.google.common.base.Optional
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.VerticalScrollingCandidateView
@@ -23,7 +22,6 @@ import ee.oyatl.ime.keyboard.KeyLabel
 import ee.oyatl.ime.keyboard.KeyboardParams
 import ee.oyatl.ime.keyboard.KeyboardState.Symbol
 import ee.oyatl.ime.keyboard.KeyboardView
-import ee.oyatl.ime.keyboard.LayoutTable
 import ee.oyatl.ime.keyboard.listener.FlickListener
 import ee.oyatl.ime.keyboard.touchhandler.FlickDirection
 import ee.oyatl.ime.keyboard.touchhandler.FlickTouchHandler
@@ -217,10 +215,10 @@ abstract class MozcIMEMode(
         // Show them as hints only when option is on
         private val keyLabels12Key: Map<Int, KeyLabel> =
             if(flickMode == FlickMode.ToggleOnly) LayoutKana.LABELS_12KEY.mapValues { (k, v) ->
-                KeyLabel.Default(v.text)
+                KeyLabel(v.text)
             }
             else LayoutKana.LABELS_12KEY.mapValues { (k, v) ->
-                v.copy(showAsHint = flickHint)
+                v.copy(showFlickHint = flickHint)
             }
 
         override val keyLabels: Map<Int, KeyLabel>
@@ -287,7 +285,7 @@ abstract class MozcIMEMode(
 
         // Show flick hints only when option is on
         private val keyLabelsGodan = LayoutGodan.LABELS.mapValues { (k, v) ->
-            v.copy(showAsHint = flickHint)
+            v.copy(showFlickHint = flickHint)
         }
 
         override val keyLabels: Map<Int, KeyLabel>

@@ -2,18 +2,15 @@ package ee.oyatl.ime.keyboard
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.res.ColorStateList
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.util.AttributeSet
-import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.graphics.drawable.toBitmap
@@ -44,20 +41,13 @@ class CanvasKeyboardView(
             field = value
             keySet.forEach {
                 val label = value[it.keyCode] ?: return@forEach
-                when(label) {
-                    is KeyLabel.Default -> {
-                        if(label.text != null) it.label = label.text
-                        if(label.icon != null) it.icon = AppCompatResources.getDrawable(context, label.icon)
-                    }
-                    is KeyLabel.Flick -> {
-                        if(label.text != null) it.label = label.text
-                        if(label.showAsHint) {
-                            if(label.up != null) it.labelHintTop = label.up
-                            if(label.down != null) it.labelHintBottom = label.down
-                            if(label.left != null) it.labelHintLeft = label.left
-                            if(label.right != null) it.labelHintRight = label.right
-                        }
-                    }
+                if(label.text != null) it.label = label.text
+                if(label.icon != null) it.icon = AppCompatResources.getDrawable(context, label.icon)
+                if(label.showFlickHint) {
+                    if(label.up != null) it.labelHintTop = label.up
+                    if(label.down != null) it.labelHintBottom = label.down
+                    if(label.left != null) it.labelHintLeft = label.left
+                    if(label.right != null) it.labelHintRight = label.right
                 }
             }
         }
