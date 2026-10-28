@@ -167,7 +167,7 @@ abstract class CangjieIMEMode(
         listener: IMEMode.Listener
     ): CangjieIMEMode(listener) {
         override val keyMap: Map<Char, Char> = LayoutCangjie.KEY_MAP_CANGJIE
-        override var textLayoutPreset: KeyboardLayoutPreset = CangjieLayoutPresets.cangjie(numberRow, cursorKeys)
+        override var textLayoutPreset: KeyboardLayoutPreset = CangjieLayoutPresets.cangjie()
     }
 
     class Dayi3(
@@ -176,7 +176,7 @@ abstract class CangjieIMEMode(
         listener: IMEMode.Listener
     ): CangjieIMEMode(listener) {
         override val inputMode: Int = TableLoader.DAYI3
-        override var textLayoutPreset: KeyboardLayoutPreset = CangjieLayoutPresets.dayi3(cursorKeys)
+        override var textLayoutPreset: KeyboardLayoutPreset = CangjieLayoutPresets.dayi3()
         override val keyMap: Map<Char, Char> = LayoutCangjie.KEY_MAP_DAYI3
     }
 

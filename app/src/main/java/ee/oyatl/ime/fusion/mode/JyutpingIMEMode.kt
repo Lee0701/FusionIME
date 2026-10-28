@@ -130,7 +130,7 @@ class JyutpingIMEMode(
         override val type: String = TYPE
 
         override fun create(listener: IMEMode.Listener): IMEMode {
-            val textLayoutPreset = JyutpingLayoutPresets.jyutping(LatinLayoutPresets.qwerty(false, numberRow, cursorKeys))
+            val textLayoutPreset = JyutpingLayoutPresets.jyutping(LatinLayoutPresets.qwerty(false))
             return JyutpingIMEMode(textLayoutPreset, listener)
         }
 

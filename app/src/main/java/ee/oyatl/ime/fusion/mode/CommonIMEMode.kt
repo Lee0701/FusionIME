@@ -270,12 +270,13 @@ abstract class CommonIMEMode(
             repeatDelay = 300,
             repeatInterval = 30,
             previewPopups = showPreviewPopup,
+            extra = mapOf("number_row" to "true", "cursor_keys" to "true")
         )
 
         return when(symbolState) {
             KeyboardState.Symbol.Text -> params
-            KeyboardState.Symbol.Symbol -> params.copy(shiftAutoRelease = false)
-            KeyboardState.Symbol.Number -> params.copy(shiftAutoRelease = false, splitWidth = 0)
+            KeyboardState.Symbol.Symbol -> params.copy(shiftAutoRelease = false, extra = mapOf())
+            KeyboardState.Symbol.Number -> params.copy(shiftAutoRelease = false, splitWidth = 0, extra = mapOf())
         }
     }
 

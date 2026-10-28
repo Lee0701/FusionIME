@@ -28,19 +28,19 @@ object KoreanLayoutPresets {
             keyboardTemplate = KeyboardTemplate.ByScreenMode(
                 mobile = KeyboardTemplate.Basic(
                     configuration = KeyboardConfiguration(
-                        if (numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
+                        MobileKeyboard.numbers(),
                         MobileKeyboard.alphabetic(semicolon = false),
-                        MobileKeyboard.bottom(dpad = cursorKeys)
+                        MobileKeyboard.bottom()
                     ),
-                    contentRows = (if(numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.KS
+                    contentRows = MobileKeyboardRows.NUMBERS + MobileKeyboardRows.KS
                 ),
                 tablet = KeyboardTemplate.Basic(
                     configuration = KeyboardConfiguration(
-                        if(numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
-                        TabletKeyboard.alphabetic(semicolon = false, delete = !numberRow),
+                        TabletKeyboard.numbers(),
+                        TabletKeyboard.alphabetic(semicolon = false),
                         TabletKeyboard.bottom()
                     ),
-                    contentRows = (if(numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.KS
+                    contentRows = TabletKeyboardRows.NUMBERS + TabletKeyboardRows.KS
                 )
             ),
             layoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY) + layoutTable,
@@ -59,14 +59,14 @@ object KoreanLayoutPresets {
                     configuration = KeyboardConfiguration(
                         MobileKeyboard.numbers(),
                         MobileKeyboard.alphabetic(semicolon = true, shiftDeleteWidth = 1f),
-                        MobileKeyboard.bottom(left = ExtKeyCode.KEYCODE_PERIOD_COMMA, right = KeyCode.KEYCODE_SLASH, dpad = cursorKeys)
+                        MobileKeyboard.bottom(left = ExtKeyCode.KEYCODE_PERIOD_COMMA, right = KeyCode.KEYCODE_SLASH)
                     ),
                     contentRows = MobileKeyboardRows.NUMBERS + MobileKeyboardRows.SEMICOLON_QUOTE
                 ),
                 tablet = KeyboardTemplate.Basic(
                     configuration = KeyboardConfiguration(
-                        TabletKeyboard.numbers(delete = true),
-                        TabletKeyboard.alphabetic(semicolon = true, delete = false),
+                        TabletKeyboard.numbers(),
+                        TabletKeyboard.alphabetic(semicolon = true),
                         TabletKeyboard.bottom()
                     ),
                     contentRows = TabletKeyboardRows.NUMBERS + TabletKeyboardRows.SEMICOLON_QUOTE_SLASH
@@ -86,14 +86,14 @@ object KoreanLayoutPresets {
                     configuration = KeyboardConfiguration(
                         MobileKeyboard.numbers(),
                         MobileKeyboard.alphabetic(semicolon = true, shiftDeleteWidth = 1f),
-                        MobileKeyboard.bottom(ExtKeyCode.KEYCODE_PERIOD_COMMA, KeyCode.KEYCODE_SLASH, dpad = cursorKeys)
+                        MobileKeyboard.bottom(ExtKeyCode.KEYCODE_PERIOD_COMMA, KeyCode.KEYCODE_SLASH)
                     ),
                     contentRows = MobileKeyboardRows.NUMBERS + MobileKeyboardRows.SEMICOLON_QUOTE
                 ),
                 tablet = KeyboardTemplate.Basic(
                     configuration = KeyboardConfiguration(
-                        TabletKeyboard.numbers(delete = true),
-                        TabletKeyboard.alphabetic(semicolon = true, delete = false, spacerOnDelete = false),
+                        TabletKeyboard.numbers(),
+                        TabletKeyboard.alphabetic(semicolon = true, fillDeleteSpace = false),
                         TabletKeyboard.bottom()
                     ),
                     contentRows = TabletKeyboardRows.HANGUL_OLD_393

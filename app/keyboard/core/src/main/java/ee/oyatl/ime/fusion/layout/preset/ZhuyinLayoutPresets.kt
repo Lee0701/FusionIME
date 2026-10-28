@@ -23,14 +23,14 @@ object ZhuyinLayoutPresets {
                     configuration = KeyboardConfiguration(
                         MobileKeyboard.numbers(),
                         MobileKeyboard.alphabetic(semicolon = true, shiftDeleteWidth = 1f, shift = false),
-                        MobileKeyboard.bottom(left = KeyCode.KEYCODE_MINUS, right = KeyCode.KEYCODE_SLASH, dpad = cursorKeys)
+                        MobileKeyboard.bottom(left = KeyCode.KEYCODE_MINUS, right = KeyCode.KEYCODE_SLASH)
                     ),
                     contentRows = MobileKeyboardRows.NUMBERS + MobileKeyboardRows.HALF_GRID
                 ),
                 tablet = KeyboardTemplate.Basic(
                     configuration = KeyboardConfiguration(
-                        TabletKeyboard.numbers(delete = true),
-                        TabletKeyboard.alphabetic(semicolon = true, rightShift = false, delete = false, spacerOnDelete = false),
+                        TabletKeyboard.numbers(),
+                        TabletKeyboard.alphabetic(semicolon = true, rightShift = false, fillDeleteSpace = false),
                         TabletKeyboard.bottom()
                     ),
                     contentRows = TabletKeyboardRows.NUMBERS + TabletKeyboardRows.SEMICOLON_SLASH_MINUS

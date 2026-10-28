@@ -10,7 +10,7 @@ object VietLayoutPresets {
         cursorKeys: Boolean,
         isHanNom: Boolean
     ): KeyboardLayoutPreset {
-        val qwerty = LatinLayoutPresets.qwerty(false, numberRow, cursorKeys)
+        val qwerty = LatinLayoutPresets.qwerty(false)
         val additionalTable = LayoutTable.fromShiftStates(
             if(isHanNom) LayoutExt.TABLE_HAN_NOM
             else mapOf()

@@ -96,7 +96,7 @@ object SymbolLayoutPresets {
             ),
             tablet = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
-                    TabletKeyboard.numbers(delete = true),
+                    TabletKeyboard.numbers(),
                     TabletKeyboard.alphabetic(semicolon = true),
                     TabletKeyboard.bottom()
                 ),
@@ -150,7 +150,7 @@ object SymbolLayoutPresets {
             ),
             tablet = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
-                    TabletKeyboard.numbers(delete = true),
+                    TabletKeyboard.numbers(),
                     TabletKeyboard.alphabetic(),
                     TabletKeyboard.bottom()
                 ),

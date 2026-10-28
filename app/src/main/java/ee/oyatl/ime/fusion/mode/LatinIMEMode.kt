@@ -586,7 +586,7 @@ class LatinIMEMode(
             val textLayoutPreset = when(layout) {
                 Layout.Qwerty -> when(locale.language) {
                     "es" -> LatinLayoutPresets.spanishQwerty(numberRow, cursorKeys)
-                    else -> LatinLayoutPresets.qwerty(false, numberRow, cursorKeys)
+                    else -> LatinLayoutPresets.qwerty(false)
                 }
                 Layout.Azerty -> LatinLayoutPresets.azerty(numberRow, cursorKeys)
                 Layout.Qwertz -> LatinLayoutPresets.qwertz(numberRow, cursorKeys)

@@ -49,5 +49,29 @@ data class KeyboardConfiguration(
                 None, Up, Down
             }
         }
+
+        @SerialName("ifeq")
+        @Serializable
+        data class IfEq(
+            val name: String,
+            val value: String,
+            val content: Item
+        ): Item
+
+        @SerialName("ifneq")
+        @Serializable
+        data class IfNEq(
+            val name: String,
+            val value: String,
+            val content: Item
+        ): Item
+
+        @SerialName("multiple")
+        @Serializable
+        data class Multiple(
+            val items: List<Item>
+        ): Item {
+            constructor(vararg items: Item): this(items.toList())
+        }
     }
 }

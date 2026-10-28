@@ -13,6 +13,7 @@ import ee.oyatl.ime.fusion.keyboard.core.SpecialKeyType
 import ee.oyatl.ime.theme.KeyBackground
 import ee.oyatl.ime.theme.SpecialKeyIcon
 import kotlin.collections.map
+import kotlin.text.get
 
 object KeyboardInflater {
     private val keyCharacterMap: KeyCharacterMap = KeyCharacterMap.load(KeyCharacterMap.VIRTUAL_KEYBOARD)
@@ -59,44 +60,61 @@ object KeyboardInflater {
     ): Keyboard {
         val keyCodeRows = template.contentRows.map { row -> row.map { keyCharToKeyCode(it) } }
         val result = mutableListOf<List<Keyboard.KeyItem>>()
+
+        fun inflateItem(item: KeyboardConfiguration.Item): List<Keyboard.KeyItem> = when(item) {
+            is KeyboardConfiguration.Item.ContentKey -> {
+                val rowIndex = keyCodeRows.size - item.rowId - 1
+                val keyCode = softKeyCodeMapper[params, keyCodeRows[rowIndex][item.index]]
+                listOf(inflateKey(keyCode))
+            }
+            is KeyboardConfiguration.Item.ContentRow -> {
+                val rowIndex = keyCodeRows.size - item.rowId - 1
+                val content = keyCodeRows[rowIndex].map {
+                    if(it == KeyCode.KEYCODE_SPACE) {
+                        Keyboard.KeyItem.SplitSpacer(params.splitWidth)
+                    } else {
+                        val keyCode = softKeyCodeMapper[params, it]
+                        inflateKey(keyCode)
+                    }
+                }
+                content
+            }
+            is KeyboardConfiguration.Item.Spacer -> {
+                listOf(Keyboard.KeyItem.Spacer(item.width))
+            }
+            is KeyboardConfiguration.Item.TemplateKey -> {
+                val keyCode = softKeyCodeMapper[params, item.keyCode]
+                if(params.splitWidth != 0 && keyCode == KeyCode.KEYCODE_SPACE) {
+                    listOf(
+                        inflateKey(keyCode, item.copy(width = item.width / 2)),
+                        Keyboard.KeyItem.SplitSpacer(params.splitWidth),
+                        inflateKey(keyCode, item.copy(width = item.width / 2))
+                    )
+                } else {
+                    listOf(inflateKey(keyCode, item))
+                }
+            }
+            is KeyboardConfiguration.Item.IfEq -> {
+                val value = params.extra[item.name].toString()
+                if(value == item.value) inflateItem(item.content) else listOf()
+            }
+            is KeyboardConfiguration.Item.IfNEq -> {
+                val value = params.extra[item.name].toString()
+                if(value != item.value) inflateItem(item.content) else listOf()
+            }
+            is KeyboardConfiguration.Item.Multiple -> {
+                return item.items.flatMap(::inflateItem)
+            }
+        }
+
         template.configuration.rows.forEach { row ->
             val resultRow = mutableListOf<Keyboard.KeyItem>()
             row.forEach { item ->
-                when(item) {
-                    is KeyboardConfiguration.Item.ContentKey -> {
-                        val rowIndex = keyCodeRows.size - item.rowId - 1
-                        val keyCode = softKeyCodeMapper[params, keyCodeRows[rowIndex][item.index]]
-                        resultRow += inflateKey(keyCode)
-                    }
-                    is KeyboardConfiguration.Item.ContentRow -> {
-                        val rowIndex = keyCodeRows.size - item.rowId - 1
-                        val content = keyCodeRows[rowIndex].map {
-                            if(it == KeyCode.KEYCODE_SPACE) {
-                                Keyboard.KeyItem.SplitSpacer(params.splitWidth)
-                            } else {
-                                val keyCode = softKeyCodeMapper[params, it]
-                                inflateKey(keyCode)
-                            }
-                        }
-                        resultRow += content
-                    }
-                    is KeyboardConfiguration.Item.Spacer -> {
-                        resultRow += Keyboard.KeyItem.Spacer(item.width)
-                    }
-                    is KeyboardConfiguration.Item.TemplateKey -> {
-                        val keyCode = softKeyCodeMapper[params, item.keyCode]
-                        if(params.splitWidth != 0 && keyCode == KeyCode.KEYCODE_SPACE) {
-                            resultRow += inflateKey(keyCode, item.copy(width = item.width / 2))
-                            resultRow += Keyboard.KeyItem.SplitSpacer(params.splitWidth)
-                            resultRow += inflateKey(keyCode, item.copy(width = item.width / 2))
-                        } else {
-                            resultRow += inflateKey(keyCode, item)
-                        }
-                    }
-                }
+                resultRow += inflateItem(item)
             }
             result += resultRow
         }
+        result.removeIf { it.isEmpty() }
         return Keyboard(result, params)
     }
 

@@ -19,28 +19,26 @@ import ee.oyatl.ime.fusion.keyboard.core.SoftKeyCodeMapper
 
 object LatinLayoutPresets {
     fun qwerty(
-        semicolon: Boolean = false,
-        numberRow: Boolean = false,
-        cursorKeys: Boolean = false
+        semicolon: Boolean = false
     ): KeyboardLayoutPreset {
         return KeyboardLayoutPreset(
             keyboardTemplate = KeyboardTemplate.ByScreenMode(
                 mobile = KeyboardTemplate.Basic(
                     configuration = KeyboardConfiguration(
-                        if (numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
+                        MobileKeyboard.numbers(),
                         MobileKeyboard.alphabetic(semicolon = semicolon),
-                        MobileKeyboard.bottom(dpad = cursorKeys)
+                        MobileKeyboard.bottom()
                     ),
-                    contentRows = (if(numberRow) MobileKeyboardRows.NUMBERS else listOf()) +
+                    contentRows = MobileKeyboardRows.NUMBERS +
                             (if(semicolon) MobileKeyboardRows.SEMICOLON else MobileKeyboardRows.DEFAULT)
                 ),
                 tablet = KeyboardTemplate.Basic(
                     configuration = KeyboardConfiguration(
-                        if(numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
-                        TabletKeyboard.alphabetic(semicolon = semicolon, delete = !numberRow),
+                        TabletKeyboard.numbers(),
+                        TabletKeyboard.alphabetic(semicolon = semicolon),
                         TabletKeyboard.bottom()
                     ),
-                    contentRows = (if(numberRow) TabletKeyboardRows.NUMBERS else listOf()) +
+                    contentRows = TabletKeyboardRows.NUMBERS +
                             (if(semicolon) TabletKeyboardRows.SEMICOLON else TabletKeyboardRows.DEFAULT)
                 )
             ),
@@ -53,7 +51,7 @@ object LatinLayoutPresets {
         numberRow: Boolean = false,
         cursorKeys: Boolean = false
     ): KeyboardLayoutPreset {
-        val qwerty = qwerty(true, numberRow, cursorKeys)
+        val qwerty = qwerty(true)
         val layoutTable = qwerty.layoutTable + LayoutTable.fromShiftStates(LayoutLatin.TABLE_SPANISH_QWERTY)
         return qwerty.copy(
             layoutTable = layoutTable
@@ -64,7 +62,7 @@ object LatinLayoutPresets {
         numberRow: Boolean = false,
         cursorKeys: Boolean = false
     ): KeyboardLayoutPreset {
-        val qwerty = qwerty(true, numberRow, cursorKeys)
+        val qwerty = qwerty(true)
         return qwerty.copy(
             layoutTable = qwerty.layoutTable + LayoutTable.fromShiftStates(LayoutLatin.TABLE_AZERTY),
             altGraphTable = LayoutTable.fromShiftStates(LayoutLatin.TABLE_AZERTY_ALTGR),
@@ -86,7 +84,7 @@ object LatinLayoutPresets {
         numberRow: Boolean = false,
         cursorKeys: Boolean = false
     ): KeyboardLayoutPreset {
-        val qwerty = qwerty(false, numberRow, cursorKeys)
+        val qwerty = qwerty(false)
         return qwerty.copy(
             layoutTable = qwerty.layoutTable + LayoutTable.fromShiftStates(LayoutLatin.TABLE_GERMAN_QWERTZ),
             altGraphTable = LayoutTable.fromShiftStates(LayoutLatin.TABLE_GERMAN_QWERTZ_ALTGR),
@@ -105,17 +103,17 @@ object LatinLayoutPresets {
                     configuration = KeyboardConfiguration(
                         if(numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
                         MobileKeyboard.alphabetic(semicolon = true),
-                        MobileKeyboard.bottom(dpad = cursorKeys)
+                        MobileKeyboard.bottom()
                     ),
-                    contentRows = (if(numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.GERMAN
+                    contentRows = MobileKeyboardRows.NUMBERS + MobileKeyboardRows.GERMAN
                 ),
                 tablet = KeyboardTemplate.Basic(
                     configuration = KeyboardConfiguration(
-                        if(numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
-                        TabletKeyboard.alphabetic(semicolon = true, delete = !numberRow),
+                        TabletKeyboard.numbers(),
+                        TabletKeyboard.alphabetic(semicolon = true),
                         TabletKeyboard.bottom()
                     ),
-                    contentRows = (if(numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.GERMAN
+                    contentRows = TabletKeyboardRows.NUMBERS + TabletKeyboardRows.GERMAN
                 )
             ),
             layoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutLatin.TABLE_GERMAN_QWERTZ),
@@ -136,17 +134,17 @@ object LatinLayoutPresets {
                     configuration = KeyboardConfiguration(
                         if(numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
                         MobileKeyboard.alphabetic(semicolon = true),
-                        MobileKeyboard.bottom(left = KeyCode.KEYCODE_X, right = KeyCode.KEYCODE_SLASH, dpad = cursorKeys)
+                        MobileKeyboard.bottom(left = KeyCode.KEYCODE_X, right = KeyCode.KEYCODE_SLASH)
                     ),
-                    contentRows = (if(numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.DVORAK
+                    contentRows = MobileKeyboardRows.NUMBERS + MobileKeyboardRows.DVORAK
                 ),
                 tablet = KeyboardTemplate.Basic(
                     configuration = KeyboardConfiguration(
-                        if(numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
-                        TabletKeyboard.alphabetic(semicolon = true, delete = !numberRow),
+                        TabletKeyboard.numbers(),
+                        TabletKeyboard.alphabetic(semicolon = true),
                         TabletKeyboard.bottom()
                     ),
-                    contentRows = (if(numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.DVORAK
+                    contentRows = TabletKeyboardRows.NUMBERS + TabletKeyboardRows.DVORAK
                 )
             ),
             layoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY),
@@ -165,17 +163,17 @@ object LatinLayoutPresets {
                     configuration = KeyboardConfiguration(
                         if(numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
                         MobileKeyboard.alphabetic(semicolon = true),
-                        MobileKeyboard.bottom(dpad = cursorKeys)
+                        MobileKeyboard.bottom()
                     ),
-                    contentRows = (if(numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.SEMICOLON
+                    contentRows = MobileKeyboardRows.NUMBERS + MobileKeyboardRows.SEMICOLON
                 ),
                 tablet = KeyboardTemplate.Basic(
                     configuration = KeyboardConfiguration(
-                        if(numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
-                        TabletKeyboard.alphabetic(semicolon = true, delete = !numberRow),
+                        TabletKeyboard.numbers(),
+                        TabletKeyboard.alphabetic(semicolon = true),
                         TabletKeyboard.bottom()
                     ),
-                    contentRows = (if(numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.SEMICOLON
+                    contentRows = TabletKeyboardRows.NUMBERS + TabletKeyboardRows.SEMICOLON
                 )
             ),
             layoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY),

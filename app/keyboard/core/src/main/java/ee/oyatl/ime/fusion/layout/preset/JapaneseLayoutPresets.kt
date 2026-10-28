@@ -68,14 +68,14 @@ object JapaneseLayoutPresets {
                     configuration = KeyboardConfiguration(
                         MobileKeyboard.numbers(),
                         MobileKeyboard.alphabetic(semicolon = true, shiftDeleteWidth = 1f),
-                        MobileKeyboard.bottom(left = ExtKeyCode.KEYCODE_KANA_EQUALS, right = ExtKeyCode.KEYCODE_KANA_SLASH, dpad = true)
+                        MobileKeyboard.bottom(left = ExtKeyCode.KEYCODE_KANA_EQUALS, right = ExtKeyCode.KEYCODE_KANA_SLASH)
                     ),
                     contentRows = MobileKeyboardRows.JIS
                 ),
                 tablet = Basic(
                     configuration = KeyboardConfiguration(
-                        TabletKeyboard.numbers(delete = true, spacerOnDelete = false),
-                        TabletKeyboard.alphabetic(semicolon = true, delete = false, spacerOnDelete = true),
+                        TabletKeyboard.numbers(),
+                        TabletKeyboard.alphabetic(semicolon = true),
                         TabletKeyboard.bottom()
                     ),
                     contentRows = TabletKeyboardRows.JIS

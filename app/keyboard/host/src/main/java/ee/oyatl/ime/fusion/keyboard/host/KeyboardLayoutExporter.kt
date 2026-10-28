@@ -70,19 +70,19 @@ object KeyboardLayoutExporter {
         val keyboardTemplateHangulKSCompatible = KeyboardTemplate.ByScreenMode(
             mobile = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
-                    if (numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
+                    MobileKeyboard.numbers(),
                     MobileKeyboard.alphabetic(semicolon = false),
-                    MobileKeyboard.bottom(dpad = cursorKeys)
+                    MobileKeyboard.bottom()
                 ),
-                contentRows = (if(numberRow) MobileKeyboardRows.NUMBERS else listOf()) + MobileKeyboardRows.KS
+                contentRows = MobileKeyboardRows.NUMBERS + MobileKeyboardRows.KS
             ),
             tablet = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
-                    if(numberRow) TabletKeyboard.numbers(delete = true) else KeyboardConfiguration(),
+                    TabletKeyboard.numbers(delete = true),
                     TabletKeyboard.alphabetic(semicolon = false, delete = !numberRow),
                     TabletKeyboard.bottom()
                 ),
-                contentRows = (if(numberRow) TabletKeyboardRows.NUMBERS else listOf()) + TabletKeyboardRows.KS
+                contentRows = TabletKeyboardRows.NUMBERS + TabletKeyboardRows.KS
             )
         )
 

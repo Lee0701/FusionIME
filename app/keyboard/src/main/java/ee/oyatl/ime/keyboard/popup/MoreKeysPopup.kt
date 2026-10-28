@@ -78,7 +78,8 @@ class MoreKeysPopup(
             shiftAutoRelease = false,
             repeatDelay = 0,
             repeatInterval = 0,
-            previewPopups = false
+            previewPopups = false,
+            extra = mapOf()
         )
         contentView = DefaultKeyboardView(parent.context, null).also {
             it.keyboardTheme = keyboardView.keyboardTheme

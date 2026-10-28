@@ -16,34 +16,29 @@ import ee.oyatl.ime.fusion.keyboard.core.LayoutTable
 import kotlin.collections.plus
 
 object CangjieLayoutPresets {
-    fun cangjie(
-        numberRow: Boolean = false,
-        cursorKeys: Boolean = false
-    ): KeyboardLayoutPreset {
-        val qwerty = LatinLayoutPresets.qwerty(false, numberRow, cursorKeys)
+    fun cangjie(): KeyboardLayoutPreset {
+        val qwerty = LatinLayoutPresets.qwerty(false)
         val layoutTable = qwerty.layoutTable + LayoutTable.fromShiftStates(LayoutExt.TABLE_CHINESE + LayoutCangjie.TABLE_QWERTY)
         return qwerty.copy(
             layoutTable = layoutTable
         )
     }
 
-    fun dayi3(
-        cursorKeys: Boolean = false
-    ): KeyboardLayoutPreset {
+    fun dayi3(): KeyboardLayoutPreset {
         return KeyboardLayoutPreset(
             keyboardTemplate = KeyboardTemplate.ByScreenMode(
                 mobile = KeyboardTemplate.Basic(
                     configuration = KeyboardConfiguration(
                         MobileKeyboard.numbers(),
                         MobileKeyboard.alphabetic(semicolon = true, shiftDeleteWidth = 1f, shift = false),
-                        MobileKeyboard.bottom(left = ExtKeyCode.KEYCODE_PERIOD_COMMA, right = KeyCode.KEYCODE_SLASH, dpad = cursorKeys)
+                        MobileKeyboard.bottom(left = ExtKeyCode.KEYCODE_PERIOD_COMMA, right = KeyCode.KEYCODE_SLASH)
                     ),
                     contentRows = MobileKeyboardRows.NUMBERS + MobileKeyboardRows.HALF_GRID
                 ),
                 tablet = KeyboardTemplate.Basic(
                     configuration = KeyboardConfiguration(
-                        TabletKeyboard.numbers(delete = true),
-                        TabletKeyboard.alphabetic(semicolon = true, rightShift = false, delete = false, spacerOnDelete = true),
+                        TabletKeyboard.numbers(),
+                        TabletKeyboard.alphabetic(semicolon = true, rightShift = false),
                         TabletKeyboard.bottom()
                     ),
                     contentRows = TabletKeyboardRows.NUMBERS + TabletKeyboardRows.SEMICOLON_SLASH

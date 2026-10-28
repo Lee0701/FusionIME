@@ -16,5 +16,6 @@ data class KeyboardParams(
     val shiftAutoRelease: Boolean,
     val repeatDelay: Int,
     val repeatInterval: Int,
-    val previewPopups: Boolean
+    val previewPopups: Boolean,
+    val extra: Map<String, String>
 )
