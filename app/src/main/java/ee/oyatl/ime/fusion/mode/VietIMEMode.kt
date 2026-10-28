@@ -159,7 +159,7 @@ class VietIMEMode(
         }
 
         override fun getLabel(context: Context): String {
-            val localeName = Locale("vi").displayName
+            val localeName = Locale.Builder().setLanguage("vi").build().displayName
             val layoutName = context.getString(layout.nameKey)
             return "$localeName $layoutName"
         }

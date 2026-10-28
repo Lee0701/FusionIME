@@ -27,7 +27,7 @@ import androidx.core.widget.TextViewCompat
 import androidx.preference.PreferenceManager
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.ExpandedCandidateView
-import ee.oyatl.ime.fusion.PreferenceUtil
+import ee.oyatl.ime.fusion.util.PreferenceUtil
 import ee.oyatl.ime.fusion.databinding.InputViewWrapperBinding
 import ee.oyatl.ime.fusion.databinding.ModeSwitcherTabBarBinding
 import ee.oyatl.ime.fusion.databinding.ModeSwitcherTabBinding

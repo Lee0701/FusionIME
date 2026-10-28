@@ -11,9 +11,9 @@ import androidx.preference.PreferenceManager
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.ScrollingCandidateView
 import ee.oyatl.ime.fusion.FlickAction
-import ee.oyatl.ime.fusion.KeyEventUtil
-import ee.oyatl.ime.fusion.PreferenceUtil.getOrientationBoolean
-import ee.oyatl.ime.fusion.PreferenceUtil.getOrientationInteger
+import ee.oyatl.ime.fusion.util.KeyEventUtil
+import ee.oyatl.ime.fusion.util.PreferenceUtil.getOrientationBoolean
+import ee.oyatl.ime.fusion.util.PreferenceUtil.getOrientationInteger
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.layout.preset.LatinLayoutPresets
 import ee.oyatl.ime.fusion.layout.preset.SymbolLayoutPresets

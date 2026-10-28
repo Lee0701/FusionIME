@@ -166,4 +166,23 @@
     <string name="viet_layout_vni_nom">VNI (Han Nom)</string>
     <string name="viet_layout_vni_quoc_ngu">VNI (Chu Quoc Ngu)</string>
     <string name="jyutping_layout_jyutping">Jyutping</string>
+    <string name="setup_wizard_incomplete">Setup is incomplete.</string>
+    <string name="setup_wizard_start">Setup Wizard</string>
+    <string name="setup_wizard_label">FusionIME Setup Wizard</string>
+    <string name="setup_wizard_welcome_label">Welcome</string>
+    <string name="setup_wizard_welcome_title">Welcome!</string>
+    <string name="setup_wizard_welcome_subtitle">Proceed to start using FusionIME.</string>
+    <string name="setup_wizard_enable_label">Enable FusionIME</string>
+    <string name="setup_wizard_enable_title">Step 1</string>
+    <string name="setup_wizard_enable_subtitle">Please enable FusionIME in Language &amp; Input settings.</string>
+    <string name="setup_wizard_enable_button">Enable</string>
+    <string name="setup_wizard_select_label">Select FusionIME</string>
+    <string name="setup_wizard_select_title">Step 2</string>
+    <string name="setup_wizard_select_subtitle">Please select FusionIME from the input method list.</string>
+    <string name="setup_wizard_select_button">Select</string>
+    <string name="setup_wizard_languages_label">Languages</string>
+    <string name="setup_wizard_languages_title">Step 3</string>
+    <string name="setup_wizard_languages_subtitle">Select languages you want to use.</string>
+    <string name="setup_wizard_next">Next</string>
+    <string name="setup_wizard_finish">Finish</string>
 </resources>

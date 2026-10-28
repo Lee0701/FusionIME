@@ -69,6 +69,7 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.emoji2.emojipicker)
+    implementation(libs.androidx.navigation.fragment)
     implementation(libs.material)
     implementation(libs.guava)
     implementation(libs.protobuf.java)

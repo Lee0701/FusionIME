@@ -1,13 +1,15 @@
-package ee.oyatl.ime.fusion
+package ee.oyatl.ime.fusion.util
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Configuration
 import android.util.TypedValue
 import androidx.preference.PreferenceManager
+import ee.oyatl.ime.theme.KeyboardTheme
+import ee.oyatl.ime.theme.KeyboardThemeSet
 import kotlin.math.roundToInt
 
-object DimensionUtil {
+object PreferenceUtil {
     fun getOrientationSuffix(context: Context): String {
         val landscape = context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
         val suffix = if(landscape) "_landscape" else "_portrait"
@@ -36,7 +38,14 @@ object DimensionUtil {
 
     fun getKeyboardHeight(context: Context): Int {
         val rowHeightDIP = getOrientationInteger(context, "keyboard_height")
-        val height = (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, rowHeightDIP, context.resources.displayMetrics) * 4).roundToInt()
-        return height
+        return (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, rowHeightDIP, context.resources.displayMetrics) * 4).roundToInt()
+    }
+
+    fun getKeyboardTheme(context: Context): KeyboardTheme {
+        val pref = PreferenceManager.getDefaultSharedPreferences(context)
+        val key = pref.getString("keyboard_theme", null)
+        val themeSet = KeyboardThemeSet.entries.find { it.name == key } ?: KeyboardThemeSet.Static
+        val darkMode = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+        return if(darkMode) themeSet.dark else themeSet.light
     }
 }

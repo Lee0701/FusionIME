@@ -617,9 +617,10 @@ class LatinIMEMode(
         companion object {
             fun parse(map: Map<String, String>): Params {
                 val localeName = (map["locale"] ?: Locale.ENGLISH.language).split('_')
-                val locale =
-                    if(localeName.size == 2) Locale(localeName[0], localeName[1])
-                    else Locale(localeName[0])
+                val builder = Locale.Builder()
+                builder.setLanguage(localeName[0])
+                if(localeName.size == 2) builder.setRegion(localeName[1])
+                val locale = builder.build()
                 val defaultLayout = if(locale.language == "fr") Layout.Azerty else Layout.Qwerty
                 val layout = Layout.entries.find { it.name == map["layout"] } ?: defaultLayout
                 val numberRow = map["number_row"]?.toBoolean() ?: false

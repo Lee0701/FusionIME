@@ -28,6 +28,7 @@ import ee.oyatl.ime.fusion.mode.LatinIMEMode
 import ee.oyatl.ime.fusion.mode.PinyinIMEMode
 import ee.oyatl.ime.fusion.preference.KeyStrokePreference
 import ee.oyatl.ime.fusion.settings.InputModeSettingsFragment
+import ee.oyatl.ime.fusion.util.PreferenceUtil
 import ee.oyatl.ime.keyboard.PaleViewFilter
 import ee.oyatl.ime.theme.KeyboardTheme
 import kotlinx.coroutines.CoroutineScope
