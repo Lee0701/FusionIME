@@ -38,6 +38,7 @@ import ee.oyatl.ime.candidate.TripleCandidateView
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.layout.preset.LatinLayoutPresets
 import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
+import ee.oyatl.ime.keyboard.KeyboardState
 import java.util.Locale
 
 class LatinIMEMode(
@@ -65,8 +66,15 @@ class LatinIMEMode(
 
     override val isInputViewShown: Boolean = true
     override val resources: Resources? = context?.resources
-    override val currentAutoCapsState: Int = 0
-    override val currentRecapitalizeState: Int = 0
+    override val currentAutoCapsState: Int get() {
+        val inputLogic = inputLogic ?: return 0
+        val settingsValues = settings?.current ?: return 0
+        return inputLogic.getCurrentAutoCapsState(settingsValues)
+    }
+    override val currentRecapitalizeState: Int get() {
+        val inputLogic = inputLogic ?: return 0
+        return inputLogic.currentRecapitalizeState
+    }
 
     override suspend fun onLoad(context: Context) {
         super.onLoad(context)
@@ -84,6 +92,7 @@ class LatinIMEMode(
         super.onStart(inputConnection, editorInfo)
         onStartInputViewInternal(editorInfo, false)
         onStartInputInternal(editorInfo, false)
+        updateAutoCapsState()
     }
 
     override fun onReset() {
@@ -142,6 +151,16 @@ class LatinIMEMode(
 
             keyboardSwitcher?.requestUpdatingShiftState(currentAutoCapsState, currentRecapitalizeState)
         }
+    }
+
+    private fun updateAutoCapsState() {
+        if(shiftState == KeyboardState.Shift.Locked) return
+        if(currentAutoCapsState != Constants.TextUtils.CAP_MODE_OFF) {
+            shiftState = KeyboardState.Shift.AutoShifted
+        } else {
+            shiftState = KeyboardState.Shift.Released
+        }
+        super.updateInputView()
     }
 
     fun loadSettings() {
@@ -321,6 +340,7 @@ class LatinIMEMode(
             )
         updateStateAfterInputTransaction(completeInputTransaction)
         keyboardSwitcher.onEvent(event, currentAutoCapsState, currentRecapitalizeState)
+        updateAutoCapsState()
     }
 
     override fun onTextInput(rawText: String?) {
