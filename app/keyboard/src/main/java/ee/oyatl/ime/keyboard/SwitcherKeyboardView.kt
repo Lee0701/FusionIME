@@ -26,8 +26,9 @@ class SwitcherKeyboardView(
     var state: KeyboardState? = null
         set(value) {
             field = value
-            val currentView = currentView
-            if(currentView is View) currentView.bringToFront()
+            map.values.filterIsInstance<View>().forEach {
+                it.visibility = if(it === currentView) VISIBLE else GONE
+            }
         }
 
     private val currentView: KeyboardView get() = map[state] ?: map.values.first()
