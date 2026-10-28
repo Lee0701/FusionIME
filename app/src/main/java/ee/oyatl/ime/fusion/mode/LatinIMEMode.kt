@@ -1,6 +1,7 @@
 package ee.oyatl.ime.fusion.mode
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.content.res.Resources
 import android.inputmethodservice.InputMethodService
 import android.view.KeyCharacterMap
@@ -44,13 +45,16 @@ import java.util.Locale
 class LatinIMEMode(
     private val listener: IMEMode.Listener,
     val locale: Locale,
-    override var textLayoutPreset: KeyboardLayoutPreset
+    override var textLayoutPreset: KeyboardLayoutPreset,
+    val autoCaps: Boolean,
+    val autoPeriod: Boolean
 ): CommonIMEMode(listener), ILatinIME {
     override var context: Context? = null
 
     override val handler: LatinIME.UIHandler = LatinIME.UIHandler(this)
     private var dictionaryFacilitator: DictionaryFacilitator? = null
     override var settings: Settings? = null
+    private var settingsValues: SettingsValues? = null
     private var richImm: RichInputMethodManager? = null
     override var keyboardSwitcher: KeyboardSwitcher? = null
     override var inputLogic: InputLogic? = null
@@ -68,7 +72,7 @@ class LatinIMEMode(
     override val resources: Resources? = context?.resources
     override val currentAutoCapsState: Int get() {
         val inputLogic = inputLogic ?: return 0
-        val settingsValues = settings?.current ?: return 0
+        val settingsValues = settingsValues ?: return 0
         return inputLogic.getCurrentAutoCapsState(settingsValues)
     }
     override val currentRecapitalizeState: Int get() {
@@ -147,7 +151,7 @@ class LatinIMEMode(
     ) {
         super.updateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd, candidatesStart, candidatesEnd)
         if(isInputViewShown &&
-            inputLogic?.onUpdateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd, settings?.current) == true) {
+            inputLogic?.onUpdateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd, settingsValues) == true) {
 
             keyboardSwitcher?.requestUpdatingShiftState(currentAutoCapsState, currentRecapitalizeState)
         }
@@ -164,12 +168,15 @@ class LatinIMEMode(
     }
 
     fun loadSettings() {
-        val editorInfo = currentInputEditorInfo ?: return
-        val inputAttributes = InputAttributes(
-            editorInfo, false, context?.packageName
-        )
+        val context = context ?: return
+        val pref = SharedPreferenceImpl(mapOf(
+            Settings.PREF_AUTO_CAP to autoCaps.toString(),
+            Settings.PREF_KEY_USE_DOUBLE_SPACE_PERIOD to autoPeriod.toString()
+        ))
+        val inputAttributes = InputAttributes(currentInputEditorInfo, false, context.packageName)
+        settingsValues = SettingsValues(context, pref, context.resources, inputAttributes)
         settings?.loadSettings(context, locale, inputAttributes)
-        val currentSettingsValues = settings?.current ?: return
+        val currentSettingsValues = settingsValues ?: return
         AudioAndHapticFeedbackManager.getInstance().onSettingsChanged(currentSettingsValues)
 
 
@@ -184,7 +191,6 @@ class LatinIMEMode(
     }
 
     override fun onUpdateMainDictionaryAvailability(isMainDictionaryAvailable: Boolean) {
-        val handler = handler ?: return
         if (handler.hasPendingWaitForDictionaryLoad()) {
             handler.cancelWaitForDictionaryLoad()
             handler.postResumeSuggestions(false /* shouldDelay */)
@@ -195,7 +201,7 @@ class LatinIMEMode(
         val dictionaryFacilitator = dictionaryFacilitator ?: return
         val subtypeSwitcherLocale = locale
         if (dictionaryFacilitator.isForLocale(subtypeSwitcherLocale)
-            && dictionaryFacilitator.isForAccount(settings?.current?.mAccount)) {
+            && dictionaryFacilitator.isForAccount(settingsValues?.mAccount)) {
 
             return
         }
@@ -204,7 +210,7 @@ class LatinIMEMode(
 
     private fun resetDictionaryFacilitator(locale: Locale?) {
         val dictionaryFacilitator = this.dictionaryFacilitator ?: return
-        val settingsValues = settings?.current ?: return
+        val settingsValues = settingsValues ?: return
         val inputLogic = inputLogic ?: return
         dictionaryFacilitator.resetDictionaries(
             context,  /* context */locale,
@@ -223,7 +229,7 @@ class LatinIMEMode(
 
     override fun resetSuggestMainDict() {
         val dictionaryFacilitator = dictionaryFacilitator ?: return
-        val settingsValues = settings?.current ?: return
+        val settingsValues = settingsValues ?: return
         dictionaryFacilitator.resetDictionaries(
             context,
             dictionaryFacilitator.locale,
@@ -250,7 +256,7 @@ class LatinIMEMode(
     ) {
         loadSettings()
         dictionaryFacilitator?.onStartInput()
-        inputLogic?.startInput(richImm?.combiningRulesExtraValueOfCurrentSubtype, settings?.current)
+        inputLogic?.startInput(richImm?.combiningRulesExtraValueOfCurrentSubtype, settingsValues)
     }
 
     override fun onFinishInputInternal() {
@@ -334,7 +340,7 @@ class LatinIMEMode(
         }
         val completeInputTransaction: InputTransaction =
             inputLogic.onCodeInput(
-                settings?.current, event,
+                settingsValues, event,
                 keyboardSwitcher.getKeyboardShiftMode(),
                 keyboardSwitcher.getCurrentKeyboardScriptId(), handler
             )
@@ -347,7 +353,7 @@ class LatinIMEMode(
         // TODO: have the keyboard pass the correct key code when we need it.
         val event = Event.createSoftwareTextEvent(rawText, Constants.CODE_OUTPUT_TEXT)
         val completeInputTransaction = inputLogic?.onTextInput(
-            settings?.current, event,
+            settingsValues, event,
             keyboardSwitcher?.getKeyboardShiftMode() ?: WordComposer.CAPS_MODE_OFF,
             handler
         )
@@ -356,7 +362,7 @@ class LatinIMEMode(
     }
 
     override fun onStartBatchInput() {
-        inputLogic?.onStartBatchInput(settings?.current, keyboardSwitcher, handler)
+        inputLogic?.onStartBatchInput(settingsValues, keyboardSwitcher, handler)
 //        mGestureConsumer.onGestureStarted(
 //            mRichImm.getCurrentSubtypeLocale(),
 //            mKeyboardSwitcher.getKeyboard()
@@ -400,7 +406,7 @@ class LatinIMEMode(
     ) {
         val keyboard = dummyKeyboard
         inputLogic?.getSuggestedWords(
-            settings?.current, keyboard,
+            settingsValues, keyboard,
             keyboardSwitcher?.getKeyboardShiftMode() ?: WordComposer.CAPS_MODE_OFF,
             inputStyle, sequenceNumber, callback
         )
@@ -426,7 +432,7 @@ class LatinIMEMode(
 
     override fun pickSuggestionManually(suggestionInfo: SuggestedWords.SuggestedWordInfo?) {
         val completeInputTransaction: InputTransaction = inputLogic?.onPickSuggestionManually(
-            settings?.current, suggestionInfo,
+            settingsValues, suggestionInfo,
             keyboardSwitcher?.getKeyboardShiftMode() ?: WordComposer.CAPS_MODE_OFF,
             keyboardSwitcher?.getCurrentKeyboardScriptId() ?: ScriptUtils.SCRIPT_UNKNOWN,
             handler
@@ -499,7 +505,7 @@ class LatinIMEMode(
     }
 
     override fun debugDumpStateAndCrashWithException(context: String?) {
-        val settingsValues: SettingsValues = settings?.current ?: return
+        val settingsValues: SettingsValues = settingsValues ?: return
         val s = StringBuilder(settingsValues.toString())
         s.append("\nAttributes : ").append(settingsValues.mInputAttributes)
             .append("\nContext : ").append(context)
@@ -513,6 +519,53 @@ class LatinIMEMode(
         return context is InputMethodService && context.enableHardwareAcceleration()
     }
 
+    class SharedPreferenceImpl(
+        val map: Map<String, String>
+    ): SharedPreferences {
+        override fun contains(key: String?): Boolean {
+            return map.containsKey(key ?: return false)
+        }
+
+        override fun edit(): SharedPreferences.Editor? {
+            return null
+        }
+
+        override fun getAll(): Map<String, String> {
+            return map
+        }
+
+        override fun getBoolean(key: String?, defValue: Boolean): Boolean {
+            return map[key]?.toBoolean() ?: defValue
+        }
+
+        override fun getFloat(key: String?, defValue: Float): Float {
+            return map[key]?.toFloatOrNull() ?: defValue
+        }
+
+        override fun getInt(key: String?, defValue: Int): Int {
+            return map[key]?.toIntOrNull() ?: defValue
+        }
+
+        override fun getLong(key: String?, defValue: Long): Long {
+            return map[key]?.toLongOrNull() ?: defValue
+        }
+
+        override fun getString(key: String?, defValue: String?): String? {
+            return map[key] ?: defValue
+        }
+
+        override fun getStringSet(
+            key: String?,
+            defValues: Set<String?>?
+        ): Set<String?>? {
+            return null
+        }
+
+        override fun registerOnSharedPreferenceChangeListener(listener: SharedPreferences.OnSharedPreferenceChangeListener?) = Unit
+
+        override fun unregisterOnSharedPreferenceChangeListener(listener: SharedPreferences.OnSharedPreferenceChangeListener?) = Unit
+    }
+
     data class LatinCandidate(
         val index: Int,
         val suggestedWordInfo: SuggestedWords.SuggestedWordInfo
@@ -524,7 +577,9 @@ class LatinIMEMode(
         val locale: Locale = Locale.ENGLISH,
         val layout: Layout = Layout.Qwerty,
         val numberRow: Boolean = false,
-        val cursorKeys: Boolean = false
+        val cursorKeys: Boolean = false,
+        val autoCaps: Boolean = false,
+        val autoPeriod: Boolean = false
     ): IMEMode.Params {
         override val type: String = TYPE
 
@@ -540,7 +595,7 @@ class LatinIMEMode(
                 Layout.Dvorak -> LatinLayoutPresets.dvorak(numberRow, cursorKeys)
                 Layout.Colemak -> LatinLayoutPresets.colemak(numberRow, cursorKeys)
             }
-            return LatinIMEMode(listener, locale, textLayoutPreset)
+            return LatinIMEMode(listener, locale, textLayoutPreset, autoCaps, autoPeriod)
         }
 
         override fun getLabel(context: Context): String {
@@ -568,11 +623,15 @@ class LatinIMEMode(
                 val layout = Layout.entries.find { it.name == map["layout"] } ?: defaultLayout
                 val numberRow = map["number_row"]?.toBoolean() ?: false
                 val cursorKeys = map["cursor_keys"]?.toBoolean() ?: false
+                val autoCaps = map["auto_caps"]?.toBoolean() ?: false
+                val autoPeriod = map["auto_period"]?.toBoolean() ?: false
                 return Params(
                     locale = locale,
                     layout = layout,
                     numberRow = numberRow,
-                    cursorKeys = cursorKeys
+                    cursorKeys = cursorKeys,
+                    autoCaps = autoCaps,
+                    autoPeriod = autoPeriod
                 )
             }
         }
