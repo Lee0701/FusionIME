@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.FrameLayout
 import ee.oyatl.ime.keyboard.listener.KeyboardListener
 import ee.oyatl.ime.keyboard.popup.PopupManager
+import ee.oyatl.ime.theme.KeyboardTheme
 
 class SwitcherKeyboardView(
     context: Context,
@@ -48,6 +49,10 @@ class SwitcherKeyboardView(
         return currentView.findKeys(keyCode)
     }
 
+    override val keyboardTheme: KeyboardTheme?
+        get() = currentView.keyboardTheme
+    override val keyboard: Keyboard?
+        get() = currentView.keyboard
     override var labels: Map<Int, KeyLabel>
         get() = currentView.labels
         set(value) {

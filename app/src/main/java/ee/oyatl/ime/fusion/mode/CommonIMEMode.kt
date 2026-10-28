@@ -42,6 +42,7 @@ import ee.oyatl.ime.keyboard.touchhandler.FlickTouchHandler
 import ee.oyatl.ime.keyboard.touchhandler.LongPressTouchHandler
 import ee.oyatl.ime.keyboard.touchhandler.SeekTouchHandler
 import ee.oyatl.ime.keyboard.touchhandler.TouchHandler
+import ee.oyatl.ime.theme.KeyboardTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -51,6 +52,8 @@ abstract class CommonIMEMode(
     private val listener: IMEMode.Listener
 ): IMEMode, KeyboardListener, FlickListener, LongPressListener, CandidateView.Listener, ShiftStateManager.ShiftStateHolder {
     protected val keyCharacterMap: KeyCharacterMap = KeyCharacterMap.load(KeyCharacterMap.VIRTUAL_KEYBOARD)
+
+    override var keyboardTheme: KeyboardTheme? = null
 
     open var textLayoutPreset: KeyboardLayoutPreset = LatinLayoutPresets.qwerty()
     open var symbolLayoutPreset: KeyboardLayoutPreset = SymbolLayoutPresets.symbolG()
@@ -161,18 +164,21 @@ abstract class CommonIMEMode(
         val numberKeyboard = numberLayoutPreset.keyboardTemplate.inflate(numberKeyboardParams, symbolLayoutPreset.softKeyCodeMapper)
 
         val textKeyboardView = CanvasKeyboardView(context, null).also {
+            it.keyboardTheme = keyboardTheme
             it.keyboard = textKeyboard
             it.listener = createKeyboardListener(context, textKeyboardParams)
             it.touchHandler = createTouchHandler(it, textKeyboardParams, KeyboardState.Symbol.Text)
             it.popupManager = DefaultPopupManager()
         }
         val symbolKeyboardView = CanvasKeyboardView(context, null).also {
+            it.keyboardTheme = keyboardTheme
             it.keyboard = symbolKeyboard
             it.listener = createKeyboardListener(context, symbolKeyboardParams)
             it.touchHandler = createTouchHandler(it, symbolKeyboardParams, KeyboardState.Symbol.Symbol)
             it.popupManager = DefaultPopupManager()
         }
         val numberKeyboardView = CanvasKeyboardView(context, null).also {
+            it.keyboardTheme = keyboardTheme
             it.keyboard = numberKeyboard
             it.listener = createKeyboardListener(context, numberKeyboardParams)
             it.touchHandler = createTouchHandler(it, numberKeyboardParams, KeyboardState.Symbol.Number)
@@ -192,6 +198,7 @@ abstract class CommonIMEMode(
 
     override fun createCandidateView(context: Context): View {
         candidateView = ScrollingCandidateView(context, null).apply {
+            keyboardTheme = this@CommonIMEMode.keyboardTheme
             listener = this@CommonIMEMode
         }
         return candidateView as View

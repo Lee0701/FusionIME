@@ -14,11 +14,13 @@ import ee.oyatl.ime.fusion.DimensionUtil
 import ee.oyatl.ime.fusion.KeyEventUtil
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.databinding.EmojiImeModeBinding
+import ee.oyatl.ime.theme.KeyboardTheme
 
 class EmojiIMEMode(
     private val listener: IMEMode.Listener
 ): IMEMode, Consumer<EmojiViewItem>, CandidateView.Listener {
 
+    override var keyboardTheme: KeyboardTheme? = null
     private var inputView: View? = null
     private var candidateView: CandidateView? = null
     private var util: KeyEventUtil? = null
@@ -56,6 +58,7 @@ class EmojiIMEMode(
 
     override fun createCandidateView(context: Context): View {
         candidateView = ScrollingCandidateView(context, null).apply {
+            keyboardTheme = this@EmojiIMEMode.keyboardTheme
             listener = this@EmojiIMEMode
         }
         return candidateView as View

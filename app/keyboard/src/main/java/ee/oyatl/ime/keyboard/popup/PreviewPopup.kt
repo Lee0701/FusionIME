@@ -5,19 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.DecelerateInterpolator
 import android.widget.PopupWindow
-import androidx.appcompat.view.ContextThemeWrapper
+import ee.oyatl.ime.keyboard.DefaultKeyboardView
 import ee.oyatl.ime.keyboard.KeyboardView
 import ee.oyatl.ime.keyboard.R
 import ee.oyatl.ime.keyboard.databinding.PopupPreviewBinding
 
 class PreviewPopup(
-    keyboardView: KeyboardView,
+    private val keyboardView: KeyboardView,
     key: KeyboardView.Key,
 ): Popup {
     private val parent: View = keyboardView.view
     private val window: PopupWindow = PopupWindow(parent.context, null)
-    private val binding = PopupPreviewBinding.inflate(LayoutInflater.from(
-        ContextThemeWrapper(parent.context, R.style.Theme_FusionIME_Keyboard_Popup)))
+    private val binding = PopupPreviewBinding.inflate(LayoutInflater.from(parent.context))
     override val view: View get() = binding.root
     override val isShown: Boolean get() = window.isShowing
 
@@ -67,6 +66,14 @@ class PreviewPopup(
         val (w, h) = size
         val (x, y) = position
         binding.label.text = label
+
+        val popupTheme = keyboardView.keyboardTheme?.popupTheme
+        if(popupTheme != null) {
+            binding.root.setBackgroundResource(R.drawable.key_bg)
+            binding.root.backgroundTintList = parent.context.getColorStateList(popupTheme.backgroundColor)
+            binding.label.setTextColor(parent.context.getColor(popupTheme.foregroundColor))
+        }
+
         window.update(x, y, w, h)
     }
 }

@@ -105,6 +105,7 @@ class LatinIMEMode(
 
     override fun createCandidateView(context: Context): View {
         candidateView = TripleCandidateView(context, null).apply {
+            keyboardTheme = this@LatinIMEMode.keyboardTheme
             listener = this@LatinIMEMode
         }
         return candidateView as View

@@ -17,6 +17,7 @@
     <string name="settings_appearance_keyboard_height_landscape_title">Keyboard Height (Landscape)</string>
     <string name="settings_appearance_show_voice_input_button_title">Show Voice Input Button</string>
     <string name="settings_clipboard_candidate_enabled_title">Clipboard suggestion</string>
+    <string name="settings_appearance_keyboard_theme_title">Keyboard Theme</string>
     <string name="settings_appearance_split_keyboard_title">Split Keyboard</string>
     <string name="settings_appearance_split_keyboard_portrait_title">Split Keyboard (Portrait)</string>
     <string name="settings_appearance_split_ratio_portrait_title">Split Ratio (Portrait)</string>
@@ -88,6 +89,8 @@
     <string name="symbol_layout_n2">Type N2</string>
     <string name="symbol_layout_o1">Type O1</string>
     <string name="symbol_layout_o2">Type O2</string>
+    <string name="keyboard_theme_static">Static Colours</string>
+    <string name="keyboard_theme_dynamic">Dynamic Colours</string>
     <string name="touch_mode_seek">Seek</string>
     <string name="touch_mode_flick">Flick</string>
     <string name="flick_action_none">None</string>

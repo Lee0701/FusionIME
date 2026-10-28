@@ -12,7 +12,6 @@ class TripleCandidateView(
     attributeSet: AttributeSet?
 ): RecyclerCandidateView(context, attributeSet) {
     init {
-        setBackgroundColor(backgroundColor)
         layoutManager = FlexboxLayoutManager(
             context,
             FlexDirection.ROW

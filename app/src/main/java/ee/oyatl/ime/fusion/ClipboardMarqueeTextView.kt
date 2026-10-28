@@ -25,9 +25,6 @@ class ClipboardMarqueeTextView @JvmOverloads constructor(
     private val contentTextView: TextView
         get() = contentView.findViewById(R.id.clipboard_candidate_text)
 
-    private val contentIconView: ImageView
-        get() = contentView.findViewById(R.id.clipboard_candidate_icon)
-
     var text: CharSequence
         get() = contentTextView.text
         set(value) {
@@ -50,14 +47,6 @@ class ClipboardMarqueeTextView @JvmOverloads constructor(
     override fun performClick(): Boolean {
         super.performClick()
         return true
-    }
-
-    fun showClipboardIcon() {
-        contentIconView.setImageResource(R.drawable.content_paste_24)
-    }
-
-    fun showDeleteIcon() {
-        contentIconView.setImageResource(R.drawable.delete_24)
     }
 
     fun startScrolling() {

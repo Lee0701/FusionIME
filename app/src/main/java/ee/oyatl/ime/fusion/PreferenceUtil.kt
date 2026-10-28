@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.res.Configuration
 import android.util.TypedValue
 import androidx.preference.PreferenceManager
+import ee.oyatl.ime.theme.KeyboardTheme
+import ee.oyatl.ime.theme.KeyboardThemeSet
 import kotlin.math.roundToInt
 
 object PreferenceUtil {
@@ -37,5 +39,13 @@ object PreferenceUtil {
     fun getKeyboardHeight(context: Context): Int {
         val rowHeightDIP = getOrientationInteger(context, "keyboard_height")
         return (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, rowHeightDIP, context.resources.displayMetrics) * 4).roundToInt()
+    }
+
+    fun getKeyboardTheme(context: Context): KeyboardTheme {
+        val pref = PreferenceManager.getDefaultSharedPreferences(context)
+        val key = pref.getString("keyboard_theme", null)
+        val themeSet = KeyboardThemeSet.entries.find { it.name == key } ?: KeyboardThemeSet.Static
+        val darkMode = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+        return if(darkMode) themeSet.dark else themeSet.light
     }
 }

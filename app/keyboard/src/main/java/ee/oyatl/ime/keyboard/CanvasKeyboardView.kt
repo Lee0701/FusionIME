@@ -24,6 +24,8 @@ import ee.oyatl.ime.keyboard.popup.EmptyPopupManager
 import ee.oyatl.ime.keyboard.popup.PopupManager
 import ee.oyatl.ime.keyboard.touchhandler.EmptyTouchHandler
 import ee.oyatl.ime.keyboard.touchhandler.TouchHandler
+import ee.oyatl.ime.theme.KeyTheme
+import ee.oyatl.ime.theme.KeyboardTheme
 import kotlin.math.max
 import kotlin.math.roundToInt
 
@@ -60,7 +62,8 @@ class CanvasKeyboardView(
             }
         }
 
-    var keyboard: Keyboard? = null
+    override var keyboardTheme: KeyboardTheme? = null
+    override var keyboard: Keyboard? = null
         set(value) {
             field = value
             if(value != null) setup(value)
@@ -69,26 +72,10 @@ class CanvasKeyboardView(
     override var popupManager: PopupManager = EmptyPopupManager
     var touchHandler: TouchHandler = EmptyTouchHandler
 
-    private val keyboardBackground: Drawable
-    private val specialKeyStyles: Map<SpecialKeyType?, KeyStyle>
-
     val bitmapPaint = Paint()
     val textPaint = Paint()
 
     init {
-        val typedValue = TypedValue()
-        val keyboardContext = ContextThemeWrapper(context, R.style.Theme_FusionIME_Keyboard)
-
-        keyboardContext.theme.resolveAttribute(R.attr.backgroundColor, typedValue, true)
-        keyboardBackground = ContextCompat.getColor(keyboardContext, typedValue.resourceId).toDrawable()
-
-        val keyStyle = KeyStyle.fromTheme(context, R.style.Theme_FusionIME_Keyboard_Key)
-        specialKeyStyles = SpecialKeyType.entries.mapNotNull { type ->
-            val style = KeyStyle.fromTheme(context, type.themeRes)
-            if (style == null) null
-            else type to style
-        }.toMap() + listOfNotNull(keyStyle).associateBy { null }
-
         viewTreeObserver.addOnGlobalLayoutListener {
             updateKeyLocations()
         }
@@ -116,11 +103,8 @@ class CanvasKeyboardView(
                         val icon = if(item.iconRes != 0) ContextCompat.getDrawable(context, item.iconRes) else null
                         val label = if(item.keyCode < 0) (-item.keyCode).toChar().toString() else ""
                         val background = AppCompatResources.getDrawable(context, item.bkgRes)
-                        val style = KeyStyle.fromTheme(context, item.themeRes)?.let {
-                            if(background != null) it.copy(background = background)
-                            else it
-                        }
-                        val key = CachedKey(item.keyCode, label, style, icon)
+                        val keyTheme = keyboardTheme?.keyThemes[item.keyType]
+                        val key = CachedKey(item.keyCode, label, background, keyTheme, icon)
                         key.rect.set(x, y, x + width, y + rowHeight)
                         keySet += key
                     }
@@ -164,17 +148,23 @@ class CanvasKeyboardView(
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
+        val keyboardTheme = keyboardTheme ?: return
         getLocalVisibleRect(rect)
 
         if(!rect.isEmpty) {
-            canvas.drawBitmap(keyboardBackground.toBitmap(rect.width(), rect.height()), 0f, 0f, bitmapPaint)
+            val bitmap = context
+                .getColor(keyboardTheme.backgroundColor)
+                .toDrawable()
+                .toBitmap(rect.width(), rect.height())
+            canvas.drawBitmap(bitmap, 0f, 0f, bitmapPaint)
         }
 
         keySet.forEach { key ->
-            val style = key.style ?: return@forEach
-            val background = style.background
+            val keyTheme = key.keyTheme ?: return@forEach
+            val background = key.background ?: return@forEach
             val keyState = intArrayOf(if(key.pressed) android.R.attr.state_pressed else 0)
-            val tint = style.backgroundColorStateList.getColorForState(keyState, style.backgroundColorStateList.defaultColor)
+            val tintColorStateList = context.getColorStateList(keyTheme.backgroundColor)
+            val tint = tintColorStateList.getColorForState(keyState, tintColorStateList.defaultColor)
             DrawableCompat.setTint(background, tint)
             canvas.drawBitmap(
                 background.toBitmap(key.rect.width(), key.rect.height()),
@@ -184,7 +174,7 @@ class CanvasKeyboardView(
         }
 
         keySet.forEach { key ->
-            val style = key.style ?: return@forEach
+            val keyTheme = key.keyTheme ?: return@forEach
             val icon = key.icon
             val label = key.label
             // Draw hint labels
@@ -204,13 +194,13 @@ class CanvasKeyboardView(
             labelHints.zip(positions).forEach { (label, position) ->
                 label ?: return@forEach
                 val (x, y) = position
-                textPaint.color = style.hintTextColor
+                textPaint.color = context.getColor(keyTheme.hintColor)
                 textPaint.textSize = hintSize
                 canvas.drawText(label, x, y, textPaint)
             }
             // Draw icon
             if(icon != null) {
-                DrawableCompat.setTint(icon, style.foregroundColor)
+                DrawableCompat.setTint(icon, context.getColor(keyTheme.foregroundColor))
                 val bitmap = icon.toBitmap()
                 val x = key.rect.centerX() - bitmap.width / 2
                 val y = key.rect.centerY() - bitmap.height / 2
@@ -219,7 +209,7 @@ class CanvasKeyboardView(
             // Draw main label
             if(label.isNotEmpty()) {
                 textPaint.textAlign = Paint.Align.CENTER
-                textPaint.color = style.foregroundColor
+                textPaint.color = context.getColor(keyTheme.foregroundColor)
                 textPaint.textSize = context.resources.getDimension(R.dimen.key_text_size)
                 val x = key.rect.centerX().toFloat()
                 val y = key.rect.centerY() - (textPaint.descent() + textPaint.ascent()) / 2
@@ -273,7 +263,8 @@ class CanvasKeyboardView(
     inner class CachedKey(
         override val keyCode: Int,
         override var label: String,
-        val style: KeyStyle? = null,
+        val background: Drawable? = null,
+        val keyTheme: KeyTheme? = null,
         var icon: Drawable? = null,
         var labelHintTop: String? = null,
         var labelHintBottom: String? = null,
@@ -292,33 +283,6 @@ class CanvasKeyboardView(
         override fun onReleased() {
             this.pressed = false
             invalidate()
-        }
-    }
-
-    data class KeyStyle(
-        val background: Drawable,
-        val backgroundColorStateList: ColorStateList,
-        val foregroundColor: Int,
-        val hintTextColor: Int
-    ) {
-        companion object {
-            fun fromTheme(context: Context, themeRes: Int): KeyStyle? {
-                val typedValue = TypedValue()
-                val keyContext = ContextThemeWrapper(context, themeRes)
-                val background = ContextCompat.getDrawable(keyContext, R.drawable.key_bg) ?: return null
-                keyContext.theme.resolveAttribute(R.attr.backgroundColor, typedValue, true)
-                val backgroundColorStateList = ContextCompat.getColorStateList(keyContext, typedValue.resourceId) ?: ColorStateList(arrayOf(), intArrayOf())
-                keyContext.theme.resolveAttribute(R.attr.foregroundColor, typedValue, true)
-                val foregroundColor = ContextCompat.getColor(keyContext, typedValue.resourceId)
-                keyContext.theme.resolveAttribute(R.attr.hintTextColor, typedValue, true)
-                val hintTextColor = ContextCompat.getColor(keyContext, typedValue.resourceId)
-                return KeyStyle(
-                    background,
-                    backgroundColorStateList,
-                    foregroundColor,
-                    hintTextColor
-                )
-            }
         }
     }
 }
