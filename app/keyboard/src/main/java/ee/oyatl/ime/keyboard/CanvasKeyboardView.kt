@@ -256,6 +256,7 @@ class CanvasKeyboardView(
     }
 
     override fun onReset() {
+        touchHandler.onReset()
         invalidate()
     }
 
