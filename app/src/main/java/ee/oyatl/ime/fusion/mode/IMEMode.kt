@@ -9,6 +9,7 @@ import ee.oyatl.ime.candidate.CandidateView
 interface IMEMode {
 
     suspend fun onLoad(context: Context)
+    suspend fun onUnload(context: Context)
     fun onStart(inputConnection: InputConnection, editorInfo: EditorInfo)
     fun onFinish()
     fun createInputView(context: Context): View

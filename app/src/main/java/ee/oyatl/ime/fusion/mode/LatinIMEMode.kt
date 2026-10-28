@@ -80,6 +80,11 @@ class LatinIMEMode(
         inputLogic = InputLogic(this, this, dictionaryFacilitator)
     }
 
+    override suspend fun onUnload(context: Context) {
+        dictionaryFacilitator?.closeDictionaries()
+        super.onUnload(context)
+    }
+
     override fun onStart(inputConnection: InputConnection, editorInfo: EditorInfo) {
         super.onStart(inputConnection, editorInfo)
         onStartInputViewInternal(editorInfo, false)
