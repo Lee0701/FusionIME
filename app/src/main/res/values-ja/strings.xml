@@ -156,4 +156,26 @@
     <string name="input_mode_emoji">絵文字</string>
     <string name="latin_layout_qwertz">QWERTZ</string>
     <string name="latin_layout_deutsch">独逸語</string>
+    <string name="settings_input_mode_auto_caps_title">自動大文字化</string>
+    <string name="settings_input_mode_auto_period_summary">スペースキーをダブルタップするとピリオドとスペースが入力されます。</string>
+    <string name="viet_layout_vni_quoc_ngu">VNI（チュ・クオック・グー）</string>
+    <string name="viet_layout_vni_nom">VNI（漢喃）</string>
+    <string name="settings_appearance_keyboard_theme_title">キーボードのテーマ</string>
+    <string name="setup_wizard_incomplete">設定が未完了です。</string>
+    <string name="setup_wizard_start">セットアップウィザード</string>
+    <string name="setup_wizard_label">FusionIME セットアップウィザード</string>
+    <string name="setup_wizard_welcome_label">ようこそ</string>
+    <string name="setup_wizard_welcome_title">ようこそ！</string>
+    <string name="setup_wizard_enable_title">ステップ 1</string>
+    <string name="setup_wizard_enable_subtitle">言語とキーボードの設定で FusionIME を有効化してください。</string>
+    <string name="setup_wizard_enable_button">有効化する</string>
+    <string name="setup_wizard_select_label">FusionIME を選択する</string>
+    <string name="setup_wizard_select_title">ステップ 2</string>
+    <string name="setup_wizard_select_subtitle">入力方法のリストから FusionIME を選択してください。</string>
+    <string name="setup_wizard_select_button">選択する</string>
+    <string name="setup_wizard_languages_label">言語</string>
+    <string name="setup_wizard_languages_title">ステップ 3</string>
+    <string name="setup_wizard_languages_subtitle">使用したい言語を選択してください。</string>
+    <string name="setup_wizard_next">次に進む</string>
+    <string name="setup_wizard_finish">終了</string>
 </resources>
