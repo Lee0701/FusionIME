@@ -29,9 +29,9 @@ object TabletKeyboard {
         )
         row0.add(Item.IfEq("number_row", "true", Item.TemplateKey(KeyCode.KEYCODE_DEL, 1f, true)))
         if(fillDeleteSpace) row0.add(Item.IfNEq("number_row", "true", Item.Spacer(1f)))
-        return KeyboardConfiguration(listOf(
-            row0
-        ))
+        return KeyboardConfiguration(listOf(listOf(
+            Item.IfEq("number_row", "true", Item.Multiple(row0))
+        )))
     }
 
     fun alphabetic(
