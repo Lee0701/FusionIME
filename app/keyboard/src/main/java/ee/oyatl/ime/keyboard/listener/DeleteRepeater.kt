@@ -23,6 +23,7 @@ class DeleteRepeater(
                 return true
             }
         }
+        handler.removeCallbacksAndMessages(null)
         return false
     }
 
@@ -33,6 +34,7 @@ class DeleteRepeater(
                 return true
             }
         }
+        handler.removeCallbacksAndMessages(null)
         return false
     }
 

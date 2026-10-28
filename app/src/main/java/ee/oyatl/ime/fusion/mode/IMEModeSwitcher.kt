@@ -200,10 +200,10 @@ class IMEModeSwitcher(
         wrapper.keyboardView.addView(inputView)
 
         wrapper.candidateView.removeAllViews()
-        val view = currentEntry.candidateView ?: currentEntry.imeMode.createCandidateView(context)
-        currentEntry.candidateView = view
-        (view.parent as ViewGroup?)?.removeView(view)
-        wrapper.candidateView.addView(view)
+        val candidateView = currentEntry.candidateView ?: currentEntry.imeMode.createCandidateView(context)
+        currentEntry.candidateView = candidateView
+        (candidateView.parent as ViewGroup?)?.removeView(candidateView)
+        wrapper.candidateView.addView(candidateView)
 
         val alwaysShowSoftKeyboard = preference.getBoolean("always_show_soft_keyboard", false)
         val hardwareKeyboard = context.resources.configuration.hardKeyboardHidden != Configuration.HARDKEYBOARDHIDDEN_YES
