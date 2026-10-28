@@ -33,6 +33,7 @@ data class LayoutTable(
                 KeyboardState.Shift.Released -> normal
                 KeyboardState.Shift.Pressed -> shifted
                 KeyboardState.Shift.Locked -> locked
+                KeyboardState.Shift.AutoShifted -> locked
             }
         }
     }

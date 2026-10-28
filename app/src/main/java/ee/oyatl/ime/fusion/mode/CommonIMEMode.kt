@@ -50,7 +50,7 @@ import kotlin.math.roundToInt
 
 abstract class CommonIMEMode(
     private val listener: IMEMode.Listener
-): IMEMode, KeyboardListener, FlickListener, LongPressListener, CandidateView.Listener {
+): IMEMode, KeyboardListener, FlickListener, LongPressListener, CandidateView.Listener, ShiftStateManager.ShiftStateHolder {
     protected val keyCharacterMap: KeyCharacterMap = KeyCharacterMap.load(KeyCharacterMap.VIRTUAL_KEYBOARD)
 
     open var textLayoutPreset: KeyboardLayoutPreset = LatinLayoutPresets.qwerty()
@@ -76,7 +76,11 @@ abstract class CommonIMEMode(
     protected var candidateView: CandidateView? = null
 
     var symbolState: KeyboardState.Symbol = KeyboardState.Symbol.Text
-    var shiftState: KeyboardState.Shift = KeyboardState.Shift.Released
+    override var shiftState: KeyboardState.Shift = KeyboardState.Shift.Released
+        set(value) {
+            field = value
+            updateInputView()
+        }
 
     private var defaultFlickActions: Map<FlickDirection, FlickAction> = mapOf()
 
@@ -210,6 +214,7 @@ abstract class CommonIMEMode(
                 KeyboardState.Shift.Released -> ee.oyatl.ime.keyboard.R.drawable.keyic_shift
                 KeyboardState.Shift.Pressed -> ee.oyatl.ime.keyboard.R.drawable.keyic_shift_pressed
                 KeyboardState.Shift.Locked -> ee.oyatl.ime.keyboard.R.drawable.keyic_shift_locked
+                KeyboardState.Shift.AutoShifted -> ee.oyatl.ime.keyboard.R.drawable.keyic_shift_pressed
             }
             val icons = mapOf(
                 KeyEvent.KEYCODE_SHIFT_LEFT to KeyLabel.Default(icon = shiftIcon),
@@ -276,7 +281,7 @@ abstract class CommonIMEMode(
             DeleteRepeater(this, params),
             ParallelKeyboardListener(
                 InputOnKeyUp(this, ignoreKeyCodes = ShiftStateManager.KEY_CODES),
-                ShiftStateManager(this, params)
+                ShiftStateManager(this, params, this)
             )
         )
     }
