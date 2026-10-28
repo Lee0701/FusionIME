@@ -10,7 +10,6 @@ import android.view.inputmethod.InputConnection
 import androidx.preference.PreferenceManager
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.ScrollingCandidateView
-import ee.oyatl.ime.fusion.Feature
 import ee.oyatl.ime.fusion.FlickAction
 import ee.oyatl.ime.fusion.KeyEventUtil
 import ee.oyatl.ime.fusion.PreferenceUtil.getOrientationBoolean
@@ -235,7 +234,7 @@ abstract class CommonIMEMode(
         val screenMode = KeyboardState.ScreenMode.valueOf(preference.getString("screen_mode", null) ?: defaultScreenMode)
         val rowHeightDIP = getOrientationInteger(context, "keyboard_height")
         val height = (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, rowHeightDIP, context.resources.displayMetrics) * 4).roundToInt()
-        val split = Feature.SplitKeyboard.availableInCurrentVersion && getOrientationBoolean(context, "split_keyboard")
+        val split = getOrientationBoolean(context, "split_keyboard")
         val splitRatio = if(split) getOrientationInteger(context, "split_ratio") else 0f
         val splitWidthDIP = context.resources.configuration.screenWidthDp / 100f * splitRatio
         val splitWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, splitWidthDIP, context.resources.displayMetrics).roundToInt()
@@ -290,7 +289,7 @@ abstract class CommonIMEMode(
         params: KeyboardParams,
         symbolState: KeyboardState.Symbol
     ): TouchHandler {
-        val flick = params.touchMode == TouchMode.Flick && Feature.TouchMode.availableInCurrentVersion
+        val flick = params.touchMode == TouchMode.Flick
         val handler = if(flick) {
             FlickTouchHandler(keyboardView, params, diagonal = false, multiFlick = false)
         } else {

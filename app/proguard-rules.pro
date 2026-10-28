@@ -19,3 +19,5 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+-keep,allowoptimization public class org.mozc.android.inputmethod.japanese.protobuf.Proto** { *; }

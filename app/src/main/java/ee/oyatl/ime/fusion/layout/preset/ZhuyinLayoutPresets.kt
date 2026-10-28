@@ -1,7 +1,6 @@
 package ee.oyatl.ime.fusion.layout.preset
 
 import android.view.KeyEvent
-import ee.oyatl.ime.fusion.Feature
 import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.layout.LayoutExt
 import ee.oyatl.ime.fusion.layout.LayoutQwerty
@@ -18,7 +17,6 @@ object ZhuyinLayoutPresets {
     fun bopomofo(
         cursorKeys: Boolean = false,
     ): KeyboardLayoutPreset {
-        val cursorKeys = Feature.CursorKeys.availableInCurrentVersion && cursorKeys
         return KeyboardLayoutPreset(
             keyboardTemplate = KeyboardTemplate.ByScreenMode(
                 mobile = KeyboardTemplate.Basic(

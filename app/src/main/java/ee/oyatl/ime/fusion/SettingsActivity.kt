@@ -119,16 +119,14 @@ class SettingsActivity : AppCompatActivity(),
     class AppearanceFragment : PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             addPreferencesFromResource(R.xml.pref_appearance_basic)
-            if(Feature.SplitKeyboard.availableInCurrentVersion)
-                addPreferencesFromResource(R.xml.pref_appearance_split_keyboard)
+            addPreferencesFromResource(R.xml.pref_appearance_split_keyboard)
         }
     }
 
     class BehaviourFragment : PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             addPreferencesFromResource(R.xml.pref_behaviour_feedback)
-            if(Feature.TouchMode.availableInCurrentVersion)
-                addPreferencesFromResource(R.xml.pref_behaviour_touch)
+            addPreferencesFromResource(R.xml.pref_behaviour_touch)
             addPreferencesFromResource(R.xml.pref_behaviour_hardware)
         }
     }

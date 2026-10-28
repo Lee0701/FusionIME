@@ -12,8 +12,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
-import ee.oyatl.ime.fusion.Feature
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.databinding.FragmentInputModeSettingsBinding
 import ee.oyatl.ime.fusion.databinding.InputModeListItemBinding
@@ -97,13 +95,8 @@ class InputModeSettingsFragment: Fragment() {
         itemTouchHelper.attachToRecyclerView(binding.recyclerView)
 
         binding.fab.setOnClickListener {
-            val enabled = Feature.paidVersion || items.size < FREE_INPUT_MODES_LIMIT
-            if(enabled) {
-                val bottomSheet = ChooseInputModeTypeBottomSheet()
-                bottomSheet.show(parentFragmentManager, ChooseInputModeTypeBottomSheet.TAG)
-            } else {
-                Snackbar.make(binding.root, R.string.msg_input_modes_limit_reached, Snackbar.LENGTH_LONG).show()
-            }
+            val bottomSheet = ChooseInputModeTypeBottomSheet()
+            bottomSheet.show(parentFragmentManager, ChooseInputModeTypeBottomSheet.TAG)
         }
     }
 
