@@ -17,7 +17,7 @@ import ee.oyatl.ime.fusion.PreferenceUtil.getOrientationInteger
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.layout.preset.LatinLayoutPresets
 import ee.oyatl.ime.fusion.layout.preset.SymbolLayoutPresets
-import ee.oyatl.ime.keyboard.DefaultKeyboardView
+import ee.oyatl.ime.keyboard.CanvasKeyboardView
 import ee.oyatl.ime.keyboard.KeyLabel
 import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
 import ee.oyatl.ime.keyboard.KeyboardParams
@@ -26,13 +26,14 @@ import ee.oyatl.ime.keyboard.KeyboardView
 import ee.oyatl.ime.keyboard.LayoutTable
 import ee.oyatl.ime.keyboard.SwitcherKeyboardView
 import ee.oyatl.ime.keyboard.TouchMode
-import ee.oyatl.ime.keyboard.listener.CompoundKeyboardListener
 import ee.oyatl.ime.keyboard.listener.DeleteRepeater
 import ee.oyatl.ime.keyboard.listener.FlickListener
 import ee.oyatl.ime.keyboard.listener.InputOnKeyUp
 import ee.oyatl.ime.keyboard.listener.KeyFeedbackManager
 import ee.oyatl.ime.keyboard.listener.KeyboardListener
 import ee.oyatl.ime.keyboard.listener.LongPressListener
+import ee.oyatl.ime.keyboard.listener.ParallelKeyboardListener
+import ee.oyatl.ime.keyboard.listener.SerialKeyboardListener
 import ee.oyatl.ime.keyboard.listener.ShiftStateManager
 import ee.oyatl.ime.keyboard.popup.DefaultPopupManager
 import ee.oyatl.ime.keyboard.popup.MoreKeysPopup
@@ -43,13 +44,12 @@ import ee.oyatl.ime.keyboard.touchhandler.SeekTouchHandler
 import ee.oyatl.ime.keyboard.touchhandler.TouchHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 abstract class CommonIMEMode(
     private val listener: IMEMode.Listener
-): IMEMode, KeyboardListener, FlickListener, LongPressListener, CandidateView.Listener {
+): IMEMode, KeyboardListener, FlickListener, LongPressListener, CandidateView.Listener, ShiftStateManager.ShiftStateHolder {
     protected val keyCharacterMap: KeyCharacterMap = KeyCharacterMap.load(KeyCharacterMap.VIRTUAL_KEYBOARD)
 
     open var textLayoutPreset: KeyboardLayoutPreset = LatinLayoutPresets.qwerty()
@@ -75,7 +75,11 @@ abstract class CommonIMEMode(
     protected var candidateView: CandidateView? = null
 
     var symbolState: KeyboardState.Symbol = KeyboardState.Symbol.Text
-    var shiftState: KeyboardState.Shift = KeyboardState.Shift.Released
+    override var shiftState: KeyboardState.Shift = KeyboardState.Shift.Released
+        set(value) {
+            field = value
+            updateInputView()
+        }
 
     private var defaultFlickActions: Map<FlickDirection, FlickAction> = mapOf()
 
@@ -156,19 +160,19 @@ abstract class CommonIMEMode(
         val symbolKeyboard = symbolLayoutPreset.keyboardTemplate.inflate(symbolKeyboardParams, symbolLayoutPreset.softKeyCodeMapper)
         val numberKeyboard = numberLayoutPreset.keyboardTemplate.inflate(numberKeyboardParams, symbolLayoutPreset.softKeyCodeMapper)
 
-        val textKeyboardView = DefaultKeyboardView(context, null).also {
+        val textKeyboardView = CanvasKeyboardView(context, null).also {
             it.keyboard = textKeyboard
             it.listener = createKeyboardListener(context, textKeyboardParams)
             it.touchHandler = createTouchHandler(it, textKeyboardParams, KeyboardState.Symbol.Text)
             it.popupManager = DefaultPopupManager()
         }
-        val symbolKeyboardView = DefaultKeyboardView(context, null).also {
+        val symbolKeyboardView = CanvasKeyboardView(context, null).also {
             it.keyboard = symbolKeyboard
             it.listener = createKeyboardListener(context, symbolKeyboardParams)
             it.touchHandler = createTouchHandler(it, symbolKeyboardParams, KeyboardState.Symbol.Symbol)
             it.popupManager = DefaultPopupManager()
         }
-        val numberKeyboardView = DefaultKeyboardView(context, null).also {
+        val numberKeyboardView = CanvasKeyboardView(context, null).also {
             it.keyboard = numberKeyboard
             it.listener = createKeyboardListener(context, numberKeyboardParams)
             it.touchHandler = createTouchHandler(it, numberKeyboardParams, KeyboardState.Symbol.Number)
@@ -195,7 +199,7 @@ abstract class CommonIMEMode(
 
     override fun getInputView(): View? {
         updateInputView()
-        return keyboardView as? View
+        return keyboardView?.view
     }
 
     protected fun updateInputView() {
@@ -209,6 +213,7 @@ abstract class CommonIMEMode(
                 KeyboardState.Shift.Released -> ee.oyatl.ime.keyboard.R.drawable.keyic_shift
                 KeyboardState.Shift.Pressed -> ee.oyatl.ime.keyboard.R.drawable.keyic_shift_pressed
                 KeyboardState.Shift.Locked -> ee.oyatl.ime.keyboard.R.drawable.keyic_shift_locked
+                KeyboardState.Shift.AutoShifted -> ee.oyatl.ime.keyboard.R.drawable.keyic_shift_pressed
             }
             val icons = mapOf(
                 KeyEvent.KEYCODE_SHIFT_LEFT to KeyLabel.Default(icon = shiftIcon),
@@ -272,11 +277,13 @@ abstract class CommonIMEMode(
         context: Context,
         params: KeyboardParams
     ): KeyboardListener {
-        return CompoundKeyboardListener(
+        return SerialKeyboardListener(
             KeyFeedbackManager(context, params),
             DeleteRepeater(this, params),
-            ShiftStateManager(this, params),
-            InputOnKeyUp(this)
+            ParallelKeyboardListener(
+                InputOnKeyUp(this, ignoreKeyCodes = ShiftStateManager.KEY_CODES),
+                ShiftStateManager(this, params, this)
+            )
         )
     }
 

@@ -7,7 +7,6 @@ import ee.oyatl.ime.keyboard.popup.PopupManager
 
 interface KeyboardView {
     val view: View
-
     val rect: Rect
     val location: IntArray
     val listener: KeyboardListener
