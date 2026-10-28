@@ -14,9 +14,7 @@ import ee.oyatl.ime.fusion.layout.TabletKeyboard
 import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
 
 object ZhuyinLayoutPresets {
-    fun bopomofo(
-        cursorKeys: Boolean = false,
-    ): KeyboardLayoutPreset {
+    fun bopomofo(): KeyboardLayoutPreset {
         return KeyboardLayoutPreset(
             keyboardTemplate = KeyboardTemplate.ByScreenMode(
                 mobile = KeyboardTemplate.Basic(

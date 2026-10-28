@@ -17,16 +17,15 @@ import java.util.Locale
 
 class VietIMEMode(
     listener: IMEMode.Listener,
-    numberRow: Boolean,
-    cursorKeys: Boolean,
-    val layout: Layout
+    val layout: Layout,
+    override val extra: Map<String, String>
 ): CommonIMEMode(listener) {
     private val wordComposer: WordComposer = WordComposer()
     private var converter: VietnameseConverter? = null
     private val inputMethod: InputMethod = layout.keyboardMode.createInputMethod()
 
     private val forcedNumberRow = layout.keyboardMode == KeyboardMode.VNI
-    override var textLayoutPreset: KeyboardLayoutPreset = VietLayoutPresets.qwerty(forcedNumberRow || numberRow, cursorKeys, layout.nomMode)
+    override var textLayoutPreset: KeyboardLayoutPreset = VietLayoutPresets.qwerty(layout.nomMode)
 
     private var bestCandidate: VietnameseConverter.Candidate? = null
 
@@ -149,13 +148,12 @@ class VietIMEMode(
 
     data class Params(
         val layout: Layout,
-        val numberRow: Boolean,
-        val cursorKeys: Boolean
+        val extra: Map<String, String>
     ): IMEMode.Params {
         override val type: String = TYPE
 
         override fun create(listener: IMEMode.Listener): IMEMode {
-            return VietIMEMode(listener, numberRow, cursorKeys, layout)
+            return VietIMEMode(listener, layout, extra)
         }
 
         override fun getLabel(context: Context): String {
@@ -173,12 +171,13 @@ class VietIMEMode(
         companion object {
             fun parse(map: Map<String, String>): Params {
                 val layout = Layout.entries.find { it.name == map["layout"] } ?: Layout.QwertyNom
-                val numberRow = map["number_row"]?.toBoolean() ?: false
-                val cursorKeys = map["cursor_keys"]?.toBoolean() ?: false
+                val forceNumberRow =
+                    if(layout.keyboardMode == KeyboardMode.VNI) mapOf("number_row" to "true")
+                    else emptyMap()
+                val extra = map + forceNumberRow
                 return Params(
                     layout = layout,
-                    numberRow = numberRow,
-                    cursorKeys = cursorKeys
+                    extra = extra
                 )
             }
         }

@@ -55,6 +55,7 @@ abstract class CommonIMEMode(
     protected val keyCharacterMap: KeyCharacterMap = KeyCharacterMap.load(KeyCharacterMap.VIRTUAL_KEYBOARD)
 
     override var keyboardTheme: KeyboardTheme? = null
+    protected open val extra: Map<String, String> = mapOf()
 
     open var textLayoutPreset: KeyboardLayoutPreset = LatinLayoutPresets.qwerty()
     open var symbolLayoutPreset: KeyboardLayoutPreset = SymbolLayoutPresets.symbolG()
@@ -270,7 +271,7 @@ abstract class CommonIMEMode(
             repeatDelay = 300,
             repeatInterval = 30,
             previewPopups = showPreviewPopup,
-            extra = mapOf("number_row" to "true", "cursor_keys" to "true")
+            extra = extra
         )
 
         return when(symbolState) {

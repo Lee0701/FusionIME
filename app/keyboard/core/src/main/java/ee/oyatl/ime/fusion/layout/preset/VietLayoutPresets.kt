@@ -6,8 +6,6 @@ import ee.oyatl.ime.fusion.keyboard.core.LayoutTable
 
 object VietLayoutPresets {
     fun qwerty(
-        numberRow: Boolean,
-        cursorKeys: Boolean,
         isHanNom: Boolean
     ): KeyboardLayoutPreset {
         val qwerty = LatinLayoutPresets.qwerty(false)

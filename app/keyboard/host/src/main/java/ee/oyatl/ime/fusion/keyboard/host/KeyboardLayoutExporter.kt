@@ -65,8 +65,6 @@ object KeyboardLayoutExporter {
 
     @JvmStatic
     fun main(args: Array<String>) {
-        val numberRow = false
-        val cursorKeys = false
         val keyboardTemplateHangulKSCompatible = KeyboardTemplate.ByScreenMode(
             mobile = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
@@ -78,8 +76,8 @@ object KeyboardLayoutExporter {
             ),
             tablet = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
-                    TabletKeyboard.numbers(delete = true),
-                    TabletKeyboard.alphabetic(semicolon = false, delete = !numberRow),
+                    TabletKeyboard.numbers(),
+                    TabletKeyboard.alphabetic(semicolon = false),
                     TabletKeyboard.bottom()
                 ),
                 contentRows = TabletKeyboardRows.NUMBERS + TabletKeyboardRows.KS

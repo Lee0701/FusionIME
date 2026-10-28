@@ -20,9 +20,7 @@ import ee.oyatl.ime.fusion.keyboard.core.SoftKeyCodeMapper
 
 object KoreanLayoutPresets {
     fun ksCompatible(
-        layoutTable: LayoutTable,
-        numberRow: Boolean = false,
-        cursorKeys: Boolean = false
+        layoutTable: LayoutTable
     ): KeyboardLayoutPreset {
         return KeyboardLayoutPreset(
             keyboardTemplate = KeyboardTemplate.ByScreenMode(
@@ -50,8 +48,7 @@ object KoreanLayoutPresets {
 
     fun threeSet390391(
         layoutTable: LayoutTable,
-        softKeyCodeMapper: SoftKeyCodeMapper,
-        cursorKeys: Boolean = false
+        softKeyCodeMapper: SoftKeyCodeMapper
     ): KeyboardLayoutPreset {
         return KeyboardLayoutPreset(
             keyboardTemplate = KeyboardTemplate.ByScreenMode(
@@ -77,9 +74,7 @@ object KoreanLayoutPresets {
         )
     }
 
-    fun threeSet393(
-        cursorKeys: Boolean = false
-    ): KeyboardLayoutPreset {
+    fun threeSet393(): KeyboardLayoutPreset {
         return KeyboardLayoutPreset(
             keyboardTemplate = KeyboardTemplate.ByScreenMode(
                 mobile = KeyboardTemplate.Basic(

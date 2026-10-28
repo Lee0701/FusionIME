@@ -19,7 +19,8 @@ import java.util.Locale
 class ZhuyinIMEMode(
     listener: IMEMode.Listener,
     override var textLayoutPreset: KeyboardLayoutPreset,
-    conversionEngine: ConversionEngines
+    conversionEngine: ConversionEngines,
+    override val extra: Map<String, String>
 ): CommonIMEMode(listener) {
     private val handler: Handler = Handler(Looper.getMainLooper()) { msg ->
         when(msg.what) {
@@ -174,13 +175,13 @@ class ZhuyinIMEMode(
 
     class Params(
         val conversionEngine: ConversionEngines,
-        val cursorKeys: Boolean
+        val extra: Map<String, String>
     ): IMEMode.Params {
         override val type: String = TYPE
 
         override fun create(listener: IMEMode.Listener): IMEMode {
-            val textLayoutPreset = ZhuyinLayoutPresets.bopomofo(cursorKeys)
-            return ZhuyinIMEMode(listener, textLayoutPreset, conversionEngine)
+            val textLayoutPreset = ZhuyinLayoutPresets.bopomofo()
+            return ZhuyinIMEMode(listener, textLayoutPreset, conversionEngine, extra)
         }
 
         override fun getLabel(context: Context): String {
@@ -197,10 +198,10 @@ class ZhuyinIMEMode(
             fun parse(map: Map<String, String>): Params {
                 val conversionEngine = ConversionEngines.entries.find { it.name == map["conversion_engine"] }
                     ?: ConversionEngines.FUZZY_CHEWING_CONVERSION_ENGINE
-                val cursorKeys = map["cursor_keys"]?.toBoolean() ?: false
+                val extra = map + mapOf("number_row" to "true")
                 return Params(
                     conversionEngine = conversionEngine,
-                    cursorKeys = cursorKeys
+                    extra = extra
                 )
             }
         }

@@ -20,6 +20,7 @@ import java.util.Locale
 
 class JyutpingIMEMode(
     override var textLayoutPreset: KeyboardLayoutPreset,
+    override val extra: Map<String, String>,
     listener: IMEMode.Listener
 ): CommonIMEMode(listener) {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
@@ -124,14 +125,13 @@ class JyutpingIMEMode(
     }
 
     class Params(
-        val numberRow: Boolean = false,
-        val cursorKeys: Boolean
+        val extra: Map<String, String>
     ): IMEMode.Params {
         override val type: String = TYPE
 
         override fun create(listener: IMEMode.Listener): IMEMode {
             val textLayoutPreset = JyutpingLayoutPresets.jyutping(LatinLayoutPresets.qwerty(false))
-            return JyutpingIMEMode(textLayoutPreset, listener)
+            return JyutpingIMEMode(textLayoutPreset, extra, listener)
         }
 
         override fun getLabel(context: Context): String {
@@ -146,11 +146,8 @@ class JyutpingIMEMode(
 
         companion object {
             fun parse(map: Map<String, String>): Params {
-                val numberRow = map["number_row"]?.toBoolean() ?: false
-                val cursorKeys = map["cursor_keys"]?.toBoolean() ?: false
                 return Params(
-                    numberRow = numberRow,
-                    cursorKeys = cursorKeys
+                    extra = map
                 )
             }
         }

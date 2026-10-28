@@ -33,6 +33,7 @@ import java.util.concurrent.Executors
 
 abstract class KoreanIMEMode(
     converterType: ConverterType,
+    override val extra: Map<String, String>,
     listener: IMEMode.Listener
 ): CommonIMEMode(listener) {
     private val dispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
@@ -145,27 +146,23 @@ abstract class KoreanIMEMode(
     }
 
     abstract class Hangul2SetKSCompatible(
-        numberRow: Boolean,
-        cursorKeys: Boolean,
         converterType: ConverterType,
+        extra: Map<String, String>,
         listener: IMEMode.Listener
-    ): KoreanIMEMode(converterType, listener) {
+    ): KoreanIMEMode(converterType, extra, listener) {
         abstract val layoutTable: LayoutTable
         override var textLayoutPreset: KeyboardLayoutPreset =
             KoreanLayoutPresets.ksCompatible(
-                layoutTable,
-                numberRow,
-                cursorKeys
+                layoutTable
             )
     }
 
     class Hangul2SetKS(
         correctOrders: Boolean,
-        numberRow: Boolean,
-        cursorKeys: Boolean,
         converterType: ConverterType,
+        extra: Map<String, String>,
         listener: IMEMode.Listener
-    ): KoreanIMEMode(converterType, listener) {
+    ): KoreanIMEMode(converterType, extra, listener) {
         override val hangulCombiner: HangulCombiner = HangulCombiner(Hangul2Set.COMB_KS, correctOrders)
     }
 
@@ -173,26 +170,25 @@ abstract class KoreanIMEMode(
      * Common part for 390 and 391
      */
     abstract class Hangul3Set390391(
-        cursorKeys: Boolean,
         converterType: ConverterType,
+        extra: Map<String, String>,
         listener: IMEMode.Listener
-    ): KoreanIMEMode(converterType, listener) {
+    ): KoreanIMEMode(converterType, extra + mapOf("number_row" to "true"), listener) {
         abstract val softKeyCodeMapper: SoftKeyCodeMapper
         abstract val layoutTable: LayoutTable
         override var textLayoutPreset: KeyboardLayoutPreset =
             KoreanLayoutPresets.threeSet390391(
                 layoutTable,
-                softKeyCodeMapper,
-                cursorKeys
+                softKeyCodeMapper
             )
     }
 
     class Hangul3Set390(
         correctOrders: Boolean,
-        cursorKeys: Boolean,
         converterType: ConverterType,
+        extra: Map<String, String>,
         listener: IMEMode.Listener
-    ): Hangul3Set390391(cursorKeys, converterType, listener) {
+    ): Hangul3Set390391(converterType, extra, listener) {
         override val hangulCombiner: HangulCombiner = HangulCombiner(Hangul3Set.COMBINATION_390_391, correctOrders)
         override val layoutTable: LayoutTable get() = LayoutTable.fromShiftStates(Hangul3Set.TABLE_390)
         override val softKeyCodeMapper: SoftKeyCodeMapper get() = SoftKeyCodeMapper.ByScreenMode(
@@ -203,10 +199,10 @@ abstract class KoreanIMEMode(
 
     class Hangul3Set391(
         correctOrders: Boolean,
-        cursorKeys: Boolean,
         converterType: ConverterType,
+        extra: Map<String, String>,
         listener: IMEMode.Listener
-    ): Hangul3Set390391(cursorKeys, converterType, listener) {
+    ): Hangul3Set390391(converterType, extra, listener) {
         override val hangulCombiner: HangulCombiner = HangulCombiner(Hangul3Set.COMBINATION_390_391, correctOrders)
         override val layoutTable: LayoutTable get() = LayoutTable.fromShiftStates(Hangul3Set.TABLE_391)
         override val softKeyCodeMapper: SoftKeyCodeMapper get() = SoftKeyCodeMapper.Empty
@@ -214,10 +210,10 @@ abstract class KoreanIMEMode(
 
     class Hangul3Set391Strict(
         correctOrders: Boolean,
-        cursorKeys: Boolean,
         converterType: ConverterType,
+        extra: Map<String, String>,
         listener: IMEMode.Listener
-    ): Hangul3Set390391(cursorKeys, converterType, listener) {
+    ): Hangul3Set390391(converterType, extra, listener) {
         override val hangulCombiner: HangulCombiner = HangulCombiner(Hangul3Set.COMBINATION_391_STRICT, correctOrders)
         override val layoutTable: LayoutTable get() = LayoutTable.fromShiftStates(Hangul3Set.TABLE_391_STRICT)
         override val softKeyCodeMapper: SoftKeyCodeMapper get() = SoftKeyCodeMapper.Empty
@@ -225,42 +221,40 @@ abstract class KoreanIMEMode(
 
     class HangulOld2Set(
         correctOrders: Boolean,
-        numberRow: Boolean,
-        cursorKeys: Boolean,
         converterType: ConverterType,
+        extra: Map<String, String>,
         listener: IMEMode.Listener
-    ): Hangul2SetKSCompatible(numberRow, cursorKeys, converterType, listener) {
+    ): Hangul2SetKSCompatible(converterType, extra, listener) {
         override val hangulCombiner: HangulCombiner = HangulCombiner(HangulOld.COMB_FULL, correctOrders)
         override val layoutTable: LayoutTable get() = LayoutTable.fromShiftStates(HangulOld.TABLE_OLD_2SET)
     }
 
     class HangulOld3Set393(
         correctOrders: Boolean,
-        cursorKeys: Boolean,
         converterType: ConverterType,
+        extra: Map<String, String>,
         listener: IMEMode.Listener
-    ): KoreanIMEMode(converterType, listener) {
+    ): KoreanIMEMode(converterType, extra + mapOf("number_row" to "true"), listener) {
         override val hangulCombiner: HangulCombiner = HangulCombiner(HangulOld.COMB_FULL, correctOrders)
-        override var textLayoutPreset: KeyboardLayoutPreset = KoreanLayoutPresets.threeSet393(cursorKeys)
+        override var textLayoutPreset: KeyboardLayoutPreset = KoreanLayoutPresets.threeSet393()
     }
 
     data class Params(
         val layout: Layout,
         val correctOrders: Boolean,
         val converterType: ConverterType,
-        val numberRow: Boolean,
-        val cursorKeys: Boolean
+        val extra: Map<String, String>
     ): IMEMode.Params {
         override val type: String = TYPE
 
         override fun create(listener: IMEMode.Listener): IMEMode {
             return when(layout) {
-                Layout.Set2KS -> Hangul2SetKS(correctOrders, numberRow, cursorKeys, converterType, listener)
-                Layout.Set3390 -> Hangul3Set390(correctOrders, cursorKeys, converterType, listener)
-                Layout.Set3391 -> Hangul3Set391(correctOrders, cursorKeys, converterType, listener)
-                Layout.Set3391Strict -> Hangul3Set391Strict(correctOrders, cursorKeys, converterType, listener)
-                Layout.Set2Old -> HangulOld2Set(correctOrders, numberRow, cursorKeys, converterType, listener)
-                Layout.Set3Old393 -> HangulOld3Set393(correctOrders, cursorKeys, converterType, listener)
+                Layout.Set2KS -> Hangul2SetKS(correctOrders, converterType, extra, listener)
+                Layout.Set3390 -> Hangul3Set390(correctOrders, converterType, extra, listener)
+                Layout.Set3391 -> Hangul3Set391(correctOrders, converterType, extra, listener)
+                Layout.Set3391Strict -> Hangul3Set391Strict(correctOrders, converterType, extra, listener)
+                Layout.Set2Old -> HangulOld2Set(correctOrders, converterType, extra, listener)
+                Layout.Set3Old393 -> HangulOld3Set393(correctOrders, converterType, extra, listener)
             }
         }
 
@@ -286,14 +280,11 @@ abstract class KoreanIMEMode(
                 val layout = Layout.entries.find { it.name == map["layout"] } ?: Layout.Set2KS
                 val converterType = ConverterType.valueOf(map["converter"] ?: ConverterType.Word.name)
                 val correctOrders = (map["correct_orders"] ?: "false").toBoolean()
-                val numberRow = map["number_row"]?.toBoolean() ?: false
-                val cursorKeys = map["cursor_keys"]?.toBoolean() ?: false
                 return Params(
                     layout = layout,
                     converterType = converterType,
                     correctOrders = correctOrders,
-                    numberRow = numberRow,
-                    cursorKeys = cursorKeys
+                    extra = map
                 )
             }
         }

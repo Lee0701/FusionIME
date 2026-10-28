@@ -19,7 +19,8 @@ import java.util.Locale
 import kotlin.collections.plus
 
 abstract class CangjieIMEMode(
-    listener: IMEMode.Listener
+    listener: IMEMode.Listener,
+    override val extra: Map<String, String>
 ): CommonIMEMode(listener) {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private var convertJob: Job? = null
@@ -162,19 +163,18 @@ abstract class CangjieIMEMode(
     class CangjieQuick(
         override val fullWidth: Boolean,
         override val inputMode: Int,
-        numberRow: Boolean,
-        cursorKeys: Boolean,
+        extra: Map<String, String>,
         listener: IMEMode.Listener
-    ): CangjieIMEMode(listener) {
+    ): CangjieIMEMode(listener, extra) {
         override val keyMap: Map<Char, Char> = LayoutCangjie.KEY_MAP_CANGJIE
         override var textLayoutPreset: KeyboardLayoutPreset = CangjieLayoutPresets.cangjie()
     }
 
     class Dayi3(
         override val fullWidth: Boolean,
-        cursorKeys: Boolean,
+        extra: Map<String, String>,
         listener: IMEMode.Listener
-    ): CangjieIMEMode(listener) {
+    ): CangjieIMEMode(listener, extra + mapOf("number_row" to "true")) {
         override val inputMode: Int = TableLoader.DAYI3
         override var textLayoutPreset: KeyboardLayoutPreset = CangjieLayoutPresets.dayi3()
         override val keyMap: Map<Char, Char> = LayoutCangjie.KEY_MAP_DAYI3
@@ -183,16 +183,15 @@ abstract class CangjieIMEMode(
     data class Params(
         val layout: Layout,
         val fullWidth: Boolean,
-        val numberRow: Boolean,
-        val cursorKeys: Boolean
+        val extra: Map<String, String>
     ): IMEMode.Params {
         override val type: String = TYPE
 
         override fun create(listener: IMEMode.Listener): IMEMode {
             return when(layout) {
-                Layout.Cangjie -> CangjieQuick(fullWidth, TableLoader.CANGJIE, numberRow, cursorKeys, listener)
-                Layout.Quick -> CangjieQuick(fullWidth, TableLoader.QUICK, numberRow, cursorKeys, listener)
-                Layout.Dayi3 -> Dayi3(fullWidth, cursorKeys, listener)
+                Layout.Cangjie -> CangjieQuick(fullWidth, TableLoader.CANGJIE, extra, listener)
+                Layout.Quick -> CangjieQuick(fullWidth, TableLoader.QUICK, extra, listener)
+                Layout.Dayi3 -> Dayi3(fullWidth, extra, listener)
             }
         }
 
@@ -214,13 +213,10 @@ abstract class CangjieIMEMode(
             fun parse(map: Map<String, String>): Params {
                 val layout = Layout.entries.find { it.name == map["layout"] } ?: Layout.Cangjie
                 val fullWidth = map["full_width"].toBoolean()
-                val numberRow = map["number_row"]?.toBoolean() ?: false
-                val cursorKeys = map["cursor_keys"]?.toBoolean() ?: false
                 return Params(
                     layout = layout,
                     fullWidth = fullWidth,
-                    numberRow = numberRow,
-                    cursorKeys = cursorKeys
+                    extra = map
                 )
             }
         }

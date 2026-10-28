@@ -46,6 +46,7 @@ class LatinIMEMode(
     private val listener: IMEMode.Listener,
     val locale: Locale,
     override var textLayoutPreset: KeyboardLayoutPreset,
+    override val extra: Map<String, String>,
     val autoCaps: Boolean,
     val autoPeriod: Boolean
 ): CommonIMEMode(listener), ILatinIME {
@@ -575,26 +576,25 @@ class LatinIMEMode(
     data class Params(
         val locale: Locale = Locale.ENGLISH,
         val layout: Layout = Layout.Qwerty,
-        val numberRow: Boolean = false,
-        val cursorKeys: Boolean = false,
         val autoCaps: Boolean = false,
-        val autoPeriod: Boolean = false
+        val autoPeriod: Boolean = false,
+        val extra: Map<String, String> = emptyMap()
     ): IMEMode.Params {
         override val type: String = TYPE
 
         override fun create(listener: IMEMode.Listener): LatinIMEMode {
             val textLayoutPreset = when(layout) {
                 Layout.Qwerty -> when(locale.language) {
-                    "es" -> LatinLayoutPresets.spanishQwerty(numberRow, cursorKeys)
+                    "es" -> LatinLayoutPresets.spanishQwerty()
                     else -> LatinLayoutPresets.qwerty(false)
                 }
-                Layout.Azerty -> LatinLayoutPresets.azerty(numberRow, cursorKeys)
-                Layout.Qwertz -> LatinLayoutPresets.qwertz(numberRow, cursorKeys)
-                Layout.Deutsch -> LatinLayoutPresets.germanQwertz(numberRow, cursorKeys)
-                Layout.Dvorak -> LatinLayoutPresets.dvorak(numberRow, cursorKeys)
-                Layout.Colemak -> LatinLayoutPresets.colemak(numberRow, cursorKeys)
+                Layout.Azerty -> LatinLayoutPresets.azerty()
+                Layout.Qwertz -> LatinLayoutPresets.qwertz()
+                Layout.Deutsch -> LatinLayoutPresets.germanQwertz()
+                Layout.Dvorak -> LatinLayoutPresets.dvorak()
+                Layout.Colemak -> LatinLayoutPresets.colemak()
             }
-            return LatinIMEMode(listener, locale, textLayoutPreset, autoCaps, autoPeriod)
+            return LatinIMEMode(listener, locale, textLayoutPreset, extra, autoCaps, autoPeriod)
         }
 
         override fun getLabel(context: Context): String {
@@ -621,17 +621,14 @@ class LatinIMEMode(
                 val locale = builder.build()
                 val defaultLayout = if(locale.language == "fr") Layout.Azerty else Layout.Qwerty
                 val layout = Layout.entries.find { it.name == map["layout"] } ?: defaultLayout
-                val numberRow = map["number_row"]?.toBoolean() ?: false
-                val cursorKeys = map["cursor_keys"]?.toBoolean() ?: false
                 val autoCaps = map["auto_caps"]?.toBoolean() ?: false
                 val autoPeriod = map["auto_period"]?.toBoolean() ?: false
                 return Params(
                     locale = locale,
                     layout = layout,
-                    numberRow = numberRow,
-                    cursorKeys = cursorKeys,
                     autoCaps = autoCaps,
-                    autoPeriod = autoPeriod
+                    autoPeriod = autoPeriod,
+                    extra = map
                 )
             }
         }

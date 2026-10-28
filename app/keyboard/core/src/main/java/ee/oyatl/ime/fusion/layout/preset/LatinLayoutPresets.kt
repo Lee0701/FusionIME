@@ -47,10 +47,7 @@ object LatinLayoutPresets {
         )
     }
 
-    fun spanishQwerty(
-        numberRow: Boolean = false,
-        cursorKeys: Boolean = false
-    ): KeyboardLayoutPreset {
+    fun spanishQwerty(): KeyboardLayoutPreset {
         val qwerty = qwerty(true)
         val layoutTable = qwerty.layoutTable + LayoutTable.fromShiftStates(LayoutLatin.TABLE_SPANISH_QWERTY)
         return qwerty.copy(
@@ -58,10 +55,7 @@ object LatinLayoutPresets {
         )
     }
 
-    fun azerty(
-        numberRow: Boolean = false,
-        cursorKeys: Boolean = false
-    ): KeyboardLayoutPreset {
+    fun azerty(): KeyboardLayoutPreset {
         val qwerty = qwerty(true)
         return qwerty.copy(
             layoutTable = qwerty.layoutTable + LayoutTable.fromShiftStates(LayoutLatin.TABLE_AZERTY),
@@ -80,10 +74,7 @@ object LatinLayoutPresets {
         )
     }
 
-    fun qwertz(
-        numberRow: Boolean = false,
-        cursorKeys: Boolean = false
-    ): KeyboardLayoutPreset {
+    fun qwertz(): KeyboardLayoutPreset {
         val qwerty = qwerty(false)
         return qwerty.copy(
             layoutTable = qwerty.layoutTable + LayoutTable.fromShiftStates(LayoutLatin.TABLE_GERMAN_QWERTZ),
@@ -93,15 +84,12 @@ object LatinLayoutPresets {
         )
     }
 
-    fun germanQwertz(
-        numberRow: Boolean = false,
-        cursorKeys: Boolean = false
-    ): KeyboardLayoutPreset {
+    fun germanQwertz(): KeyboardLayoutPreset {
         return KeyboardLayoutPreset(
             keyboardTemplate = KeyboardTemplate.ByScreenMode(
                 mobile = KeyboardTemplate.Basic(
                     configuration = KeyboardConfiguration(
-                        if(numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
+                        MobileKeyboard.numbers(),
                         MobileKeyboard.alphabetic(semicolon = true),
                         MobileKeyboard.bottom()
                     ),
@@ -124,15 +112,12 @@ object LatinLayoutPresets {
         )
     }
 
-    fun dvorak(
-        numberRow: Boolean = false,
-        cursorKeys: Boolean = false
-    ): KeyboardLayoutPreset {
+    fun dvorak(): KeyboardLayoutPreset {
         return KeyboardLayoutPreset(
             keyboardTemplate = KeyboardTemplate.ByScreenMode(
                 mobile = KeyboardTemplate.Basic(
                     configuration = KeyboardConfiguration(
-                        if(numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
+                        MobileKeyboard.numbers(),
                         MobileKeyboard.alphabetic(semicolon = true),
                         MobileKeyboard.bottom(left = KeyCode.KEYCODE_X, right = KeyCode.KEYCODE_SLASH)
                     ),
@@ -153,15 +138,12 @@ object LatinLayoutPresets {
         )
     }
 
-    fun colemak(
-        numberRow: Boolean = false,
-        cursorKeys: Boolean = false
-    ): KeyboardLayoutPreset {
+    fun colemak(): KeyboardLayoutPreset {
         return KeyboardLayoutPreset(
             keyboardTemplate = KeyboardTemplate.ByScreenMode(
                 mobile = KeyboardTemplate.Basic(
                     configuration = KeyboardConfiguration(
-                        if(numberRow) MobileKeyboard.numbers() else KeyboardConfiguration(),
+                        MobileKeyboard.numbers(),
                         MobileKeyboard.alphabetic(semicolon = true),
                         MobileKeyboard.bottom()
                     ),

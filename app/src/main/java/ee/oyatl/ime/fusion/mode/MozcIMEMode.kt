@@ -40,7 +40,8 @@ import java.util.Locale
 
 abstract class MozcIMEMode(
     listener: IMEMode.Listener,
-    val candidateViewHeight: Int
+    val candidateViewHeight: Int,
+    override val extra: Map<String, String>
 ): CommonIMEMode(listener) {
 
     private lateinit var resources: Resources
@@ -195,8 +196,8 @@ abstract class MozcIMEMode(
     class RomajiQwerty(
         listener: IMEMode.Listener,
         candidateViewHeight: Int,
-        numberRow: Boolean
-    ): MozcIMEMode(listener, candidateViewHeight) {
+        extra: Map<String, String>
+    ): MozcIMEMode(listener, candidateViewHeight, extra) {
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.QWERTY_KANA
         override var textLayoutPreset: KeyboardLayoutPreset = JapaneseLayoutPresets.romajiQwertyCompatible(
             LatinLayoutPresets.qwerty(true))
@@ -206,8 +207,9 @@ abstract class MozcIMEMode(
         listener: IMEMode.Listener,
         candidateViewHeight: Int,
         val flickMode: FlickMode,
-        val flickHint: Boolean
-    ): MozcIMEMode(listener, candidateViewHeight), FlickListener {
+        val flickHint: Boolean,
+        extra: Map<String, String>
+    ): MozcIMEMode(listener, candidateViewHeight, extra), FlickListener {
         override val keyboardSpecification: KeyboardSpecification = flickMode.keyboardSpecification
         override var textLayoutPreset: KeyboardLayoutPreset = JapaneseLayoutPresets.kana12Key()
 
@@ -278,8 +280,9 @@ abstract class MozcIMEMode(
     class Godan(
         listener: IMEMode.Listener,
         candidateViewHeight: Int,
-        val flickHint: Boolean
-    ): MozcIMEMode(listener, candidateViewHeight) {
+        val flickHint: Boolean,
+        extra: Map<String, String>
+    ): MozcIMEMode(listener, candidateViewHeight, extra) {
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.GODAN_KANA
         override var textLayoutPreset: KeyboardLayoutPreset = JapaneseLayoutPresets.godan()
 
@@ -347,8 +350,9 @@ abstract class MozcIMEMode(
 
     class KanaJIS(
         listener: IMEMode.Listener,
-        candidateViewHeight: Int
-    ): MozcIMEMode(listener, candidateViewHeight) {
+        candidateViewHeight: Int,
+        extra: Map<String, String>
+    ): MozcIMEMode(listener, candidateViewHeight, extra + mapOf("number_row" to "true")) {
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.QWERTY_KANA_JIS
         override var textLayoutPreset: KeyboardLayoutPreset = JapaneseLayoutPresets.jis()
     }
@@ -357,15 +361,16 @@ abstract class MozcIMEMode(
         listener: IMEMode.Listener,
         candidateViewHeight: Int,
         keys: String,
-        keyLayout: JapaneseLayoutPresets.KeyLayout
-    ): MozcIMEMode(listener, candidateViewHeight) {
+        keyLayout: JapaneseLayoutPresets.KeyLayout,
+        extra: Map<String, String>
+    ): MozcIMEMode(listener, candidateViewHeight, extra) {
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.TWELVE_KEY_FLICK_KANA
         override var textLayoutPreset: KeyboardLayoutPreset = JapaneseLayoutPresets.syllables(keys, keyLayout)
     }
 
     data class Params(
         val layout: Layout = Layout.RomajiQwerty,
-        val numberRow: Boolean = false,
+        val extra: Map<String, String>,
         val candidateViewHeight: Int = 2,
         val flickMode: FlickMode = FlickMode.FlickToggle,
         val flickHint: Boolean = false,
@@ -374,12 +379,12 @@ abstract class MozcIMEMode(
         override val type: String = TYPE
         override fun create(listener: IMEMode.Listener): IMEMode {
             return when(layout) {
-                Layout.RomajiQwerty -> RomajiQwerty(listener, candidateViewHeight, numberRow)
-                Layout.Kana12Key -> Kana12Key(listener, candidateViewHeight, flickMode, flickHint)
-                Layout.Godan -> Godan(listener, candidateViewHeight, flickHint)
-                Layout.KanaJIS -> KanaJIS(listener, candidateViewHeight)
-                Layout.KanaSyllables -> KanaSyllables(listener, candidateViewHeight, LayoutKana.KEYS_AIUEO, syllablesKeyLayout)
-                Layout.KanaIroha -> KanaSyllables(listener, candidateViewHeight, LayoutKana.KEYS_IROHA, syllablesKeyLayout)
+                Layout.RomajiQwerty -> RomajiQwerty(listener, candidateViewHeight, extra)
+                Layout.Kana12Key -> Kana12Key(listener, candidateViewHeight, flickMode, flickHint, extra)
+                Layout.Godan -> Godan(listener, candidateViewHeight, flickHint, extra)
+                Layout.KanaJIS -> KanaJIS(listener, candidateViewHeight, extra)
+                Layout.KanaSyllables -> KanaSyllables(listener, candidateViewHeight, LayoutKana.KEYS_AIUEO, syllablesKeyLayout, extra)
+                Layout.KanaIroha -> KanaSyllables(listener, candidateViewHeight, LayoutKana.KEYS_IROHA, syllablesKeyLayout, extra)
             }
         }
 
@@ -403,20 +408,22 @@ abstract class MozcIMEMode(
         companion object {
             fun parse(map: Map<String, String>): Params {
                 val layout = Layout.entries.find { it.name == map["layout"] } ?: Layout.RomajiQwerty
-                val numberRow = map["number_row"]?.toBoolean() ?: false
                 val candidateViewHeight = map["candidate_view_height"]?.toFloatOrNull()?.toInt() ?: 2
                 val flickMode = FlickMode.valueOf(map["flick_mode"] ?: FlickMode.FlickToggle.name)
                 val flickHint = map["flick_hint"]?.toBoolean() ?: false
                 val syllablesKeyLayout =
                     JapaneseLayoutPresets.KeyLayout.entries.find { it.name == map["syllables_key_layout"] }
                         ?: JapaneseLayoutPresets.KeyLayout.Horizontal
+                val extra = map + mapOf(
+                    "cursor_keys" to "true"
+                )
                 return Params(
                     layout = layout,
                     candidateViewHeight = candidateViewHeight,
-                    numberRow = numberRow,
                     flickMode = flickMode,
                     flickHint = flickHint,
-                    syllablesKeyLayout = syllablesKeyLayout
+                    syllablesKeyLayout = syllablesKeyLayout,
+                    extra = extra
                 )
             }
         }

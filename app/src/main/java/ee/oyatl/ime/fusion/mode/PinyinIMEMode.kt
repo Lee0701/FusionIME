@@ -39,8 +39,7 @@ class PinyinIMEMode(
     listener: IMEMode.Listener,
     val spelling: Spelling,
     val chineseTraditional: Boolean,
-    numberRow: Boolean,
-    cursorKeys: Boolean
+    override val extra: Map<String, String>
 ): CommonIMEMode(listener), DecodingInfo.IMEStateHolder {
     /**
      * Connection used to bind the decoding service.
@@ -943,13 +942,12 @@ class PinyinIMEMode(
     class Params(
         val spelling: Spelling = Spelling.FullPinyin,
         val chineseTraditional: Boolean,
-        val numberRow: Boolean,
-        val cursorKeys: Boolean
+        val extra: Map<String, String>
     ): IMEMode.Params {
         override val type: String = TYPE
 
         override fun create(listener: IMEMode.Listener): IMEMode {
-            return PinyinIMEMode(listener, spelling, chineseTraditional, numberRow, cursorKeys)
+            return PinyinIMEMode(listener, spelling, chineseTraditional, extra)
         }
 
         override fun getLabel(context: Context): String {
@@ -980,13 +978,15 @@ class PinyinIMEMode(
 
         companion object {
             fun parse(map: Map<String, String>): Params {
-                val numberRow = map["number_row"]?.toBoolean() ?: false
-                val cursorKeys = map["cursor_keys"]?.toBoolean() ?: false
                 val chineseTraditional = map["chinese_traditional"]?.toBoolean() ?: false
                 val spelling = Spelling.entries.firstOrNull {
                     it.name == map["pinyin_spelling"]
                 } ?: Spelling.FullPinyin
-                return Params(spelling, chineseTraditional, numberRow, cursorKeys)
+                return Params(
+                    spelling = spelling,
+                    chineseTraditional = chineseTraditional,
+                    extra = map
+                )
             }
         }
     }
