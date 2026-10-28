@@ -1,5 +1,6 @@
 package ee.oyatl.ime.theme
 
+import ee.oyatl.ime.fusion.keyboard.core.KeyType
 import ee.oyatl.ime.keyboard.R
 
 object KeyboardThemes {

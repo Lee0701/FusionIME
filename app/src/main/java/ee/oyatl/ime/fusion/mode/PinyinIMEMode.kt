@@ -22,7 +22,7 @@ import com.android.inputmethod.pinyin.PinyinIME.ImeState
 import com.android.inputmethod.pinyin.R
 import com.android.inputmethod.pinyin.Settings
 import ee.oyatl.ime.candidate.CandidateView
-import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
+import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.pinyin.CandidatesContainer
 import ee.oyatl.ime.fusion.pinyin.ComposingView
 import ee.oyatl.ime.fusion.pinyin.ComposingView.ComposingStatus

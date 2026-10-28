@@ -4,7 +4,7 @@ import android.content.Context
 import android.view.KeyEvent
 import androidx.annotation.StringRes
 import ee.oyatl.ime.candidate.CandidateView
-import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
+import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.hangul.HangulCombiner
 import ee.oyatl.ime.fusion.korean.BigramHanjaConverter
@@ -13,11 +13,11 @@ import ee.oyatl.ime.fusion.korean.HanjaConverter
 import ee.oyatl.ime.fusion.korean.JeongUnHanjaConverter
 import ee.oyatl.ime.fusion.korean.UnigramHanjaConverter
 import ee.oyatl.ime.fusion.korean.WordComposer
-import ee.oyatl.ime.keyboard.SoftKeyCodeMapper
+import ee.oyatl.ime.fusion.keyboard.core.SoftKeyCodeMapper
 import ee.oyatl.ime.fusion.layout.Hangul2Set
 import ee.oyatl.ime.fusion.layout.Hangul3Set
 import ee.oyatl.ime.fusion.layout.HangulOld
-import ee.oyatl.ime.keyboard.core.LayoutTable
+import ee.oyatl.ime.fusion.keyboard.core.LayoutTable
 import ee.oyatl.ime.fusion.layout.LayoutExt
 import ee.oyatl.ime.fusion.layout.LayoutQwerty
 import ee.oyatl.ime.fusion.layout.preset.KoreanLayoutPresets

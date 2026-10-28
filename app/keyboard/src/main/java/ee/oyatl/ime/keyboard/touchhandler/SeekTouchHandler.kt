@@ -1,7 +1,7 @@
 package ee.oyatl.ime.keyboard.touchhandler
 
 import android.view.KeyEvent
-import ee.oyatl.ime.keyboard.KeyboardParams
+import ee.oyatl.ime.fusion.keyboard.core.KeyboardParams
 import ee.oyatl.ime.keyboard.KeyboardView
 import ee.oyatl.ime.keyboard.popup.PreviewPopup
 

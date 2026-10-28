@@ -6,14 +6,14 @@ import android.os.Looper
 import android.view.KeyEvent
 import com.miyabi_hiroshi.app.libchewing_android_app_module.ConversionEngines
 import ee.oyatl.ime.candidate.CandidateView
-import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
+import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.korean.WordComposer
 import ee.oyatl.ime.fusion.layout.LayoutExt
 import ee.oyatl.ime.fusion.layout.LayoutZhuyin
 import ee.oyatl.ime.fusion.layout.preset.ZhuyinLayoutPresets
 import ee.oyatl.ime.fusion.zhuyin.ChewingConverter
-import ee.oyatl.ime.keyboard.core.LayoutTable
+import ee.oyatl.ime.fusion.keyboard.core.LayoutTable
 import java.util.Locale
 
 class ZhuyinIMEMode(

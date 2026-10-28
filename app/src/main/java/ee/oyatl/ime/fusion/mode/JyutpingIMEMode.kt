@@ -3,7 +3,7 @@ package ee.oyatl.ime.fusion.mode
 import android.content.Context
 import android.view.KeyEvent
 import ee.oyatl.ime.candidate.CandidateView
-import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
+import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.korean.WordComposer
 import ee.oyatl.ime.fusion.layout.preset.JyutpingLayoutPresets

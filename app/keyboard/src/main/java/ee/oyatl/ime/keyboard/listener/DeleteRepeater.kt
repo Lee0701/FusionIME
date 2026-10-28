@@ -3,8 +3,8 @@ package ee.oyatl.ime.keyboard.listener
 import android.os.Handler
 import android.os.Looper
 import android.view.KeyEvent
-import ee.oyatl.ime.keyboard.KeyboardParams
-import ee.oyatl.ime.keyboard.core.FlickDirection
+import ee.oyatl.ime.fusion.keyboard.core.KeyboardParams
+import ee.oyatl.ime.fusion.keyboard.core.FlickDirection
 
 class DeleteRepeater(
     val listener: KeyboardListener,

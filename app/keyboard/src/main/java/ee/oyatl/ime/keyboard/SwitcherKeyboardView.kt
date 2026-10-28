@@ -5,8 +5,9 @@ import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
-import ee.oyatl.ime.keyboard.core.KeyLabel
-import ee.oyatl.ime.keyboard.core.KeyboardState
+import ee.oyatl.ime.fusion.keyboard.core.KeyLabel
+import ee.oyatl.ime.fusion.keyboard.core.Keyboard
+import ee.oyatl.ime.fusion.keyboard.core.KeyboardState
 import ee.oyatl.ime.keyboard.listener.KeyboardListener
 import ee.oyatl.ime.keyboard.popup.PopupManager
 import ee.oyatl.ime.theme.KeyboardTheme

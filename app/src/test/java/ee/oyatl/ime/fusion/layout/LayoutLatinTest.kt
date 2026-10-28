@@ -2,7 +2,7 @@ package ee.oyatl.ime.fusion.layout
 
 import android.view.KeyEvent
 import ee.oyatl.ime.fusion.mode.LatinIMEMode
-import ee.oyatl.ime.keyboard.core.LayoutTable
+import ee.oyatl.ime.fusion.keyboard.core.LayoutTable
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

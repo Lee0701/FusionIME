@@ -18,14 +18,14 @@ import ee.oyatl.ime.fusion.util.KeyEventUtil
 import ee.oyatl.ime.fusion.util.PreferenceUtil.getOrientationBoolean
 import ee.oyatl.ime.fusion.util.PreferenceUtil.getOrientationInteger
 import ee.oyatl.ime.keyboard.CanvasKeyboardView
-import ee.oyatl.ime.keyboard.core.KeyInput
-import ee.oyatl.ime.keyboard.core.KeyLabel
-import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
-import ee.oyatl.ime.keyboard.KeyboardParams
-import ee.oyatl.ime.keyboard.core.KeyboardState
+import ee.oyatl.ime.fusion.keyboard.core.KeyInput
+import ee.oyatl.ime.fusion.keyboard.core.KeyLabel
+import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPreset
+import ee.oyatl.ime.fusion.keyboard.core.KeyboardParams
+import ee.oyatl.ime.fusion.keyboard.core.KeyboardState
 import ee.oyatl.ime.keyboard.KeyboardView
 import ee.oyatl.ime.keyboard.SwitcherKeyboardView
-import ee.oyatl.ime.keyboard.TouchMode
+import ee.oyatl.ime.fusion.keyboard.core.TouchMode
 import ee.oyatl.ime.keyboard.listener.DeleteRepeater
 import ee.oyatl.ime.keyboard.listener.FlickListener
 import ee.oyatl.ime.keyboard.listener.InputOnKeyUp
@@ -37,7 +37,8 @@ import ee.oyatl.ime.keyboard.listener.SerialKeyboardListener
 import ee.oyatl.ime.keyboard.listener.ShiftStateManager
 import ee.oyatl.ime.keyboard.popup.DefaultPopupManager
 import ee.oyatl.ime.keyboard.popup.MoreKeysPopup
-import ee.oyatl.ime.keyboard.core.FlickDirection
+import ee.oyatl.ime.fusion.keyboard.core.FlickDirection
+import ee.oyatl.ime.keyboard.KeyboardInflater
 import ee.oyatl.ime.keyboard.touchhandler.FlickTouchHandler
 import ee.oyatl.ime.keyboard.touchhandler.LongPressTouchHandler
 import ee.oyatl.ime.keyboard.touchhandler.SeekTouchHandler
@@ -157,9 +158,9 @@ abstract class CommonIMEMode(
         val symbolKeyboardParams = createKeyboardParams(context, KeyboardState.Symbol.Symbol)
         val numberKeyboardParams = createKeyboardParams(context, KeyboardState.Symbol.Number)
 
-        val textKeyboard = textLayoutPreset.keyboardTemplate.inflate(textKeyboardParams, textLayoutPreset.softKeyCodeMapper)
-        val symbolKeyboard = symbolLayoutPreset.keyboardTemplate.inflate(symbolKeyboardParams, symbolLayoutPreset.softKeyCodeMapper)
-        val numberKeyboard = numberLayoutPreset.keyboardTemplate.inflate(numberKeyboardParams, symbolLayoutPreset.softKeyCodeMapper)
+        val textKeyboard = KeyboardInflater.inflate(textLayoutPreset, textKeyboardParams)
+        val symbolKeyboard = KeyboardInflater.inflate(symbolLayoutPreset, symbolKeyboardParams)
+        val numberKeyboard = KeyboardInflater.inflate(numberLayoutPreset, numberKeyboardParams)
 
         val textKeyboardView = CanvasKeyboardView(context, null).also {
             it.keyboardTheme = keyboardTheme

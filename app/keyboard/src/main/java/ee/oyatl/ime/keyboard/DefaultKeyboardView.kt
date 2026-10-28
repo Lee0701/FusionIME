@@ -12,8 +12,9 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.LinearLayout
-import ee.oyatl.ime.keyboard.core.KeyLabel
-import ee.oyatl.ime.keyboard.core.KeyboardState
+import ee.oyatl.ime.fusion.keyboard.core.KeyLabel
+import ee.oyatl.ime.fusion.keyboard.core.Keyboard
+import ee.oyatl.ime.fusion.keyboard.core.KeyboardState
 import ee.oyatl.ime.keyboard.databinding.KbdKeyBinding
 import ee.oyatl.ime.keyboard.databinding.KbdKeyboardBinding
 import ee.oyatl.ime.keyboard.databinding.KbdRowBinding

@@ -1,8 +1,8 @@
 package ee.oyatl.ime.keyboard.touchhandler
 
-import ee.oyatl.ime.keyboard.KeyboardParams
+import ee.oyatl.ime.fusion.keyboard.core.KeyboardParams
 import ee.oyatl.ime.keyboard.KeyboardView
-import ee.oyatl.ime.keyboard.core.FlickDirection
+import ee.oyatl.ime.fusion.keyboard.core.FlickDirection
 import ee.oyatl.ime.keyboard.listener.FlickListener
 import ee.oyatl.ime.keyboard.popup.PreviewPopup
 import kotlin.math.PI

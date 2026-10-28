@@ -2,6 +2,7 @@ package ee.oyatl.ime.theme
 
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
+import ee.oyatl.ime.fusion.keyboard.core.KeyType
 
 data class KeyboardTheme(
     @ColorRes val backgroundColor: Int,
@@ -17,12 +18,6 @@ data class KeyTheme(
     @ColorRes val foregroundColor: Int,
     @ColorRes val hintColor: Int
 )
-
-enum class KeyType {
-    Default,
-    Modifier,
-    Return
-}
 
 data class PopupTheme(
     @ColorRes val backgroundColor: Int,

@@ -8,7 +8,7 @@ import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.korean.WordComposer
 import ee.oyatl.ime.fusion.layout.preset.VietLayoutPresets
-import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
+import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPreset
 import ee.oyatl.ime.viet.VietnameseConverter
 import net.sourceforge.vietpad.inputmethod.InputMethod
 import net.sourceforge.vietpad.inputmethod.KeyboardMode
