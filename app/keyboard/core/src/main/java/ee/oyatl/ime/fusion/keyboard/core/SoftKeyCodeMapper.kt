@@ -1,11 +1,17 @@
 package ee.oyatl.ime.fusion.keyboard.core
 
-interface SoftKeyCodeMapper {
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+@Serializable
+sealed interface SoftKeyCodeMapper {
     operator fun get(
         params: KeyboardParams,
         keyCode: Int
     ): Int
 
+    @SerialName("empty")
+    @Serializable
     object Empty: SoftKeyCodeMapper {
         override fun get(
             params: KeyboardParams,
@@ -13,7 +19,9 @@ interface SoftKeyCodeMapper {
         ): Int = keyCode
     }
 
-    class Basic(
+    @SerialName("basic")
+    @Serializable
+    data class Basic(
         val map: Map<Int, Int> = emptyMap()
     ): SoftKeyCodeMapper {
         override fun get(
@@ -24,7 +32,9 @@ interface SoftKeyCodeMapper {
         }
     }
 
-    class ByScreenMode(
+    @SerialName("by-screen-mode")
+    @Serializable
+    data class ByScreenMode(
         val mobile: SoftKeyCodeMapper = Basic(),
         val tablet: SoftKeyCodeMapper = mobile,
         val full: SoftKeyCodeMapper = tablet

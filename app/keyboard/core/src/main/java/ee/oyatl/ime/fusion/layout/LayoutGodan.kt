@@ -15,54 +15,54 @@ import ee.oyatl.ime.fusion.keyboard.core.KeyboardConfiguration.Item.TemplateKey
  */
 object LayoutGodan {
     fun mobileKeyboardConfiguration(): KeyboardConfiguration {
-    return KeyboardConfiguration(
-        listOf(
+        return KeyboardConfiguration(
             listOf(
-                TemplateKey(KeyCode.KEYCODE_NUM, special = true),
-                TemplateKey(KeyCode.KEYCODE_A),
-                TemplateKey(KeyCode.KEYCODE_K),
-                TemplateKey(KeyCode.KEYCODE_H),
-                TemplateKey(KeyCode.KEYCODE_DEL, special = true)
-            ),
-            listOf(
-                TemplateKey(KeyCode.KEYCODE_DPAD_LEFT, special = true),
-                TemplateKey(KeyCode.KEYCODE_I),
-                TemplateKey(KeyCode.KEYCODE_S),
-                TemplateKey(KeyCode.KEYCODE_M),
-                TemplateKey(KeyCode.KEYCODE_DPAD_RIGHT, special = true)
-            ),
-            listOf(
-                TemplateKey(KeyCode.KEYCODE_LANGUAGE_SWITCH, special = true),
-                TemplateKey(KeyCode.KEYCODE_U),
-                TemplateKey(KeyCode.KEYCODE_T),
-                TemplateKey(KeyCode.KEYCODE_Y),
-                TemplateKey(KeyCode.KEYCODE_SPACE, special = true)
-            ),
-            listOf(
-                TemplateKey(
-                    KeyCode.KEYCODE_SYM,
-                    special = true,
-                    merge = TemplateKey.Merge.Down
+                listOf(
+                    TemplateKey(KeyCode.KEYCODE_NUM, special = true),
+                    TemplateKey(KeyCode.KEYCODE_A),
+                    TemplateKey(KeyCode.KEYCODE_K),
+                    TemplateKey(KeyCode.KEYCODE_H),
+                    TemplateKey(KeyCode.KEYCODE_DEL, special = true)
                 ),
-                TemplateKey(KeyCode.KEYCODE_E),
-                TemplateKey(KeyCode.KEYCODE_N),
-                TemplateKey(KeyCode.KEYCODE_R),
-                TemplateKey(
-                    KeyCode.KEYCODE_ENTER,
-                    special = true,
-                    merge = TemplateKey.Merge.Down
+                listOf(
+                    TemplateKey(KeyCode.KEYCODE_DPAD_LEFT, special = true),
+                    TemplateKey(KeyCode.KEYCODE_I),
+                    TemplateKey(KeyCode.KEYCODE_S),
+                    TemplateKey(KeyCode.KEYCODE_M),
+                    TemplateKey(KeyCode.KEYCODE_DPAD_RIGHT, special = true)
+                ),
+                listOf(
+                    TemplateKey(KeyCode.KEYCODE_LANGUAGE_SWITCH, special = true),
+                    TemplateKey(KeyCode.KEYCODE_U),
+                    TemplateKey(KeyCode.KEYCODE_T),
+                    TemplateKey(KeyCode.KEYCODE_Y),
+                    TemplateKey(KeyCode.KEYCODE_SPACE, special = true)
+                ),
+                listOf(
+                    TemplateKey(
+                        KeyCode.KEYCODE_SYM,
+                        special = true,
+                        merge = TemplateKey.Merge.Down
+                    ),
+                    TemplateKey(KeyCode.KEYCODE_E),
+                    TemplateKey(KeyCode.KEYCODE_N),
+                    TemplateKey(KeyCode.KEYCODE_R),
+                    TemplateKey(
+                        KeyCode.KEYCODE_ENTER,
+                        special = true,
+                        merge = TemplateKey.Merge.Down
+                    )
+                ),
+                listOf(
+                    TemplateKey(KeyCode.KEYCODE_SYM, special = true, merge = TemplateKey.Merge.Up),
+                    TemplateKey(KeyCode.KEYCODE_O),
+                    KeyboardConfiguration.Item.Spacer(width = 1f),
+                    TemplateKey(KeyCode.KEYCODE_W),
+                    TemplateKey(KeyCode.KEYCODE_ENTER, special = true, merge = TemplateKey.Merge.Up)
                 )
-            ),
-            listOf(
-                TemplateKey(KeyCode.KEYCODE_SYM, special = true, merge = TemplateKey.Merge.Up),
-                TemplateKey(KeyCode.KEYCODE_O),
-                KeyboardConfiguration.Item.Spacer(width = 1f),
-                TemplateKey(KeyCode.KEYCODE_W),
-                TemplateKey(KeyCode.KEYCODE_ENTER, special = true, merge = TemplateKey.Merge.Up)
             )
         )
-    )
-}
+    }
 
     val TABLE: Map<Int, List<Int>> = mapOf(
         // Main 14 Roman-letter keys.

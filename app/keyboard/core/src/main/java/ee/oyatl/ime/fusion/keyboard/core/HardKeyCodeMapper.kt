@@ -1,6 +1,9 @@
 package ee.oyatl.ime.fusion.keyboard.core
 
-class HardKeyCodeMapper(
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class HardKeyCodeMapper(
     private val map: Map<Int, Int> = emptyMap()
 ) {
     operator fun get(keyCode: Int): Int {

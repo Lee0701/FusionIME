@@ -1,6 +1,9 @@
 package ee.oyatl.ime.fusion.keyboard.core
 
-class LongPressTable(
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class LongPressTable(
     private val map: Map<Int, List<Int>> = emptyMap(),
     private val uppercaseOverrides: Map<Int, Int> = emptyMap()
 ) {
@@ -12,6 +15,13 @@ class LongPressTable(
         return map[lowercase].orEmpty().map { candidate ->
             uppercaseOverrides[candidate] ?: Character.toUpperCase(candidate)
         }
+    }
+
+    operator fun plus(other: LongPressTable): LongPressTable {
+        return LongPressTable(
+            map = this.map + other.map,
+            uppercaseOverrides = this.uppercaseOverrides + other.uppercaseOverrides
+        )
     }
 
     companion object {

@@ -50,6 +50,7 @@ data class LayoutTable(
         data class Output(
             val char: Int
         ): Item
+
         @SerialName("shift")
         @Serializable
         data class ShiftState(
@@ -57,6 +58,7 @@ data class LayoutTable(
             val shifted: Item? = null,
             val locked: Item? = null
         ): Item
+
         @SerialName("flick")
         @Serializable
         data class Flick(
