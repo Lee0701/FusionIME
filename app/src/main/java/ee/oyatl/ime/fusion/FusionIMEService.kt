@@ -15,6 +15,7 @@ import android.view.WindowInsets.Type
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.view.inputmethod.InputMethodSubtype
+import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.preference.PreferenceManager
@@ -362,11 +363,9 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
         // Enable edge-to-edge
         WindowCompat.setDecorFitsSystemWindows(window, false)
         WindowCompat.enableEdgeToEdge(window)
-        val theme = ContextThemeWrapper(this, R.style.Theme_FusionIME_Keyboard).theme
-        theme.resolveAttribute(R.attr.backgroundColor, typedValue, true)
         val darkMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
         // Update colors
-        window.decorView.setBackgroundColor(typedValue.data)
+        window.decorView.setBackgroundColor(getColor(keyboardTheme.backgroundColor))
         WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightNavigationBars = !darkMode
         // Get system bar insets after keyboard is displayed
         ViewCompat.setOnApplyWindowInsetsListener(window.decorView) { view, windowInsets ->
