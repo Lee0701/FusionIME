@@ -9,8 +9,8 @@ import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.os.Handler
 import android.os.Looper
-import android.view.HapticFeedbackConstants
 import android.util.TypedValue
+import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +22,8 @@ import android.view.inputmethod.InputMethodSubtype
 import android.widget.FrameLayout
 import androidx.core.animation.doOnEnd
 import androidx.core.animation.doOnStart
+import androidx.core.view.isVisible
+import androidx.core.widget.TextViewCompat
 import androidx.preference.PreferenceManager
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.ExpandedCandidateView
@@ -29,12 +31,14 @@ import ee.oyatl.ime.fusion.util.PreferenceUtil
 import ee.oyatl.ime.fusion.databinding.InputViewWrapperBinding
 import ee.oyatl.ime.fusion.databinding.ModeSwitcherTabBarBinding
 import ee.oyatl.ime.fusion.databinding.ModeSwitcherTabBinding
+import ee.oyatl.ime.theme.CandidateItemType
+import ee.oyatl.ime.theme.KeyboardTheme
 import kotlin.math.ceil
-import androidx.core.view.isVisible
 
 class IMEModeSwitcher(
     private val context: Context,
     val entries: List<Entry>,
+    var keyboardTheme: KeyboardTheme,
     private val callback: Callback
 ) {
     val handler = Handler(Looper.getMainLooper())
@@ -117,6 +121,23 @@ class IMEModeSwitcher(
         val inflater = LayoutInflater.from(context)
         val inputView = InputViewWrapperBinding.inflate(inflater)
 
+        inputView.expandedCandidateView.keyboardTheme = keyboardTheme
+
+        val itemTheme = keyboardTheme.candidatesTheme.itemThemes.getValue(CandidateItemType.Default)
+        inputView.idleView.setBackgroundColor(context.getColor(keyboardTheme.tabBarTheme.backgroundColor))
+        inputView.buttonsView.setBackgroundColor(context.getColor(keyboardTheme.tabBarTheme.backgroundColor))
+        inputView.expandedCandidateView.setBackgroundColor(context.getColor(keyboardTheme.candidatesTheme.backgroundColor))
+        inputView.clipboardCandidateText.setTextColor(context.getColor(itemTheme.foregroundColor))
+        TextViewCompat.setCompoundDrawableTintList(
+            inputView.clipboardCandidateText,
+            context.getColorStateList(itemTheme.foregroundColor)
+        )
+        inputView.clipboardCandidateCloseButton.imageTintList = context.getColorStateList(itemTheme.foregroundColor)
+        inputView.closeButton.imageTintList = context.getColorStateList(itemTheme.foregroundColor)
+        inputView.expandButton.imageTintList = context.getColorStateList(itemTheme.foregroundColor)
+        inputView.voiceInputButton.setBackgroundColor(context.getColor(keyboardTheme.backgroundColor))
+        inputView.voiceInputButton.imageTintList = context.getColorStateList(itemTheme.foregroundColor)
+
         inputView.tabViewFrame.addView(this.initTabBarView(context))
         inputView.closeButton.setOnClickListener {
             if(animationIsRunning) return@setOnClickListener
@@ -193,6 +214,8 @@ class IMEModeSwitcher(
     private fun updateInputView() {
         val wrapper = inputViewWrapper ?: return
 
+        currentEntry.imeMode.keyboardTheme = keyboardTheme
+
         wrapper.keyboardView.removeAllViews()
         val inputView = currentEntry.inputView ?: currentEntry.imeMode.createInputView(context)
         currentEntry.inputView = inputView
@@ -200,10 +223,10 @@ class IMEModeSwitcher(
         wrapper.keyboardView.addView(inputView)
 
         wrapper.candidateView.removeAllViews()
-        val view = currentEntry.candidateView ?: currentEntry.imeMode.createCandidateView(context)
-        currentEntry.candidateView = view
-        (view.parent as ViewGroup?)?.removeView(view)
-        wrapper.candidateView.addView(view)
+        val candidateView = currentEntry.candidateView ?: currentEntry.imeMode.createCandidateView(context)
+        currentEntry.candidateView = candidateView
+        (candidateView.parent as ViewGroup?)?.removeView(candidateView)
+        wrapper.candidateView.addView(candidateView)
 
         val alwaysShowSoftKeyboard = preference.getBoolean("always_show_soft_keyboard", false)
         val hardwareKeyboard = context.resources.configuration.hardKeyboardHidden != Configuration.HARDKEYBOARDHIDDEN_YES
@@ -250,7 +273,6 @@ class IMEModeSwitcher(
             if(text.toString() != newText) {
                 stopScrolling()
                 text = newText
-                showClipboardIcon()
                 displayChanged = true
             }
         }
@@ -265,10 +287,7 @@ class IMEModeSwitcher(
     }
 
     private fun hideClipboardCandidateView(inputView: InputViewWrapperBinding) {
-        inputView.clipboardCandidate.showDeleteIcon()
-        if(callback.onClipboardCandidateClearRequested()) {
-            inputView.clipboardCandidate.showClipboardIcon()
-        }
+        callback.onClipboardCandidateClearRequested()
     }
 
     private fun updateClipboardScrolling(inputView: InputViewWrapperBinding) {
@@ -285,6 +304,12 @@ class IMEModeSwitcher(
         val tabBar = ModeSwitcherTabBarBinding.inflate(layoutInflater, null, false)
         tabs = entries.mapIndexed { index, entry ->
             val tab = ModeSwitcherTabBinding.inflate(layoutInflater, tabBar.content, true)
+
+            val theme = keyboardTheme.tabBarTheme.itemTheme
+            tab.root.setBackgroundResource(theme.backgroundDrawable)
+            tab.root.backgroundTintList = context.getColorStateList(theme.backgroundColor)
+            tab.label.setTextColor(context.getColor(theme.foregroundColor))
+
             tab.label.text = entry.label
             tab.root.setOnClickListener {
                 callback.onSwitchInputMode(index)

@@ -36,6 +36,12 @@
             app:entryValues="@array/settings_behaviour_default_flick_action_values"
             app:title="@string/settings_behaviour_default_flick_action_down_title" />
 
+        <SwitchPreferenceCompat
+            app:key="touch_correction"
+            app:defaultValue="true"
+            app:title="@string/settings_behaviour_touch_correction_title"
+            app:summary="@string/settings_behaviour_touch_correction_summary" />
+
     </PreferenceCategory>
 
 </PreferenceScreen>

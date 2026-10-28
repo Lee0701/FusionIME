@@ -1,15 +1,18 @@
 package ee.oyatl.ime.fusion
 
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.fragment.app.FragmentManager
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.color.DynamicColors
 import ee.oyatl.ime.fusion.databinding.SettingsActivityBinding
 import ee.oyatl.ime.fusion.util.InputMethodUtil
 
@@ -21,6 +24,15 @@ class SettingsActivity : AppCompatActivity(), PreferenceFragmentCompat.OnPrefere
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        DynamicColors.applyToActivityIfAvailable(this)
+        WindowCompat.enableEdgeToEdge(window)
+        val darkMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+        WindowCompat.getInsetsController(window, window.decorView).apply {
+            isAppearanceLightNavigationBars = !darkMode
+            isAppearanceLightStatusBars = !darkMode
+        }
+
         binding = SettingsActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)

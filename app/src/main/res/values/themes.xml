@@ -1,26 +1,5 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="Theme.FusionIME" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorOnBackground">@color/brand_color_light_bg</item>
-        <item name="colorPrimary">@color/brand_color_light_fg</item>
-        <item name="colorPrimaryVariant">@color/brand_color_light_fg_var</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/brand_color_light_fg_alt</item>
-        <item name="colorSecondaryVariant">@color/brand_color_light_fg_alt_var</item>
-        <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
-
-        <item name="android:textColor">@color/black</item>
-        <item name="android:textSize">16sp</item>
-    </style>
-
-    <style name="Slider" parent="Widget.MaterialComponents.Slider">
-        <item name="colorPrimary">?attr/colorSecondary</item>
-        <item name="colorOnPrimary">?attr/colorOnSecondary</item>
-        <item name="colorPrimaryVariant">?attr/colorSecondaryVariant</item>
+    <style name="Theme.FusionIME" parent="Theme.AppTheme">
     </style>
 </resources>
