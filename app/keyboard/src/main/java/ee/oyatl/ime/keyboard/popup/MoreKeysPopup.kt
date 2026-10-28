@@ -72,6 +72,7 @@ class MoreKeysPopup(
             hapticFeedback = false,
             vibrationDuration = 0L,
             touchMode = TouchMode.Seek,
+            touchCorrection = false,
             soundVolume = 0f,
             flickSensitivity = 0,
             longPressDelay = 0,

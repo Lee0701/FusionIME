@@ -73,7 +73,7 @@ class DefaultKeyboardView(
 
     init {
         viewTreeObserver.addOnGlobalLayoutListener {
-            cacheKeys()
+            updateKeyLocations()
         }
     }
 
@@ -179,7 +179,7 @@ class DefaultKeyboardView(
         return true
     }
 
-    private fun cacheKeys() {
+    private fun updateKeyLocations() {
         val rect = Rect()
         this.getLocationOnScreen(location)
         this.getGlobalVisibleRect(rect)

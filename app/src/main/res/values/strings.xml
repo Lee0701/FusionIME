@@ -37,6 +37,8 @@
     <string name="settings_behaviour_flick_sensitivity_title">Flick Sensitivity</string>
     <string name="settings_behaviour_default_flick_action_up_title">Default Flick Action (Up)</string>
     <string name="settings_behaviour_default_flick_action_down_title">Default Flick Action (Down)</string>
+    <string name="settings_behaviour_touch_correction_title">Touch Correction</string>
+    <string name="settings_behaviour_touch_correction_summary">Correct touch errors between adjacent keys.</string>
     <string name="settings_behaviour_hardware_title">Hardware Keyboard</string>
     <string name="settings_behaviour_hardware_language_key_title">Hardware Language Key</string>
     <string name="settings_behaviour_hardware_language_key_summary">Set a key combination to use as language switch on hardware keyboard.</string>
@@ -49,6 +51,9 @@
     <string name="settings_input_mode_remove_description">Remove</string>
     <string name="settings_input_mode_locale_title">Language</string>
     <string name="settings_input_mode_layout_title">Keyboard Layout</string>
+    <string name="settings_input_mode_auto_caps_title">Auto Capitalization</string>
+    <string name="settings_input_mode_auto_period_title">Auto Period</string>
+    <string name="settings_input_mode_auto_period_summary">Double-tap on spacebar inserts a period followed by a space.</string>
     <string name="settings_input_mode_number_row_title">Number Row</string>
     <string name="settings_input_mode_number_row_summary">Always show top number row.</string>
     <string name="settings_input_mode_cursor_keys_title">Cursor Keys</string>
@@ -158,5 +163,7 @@
     <string name="viet_layout_qwerty_quoc_ngu">QWERTY (Chu Quoc Ngu)</string>
     <string name="viet_layout_telex_nom">Telex (Han Nom)</string>
     <string name="viet_layout_telex_quoc_ngu">Telex (Chu Quoc Ngu)</string>
+    <string name="viet_layout_vni_nom">VNI (Han Nom)</string>
+    <string name="viet_layout_vni_quoc_ngu">VNI (Chu Quoc Ngu)</string>
     <string name="jyutping_layout_jyutping">Jyutping</string>
 </resources>

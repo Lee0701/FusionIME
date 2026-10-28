@@ -8,7 +8,6 @@ import ee.oyatl.ime.theme.KeyboardTheme
 
 interface KeyboardView {
     val view: View
-
     val rect: Rect
     val location: IntArray
     val listener: KeyboardListener

@@ -9,6 +9,7 @@ data class KeyboardParams(
     val soundVolume: Float,
     val vibrationDuration: Long,
     val touchMode: TouchMode,
+    val touchCorrection: Boolean,
     val flickSensitivity: Int,
     val longPressDelay: Int,
     val shiftLockDelay: Int,
