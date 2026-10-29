@@ -4,7 +4,6 @@ import com.charleskorn.kaml.Yaml
 import com.charleskorn.kaml.YamlConfiguration
 import com.charleskorn.kaml.decodeFromStream
 import ee.oyatl.ime.fusion.hangul.JamoCombinationTable
-import java.io.File
 import java.io.InputStream
 
 abstract class KeyboardLayoutPresetLoader {
@@ -26,8 +25,8 @@ abstract class KeyboardLayoutPresetLoader {
             .fold(LayoutTable()) { acc, table -> acc + table }
         val altGraphTable = importAll<LayoutTable>(def.altGraphTables)
             .fold(LayoutTable()) { acc, table -> acc + table }
-        val longPressTable = importAll<LongPressTable>(def.longPressTables)
-            .fold(LongPressTable()) { acc, table -> acc + table }
+        val moreKeysTable = importAll<MoreKeysTable>(def.moreKeysTables)
+            .fold(MoreKeysTable()) { acc, table -> acc + table }
         val softKeyCodeMapper = import<SoftKeyCodeMapper>(def.softKeyCodeMapper)
         val hardKeyCodeMapper = import<HardKeyCodeMapper>(def.hardKeyCodeMapper)
         val extra = inflateExtra(def.extra)
@@ -35,7 +34,7 @@ abstract class KeyboardLayoutPresetLoader {
             keyboardTemplate = keyboardTemplate,
             layoutTable = layoutTable,
             altGraphTable = altGraphTable,
-            longPressTable = longPressTable,
+            moreKeysTable = moreKeysTable,
             softKeyCodeMapper = softKeyCodeMapper,
             hardKeyCodeMapper = hardKeyCodeMapper,
             extra = extra

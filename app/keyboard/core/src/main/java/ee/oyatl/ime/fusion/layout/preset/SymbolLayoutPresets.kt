@@ -4,7 +4,7 @@ import ee.oyatl.ime.fusion.keyboard.core.KeyboardConfiguration
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardTemplate
 import ee.oyatl.ime.fusion.keyboard.core.LayoutTable
-import ee.oyatl.ime.fusion.keyboard.core.LongPressTable
+import ee.oyatl.ime.fusion.keyboard.core.MoreKeysTable
 import ee.oyatl.ime.fusion.keyboard.core.SoftKeyCodeMapper
 import ee.oyatl.ime.fusion.layout.LayoutExt
 import ee.oyatl.ime.fusion.layout.LayoutQwerty
@@ -51,7 +51,7 @@ object SymbolLayoutPresets {
         layoutTable = LayoutTable.fromShiftStates(
             map = LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutSymbol.TABLE_G
         ),
-        longPressTable = LongPressTable.from(
+        moreKeysTable = MoreKeysTable.from(
             SymbolMoreKeysTable.DEFAULT
         ),
         softKeyCodeMapper = softKeyCodeMapper()
@@ -77,7 +77,7 @@ object SymbolLayoutPresets {
         layoutTable = LayoutTable.fromShiftStates(
             map = LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutSymbol.TABLE_N1
         ),
-        longPressTable = LongPressTable.from(
+        moreKeysTable = MoreKeysTable.from(
             SymbolMoreKeysTable.DEFAULT
         ),
         softKeyCodeMapper = softKeyCodeMapper()
@@ -105,7 +105,7 @@ object SymbolLayoutPresets {
         layoutTable = LayoutTable.fromShiftStates(
             map = LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutSymbol.TABLE_N2
         ),
-        longPressTable = LongPressTable.from(
+        moreKeysTable = MoreKeysTable.from(
             SymbolMoreKeysTable.DEFAULT
         ),
         softKeyCodeMapper = softKeyCodeMapper()
@@ -131,7 +131,7 @@ object SymbolLayoutPresets {
         layoutTable = LayoutTable.fromShiftStates(
             map = LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutSymbol.TABLE_O1
         ),
-        longPressTable = LongPressTable.from(
+        moreKeysTable = MoreKeysTable.from(
             SymbolMoreKeysTable.DEFAULT
         ),
         softKeyCodeMapper = softKeyCodeMapper()
@@ -159,7 +159,7 @@ object SymbolLayoutPresets {
         layoutTable = LayoutTable.fromShiftStates(
             map = LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutSymbol.TABLE_O2
         ),
-        longPressTable = LongPressTable.from(
+        moreKeysTable = MoreKeysTable.from(
             SymbolMoreKeysTable.DEFAULT
         ),
         softKeyCodeMapper = softKeyCodeMapper()

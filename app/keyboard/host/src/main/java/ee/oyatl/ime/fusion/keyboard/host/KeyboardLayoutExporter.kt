@@ -9,7 +9,7 @@ import ee.oyatl.ime.fusion.keyboard.core.KeyboardConfiguration
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPresetDef
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardTemplate
 import ee.oyatl.ime.fusion.keyboard.core.LayoutTable
-import ee.oyatl.ime.fusion.keyboard.core.LongPressTable
+import ee.oyatl.ime.fusion.keyboard.core.MoreKeysTable
 import ee.oyatl.ime.fusion.keyboard.core.SoftKeyCodeMapper
 import ee.oyatl.ime.fusion.layout.Hangul2Set
 import ee.oyatl.ime.fusion.layout.LatinMoreKeysTable
@@ -91,7 +91,7 @@ object KeyboardLayoutExporter {
             keyboardTemplate = KEYBOARD_TEMPLATE_HANGUL_KS_COMPATIBLE,
             layoutTables = listOf(LAYOUT_TABLE_EXT, LAYOUT_TABLE_QWERTY, LAYOUT_TABLE_HANGUL_2SET_KS),
             altGraphTables = listOf(),
-            longPressTables = listOf(MORE_KEYS_TABLE_LATIN_DEFAULT),
+            moreKeysTables = listOf(MORE_KEYS_TABLE_LATIN_DEFAULT),
             softKeyCodeMapper = SOFT_KEYCODE_MAPPER_EMPTY,
             hardKeyCodeMapper = HARD_KEYCODE_MAPPER_EMPTY,
             extra = KeyboardLayoutPresetDef.Extra.Hangul(
@@ -108,7 +108,7 @@ object KeyboardLayoutExporter {
             LAYOUT_TABLE_HANGUL_2SET_KS to LayoutTable.fromShiftStates(Hangul2Set.TABLE_KS)
         )
         val moreKeysTables = mapOf(
-            MORE_KEYS_TABLE_LATIN_DEFAULT to LongPressTable.from(LatinMoreKeysTable.DEFAULT, LatinMoreKeysTable.DEFAULT_UPPERCASE_OVERRIDE)
+            MORE_KEYS_TABLE_LATIN_DEFAULT to MoreKeysTable.from(LatinMoreKeysTable.DEFAULT, LatinMoreKeysTable.DEFAULT_UPPERCASE_OVERRIDE)
         )
         val softKeyCodeMappers = mapOf(
             SOFT_KEYCODE_MAPPER_EMPTY to SoftKeyCodeMapper.Empty
@@ -124,7 +124,7 @@ object KeyboardLayoutExporter {
         )
         exportAll<KeyboardTemplate>(keyboardTemplates)
         exportAll<LayoutTable>(layoutTables)
-        exportAll<LongPressTable>(moreKeysTables)
+        exportAll<MoreKeysTable>(moreKeysTables)
         exportAll<SoftKeyCodeMapper>(softKeyCodeMappers)
         exportAll<HardKeyCodeMapper>(hardKeyCodeMappers)
         exportAll<JamoCombinationTable>(jamoCombinationTables)

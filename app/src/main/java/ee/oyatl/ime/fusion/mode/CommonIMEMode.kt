@@ -401,7 +401,7 @@ abstract class CommonIMEMode(
         val key = keyboardView.findKeys(keyCode).firstOrNull() ?: return false
         val input = KeyInput(keyCode, shiftState, null)
         val baseChar = currentLayoutPreset.layoutTable[input] ?: return false
-        val candidates = currentLayoutPreset.longPressTable.candidatesFor(baseChar)
+        val candidates = currentLayoutPreset.moreKeysTable.candidatesFor(baseChar)
         if(candidates.isEmpty()) return false
         keyboardView.popupManager.removePopup(key)
         keyboardView.popupManager.showPopup(key) {

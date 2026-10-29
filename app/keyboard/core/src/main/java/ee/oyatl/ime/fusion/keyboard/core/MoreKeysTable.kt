@@ -3,7 +3,7 @@ package ee.oyatl.ime.fusion.keyboard.core
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class LongPressTable(
+data class MoreKeysTable(
     private val map: Map<Int, List<Int>> = emptyMap(),
     private val uppercaseOverrides: Map<Int, Int> = emptyMap()
 ) {
@@ -17,8 +17,8 @@ data class LongPressTable(
         }
     }
 
-    operator fun plus(other: LongPressTable): LongPressTable {
-        return LongPressTable(
+    operator fun plus(other: MoreKeysTable): MoreKeysTable {
+        return MoreKeysTable(
             map = this.map + other.map,
             uppercaseOverrides = this.uppercaseOverrides + other.uppercaseOverrides
         )
@@ -28,7 +28,7 @@ data class LongPressTable(
         fun from(
             map: Map<Char, List<Char>> = emptyMap(),
             uppercaseOverrides: Map<Char, Char> = emptyMap()
-        ): LongPressTable = LongPressTable(
+        ): MoreKeysTable = MoreKeysTable(
             map.map { (k, v) -> k.code to v.map(Char::code) }.toMap(),
             uppercaseOverrides.map { (k, v) -> k.code to v.code }.toMap()
         )

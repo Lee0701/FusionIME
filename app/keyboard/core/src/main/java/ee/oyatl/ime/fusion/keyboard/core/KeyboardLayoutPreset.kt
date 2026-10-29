@@ -9,7 +9,7 @@ data class KeyboardLayoutPreset(
     val keyboardTemplate: KeyboardTemplate,
     val layoutTable: LayoutTable = LayoutTable(),
     val altGraphTable: LayoutTable = LayoutTable(),
-    val longPressTable: LongPressTable = LongPressTable(),
+    val moreKeysTable: MoreKeysTable = MoreKeysTable(),
     val softKeyCodeMapper: SoftKeyCodeMapper = SoftKeyCodeMapper.Empty,
     val hardKeyCodeMapper: HardKeyCodeMapper = HardKeyCodeMapper(),
     val extra: Extra = Extra.None

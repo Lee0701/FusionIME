@@ -8,7 +8,7 @@ data class KeyboardLayoutPresetDef(
     val keyboardTemplate: String,
     val layoutTables: List<String>,
     val altGraphTables: List<String>,
-    val longPressTables: List<String>,
+    val moreKeysTables: List<String>,
     val softKeyCodeMapper: String,
     val hardKeyCodeMapper: String,
     val extra: Extra

@@ -16,7 +16,7 @@ import ee.oyatl.ime.fusion.layout.MobileKeyboardRows
 import ee.oyatl.ime.fusion.layout.TabletKeyboard
 import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
 import ee.oyatl.ime.fusion.keyboard.core.LayoutTable
-import ee.oyatl.ime.fusion.keyboard.core.LongPressTable
+import ee.oyatl.ime.fusion.keyboard.core.MoreKeysTable
 import ee.oyatl.ime.fusion.keyboard.core.SoftKeyCodeMapper
 
 object KoreanLayoutPresets {
@@ -44,7 +44,7 @@ object KoreanLayoutPresets {
                 )
             ),
             layoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY) + layoutTable,
-            longPressTable = LongPressTable.from(LatinMoreKeysTable.DEFAULT, LatinMoreKeysTable.DEFAULT_UPPERCASE_OVERRIDE),
+            moreKeysTable = MoreKeysTable.from(LatinMoreKeysTable.DEFAULT, LatinMoreKeysTable.DEFAULT_UPPERCASE_OVERRIDE),
             extra = KeyboardLayoutPreset.Extra.Hangul(
                 jamoCombinationTable = jamoCombinationTable
             )
