@@ -68,7 +68,6 @@ abstract class RecyclerCandidateView(
         fun onBind(candidate: Candidate, onClick: () -> Unit, onLongClick: () -> Unit = {}) {
             val itemTheme = keyboardTheme.candidatesTheme.itemThemes[CandidateItemType.Default]
             if(itemTheme != null) {
-                view.root.setBackgroundColor(view.root.context.getColor(itemTheme.backgroundColor))
                 view.text.setTextColor(view.root.context.getColor(itemTheme.foregroundColor))
                 view.extra.setTextColor(view.root.context.getColor(itemTheme.extraColor))
                 view.icon.imageTintList = view.root.context.getColorStateList(itemTheme.foregroundColor)
