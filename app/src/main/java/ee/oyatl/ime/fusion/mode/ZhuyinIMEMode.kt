@@ -6,6 +6,7 @@ import android.os.Looper
 import android.view.KeyEvent
 import com.miyabi_hiroshi.app.libchewing_android_app_module.ConversionEngines
 import ee.oyatl.ime.candidate.CandidateView
+import ee.oyatl.ime.fusion.AssetsPresetLoader
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.korean.WordComposer
@@ -18,8 +19,8 @@ import java.util.Locale
 
 class ZhuyinIMEMode(
     listener: IMEMode.Listener,
-    override var textLayoutPreset: KeyboardLayoutPreset,
     conversionEngine: ConversionEngines,
+    val presetName: String,
     override val extra: Map<String, String>
 ): CommonIMEMode(listener) {
     private val handler: Handler = Handler(Looper.getMainLooper()) { msg ->
@@ -39,6 +40,8 @@ class ZhuyinIMEMode(
 
     override suspend fun onLoad(context: Context) {
         super.onLoad(context)
+        val loader = AssetsPresetLoader(context.assets, "keyboard/zhuyin")
+        textLayoutPreset = loader.inflate(loader.load(presetName))
         symbolLayoutPreset = super.symbolLayoutPreset.copy(
             layoutTable = super.symbolLayoutPreset.layoutTable + LayoutTable.fromShiftStates(LayoutExt.TABLE_CHINESE)
         )
@@ -180,8 +183,8 @@ class ZhuyinIMEMode(
         override val type: String = TYPE
 
         override fun create(listener: IMEMode.Listener): IMEMode {
-            val textLayoutPreset = ZhuyinLayoutPresets.bopomofo()
-            return ZhuyinIMEMode(listener, textLayoutPreset, conversionEngine, extra)
+            val presetName = "bopomofo"
+            return ZhuyinIMEMode(listener, conversionEngine, presetName, extra)
         }
 
         override fun getLabel(context: Context): String {

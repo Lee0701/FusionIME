@@ -1,0 +1,6 @@
+!<by-screen-mode>
+mobile: !<basic>
+  map:
+    69: 603
+    75: 601
+    71: 600

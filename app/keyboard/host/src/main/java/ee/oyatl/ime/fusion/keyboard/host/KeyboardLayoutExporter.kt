@@ -33,12 +33,52 @@ fun export(dirname: String, presets: Map<String, KeyboardLayoutPreset>) {
 fun main(args: Array<String>) {
     val dirname = "app/src/main/assets/keyboard"
 
-    export("$dirname", mapOf(
+    export("$dirname/latin", mapOf(
+        "qwerty" to LatinLayoutPresets.qwerty(),
+        "qwerty_spanish" to LatinLayoutPresets.spanishQwerty(),
+        "azerty" to LatinLayoutPresets.azerty(),
+        "qwertz" to LatinLayoutPresets.qwertz(),
+        "qwerz_german" to LatinLayoutPresets.germanQwertz(),
+        "dvorak" to LatinLayoutPresets.dvorak(),
+        "colemak" to LatinLayoutPresets.colemak()
+    ))
+
+    export("$dirname/pinyin", mapOf(
+        "pinyin_qwerty" to PinyinLayoutPresets.pinyin(LatinLayoutPresets.qwerty(false)),
+        "pinyin_qwerty_semicolon" to PinyinLayoutPresets.pinyin(LatinLayoutPresets.qwerty(true))
+    ))
+
+    export("$dirname/zhuyin", mapOf(
+        "bopomofo" to ZhuyinLayoutPresets.bopomofo()
+    ))
+
+    export("$dirname/cangjie", mapOf(
+        "cangjie" to CangjieLayoutPresets.cangjie(),
+        "dayi3" to CangjieLayoutPresets.dayi3()
+    ))
+
+    export("$dirname/jyutping", mapOf(
+        "jyutping_qwerty" to JyutpingLayoutPresets.jyutping(LatinLayoutPresets.qwerty())
+    ))
+
+    export("$dirname/japanese", mapOf(
+        "romaji_qwerty" to JapaneseLayoutPresets.romajiQwertyCompatible(LatinLayoutPresets.qwerty(true)),
+        "kana_12key" to JapaneseLayoutPresets.kana12Key(),
+        "godan" to JapaneseLayoutPresets.godan(),
+        "kana_jis" to JapaneseLayoutPresets.jis()
+    ))
+
+    export("$dirname/korean", mapOf(
         "hangul_2set_ks" to KoreanLayoutPresets.hangul2SetKS(),
         "hangul_3set_390" to KoreanLayoutPresets.hangul3Set390(),
         "hangul_3set_391" to KoreanLayoutPresets.hangul3Set391(),
         "hangul_3set_391_strict" to KoreanLayoutPresets.hangul3Set391Strict(),
         "hangul_old_2set" to KoreanLayoutPresets.hangulOld2Set(),
         "hangul_old_3set_393" to KoreanLayoutPresets.hangul3Set393()
+    ))
+
+    export("$dirname/vietnamese", mapOf(
+        "qwerty" to VietLayoutPresets.chuQuocNgu(LatinLayoutPresets.qwerty(), false),
+        "qwerty_nom" to VietLayoutPresets.chuQuocNgu(LatinLayoutPresets.qwerty(), true)
     ))
 }

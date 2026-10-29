@@ -1,0 +1,5 @@
+!<by-screen-mode>
+mobile: !<basic>
+  map:
+    74: 69
+full: !<empty> {}

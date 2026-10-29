@@ -3,6 +3,7 @@ package ee.oyatl.ime.fusion.mode
 import android.content.Context
 import android.view.KeyEvent
 import ee.oyatl.ime.candidate.CandidateView
+import ee.oyatl.ime.fusion.AssetsPresetLoader
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.korean.WordComposer
@@ -19,7 +20,7 @@ import org.jyutping.jyutping.models.VirtualInputKey
 import java.util.Locale
 
 class JyutpingIMEMode(
-    override var textLayoutPreset: KeyboardLayoutPreset,
+    val presetName: String,
     override val extra: Map<String, String>,
     listener: IMEMode.Listener
 ): CommonIMEMode(listener) {
@@ -31,6 +32,10 @@ class JyutpingIMEMode(
 
     override suspend fun onLoad(context: Context) {
         super.onLoad(context)
+
+        val loader = AssetsPresetLoader(context.assets, "keyboard/jyutping")
+        textLayoutPreset = loader.inflate(loader.load(presetName))
+
         Segmenter.prepare()
         BinaryDictionaries.loadDictionaries(context)
     }
@@ -130,8 +135,7 @@ class JyutpingIMEMode(
         override val type: String = TYPE
 
         override fun create(listener: IMEMode.Listener): IMEMode {
-            val textLayoutPreset = JyutpingLayoutPresets.jyutping(LatinLayoutPresets.qwerty(false))
-            return JyutpingIMEMode(textLayoutPreset, extra, listener)
+            return JyutpingIMEMode("jyutping_qwerty", extra, listener)
         }
 
         override fun getLabel(context: Context): String {

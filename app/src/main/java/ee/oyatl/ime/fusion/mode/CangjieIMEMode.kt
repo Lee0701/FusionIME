@@ -5,6 +5,7 @@ import android.view.KeyEvent
 import androidx.annotation.StringRes
 import com.diycircuits.cangjie.TableLoader
 import ee.oyatl.ime.candidate.CandidateView
+import ee.oyatl.ime.fusion.AssetsPresetLoader
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.korean.WordComposer
@@ -20,6 +21,7 @@ import kotlin.collections.plus
 
 abstract class CangjieIMEMode(
     listener: IMEMode.Listener,
+    val presetName: String,
     override val extra: Map<String, String>
 ): CommonIMEMode(listener) {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
@@ -37,6 +39,8 @@ abstract class CangjieIMEMode(
 
     override suspend fun onLoad(context: Context) {
         super.onLoad(context)
+        val loader = AssetsPresetLoader(context.assets, "keyboard/cangjie")
+        textLayoutPreset = loader.inflate(loader.load(presetName))
         val table = TableLoader()
         table.setPath(context.filesDir.absolutePath.encodeToByteArray())
         table.initialize()
@@ -165,18 +169,16 @@ abstract class CangjieIMEMode(
         override val inputMode: Int,
         extra: Map<String, String>,
         listener: IMEMode.Listener
-    ): CangjieIMEMode(listener, extra) {
+    ): CangjieIMEMode(listener, "cangjie", extra) {
         override val keyMap: Map<Char, Char> = LayoutCangjie.KEY_MAP_CANGJIE
-        override var textLayoutPreset: KeyboardLayoutPreset = CangjieLayoutPresets.cangjie()
     }
 
     class Dayi3(
         override val fullWidth: Boolean,
         extra: Map<String, String>,
         listener: IMEMode.Listener
-    ): CangjieIMEMode(listener, extra + mapOf("number_row" to "true")) {
+    ): CangjieIMEMode(listener, "dayi3", extra + mapOf("number_row" to "true")) {
         override val inputMode: Int = TableLoader.DAYI3
-        override var textLayoutPreset: KeyboardLayoutPreset = CangjieLayoutPresets.dayi3()
         override val keyMap: Map<Char, Char> = LayoutCangjie.KEY_MAP_DAYI3
     }
 

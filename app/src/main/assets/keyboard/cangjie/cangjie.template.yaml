@@ -1,0 +1,145 @@
+!<by-screen-mode>
+mobile: !<basic>
+  configuration:
+    rows:
+    - - !<ifeq>
+        name: "number_row"
+        value: "true"
+        content: !<content-row>
+          rowId: 3
+    - - !<content-row>
+        rowId: 2
+    - - !<spacer>
+        width: 0.5
+      - !<content-row>
+        rowId: 1
+      - !<spacer>
+        width: 0.5
+    - - !<template-key>
+        keyCode: 59
+        width: 1.5
+        special: true
+      - !<content-row>
+        rowId: 0
+      - !<template-key>
+        keyCode: 67
+        width: 1.5
+        special: true
+    - - !<template-key>
+        keyCode: 63
+        width: 1.5
+        special: true
+      - !<template-key>
+        keyCode: 55
+      - !<template-key>
+        keyCode: 204
+        special: true
+      - !<ifeq>
+        name: "cursor_keys"
+        value: "true"
+        content: !<template-key>
+          keyCode: 62
+          width: 2.0
+      - !<ifneq>
+        name: "cursor_keys"
+        value: "true"
+        content: !<template-key>
+          keyCode: 62
+          width: 4.0
+      - !<template-key>
+        keyCode: 56
+      - !<ifeq>
+        name: "cursor_keys"
+        value: "true"
+        content: !<multiple>
+          items:
+          - !<template-key>
+            keyCode: 21
+            special: true
+          - !<template-key>
+            keyCode: 22
+            special: true
+      - !<template-key>
+        keyCode: 66
+        width: 1.5
+        special: true
+  contentRows:
+  - "12345 67890"
+  - "qwert yuiop"
+  - "asdfg hjkl"
+  - "zxcvb nm"
+tablet: !<basic>
+  configuration:
+    rows:
+    - - !<ifeq>
+        name: "number_row"
+        value: "true"
+        content: !<multiple>
+          items:
+          - !<content-row>
+            rowId: 3
+          - !<ifeq>
+            name: "number_row"
+            value: "true"
+            content: !<template-key>
+              keyCode: 67
+              special: true
+          - !<ifneq>
+            name: "number_row"
+            value: "true"
+            content: !<spacer>
+              width: 1.0
+    - - !<content-row>
+        rowId: 2
+      - !<ifneq>
+        name: "number_row"
+        value: "true"
+        content: !<template-key>
+          keyCode: 67
+          special: true
+      - !<ifeq>
+        name: "number_row"
+        value: "true"
+        content: !<spacer>
+          width: 1.0
+    - - !<spacer>
+        width: 0.5
+      - !<content-row>
+        rowId: 1
+      - !<template-key>
+        keyCode: 66
+        width: 1.5
+        special: true
+    - - !<template-key>
+        keyCode: 59
+        special: true
+      - !<content-row>
+        rowId: 0
+      - !<template-key>
+        keyCode: 59
+        special: true
+    - - !<template-key>
+        keyCode: 63
+        width: 1.5
+        special: true
+      - !<template-key>
+        keyCode: 204
+        special: true
+      - !<template-key>
+        keyCode: 62
+        width: 5.0
+      - !<template-key>
+        keyCode: 21
+        special: true
+      - !<template-key>
+        keyCode: 22
+        special: true
+      - !<template-key>
+        keyCode: 63
+        width: 1.5
+        special: true
+  contentRows:
+  - "12345 67890"
+  - "qwert yuiop"
+  - "asdfg hjkl"
+  - "zxcvb nm,."

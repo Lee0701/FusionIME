@@ -1,0 +1,7 @@
+keyboardTemplate: "kana_12key.template"
+layoutTable: "kana_12key.layout"
+altGraphTable: "kana_12key.altgr"
+moreKeysTable: "kana_12key.morekeys"
+softKeyCodeMapper: "kana_12key.softkeycode"
+hardKeyCodeMapper: "kana_12key.hardkeycode"
+extra: !<none> {}

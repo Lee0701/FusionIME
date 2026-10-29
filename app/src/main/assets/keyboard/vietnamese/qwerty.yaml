@@ -1,0 +1,7 @@
+keyboardTemplate: "qwerty.template"
+layoutTable: "qwerty.layout"
+altGraphTable: "qwerty.altgr"
+moreKeysTable: "qwerty.morekeys"
+softKeyCodeMapper: "qwerty.softkeycode"
+hardKeyCodeMapper: "qwerty.hardkeycode"
+extra: !<none> {}

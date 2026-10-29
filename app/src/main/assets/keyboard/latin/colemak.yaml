@@ -1,0 +1,7 @@
+keyboardTemplate: "colemak.template"
+layoutTable: "colemak.layout"
+altGraphTable: "colemak.altgr"
+moreKeysTable: "colemak.morekeys"
+softKeyCodeMapper: "colemak.softkeycode"
+hardKeyCodeMapper: "colemak.hardkeycode"
+extra: !<none> {}

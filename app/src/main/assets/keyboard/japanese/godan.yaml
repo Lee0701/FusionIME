@@ -1,0 +1,7 @@
+keyboardTemplate: "godan.template"
+layoutTable: "godan.layout"
+altGraphTable: "godan.altgr"
+moreKeysTable: "godan.morekeys"
+softKeyCodeMapper: "godan.softkeycode"
+hardKeyCodeMapper: "godan.hardkeycode"
+extra: !<none> {}

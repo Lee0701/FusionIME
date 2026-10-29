@@ -5,10 +5,9 @@ import android.view.KeyEvent
 import androidx.annotation.RawRes
 import androidx.annotation.StringRes
 import ee.oyatl.ime.candidate.CandidateView
+import ee.oyatl.ime.fusion.AssetsPresetLoader
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.korean.WordComposer
-import ee.oyatl.ime.fusion.layout.preset.VietLayoutPresets
-import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPreset
 import ee.oyatl.ime.viet.VietnameseConverter
 import net.sourceforge.vietpad.inputmethod.InputMethod
 import net.sourceforge.vietpad.inputmethod.KeyboardMode
@@ -24,13 +23,14 @@ class VietIMEMode(
     private var converter: VietnameseConverter? = null
     private val inputMethod: InputMethod = layout.keyboardMode.createInputMethod()
 
-    private val forcedNumberRow = layout.keyboardMode == KeyboardMode.VNI
-    override var textLayoutPreset: KeyboardLayoutPreset = VietLayoutPresets.qwerty(layout.nomMode)
-
     private var bestCandidate: VietnameseConverter.Candidate? = null
 
     override suspend fun onLoad(context: Context) {
         super.onLoad(context)
+        val loader = AssetsPresetLoader(context.assets, "keyboard/vietnamese")
+        val suffix = if(layout.nomMode) "_nom" else ""
+        val presetName = "qwerty$suffix"
+        textLayoutPreset = loader.inflate(loader.load(presetName))
         if(layout.dictResId != 0) {
             converter = VietnameseConverter(context, layout.dictResId)
         }
@@ -171,10 +171,8 @@ class VietIMEMode(
         companion object {
             fun parse(map: Map<String, String>): Params {
                 val layout = Layout.entries.find { it.name == map["layout"] } ?: Layout.QwertyNom
-                val forceNumberRow =
-                    if(layout.keyboardMode == KeyboardMode.VNI) mapOf("number_row" to "true")
-                    else emptyMap()
-                val extra = map + forceNumberRow
+                val extra = map.toMutableMap()
+                if(layout.keyboardMode == KeyboardMode.VNI) extra += "number_row" to "true"
                 return Params(
                     layout = layout,
                     extra = extra

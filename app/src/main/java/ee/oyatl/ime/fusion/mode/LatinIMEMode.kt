@@ -36,6 +36,7 @@ import com.android.inputmethod.latin.settings.SettingsValues
 import com.android.inputmethod.latin.utils.ScriptUtils
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.TripleCandidateView
+import ee.oyatl.ime.fusion.AssetsPresetLoader
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.layout.preset.LatinLayoutPresets
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPreset
@@ -45,7 +46,7 @@ import java.util.Locale
 class LatinIMEMode(
     private val listener: IMEMode.Listener,
     val locale: Locale,
-    override var textLayoutPreset: KeyboardLayoutPreset,
+    val presetName: String,
     override val extra: Map<String, String>,
     val autoCaps: Boolean,
     val autoPeriod: Boolean
@@ -90,6 +91,10 @@ class LatinIMEMode(
     override suspend fun onLoad(context: Context) {
         super.onLoad(context)
         this.context = context
+
+        val loader = AssetsPresetLoader(context.assets, "keyboard/latin")
+        textLayoutPreset = loader.inflate(loader.load(presetName))
+
         dummyKeyboard = KeyboardBuilder(context, keyboardParams).build()
         dictionaryFacilitator = DictionaryFacilitatorProvider.getDictionaryFacilitator(false)
         settings = Settings.getInstance()
@@ -596,18 +601,15 @@ class LatinIMEMode(
         override val type: String = TYPE
 
         override fun create(listener: IMEMode.Listener): LatinIMEMode {
-            val textLayoutPreset = when(layout) {
-                Layout.Qwerty -> when(locale.language) {
-                    "es" -> LatinLayoutPresets.spanishQwerty()
-                    else -> LatinLayoutPresets.qwerty(false)
+            val suffix = when(locale.language) {
+                "es" -> when(layout) {
+                    Layout.Qwerty -> "_spanish"
+                    else -> ""
                 }
-                Layout.Azerty -> LatinLayoutPresets.azerty()
-                Layout.Qwertz -> LatinLayoutPresets.qwertz()
-                Layout.Deutsch -> LatinLayoutPresets.germanQwertz()
-                Layout.Dvorak -> LatinLayoutPresets.dvorak()
-                Layout.Colemak -> LatinLayoutPresets.colemak()
+                else -> ""
             }
-            return LatinIMEMode(listener, locale, textLayoutPreset, extra, autoCaps, autoPeriod)
+            val presetName = layout.presetName + suffix
+            return LatinIMEMode(listener, locale, presetName, extra, autoCaps, autoPeriod)
         }
 
         override fun getLabel(context: Context): String {
@@ -648,14 +650,15 @@ class LatinIMEMode(
     }
 
     enum class Layout(
-        @StringRes val nameKey: Int
+        @StringRes val nameKey: Int,
+        val presetName: String
     ) {
-        Qwerty(R.string.latin_layout_qwerty),
-        Azerty(R.string.latin_layout_azerty),
-        Qwertz(R.string.latin_layout_qwertz),
-        Deutsch(R.string.latin_layout_deutsch),
-        Dvorak(R.string.latin_layout_dvorak),
-        Colemak(R.string.latin_layout_colemak)
+        Qwerty(R.string.latin_layout_qwerty, "qwerty"),
+        Azerty(R.string.latin_layout_azerty, "azerty"),
+        Qwertz(R.string.latin_layout_qwertz, "qwertz"),
+        Deutsch(R.string.latin_layout_deutsch, "qwertz_german"),
+        Dvorak(R.string.latin_layout_dvorak, "dvorak"),
+        Colemak(R.string.latin_layout_colemak, "colemak")
     }
 
     companion object {

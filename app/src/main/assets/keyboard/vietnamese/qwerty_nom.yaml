@@ -1,0 +1,7 @@
+keyboardTemplate: "qwerty_nom.template"
+layoutTable: "qwerty_nom.layout"
+altGraphTable: "qwerty_nom.altgr"
+moreKeysTable: "qwerty_nom.morekeys"
+softKeyCodeMapper: "qwerty_nom.softkeycode"
+hardKeyCodeMapper: "qwerty_nom.hardkeycode"
+extra: !<none> {}

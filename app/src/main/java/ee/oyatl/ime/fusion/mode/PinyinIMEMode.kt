@@ -22,6 +22,7 @@ import com.android.inputmethod.pinyin.PinyinIME.ImeState
 import com.android.inputmethod.pinyin.R
 import com.android.inputmethod.pinyin.Settings
 import ee.oyatl.ime.candidate.CandidateView
+import ee.oyatl.ime.fusion.AssetsPresetLoader
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.pinyin.CandidatesContainer
 import ee.oyatl.ime.fusion.pinyin.ComposingView
@@ -39,6 +40,7 @@ class PinyinIMEMode(
     listener: IMEMode.Listener,
     val spelling: Spelling,
     val chineseTraditional: Boolean,
+    val presetName: String,
     override val extra: Map<String, String>
 ): CommonIMEMode(listener), DecodingInfo.IMEStateHolder {
     /**
@@ -78,13 +80,13 @@ class PinyinIMEMode(
 
     private var isEnterNormalState = true
 
-    private val hasSemicolonKey = spelling.doublePinyinScheme?.acceptsFinal(';') == true
-    override var textLayoutPreset: KeyboardLayoutPreset = PinyinLayoutPresets.pinyin(
-        LatinLayoutPresets.qwerty(hasSemicolonKey)
-    )
-
     override suspend fun onLoad(context: Context) {
         super.onLoad(context)
+        val loader = AssetsPresetLoader(context.assets, "keyboard/pinyin")
+        val hasSemicolonKey = spelling.doublePinyinScheme?.acceptsFinal(';') == true
+        val suffix = if(hasSemicolonKey) "_semicolon" else ""
+        val presetName = presetName + suffix
+        textLayoutPreset = loader.inflate(loader.load(presetName))
         startPinyinDecoderService(context)
     }
 
@@ -947,7 +949,8 @@ class PinyinIMEMode(
         override val type: String = TYPE
 
         override fun create(listener: IMEMode.Listener): IMEMode {
-            return PinyinIMEMode(listener, spelling, chineseTraditional, extra)
+            val presetName = "pinyin_qwerty"
+            return PinyinIMEMode(listener, spelling, chineseTraditional, presetName, extra)
         }
 
         override fun getLabel(context: Context): String {

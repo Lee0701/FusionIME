@@ -10,6 +10,7 @@ import androidx.annotation.StringRes
 import com.google.common.base.Optional
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.VerticalScrollingCandidateView
+import ee.oyatl.ime.fusion.AssetsPresetLoader
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.layout.LayoutGodan
@@ -243,14 +244,28 @@ abstract class MozcIMEMode(
         )
     }
 
-    class RomajiQwerty(
+    abstract class StaticPreset(
         listener: IMEMode.Listener,
         candidateViewHeight: Int,
         extra: Map<String, String>
     ): MozcIMEMode(listener, candidateViewHeight, extra) {
+        abstract val presetName: String
+
+        override suspend fun onLoad(context: Context) {
+            super.onLoad(context)
+
+            val loader = AssetsPresetLoader(context.assets, "keyboard/japanese")
+            textLayoutPreset = loader.inflate(loader.load(presetName))
+        }
+    }
+
+    class RomajiQwerty(
+        listener: IMEMode.Listener,
+        candidateViewHeight: Int,
+        extra: Map<String, String>
+    ): StaticPreset(listener, candidateViewHeight, extra) {
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.QWERTY_KANA
-        override var textLayoutPreset: KeyboardLayoutPreset = JapaneseLayoutPresets.romajiQwertyCompatible(
-            LatinLayoutPresets.qwerty(true))
+        override val presetName: String = "romaji_qwerty"
     }
 
     class Kana12Key(
@@ -259,9 +274,9 @@ abstract class MozcIMEMode(
         val flickMode: FlickMode,
         val flickHint: Boolean,
         extra: Map<String, String>
-    ): MozcIMEMode(listener, candidateViewHeight, extra), FlickListener {
+    ): StaticPreset(listener, candidateViewHeight, extra), FlickListener {
         override val keyboardSpecification: KeyboardSpecification = flickMode.keyboardSpecification
-        override var textLayoutPreset: KeyboardLayoutPreset = JapaneseLayoutPresets.kana12Key()
+        override val presetName: String = "kana_12key"
 
         // Remove flick labels if toggle only mode
         // Show them as hints only when option is on
@@ -332,9 +347,9 @@ abstract class MozcIMEMode(
         candidateViewHeight: Int,
         val flickHint: Boolean,
         extra: Map<String, String>
-    ): MozcIMEMode(listener, candidateViewHeight, extra) {
+    ): StaticPreset(listener, candidateViewHeight, extra) {
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.GODAN_KANA
-        override var textLayoutPreset: KeyboardLayoutPreset = JapaneseLayoutPresets.godan()
+        override val presetName: String = "godan"
 
         // Show flick hints only when option is on
         private val keyLabelsGodan = LayoutGodan.LABELS.mapValues { (k, v) ->
@@ -402,9 +417,9 @@ abstract class MozcIMEMode(
         listener: IMEMode.Listener,
         candidateViewHeight: Int,
         extra: Map<String, String>
-    ): MozcIMEMode(listener, candidateViewHeight, extra + mapOf("number_row" to "true")) {
+    ): StaticPreset(listener, candidateViewHeight, extra + mapOf("number_row" to "true")) {
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.QWERTY_KANA_JIS
-        override var textLayoutPreset: KeyboardLayoutPreset = JapaneseLayoutPresets.jis()
+        override val presetName: String = "kana_jis"
     }
 
     class KanaSyllables(
