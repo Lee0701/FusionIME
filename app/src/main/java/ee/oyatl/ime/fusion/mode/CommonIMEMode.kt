@@ -1,8 +1,6 @@
 package ee.oyatl.ime.fusion.mode
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.content.res.Configuration
 import android.util.TypedValue
 import android.view.KeyCharacterMap
 import android.view.KeyEvent
@@ -12,101 +10,63 @@ import android.view.inputmethod.InputConnection
 import androidx.preference.PreferenceManager
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.ScrollingCandidateView
-import ee.oyatl.ime.fusion.Feature
 import ee.oyatl.ime.fusion.FlickAction
-import ee.oyatl.ime.fusion.KeyEventUtil
+import ee.oyatl.ime.fusion.util.KeyEventUtil
+import ee.oyatl.ime.fusion.util.PreferenceUtil.getOrientationBoolean
+import ee.oyatl.ime.fusion.util.PreferenceUtil.getOrientationInteger
 import ee.oyatl.ime.fusion.R
-import ee.oyatl.ime.fusion.layout.LayoutExt
-import ee.oyatl.ime.fusion.layout.LayoutQwerty
-import ee.oyatl.ime.fusion.layout.LayoutSymbol
-import ee.oyatl.ime.fusion.layout.MobileKeyboard
-import ee.oyatl.ime.fusion.layout.MobileKeyboardRows
-import ee.oyatl.ime.fusion.layout.NumberKeyboard
-import ee.oyatl.ime.fusion.layout.TabletKeyboard
-import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
-import ee.oyatl.ime.keyboard.DefaultKeyboardView
+import ee.oyatl.ime.fusion.layout.preset.LatinLayoutPresets
+import ee.oyatl.ime.fusion.layout.preset.SymbolLayoutPresets
+import ee.oyatl.ime.keyboard.CanvasKeyboardView
 import ee.oyatl.ime.keyboard.KeyLabel
-import ee.oyatl.ime.keyboard.KeyboardConfiguration
+import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
 import ee.oyatl.ime.keyboard.KeyboardParams
 import ee.oyatl.ime.keyboard.KeyboardState
-import ee.oyatl.ime.keyboard.KeyboardTemplate
 import ee.oyatl.ime.keyboard.KeyboardView
 import ee.oyatl.ime.keyboard.LayoutTable
 import ee.oyatl.ime.keyboard.SwitcherKeyboardView
-import ee.oyatl.ime.keyboard.listener.CompoundKeyboardListener
+import ee.oyatl.ime.keyboard.TouchMode
 import ee.oyatl.ime.keyboard.listener.DeleteRepeater
 import ee.oyatl.ime.keyboard.listener.FlickListener
 import ee.oyatl.ime.keyboard.listener.InputOnKeyUp
 import ee.oyatl.ime.keyboard.listener.KeyFeedbackManager
 import ee.oyatl.ime.keyboard.listener.KeyboardListener
+import ee.oyatl.ime.keyboard.listener.LongPressListener
+import ee.oyatl.ime.keyboard.listener.ParallelKeyboardListener
+import ee.oyatl.ime.keyboard.listener.SerialKeyboardListener
 import ee.oyatl.ime.keyboard.listener.ShiftStateManager
 import ee.oyatl.ime.keyboard.popup.DefaultPopupManager
+import ee.oyatl.ime.keyboard.popup.MoreKeysPopup
 import ee.oyatl.ime.keyboard.touchhandler.FlickDirection
 import ee.oyatl.ime.keyboard.touchhandler.FlickTouchHandler
+import ee.oyatl.ime.keyboard.touchhandler.LongPressTouchHandler
 import ee.oyatl.ime.keyboard.touchhandler.SeekTouchHandler
 import ee.oyatl.ime.keyboard.touchhandler.TouchHandler
+import ee.oyatl.ime.theme.KeyboardTheme
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 abstract class CommonIMEMode(
     private val listener: IMEMode.Listener
-): IMEMode, KeyboardListener, FlickListener, CandidateView.Listener {
+): IMEMode, KeyboardListener, FlickListener, LongPressListener, CandidateView.Listener, ShiftStateManager.ShiftStateHolder {
     protected val keyCharacterMap: KeyCharacterMap = KeyCharacterMap.load(KeyCharacterMap.VIRTUAL_KEYBOARD)
 
-    open val textLayoutTable: LayoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY)
-    open val symbolLayoutTable: LayoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutSymbol.TABLE_G)
-    open val numberLayoutTable: LayoutTable = LayoutTable(mapOf())
+    override var keyboardTheme: KeyboardTheme? = null
 
-    open val textKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
-        mobile = KeyboardTemplate.Basic(
-            configuration = KeyboardConfiguration(
-                MobileKeyboard.alphabetic(),
-                MobileKeyboard.bottom()
-            ),
-            contentRows = MobileKeyboardRows.DEFAULT
-        ),
-        tablet = KeyboardTemplate.Basic(
-            configuration = KeyboardConfiguration(
-                TabletKeyboard.alphabetic(),
-                TabletKeyboard.bottom()
-            ),
-            contentRows = TabletKeyboardRows.DEFAULT
-        )
-    )
-    open val symbolKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
-        mobile = KeyboardTemplate.Basic(
-            configuration = KeyboardConfiguration(
-                MobileKeyboard.alphabetic(semicolon = true),
-                MobileKeyboard.bottom(languageKeyCode = KeyEvent.KEYCODE_NUM)
-            ),
-            contentRows = MobileKeyboardRows.SEMICOLON,
-        ),
-        tablet = KeyboardTemplate.Basic(
-            configuration = KeyboardConfiguration(
-                TabletKeyboard.alphabetic(semicolon = true),
-                TabletKeyboard.bottom(languageKeyCode = KeyEvent.KEYCODE_NUM)
-            ),
-            contentRows = TabletKeyboardRows.SEMICOLON
-        )
-    )
-    open val numberKeyboardTemplate: KeyboardTemplate = KeyboardTemplate.ByScreenMode(
-        mobile = KeyboardTemplate.Basic(
-            configuration = NumberKeyboard.mobile(),
-            contentRows = emptyList(),
-        ),
-        tablet = KeyboardTemplate.Basic(
-            configuration = NumberKeyboard.tablet(),
-            contentRows = emptyList(),
-        )
-    )
+    open var textLayoutPreset: KeyboardLayoutPreset = LatinLayoutPresets.qwerty()
+    open var symbolLayoutPreset: KeyboardLayoutPreset = SymbolLayoutPresets.symbolG()
+    open var numberLayoutPreset: KeyboardLayoutPreset = SymbolLayoutPresets.number()
 
-    val currentLayoutTable: LayoutTable get() = when(symbolState) {
-        KeyboardState.Symbol.Text -> textLayoutTable
-        KeyboardState.Symbol.Symbol -> symbolLayoutTable
-        KeyboardState.Symbol.Number -> numberLayoutTable
+    val currentLayoutPreset: KeyboardLayoutPreset  get() = when(symbolState) {
+        KeyboardState.Symbol.Text -> textLayoutPreset
+        KeyboardState.Symbol.Symbol -> symbolLayoutPreset
+        KeyboardState.Symbol.Number -> numberLayoutPreset
     }
 
     open val keyLabels: Map<Int, KeyLabel>
-        get() = currentLayoutTable.map.mapValues { (_, v) ->
+        get() = currentLayoutPreset.layoutTable.map.mapValues { (_, v) ->
             val str = when(v) {
                 is LayoutTable.DefaultItem -> v.forShiftState(shiftState)
                 else -> v.normal
@@ -118,7 +78,11 @@ abstract class CommonIMEMode(
     protected var candidateView: CandidateView? = null
 
     var symbolState: KeyboardState.Symbol = KeyboardState.Symbol.Text
-    var shiftState: KeyboardState.Shift = KeyboardState.Shift.Released
+    override var shiftState: KeyboardState.Shift = KeyboardState.Shift.Released
+        set(value) {
+            field = value
+            updateInputView()
+        }
 
     private var defaultFlickActions: Map<FlickDirection, FlickAction> = mapOf()
 
@@ -158,6 +122,10 @@ abstract class CommonIMEMode(
     override suspend fun onLoad(context: Context) {
         val preference = PreferenceManager.getDefaultSharedPreferences(context)
 
+        val symbolLayoutTypeName = preference.getString("symbol_layout", null)
+        val symbolLayoutType = SymbolLayoutPresets.Type.entries.find { it.name == symbolLayoutTypeName } ?: SymbolLayoutPresets.Type.G
+        this.symbolLayoutPreset = symbolLayoutType.createPreset()
+
         val flickActionUp = FlickAction.valueOf(preference.getString("default_flick_action_up", null) ?: FlickAction.Shifted.name)
         val flickActionDown = FlickAction.valueOf(preference.getString("default_flick_action_down", null) ?: FlickAction.Symbol.name)
         defaultFlickActions = mapOf(
@@ -172,7 +140,7 @@ abstract class CommonIMEMode(
         setPreferredKeyboard(editorInfo)
         shiftState = KeyboardState.Shift.Released
         updateInputView()
-        keyboardView?.onReset()
+        CoroutineScope(Dispatchers.Main).launch { keyboardView?.onReset() }
     }
 
     override fun onFinish() {
@@ -186,89 +154,35 @@ abstract class CommonIMEMode(
         submitCandidates(emptyList())
     }
 
-    private fun getOrientationSuffix(context: Context): String {
-        val landscape = context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
-        val suffix = if(landscape) "_landscape" else "_portrait"
-        return suffix
-    }
-
-    private fun getOrientationInteger(context: Context, key: String): Float {
-        val preference = PreferenceManager.getDefaultSharedPreferences(context)
-        val suffix = getOrientationSuffix(context)
-        @SuppressLint("DiscouragedApi")
-        val defaultId = context.resources.getIdentifier("${key}${suffix}_default", "integer", context.packageName)
-        val defaultValue = context.resources.getInteger(defaultId).toFloat()
-        val value = preference.getFloat("${key}${suffix}", defaultValue)
-        return value
-    }
-
-    private fun getOrientationBoolean(context: Context, key: String): Boolean {
-        val preference = PreferenceManager.getDefaultSharedPreferences(context)
-        val suffix = getOrientationSuffix(context)
-        @SuppressLint("DiscouragedApi")
-        val defaultId = context.resources.getIdentifier("${key}${suffix}_default", "bool", context.packageName)
-        val defaultValue = context.resources.getBoolean(defaultId)
-        val value = preference.getBoolean("${key}${suffix}", defaultValue)
-        return value
-    }
-
     override fun createInputView(context: Context): View {
-        val preference = PreferenceManager.getDefaultSharedPreferences(context)
+        val textKeyboardParams = createKeyboardParams(context, KeyboardState.Symbol.Text)
+        val symbolKeyboardParams = createKeyboardParams(context, KeyboardState.Symbol.Symbol)
+        val numberKeyboardParams = createKeyboardParams(context, KeyboardState.Symbol.Number)
 
-        val defaultScreenMode = context.resources.getString(R.string.screen_mode_default)
-        val screenMode = KeyboardState.ScreenMode.valueOf(preference.getString("screen_mode", null) ?: defaultScreenMode)
-        val rowHeightDIP = getOrientationInteger(context, "keyboard_height")
-        val height = (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, rowHeightDIP, context.resources.displayMetrics) * 4).roundToInt()
-        val split = Feature.SplitKeyboard.availableInCurrentVersion && getOrientationBoolean(context, "split_keyboard")
-        val splitRatio = if(split) getOrientationInteger(context, "split_ratio") else 0f
-        val splitWidthDIP = context.resources.configuration.screenWidthDp / 100f * splitRatio
-        val splitWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, splitWidthDIP, context.resources.displayMetrics).roundToInt()
-        val showPreviewPopup = preference.getBoolean("preview_popup", true)
-        val sound = preference.getBoolean("sound_feedback", true)
-        val haptic = preference.getBoolean("haptic_feedback", true)
-        val duration = preference.getFloat("vibration_duration", 10f).toLong()
-        val soundVolume = if(sound) 1f else 0f
-        val vibrationDuration = if(haptic) duration else 0L
-        val params = KeyboardParams(
-            screenMode = screenMode,
-            height = height,
-            splitWidth = splitWidth,
-            soundFeedback = false,
-            hapticFeedback = false,
-            soundVolume = soundVolume,
-            vibrationDuration = vibrationDuration,
-            previewPopups = showPreviewPopup,
-            shiftLockDelay = 300,
-            shiftAutoRelease = true,
-            repeatDelay = 300,
-            repeatInterval = 30,
-        )
+        val textKeyboard = textLayoutPreset.keyboardTemplate.inflate(textKeyboardParams, textLayoutPreset.softKeyCodeMapper)
+        val symbolKeyboard = symbolLayoutPreset.keyboardTemplate.inflate(symbolKeyboardParams, symbolLayoutPreset.softKeyCodeMapper)
+        val numberKeyboard = numberLayoutPreset.keyboardTemplate.inflate(numberKeyboardParams, symbolLayoutPreset.softKeyCodeMapper)
 
-        val textKeyboardParams = params.copy()
-        val symbolKeyboardParams = params.copy(shiftAutoRelease = false)
-        val numberKeyboardParams = params.copy(shiftAutoRelease = false, splitWidth = 0)
-
-        val textKeyboard = textKeyboardTemplate.inflate(textKeyboardParams)
-        val symbolKeyboard = symbolKeyboardTemplate.inflate(symbolKeyboardParams)
-        val numberKeyboard = numberKeyboardTemplate.inflate(numberKeyboardParams)
-
-        val textKeyboardView = DefaultKeyboardView(context, null).also {
+        val textKeyboardView = CanvasKeyboardView(context, null).also {
+            it.keyboardTheme = keyboardTheme
             it.keyboard = textKeyboard
             it.listener = createKeyboardListener(context, textKeyboardParams)
-            it.touchHandler = createTouchHandler(it, context, KeyboardState.Symbol.Text)
-            if(params.previewPopups) it.popupManager = DefaultPopupManager(it, it)
+            it.touchHandler = createTouchHandler(it, textKeyboardParams, KeyboardState.Symbol.Text)
+            it.popupManager = DefaultPopupManager()
         }
-        val symbolKeyboardView = DefaultKeyboardView(context, null).also {
+        val symbolKeyboardView = CanvasKeyboardView(context, null).also {
+            it.keyboardTheme = keyboardTheme
             it.keyboard = symbolKeyboard
             it.listener = createKeyboardListener(context, symbolKeyboardParams)
-            it.touchHandler = createTouchHandler(it, context, KeyboardState.Symbol.Symbol)
-            if(params.previewPopups) it.popupManager = DefaultPopupManager(it, it)
+            it.touchHandler = createTouchHandler(it, symbolKeyboardParams, KeyboardState.Symbol.Symbol)
+            it.popupManager = DefaultPopupManager()
         }
-        val numberKeyboardView = DefaultKeyboardView(context, null).also {
+        val numberKeyboardView = CanvasKeyboardView(context, null).also {
+            it.keyboardTheme = keyboardTheme
             it.keyboard = numberKeyboard
             it.listener = createKeyboardListener(context, numberKeyboardParams)
-            it.touchHandler = createTouchHandler(it, context, KeyboardState.Symbol.Number)
-            if(params.previewPopups) it.popupManager = DefaultPopupManager(it, it)
+            it.touchHandler = createTouchHandler(it, numberKeyboardParams, KeyboardState.Symbol.Number)
+            it.popupManager = DefaultPopupManager()
         }
 
         updateInputView()
@@ -284,6 +198,7 @@ abstract class CommonIMEMode(
 
     override fun createCandidateView(context: Context): View {
         candidateView = ScrollingCandidateView(context, null).apply {
+            keyboardTheme = this@CommonIMEMode.keyboardTheme
             listener = this@CommonIMEMode
         }
         return candidateView as View
@@ -291,7 +206,7 @@ abstract class CommonIMEMode(
 
     override fun getInputView(): View? {
         updateInputView()
-        return keyboardView as? View
+        return keyboardView?.view
     }
 
     protected fun updateInputView() {
@@ -305,6 +220,7 @@ abstract class CommonIMEMode(
                 KeyboardState.Shift.Released -> ee.oyatl.ime.keyboard.R.drawable.keyic_shift
                 KeyboardState.Shift.Pressed -> ee.oyatl.ime.keyboard.R.drawable.keyic_shift_pressed
                 KeyboardState.Shift.Locked -> ee.oyatl.ime.keyboard.R.drawable.keyic_shift_locked
+                KeyboardState.Shift.AutoShifted -> ee.oyatl.ime.keyboard.R.drawable.keyic_shift_pressed
             }
             val icons = mapOf(
                 KeyEvent.KEYCODE_SHIFT_LEFT to KeyLabel.Default(icon = shiftIcon),
@@ -314,29 +230,82 @@ abstract class CommonIMEMode(
         }
     }
 
-    open fun createKeyboardListener(context: Context, params: KeyboardParams): KeyboardListener {
-        return CompoundKeyboardListener(
+    open fun createKeyboardParams(
+        context: Context,
+        symbolState: KeyboardState.Symbol
+    ): KeyboardParams {
+        val preference = PreferenceManager.getDefaultSharedPreferences(context)
+
+        val defaultScreenMode = context.resources.getString(R.string.screen_mode_default)
+        val screenMode = KeyboardState.ScreenMode.valueOf(preference.getString("screen_mode", null) ?: defaultScreenMode)
+        val rowHeightDIP = getOrientationInteger(context, "keyboard_height")
+        val height = (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, rowHeightDIP, context.resources.displayMetrics) * 4).roundToInt()
+        val split = getOrientationBoolean(context, "split_keyboard")
+        val splitRatio = if(split) getOrientationInteger(context, "split_ratio") else 0f
+        val splitWidthDIP = context.resources.configuration.screenWidthDp / 100f * splitRatio
+        val splitWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, splitWidthDIP, context.resources.displayMetrics).roundToInt()
+        val showPreviewPopup = preference.getBoolean("preview_popup", true)
+        val sound = preference.getBoolean("sound_feedback", true)
+        val haptic = preference.getBoolean("haptic_feedback", true)
+        val duration = preference.getFloat("vibration_duration", 10f).toLong()
+        val soundVolume = if(sound) 1f else 0f
+        val vibrationDuration = if(haptic) duration else 0L
+        val touchMode = TouchMode.entries.find { it.name == preference.getString("touch_mode", null) } ?: TouchMode.Seek
+        val touchCorrection = preference.getBoolean("touch_correction", true)
+        val defaultFlickSensitivity = context.resources.getInteger(R.integer.flick_sensitivity_default).toFloat()
+        val flickSensitivity = preference.getFloat("flick_sensitivity", defaultFlickSensitivity).toInt()
+        val params = KeyboardParams(
+            screenMode = screenMode,
+            height = height,
+            splitWidth = splitWidth,
+            soundFeedback = false,
+            hapticFeedback = false,
+            soundVolume = soundVolume,
+            vibrationDuration = vibrationDuration,
+            touchMode = touchMode,
+            touchCorrection = touchCorrection,
+            flickSensitivity = flickSensitivity,
+            longPressDelay = 300,
+            shiftLockDelay = 300,
+            shiftAutoRelease = true,
+            repeatDelay = 300,
+            repeatInterval = 30,
+            previewPopups = showPreviewPopup,
+        )
+
+        return when(symbolState) {
+            KeyboardState.Symbol.Text -> params
+            KeyboardState.Symbol.Symbol -> params.copy(shiftAutoRelease = false)
+            KeyboardState.Symbol.Number -> params.copy(shiftAutoRelease = false, splitWidth = 0)
+        }
+    }
+
+    open fun createKeyboardListener(
+        context: Context,
+        params: KeyboardParams
+    ): KeyboardListener {
+        return SerialKeyboardListener(
             KeyFeedbackManager(context, params),
             DeleteRepeater(this, params),
-            ShiftStateManager(this, params),
-            InputOnKeyUp(this)
+            ParallelKeyboardListener(
+                InputOnKeyUp(this, ignoreKeyCodes = ShiftStateManager.KEY_CODES),
+                ShiftStateManager(this, params, this)
+            )
         )
     }
 
     open fun createTouchHandler(
         keyboardView: KeyboardView,
-        context: Context,
+        params: KeyboardParams,
         symbolState: KeyboardState.Symbol
     ): TouchHandler {
-        val preference = PreferenceManager.getDefaultSharedPreferences(context)
-        val touchMode = preference.getString("touch_mode", "seek")
-        if(touchMode == "flick" && Feature.TouchMode.availableInCurrentVersion) {
-            val defaultValue = context.resources.getInteger(R.integer.flick_sensitivity_default).toFloat()
-            val flickSensitivity = preference.getFloat("flick_sensitivity", defaultValue).toInt()
-            return FlickTouchHandler(keyboardView, flickSensitivity, diagonal = false, multiFlick = false)
+        val flick = params.touchMode == TouchMode.Flick
+        val handler = if(flick) {
+            FlickTouchHandler(keyboardView, params, diagonal = false, multiFlick = false)
         } else {
-            return SeekTouchHandler(keyboardView)
+            SeekTouchHandler(keyboardView, params)
         }
+        return LongPressTouchHandler(keyboardView, handler, params)
     }
 
     protected fun setPreferredKeyboard(editorInfo: EditorInfo) {
@@ -372,13 +341,20 @@ abstract class CommonIMEMode(
         if(keyCode == KeyEvent.KEYCODE_SHIFT_LEFT || keyCode == KeyEvent.KEYCODE_SHIFT_RIGHT) {
             shiftState = KeyboardState.Shift.Pressed
         } else if(keyCode == KeyEvent.KEYCODE_CAPS_LOCK) {
-            shiftState = KeyboardState.Shift.Locked
+            shiftState =
+                if(shiftState != KeyboardState.Shift.Locked) KeyboardState.Shift.Locked
+                else KeyboardState.Shift.Released
         } else if(keyCode < 0) {
             onChar(-keyCode)
         } else if(keyCode > KeyEvent.getMaxKeyCode() || keyCharacterMap.isPrintingKey(keyCode)) {
-            val item = currentLayoutTable[keyCode]
+            val altGrPressed = metaState and KeyEvent.META_ALT_RIGHT_ON != 0
+            val table =
+                if(altGrPressed) currentLayoutPreset.altGraphTable ?: currentLayoutPreset.layoutTable
+                else currentLayoutPreset.layoutTable
+            val item = table[keyCode]
             if(item is LayoutTable.DefaultItem) onChar(item.forShiftState(shiftState))
-            else onChar(item?.normal ?: keyCharacterMap.get(keyCode, metaState))
+            else if(item != null) onChar(item.normal)
+            else if(!altGrPressed) onChar(keyCharacterMap.get(keyCode, metaState))
         } else {
             onSpecial(keyCode)
         }
@@ -394,9 +370,17 @@ abstract class CommonIMEMode(
         return true
     }
 
+    override fun translateKeyCode(keyCode: Int): Int {
+        return currentLayoutPreset.hardKeyCodeMapper[keyCode]
+    }
+
+    override fun isAltGraphCapable(): Boolean {
+        return currentLayoutPreset.altGraphTable != null
+    }
+
     override fun onFlick(keyCode: Int, direction: FlickDirection): Boolean {
-        val item = currentLayoutTable[keyCode]
-        val symbol = symbolLayoutTable[keyCode]
+        val item = currentLayoutPreset.layoutTable[keyCode]
+        val symbol = symbolLayoutPreset.layoutTable[keyCode]
         when(defaultFlickActions[direction]) {
             FlickAction.Default -> if(item is LayoutTable.DefaultItem) onChar(item.forShiftState(shiftState))
             FlickAction.Shifted -> if(item is LayoutTable.DefaultItem) onChar(item.forShiftState(KeyboardState.Shift.Pressed))
@@ -407,10 +391,31 @@ abstract class CommonIMEMode(
         return false
     }
 
+    override fun onKeyLongPress(keyCode: Int, metaState: Int): Boolean {
+        val keyboardView = keyboardView ?: return false
+        val key = keyboardView.findKeys(keyCode).firstOrNull() ?: return false
+        val item = currentLayoutPreset.layoutTable[keyCode] ?: return false
+        val baseChar = if(item is LayoutTable.DefaultItem) item.forShiftState(shiftState) else item.normal
+        val candidates = currentLayoutPreset.longPressTable.candidatesFor(baseChar)
+        if(candidates.isEmpty()) return false
+        keyboardView.popupManager.removePopup(key)
+        keyboardView.popupManager.showPopup(key) {
+            MoreKeysPopup(keyboardView, key, candidates) {
+                this.onChar(it)
+                listener.onLongPressStateChanged(false)
+            }
+        }
+        listener.onLongPressStateChanged(true)
+        return true
+    }
+
     protected fun submitCandidates(candidates: List<CandidateView.Candidate>) {
-        candidateView?.submitList(candidates)
-        val visible = candidates.isNotEmpty()
-        listener.onCandidateViewVisibilityChange(visible)
+        CoroutineScope(Dispatchers.Main).launch {
+            candidateView?.submitList(candidates)
+            listener.onExpandedCandidates(candidates)
+            val visible = candidates.isNotEmpty()
+            listener.onCandidateViewVisibilityChange(visible)
+        }
     }
 
     override fun updateSelection(

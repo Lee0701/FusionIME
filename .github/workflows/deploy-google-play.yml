@@ -1,6 +1,9 @@
 name: Deploy to Google Play
 
 on:
+  push:
+    branches:
+      - production
   workflow_dispatch:
 
 concurrency:
@@ -23,7 +26,7 @@ jobs:
 
     steps:
       - name: Cache Gradle packages
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ~/.gradle/caches
@@ -31,23 +34,23 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('gradle.properties', '**/*.gradle*', '**/gradle-wrapper.properties') }}
 
       - name: Cache Android SDK
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.android
           key: ${{ runner.os }}-android
 
       - name: Checkout
         id: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           submodules: true
 
       - name: set up JDK 17
         id: setup_jdk
-        uses: actions/setup-java@v3.6.0
+        uses: actions/setup-java@v6
         with:
-          distribution: 'adopt'
+          distribution: 'temurin'
           java-version: '17'
 
       - name: Grant execute permission for gradlew
@@ -56,11 +59,11 @@ jobs:
 
       - name: Setup Android SDK
         id: setup_android
-        uses: android-actions/setup-android@v2
+        uses: android-actions/setup-android@v4
 
       - name: Set timezone
         id: set_timezone
-        uses: szenius/set-timezone@v1.2
+        uses: szenius/set-timezone@v2.0
         with:
           timezoneMacos: "Asia/Seoul"
 
@@ -116,11 +119,11 @@ jobs:
 
     strategy:
       matrix:
-        edition: [free, paid]
+        edition: [free]
 
     steps:
       - name: Cache Gradle packages
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ~/.gradle/caches
@@ -128,14 +131,14 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('gradle.properties', '**/*.gradle*', '**/gradle-wrapper.properties') }}
 
       - name: Cache Android SDK
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.android
           key: ${{ runner.os }}-android
 
       - name: Checkout
         id: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v7
         with:
           ref: ${{ github.ref_name }}
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -143,9 +146,9 @@ jobs:
 
       - name: set up JDK 17
         id: setup_jdk
-        uses: actions/setup-java@v3.6.0
+        uses: actions/setup-java@v6
         with:
-          distribution: 'adopt'
+          distribution: 'temurin'
           java-version: '17'
 
       - name: Grant execute permission for gradlew
@@ -154,11 +157,11 @@ jobs:
 
       - name: Setup Android SDK
         id: setup_android
-        uses: android-actions/setup-android@v2
+        uses: android-actions/setup-android@v4
 
       - name: Generate capitalized edition name
         id: edition_name
-        uses: ASzc/change-string-case-action@v6
+        uses: ASzc/change-string-case-action@v8
         with:
           string: ${{ matrix.edition }}
 
@@ -182,7 +185,7 @@ jobs:
 
       - name: Upload AAB
         id: upload_app_bundle
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: app-${{ steps.edition_name.outputs.lowercase }}-release
           path: app/build/outputs/bundle/${{ steps.edition_name.outputs.lowercase }}Release/app-${{ steps.edition_name.outputs.lowercase }}-release.aab

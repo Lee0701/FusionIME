@@ -2,16 +2,18 @@ package ee.oyatl.ime.fusion.settings
 
 import android.os.Bundle
 import androidx.fragment.app.setFragmentResult
+import androidx.preference.ListPreference
 import androidx.preference.PreferenceFragmentCompat
-import ee.oyatl.ime.fusion.Feature
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.mode.CangjieIMEMode
 import ee.oyatl.ime.fusion.mode.IMEMode
+import ee.oyatl.ime.fusion.mode.JyutpingIMEMode
 import ee.oyatl.ime.fusion.mode.KoreanIMEMode
 import ee.oyatl.ime.fusion.mode.LatinIMEMode
 import ee.oyatl.ime.fusion.mode.MozcIMEMode
 import ee.oyatl.ime.fusion.mode.PinyinIMEMode
 import ee.oyatl.ime.fusion.mode.VietIMEMode
+import ee.oyatl.ime.fusion.mode.ZhuyinIMEMode
 
 abstract class InputModeDetailsFragment: PreferenceFragmentCompat() {
 
@@ -50,10 +52,22 @@ abstract class InputModeDetailsFragment: PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             super.onCreatePreferences(savedInstanceState, rootKey)
             addPreferencesFromResource(R.xml.pref_input_mode_latin)
-            if(Feature.NumberRow.availableInCurrentVersion)
-                addPreferencesFromResource(R.xml.pref_input_mode_number_row)
-            if(Feature.UnicodeInput.availableInCurrentVersion)
-                addPreferencesFromResource(R.xml.pref_input_mode_latin_unicode_conversion)
+            val locale = findPreference<ListPreference>("locale")
+            val layout = findPreference<ListPreference>("layout")
+            if(map["locale"] == "fr" && map["layout"] == null) {
+                layout?.value = LatinIMEMode.Layout.Azerty.name
+            }
+            if(map["locale"] == "de" && map["layout"] == null) {
+                layout?.value = LatinIMEMode.Layout.Deutsch.name
+            }
+            locale?.setOnPreferenceChangeListener { _, value ->
+                if(value == "fr") layout?.value = LatinIMEMode.Layout.Azerty.name
+                if(value == "de") layout?.value = LatinIMEMode.Layout.Deutsch.name
+                true
+            }
+            addPreferencesFromResource(R.xml.pref_input_mode_number_row)
+            addPreferencesFromResource(R.xml.pref_input_mode_cursor_keys)
+            addPreferencesFromResource(R.xml.pref_input_mode_latin_unicode_conversion)
         }
     }
 
@@ -61,10 +75,9 @@ abstract class InputModeDetailsFragment: PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             super.onCreatePreferences(savedInstanceState, rootKey)
             addPreferencesFromResource(R.xml.pref_input_mode_korean_layout)
-            if(Feature.NumberRow.availableInCurrentVersion)
-                addPreferencesFromResource(R.xml.pref_input_mode_number_row)
-            if(Feature.BigramHanjaConverter.availableInCurrentVersion)
-                addPreferencesFromResource(R.xml.pref_input_mode_korean_converter)
+            addPreferencesFromResource(R.xml.pref_input_mode_number_row)
+            addPreferencesFromResource(R.xml.pref_input_mode_cursor_keys)
+            addPreferencesFromResource(R.xml.pref_input_mode_korean_converter)
         }
     }
 
@@ -72,10 +85,8 @@ abstract class InputModeDetailsFragment: PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             super.onCreatePreferences(savedInstanceState, rootKey)
             addPreferencesFromResource(R.xml.pref_input_mode_mozc_layout)
-            if(Feature.NumberRow.availableInCurrentVersion)
-                addPreferencesFromResource(R.xml.pref_input_mode_number_row)
-            if(Feature.MozcCandidateHeight.availableInCurrentVersion)
-                addPreferencesFromResource(R.xml.pref_input_mode_mozc_candidate)
+            addPreferencesFromResource(R.xml.pref_input_mode_number_row)
+            addPreferencesFromResource(R.xml.pref_input_mode_mozc_candidate)
         }
     }
 
@@ -83,8 +94,16 @@ abstract class InputModeDetailsFragment: PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             super.onCreatePreferences(savedInstanceState, rootKey)
             addPreferencesFromResource(R.xml.pref_input_mode_pinyin)
-            if(Feature.NumberRow.availableInCurrentVersion)
-                addPreferencesFromResource(R.xml.pref_input_mode_number_row)
+            addPreferencesFromResource(R.xml.pref_input_mode_number_row)
+            addPreferencesFromResource(R.xml.pref_input_mode_cursor_keys)
+        }
+    }
+
+    class Zhuyin: InputModeDetailsFragment() {
+        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+            super.onCreatePreferences(savedInstanceState, rootKey)
+            addPreferencesFromResource(R.xml.pref_input_mode_zhuyin_engine)
+            addPreferencesFromResource(R.xml.pref_input_mode_cursor_keys)
         }
     }
 
@@ -92,8 +111,8 @@ abstract class InputModeDetailsFragment: PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             super.onCreatePreferences(savedInstanceState, rootKey)
             addPreferencesFromResource(R.xml.pref_input_mode_viet)
-            if(Feature.NumberRow.availableInCurrentVersion)
-                addPreferencesFromResource(R.xml.pref_input_mode_number_row)
+            addPreferencesFromResource(R.xml.pref_input_mode_number_row)
+            addPreferencesFromResource(R.xml.pref_input_mode_cursor_keys)
         }
     }
 
@@ -101,10 +120,17 @@ abstract class InputModeDetailsFragment: PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             super.onCreatePreferences(savedInstanceState, rootKey)
             addPreferencesFromResource(R.xml.pref_input_mode_cangjie_layout)
-            if(Feature.NumberRow.availableInCurrentVersion)
-                addPreferencesFromResource(R.xml.pref_input_mode_number_row)
+            addPreferencesFromResource(R.xml.pref_input_mode_number_row)
+            addPreferencesFromResource(R.xml.pref_input_mode_cursor_keys)
             addPreferencesFromResource(R.xml.pref_input_mode_cangjie_extra)
+        }
+    }
 
+    class Jyutping: InputModeDetailsFragment() {
+        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+            super.onCreatePreferences(savedInstanceState, rootKey)
+            addPreferencesFromResource(R.xml.pref_input_mode_number_row)
+            addPreferencesFromResource(R.xml.pref_input_mode_cursor_keys)
         }
     }
 
@@ -119,8 +145,10 @@ abstract class InputModeDetailsFragment: PreferenceFragmentCompat() {
                 KoreanIMEMode.TYPE -> Korean()
                 MozcIMEMode.TYPE -> Mozc()
                 PinyinIMEMode.TYPE -> Pinyin()
+                ZhuyinIMEMode.TYPE -> Zhuyin()
                 VietIMEMode.TYPE -> Viet()
                 CangjieIMEMode.TYPE -> Cangjie()
+                JyutpingIMEMode.TYPE -> Jyutping()
                 else -> null
             }
             fragment?.map += map

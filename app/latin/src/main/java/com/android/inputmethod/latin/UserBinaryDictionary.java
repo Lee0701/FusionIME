@@ -26,6 +26,8 @@ import android.provider.UserDictionary.Words;
 import android.text.TextUtils;
 import android.util.Log;
 
+import androidx.annotation.Keep;
+
 import com.android.inputmethod.annotations.ExternallyReferenced;
 import com.android.inputmethod.latin.utils.SubtypeLocaleUtils;
 
@@ -92,6 +94,7 @@ public class UserBinaryDictionary extends ExpandableBinaryDictionary {
 
     // Note: This method is called by {@link DictionaryFacilitator} using Java reflection.
     @ExternallyReferenced
+    @Keep
     public static UserBinaryDictionary getDictionary(
             final Context context, final Locale locale, final File dictFile,
             final String dictNamePrefix, @Nullable final String account) {

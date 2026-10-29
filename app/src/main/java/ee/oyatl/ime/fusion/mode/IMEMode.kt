@@ -4,8 +4,11 @@ import android.content.Context
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
+import ee.oyatl.ime.candidate.CandidateView
+import ee.oyatl.ime.theme.KeyboardTheme
 
 interface IMEMode {
+    var keyboardTheme: KeyboardTheme?
 
     suspend fun onLoad(context: Context)
     fun onStart(inputConnection: InputConnection, editorInfo: EditorInfo)
@@ -16,6 +19,8 @@ interface IMEMode {
 
     fun onKeyDown(keyCode: Int, metaState: Int): Boolean
     fun onKeyUp(keyCode: Int, metaState: Int): Boolean
+    fun translateKeyCode(keyCode: Int): Int
+    fun isAltGraphCapable(): Boolean
 
     fun updateSelection(
         oldSelStart: Int, oldSelEnd: Int,
@@ -27,13 +32,15 @@ interface IMEMode {
         fun onLanguageSwitch()
         fun onRequestHideSelf(flags: Int)
         fun onCandidateViewVisibilityChange(visible: Boolean)
+        fun onExpandedCandidates(candidates: List<CandidateView.Candidate>)
+        fun onLongPressStateChanged(active: Boolean)
     }
 
     interface Params {
         val type: String
         fun create(listener: Listener): IMEMode
         fun getLabel(context: Context): String
-        fun getShortLabel(context: Context, params: List<Params>): String
+        fun getShortLabels(context: Context): List<String>
 
         companion object {
             fun parse(stringifedMap: String): Params? {
@@ -52,6 +59,8 @@ interface IMEMode {
                     ZhuyinIMEMode.TYPE -> ZhuyinIMEMode.Params.parse(map)
                     CangjieIMEMode.TYPE -> CangjieIMEMode.Params.parse(map)
                     VietIMEMode.TYPE -> VietIMEMode.Params.parse(map)
+                    JyutpingIMEMode.TYPE -> JyutpingIMEMode.Params.parse(map)
+                    EmojiIMEMode.TYPE -> EmojiIMEMode.Params.parse(map)
                     else -> null
                 }
             }

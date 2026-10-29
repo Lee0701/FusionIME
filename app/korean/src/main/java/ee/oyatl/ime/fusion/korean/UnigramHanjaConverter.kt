@@ -3,10 +3,15 @@ package ee.oyatl.ime.fusion.korean
 import android.content.Context
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.fusion.dictionary.manager.DictionaryCache
+import ee.oyatl.ime.newdict.CachedDiskTrieDictionary
 import ee.oyatl.ime.newdict.DiskHanjaDictionary
 import ee.oyatl.ime.newdict.DiskTrieDictionary
+import kotlinx.coroutines.yield
 
-class UnigramHanjaConverter: HanjaConverter {
+class UnigramHanjaConverter(
+    val useCache: Boolean = true
+): HanjaConverter {
+    private var isLoaded: Boolean = false
     private lateinit var indexDict: DiskTrieDictionary
     private lateinit var vocabDict: DiskHanjaDictionary
 
@@ -14,20 +19,32 @@ class UnigramHanjaConverter: HanjaConverter {
         val indexDictId = R.raw.hanja_index
         val vocabDictId = R.raw.hanja_content
         indexDict = DictionaryCache.get(indexDictId) {
-            DiskTrieDictionary(context.resources.openRawResource(indexDictId))
+            if(useCache) CachedDiskTrieDictionary(context.resources.openRawResource(indexDictId))
+            else DiskTrieDictionary(context.resources.openRawResource(indexDictId))
         }
         vocabDict = DictionaryCache.get(vocabDictId) {
             DiskHanjaDictionary(context.resources.openRawResource(vocabDictId))
         }
+        isLoaded = true
     }
 
-    override fun convert(text: String): List<CandidateView.Candidate> {
-        val hanjaResult = (1 .. text.length).map { l ->
+    override fun reset() {
+        if(!isLoaded) return
+        if(useCache) {
+            val indexDict = this.indexDict
+            if(indexDict is CachedDiskTrieDictionary) indexDict.clearCache()
+        }
+    }
+
+    override suspend fun convert(text: String): List<CandidateView.Candidate> {
+        val hanjaResult = (1..text.length).flatMap { l ->
+            yield()
             indexDict.get(text.take(l))
                 .map { vocabDict.get(it) }
                 .filter { it.hanja.length == l }
                 .map { Candidate(it.hanja, it.frequency.toFloat(), it.extra) }
-        }.flatten()
+        }
+        yield()
         return hanjaResult
             .sortedByDescending { it.score }
             .distinctBy { it.text }

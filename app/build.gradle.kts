@@ -7,21 +7,22 @@ plugins {
 
 configure<ApplicationExtension> {
     namespace = "ee.oyatl.ime.fusion"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "ee.oyatl.ime.fusion"
-        minSdk = 21
-        targetSdk = 36
-        versionCode = 17
-        versionName = "20260725-17-e602c6e"
+        minSdk = 24
+        targetSdk = 37
+        versionCode = 21
+        versionName = "20261027-21-3e2e959"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -31,13 +32,8 @@ configure<ApplicationExtension> {
 
     flavorDimensions += "edition"
     productFlavors {
-        create("paid") {
-            isDefault = true
-            dimension = "edition"
-            applicationIdSuffix = ""
-            buildConfigField("boolean", "IS_PAID", "true")
-        }
         create("free") {
+            isDefault = true
             dimension = "edition"
             applicationIdSuffix = ".free"
             buildConfigField("boolean", "IS_PAID", "false")
@@ -72,6 +68,8 @@ dependencies {
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.emoji2.emojipicker)
+    implementation(libs.androidx.navigation.fragment)
     implementation(libs.material)
     implementation(libs.guava)
     implementation(libs.protobuf.java)
@@ -80,13 +78,13 @@ dependencies {
     implementation(project(":app:keyboard"))
     implementation(project(":app:mozc"))
     implementation(project(":app:pinyin"))
-    implementation(project(":app:zhuyin"))
     implementation(project(":app:chewing"))
     implementation(project(":app:cangjie"))
     implementation(project(":app:korean"))
     implementation(project(":app:korean:hangul"))
     implementation(project(":app:latin"))
     implementation(project(":app:viet"))
+    implementation(project(":app:jyutping"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -102,10 +100,6 @@ tasks.register("printVersionName") {
 
 tasks.register("printPackageName") {
     println(android.defaultConfig.applicationId)
-}
-
-tasks.register("printPaidPackageNameSuffix") {
-    println(android.productFlavors["paid"].applicationIdSuffix)
 }
 
 tasks.register("printFreePackageNameSuffix") {

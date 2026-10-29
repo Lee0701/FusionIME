@@ -152,12 +152,20 @@ class DecodingInfo(
         get() = mCandidatesList.size == 0
 
     val isSplStrFull: Boolean
-        get() {
-            if (origianlSplStr.length >= PY_STRING_MAX - 1) return true
-            return false
-        }
+        get() = !hasCapacityForEdit(removeBeforeCursor = 0, appendLength = 1)
 
-    fun addSplChar(ch: Char, reset: Boolean) {
+    fun hasCapacityForEdit(removeBeforeCursor: Int, appendLength: Int): Boolean {
+        return PinyinInputLimits.canApplyEdit(
+            currentLength = origianlSplStr.length,
+            removeBeforeCursor = removeBeforeCursor,
+            appendLength = appendLength
+        )
+    }
+
+    fun addSplChar(ch: Char, reset: Boolean): Boolean {
+        val currentLength = if (reset) 0 else origianlSplStr.length
+        if (!PinyinInputLimits.canApplyEdit(currentLength, 0, 1)) return false
+
         if (reset) {
             origianlSplStr.delete(0, origianlSplStr.length)
             splStrDecodedLen = 0
@@ -166,6 +174,7 @@ class DecodingInfo(
         }
         origianlSplStr.insert(cursorPos, ch)
         cursorPos++
+        return true
     }
 
     // Prepare to delete before cursor. We may delete a spelling char if
@@ -252,7 +261,7 @@ class DecodingInfo(
                 if (length() == 0) {
                     totalChoicesNum = 0
                 } else {
-                    val mPyBuf = mPyBuf ?: ByteArray(PY_STRING_MAX)
+                    val mPyBuf = mPyBuf ?: ByteArray(PinyinInputLimits.BUFFER_SIZE)
                     this.mPyBuf = mPyBuf
                     for (i in 0..<length()) mPyBuf[i] = charAt(i).code.toByte()
                     mPyBuf[length()] = 0
@@ -587,11 +596,6 @@ class DecodingInfo(
     }
 
     companion object {
-        /**
-         * Maximum length of the Pinyin string
-         */
-        private const val PY_STRING_MAX = 28
-
         /**
          * Maximum number of candidates to display in one page.
          */

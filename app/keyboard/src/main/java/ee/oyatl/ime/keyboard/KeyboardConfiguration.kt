@@ -25,7 +25,12 @@ data class KeyboardConfiguration(
             val width: Float = 1f,
             val special: Boolean = false,
             val label: String? = null,
-            val iconRes: Int? = null
-        ): Item
+            val iconRes: Int? = null,
+            val merge: Merge? = null
+        ): Item {
+            enum class Merge {
+                Up, Down
+            }
+        }
     }
 }

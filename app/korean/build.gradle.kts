@@ -7,10 +7,10 @@ plugins {
 
 configure<LibraryExtension> {
     namespace = "ee.oyatl.ime.fusion.korean"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
-        minSdk = 21
+        minSdk = 24
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -18,13 +18,18 @@ configure<LibraryExtension> {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
         }
     }
+
+    flavorDimensions += "edition"
+    productFlavors {
+        register("free")
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -43,6 +48,7 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(project(":app:korean:hangul"))
+    implementation(project(":app:latin"))
     implementation(project(":app:dictionary"))
     implementation(project(":app:dictionary-manager"))
     implementation(project(":app:keyboard"))

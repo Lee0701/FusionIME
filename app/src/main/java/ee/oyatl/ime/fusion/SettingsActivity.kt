@@ -1,23 +1,40 @@
 package ee.oyatl.ime.fusion
 
+import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.fragment.app.FragmentManager
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.color.DynamicColors
 import ee.oyatl.ime.fusion.databinding.SettingsActivityBinding
+import ee.oyatl.ime.fusion.util.InputMethodUtil
 
 private const val TITLE_TAG = "settingsActivityTitle"
 
-class SettingsActivity : AppCompatActivity(),
-    PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
+class SettingsActivity : AppCompatActivity(), PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
+
+    lateinit var binding: SettingsActivityBinding
+    private var snackbar: Snackbar? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = SettingsActivityBinding.inflate(layoutInflater)
+
+        DynamicColors.applyToActivityIfAvailable(this)
+        WindowCompat.enableEdgeToEdge(window)
+        val darkMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+        WindowCompat.getInsetsController(window, window.decorView).apply {
+            isAppearanceLightNavigationBars = !darkMode
+            isAppearanceLightStatusBars = !darkMode
+        }
+
+        binding = SettingsActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
@@ -50,6 +67,26 @@ class SettingsActivity : AppCompatActivity(),
         }
         supportFragmentManager.addOnBackStackChangedListener(onBackStackChangedListener)
         onBackStackChangedListener.onBackStackChanged()
+
+        if(!InputMethodUtil.checkMethodSelected(this)) {
+            startActivity(Intent(this, SetupWizardActivity::class.java))
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if(!InputMethodUtil.checkMethodSelected(this)) {
+            if(snackbar == null) {
+                snackbar = Snackbar
+                    .make(binding.root, R.string.setup_wizard_incomplete, Snackbar.LENGTH_INDEFINITE)
+                    .setAction(R.string.setup_wizard_start) {
+                        startActivity(Intent(this, SetupWizardActivity::class.java))
+                    }
+                snackbar?.show()
+            }
+        } else {
+            snackbar?.dismiss()
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -107,17 +144,21 @@ class SettingsActivity : AppCompatActivity(),
     class AppearanceFragment : PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             addPreferencesFromResource(R.xml.pref_appearance_basic)
-            if(Feature.SplitKeyboard.availableInCurrentVersion)
-                addPreferencesFromResource(R.xml.pref_appearance_split_keyboard)
+            addPreferencesFromResource(R.xml.pref_appearance_split_keyboard)
         }
     }
 
     class BehaviourFragment : PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             addPreferencesFromResource(R.xml.pref_behaviour_feedback)
-            if(Feature.TouchMode.availableInCurrentVersion)
-                addPreferencesFromResource(R.xml.pref_behaviour_touch)
+            addPreferencesFromResource(R.xml.pref_behaviour_touch)
             addPreferencesFromResource(R.xml.pref_behaviour_hardware)
+        }
+    }
+
+    class InfoFragment : PreferenceFragmentCompat() {
+        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+            addPreferencesFromResource(R.xml.pref_info)
         }
     }
 }

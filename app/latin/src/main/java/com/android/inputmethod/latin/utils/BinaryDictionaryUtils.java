@@ -16,6 +16,8 @@
 
 package com.android.inputmethod.latin.utils;
 
+import androidx.annotation.Keep;
+
 import com.android.inputmethod.annotations.UsedForTesting;
 import com.android.inputmethod.latin.BinaryDictionary;
 import com.android.inputmethod.latin.common.StringUtils;
@@ -29,6 +31,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Keep
 public final class BinaryDictionaryUtils {
     private static final String TAG = BinaryDictionaryUtils.class.getSimpleName();
 

@@ -8,7 +8,9 @@ import java.io.FileOutputStream
 import java.io.IOException
 import kotlin.math.min
 
-class ChewingConverter {
+class ChewingConverter(
+    val conversionEngine: ConversionEngines
+) {
     val chewing = Chewing()
 
     val dataFileList = listOf(
@@ -38,7 +40,7 @@ class ChewingConverter {
         chewing.connect(context.cacheDir.absolutePath)
         chewing.setChiEngMode(1)
         chewing.setPhraseChoiceRearward(1)
-        chewing.configSetInt("chewing.conversion_engine", ConversionEngines.FUZZY_CHEWING_CONVERSION_ENGINE.mode)
+        chewing.configSetInt("chewing.conversion_engine", conversionEngine.mode)
         chewing.configSetInt("chewing.sort_candidates_by_frequency", 1)
     }
 

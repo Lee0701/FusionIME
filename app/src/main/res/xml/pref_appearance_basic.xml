@@ -6,11 +6,27 @@
         android:title="@string/settings_appearance_basic_title">
 
         <ListPreference
+            android:key="keyboard_theme"
+            android:entries="@array/settings_appearance_keyboard_theme_entries"
+            android:entryValues="@array/settings_appearance_keyboard_theme_values"
+            android:defaultValue="Static"
+            android:title="@string/settings_appearance_keyboard_theme_title"
+            app:useSimpleSummaryProvider="true" />
+
+        <ListPreference
             android:key="screen_mode"
             android:entries="@array/settings_appearance_screen_mode_entries"
             android:entryValues="@array/settings_appearance_screen_mode_values"
             android:defaultValue="@string/screen_mode_default"
             android:title="@string/settings_appearance_screen_mode_title"
+            app:useSimpleSummaryProvider="true" />
+
+        <ListPreference
+            android:key="symbol_layout"
+            android:entries="@array/settings_appearance_symbol_layout_entries"
+            android:entryValues="@array/settings_appearance_symbol_layout_values"
+            android:defaultValue="G"
+            android:title="@string/settings_appearance_symbol_layout_title"
             app:useSimpleSummaryProvider="true" />
 
         <ee.oyatl.ime.fusion.preference.SliderPreference
@@ -35,6 +51,11 @@
             android:key="show_voice_input_button"
             app:defaultValue="false"
             app:title="@string/settings_appearance_show_voice_input_button_title" />
+
+        <SwitchPreferenceCompat
+            android:key="clipboard_candidate_enabled"
+            app:defaultValue="true"
+            app:title="@string/settings_clipboard_candidate_enabled_title" />
 
     </androidx.preference.PreferenceCategory>
 

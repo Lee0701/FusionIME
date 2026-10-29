@@ -1,7 +1,5 @@
 
-<a href="https://play.google.com/store/apps/details?id=ee.oyatl.ime.fusion"><img src="https://raw.githubusercontent.com/pioug/google-play-badges/refs/heads/main/svg/ko.svg" width="150"></a>
-
-[데모판 다운로드](https://play.google.com/store/apps/details?id=ee.oyatl.ime.fusion.free)
+<a href="https://play.google.com/store/apps/details?id=ee.oyatl.ime.fusion.free"><img src="https://raw.githubusercontent.com/pioug/google-play-badges/refs/heads/main/svg/ko.svg" width="150"></a>
 
 # FusionIME
 FusionIME는 한중일월(한자문화권) 언어를 위한 여러가지 입력 방식을 단일 앱으로 제공합니다.
@@ -15,30 +13,33 @@ FusionIME는 한중일월(한자문화권) 언어를 위한 여러가지 입력 
 ## 지원하는 언어와 배열
 ### 라틴 계열 언어
 * 언어: 영어, 독일어, 스페인어, 프랑스어, 이탈리아어, 브라질 포르투갈어
-* 배열: QWERTY, 드보락, 콜맥
+* 배열: QWERTY, QWERTZ, AZERTY, 드보락, 콜맥
 
 ### 중국어
 * 간체·번체 중국어 한어병음
+  * 자연마, 마이크로소프트, 지능 ABC, 병음가가, 소학, 수구, 자광 쌍병음
 * 번체 중국어 주음부호
 * 창힐수입법, 속성수입법, 대이수입법
+* 광동어 월병
 
 ### 일본어
-* 로마자 QWERTY, 가나 JIS, 가나 오십음도
+* 로마자 QWERTY, GODAN
+* 가나 JIS, 12키(토글·플릭), 오십음도, 이로하순
 
 ### 한국어
 * 한국어 두벌식 표준
 * 한국어 세벌식 390, 세벌식 최종
 * 옛한글 두벌식, 세벌식 393
 
-단어·어절단위 한자 변환과 정음 한자 변환을 지원합니다.
+단어·어절단위 한자 변환과 정음 한자 변환, 한글전용 단어 예측을 지원합니다.
 
 ### 월남어
 * QWERTY, 텔렉스
 
-한놈 변환을 지원합니다.
+쯔꾸옥응으 및 한놈 변환을 지원합니다.
 
 ## 사전 데이터
-* 한국어: [표준국어대사전](https://stdict.korean.go.kr), [libhangul](https://github.com/libhangul/libhangul/tree/main)
+* 한국어: [표준국어대사전](https://stdict.korean.go.kr), [libhangul](https://github.com/libhangul/libhangul)
 * 월남어: [chunom.org](https://chunom.org/)
 
 ## 라이선스
@@ -46,6 +47,9 @@ GNU General Public License v3.0
 
 * [Cangjie](https://github.com/hilarycheng/another_android_cangjie): GNU General Public License v2.0
 * [Chewing](https://github.com/hiroshiyui/libchewingAndroidAppModule): GNU General Public License v3.0
-* [LatinIME](android.googlesource.com/platform/packages/inputmethods/LatinIME/): Apache License 2.0
+* [LatinIME](https://android.googlesource.com/platform/packages/inputmethods/LatinIME/): Apache License 2.0
 * [Mozc](https://github.com/google/mozc): BSD 3-Clause
-* [PinyinIME](android.googlesource.com/platform/packages/inputmethods/PinyinIME/): Apache License 2.0
+* [PinyinIME](https://android.googlesource.com/platform/packages/inputmethods/PinyinIME/): Apache License 2.0
+* [Jyutping](https://github.com/yuetyam/jyutping-android): CC0 1.0 Universal
+* [Vietnamese AnySoftKeyboard](https://github.com/sh000gun/vietnamese-anysoftkeyboard): Apache License 2.0
+* [TrueTap Keyboard](https://github.com/RedZero13/TrueTap-Keyboard)

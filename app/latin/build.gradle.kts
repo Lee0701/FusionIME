@@ -7,10 +7,10 @@ plugins {
 
 configure<LibraryExtension> {
     namespace = "com.android.inputmethod.latin"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
-        minSdk = 21
+        minSdk = 24
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -23,7 +23,6 @@ configure<LibraryExtension> {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -33,11 +32,6 @@ configure<LibraryExtension> {
 
     flavorDimensions += "edition"
     productFlavors {
-        register("paid") {
-            // Need to match with @string/authority
-            buildConfigField("String", "DICTIONARY_DOMAIN", "\"ee.oyatl.ime.fusion.latin.dictionarypack.aosp\"")
-            buildConfigField("String", "RESOURCE_PACKAGE_NAME", "\"ee.oyatl.ime.fusion\"")
-        }
         register("free") {
             // Need to match with @string/authority
             buildConfigField("String", "DICTIONARY_DOMAIN", "\"ee.oyatl.ime.fusion.free.latin.dictionarypack.aosp\"")
