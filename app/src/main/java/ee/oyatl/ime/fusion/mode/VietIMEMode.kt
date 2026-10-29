@@ -225,7 +225,7 @@ class VietIMEMode(
             true
         ),
         VNINom(
-            R.string.viet_layout_telex_nom,
+            R.string.viet_layout_vni_nom,
             "越",
             KeyboardMode.VNI,
             true,
@@ -233,7 +233,7 @@ class VietIMEMode(
             false
         ),
         VNIQuocNgu(
-            R.string.viet_layout_telex_quoc_ngu,
+            R.string.viet_layout_vni_quoc_ngu,
             "Việt",
             KeyboardMode.VNI,
             false,
