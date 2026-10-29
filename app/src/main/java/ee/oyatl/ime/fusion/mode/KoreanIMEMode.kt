@@ -4,33 +4,27 @@ import android.content.Context
 import android.view.KeyEvent
 import androidx.annotation.StringRes
 import ee.oyatl.ime.candidate.CandidateView
-import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPreset
+import ee.oyatl.ime.fusion.AssetsPresetLoader
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.hangul.HangulCombiner
 import ee.oyatl.ime.fusion.hangul.JamoCombinationTable
-import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPresetLoader
+import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.korean.BigramHanjaConverter
 import ee.oyatl.ime.fusion.korean.HangulPredictor
 import ee.oyatl.ime.fusion.korean.HanjaConverter
 import ee.oyatl.ime.fusion.korean.JeongUnHanjaConverter
 import ee.oyatl.ime.fusion.korean.UnigramHanjaConverter
 import ee.oyatl.ime.fusion.korean.WordComposer
-import ee.oyatl.ime.fusion.keyboard.core.SoftKeyCodeMapper
-import ee.oyatl.ime.fusion.layout.Hangul3Set
-import ee.oyatl.ime.fusion.layout.HangulOld
-import ee.oyatl.ime.fusion.keyboard.core.LayoutTable
-import ee.oyatl.ime.fusion.layout.preset.KoreanLayoutPresets
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.launch
-import java.io.InputStream
 import java.util.Locale
 import java.util.concurrent.Executors
-import kotlin.text.toBoolean
 
-abstract class KoreanIMEMode(
+class KoreanIMEMode(
     converterType: ConverterType,
+    val presetName: String,
     override val extra: Map<String, String>,
     listener: IMEMode.Listener
 ): CommonIMEMode(listener) {
@@ -46,14 +40,8 @@ abstract class KoreanIMEMode(
 
     override suspend fun onLoad(context: Context) {
         super.onLoad(context)
-        if(this is Hangul2SetKS) {
-            val loader = object: KeyboardLayoutPresetLoader() {
-                override fun openInput(name: String): InputStream {
-                    return context.assets.open("keyboard/${name}.yaml")
-                }
-            }
-            textLayoutPreset = loader.inflate(loader.load("hangul_2set_ks"))
-        }
+        val loader = AssetsPresetLoader(context.assets, "keyboard")
+        textLayoutPreset = loader.inflate(loader.load(presetName))
         val jamoCombinationTable = (textLayoutPreset.extra as? KeyboardLayoutPreset.Extra.Hangul)
             ?.jamoCombinationTable ?: JamoCombinationTable()
         val correctOrders = (extra["correct_orders"] ?: "false").toBoolean()
@@ -147,52 +135,6 @@ abstract class KoreanIMEMode(
         }
     }
 
-    class Hangul2SetKS(
-        converterType: ConverterType,
-        extra: Map<String, String>,
-        listener: IMEMode.Listener
-    ): KoreanIMEMode(converterType, extra, listener)
-
-    class Hangul3Set390(
-        converterType: ConverterType,
-        extra: Map<String, String>,
-        listener: IMEMode.Listener
-    ): KoreanIMEMode(converterType, extra, listener) {
-        override var textLayoutPreset: KeyboardLayoutPreset = KoreanLayoutPresets.hangul3Set390()
-    }
-
-    class Hangul3Set391(
-        converterType: ConverterType,
-        extra: Map<String, String>,
-        listener: IMEMode.Listener
-    ): KoreanIMEMode(converterType, extra, listener) {
-        override var textLayoutPreset: KeyboardLayoutPreset = KoreanLayoutPresets.hangul3Set391()
-    }
-
-    class Hangul3Set391Strict(
-        converterType: ConverterType,
-        extra: Map<String, String>,
-        listener: IMEMode.Listener
-    ): KoreanIMEMode(converterType, extra, listener) {
-        override var textLayoutPreset: KeyboardLayoutPreset = KoreanLayoutPresets.hangul3Set391Strict()
-    }
-
-    class HangulOld2Set(
-        converterType: ConverterType,
-        extra: Map<String, String>,
-        listener: IMEMode.Listener
-    ): KoreanIMEMode(converterType, extra, listener) {
-        override var textLayoutPreset: KeyboardLayoutPreset = KoreanLayoutPresets.hangulOld2Set()
-    }
-
-    class HangulOld3Set393(
-        converterType: ConverterType,
-        extra: Map<String, String>,
-        listener: IMEMode.Listener
-    ): KoreanIMEMode(converterType, extra + mapOf("number_row" to "true"), listener) {
-        override var textLayoutPreset: KeyboardLayoutPreset = KoreanLayoutPresets.hangul3Set393()
-    }
-
     data class Params(
         val layout: Layout,
         val converterType: ConverterType,
@@ -201,13 +143,15 @@ abstract class KoreanIMEMode(
         override val type: String = TYPE
 
         override fun create(listener: IMEMode.Listener): IMEMode {
+            val extra = extra.toMutableMap()
+            if(layout.requiresNumberRow) extra += "number_row" to "true"
             return when(layout) {
-                Layout.Set2KS -> Hangul2SetKS(converterType, extra, listener)
-                Layout.Set3390 -> Hangul3Set390(converterType, extra, listener)
-                Layout.Set3391 -> Hangul3Set391(converterType, extra, listener)
-                Layout.Set3391Strict -> Hangul3Set391Strict(converterType, extra, listener)
-                Layout.Set2Old -> HangulOld2Set(converterType, extra, listener)
-                Layout.Set3Old393 -> HangulOld3Set393(converterType, extra, listener)
+                Layout.Set2KS -> KoreanIMEMode(converterType, layout.presetName, extra, listener)
+                Layout.Set3390 -> KoreanIMEMode(converterType, layout.presetName, extra, listener)
+                Layout.Set3391 -> KoreanIMEMode(converterType, layout.presetName, extra, listener)
+                Layout.Set3391Strict -> KoreanIMEMode(converterType, layout.presetName, extra, listener)
+                Layout.Set2Old -> KoreanIMEMode(converterType, layout.presetName, extra, listener)
+                Layout.Set3Old393 -> KoreanIMEMode(converterType, layout.presetName, extra, listener)
             }
         }
 
@@ -242,14 +186,16 @@ abstract class KoreanIMEMode(
     }
 
     enum class Layout(
-        @StringRes val nameKey: Int
+        @StringRes val nameKey: Int,
+        val presetName: String,
+        val requiresNumberRow: Boolean = false
     ) {
-        Set2KS(R.string.korean_layout_hangul_2set_ks),
-        Set3390(R.string.korean_layout_hangul_3set_390),
-        Set3391(R.string.korean_layout_hangul_3set_391),
-        Set3391Strict(R.string.korean_layout_hangul_3set_391_strict),
-        Set2Old(R.string.korean_layout_old_hangul_2set_ks),
-        Set3Old393(R.string.korean_layout_old_hangul_3set_393)
+        Set2KS(R.string.korean_layout_hangul_2set_ks, "hangul_2set_ks"),
+        Set3390(R.string.korean_layout_hangul_3set_390, "hangul_3set_390", requiresNumberRow = true),
+        Set3391(R.string.korean_layout_hangul_3set_391, "hangul_3set_391", requiresNumberRow = true),
+        Set3391Strict(R.string.korean_layout_hangul_3set_391_strict, "hangul_3set_391_strict", requiresNumberRow = true),
+        Set2Old(R.string.korean_layout_old_hangul_2set_ks, "hangul_old_2set"),
+        Set3Old393(R.string.korean_layout_old_hangul_3set_393, "hangul_old_3set_393", requiresNumberRow = true)
     }
 
     enum class ConverterType {

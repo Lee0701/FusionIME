@@ -1,0 +1,10 @@
+!<by-screen-mode>
+mobile: !<basic>
+  map:
+    30: 600
+    42: 601
+    41: 602
+    75: 603
+    76: 501
+    501: 68
+tablet: !<empty> {}
