@@ -18,6 +18,7 @@ import ee.oyatl.ime.fusion.util.KeyEventUtil
 import ee.oyatl.ime.fusion.util.PreferenceUtil.getOrientationBoolean
 import ee.oyatl.ime.fusion.util.PreferenceUtil.getOrientationInteger
 import ee.oyatl.ime.keyboard.CanvasKeyboardView
+import ee.oyatl.ime.keyboard.DefaultKeyboardView
 import ee.oyatl.ime.fusion.keyboard.core.KeyInput
 import ee.oyatl.ime.fusion.keyboard.core.KeyLabel
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPreset
@@ -163,21 +164,21 @@ abstract class CommonIMEMode(
         val symbolKeyboard = KeyboardInflater.inflate(symbolLayoutPreset, symbolKeyboardParams)
         val numberKeyboard = KeyboardInflater.inflate(numberLayoutPreset, numberKeyboardParams)
 
-        val textKeyboardView = CanvasKeyboardView(context, null).also {
+        val textKeyboardView = DefaultKeyboardView(context, null).also {
             it.keyboardTheme = keyboardTheme
             it.keyboard = textKeyboard
             it.listener = createKeyboardListener(context, textKeyboardParams)
             it.touchHandler = createTouchHandler(it, textKeyboardParams, KeyboardState.Symbol.Text)
             it.popupManager = DefaultPopupManager()
         }
-        val symbolKeyboardView = CanvasKeyboardView(context, null).also {
+        val symbolKeyboardView = DefaultKeyboardView(context, null).also {
             it.keyboardTheme = keyboardTheme
             it.keyboard = symbolKeyboard
             it.listener = createKeyboardListener(context, symbolKeyboardParams)
             it.touchHandler = createTouchHandler(it, symbolKeyboardParams, KeyboardState.Symbol.Symbol)
             it.popupManager = DefaultPopupManager()
         }
-        val numberKeyboardView = CanvasKeyboardView(context, null).also {
+        val numberKeyboardView = DefaultKeyboardView(context, null).also {
             it.keyboardTheme = keyboardTheme
             it.keyboard = numberKeyboard
             it.listener = createKeyboardListener(context, numberKeyboardParams)
