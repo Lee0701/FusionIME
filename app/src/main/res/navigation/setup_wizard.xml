@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/setup"
+    app:startDestination="@id/welcome">
+
+    <fragment
+        android:id="@+id/welcome"
+        android:name="ee.oyatl.ime.fusion.setup.WelcomeFragment"
+        android:label="@string/setup_wizard_welcome_label">
+
+        <action
+            android:id="@+id/action_welcome_to_enable"
+            app:destination="@id/enable" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/enable"
+        android:name="ee.oyatl.ime.fusion.setup.EnableFragment"
+        android:label="@string/setup_wizard_enable_label">
+
+        <action
+            android:id="@+id/action_enable_to_select"
+            app:destination="@id/select" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/select"
+        android:name="ee.oyatl.ime.fusion.setup.SelectFragment"
+        android:label="@string/setup_wizard_select_label">
+
+        <action
+            android:id="@+id/action_select_to_languages"
+            app:destination="@id/languages" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/languages"
+        android:name="ee.oyatl.ime.fusion.setup.LanguagesFragment"
+        android:label="@string/setup_wizard_languages_label">
+
+    </fragment>
+
+</navigation>

@@ -1,7 +1,10 @@
 package ee.oyatl.ime.candidate
 
+import ee.oyatl.ime.theme.KeyboardTheme
+
 interface CandidateView {
 
+    var keyboardTheme: KeyboardTheme?
     var listener: Listener?
 
     fun submitList(list: List<Candidate>)
@@ -23,7 +26,16 @@ interface CandidateView {
         val extra: CharSequence
     }
 
+    data class ConfirmDeleteCandidate(
+        val candidate: Candidate
+    ): Candidate {
+        override val text: CharSequence = candidate.text
+    }
+
     interface Listener {
         fun onCandidateSelected(candidate: Candidate)
+
+        /** Held down rather than tapped; modes that have nothing to offer ignore it. */
+        fun onCandidateLongPressed(candidate: Candidate) = Unit
     }
 }

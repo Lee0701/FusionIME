@@ -10,7 +10,6 @@ class ScrollingCandidateView(
     attributeSet: AttributeSet?
 ): RecyclerCandidateView(context, attributeSet) {
     init {
-        setBackgroundColor(backgroundColor)
         layoutManager = LinearLayoutManager(
             context,
             LinearLayoutManager.HORIZONTAL,

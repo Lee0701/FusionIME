@@ -9,15 +9,15 @@ import android.inputmethodservice.InputMethodService
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
-import android.util.TypedValue
 import android.view.KeyEvent
 import android.view.View
 import android.view.WindowInsets.Type
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.view.inputmethod.InputMethodSubtype
-import androidx.appcompat.view.ContextThemeWrapper
+import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.preference.PreferenceManager
 import com.android.inputmethod.latin.RichInputMethodManager
 import com.android.inputmethod.latin.settings.Settings
@@ -28,8 +28,9 @@ import ee.oyatl.ime.fusion.mode.LatinIMEMode
 import ee.oyatl.ime.fusion.mode.PinyinIMEMode
 import ee.oyatl.ime.fusion.preference.KeyStrokePreference
 import ee.oyatl.ime.fusion.settings.InputModeSettingsFragment
+import ee.oyatl.ime.fusion.util.PreferenceUtil
 import ee.oyatl.ime.keyboard.PaleViewFilter
-import ee.oyatl.ime.keyboard.R
+import ee.oyatl.ime.theme.KeyboardTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -38,6 +39,7 @@ import org.json.JSONArray
 class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.Callback, SharedPreferences.OnSharedPreferenceChangeListener {
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
     private lateinit var preference: SharedPreferences
+    private lateinit var keyboardTheme: KeyboardTheme
     private lateinit var imeModeSwitcher: IMEModeSwitcher
     private lateinit var clipboardManager: ClipboardManager
     private var imeView: View? = null
@@ -89,6 +91,7 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         onResetViews()
+        updateNavigationBar()
     }
 
     fun onInit() {
@@ -105,7 +108,8 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
             val shortLabel = labels.firstOrNull { it !in others } ?: labels.last()
             entries += IMEModeSwitcher.Entry(shortLabel, p.create(this))
         }
-        imeModeSwitcher = IMEModeSwitcher(this, entries, this)
+        keyboardTheme = PreferenceUtil.getKeyboardTheme(this)
+        imeModeSwitcher = IMEModeSwitcher(this, entries, keyboardTheme, this)
     }
 
     fun onLoad() {
@@ -125,6 +129,8 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
 
     fun onResetViews() {
         imeViewFilter.clear()
+        keyboardTheme = PreferenceUtil.getKeyboardTheme(this)
+        imeModeSwitcher.keyboardTheme = keyboardTheme
         imeModeSwitcher.resetInputViews()
         imeModeSwitcher.resetCandidateViews()
         setInputView(onCreateInputView())
@@ -356,27 +362,23 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
     private fun updateNavigationBar() {
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM) return
         val window = window.window ?: return
-        val typedValue = TypedValue()
         // Enable edge-to-edge
         WindowCompat.setDecorFitsSystemWindows(window, false)
         WindowCompat.enableEdgeToEdge(window)
+        val darkMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+        // Update colors
+        window.decorView.setBackgroundColor(getColor(keyboardTheme.backgroundColor))
+        WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightNavigationBars = !darkMode
         // Get system bar insets after keyboard is displayed
-        window.decorView.setOnApplyWindowInsetsListener { view, windowInsets ->
+        ViewCompat.setOnApplyWindowInsetsListener(window.decorView) { view, windowInsets ->
             val insets = windowInsets.getInsets(Type.systemBars() and Type.ime().inv())
-            val theme = ContextThemeWrapper(this, R.style.Theme_FusionIME_Keyboard).theme
-            theme.resolveAttribute(R.attr.backgroundColor, typedValue, true)
-            val darkMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
-            // Update colors
-            view.setBackgroundColor(typedValue.data)
-            WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightNavigationBars = !darkMode
             // Apply bottom padding to root input view
             // Not applying to the decor view since different behaviours between devices
-            imeView?.apply {
-                setPadding(0, 0, 0, insets.bottom)
-                requestLayout()
-                requestApplyInsets()
-            }
-            windowInsets
+            val imeView = imeView
+            // Workaround for some devices that applies bottom padding also for navbar buttons
+            imeView?.setPadding(0, 0, 0, insets.bottom)
+            view.setPadding(0, 0, 0, if(imeView != null) 0 else insets.bottom)
+            WindowInsetsCompat.CONSUMED
         }
     }
 

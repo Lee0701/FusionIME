@@ -2,65 +2,98 @@ package ee.oyatl.ime.candidate
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.appcompat.view.ContextThemeWrapper
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ee.oyatl.ime.candidate.CandidateView.Candidate
 import ee.oyatl.ime.keyboard.R
 import ee.oyatl.ime.keyboard.databinding.CandidateItemBinding
+import ee.oyatl.ime.theme.CandidateItemType
+import ee.oyatl.ime.theme.KeyboardTheme
 
 abstract class RecyclerCandidateView(
     context: Context,
     attributeSet: AttributeSet?
 ): RecyclerView(context, attributeSet), CandidateView {
 
+    override var keyboardTheme: KeyboardTheme? = null
+        set(value) {
+            field = value
+            initialize()
+        }
     override var listener: CandidateView.Listener? = null
-    protected val backgroundColor: Int
 
-    init {
-        adapter = Adapter { listener?.onCandidateSelected(it) }
-        val typedValue = TypedValue()
-        ContextThemeWrapper(context, R.style.Theme_FusionIME_Candidates).theme
-            .resolveAttribute(R.attr.backgroundColor, typedValue, false)
-        backgroundColor = context.resources.getColor(typedValue.data)
+    fun initialize() {
+        val keyboardTheme = keyboardTheme ?: return
+        setBackgroundColor(context.getColor(keyboardTheme.candidatesTheme.backgroundColor))
+
+        adapter = Adapter(
+            keyboardTheme,
+            onItemClick = { listener?.onCandidateSelected(it) },
+            onItemLongClick = { listener?.onCandidateLongPressed(it) }
+        )
         itemAnimator = null
     }
 
     override fun submitList(list: List<Candidate>) {
-        val adapter = this.adapter as Adapter
+        val adapter = this.adapter as? Adapter ?: return
         adapter.submitList(list)
         val focusedIndex = list.indexOfFirst { it is CandidateView.FocusableCandidate && it.focused }
         if(focusedIndex > -1) smoothScrollToPosition(focusedIndex)
     }
 
     class Adapter(
-        private val onItemClick: (Candidate) -> Unit
+        private val keyboardTheme: KeyboardTheme,
+        private val onItemClick: (Candidate) -> Unit,
+        private val onItemLongClick: (Candidate) -> Unit = {}
     ): ListAdapter<Candidate, ViewHolder>(DiffCallback()) {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            return ViewHolder(CandidateItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+            return ViewHolder(
+                CandidateItemBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+                keyboardTheme
+            )
         }
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val item = getItem(position)
-            holder.onBind(item) { onItemClick(item) }
+            holder.onBind(item, { onItemClick(item) }, { onItemLongClick(item) })
         }
     }
 
     class ViewHolder(
-        private val view: CandidateItemBinding
+        private val view: CandidateItemBinding,
+        private val keyboardTheme: KeyboardTheme
     ): RecyclerView.ViewHolder(view.root) {
-        fun onBind(candidate: Candidate, onClick: () -> Unit) {
+        fun onBind(candidate: Candidate, onClick: () -> Unit, onLongClick: () -> Unit = {}) {
+            val itemTheme = keyboardTheme.candidatesTheme.itemThemes[CandidateItemType.Default]
+            if(itemTheme != null) {
+                view.text.setTextColor(view.root.context.getColor(itemTheme.foregroundColor))
+                view.extra.setTextColor(view.root.context.getColor(itemTheme.extraColor))
+                view.icon.imageTintList = view.root.context.getColorStateList(itemTheme.foregroundColor)
+            }
+
             view.text.text = candidate.text
             if(candidate is CandidateView.ExtraCandidate) {
                 view.extra.text = candidate.extra
+                view.text.visibility = VISIBLE
                 view.extra.visibility = VISIBLE
+                view.icon.visibility = GONE
+            } else if(candidate is CandidateView.ConfirmDeleteCandidate) {
+                view.icon.setImageResource(R.drawable.candic_delete)
+                view.text.visibility = INVISIBLE
+                view.extra.visibility = INVISIBLE
+                view.icon.visibility = VISIBLE
             } else {
+                view.text.visibility = VISIBLE
                 view.extra.visibility = GONE
+                view.icon.visibility = GONE
             }
             view.root.setOnClickListener { onClick() }
+            view.root.setOnLongClickListener {
+                onLongClick()
+                true
+            }
             if(candidate is CandidateView.FocusableCandidate) {
                 view.root.isHovered = candidate.focused
             }

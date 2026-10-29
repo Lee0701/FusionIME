@@ -18,4 +18,15 @@
         android:title="@string/settings_input_mode_layout_title"
         app:useSimpleSummaryProvider="true" />
 
+    <SwitchPreferenceCompat
+        android:key="auto_caps"
+        android:title="@string/settings_input_mode_auto_caps_title"
+        android:defaultValue="false" />
+
+    <SwitchPreferenceCompat
+        android:key="auto_period"
+        android:title="@string/settings_input_mode_auto_period_title"
+        android:summary="@string/settings_input_mode_auto_period_summary"
+        android:defaultValue="false" />
+
 </androidx.preference.PreferenceScreen>

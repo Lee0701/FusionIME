@@ -14,4 +14,11 @@ object LayoutExt {
         ExtKeyCode.KEYCODE_PERIOD_COMMA to listOf('。'.code, '，'.code),
         ExtKeyCode.KEYCODE_COMMA_PERIOD to listOf('，'.code, '。'.code)
     )
+
+    val TABLE_HAN_NOM = mapOf(
+        KeyEvent.KEYCODE_COMMA to listOf('、'.code, '《'.code),
+        KeyEvent.KEYCODE_PERIOD to listOf('。'.code, '》'.code),
+        ExtKeyCode.KEYCODE_PERIOD_COMMA to listOf('。'.code, '、'.code),
+        ExtKeyCode.KEYCODE_COMMA_PERIOD to listOf('、'.code, '。'.code)
+    )
 }

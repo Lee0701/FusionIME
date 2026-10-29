@@ -41,6 +41,12 @@ class WordComposer {
         moveCursorRelative(-length)
     }
 
+    fun replace(length: Int, text: String) {
+        consume(length)
+        composingWord = text + composingWord
+        moveCursorRelative(text.length)
+    }
+
     fun moveCursor(position: Int): Boolean {
         cursor = position
         cursor = max(cursor, 0)

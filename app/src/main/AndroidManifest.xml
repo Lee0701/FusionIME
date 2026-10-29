@@ -26,6 +26,11 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".SetupWizardActivity"
+            android:exported="true"
+            android:label="@string/setup_wizard_label" />
+
         <service
             android:name=".FusionIMEService"
             android:exported="true"

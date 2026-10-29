@@ -1,6 +1,5 @@
-package ee.oyatl.ime.fusion
+package ee.oyatl.ime.fusion.util
 
-import android.os.Build
 import android.os.SystemClock
 import android.view.KeyCharacterMap
 import android.view.KeyEvent
@@ -26,7 +25,7 @@ class KeyEventUtil(
      * this is mainly for use with [android.text.InputType.TYPE_NULL] type
      * text fields, or for non-rich input methods. A reasonably capable software
      * input method should use the
-     * [android.view.inputmethod.InputConnection.commitText] family of methods
+     * [InputConnection.commitText] family of methods
      * to send text to an application, rather than sending key events.
      *
      * @param keyEventCode The raw key code to send, as defined by
@@ -117,10 +116,6 @@ class KeyEventUtil(
     }
 
     fun deleteSurroundingText(beforeLength: Int, afterLength: Int) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            currentInputConnection.deleteSurroundingTextInCodePoints(beforeLength, afterLength)
-        } else {
-            currentInputConnection.deleteSurroundingText(beforeLength, afterLength)
-        }
+        currentInputConnection.deleteSurroundingTextInCodePoints(beforeLength, afterLength)
     }
 }
