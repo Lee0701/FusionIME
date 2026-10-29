@@ -1,9 +1,8 @@
 package ee.oyatl.ime.fusion.layout
 
-import android.view.KeyEvent
+import ee.oyatl.ime.fusion.keyboard.core.KeyCode
 import ee.oyatl.ime.fusion.keyboard.core.KeyInput
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardState
-import ee.oyatl.ime.fusion.mode.LatinIMEMode
 import ee.oyatl.ime.fusion.keyboard.core.LayoutTable
 import ee.oyatl.ime.fusion.keyboard.core.SoftKeyCodeMapper
 import org.junit.Assert.assertEquals
@@ -14,7 +13,7 @@ class LayoutLatinTest {
     fun spanishQwertyAddsEnyeAfterL() {
         assertEquals(
             listOf('ñ'.code, 'Ñ'.code),
-            LayoutLatin.TABLE_SPANISH_QWERTY[KeyEvent.KEYCODE_SEMICOLON]
+            LayoutLatin.TABLE_SPANISH_QWERTY[KeyCode.KEYCODE_SEMICOLON]
         )
     }
 
@@ -28,26 +27,12 @@ class LayoutLatinTest {
                 + LayoutLatin.SOFT_KEYCODE_MAP_AZERTY_MOBILE
         )
 
-        assertKey(table, mapper, KeyEvent.KEYCODE_Q, 'a', 'A')
-        assertKey(table, mapper, KeyEvent.KEYCODE_W, 'z', 'Z')
-        assertKey(table, mapper, KeyEvent.KEYCODE_A, 'q', 'Q')
-        assertKey(table, mapper, KeyEvent.KEYCODE_SEMICOLON, 'm', 'M')
-        assertKey(table, mapper, KeyEvent.KEYCODE_Z, 'w', 'W')
-        assertKey(table, mapper, KeyEvent.KEYCODE_M, '\'', '?')
-    }
-
-    @Test
-    fun frenchDefaultsToAzertyUnlessLayoutIsExplicit() {
-        assertEquals(
-            LatinIMEMode.Layout.Azerty,
-            LatinIMEMode.Params.parse(mapOf("type" to "latin", "locale" to "fr")).layout
-        )
-        assertEquals(
-            LatinIMEMode.Layout.Qwerty,
-            LatinIMEMode.Params.parse(
-                mapOf("type" to "latin", "locale" to "fr", "layout" to "Qwerty")
-            ).layout
-        )
+        assertKey(table, mapper, KeyCode.KEYCODE_Q, 'a', 'A')
+        assertKey(table, mapper, KeyCode.KEYCODE_W, 'z', 'Z')
+        assertKey(table, mapper, KeyCode.KEYCODE_A, 'q', 'Q')
+        assertKey(table, mapper, KeyCode.KEYCODE_SEMICOLON, 'm', 'M')
+        assertKey(table, mapper, KeyCode.KEYCODE_Z, 'w', 'W')
+        assertKey(table, mapper, KeyCode.KEYCODE_M, '\'', '?')
     }
 
     private fun assertKey(

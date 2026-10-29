@@ -16,4 +16,5 @@ dependencies {
     implementation(libs.kotaml.core)
     implementation(project(":app:keyboard:core"))
     implementation(project(":app:korean:hangul"))
+    testImplementation(libs.junit)
 }
