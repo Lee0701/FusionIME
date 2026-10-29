@@ -4,4 +4,5 @@ altGraphTable: "qwerty.altgr"
 moreKeysTable: "qwerty.morekeys"
 softKeyCodeMapper: "qwerty.softkeycode"
 hardKeyCodeMapper: "qwerty.hardkeycode"
+keyLabels: "qwerty.labels"
 extra: !<none> {}

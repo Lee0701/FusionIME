@@ -66,4 +66,3 @@ mobile: !<basic>
         keyCode: 66
         special: true
         merge: "Up"
-  contentRows: []

@@ -4,4 +4,5 @@ altGraphTable: "godan.altgr"
 moreKeysTable: "godan.morekeys"
 softKeyCodeMapper: "godan.softkeycode"
 hardKeyCodeMapper: "godan.hardkeycode"
+keyLabels: "godan.labels"
 extra: !<none> {}

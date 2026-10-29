@@ -58,7 +58,6 @@ mobile: !<basic>
       - !<template-key>
         keyCode: 66
         special: true
-  contentRows: []
 tablet: !<basic>
   configuration:
     rows:
@@ -135,4 +134,3 @@ tablet: !<basic>
         keyCode: 63
         width: 0.5
         special: true
-  contentRows: []

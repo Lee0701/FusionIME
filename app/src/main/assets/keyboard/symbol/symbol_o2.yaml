@@ -4,4 +4,5 @@ altGraphTable: "symbol_o2.altgr"
 moreKeysTable: "symbol_o2.morekeys"
 softKeyCodeMapper: "symbol_o2.softkeycode"
 hardKeyCodeMapper: "symbol_o2.hardkeycode"
+keyLabels: "symbol_o2.labels"
 extra: !<none> {}

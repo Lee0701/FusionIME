@@ -1,0 +1,8 @@
+keyboardTemplate: "symbol_chinese.template"
+layoutTable: "symbol_chinese.layout"
+altGraphTable: "symbol_chinese.altgr"
+moreKeysTable: "symbol_chinese.morekeys"
+softKeyCodeMapper: "symbol_chinese.softkeycode"
+hardKeyCodeMapper: "symbol_chinese.hardkeycode"
+keyLabels: "symbol_chinese.labels"
+extra: !<none> {}

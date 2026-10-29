@@ -38,8 +38,6 @@ import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.TripleCandidateView
 import ee.oyatl.ime.fusion.AssetsPresetLoader
 import ee.oyatl.ime.fusion.R
-import ee.oyatl.ime.fusion.layout.preset.LatinLayoutPresets
-import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardState
 import java.util.Locale
 

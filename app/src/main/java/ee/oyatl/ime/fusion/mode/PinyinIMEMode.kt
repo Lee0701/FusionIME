@@ -23,7 +23,6 @@ import com.android.inputmethod.pinyin.R
 import com.android.inputmethod.pinyin.Settings
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.fusion.AssetsPresetLoader
-import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.pinyin.CandidatesContainer
 import ee.oyatl.ime.fusion.pinyin.ComposingView
 import ee.oyatl.ime.fusion.pinyin.ComposingView.ComposingStatus
@@ -31,8 +30,6 @@ import ee.oyatl.ime.fusion.pinyin.DecodingInfo
 import ee.oyatl.ime.fusion.pinyin.DoublePinyinComposer
 import ee.oyatl.ime.fusion.pinyin.DoublePinyinScheme
 import ee.oyatl.ime.fusion.pinyin.OnGestureListener
-import ee.oyatl.ime.fusion.layout.preset.LatinLayoutPresets
-import ee.oyatl.ime.fusion.layout.preset.PinyinLayoutPresets
 import java.lang.ref.WeakReference
 import java.util.Locale
 

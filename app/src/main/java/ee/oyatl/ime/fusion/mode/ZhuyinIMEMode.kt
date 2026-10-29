@@ -7,14 +7,10 @@ import android.view.KeyEvent
 import com.miyabi_hiroshi.app.libchewing_android_app_module.ConversionEngines
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.fusion.AssetsPresetLoader
-import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.R
-import ee.oyatl.ime.fusion.korean.WordComposer
-import ee.oyatl.ime.fusion.layout.LayoutExt
-import ee.oyatl.ime.fusion.layout.LayoutZhuyin
-import ee.oyatl.ime.fusion.layout.preset.ZhuyinLayoutPresets
-import ee.oyatl.ime.fusion.zhuyin.ChewingConverter
 import ee.oyatl.ime.fusion.keyboard.core.LayoutTable
+import ee.oyatl.ime.fusion.korean.WordComposer
+import ee.oyatl.ime.fusion.zhuyin.ChewingConverter
 import java.util.Locale
 
 class ZhuyinIMEMode(
@@ -42,8 +38,10 @@ class ZhuyinIMEMode(
         super.onLoad(context)
         val loader = AssetsPresetLoader(context.assets, "keyboard/zhuyin")
         textLayoutPreset = loader.inflate(loader.load(presetName))
+        val symbolLoader = AssetsPresetLoader(context.assets, "keyboard/symbol")
+        val chineseSymbols = symbolLoader.inflate(symbolLoader.load("symbol_chinese"))
         symbolLayoutPreset = super.symbolLayoutPreset.copy(
-            layoutTable = super.symbolLayoutPreset.layoutTable + LayoutTable.fromShiftStates(LayoutExt.TABLE_CHINESE)
+            layoutTable = super.symbolLayoutPreset.layoutTable + chineseSymbols.layoutTable
         )
         converter.initialize(context)
     }
@@ -73,8 +71,8 @@ class ZhuyinIMEMode(
 
     private fun updateSuggestions() {
         val key = wordComposer.textBeforeCursor
-        val codes = key.mapNotNull { LayoutZhuyin.CODES_MAP[it]?.code }.toMutableList()
-        if(key.lastOrNull() !in LayoutZhuyin.TONE_MARKS) codes += ' '.code
+        val codes = key.mapNotNull { CODES_MAP[it]?.code }.toMutableList()
+        if(key.lastOrNull() !in TONE_MARKS) codes += ' '.code
         val candidates = converter.getSuggestions(codes).mapIndexed { i, s -> ZhuyinCandidate(i, s, key) }
         bestCandidate = candidates.getOrNull(0)
         submitCandidates(candidates)
@@ -98,7 +96,7 @@ class ZhuyinIMEMode(
 
     private fun handleSpace() {
         if(wordComposer.composingText.isNotEmpty()) {
-            if(wordComposer.textBeforeCursor.lastOrNull() !in LayoutZhuyin.TONE_MARKS) {
+            if(wordComposer.textBeforeCursor.lastOrNull() !in TONE_MARKS) {
                 wordComposer.commit('ˉ'.toString())
                 renderResult()
             } else {
@@ -150,7 +148,7 @@ class ZhuyinIMEMode(
 
     override fun onChar(codePoint: Int) {
         val key = codePoint.toChar()
-        if(key in LayoutZhuyin.CODES_MAP) {
+        if(key in CODES_MAP) {
             wordComposer.commit(key.toString())
             renderResult()
         } else {
@@ -212,5 +210,52 @@ class ZhuyinIMEMode(
     companion object {
         const val TYPE: String = "zhuyin"
         const val MSG_UPDATE_SUGGESTIONS = 0
+
+        val TONE_MARKS = setOf('ˉ', 'ˇ', 'ˋ', 'ˊ', '˙')
+
+        val CODES_MAP = mapOf(
+            'ㄅ' to '1',
+            'ㄉ' to '2',
+            'ˇ' to '3',
+            'ˋ' to '4',
+            'ㄓ' to '5',
+            'ˊ' to '6',
+            '˙' to '7',
+            'ㄚ' to '8',
+            'ㄞ' to '9',
+            'ㄢ' to '0',
+            'ㄆ' to 'q',
+            'ㄊ' to 'w',
+            'ㄍ' to 'e',
+            'ㄐ' to 'r',
+            'ㄔ' to 't',
+            'ㄗ' to 'y',
+            'ㄧ' to 'u',
+            'ㄛ' to 'i',
+            'ㄟ' to 'o',
+            'ㄣ' to 'p',
+            'ㄇ' to 'a',
+            'ㄋ' to 's',
+            'ㄎ' to 'd',
+            'ㄑ' to 'f',
+            'ㄕ' to 'g',
+            'ㄘ' to 'h',
+            'ㄨ' to 'j',
+            'ㄜ' to 'k',
+            'ㄠ' to 'l',
+            'ㄤ' to ';',
+            'ㄈ' to 'z',
+            'ㄌ' to 'x',
+            'ㄏ' to 'c',
+            'ㄒ' to 'v',
+            'ㄖ' to 'b',
+            'ㄙ' to 'n',
+            'ㄩ' to 'm',
+            'ㄝ' to ',',
+            'ㄡ' to '.',
+            'ㄥ' to '/',
+            'ㄦ' to '-',
+            'ˉ' to ' '
+        )
     }
 }

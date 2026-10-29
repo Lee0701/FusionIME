@@ -1,5 +1,8 @@
 package ee.oyatl.ime.fusion.keyboard.core
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class KeyLabel(
     val text: String? = null,
     val icon: Int? = null,

@@ -4,4 +4,5 @@ altGraphTable: "qwerz_german.altgr"
 moreKeysTable: "qwerz_german.morekeys"
 softKeyCodeMapper: "qwerz_german.softkeycode"
 hardKeyCodeMapper: "qwerz_german.hardkeycode"
+keyLabels: "qwerz_german.labels"
 extra: !<none> {}

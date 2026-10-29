@@ -4,4 +4,5 @@ altGraphTable: "qwerty_spanish.altgr"
 moreKeysTable: "qwerty_spanish.morekeys"
 softKeyCodeMapper: "qwerty_spanish.softkeycode"
 hardKeyCodeMapper: "qwerty_spanish.hardkeycode"
+keyLabels: "qwerty_spanish.labels"
 extra: !<none> {}

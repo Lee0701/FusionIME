@@ -12,6 +12,7 @@ data class KeyboardLayoutPreset(
     val moreKeysTable: MoreKeysTable = MoreKeysTable(),
     val softKeyCodeMapper: SoftKeyCodeMapper = SoftKeyCodeMapper.Empty,
     val hardKeyCodeMapper: HardKeyCodeMapper = HardKeyCodeMapper(),
+    val keyLabels: KeyLabels = KeyLabels(),
     val extra: Extra = Extra.None
 ) {
     @Serializable

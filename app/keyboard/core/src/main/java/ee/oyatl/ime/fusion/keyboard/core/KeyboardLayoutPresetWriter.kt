@@ -22,12 +22,14 @@ abstract class KeyboardLayoutPresetWriter {
         val moreKeys = "$name.morekeys"
         val softKeyCode = "$name.softkeycode"
         val hardKeyCode = "$name.hardkeycode"
+        val keyLabels = "$name.labels"
         export<KeyboardTemplate>(template, preset.keyboardTemplate)
         export<LayoutTable>(layout, preset.layoutTable)
         export<LayoutTable>(altGr, preset.altGraphTable)
         export<MoreKeysTable>(moreKeys, preset.moreKeysTable)
         export<SoftKeyCodeMapper>(softKeyCode, preset.softKeyCodeMapper)
         export<HardKeyCodeMapper>(hardKeyCode, preset.hardKeyCodeMapper)
+        export<KeyLabels>(keyLabels, preset.keyLabels)
         val extra = saveExtra(name, preset.extra)
         val def = KeyboardLayoutPresetDef(
             keyboardTemplate = template,
@@ -36,6 +38,7 @@ abstract class KeyboardLayoutPresetWriter {
             moreKeysTable = moreKeys,
             softKeyCodeMapper = softKeyCode,
             hardKeyCodeMapper = hardKeyCode,
+            keyLabels = keyLabels,
             extra = extra
         )
         export<KeyboardLayoutPresetDef>(name, def)

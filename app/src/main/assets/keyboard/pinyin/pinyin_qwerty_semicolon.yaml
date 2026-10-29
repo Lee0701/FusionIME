@@ -4,4 +4,5 @@ altGraphTable: "pinyin_qwerty_semicolon.altgr"
 moreKeysTable: "pinyin_qwerty_semicolon.morekeys"
 softKeyCodeMapper: "pinyin_qwerty_semicolon.softkeycode"
 hardKeyCodeMapper: "pinyin_qwerty_semicolon.hardkeycode"
+keyLabels: "pinyin_qwerty_semicolon.labels"
 extra: !<none> {}

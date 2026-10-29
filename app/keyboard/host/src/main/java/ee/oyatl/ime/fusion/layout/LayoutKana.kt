@@ -1,14 +1,10 @@
 package ee.oyatl.ime.fusion.layout
+
 import ee.oyatl.ime.fusion.keyboard.core.ExtKeyCode
 import ee.oyatl.ime.fusion.keyboard.core.KeyCode
 import ee.oyatl.ime.fusion.keyboard.core.KeyLabel
 
 object LayoutKana {
-    const val KEYS_AIUEO = "あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもや　ゆ　よらりるれろわゐ　ゑを"
-    const val KEYS_IROHA = "いろはにほへとちりぬるをわかよたれそつねならむうゐのおくやまけふこえてあさきゆめみしゑひもせす　　　"
-    const val BOTTOM_LEFT_SYLLABLES: String = "ん"
-    const val BOTTOM_RIGHT_SYLLABLES: String = "*ー"
-
     val ROWS_12KEY: List<String> = listOf(
         "123",
         "456",

@@ -4,4 +4,5 @@ altGraphTable: "number.altgr"
 moreKeysTable: "number.morekeys"
 softKeyCodeMapper: "number.softkeycode"
 hardKeyCodeMapper: "number.hardkeycode"
+keyLabels: "number.labels"
 extra: !<none> {}

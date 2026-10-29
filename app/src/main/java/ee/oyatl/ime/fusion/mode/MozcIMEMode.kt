@@ -11,21 +11,17 @@ import com.google.common.base.Optional
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.VerticalScrollingCandidateView
 import ee.oyatl.ime.fusion.AssetsPresetLoader
-import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.R
-import ee.oyatl.ime.fusion.layout.LayoutGodan
-import ee.oyatl.ime.fusion.layout.LayoutKana
-import ee.oyatl.ime.fusion.layout.preset.JapaneseLayoutPresets
-import ee.oyatl.ime.fusion.layout.preset.LatinLayoutPresets
-import ee.oyatl.ime.fusion.mozc.InputConnectionRenderer
+import ee.oyatl.ime.fusion.keyboard.core.FlickDirection
 import ee.oyatl.ime.fusion.keyboard.core.KeyInput
 import ee.oyatl.ime.fusion.keyboard.core.KeyLabel
+import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardParams
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardState.Symbol
+import ee.oyatl.ime.fusion.mozc.InputConnectionRenderer
+import ee.oyatl.ime.fusion.preset.JapaneseSyllables
 import ee.oyatl.ime.keyboard.KeyboardView
 import ee.oyatl.ime.keyboard.listener.FlickListener
-import ee.oyatl.ime.fusion.keyboard.core.FlickDirection
-import ee.oyatl.ime.fusion.preset.JapaneseSyllables
 import ee.oyatl.ime.keyboard.touchhandler.FlickTouchHandler
 import ee.oyatl.ime.keyboard.touchhandler.TouchHandler
 import org.mozc.android.inputmethod.japanese.MozcUtil
@@ -281,13 +277,14 @@ abstract class MozcIMEMode(
 
         // Remove flick labels if toggle only mode
         // Show them as hints only when option is on
-        private val keyLabels12Key: Map<Int, KeyLabel> =
-            if(flickMode == FlickMode.ToggleOnly) LayoutKana.LABELS_12KEY.mapValues { (k, v) ->
+        private val keyLabels12Key: Map<Int, KeyLabel> by lazy {
+            if(flickMode == FlickMode.ToggleOnly) textLayoutPreset.keyLabels.map.mapValues { (k, v) ->
                 KeyLabel(v.text)
             }
-            else LayoutKana.LABELS_12KEY.mapValues { (k, v) ->
+            else textLayoutPreset.keyLabels.map.mapValues { (k, v) ->
                 v.copy(showFlickHint = flickHint)
             }
+        }
 
         override val keyLabels: Map<Int, KeyLabel>
             get() =
@@ -353,8 +350,10 @@ abstract class MozcIMEMode(
         override val presetName: String = "godan"
 
         // Show flick hints only when option is on
-        private val keyLabelsGodan = LayoutGodan.LABELS.mapValues { (k, v) ->
-            v.copy(showFlickHint = flickHint)
+        private val keyLabelsGodan: Map<Int, KeyLabel> by lazy {
+            textLayoutPreset.keyLabels.map.mapValues { (k, v) ->
+                v.copy(showFlickHint = flickHint)
+            }
         }
 
         override val keyLabels: Map<Int, KeyLabel>
@@ -449,8 +448,8 @@ abstract class MozcIMEMode(
                 Layout.Kana12Key -> Kana12Key(listener, candidateViewHeight, flickMode, flickHint, extra)
                 Layout.Godan -> Godan(listener, candidateViewHeight, flickHint, extra)
                 Layout.KanaJIS -> KanaJIS(listener, candidateViewHeight, extra)
-                Layout.KanaSyllables -> KanaSyllables(listener, candidateViewHeight, LayoutKana.KEYS_AIUEO, syllablesKeyLayout, extra)
-                Layout.KanaIroha -> KanaSyllables(listener, candidateViewHeight, LayoutKana.KEYS_IROHA, syllablesKeyLayout, extra)
+                Layout.KanaSyllables -> KanaSyllables(listener, candidateViewHeight, JapaneseSyllables.KEYS_AIUEO, syllablesKeyLayout, extra)
+                Layout.KanaIroha -> KanaSyllables(listener, candidateViewHeight, JapaneseSyllables.KEYS_IROHA, syllablesKeyLayout, extra)
             }
         }
 

@@ -6,18 +6,14 @@ import androidx.annotation.StringRes
 import com.diycircuits.cangjie.TableLoader
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.fusion.AssetsPresetLoader
-import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.R
-import ee.oyatl.ime.fusion.korean.WordComposer
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardState
-import ee.oyatl.ime.fusion.layout.LayoutCangjie
-import ee.oyatl.ime.fusion.layout.preset.CangjieLayoutPresets
+import ee.oyatl.ime.fusion.korean.WordComposer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.util.Locale
-import kotlin.collections.plus
 
 abstract class CangjieIMEMode(
     listener: IMEMode.Listener,
@@ -170,7 +166,7 @@ abstract class CangjieIMEMode(
         extra: Map<String, String>,
         listener: IMEMode.Listener
     ): CangjieIMEMode(listener, "cangjie", extra) {
-        override val keyMap: Map<Char, Char> = LayoutCangjie.KEY_MAP_CANGJIE
+        override val keyMap: Map<Char, Char> = KEY_MAP_CANGJIE
     }
 
     class Dayi3(
@@ -179,7 +175,16 @@ abstract class CangjieIMEMode(
         listener: IMEMode.Listener
     ): CangjieIMEMode(listener, "dayi3", extra) {
         override val inputMode: Int = TableLoader.DAYI3
-        override val keyMap: Map<Char, Char> = LayoutCangjie.KEY_MAP_DAYI3
+        override val keyMap: Map<Char, Char> = KEY_MAP_DAYI3
+
+        override fun onLoad(context: Context) {
+            super.onLoad(context)
+            val symbolLoader = AssetsPresetLoader(context.assets, "keyboard/symbol")
+            val chineseSymbols = symbolLoader.inflate(symbolLoader.load("symbol_chinese"))
+            symbolLayoutPreset = super.symbolLayoutPreset.copy(
+                layoutTable = super.symbolLayoutPreset.layoutTable + chineseSymbols.layoutTable
+            )
+        }
     }
 
     data class Params(
@@ -234,5 +239,83 @@ abstract class CangjieIMEMode(
 
     companion object {
         const val TYPE: String = "cangjie"
+
+        val KEY_MAP_CANGJIE = mapOf(
+            '日' to 'a',
+            '月' to 'b',
+            '金' to 'c',
+            '木' to 'd',
+            '水' to 'e',
+            '火' to 'f',
+            '土' to 'g',
+            '竹' to 'h',
+            '戈' to 'i',
+            '十' to 'j',
+            '大' to 'k',
+            '中' to 'l',
+            '一' to 'm',
+            '弓' to 'n',
+            '人' to 'o',
+            '心' to 'p',
+            '手' to 'q',
+            '口' to 'r',
+            '尸' to 's',
+            '廿' to 't',
+            '山' to 'u',
+            '女' to 'v',
+            '田' to 'w',
+            '難' to 'x',
+            '卜' to 'y',
+            '重' to 'z'
+        )
+
+        val KEY_MAP_DAYI3 = mapOf(
+            '巷' to '`',
+            '言' to '1',
+            '牛' to '2',
+            '目' to '3',
+            '四' to '4',
+            '王' to '5',
+            '門' to '6',
+            '田' to '7',
+            '米' to '8',
+            '足' to '9',
+            '金' to '0',
+            '郷' to '-',
+            '石' to 'Q',
+            '山' to 'W',
+            '一' to 'E',
+            '工' to 'R',
+            '糸' to 'T',
+            '火' to 'Y',
+            '艸' to 'U',
+            '木' to 'I',
+            '口' to 'O',
+            '耳' to 'P',
+            '路' to '[',
+            '街' to ']',
+            '鎮' to '\\',
+            '人' to 'A',
+            '革' to 'S',
+            '日' to 'D',
+            '土' to 'F',
+            '手' to 'G',
+            '鳥' to 'H',
+            '月' to 'J',
+            '立' to 'K',
+            '女' to 'L',
+            '虫' to ';',
+            '號' to '\'',
+            '心' to 'Z',
+            '水' to 'X',
+            '鹿' to 'C',
+            '禾' to 'V',
+            '馬' to 'B',
+            '魚' to 'N',
+            '雨' to 'M',
+            '力' to ',',
+            '舟' to '.',
+            '竹' to '/'
+        )
     }
 }

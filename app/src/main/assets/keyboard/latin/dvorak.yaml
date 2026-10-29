@@ -4,4 +4,5 @@ altGraphTable: "dvorak.altgr"
 moreKeysTable: "dvorak.morekeys"
 softKeyCodeMapper: "dvorak.softkeycode"
 hardKeyCodeMapper: "dvorak.hardkeycode"
+keyLabels: "dvorak.labels"
 extra: !<none> {}

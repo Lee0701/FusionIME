@@ -4,4 +4,5 @@ altGraphTable: "jyutping_qwerty.altgr"
 moreKeysTable: "jyutping_qwerty.morekeys"
 softKeyCodeMapper: "jyutping_qwerty.softkeycode"
 hardKeyCodeMapper: "jyutping_qwerty.hardkeycode"
+keyLabels: "jyutping_qwerty.labels"
 extra: !<none> {}

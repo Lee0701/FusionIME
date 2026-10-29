@@ -4,4 +4,5 @@ altGraphTable: "colemak.altgr"
 moreKeysTable: "colemak.morekeys"
 softKeyCodeMapper: "colemak.softkeycode"
 hardKeyCodeMapper: "colemak.hardkeycode"
+keyLabels: "colemak.labels"
 extra: !<none> {}

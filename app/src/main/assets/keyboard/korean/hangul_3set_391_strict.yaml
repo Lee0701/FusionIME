@@ -4,5 +4,6 @@ altGraphTable: "hangul_3set_391_strict.altgr"
 moreKeysTable: "hangul_3set_391_strict.morekeys"
 softKeyCodeMapper: "hangul_3set_391_strict.softkeycode"
 hardKeyCodeMapper: "hangul_3set_391_strict.hardkeycode"
+keyLabels: "hangul_3set_391_strict.labels"
 extra: !<hangul>
   jamoCombinationTable: "hangul_3set_391_strict.combination"

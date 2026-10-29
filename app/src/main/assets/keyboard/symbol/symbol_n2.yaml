@@ -4,4 +4,5 @@ altGraphTable: "symbol_n2.altgr"
 moreKeysTable: "symbol_n2.morekeys"
 softKeyCodeMapper: "symbol_n2.softkeycode"
 hardKeyCodeMapper: "symbol_n2.hardkeycode"
+keyLabels: "symbol_n2.labels"
 extra: !<none> {}

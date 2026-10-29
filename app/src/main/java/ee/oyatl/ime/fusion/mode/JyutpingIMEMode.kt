@@ -4,11 +4,8 @@ import android.content.Context
 import android.view.KeyEvent
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.fusion.AssetsPresetLoader
-import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.korean.WordComposer
-import ee.oyatl.ime.fusion.layout.preset.JyutpingLayoutPresets
-import ee.oyatl.ime.fusion.layout.preset.LatinLayoutPresets
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

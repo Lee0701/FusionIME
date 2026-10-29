@@ -89,6 +89,7 @@ fun main(args: Array<String>) {
         "symbol_n1" to SymbolLayoutPresets.symbolN1(),
         "symbol_n2" to SymbolLayoutPresets.symbolN2(),
         "symbol_o1" to SymbolLayoutPresets.symbolO1(),
-        "symbol_o2" to SymbolLayoutPresets.symbolO2()
+        "symbol_o2" to SymbolLayoutPresets.symbolO2(),
+        "symbol_chinese" to SymbolLayoutPresets.symbolChinese()
     ))
 }

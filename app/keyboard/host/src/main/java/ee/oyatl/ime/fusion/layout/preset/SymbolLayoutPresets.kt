@@ -168,4 +168,10 @@ object SymbolLayoutPresets {
     fun softKeyCodeMapper(): SoftKeyCodeMapper {
         return SoftKeyCodeMapper.Basic(LayoutSymbol.KEYCODE_MAP_SYMBOLS)
     }
+
+    fun symbolChinese(): KeyboardLayoutPreset {
+        return KeyboardLayoutPreset(
+            layoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE_CHINESE)
+        )
+    }
 }

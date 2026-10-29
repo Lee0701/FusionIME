@@ -1,0 +1,21 @@
+map:
+  55: !<shift>
+    normal: !<output>
+      char: 65292
+    shifted: !<output>
+      char: 12298
+  56: !<shift>
+    normal: !<output>
+      char: 12290
+    shifted: !<output>
+      char: 12299
+  501: !<shift>
+    normal: !<output>
+      char: 12290
+    shifted: !<output>
+      char: 65292
+  502: !<shift>
+    normal: !<output>
+      char: 65292
+    shifted: !<output>
+      char: 12290
