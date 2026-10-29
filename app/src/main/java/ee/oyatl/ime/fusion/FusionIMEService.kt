@@ -33,6 +33,8 @@ import ee.oyatl.ime.keyboard.PaleViewFilter
 import ee.oyatl.ime.theme.KeyboardTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import org.json.JSONArray
 
@@ -57,15 +59,16 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
         super.onCreate()
         preference = PreferenceManager.getDefaultSharedPreferences(this)
         clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+
+        // LatinIMEMode
+        Settings.init(this)
+        RichInputMethodManager.init(this)
+
         onInit()
         onLoad()
         preference.registerOnSharedPreferenceChangeListener(this)
 
         updateNavigationBar()
-
-        // LatinIMEMode
-        Settings.init(this)
-        RichInputMethodManager.init(this)
     }
 
     override fun onDestroy() {
@@ -116,8 +119,11 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
         hardwareLanguageKeyStroke = KeyStrokePreference.KeyStroke
             .parse(preference.getString("hardware_language_key", null) ?: "")
             ?: hardwareLanguageKeyStroke
+        imeModeSwitcher.entries.firstOrNull()?.imeMode?.onLoad(this)
         coroutineScope.launch {
-            imeModeSwitcher.entries.forEach { it.imeMode.onLoad(this@FusionIMEService) }
+            imeModeSwitcher.entries.drop(1).map {
+                async { it.imeMode.onLoad(this@FusionIMEService) }
+            }.awaitAll()
         }
     }
 

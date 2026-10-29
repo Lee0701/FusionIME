@@ -26,6 +26,7 @@ import ee.oyatl.ime.keyboard.touchhandler.EmptyTouchHandler
 import ee.oyatl.ime.keyboard.touchhandler.TouchHandler
 import ee.oyatl.ime.theme.KeyboardTheme
 import kotlin.math.max
+import kotlin.math.min
 import kotlin.math.roundToInt
 
 class DefaultKeyboardView(
@@ -82,7 +83,7 @@ class DefaultKeyboardView(
 
         keySet.clear()
 
-        val keyHeight = keyboard.params.height / keyboard.rows.size
+        val keyHeight = keyboard.params.height / max(keyboard.rows.size, 1)
         keyboard.rows.forEach { keys ->
             val row = KbdRowBinding.inflate(inflater)
             var subRow = KbdRowBinding.inflate(inflater)

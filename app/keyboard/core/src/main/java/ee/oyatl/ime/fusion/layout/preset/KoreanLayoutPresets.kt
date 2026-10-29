@@ -107,7 +107,7 @@ object KoreanLayoutPresets {
             keyboardTemplate = KeyboardTemplate.ByScreenMode(
                 mobile = KeyboardTemplate.Basic(
                     configuration = KeyboardConfiguration(
-                        MobileKeyboard.numbers(),
+                        MobileKeyboard.numbers(true),
                         MobileKeyboard.alphabetic(semicolon = true, shiftDeleteWidth = 1f),
                         MobileKeyboard.bottom(left = ExtKeyCode.KEYCODE_PERIOD_COMMA, right = KeyCode.KEYCODE_SLASH)
                     ),
@@ -115,7 +115,7 @@ object KoreanLayoutPresets {
                 ),
                 tablet = KeyboardTemplate.Basic(
                     configuration = KeyboardConfiguration(
-                        TabletKeyboard.numbers(),
+                        TabletKeyboard.numbers(true),
                         TabletKeyboard.alphabetic(semicolon = true),
                         TabletKeyboard.bottom()
                     ),
@@ -130,7 +130,7 @@ object KoreanLayoutPresets {
             keyboardTemplate = KeyboardTemplate.ByScreenMode(
                 mobile = KeyboardTemplate.Basic(
                     configuration = KeyboardConfiguration(
-                        MobileKeyboard.numbers(),
+                        MobileKeyboard.numbers(true),
                         MobileKeyboard.alphabetic(semicolon = true, shiftDeleteWidth = 1f),
                         MobileKeyboard.bottom(ExtKeyCode.KEYCODE_PERIOD_COMMA, KeyCode.KEYCODE_SLASH)
                     ),
@@ -138,7 +138,7 @@ object KoreanLayoutPresets {
                 ),
                 tablet = KeyboardTemplate.Basic(
                     configuration = KeyboardConfiguration(
-                        TabletKeyboard.numbers(),
+                        TabletKeyboard.numbers(true),
                         TabletKeyboard.alphabetic(semicolon = true, fillDeleteSpace = false),
                         TabletKeyboard.bottom()
                     ),

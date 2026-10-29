@@ -37,7 +37,7 @@ abstract class CangjieIMEMode(
 
     private var bestCandidate: CangjieCandidate? = null
 
-    override suspend fun onLoad(context: Context) {
+    override fun onLoad(context: Context) {
         super.onLoad(context)
         val loader = AssetsPresetLoader(context.assets, "keyboard/cangjie")
         textLayoutPreset = loader.inflate(loader.load(presetName))
@@ -177,7 +177,7 @@ abstract class CangjieIMEMode(
         override val fullWidth: Boolean,
         extra: Map<String, String>,
         listener: IMEMode.Listener
-    ): CangjieIMEMode(listener, "dayi3", extra + mapOf("number_row" to "true")) {
+    ): CangjieIMEMode(listener, "dayi3", extra) {
         override val inputMode: Int = TableLoader.DAYI3
         override val keyMap: Map<Char, Char> = LayoutCangjie.KEY_MAP_DAYI3
     }

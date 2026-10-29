@@ -1,0 +1,7 @@
+keyboardTemplate: "number.template"
+layoutTable: "number.layout"
+altGraphTable: "number.altgr"
+moreKeysTable: "number.morekeys"
+softKeyCodeMapper: "number.softkeycode"
+hardKeyCodeMapper: "number.hardkeycode"
+extra: !<none> {}

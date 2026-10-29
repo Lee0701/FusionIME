@@ -88,7 +88,7 @@ class LatinIMEMode(
         ScriptUtils.getScriptFromSpellCheckerLocale(locale)
     }
 
-    override suspend fun onLoad(context: Context) {
+    override fun onLoad(context: Context) {
         super.onLoad(context)
         this.context = context
 

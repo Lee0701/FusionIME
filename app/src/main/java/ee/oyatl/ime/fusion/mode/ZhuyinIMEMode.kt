@@ -38,7 +38,7 @@ class ZhuyinIMEMode(
 
     private var bestCandidate: ZhuyinCandidate? = null
 
-    override suspend fun onLoad(context: Context) {
+    override fun onLoad(context: Context) {
         super.onLoad(context)
         val loader = AssetsPresetLoader(context.assets, "keyboard/zhuyin")
         textLayoutPreset = loader.inflate(loader.load(presetName))
@@ -201,10 +201,9 @@ class ZhuyinIMEMode(
             fun parse(map: Map<String, String>): Params {
                 val conversionEngine = ConversionEngines.entries.find { it.name == map["conversion_engine"] }
                     ?: ConversionEngines.FUZZY_CHEWING_CONVERSION_ENGINE
-                val extra = map + mapOf("number_row" to "true")
                 return Params(
                     conversionEngine = conversionEngine,
-                    extra = extra
+                    extra = map
                 )
             }
         }

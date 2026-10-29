@@ -38,7 +38,7 @@ class KoreanIMEMode(
     private val wordComposer: WordComposer = WordComposer()
     private val hanjaConverter: HanjaConverter = converterType.create()
 
-    override suspend fun onLoad(context: Context) {
+    override fun onLoad(context: Context) {
         super.onLoad(context)
         val loader = AssetsPresetLoader(context.assets, "keyboard/korean")
         textLayoutPreset = loader.inflate(loader.load(presetName))
@@ -143,8 +143,6 @@ class KoreanIMEMode(
         override val type: String = TYPE
 
         override fun create(listener: IMEMode.Listener): IMEMode {
-            val extra = extra.toMutableMap()
-            if(layout.requiresNumberRow) extra += "number_row" to "true"
             return when(layout) {
                 Layout.Set2KS -> KoreanIMEMode(converterType, layout.presetName, extra, listener)
                 Layout.Set3390 -> KoreanIMEMode(converterType, layout.presetName, extra, listener)

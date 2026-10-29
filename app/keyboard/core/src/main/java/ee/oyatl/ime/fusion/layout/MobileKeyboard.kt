@@ -27,8 +27,9 @@ object MobileKeyboard {
         return KeyboardConfiguration(listOf(row))
     }
 
-    fun numbers(): KeyboardConfiguration {
-        return KeyboardConfiguration(listOf(listOf(
+    fun numbers(force: Boolean = false): KeyboardConfiguration {
+        return if(force) KeyboardConfiguration(listOf(listOf(Item.ContentRow(3))))
+        else KeyboardConfiguration(listOf(listOf(
             Item.IfEq("number_row", "true", Item.ContentRow(3))
         )))
     }

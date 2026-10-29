@@ -10,8 +10,10 @@ import android.view.inputmethod.InputConnection
 import androidx.preference.PreferenceManager
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.ScrollingCandidateView
+import ee.oyatl.ime.fusion.AssetsPresetLoader
 import ee.oyatl.ime.fusion.FlickAction
 import ee.oyatl.ime.fusion.R
+import ee.oyatl.ime.fusion.SymbolLayout
 import ee.oyatl.ime.fusion.layout.preset.LatinLayoutPresets
 import ee.oyatl.ime.fusion.layout.preset.SymbolLayoutPresets
 import ee.oyatl.ime.fusion.util.KeyEventUtil
@@ -58,11 +60,11 @@ abstract class CommonIMEMode(
     override var keyboardTheme: KeyboardTheme? = null
     protected open val extra: Map<String, String> = mapOf()
 
-    open var textLayoutPreset: KeyboardLayoutPreset = LatinLayoutPresets.qwerty()
-    open var symbolLayoutPreset: KeyboardLayoutPreset = SymbolLayoutPresets.symbolG()
-    open var numberLayoutPreset: KeyboardLayoutPreset = SymbolLayoutPresets.number()
+    open var textLayoutPreset: KeyboardLayoutPreset = KeyboardLayoutPreset()
+    open var symbolLayoutPreset: KeyboardLayoutPreset = KeyboardLayoutPreset()
+    open var numberLayoutPreset: KeyboardLayoutPreset = KeyboardLayoutPreset()
 
-    val currentLayoutPreset: KeyboardLayoutPreset  get() = when(symbolState) {
+    val currentLayoutPreset: KeyboardLayoutPreset get() = when(symbolState) {
         KeyboardState.Symbol.Text -> textLayoutPreset
         KeyboardState.Symbol.Symbol -> symbolLayoutPreset
         KeyboardState.Symbol.Number -> numberLayoutPreset
@@ -120,12 +122,14 @@ abstract class CommonIMEMode(
         }
     }
 
-    override suspend fun onLoad(context: Context) {
+    override fun onLoad(context: Context) {
         val preference = PreferenceManager.getDefaultSharedPreferences(context)
 
+        val loader = AssetsPresetLoader(context.assets, "keyboard/symbol")
         val symbolLayoutTypeName = preference.getString("symbol_layout", null)
-        val symbolLayoutType = SymbolLayoutPresets.Type.entries.find { it.name == symbolLayoutTypeName } ?: SymbolLayoutPresets.Type.G
-        this.symbolLayoutPreset = symbolLayoutType.createPreset()
+        val symbolLayoutType = SymbolLayout.entries.find { it.name == symbolLayoutTypeName } ?: SymbolLayout.G
+        this.symbolLayoutPreset = loader.inflate(loader.load(symbolLayoutType.presetName))
+        this.numberLayoutPreset = loader.inflate(loader.load("number"))
 
         val flickActionUp = FlickAction.valueOf(preference.getString("default_flick_action_up", null) ?: FlickAction.Shifted.name)
         val flickActionDown = FlickAction.valueOf(preference.getString("default_flick_action_down", null) ?: FlickAction.Symbol.name)

@@ -8,6 +8,7 @@ import ee.oyatl.ime.fusion.layout.preset.JyutpingLayoutPresets
 import ee.oyatl.ime.fusion.layout.preset.KoreanLayoutPresets
 import ee.oyatl.ime.fusion.layout.preset.LatinLayoutPresets
 import ee.oyatl.ime.fusion.layout.preset.PinyinLayoutPresets
+import ee.oyatl.ime.fusion.layout.preset.SymbolLayoutPresets
 import ee.oyatl.ime.fusion.layout.preset.VietLayoutPresets
 import ee.oyatl.ime.fusion.layout.preset.ZhuyinLayoutPresets
 import java.io.File
@@ -80,5 +81,14 @@ fun main(args: Array<String>) {
     export("$dirname/vietnamese", mapOf(
         "qwerty" to VietLayoutPresets.chuQuocNgu(LatinLayoutPresets.qwerty(), false),
         "qwerty_nom" to VietLayoutPresets.chuQuocNgu(LatinLayoutPresets.qwerty(), true)
+    ))
+
+    export("$dirname/symbol", mapOf(
+        "number" to SymbolLayoutPresets.number(),
+        "symbol_g" to SymbolLayoutPresets.symbolG(),
+        "symbol_n1" to SymbolLayoutPresets.symbolN1(),
+        "symbol_n2" to SymbolLayoutPresets.symbolN2(),
+        "symbol_o1" to SymbolLayoutPresets.symbolO1(),
+        "symbol_o2" to SymbolLayoutPresets.symbolO2()
     ))
 }

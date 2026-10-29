@@ -87,7 +87,7 @@ object SymbolLayoutPresets {
         keyboardTemplate = KeyboardTemplate.ByScreenMode(
             mobile = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
-                    MobileKeyboard.numbers(),
+                    MobileKeyboard.numbers(true),
                     MobileKeyboard.alphabetic(semicolon = true),
                     MobileKeyboard.bottom()
                 ),
@@ -95,7 +95,7 @@ object SymbolLayoutPresets {
             ),
             tablet = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
-                    TabletKeyboard.numbers(),
+                    TabletKeyboard.numbers(true),
                     TabletKeyboard.alphabetic(semicolon = true),
                     TabletKeyboard.bottom()
                 ),
@@ -141,7 +141,7 @@ object SymbolLayoutPresets {
         keyboardTemplate = KeyboardTemplate.ByScreenMode(
             mobile = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
-                    MobileKeyboard.numbers(),
+                    MobileKeyboard.numbers(true),
                     MobileKeyboard.alphabetic(),
                     MobileKeyboard.bottom()
                 ),
@@ -149,7 +149,7 @@ object SymbolLayoutPresets {
             ),
             tablet = KeyboardTemplate.Basic(
                 configuration = KeyboardConfiguration(
-                    TabletKeyboard.numbers(),
+                    TabletKeyboard.numbers(true),
                     TabletKeyboard.alphabetic(),
                     TabletKeyboard.bottom()
                 ),
@@ -167,16 +167,5 @@ object SymbolLayoutPresets {
 
     fun softKeyCodeMapper(): SoftKeyCodeMapper {
         return SoftKeyCodeMapper.Basic(LayoutSymbol.KEYCODE_MAP_SYMBOLS)
-    }
-
-    enum class Type(
-        val createPreset: () -> KeyboardLayoutPreset
-    ) {
-        G({ symbolG() }),
-        N1({ symbolN1() }),
-        N2({ symbolN2() }),
-        O1({ symbolO1() }),
-        O2({ symbolO2() }),
-        ;
     }
 }

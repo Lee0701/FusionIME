@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class KeyboardLayoutPreset(
-    val keyboardTemplate: KeyboardTemplate,
+    val keyboardTemplate: KeyboardTemplate = KeyboardTemplate.Basic(),
     val layoutTable: LayoutTable = LayoutTable(),
     val altGraphTable: LayoutTable = LayoutTable(),
     val moreKeysTable: MoreKeysTable = MoreKeysTable(),

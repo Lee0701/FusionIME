@@ -80,7 +80,7 @@ class PinyinIMEMode(
 
     private var isEnterNormalState = true
 
-    override suspend fun onLoad(context: Context) {
+    override fun onLoad(context: Context) {
         super.onLoad(context)
         val loader = AssetsPresetLoader(context.assets, "keyboard/pinyin")
         val hasSemicolonKey = spelling.doublePinyinScheme?.acceptsFinal(';') == true

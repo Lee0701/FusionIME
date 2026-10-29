@@ -66,7 +66,7 @@ object JapaneseLayoutPresets {
             keyboardTemplate = KeyboardTemplate.ByScreenMode(
                 mobile = Basic(
                     configuration = KeyboardConfiguration(
-                        MobileKeyboard.numbers(),
+                        MobileKeyboard.numbers(true),
                         MobileKeyboard.alphabetic(semicolon = true, shiftDeleteWidth = 1f),
                         MobileKeyboard.bottom(left = ExtKeyCode.KEYCODE_KANA_EQUALS, right = ExtKeyCode.KEYCODE_KANA_SLASH)
                     ),
@@ -74,7 +74,7 @@ object JapaneseLayoutPresets {
                 ),
                 tablet = Basic(
                     configuration = KeyboardConfiguration(
-                        TabletKeyboard.numbers(),
+                        TabletKeyboard.numbers(true),
                         TabletKeyboard.alphabetic(semicolon = true),
                         TabletKeyboard.bottom()
                     ),

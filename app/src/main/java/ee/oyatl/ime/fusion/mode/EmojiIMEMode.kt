@@ -26,7 +26,7 @@ class EmojiIMEMode(
     private var util: KeyEventUtil? = null
     private val currentInputConnection: InputConnection? get() = util?.currentInputConnection
 
-    override suspend fun onLoad(context: Context) {
+    override fun onLoad(context: Context) {
     }
 
     override fun onStart(

@@ -2,11 +2,8 @@
 mobile: !<basic>
   configuration:
     rows:
-    - - !<ifeq>
-        name: "number_row"
-        value: "true"
-        content: !<content-row>
-          rowId: 3
+    - - !<content-row>
+        rowId: 3
     - - !<content-row>
         rowId: 2
     - - !<content-row>
@@ -62,24 +59,21 @@ mobile: !<basic>
 tablet: !<basic>
   configuration:
     rows:
-    - - !<ifeq>
-        name: "number_row"
-        value: "true"
-        content: !<multiple>
-          items:
-          - !<content-row>
-            rowId: 3
-          - !<ifeq>
-            name: "number_row"
-            value: "true"
-            content: !<template-key>
-              keyCode: 67
-              special: true
-          - !<ifneq>
-            name: "number_row"
-            value: "true"
-            content: !<spacer>
-              width: 1.0
+    - - !<multiple>
+        items:
+        - !<content-row>
+          rowId: 3
+        - !<ifeq>
+          name: "number_row"
+          value: "true"
+          content: !<template-key>
+            keyCode: 67
+            special: true
+        - !<ifneq>
+          name: "number_row"
+          value: "true"
+          content: !<spacer>
+            width: 1.0
     - - !<content-row>
         rowId: 2
       - !<ifneq>

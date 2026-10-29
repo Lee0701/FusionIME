@@ -8,8 +8,8 @@ sealed interface KeyboardTemplate {
     @SerialName("basic")
     @Serializable
     data class Basic(
-        val configuration: KeyboardConfiguration,
-        val contentRows: List<String>
+        val configuration: KeyboardConfiguration = KeyboardConfiguration(),
+        val contentRows: List<String> = listOf()
     ): KeyboardTemplate
 
     @SerialName("by-screen-mode")

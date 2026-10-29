@@ -19,7 +19,7 @@ object ZhuyinLayoutPresets {
             keyboardTemplate = KeyboardTemplate.ByScreenMode(
                 mobile = KeyboardTemplate.Basic(
                     configuration = KeyboardConfiguration(
-                        MobileKeyboard.numbers(),
+                        MobileKeyboard.numbers(true),
                         MobileKeyboard.alphabetic(semicolon = true, shiftDeleteWidth = 1f, shift = false),
                         MobileKeyboard.bottom(left = KeyCode.KEYCODE_MINUS, right = KeyCode.KEYCODE_SLASH)
                     ),
@@ -27,7 +27,7 @@ object ZhuyinLayoutPresets {
                 ),
                 tablet = KeyboardTemplate.Basic(
                     configuration = KeyboardConfiguration(
-                        TabletKeyboard.numbers(),
+                        TabletKeyboard.numbers(true),
                         TabletKeyboard.alphabetic(semicolon = true, rightShift = false, fillDeleteSpace = false),
                         TabletKeyboard.bottom()
                     ),

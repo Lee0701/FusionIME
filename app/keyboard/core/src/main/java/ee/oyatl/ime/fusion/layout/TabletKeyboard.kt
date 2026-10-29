@@ -22,6 +22,7 @@ object TabletKeyboard {
     }
 
     fun numbers(
+        force: Boolean = false,
         fillDeleteSpace: Boolean = true
     ): KeyboardConfiguration {
         val row0: MutableList<Item> = mutableListOf(
@@ -29,8 +30,11 @@ object TabletKeyboard {
         )
         row0.add(Item.IfEq("number_row", "true", Item.TemplateKey(KeyCode.KEYCODE_DEL, 1f, true)))
         if(fillDeleteSpace) row0.add(Item.IfNEq("number_row", "true", Item.Spacer(1f)))
-        return KeyboardConfiguration(listOf(listOf(
-            Item.IfEq("number_row", "true", Item.Multiple(row0))
+
+        val item = Item.Multiple(row0)
+        return if(force) KeyboardConfiguration(listOf(listOf(item)))
+        else KeyboardConfiguration(listOf(listOf(
+            Item.IfEq("number_row", "true", item)
         )))
     }
 

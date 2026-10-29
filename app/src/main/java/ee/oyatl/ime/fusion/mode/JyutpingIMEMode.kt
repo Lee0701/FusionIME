@@ -30,7 +30,7 @@ class JyutpingIMEMode(
     private val wordComposer = WordComposer()
     private var bestCandidate: CandidateView.Candidate? = null
 
-    override suspend fun onLoad(context: Context) {
+    override fun onLoad(context: Context) {
         super.onLoad(context)
 
         val loader = AssetsPresetLoader(context.assets, "keyboard/jyutping")

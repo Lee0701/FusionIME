@@ -76,7 +76,7 @@ abstract class MozcIMEMode(
         }
     }
 
-    override suspend fun onLoad(context: Context) {
+    override fun onLoad(context: Context) {
         super.onLoad(context)
         primaryKeyCodeConverter = PrimaryKeyCodeConverter(context)
         sessionExecutor = SessionExecutor.getInstanceInitializedIfNecessary(SessionHandlerFactory(context), context)
@@ -251,7 +251,7 @@ abstract class MozcIMEMode(
     ): MozcIMEMode(listener, candidateViewHeight, extra) {
         abstract val presetName: String
 
-        override suspend fun onLoad(context: Context) {
+        override fun onLoad(context: Context) {
             super.onLoad(context)
 
             val loader = AssetsPresetLoader(context.assets, "keyboard/japanese")
@@ -417,7 +417,7 @@ abstract class MozcIMEMode(
         listener: IMEMode.Listener,
         candidateViewHeight: Int,
         extra: Map<String, String>
-    ): StaticPreset(listener, candidateViewHeight, extra + mapOf("number_row" to "true")) {
+    ): StaticPreset(listener, candidateViewHeight, extra) {
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.QWERTY_KANA_JIS
         override val presetName: String = "kana_jis"
     }

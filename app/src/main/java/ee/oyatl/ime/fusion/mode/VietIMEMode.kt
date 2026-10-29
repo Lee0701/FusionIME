@@ -25,7 +25,7 @@ class VietIMEMode(
 
     private var bestCandidate: VietnameseConverter.Candidate? = null
 
-    override suspend fun onLoad(context: Context) {
+    override fun onLoad(context: Context) {
         super.onLoad(context)
         val loader = AssetsPresetLoader(context.assets, "keyboard/vietnamese")
         val suffix = if(layout.nomMode) "_nom" else ""
