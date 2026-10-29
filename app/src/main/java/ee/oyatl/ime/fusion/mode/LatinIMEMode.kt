@@ -257,6 +257,13 @@ class LatinIMEMode(
         loadSettings()
         dictionaryFacilitator?.onStartInput()
         inputLogic?.startInput(richImm?.combiningRulesExtraValueOfCurrentSubtype, settingsValues)
+        // As in LatinIME.onStartInputViewInternal: sync the expected cursor with the editor.
+        // Must run after startInput(), which applies its own cursor heuristics.
+        if(editorInfo != null) {
+            inputLogic?.mConnection?.resetCachesUponCursorMoveAndReturnSuccess(
+                editorInfo.initialSelStart, editorInfo.initialSelEnd, false
+            )
+        }
     }
 
     override fun onFinishInputInternal() {
