@@ -35,7 +35,7 @@ object ZhuyinLayoutPresets {
                 )
             ),
             layoutTable = LayoutTable
-                .fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutExt.TABLE_CHINESE + LayoutZhuyin.TABLE)
+                .fromShiftStates(LayoutExt.TABLE_EXT + LayoutQwerty.TABLE_QWERTY + LayoutExt.TABLE_CHINESE + LayoutZhuyin.TABLE)
         )
     }
 }

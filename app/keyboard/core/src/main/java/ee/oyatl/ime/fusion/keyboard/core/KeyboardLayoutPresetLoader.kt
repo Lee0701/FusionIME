@@ -13,7 +13,7 @@ abstract class KeyboardLayoutPresetLoader {
         )
     )
 
-    abstract fun open(name: String): InputStream
+    abstract fun openInput(name: String): InputStream
 
     fun load(name: String): KeyboardLayoutPresetDef {
         return import(name)
@@ -21,12 +21,9 @@ abstract class KeyboardLayoutPresetLoader {
 
     fun inflate(def: KeyboardLayoutPresetDef): KeyboardLayoutPreset {
         val keyboardTemplate = import<KeyboardTemplate>(def.keyboardTemplate)
-        val layoutTable = importAll<LayoutTable>(def.layoutTables)
-            .fold(LayoutTable()) { acc, table -> acc + table }
-        val altGraphTable = importAll<LayoutTable>(def.altGraphTables)
-            .fold(LayoutTable()) { acc, table -> acc + table }
-        val moreKeysTable = importAll<MoreKeysTable>(def.moreKeysTables)
-            .fold(MoreKeysTable()) { acc, table -> acc + table }
+        val layoutTable = import<LayoutTable>(def.layoutTable)
+        val altGraphTable = import<LayoutTable>(def.altGraphTable)
+        val moreKeysTable = import<MoreKeysTable>(def.moreKeysTable)
         val softKeyCodeMapper = import<SoftKeyCodeMapper>(def.softKeyCodeMapper)
         val hardKeyCodeMapper = import<HardKeyCodeMapper>(def.hardKeyCodeMapper)
         val extra = inflateExtra(def.extra)
@@ -45,8 +42,7 @@ abstract class KeyboardLayoutPresetLoader {
         return when(extra) {
             is KeyboardLayoutPresetDef.Extra.None -> KeyboardLayoutPreset.Extra.None
             is KeyboardLayoutPresetDef.Extra.Hangul -> {
-                val jamoCombinationTable = importAll<JamoCombinationTable>(extra.jamoCombinationTables)
-                    .fold(JamoCombinationTable()) { acc, table -> acc + table }
+                val jamoCombinationTable = import<JamoCombinationTable>(extra.jamoCombinationTable)
                 KeyboardLayoutPreset.Extra.Hangul(
                     jamoCombinationTable = jamoCombinationTable
                 )
@@ -63,10 +59,6 @@ abstract class KeyboardLayoutPresetLoader {
     private inline fun <reified T> import(
         name: String
     ): T {
-        return yaml.decodeFromStream(open(name))
-    }
-
-    companion object {
-        const val EXT_YAML = ".yaml"
+        return yaml.decodeFromStream(openInput(name))
     }
 }

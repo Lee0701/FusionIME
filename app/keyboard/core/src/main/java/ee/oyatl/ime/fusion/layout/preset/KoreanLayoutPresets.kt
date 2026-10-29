@@ -8,7 +8,6 @@ import ee.oyatl.ime.fusion.keyboard.core.KeyCode
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardConfiguration
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardTemplate
-import ee.oyatl.ime.fusion.layout.LatinMoreKeysTable
 import ee.oyatl.ime.fusion.layout.LayoutExt
 import ee.oyatl.ime.fusion.layout.LayoutQwerty
 import ee.oyatl.ime.fusion.layout.MobileKeyboard
@@ -16,14 +15,33 @@ import ee.oyatl.ime.fusion.layout.MobileKeyboardRows
 import ee.oyatl.ime.fusion.layout.TabletKeyboard
 import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
 import ee.oyatl.ime.fusion.keyboard.core.LayoutTable
-import ee.oyatl.ime.fusion.keyboard.core.MoreKeysTable
 import ee.oyatl.ime.fusion.keyboard.core.SoftKeyCodeMapper
+import ee.oyatl.ime.fusion.layout.Hangul2Set
 
 object KoreanLayoutPresets {
-    fun ksCompatible(
-        layoutTable: LayoutTable,
-        jamoCombinationTable: JamoCombinationTable
-    ): KeyboardLayoutPreset {
+    fun hangul2SetKS(): KeyboardLayoutPreset {
+        val layoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE_EXT + LayoutQwerty.TABLE_QWERTY + Hangul2Set.TABLE_KS)
+        val jamoCombinationTable = JamoCombinationTable.from(Hangul2Set.COMBINATION_KS)
+        return hangulKSCompatible().copy(
+            layoutTable = layoutTable,
+            extra = KeyboardLayoutPreset.Extra.Hangul(
+                jamoCombinationTable = jamoCombinationTable
+            )
+        )
+    }
+
+    fun hangulOld2Set(): KeyboardLayoutPreset {
+        val layoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE_EXT + LayoutQwerty.TABLE_QWERTY + HangulOld.TABLE_OLD_2SET)
+        val jamoCombinationTable = JamoCombinationTable.from(HangulOld.COMBINATION_FULL)
+        return hangulKSCompatible().copy(
+            layoutTable = layoutTable,
+            extra = KeyboardLayoutPreset.Extra.Hangul(
+                jamoCombinationTable = jamoCombinationTable
+            )
+        )
+    }
+
+    private fun hangulKSCompatible(): KeyboardLayoutPreset {
         return KeyboardLayoutPreset(
             keyboardTemplate = KeyboardTemplate.ByScreenMode(
                 mobile = KeyboardTemplate.Basic(
@@ -42,20 +60,49 @@ object KoreanLayoutPresets {
                     ),
                     contentRows = TabletKeyboardRows.NUMBERS + TabletKeyboardRows.KS
                 )
-            ),
-            layoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY) + layoutTable,
-            moreKeysTable = MoreKeysTable.from(LatinMoreKeysTable.DEFAULT, LatinMoreKeysTable.DEFAULT_UPPERCASE_OVERRIDE),
+            )
+        )
+    }
+
+    fun hangul3Set390(): KeyboardLayoutPreset {
+        val layoutTable = LayoutTable.fromShiftStates(Hangul3Set.TABLE_390)
+        val softKeyCodeMapper = SoftKeyCodeMapper.ByScreenMode(
+            mobile = SoftKeyCodeMapper.Basic(Hangul3Set.KEYCODE_MAP_390_MOBILE),
+            tablet = SoftKeyCodeMapper.Empty
+        )
+        val jamoCombinationTable = JamoCombinationTable.from(Hangul3Set.COMBINATION_390_391)
+        return hangul3Set390391().copy(
+            layoutTable = layoutTable,
+            softKeyCodeMapper = softKeyCodeMapper,
             extra = KeyboardLayoutPreset.Extra.Hangul(
                 jamoCombinationTable = jamoCombinationTable
             )
         )
     }
 
-    fun threeSet390391(
-        layoutTable: LayoutTable,
-        softKeyCodeMapper: SoftKeyCodeMapper,
-        jamoCombinationTable: JamoCombinationTable
-    ): KeyboardLayoutPreset {
+    fun hangul3Set391(): KeyboardLayoutPreset {
+        val layoutTable = LayoutTable.fromShiftStates(Hangul3Set.TABLE_391)
+        val jamoCombinationTable = JamoCombinationTable.from(Hangul3Set.COMBINATION_390_391)
+        return hangul3Set390391().copy(
+            layoutTable = layoutTable,
+            extra = KeyboardLayoutPreset.Extra.Hangul(
+                jamoCombinationTable = jamoCombinationTable
+            )
+        )
+    }
+
+    fun hangul3Set391Strict(): KeyboardLayoutPreset {
+        val layoutTable = LayoutTable.fromShiftStates(Hangul3Set.TABLE_391 + Hangul3Set.TABLE_391_STRICT)
+        val jamoCombinationTable = JamoCombinationTable.from(Hangul3Set.COMBINATION_391_STRICT)
+        return hangul3Set390391().copy(
+            layoutTable = layoutTable,
+            extra = KeyboardLayoutPreset.Extra.Hangul(
+                jamoCombinationTable = jamoCombinationTable
+            )
+        )
+    }
+
+    private fun hangul3Set390391(): KeyboardLayoutPreset {
         return KeyboardLayoutPreset(
             keyboardTemplate = KeyboardTemplate.ByScreenMode(
                 mobile = KeyboardTemplate.Basic(
@@ -74,16 +121,11 @@ object KoreanLayoutPresets {
                     ),
                     contentRows = TabletKeyboardRows.NUMBERS + TabletKeyboardRows.SEMICOLON_QUOTE_SLASH
                 )
-            ),
-            layoutTable = layoutTable,
-            softKeyCodeMapper = softKeyCodeMapper,
-            extra = KeyboardLayoutPreset.Extra.Hangul(
-                jamoCombinationTable = jamoCombinationTable
             )
         )
     }
 
-    fun threeSet393(): KeyboardLayoutPreset {
+    fun hangul3Set393(): KeyboardLayoutPreset {
         return KeyboardLayoutPreset(
             keyboardTemplate = KeyboardTemplate.ByScreenMode(
                 mobile = KeyboardTemplate.Basic(
@@ -104,7 +146,7 @@ object KoreanLayoutPresets {
                 )
             ),
             layoutTable = LayoutTable
-                .fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + HangulOld.TABLE_OLD_393),
+                .fromShiftStates(LayoutExt.TABLE_EXT + LayoutQwerty.TABLE_QWERTY + HangulOld.TABLE_OLD_393),
             softKeyCodeMapper = SoftKeyCodeMapper.ByScreenMode(
                 mobile = SoftKeyCodeMapper.Basic(Hangul3Set.KEYCODE_MAP_393_MOBILE),
                 tablet = SoftKeyCodeMapper.Empty

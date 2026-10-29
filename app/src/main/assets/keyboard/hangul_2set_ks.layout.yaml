@@ -1,4 +1,14 @@
 map:
+  501: !<shift>
+    normal: !<output>
+      char: 46
+    shifted: !<output>
+      char: 44
+  502: !<shift>
+    normal: !<output>
+      char: 44
+    shifted: !<output>
+      char: 46
   68: !<shift>
     normal: !<output>
       char: 96
@@ -11,71 +21,51 @@ map:
       char: 49
     shifted: !<output>
       char: 33
-    locked: !<output>
-      char: 49
   9: !<shift>
     normal: !<output>
       char: 50
     shifted: !<output>
       char: 64
-    locked: !<output>
-      char: 50
   10: !<shift>
     normal: !<output>
       char: 51
     shifted: !<output>
       char: 35
-    locked: !<output>
-      char: 51
   11: !<shift>
     normal: !<output>
       char: 52
     shifted: !<output>
       char: 36
-    locked: !<output>
-      char: 52
   12: !<shift>
     normal: !<output>
       char: 53
     shifted: !<output>
       char: 37
-    locked: !<output>
-      char: 53
   13: !<shift>
     normal: !<output>
       char: 54
     shifted: !<output>
       char: 94
-    locked: !<output>
-      char: 54
   14: !<shift>
     normal: !<output>
       char: 55
     shifted: !<output>
       char: 38
-    locked: !<output>
-      char: 55
   15: !<shift>
     normal: !<output>
       char: 56
     shifted: !<output>
       char: 42
-    locked: !<output>
-      char: 56
   16: !<shift>
     normal: !<output>
       char: 57
     shifted: !<output>
       char: 40
-    locked: !<output>
-      char: 57
   7: !<shift>
     normal: !<output>
       char: 48
     shifted: !<output>
       char: 41
-    locked: !<output>
-      char: 48
   69: !<shift>
     normal: !<output>
       char: 45
@@ -92,54 +82,54 @@ map:
       char: 61
   45: !<shift>
     normal: !<output>
-      char: 113
+      char: 12610
     shifted: !<output>
-      char: 81
+      char: 12611
   51: !<shift>
     normal: !<output>
-      char: 119
+      char: 12616
     shifted: !<output>
-      char: 87
+      char: 12617
   33: !<shift>
     normal: !<output>
-      char: 101
+      char: 12599
     shifted: !<output>
-      char: 69
+      char: 12600
   46: !<shift>
     normal: !<output>
-      char: 114
+      char: 12593
     shifted: !<output>
-      char: 82
+      char: 12594
   48: !<shift>
     normal: !<output>
-      char: 116
+      char: 12613
     shifted: !<output>
-      char: 84
+      char: 12614
   53: !<shift>
     normal: !<output>
-      char: 121
+      char: 12635
     shifted: !<output>
-      char: 89
+      char: 12635
   49: !<shift>
     normal: !<output>
-      char: 117
+      char: 12629
     shifted: !<output>
-      char: 85
+      char: 12629
   37: !<shift>
     normal: !<output>
-      char: 105
+      char: 12625
     shifted: !<output>
-      char: 73
+      char: 12625
   43: !<shift>
     normal: !<output>
-      char: 111
+      char: 12624
     shifted: !<output>
-      char: 79
+      char: 12626
   44: !<shift>
     normal: !<output>
-      char: 112
+      char: 12628
     shifted: !<output>
-      char: 80
+      char: 12630
   71: !<shift>
     normal: !<output>
       char: 91
@@ -163,49 +153,49 @@ map:
       char: 92
   29: !<shift>
     normal: !<output>
-      char: 97
+      char: 12609
     shifted: !<output>
-      char: 65
+      char: 12609
   47: !<shift>
     normal: !<output>
-      char: 115
+      char: 12596
     shifted: !<output>
-      char: 83
+      char: 12596
   32: !<shift>
     normal: !<output>
-      char: 100
+      char: 12615
     shifted: !<output>
-      char: 68
+      char: 12615
   34: !<shift>
     normal: !<output>
-      char: 102
+      char: 12601
     shifted: !<output>
-      char: 70
+      char: 12601
   35: !<shift>
     normal: !<output>
-      char: 103
+      char: 12622
     shifted: !<output>
-      char: 71
+      char: 12622
   36: !<shift>
     normal: !<output>
-      char: 104
+      char: 12631
     shifted: !<output>
-      char: 72
+      char: 12631
   38: !<shift>
     normal: !<output>
-      char: 106
+      char: 12627
     shifted: !<output>
-      char: 74
+      char: 12627
   39: !<shift>
     normal: !<output>
-      char: 107
+      char: 12623
     shifted: !<output>
-      char: 75
+      char: 12623
   40: !<shift>
     normal: !<output>
-      char: 108
+      char: 12643
     shifted: !<output>
-      char: 76
+      char: 12643
   74: !<shift>
     normal: !<output>
       char: 59
@@ -222,39 +212,39 @@ map:
       char: 39
   54: !<shift>
     normal: !<output>
-      char: 122
+      char: 12619
     shifted: !<output>
-      char: 90
+      char: 12619
   52: !<shift>
     normal: !<output>
-      char: 120
+      char: 12620
     shifted: !<output>
-      char: 88
+      char: 12620
   31: !<shift>
     normal: !<output>
-      char: 99
+      char: 12618
     shifted: !<output>
-      char: 67
+      char: 12618
   50: !<shift>
     normal: !<output>
-      char: 118
+      char: 12621
     shifted: !<output>
-      char: 86
+      char: 12621
   30: !<shift>
     normal: !<output>
-      char: 98
+      char: 12640
     shifted: !<output>
-      char: 66
+      char: 12640
   42: !<shift>
     normal: !<output>
-      char: 110
+      char: 12636
     shifted: !<output>
-      char: 78
+      char: 12636
   41: !<shift>
     normal: !<output>
-      char: 109
+      char: 12641
     shifted: !<output>
-      char: 77
+      char: 12641
   55: !<shift>
     normal: !<output>
       char: 44

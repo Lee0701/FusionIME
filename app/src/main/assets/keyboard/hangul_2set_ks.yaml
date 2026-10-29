@@ -1,0 +1,8 @@
+keyboardTemplate: "hangul_2set_ks.template"
+layoutTable: "hangul_2set_ks.layout"
+altGraphTable: "hangul_2set_ks.altgr"
+moreKeysTable: "hangul_2set_ks.morekeys"
+softKeyCodeMapper: "hangul_2set_ks.softkeycode"
+hardKeyCodeMapper: "hangul_2set_ks.hardkeycode"
+extra: !<hangul>
+  jamoCombinationTable: "hangul_2set_ks.combination"

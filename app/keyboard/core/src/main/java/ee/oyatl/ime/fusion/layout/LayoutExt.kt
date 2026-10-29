@@ -4,7 +4,7 @@ import ee.oyatl.ime.fusion.keyboard.core.ExtKeyCode
 import ee.oyatl.ime.fusion.keyboard.core.KeyCode
 
 object LayoutExt {
-    val TABLE = mapOf(
+    val TABLE_EXT = mapOf(
         ExtKeyCode.KEYCODE_PERIOD_COMMA to listOf('.'.code, ','.code),
         ExtKeyCode.KEYCODE_COMMA_PERIOD to listOf(','.code, '.'.code)
     )

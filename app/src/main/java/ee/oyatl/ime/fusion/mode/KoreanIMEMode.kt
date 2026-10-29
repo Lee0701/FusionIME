@@ -16,7 +16,6 @@ import ee.oyatl.ime.fusion.korean.JeongUnHanjaConverter
 import ee.oyatl.ime.fusion.korean.UnigramHanjaConverter
 import ee.oyatl.ime.fusion.korean.WordComposer
 import ee.oyatl.ime.fusion.keyboard.core.SoftKeyCodeMapper
-import ee.oyatl.ime.fusion.layout.Hangul2Set
 import ee.oyatl.ime.fusion.layout.Hangul3Set
 import ee.oyatl.ime.fusion.layout.HangulOld
 import ee.oyatl.ime.fusion.keyboard.core.LayoutTable
@@ -49,11 +48,11 @@ abstract class KoreanIMEMode(
         super.onLoad(context)
         if(this is Hangul2SetKS) {
             val loader = object: KeyboardLayoutPresetLoader() {
-                override fun open(name: String): InputStream {
-                    return context.assets.open("keyboard/${name}${EXT_YAML}")
+                override fun openInput(name: String): InputStream {
+                    return context.assets.open("keyboard/${name}.yaml")
                 }
             }
-            textLayoutPreset = loader.inflate(loader.load("def_hangul_2set_ks"))
+            textLayoutPreset = loader.inflate(loader.load("hangul_2set_ks"))
         }
         val jamoCombinationTable = (textLayoutPreset.extra as? KeyboardLayoutPreset.Extra.Hangul)
             ?.jamoCombinationTable ?: JamoCombinationTable()
@@ -148,85 +147,42 @@ abstract class KoreanIMEMode(
         }
     }
 
-    abstract class Hangul2SetKSCompatible(
-        converterType: ConverterType,
-        extra: Map<String, String>,
-        listener: IMEMode.Listener
-    ): KoreanIMEMode(converterType, extra, listener) {
-        abstract val layoutTable: LayoutTable
-        abstract val jamoCombinationTable: JamoCombinationTable
-        override var textLayoutPreset: KeyboardLayoutPreset =
-            KoreanLayoutPresets.ksCompatible(
-                layoutTable,
-                jamoCombinationTable
-            )
-    }
-
     class Hangul2SetKS(
         converterType: ConverterType,
         extra: Map<String, String>,
         listener: IMEMode.Listener
     ): KoreanIMEMode(converterType, extra, listener)
 
-    /*
-     * Common part for 390 and 391
-     */
-    abstract class Hangul3Set390391(
-        converterType: ConverterType,
-        extra: Map<String, String>,
-        listener: IMEMode.Listener
-    ): KoreanIMEMode(converterType, extra + mapOf("number_row" to "true"), listener) {
-        abstract val layoutTable: LayoutTable
-        abstract val jamoCombinationTable: JamoCombinationTable
-        abstract val softKeyCodeMapper: SoftKeyCodeMapper
-        override var textLayoutPreset: KeyboardLayoutPreset =
-            KoreanLayoutPresets.threeSet390391(
-                layoutTable,
-                softKeyCodeMapper,
-                jamoCombinationTable
-            )
-    }
-
     class Hangul3Set390(
         converterType: ConverterType,
         extra: Map<String, String>,
         listener: IMEMode.Listener
-    ): Hangul3Set390391(converterType, extra, listener) {
-        override val layoutTable: LayoutTable get() = LayoutTable.fromShiftStates(Hangul3Set.TABLE_390)
-        override val jamoCombinationTable: JamoCombinationTable = JamoCombinationTable.from(Hangul3Set.COMBINATION_390_391)
-        override val softKeyCodeMapper: SoftKeyCodeMapper get() = SoftKeyCodeMapper.ByScreenMode(
-            mobile = SoftKeyCodeMapper.Basic(Hangul3Set.KEYCODE_MAP_390_MOBILE),
-            tablet = SoftKeyCodeMapper.Empty
-        )
+    ): KoreanIMEMode(converterType, extra, listener) {
+        override var textLayoutPreset: KeyboardLayoutPreset = KoreanLayoutPresets.hangul3Set390()
     }
 
     class Hangul3Set391(
         converterType: ConverterType,
         extra: Map<String, String>,
         listener: IMEMode.Listener
-    ): Hangul3Set390391(converterType, extra, listener) {
-        override val layoutTable: LayoutTable get() = LayoutTable.fromShiftStates(Hangul3Set.TABLE_391)
-        override val jamoCombinationTable: JamoCombinationTable = JamoCombinationTable.from(Hangul3Set.COMBINATION_390_391)
-        override val softKeyCodeMapper: SoftKeyCodeMapper get() = SoftKeyCodeMapper.Empty
+    ): KoreanIMEMode(converterType, extra, listener) {
+        override var textLayoutPreset: KeyboardLayoutPreset = KoreanLayoutPresets.hangul3Set391()
     }
 
     class Hangul3Set391Strict(
         converterType: ConverterType,
         extra: Map<String, String>,
         listener: IMEMode.Listener
-    ): Hangul3Set390391(converterType, extra, listener) {
-        override val layoutTable: LayoutTable get() = LayoutTable.fromShiftStates(Hangul3Set.TABLE_391_STRICT)
-        override val jamoCombinationTable: JamoCombinationTable = JamoCombinationTable.from(Hangul3Set.COMBINATION_391_STRICT)
-        override val softKeyCodeMapper: SoftKeyCodeMapper get() = SoftKeyCodeMapper.Empty
+    ): KoreanIMEMode(converterType, extra, listener) {
+        override var textLayoutPreset: KeyboardLayoutPreset = KoreanLayoutPresets.hangul3Set391Strict()
     }
 
     class HangulOld2Set(
         converterType: ConverterType,
         extra: Map<String, String>,
         listener: IMEMode.Listener
-    ): Hangul2SetKSCompatible(converterType, extra, listener) {
-        override val layoutTable: LayoutTable get() = LayoutTable.fromShiftStates(HangulOld.TABLE_OLD_2SET)
-        override val jamoCombinationTable: JamoCombinationTable = JamoCombinationTable.from(HangulOld.COMBINATION_FULL)
+    ): KoreanIMEMode(converterType, extra, listener) {
+        override var textLayoutPreset: KeyboardLayoutPreset = KoreanLayoutPresets.hangulOld2Set()
     }
 
     class HangulOld3Set393(
@@ -234,7 +190,7 @@ abstract class KoreanIMEMode(
         extra: Map<String, String>,
         listener: IMEMode.Listener
     ): KoreanIMEMode(converterType, extra + mapOf("number_row" to "true"), listener) {
-        override var textLayoutPreset: KeyboardLayoutPreset = KoreanLayoutPresets.threeSet393()
+        override var textLayoutPreset: KeyboardLayoutPreset = KoreanLayoutPresets.hangul3Set393()
     }
 
     data class Params(

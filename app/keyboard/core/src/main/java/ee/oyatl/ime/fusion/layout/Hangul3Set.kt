@@ -160,7 +160,7 @@ object Hangul3Set {
         0x11ba to 0x11ba to 0x11bb
     )
 
-    val TABLE_391_STRICT = TABLE_391 + mapOf(
+    val TABLE_391_STRICT = mapOf(
         KeyCode.KEYCODE_9 to listOf(0x100116e, 0x27),
         KeyCode.KEYCODE_SLASH to listOf(0x1001169, 0x21)
     )

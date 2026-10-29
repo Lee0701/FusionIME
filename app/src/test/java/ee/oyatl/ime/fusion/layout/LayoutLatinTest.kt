@@ -21,7 +21,7 @@ class LayoutLatinTest {
     @Test
     fun azertyRemapsLettersAndKeepsApostropheOnBottomRow() {
         val table = LayoutTable.fromShiftStates(
-            LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutLatin.TABLE_AZERTY
+            LayoutExt.TABLE_EXT + LayoutQwerty.TABLE_QWERTY + LayoutLatin.TABLE_AZERTY
         )
         val mapper = SoftKeyCodeMapper.Basic(LayoutLatin.KEYCODE_MAP_AZERTY
                 + LayoutLatin.SOFT_KEYCODE_MAP_AZERTY_NUMBERS

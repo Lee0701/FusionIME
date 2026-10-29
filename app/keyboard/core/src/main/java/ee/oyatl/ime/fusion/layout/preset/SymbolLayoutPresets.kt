@@ -49,7 +49,7 @@ object SymbolLayoutPresets {
             )
         ),
         layoutTable = LayoutTable.fromShiftStates(
-            map = LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutSymbol.TABLE_G
+            map = LayoutExt.TABLE_EXT + LayoutQwerty.TABLE_QWERTY + LayoutSymbol.TABLE_G
         ),
         moreKeysTable = MoreKeysTable.from(
             SymbolMoreKeysTable.DEFAULT
@@ -75,7 +75,7 @@ object SymbolLayoutPresets {
             )
         ),
         layoutTable = LayoutTable.fromShiftStates(
-            map = LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutSymbol.TABLE_N1
+            map = LayoutExt.TABLE_EXT + LayoutQwerty.TABLE_QWERTY + LayoutSymbol.TABLE_N1
         ),
         moreKeysTable = MoreKeysTable.from(
             SymbolMoreKeysTable.DEFAULT
@@ -103,7 +103,7 @@ object SymbolLayoutPresets {
             )
         ),
         layoutTable = LayoutTable.fromShiftStates(
-            map = LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutSymbol.TABLE_N2
+            map = LayoutExt.TABLE_EXT + LayoutQwerty.TABLE_QWERTY + LayoutSymbol.TABLE_N2
         ),
         moreKeysTable = MoreKeysTable.from(
             SymbolMoreKeysTable.DEFAULT
@@ -129,7 +129,7 @@ object SymbolLayoutPresets {
             )
         ),
         layoutTable = LayoutTable.fromShiftStates(
-            map = LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutSymbol.TABLE_O1
+            map = LayoutExt.TABLE_EXT + LayoutQwerty.TABLE_QWERTY + LayoutSymbol.TABLE_O1
         ),
         moreKeysTable = MoreKeysTable.from(
             SymbolMoreKeysTable.DEFAULT
@@ -157,7 +157,7 @@ object SymbolLayoutPresets {
             )
         ),
         layoutTable = LayoutTable.fromShiftStates(
-            map = LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutSymbol.TABLE_O2
+            map = LayoutExt.TABLE_EXT + LayoutQwerty.TABLE_QWERTY + LayoutSymbol.TABLE_O2
         ),
         moreKeysTable = MoreKeysTable.from(
             SymbolMoreKeysTable.DEFAULT

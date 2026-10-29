@@ -42,7 +42,7 @@ object LatinLayoutPresets {
                             (if(semicolon) TabletKeyboardRows.SEMICOLON else TabletKeyboardRows.DEFAULT)
                 )
             ),
-            layoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY),
+            layoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE_EXT + LayoutQwerty.TABLE_QWERTY),
             moreKeysTable = MoreKeysTable.from(LatinMoreKeysTable.DEFAULT, LatinMoreKeysTable.DEFAULT_UPPERCASE_OVERRIDE)
         )
     }
@@ -104,7 +104,7 @@ object LatinLayoutPresets {
                     contentRows = TabletKeyboardRows.NUMBERS + TabletKeyboardRows.GERMAN
                 )
             ),
-            layoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutLatin.TABLE_GERMAN_QWERTZ),
+            layoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE_EXT + LayoutQwerty.TABLE_QWERTY + LayoutLatin.TABLE_GERMAN_QWERTZ),
             altGraphTable = LayoutTable.fromShiftStates(LayoutLatin.TABLE_GERMAN_QWERTZ_ALTGR),
             moreKeysTable = MoreKeysTable.from(LatinMoreKeysTable.DEFAULT, LatinMoreKeysTable.DEFAULT_UPPERCASE_OVERRIDE),
             softKeyCodeMapper = SoftKeyCodeMapper.Basic(LayoutLatin.KEYCODE_MAP_QWERTZ + LayoutLatin.SOFT_KEYCODE_MAP_DEUTSCH_QWERTZ),
@@ -132,7 +132,7 @@ object LatinLayoutPresets {
                     contentRows = TabletKeyboardRows.NUMBERS + TabletKeyboardRows.DVORAK
                 )
             ),
-            layoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY),
+            layoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE_EXT + LayoutQwerty.TABLE_QWERTY),
             moreKeysTable = MoreKeysTable.from(LatinMoreKeysTable.DEFAULT, LatinMoreKeysTable.DEFAULT_UPPERCASE_OVERRIDE),
             softKeyCodeMapper = SoftKeyCodeMapper.Basic(LayoutLatin.KEYCODE_MAP_DVORAK)
         )
@@ -158,7 +158,7 @@ object LatinLayoutPresets {
                     contentRows = TabletKeyboardRows.NUMBERS + TabletKeyboardRows.SEMICOLON
                 )
             ),
-            layoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY),
+            layoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE_EXT + LayoutQwerty.TABLE_QWERTY),
             moreKeysTable = MoreKeysTable.from(LatinMoreKeysTable.DEFAULT, LatinMoreKeysTable.DEFAULT_UPPERCASE_OVERRIDE),
             softKeyCodeMapper = SoftKeyCodeMapper.Basic(LayoutLatin.KEYCODE_MAP_COLEMAK)
         )

@@ -6,9 +6,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class KeyboardLayoutPresetDef(
     val keyboardTemplate: String,
-    val layoutTables: List<String>,
-    val altGraphTables: List<String>,
-    val moreKeysTables: List<String>,
+    val layoutTable: String,
+    val altGraphTable: String,
+    val moreKeysTable: String,
     val softKeyCodeMapper: String,
     val hardKeyCodeMapper: String,
     val extra: Extra
@@ -22,7 +22,7 @@ data class KeyboardLayoutPresetDef(
         @SerialName("hangul")
         @Serializable
         data class Hangul(
-            val jamoCombinationTables: List<String>
+            val jamoCombinationTable: String
         ): Extra
     }
 }

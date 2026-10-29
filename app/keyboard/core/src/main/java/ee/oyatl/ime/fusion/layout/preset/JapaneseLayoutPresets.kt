@@ -81,7 +81,7 @@ object JapaneseLayoutPresets {
                     contentRows = TabletKeyboardRows.JIS
                 )
             ),
-            layoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutKana.TABLE_JIS),
+            layoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE_EXT + LayoutKana.TABLE_JIS),
             softKeyCodeMapper = SoftKeyCodeMapper.ByScreenMode(
                 mobile = SoftKeyCodeMapper.Basic(mapOf(
                     KeyCode.KEYCODE_MINUS to ExtKeyCode.KEYCODE_KANA_MINUS,
