@@ -1,5 +1,6 @@
 package ee.oyatl.ime.fusion.layout.preset
 
+import ee.oyatl.ime.fusion.hangul.JamoCombinationTable
 import ee.oyatl.ime.fusion.keyboard.core.ExtKeyCode
 import ee.oyatl.ime.fusion.layout.Hangul3Set
 import ee.oyatl.ime.fusion.layout.HangulOld
@@ -20,7 +21,8 @@ import ee.oyatl.ime.fusion.keyboard.core.SoftKeyCodeMapper
 
 object KoreanLayoutPresets {
     fun ksCompatible(
-        layoutTable: LayoutTable
+        layoutTable: LayoutTable,
+        jamoCombinationTable: JamoCombinationTable
     ): KeyboardLayoutPreset {
         return KeyboardLayoutPreset(
             keyboardTemplate = KeyboardTemplate.ByScreenMode(
@@ -42,13 +44,17 @@ object KoreanLayoutPresets {
                 )
             ),
             layoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY) + layoutTable,
-            longPressTable = LongPressTable.from(LatinMoreKeysTable.DEFAULT, LatinMoreKeysTable.DEFAULT_UPPERCASE_OVERRIDE)
+            longPressTable = LongPressTable.from(LatinMoreKeysTable.DEFAULT, LatinMoreKeysTable.DEFAULT_UPPERCASE_OVERRIDE),
+            extra = KeyboardLayoutPreset.Extra.Hangul(
+                jamoCombinationTable = jamoCombinationTable
+            )
         )
     }
 
     fun threeSet390391(
         layoutTable: LayoutTable,
-        softKeyCodeMapper: SoftKeyCodeMapper
+        softKeyCodeMapper: SoftKeyCodeMapper,
+        jamoCombinationTable: JamoCombinationTable
     ): KeyboardLayoutPreset {
         return KeyboardLayoutPreset(
             keyboardTemplate = KeyboardTemplate.ByScreenMode(
@@ -70,7 +76,10 @@ object KoreanLayoutPresets {
                 )
             ),
             layoutTable = layoutTable,
-            softKeyCodeMapper = softKeyCodeMapper
+            softKeyCodeMapper = softKeyCodeMapper,
+            extra = KeyboardLayoutPreset.Extra.Hangul(
+                jamoCombinationTable = jamoCombinationTable
+            )
         )
     }
 
@@ -99,6 +108,9 @@ object KoreanLayoutPresets {
             softKeyCodeMapper = SoftKeyCodeMapper.ByScreenMode(
                 mobile = SoftKeyCodeMapper.Basic(Hangul3Set.KEYCODE_MAP_393_MOBILE),
                 tablet = SoftKeyCodeMapper.Empty
+            ),
+            extra = KeyboardLayoutPreset.Extra.Hangul(
+                jamoCombinationTable = JamoCombinationTable.from(HangulOld.COMBINATION_FULL)
             )
         )
     }

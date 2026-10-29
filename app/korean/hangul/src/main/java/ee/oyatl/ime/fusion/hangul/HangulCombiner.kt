@@ -1,7 +1,7 @@
 package ee.oyatl.ime.fusion.hangul
 
 class HangulCombiner(
-    private val jamoCombinationTable: Map<Pair<Int, Int>, Int>,
+    private val jamoCombinationTable: JamoCombinationTable,
     private val correctOrders: Boolean
 ) {
     fun combine(state: Combiner.State, input: Int): Combiner.Result {

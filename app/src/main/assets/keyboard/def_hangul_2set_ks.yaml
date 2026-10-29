@@ -8,3 +8,6 @@ longPressTables:
 - "more_keys_table_latin_default"
 softKeyCodeMapper: "soft_keycode_mapper_empty"
 hardKeyCodeMapper: "hard_keycode_mapper_empty"
+extra: !<hangul>
+  jamoCombinationTables:
+  - "jamo_combination_table_ks"

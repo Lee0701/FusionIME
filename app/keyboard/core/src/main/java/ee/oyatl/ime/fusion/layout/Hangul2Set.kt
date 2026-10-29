@@ -45,7 +45,7 @@ object Hangul2Set {
         KeyCode.KEYCODE_M to listOf(0x3161, 0x3161)
     )
 
-    val COMB_KS = mapOf(
+    val COMBINATION_KS = mapOf(
         0x1169 to 0x1161 to 0x116a,
         0x1169 to 0x1162 to 0x116b,
         0x1169 to 0x1175 to 0x116c,

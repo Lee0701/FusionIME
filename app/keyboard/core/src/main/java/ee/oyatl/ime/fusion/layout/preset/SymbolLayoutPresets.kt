@@ -1,6 +1,5 @@
 package ee.oyatl.ime.fusion.layout.preset
 
-import ee.oyatl.ime.fusion.keyboard.core.KeyCode
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardConfiguration
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardTemplate

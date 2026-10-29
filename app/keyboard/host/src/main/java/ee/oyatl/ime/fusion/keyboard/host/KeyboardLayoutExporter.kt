@@ -3,6 +3,7 @@ package ee.oyatl.ime.fusion.keyboard.host
 import com.charleskorn.kaml.Yaml
 import com.charleskorn.kaml.YamlConfiguration
 import com.charleskorn.kaml.encodeToStream
+import ee.oyatl.ime.fusion.hangul.JamoCombinationTable
 import ee.oyatl.ime.fusion.keyboard.core.HardKeyCodeMapper
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardConfiguration
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPresetDef
@@ -37,6 +38,8 @@ object KeyboardLayoutExporter {
     const val SOFT_KEYCODE_MAPPER_EMPTY = "soft_keycode_mapper_empty"
 
     const val HARD_KEYCODE_MAPPER_EMPTY = "hard_keycode_mapper_empty"
+
+    const val JAMO_COMBINATION_TABLE_KS = "jamo_combination_table_ks"
 
     private val yaml: Yaml = Yaml(
         configuration = YamlConfiguration(
@@ -90,7 +93,10 @@ object KeyboardLayoutExporter {
             altGraphTables = listOf(),
             longPressTables = listOf(MORE_KEYS_TABLE_LATIN_DEFAULT),
             softKeyCodeMapper = SOFT_KEYCODE_MAPPER_EMPTY,
-            hardKeyCodeMapper = HARD_KEYCODE_MAPPER_EMPTY
+            hardKeyCodeMapper = HARD_KEYCODE_MAPPER_EMPTY,
+            extra = KeyboardLayoutPresetDef.Extra.Hangul(
+                jamoCombinationTables = listOf(JAMO_COMBINATION_TABLE_KS)
+            )
         )
 
         val keyboardTemplates = mapOf(
@@ -110,6 +116,9 @@ object KeyboardLayoutExporter {
         val hardKeyCodeMappers = mapOf(
             HARD_KEYCODE_MAPPER_EMPTY to HardKeyCodeMapper()
         )
+        val jamoCombinationTables = mapOf(
+            JAMO_COMBINATION_TABLE_KS to JamoCombinationTable.from(Hangul2Set.COMBINATION_KS)
+        )
         val keyboardLayoutPresetDefs = mapOf(
             DEF_HANGUL_2SET_KS to defHangul2SetKS
         )
@@ -118,6 +127,7 @@ object KeyboardLayoutExporter {
         exportAll<LongPressTable>(moreKeysTables)
         exportAll<SoftKeyCodeMapper>(softKeyCodeMappers)
         exportAll<HardKeyCodeMapper>(hardKeyCodeMappers)
+        exportAll<JamoCombinationTable>(jamoCombinationTables)
         exportAll<KeyboardLayoutPresetDef>(keyboardLayoutPresetDefs)
     }
 }

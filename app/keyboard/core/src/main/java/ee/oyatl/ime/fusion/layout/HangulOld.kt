@@ -93,7 +93,7 @@ object HangulOld {
         ExtKeyCode.KEYCODE_390_3 to listOf(0x1110, 0x113e)
     )
 
-    val COMB_FULL = mapOf(
+    val COMBINATION_FULL = mapOf(
         0x1100 to 0x1100 to 0x1101, /* choseong kiyeok + kiyeok          = ssangkiyeok */
         0x1100 to 0x1103 to 0x115a, /* choseong kiyeok + tikeut          = kiyeok-tikeut */
         0x1102 to 0x1100 to 0x1113, /* choseong nieun + kiyeok           = nieun-kiyeok */
