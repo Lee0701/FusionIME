@@ -7,7 +7,6 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
 import androidx.annotation.StringRes
-import androidx.preference.PreferenceManager
 import com.google.common.base.Optional
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.VerticalScrollingCandidateView
@@ -50,6 +49,8 @@ abstract class MozcIMEMode(
     private var primaryKeyCodeConverter: PrimaryKeyCodeConverter? = null
     private var sessionExecutor: SessionExecutor? = null
     private var inputConnectionRenderer: InputConnectionRenderer? = null
+
+    private var candidates: List<CandidateView.Candidate> = listOf()
 
     private val renderResultCallback = EvaluationCallback { command, triggeringKeyEvent ->
         if(!command.isPresent) return@EvaluationCallback
@@ -158,7 +159,24 @@ abstract class MozcIMEMode(
     override fun onCandidateSelected(candidate: CandidateView.Candidate) {
         if(candidate is MozcCandidate) {
             sessionExecutor?.submitCandidate(candidate.id, Optional.absent(), renderResultCallback)
+        } else if(candidate is CandidateView.ConfirmDeleteCandidate) {
+            val candidateToDelete = candidate.candidate as? MozcCandidate ?: return
+            val sessionExecutor = this.sessionExecutor ?: return
+            sessionExecutor.deleteCandidateFromHistory(candidateToDelete.id, renderResultCallback)
         }
+    }
+
+    /**
+     * Makes Mozc forget that it ever learnt this candidate for what is being
+     * converted, so a word picked by mistake stops coming back first.
+     */
+    override fun onCandidateLongPressed(candidate: CandidateView.Candidate) {
+        if(candidate !is MozcCandidate) return
+        val newCandidates = candidates.map {
+            if(it == candidate) CandidateView.ConfirmDeleteCandidate(it)
+            else it
+        }
+        submitCandidates(newCandidates)
     }
 
     override fun onChar(codePoint: Int) {
@@ -202,6 +220,11 @@ abstract class MozcIMEMode(
             KeyEvent.KEYCODE_DPAD_DOWN -> onChar(converter.keyCodeDown)
             else -> super.onSpecial(keyCode)
         }
+    }
+
+    override fun submitCandidates(candidates: List<CandidateView.Candidate>) {
+        this.candidates = candidates
+        super.submitCandidates(candidates)
     }
 
     data class MozcCandidate(

@@ -409,7 +409,7 @@ abstract class CommonIMEMode(
         return true
     }
 
-    protected fun submitCandidates(candidates: List<CandidateView.Candidate>) {
+    protected open fun submitCandidates(candidates: List<CandidateView.Candidate>) {
         CoroutineScope(Dispatchers.Main).launch {
             candidateView?.submitList(candidates)
             listener.onExpandedCandidates(candidates)

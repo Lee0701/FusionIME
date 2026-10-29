@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ee.oyatl.ime.candidate.CandidateView.Candidate
+import ee.oyatl.ime.keyboard.R
 import ee.oyatl.ime.keyboard.databinding.CandidateItemBinding
 import ee.oyatl.ime.theme.CandidateItemType
 import ee.oyatl.ime.theme.KeyboardTheme
@@ -28,7 +29,11 @@ abstract class RecyclerCandidateView(
         val keyboardTheme = keyboardTheme ?: return
         setBackgroundColor(context.getColor(keyboardTheme.candidatesTheme.backgroundColor))
 
-        adapter = Adapter(keyboardTheme) { listener?.onCandidateSelected(it) }
+        adapter = Adapter(
+            keyboardTheme,
+            onItemClick = { listener?.onCandidateSelected(it) },
+            onItemLongClick = { listener?.onCandidateLongPressed(it) }
+        )
         itemAnimator = null
     }
 
@@ -41,7 +46,8 @@ abstract class RecyclerCandidateView(
 
     class Adapter(
         private val keyboardTheme: KeyboardTheme,
-        private val onItemClick: (Candidate) -> Unit
+        private val onItemClick: (Candidate) -> Unit,
+        private val onItemLongClick: (Candidate) -> Unit = {}
     ): ListAdapter<Candidate, ViewHolder>(DiffCallback()) {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             return ViewHolder(
@@ -51,7 +57,7 @@ abstract class RecyclerCandidateView(
         }
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val item = getItem(position)
-            holder.onBind(item) { onItemClick(item) }
+            holder.onBind(item, { onItemClick(item) }, { onItemLongClick(item) })
         }
     }
 
@@ -59,22 +65,35 @@ abstract class RecyclerCandidateView(
         private val view: CandidateItemBinding,
         private val keyboardTheme: KeyboardTheme
     ): RecyclerView.ViewHolder(view.root) {
-        fun onBind(candidate: Candidate, onClick: () -> Unit) {
+        fun onBind(candidate: Candidate, onClick: () -> Unit, onLongClick: () -> Unit = {}) {
             val itemTheme = keyboardTheme.candidatesTheme.itemThemes[CandidateItemType.Default]
             if(itemTheme != null) {
-                view.root.setBackgroundColor(view.root.context.getColor(itemTheme.backgroundColor))
                 view.text.setTextColor(view.root.context.getColor(itemTheme.foregroundColor))
                 view.extra.setTextColor(view.root.context.getColor(itemTheme.extraColor))
+                view.icon.imageTintList = view.root.context.getColorStateList(itemTheme.foregroundColor)
             }
 
             view.text.text = candidate.text
             if(candidate is CandidateView.ExtraCandidate) {
                 view.extra.text = candidate.extra
+                view.text.visibility = VISIBLE
                 view.extra.visibility = VISIBLE
+                view.icon.visibility = GONE
+            } else if(candidate is CandidateView.ConfirmDeleteCandidate) {
+                view.icon.setImageResource(R.drawable.candic_delete)
+                view.text.visibility = INVISIBLE
+                view.extra.visibility = INVISIBLE
+                view.icon.visibility = VISIBLE
             } else {
+                view.text.visibility = VISIBLE
                 view.extra.visibility = GONE
+                view.icon.visibility = GONE
             }
             view.root.setOnClickListener { onClick() }
+            view.root.setOnLongClickListener {
+                onLongClick()
+                true
+            }
             if(candidate is CandidateView.FocusableCandidate) {
                 view.root.isHovered = candidate.focused
             }
