@@ -159,6 +159,7 @@
     <string name="cangjie_layout_cangjie">Cangjie</string>
     <string name="cangjie_layout_quick">Quick</string>
     <string name="cangjie_layout_dayi3">Dayi</string>
+    <string name="cangjie_layout_stroke">Stroke</string>
     <string name="viet_layout_qwerty_nom">QWERTY (Han Nom)</string>
     <string name="viet_layout_qwerty_quoc_ngu">QWERTY (Chu Quoc Ngu)</string>
     <string name="viet_layout_telex_nom">Telex (Han Nom)</string>

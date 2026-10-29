@@ -184,7 +184,8 @@ abstract class CangjieIMEMode(
         val layout: Layout,
         val fullWidth: Boolean,
         val numberRow: Boolean,
-        val cursorKeys: Boolean
+        val cursorKeys: Boolean,
+        val chineseTraditional: Boolean
     ): IMEMode.Params {
         override val type: String = TYPE
 
@@ -193,12 +194,22 @@ abstract class CangjieIMEMode(
                 Layout.Cangjie -> CangjieQuick(fullWidth, TableLoader.CANGJIE, numberRow, cursorKeys, listener)
                 Layout.Quick -> CangjieQuick(fullWidth, TableLoader.QUICK, numberRow, cursorKeys, listener)
                 Layout.Dayi3 -> Dayi3(fullWidth, cursorKeys, listener)
+                Layout.Stroke -> StrokeIMEMode(listener, chineseTraditional)
             }
         }
 
         override fun getLabel(context: Context): String {
-            val localeName = Locale.TRADITIONAL_CHINESE.displayName
             val layoutName = context.resources.getString(layout.nameKey)
+            if(layout == Layout.Stroke) {
+                // Stroke input covers both scripts.
+                val localeName = Locale.CHINESE.displayName
+                val script = context.resources.getString(
+                    if(chineseTraditional) R.string.pinyin_chinese_traditional
+                    else R.string.pinyin_chinese_simplified
+                )
+                return "$localeName $layoutName ($script)"
+            }
+            val localeName = Locale.TRADITIONAL_CHINESE.displayName
             return "$localeName $layoutName"
         }
 
@@ -207,6 +218,7 @@ abstract class CangjieIMEMode(
                 Layout.Cangjie -> listOf("倉頡")
                 Layout.Quick -> listOf("速成")
                 Layout.Dayi3 -> listOf("大易")
+                Layout.Stroke -> if(chineseTraditional) listOf("筆畫", "繁筆") else listOf("笔画", "简笔")
             }
         }
 
@@ -216,11 +228,13 @@ abstract class CangjieIMEMode(
                 val fullWidth = map["full_width"].toBoolean()
                 val numberRow = map["number_row"]?.toBoolean() ?: false
                 val cursorKeys = map["cursor_keys"]?.toBoolean() ?: false
+                val chineseTraditional = map["chinese_traditional"]?.toBoolean() ?: false
                 return Params(
                     layout = layout,
                     fullWidth = fullWidth,
                     numberRow = numberRow,
-                    cursorKeys = cursorKeys
+                    cursorKeys = cursorKeys,
+                    chineseTraditional = chineseTraditional
                 )
             }
         }
@@ -231,7 +245,8 @@ abstract class CangjieIMEMode(
     ) {
         Cangjie(R.string.cangjie_layout_cangjie),
         Quick(R.string.cangjie_layout_quick),
-        Dayi3(R.string.cangjie_layout_dayi3)
+        Dayi3(R.string.cangjie_layout_dayi3),
+        Stroke(R.string.cangjie_layout_stroke)
     }
 
     companion object {

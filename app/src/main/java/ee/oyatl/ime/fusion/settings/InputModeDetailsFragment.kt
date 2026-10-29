@@ -122,6 +122,7 @@ abstract class InputModeDetailsFragment: PreferenceFragmentCompat() {
             addPreferencesFromResource(R.xml.pref_input_mode_number_row)
             addPreferencesFromResource(R.xml.pref_input_mode_cursor_keys)
             addPreferencesFromResource(R.xml.pref_input_mode_cangjie_extra)
+            addPreferencesFromResource(R.xml.pref_input_mode_stroke)
         }
     }
 
