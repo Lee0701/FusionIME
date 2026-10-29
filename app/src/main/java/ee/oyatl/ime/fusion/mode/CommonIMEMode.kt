@@ -276,8 +276,8 @@ abstract class CommonIMEMode(
 
         return when(symbolState) {
             KeyboardState.Symbol.Text -> params
-            KeyboardState.Symbol.Symbol -> params.copy(shiftAutoRelease = false)
-            KeyboardState.Symbol.Number -> params.copy(shiftAutoRelease = false, splitWidth = 0)
+            KeyboardState.Symbol.Symbol -> params.copy(shiftAutoRelease = false, touchCorrection = false)
+            KeyboardState.Symbol.Number -> params.copy(shiftAutoRelease = false, splitWidth = 0, touchCorrection = false)
         }
     }
 
