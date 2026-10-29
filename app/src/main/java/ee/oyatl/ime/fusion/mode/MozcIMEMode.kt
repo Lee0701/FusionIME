@@ -159,6 +159,10 @@ abstract class MozcIMEMode(
     override fun onCandidateSelected(candidate: CandidateView.Candidate) {
         if(candidate is MozcCandidate) {
             sessionExecutor?.submitCandidate(candidate.id, Optional.absent(), renderResultCallback)
+        } else if(candidate is CandidateView.ConfirmDeleteCandidate) {
+            val candidateToDelete = candidate.candidate as? MozcCandidate ?: return
+            val sessionExecutor = this.sessionExecutor ?: return
+            sessionExecutor.deleteCandidateFromHistory(candidateToDelete.id, renderResultCallback)
         }
     }
 
@@ -168,10 +172,8 @@ abstract class MozcIMEMode(
      */
     override fun onCandidateLongPressed(candidate: CandidateView.Candidate) {
         if(candidate !is MozcCandidate) return
-        val sessionExecutor = this.sessionExecutor ?: return
-        sessionExecutor.deleteCandidateFromHistory(candidate.id) { _, _ -> }
         val newCandidates = candidates.map {
-            if(it == candidate) CandidateView.DeletedCandidate
+            if(it == candidate) CandidateView.ConfirmDeleteCandidate(it)
             else it
         }
         submitCandidates(newCandidates)
