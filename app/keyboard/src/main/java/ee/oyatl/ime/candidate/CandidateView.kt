@@ -26,6 +26,12 @@ interface CandidateView {
         val extra: CharSequence
     }
 
+    object DeletedCandidate: Candidate {
+        override val text: CharSequence = ""
+
+        override fun equals(other: Any?): Boolean = other == DeletedCandidate
+    }
+
     interface Listener {
         fun onCandidateSelected(candidate: Candidate)
 

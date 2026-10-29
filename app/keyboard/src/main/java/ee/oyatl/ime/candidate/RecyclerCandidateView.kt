@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ee.oyatl.ime.candidate.CandidateView.Candidate
+import ee.oyatl.ime.keyboard.R
 import ee.oyatl.ime.keyboard.databinding.CandidateItemBinding
 import ee.oyatl.ime.theme.CandidateItemType
 import ee.oyatl.ime.theme.KeyboardTheme
@@ -70,14 +71,24 @@ abstract class RecyclerCandidateView(
                 view.root.setBackgroundColor(view.root.context.getColor(itemTheme.backgroundColor))
                 view.text.setTextColor(view.root.context.getColor(itemTheme.foregroundColor))
                 view.extra.setTextColor(view.root.context.getColor(itemTheme.extraColor))
+                view.icon.imageTintList = view.root.context.getColorStateList(itemTheme.foregroundColor)
             }
 
             view.text.text = candidate.text
             if(candidate is CandidateView.ExtraCandidate) {
                 view.extra.text = candidate.extra
+                view.text.visibility = VISIBLE
                 view.extra.visibility = VISIBLE
-            } else {
+                view.icon.visibility = GONE
+            } else if(candidate is CandidateView.DeletedCandidate) {
+                view.icon.setImageResource(R.drawable.candic_delete)
+                view.text.visibility = GONE
                 view.extra.visibility = GONE
+                view.icon.visibility = VISIBLE
+            } else {
+                view.text.visibility = VISIBLE
+                view.extra.visibility = GONE
+                view.icon.visibility = GONE
             }
             view.root.setOnClickListener { onClick() }
             view.root.setOnLongClickListener {
