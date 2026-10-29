@@ -31,6 +31,7 @@ import android.view.inputmethod.ExtractedText;
 import android.view.inputmethod.ExtractedTextRequest;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
+import android.view.inputmethod.SurroundingText;
 
 import com.android.inputmethod.compat.InputConnectionCompatUtils;
 import com.android.inputmethod.latin.common.Constants;
@@ -972,6 +973,34 @@ public final class RichInputConnection implements PrivateCommandPerformer {
 
     public int getExpectedSelectionStart() {
         return mExpectedSelStart;
+    }
+
+    /**
+     * Asks the editor where the cursor really is, instead of trusting mExpectedSelStart.
+     * This costs an IPC round-trip.
+     *
+     * @return the absolute selection start, or NOT_A_CURSOR_POSITION if it can't be known.
+     */
+    public int getActualSelectionStart() {
+        mIC = mParent.getCurrentInputConnection();
+        if (!isConnected()) return Constants.NOT_A_CURSOR_POSITION;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            // No text is transferred here. Editors relying on the default implementation
+            // report an unknown offset, in which case we fall back to the extracted text.
+            final SurroundingText surroundingText = mIC.getSurroundingText(0, 0, 0);
+            if (null != surroundingText && surroundingText.getOffset() >= 0) {
+                return surroundingText.getOffset() + surroundingText.getSelectionStart();
+            }
+        }
+        // Same technique as checkConsistencyForDebug().
+        final ExtractedTextRequest r = new ExtractedTextRequest();
+        r.hintMaxChars = 0;
+        r.hintMaxLines = 0;
+        r.token = 1;
+        r.flags = 0;
+        final ExtractedText et = mIC.getExtractedText(r, 0);
+        if (null == et) return Constants.NOT_A_CURSOR_POSITION;
+        return et.startOffset + et.selectionStart;
     }
 
     public int getExpectedSelectionEnd() {
