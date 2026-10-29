@@ -178,4 +178,11 @@
     <string name="setup_wizard_languages_subtitle">使用したい言語を選択してください。</string>
     <string name="setup_wizard_next">次に進む</string>
     <string name="setup_wizard_finish">終了</string>
+    <string name="settings_input_mode_auto_period_title">自動ピリオド</string>
+    <string name="settings_behaviour_touch_correction_summary">隣接するキーの間で発生するタッチエラーを補正します。</string>
+    <string name="settings_behaviour_touch_correction_title">タッチ補正</string>
+    <string name="keyboard_theme_static">静的カラー</string>
+    <string name="keyboard_theme_dynamic">動的カラー</string>
+    <string name="setup_wizard_welcome_subtitle">FusionIME を使用するには、案内に従って初期設定を行ってください。</string>
+    <string name="setup_wizard_enable_label">FusionIME を有効化</string>
 </resources>
