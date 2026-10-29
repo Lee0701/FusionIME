@@ -1536,6 +1536,19 @@ public final class InputLogic {
             mSuggestionStripViewAccessor.setNeutralSuggestionStrip();
             return;
         }
+        // The word range below is read relative to the editor's real cursor, but the composing
+        // region is set with absolute positions derived from the expected cursor. If the two
+        // have drifted apart, the region lands on the wrong characters and the next edit eats
+        // the space before the word. Resync before using the expected position.
+        final int actualCursorPosition = mConnection.getActualSelectionStart();
+        if (actualCursorPosition != Constants.NOT_A_CURSOR_POSITION
+                && actualCursorPosition != mConnection.getExpectedSelectionStart()) {
+            if (!mConnection.resetCachesUponCursorMoveAndReturnSuccess(actualCursorPosition,
+                    actualCursorPosition, false /* shouldFinishComposition */)) {
+                mSuggestionStripViewAccessor.setNeutralSuggestionStrip();
+                return;
+            }
+        }
         final int expectedCursorPosition = mConnection.getExpectedSelectionStart();
         if (!mConnection.isCursorTouchingWord(settingsValues.mSpacingAndPunctuations,
                     true /* checkTextAfter */)) {

@@ -51,6 +51,8 @@ abstract class MozcIMEMode(
     private var sessionExecutor: SessionExecutor? = null
     private var inputConnectionRenderer: InputConnectionRenderer? = null
 
+    private var candidates: List<CandidateView.Candidate> = listOf()
+
     private val renderResultCallback = EvaluationCallback { command, triggeringKeyEvent ->
         if(!command.isPresent) return@EvaluationCallback
         inputConnectionRenderer?.renderInputConnection(command.orNull(), triggeringKeyEvent.orNull())
@@ -98,7 +100,7 @@ abstract class MozcIMEMode(
         if(sessionExecutor != null) {
             sessionExecutor.switchInputFieldType(ProtoCommands.Context.InputFieldType.NORMAL)
             sessionExecutor.switchInputMode(
-                Optional.absent(), ProtoCommands.CompositionMode.HIRAGANA, renderResultCallback)
+                Optional.absent(), currentCompositionMode, renderResultCallback)
             sessionExecutor.setImposedConfig(
                 Config.newBuilder()
                     .setSessionKeymap(Config.SessionKeymap.MOBILE)
@@ -107,17 +109,43 @@ abstract class MozcIMEMode(
                     .setIncognitoMode(passwordField)
                     .build()
             )
-            val keyboardSpecification = when(symbolState) {
-                Symbol.Text -> this.keyboardSpecification
-                Symbol.Symbol -> KeyboardSpecification.QWERTY_KANA
-                Symbol.Number -> KeyboardSpecification.NUMBER
-            }
             sessionExecutor.updateRequest(
-                MozcUtil.getRequestBuilder(resources, keyboardSpecification, resources.configuration).build(),
+                MozcUtil.getRequestBuilder(resources, currentKeyboardSpecification, resources.configuration).build(),
                 emptyList()
             )
             sessionExecutor.resetContext()
         }
+    }
+
+    private val currentKeyboardSpecification: KeyboardSpecification get() = when(symbolState) {
+        Symbol.Text -> this.keyboardSpecification
+        Symbol.Symbol -> KeyboardSpecification.QWERTY_KANA
+        Symbol.Number -> KeyboardSpecification.NUMBER
+    }
+
+    private val currentCompositionMode: ProtoCommands.CompositionMode get() =
+        if(symbolState == Symbol.Number) currentKeyboardSpecification.compositionMode
+        else ProtoCommands.CompositionMode.HIRAGANA
+
+    // Fields that only accept numbers have nothing to convert, so input there skips Mozc.
+    private val isNumericField: Boolean get() =
+        when((currentInputEditorInfo?.inputType ?: 0) and EditorInfo.TYPE_MASK_CLASS) {
+            EditorInfo.TYPE_CLASS_NUMBER,
+            EditorInfo.TYPE_CLASS_PHONE,
+            EditorInfo.TYPE_CLASS_DATETIME -> true
+            else -> false
+        }
+
+    // Same as Mozc's own keyboard switch: tell the session about the new keyboard
+    // without resetting it, so the current composition survives.
+    private fun updateKeyboardSpecification() {
+        val sessionExecutor = sessionExecutor ?: return
+        sessionExecutor.updateRequest(
+            MozcUtil.getRequestBuilder(resources, currentKeyboardSpecification, resources.configuration).build(),
+            emptyList()
+        )
+        sessionExecutor.switchInputMode(
+            Optional.absent(), currentCompositionMode, renderResultCallback)
     }
 
     override fun createCandidateView(context: Context): View {
@@ -132,11 +160,28 @@ abstract class MozcIMEMode(
     override fun onCandidateSelected(candidate: CandidateView.Candidate) {
         if(candidate is MozcCandidate) {
             sessionExecutor?.submitCandidate(candidate.id, Optional.absent(), renderResultCallback)
+        } else if(candidate is CandidateView.ConfirmDeleteCandidate) {
+            val candidateToDelete = candidate.candidate as? MozcCandidate ?: return
+            val sessionExecutor = this.sessionExecutor ?: return
+            sessionExecutor.deleteCandidateFromHistory(candidateToDelete.id, renderResultCallback)
         }
     }
 
+    /**
+     * Makes Mozc forget that it ever learnt this candidate for what is being
+     * converted, so a word picked by mistake stops coming back first.
+     */
+    override fun onCandidateLongPressed(candidate: CandidateView.Candidate) {
+        if(candidate !is MozcCandidate) return
+        val newCandidates = candidates.map {
+            if(it == candidate) CandidateView.ConfirmDeleteCandidate(it)
+            else it
+        }
+        submitCandidates(newCandidates)
+    }
+
     override fun onChar(codePoint: Int) {
-        if(symbolState == Symbol.Number) {
+        if(symbolState == Symbol.Number && isNumericField) {
             onReset()
             return super.onChar(codePoint)
         }
@@ -156,11 +201,11 @@ abstract class MozcIMEMode(
         when(keyCode) {
             KeyEvent.KEYCODE_SYM, KeyEvent.KEYCODE_NUM -> {
                 super.onSpecial(keyCode)
-                onReset()
+                updateKeyboardSpecification()
                 return
             }
         }
-        if(symbolState == Symbol.Number) {
+        if(symbolState == Symbol.Number && isNumericField) {
             onReset()
             return super.onSpecial(keyCode)
         }
@@ -176,6 +221,11 @@ abstract class MozcIMEMode(
             KeyEvent.KEYCODE_DPAD_DOWN -> onChar(converter.keyCodeDown)
             else -> super.onSpecial(keyCode)
         }
+    }
+
+    override fun submitCandidates(candidates: List<CandidateView.Candidate>) {
+        this.candidates = candidates
+        super.submitCandidates(candidates)
     }
 
     data class MozcCandidate(

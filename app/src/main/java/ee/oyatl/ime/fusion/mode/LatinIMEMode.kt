@@ -81,6 +81,12 @@ class LatinIMEMode(
         return inputLogic.currentRecapitalizeState
     }
 
+    // KeyboardSwitcher.loadKeyboard() is never called, so its script id stays SCRIPT_UNKNOWN,
+    // which treats every code point as a word character. Derive the script from the locale instead.
+    override val currentKeyboardScriptId: Int by lazy {
+        ScriptUtils.getScriptFromSpellCheckerLocale(locale)
+    }
+
     override suspend fun onLoad(context: Context) {
         super.onLoad(context)
         this.context = context
@@ -162,7 +168,7 @@ class LatinIMEMode(
         if(shiftState == KeyboardState.Shift.Locked) return
         if(currentAutoCapsState != Constants.TextUtils.CAP_MODE_OFF) {
             shiftState = KeyboardState.Shift.AutoShifted
-        } else {
+        } else if(shiftState == KeyboardState.Shift.AutoShifted) {
             shiftState = KeyboardState.Shift.Released
         }
         updateInputView()
@@ -258,6 +264,13 @@ class LatinIMEMode(
         loadSettings()
         dictionaryFacilitator?.onStartInput()
         inputLogic?.startInput(richImm?.combiningRulesExtraValueOfCurrentSubtype, settingsValues)
+        // As in LatinIME.onStartInputViewInternal: sync the expected cursor with the editor.
+        // Must run after startInput(), which applies its own cursor heuristics.
+        if(editorInfo != null) {
+            inputLogic?.mConnection?.resetCachesUponCursorMoveAndReturnSuccess(
+                editorInfo.initialSelStart, editorInfo.initialSelEnd, false
+            )
+        }
     }
 
     override fun onFinishInputInternal() {
@@ -343,7 +356,7 @@ class LatinIMEMode(
             inputLogic.onCodeInput(
                 settingsValues, event,
                 keyboardSwitcher.getKeyboardShiftMode(),
-                keyboardSwitcher.getCurrentKeyboardScriptId(), handler
+                currentKeyboardScriptId, handler
             )
         updateStateAfterInputTransaction(completeInputTransaction)
         keyboardSwitcher.onEvent(event, currentAutoCapsState, currentRecapitalizeState)
@@ -434,7 +447,7 @@ class LatinIMEMode(
         val completeInputTransaction: InputTransaction = inputLogic?.onPickSuggestionManually(
             settingsValues, suggestionInfo,
             keyboardSwitcher?.getKeyboardShiftMode() ?: WordComposer.CAPS_MODE_OFF,
-            keyboardSwitcher?.getCurrentKeyboardScriptId() ?: ScriptUtils.SCRIPT_UNKNOWN,
+            currentKeyboardScriptId,
             handler
         ) ?: return
         updateStateAfterInputTransaction(completeInputTransaction)

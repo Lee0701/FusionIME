@@ -180,6 +180,11 @@ class IMEModeSwitcher(
                 val currentMode = currentMode
                 if(currentMode is CandidateView.Listener) currentMode.onCandidateSelected(candidate)
             }
+
+            override fun onCandidateLongPressed(candidate: CandidateView.Candidate) {
+                val currentMode = currentMode
+                if(currentMode is CandidateView.Listener) currentMode.onCandidateLongPressed(candidate)
+            }
         }
 
         val showVoiceInputButton = preference.getBoolean("show_voice_input_button", false)
