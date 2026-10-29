@@ -167,7 +167,7 @@ class LatinIMEMode(
         if(shiftState == KeyboardState.Shift.Locked) return
         if(currentAutoCapsState != Constants.TextUtils.CAP_MODE_OFF) {
             shiftState = KeyboardState.Shift.AutoShifted
-        } else {
+        } else if(shiftState == KeyboardState.Shift.AutoShifted) {
             shiftState = KeyboardState.Shift.Released
         }
         updateInputView()
