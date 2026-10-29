@@ -37,6 +37,7 @@ import com.android.inputmethod.latin.utils.ScriptUtils
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.TripleCandidateView
 import ee.oyatl.ime.fusion.R
+import ee.oyatl.ime.fusion.UnicodeConverter
 import ee.oyatl.ime.fusion.layout.preset.LatinLayoutPresets
 import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
 import ee.oyatl.ime.keyboard.KeyboardState
@@ -47,7 +48,8 @@ class LatinIMEMode(
     val locale: Locale,
     override var textLayoutPreset: KeyboardLayoutPreset,
     val autoCaps: Boolean,
-    val autoPeriod: Boolean
+    val autoPeriod: Boolean,
+    private val unicodeConversion: Boolean
 ): CommonIMEMode(listener), ILatinIME {
     override var context: Context? = null
 
@@ -80,6 +82,8 @@ class LatinIMEMode(
         return inputLogic.currentRecapitalizeState
     }
 
+    private var unicodeConverter: UnicodeConverter? = null
+
     override suspend fun onLoad(context: Context) {
         super.onLoad(context)
         this.context = context
@@ -90,6 +94,10 @@ class LatinIMEMode(
         KeyboardSwitcher.init(this)
         keyboardSwitcher = KeyboardSwitcher.getInstance()
         inputLogic = InputLogic(this, this, dictionaryFacilitator)
+
+        if(unicodeConversion) {
+            unicodeConverter = UnicodeConverter("U")
+        }
     }
 
     override fun onStart(inputConnection: InputConnection, editorInfo: EditorInfo) {
@@ -110,6 +118,17 @@ class LatinIMEMode(
     override fun onCandidateSelected(candidate: CandidateView.Candidate) {
         if(candidate is LatinCandidate) {
             pickSuggestionManually(candidate.suggestedWordInfo)
+        } else if(candidate is UnicodeConverter.Candidate) {
+            val suggestionInfo = SuggestedWords.SuggestedWordInfo(
+                candidate.text.toString(),
+                null,
+                0,
+                0,
+                null,
+                0,
+                0
+            )
+            pickSuggestionManually(suggestionInfo)
         }
     }
 
@@ -422,7 +441,8 @@ class LatinIMEMode(
     fun setSuggestedWords(suggestedWords: SuggestedWords) {
         val wordList = (0 until suggestedWords.size()).map { suggestedWords.getInfo(it) }
         val candidates = wordList.mapIndexed { i, s -> LatinCandidate(i, s) }
-        submitCandidates(candidates)
+        val unicodeCandidate = unicodeConverter?.convert(suggestedWords.typedWordInfo.word).orEmpty()
+        submitCandidates(unicodeCandidate + candidates)
     }
 
     override fun setNeutralSuggestionStrip() {
@@ -578,7 +598,8 @@ class LatinIMEMode(
         val numberRow: Boolean = false,
         val cursorKeys: Boolean = false,
         val autoCaps: Boolean = false,
-        val autoPeriod: Boolean = false
+        val autoPeriod: Boolean = false,
+        val unicodeConversion: Boolean = false
     ): IMEMode.Params {
         override val type: String = TYPE
 
@@ -594,7 +615,7 @@ class LatinIMEMode(
                 Layout.Dvorak -> LatinLayoutPresets.dvorak(numberRow, cursorKeys)
                 Layout.Colemak -> LatinLayoutPresets.colemak(numberRow, cursorKeys)
             }
-            return LatinIMEMode(listener, locale, textLayoutPreset, autoCaps, autoPeriod)
+            return LatinIMEMode(listener, locale, textLayoutPreset, autoCaps, autoPeriod, unicodeConversion)
         }
 
         override fun getLabel(context: Context): String {
@@ -625,13 +646,15 @@ class LatinIMEMode(
                 val cursorKeys = map["cursor_keys"]?.toBoolean() ?: false
                 val autoCaps = map["auto_caps"]?.toBoolean() ?: false
                 val autoPeriod = map["auto_period"]?.toBoolean() ?: false
+                val unicodeConversion = map["unicode_conversion"]?.toBoolean() ?: false
                 return Params(
                     locale = locale,
                     layout = layout,
                     numberRow = numberRow,
                     cursorKeys = cursorKeys,
                     autoCaps = autoCaps,
-                    autoPeriod = autoPeriod
+                    autoPeriod = autoPeriod,
+                    unicodeConversion = unicodeConversion
                 )
             }
         }

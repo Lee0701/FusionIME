@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <SwitchPreferenceCompat
+        android:key="unicode_conversion"
+        android:title="@string/settings_input_mode_unicode_conversion_title"
+        android:summary="@string/settings_input_mode_unicode_conversion_summary" />
+
+</androidx.preference.PreferenceScreen>
