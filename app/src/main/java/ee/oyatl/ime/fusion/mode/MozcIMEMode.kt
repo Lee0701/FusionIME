@@ -135,6 +135,16 @@ abstract class MozcIMEMode(
         }
     }
 
+    /**
+     * Makes Mozc forget that it ever learnt this candidate for what is being
+     * converted, so a word picked by mistake stops coming back first.
+     */
+    override fun onCandidateLongPressed(candidate: CandidateView.Candidate) {
+        if(candidate !is MozcCandidate) return
+        val sessionExecutor = this.sessionExecutor ?: return
+        sessionExecutor.deleteCandidateFromHistory(candidate.id, renderResultCallback)
+    }
+
     override fun onChar(codePoint: Int) {
         if(symbolState == Symbol.Number) {
             onReset()

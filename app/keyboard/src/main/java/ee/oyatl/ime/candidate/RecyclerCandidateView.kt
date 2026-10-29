@@ -28,7 +28,11 @@ abstract class RecyclerCandidateView(
         val keyboardTheme = keyboardTheme ?: return
         setBackgroundColor(context.getColor(keyboardTheme.candidatesTheme.backgroundColor))
 
-        adapter = Adapter(keyboardTheme) { listener?.onCandidateSelected(it) }
+        adapter = Adapter(
+            keyboardTheme,
+            onItemClick = { listener?.onCandidateSelected(it) },
+            onItemLongClick = { listener?.onCandidateLongPressed(it) }
+        )
         itemAnimator = null
     }
 
@@ -41,7 +45,8 @@ abstract class RecyclerCandidateView(
 
     class Adapter(
         private val keyboardTheme: KeyboardTheme,
-        private val onItemClick: (Candidate) -> Unit
+        private val onItemClick: (Candidate) -> Unit,
+        private val onItemLongClick: (Candidate) -> Unit = {}
     ): ListAdapter<Candidate, ViewHolder>(DiffCallback()) {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             return ViewHolder(
@@ -51,7 +56,7 @@ abstract class RecyclerCandidateView(
         }
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val item = getItem(position)
-            holder.onBind(item) { onItemClick(item) }
+            holder.onBind(item, { onItemClick(item) }, { onItemLongClick(item) })
         }
     }
 
@@ -59,7 +64,7 @@ abstract class RecyclerCandidateView(
         private val view: CandidateItemBinding,
         private val keyboardTheme: KeyboardTheme
     ): RecyclerView.ViewHolder(view.root) {
-        fun onBind(candidate: Candidate, onClick: () -> Unit) {
+        fun onBind(candidate: Candidate, onClick: () -> Unit, onLongClick: () -> Unit = {}) {
             val itemTheme = keyboardTheme.candidatesTheme.itemThemes[CandidateItemType.Default]
             if(itemTheme != null) {
                 view.root.setBackgroundColor(view.root.context.getColor(itemTheme.backgroundColor))
@@ -75,6 +80,10 @@ abstract class RecyclerCandidateView(
                 view.extra.visibility = GONE
             }
             view.root.setOnClickListener { onClick() }
+            view.root.setOnLongClickListener {
+                onLongClick()
+                true
+            }
             if(candidate is CandidateView.FocusableCandidate) {
                 view.root.isHovered = candidate.focused
             }

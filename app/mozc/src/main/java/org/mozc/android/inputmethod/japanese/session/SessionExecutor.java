@@ -704,6 +704,20 @@ public class SessionExecutor {
   }
 
   /**
+   * Sends {@code DELETE_CANDIDATE_FROM_HISTORY} so the server forgets that it
+   * ever learnt this candidate for the reading being converted.
+   */
+  public void deleteCandidateFromHistory(int candidateId, EvaluationCallback callback) {
+    Preconditions.checkNotNull(callback);
+    Input.Builder inputBuilder = Input.newBuilder()
+        .setType(CommandType.SEND_COMMAND)
+        .setCommand(SessionCommand.newBuilder()
+            .setType(SessionCommand.CommandType.DELETE_CANDIDATE_FROM_HISTORY)
+            .setId(candidateId));
+    evaluateAsynchronously(inputBuilder, Optional.absent(), Optional.of(callback));
+  }
+
+  /**
    * Sends {@code SUBMIT_CANDIDATE} command to the server asynchronously.
    */
   public void submitCandidate(int candidateId, Optional<Integer> rowIndex,

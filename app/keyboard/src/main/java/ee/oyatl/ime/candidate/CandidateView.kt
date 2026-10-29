@@ -28,5 +28,8 @@ interface CandidateView {
 
     interface Listener {
         fun onCandidateSelected(candidate: Candidate)
+
+        /** Held down rather than tapped; modes that have nothing to offer ignore it. */
+        fun onCandidateLongPressed(candidate: Candidate) = Unit
     }
 }
