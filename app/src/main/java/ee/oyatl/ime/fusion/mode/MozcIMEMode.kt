@@ -25,6 +25,7 @@ import ee.oyatl.ime.fusion.keyboard.core.KeyboardState.Symbol
 import ee.oyatl.ime.keyboard.KeyboardView
 import ee.oyatl.ime.keyboard.listener.FlickListener
 import ee.oyatl.ime.fusion.keyboard.core.FlickDirection
+import ee.oyatl.ime.fusion.preset.JapaneseSyllables
 import ee.oyatl.ime.keyboard.touchhandler.FlickTouchHandler
 import ee.oyatl.ime.keyboard.touchhandler.TouchHandler
 import org.mozc.android.inputmethod.japanese.MozcUtil
@@ -426,11 +427,11 @@ abstract class MozcIMEMode(
         listener: IMEMode.Listener,
         candidateViewHeight: Int,
         keys: String,
-        keyLayout: JapaneseLayoutPresets.KeyLayout,
+        keyLayout: JapaneseSyllables.KeyLayout,
         extra: Map<String, String>
     ): MozcIMEMode(listener, candidateViewHeight, extra) {
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.TWELVE_KEY_FLICK_KANA
-        override var textLayoutPreset: KeyboardLayoutPreset = JapaneseLayoutPresets.syllables(keys, keyLayout)
+        override var textLayoutPreset: KeyboardLayoutPreset = JapaneseSyllables.syllables(keys, keyLayout)
     }
 
     data class Params(
@@ -439,7 +440,7 @@ abstract class MozcIMEMode(
         val candidateViewHeight: Int = 2,
         val flickMode: FlickMode = FlickMode.FlickToggle,
         val flickHint: Boolean = false,
-        val syllablesKeyLayout: JapaneseLayoutPresets.KeyLayout
+        val syllablesKeyLayout: JapaneseSyllables.KeyLayout
     ): IMEMode.Params {
         override val type: String = TYPE
         override fun create(listener: IMEMode.Listener): IMEMode {
@@ -477,8 +478,8 @@ abstract class MozcIMEMode(
                 val flickMode = FlickMode.valueOf(map["flick_mode"] ?: FlickMode.FlickToggle.name)
                 val flickHint = map["flick_hint"]?.toBoolean() ?: false
                 val syllablesKeyLayout =
-                    JapaneseLayoutPresets.KeyLayout.entries.find { it.name == map["syllables_key_layout"] }
-                        ?: JapaneseLayoutPresets.KeyLayout.Horizontal
+                    JapaneseSyllables.KeyLayout.entries.find { it.name == map["syllables_key_layout"] }
+                        ?: JapaneseSyllables.KeyLayout.Horizontal
                 val extra = map + mapOf(
                     "cursor_keys" to "true"
                 )
