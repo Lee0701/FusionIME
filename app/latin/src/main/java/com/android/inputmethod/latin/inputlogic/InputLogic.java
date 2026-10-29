@@ -1227,7 +1227,7 @@ public final class InputLogic {
         return false;
     }
 
-    void unlearnWord(final String word, final SettingsValues settingsValues, final int eventType) {
+    public void unlearnWord(final String word, final SettingsValues settingsValues, final int eventType) {
         final NgramContext ngramContext = mConnection.getNgramContextFromNthPreviousWord(
             settingsValues.mSpacingAndPunctuations, 2);
         final long timeStampInSeconds = TimeUnit.MILLISECONDS.toSeconds(

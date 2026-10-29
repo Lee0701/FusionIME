@@ -38,6 +38,7 @@ import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.TripleCandidateView
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.layout.preset.LatinLayoutPresets
+import ee.oyatl.ime.fusion.mode.MozcIMEMode.MozcCandidate
 import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
 import ee.oyatl.ime.keyboard.KeyboardState
 import java.util.Locale
@@ -86,6 +87,8 @@ class LatinIMEMode(
         ScriptUtils.getScriptFromSpellCheckerLocale(locale)
     }
 
+    private var candidates: List<CandidateView.Candidate> = listOf()
+
     override suspend fun onLoad(context: Context) {
         super.onLoad(context)
         this.context = context
@@ -121,7 +124,24 @@ class LatinIMEMode(
     override fun onCandidateSelected(candidate: CandidateView.Candidate) {
         if(candidate is LatinCandidate) {
             pickSuggestionManually(candidate.suggestedWordInfo)
+        } else if(candidate is CandidateView.ConfirmDeleteCandidate) {
+            val inputLogic = inputLogic ?: return
+            inputLogic.unlearnWord(
+                candidate.text.toString(),
+                settingsValues,
+                Constants.EVENT_REJECTION
+            )
+            handler.postUpdateSuggestionStrip(SuggestedWords.INPUT_STYLE_NONE)
         }
+    }
+
+    override fun onCandidateLongPressed(candidate: CandidateView.Candidate) {
+        if(candidate !is LatinCandidate) return
+        val newCandidates = candidates.map {
+            if(it == candidate) CandidateView.ConfirmDeleteCandidate(it)
+            else it
+        }
+        submitCandidates(newCandidates)
     }
 
     override fun onChar(codePoint: Int) {
@@ -534,6 +554,11 @@ class LatinIMEMode(
     override fun enableHardwareAcceleration(): Boolean {
         val context = this.context
         return context is InputMethodService && context.enableHardwareAcceleration()
+    }
+
+    override fun submitCandidates(candidates: List<CandidateView.Candidate>) {
+        this.candidates = candidates
+        super.submitCandidates(candidates)
     }
 
     class SharedPreferenceImpl(
