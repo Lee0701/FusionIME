@@ -3,6 +3,7 @@ package ee.oyatl.ime.fusion.layout
 import android.view.KeyEvent
 import ee.oyatl.ime.fusion.mode.LatinIMEMode
 import ee.oyatl.ime.keyboard.LayoutTable
+import ee.oyatl.ime.keyboard.SoftKeyCodeMapper
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -18,17 +19,19 @@ class LayoutLatinTest {
     @Test
     fun azertyRemapsLettersAndKeepsApostropheOnBottomRow() {
         val table = LayoutTable.fromShiftStates(
-            LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + mapOf(
-                KeyEvent.KEYCODE_APOSTROPHE to listOf('\''.code, '?'.code)
-            )
-        ).mapKeyCodes(LayoutLatin.KEYCODE_MAP_AZERTY)
+            LayoutExt.TABLE + LayoutQwerty.TABLE_QWERTY + LayoutLatin.TABLE_AZERTY
+        )
+        val mapper = SoftKeyCodeMapper.Basic(LayoutLatin.KEYCODE_MAP_AZERTY
+                + LayoutLatin.SOFT_KEYCODE_MAP_AZERTY_NUMBERS
+                + LayoutLatin.SOFT_KEYCODE_MAP_AZERTY_MOBILE
+        )
 
-        assertKey(table, KeyEvent.KEYCODE_Q, 'a', 'A')
-        assertKey(table, KeyEvent.KEYCODE_W, 'z', 'Z')
-        assertKey(table, KeyEvent.KEYCODE_A, 'q', 'Q')
-        assertKey(table, KeyEvent.KEYCODE_SEMICOLON, 'm', 'M')
-        assertKey(table, KeyEvent.KEYCODE_Z, 'w', 'W')
-        assertKey(table, KeyEvent.KEYCODE_M, '\'', '?')
+        assertKey(table, mapper, KeyEvent.KEYCODE_Q, 'a', 'A')
+        assertKey(table, mapper, KeyEvent.KEYCODE_W, 'z', 'Z')
+        assertKey(table, mapper, KeyEvent.KEYCODE_A, 'q', 'Q')
+        assertKey(table, mapper, KeyEvent.KEYCODE_SEMICOLON, 'm', 'M')
+        assertKey(table, mapper, KeyEvent.KEYCODE_Z, 'w', 'W')
+        assertKey(table, mapper, KeyEvent.KEYCODE_M, '\'', '?')
     }
 
     @Test
@@ -47,11 +50,13 @@ class LayoutLatinTest {
 
     private fun assertKey(
         table: LayoutTable,
+        mapper: SoftKeyCodeMapper.Basic,
         keyCode: Int,
         normal: Char,
         shifted: Char
     ) {
-        val item = table[keyCode] as LayoutTable.DefaultItem
+        val mappedKeyCode = mapper.map[keyCode] ?: keyCode
+        val item = table[mappedKeyCode] as LayoutTable.DefaultItem
         assertEquals(normal.code, item.normal)
         assertEquals(shifted.code, item.shifted)
     }
