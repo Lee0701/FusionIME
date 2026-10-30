@@ -39,12 +39,12 @@ fun main(args: Array<String>) {
     val bigramDict = NGramDictionary()
     File(bigramInput).forEachLine { line ->
         val tokens = line.split('\t')
-        if(tokens.size == 2) {
-            val (s, f) = tokens
-            val sequence = s.split(' ')
+        if(tokens.size >= 2) {
+            val s = tokens.dropLast(1)
+            val f = tokens.last()
             val freq = f.toInt()
-            if(sequence.any { revIndexDict.get(it).isEmpty() }) return@forEachLine
-            val ids = sequence.map { revIndexDict.get(it).first() }
+            if(s.any { revIndexDict.get(it).isEmpty() }) return@forEachLine
+            val ids = s.map { revIndexDict.get(it).first() }
             val key = ids.dropLast(1)
             val value = mapOf(ids.last() to freq)
             bigramDict.insert(key, value)
@@ -52,9 +52,9 @@ fun main(args: Array<String>) {
     }
 
     val outDirFile = File(outDir)
-    indexDict.write(DataOutputStream(File(outDirFile, "hanja_index.bin").outputStream()))
+    indexDict.sorted().write(DataOutputStream(File(outDirFile, "hanja_index.bin").outputStream()))
 //    revIndexDict.write(DataOutputStream(File(outDirFile, "hanja_rev_index.bin").outputStream()))
     contentDict.write(DataOutputStream(File(outDirFile, "hanja_content.bin").outputStream()))
 //    definitionDict.write(DataOutputStream(File(outDirFile, "hanja_definition.bin").outputStream()))
-    bigramDict.write(DataOutputStream(File(outDirFile, "hanja_bigram.bin").outputStream()))
+    bigramDict.sorted().write(DataOutputStream(File(outDirFile, "hanja_bigram.bin").outputStream()))
 }
