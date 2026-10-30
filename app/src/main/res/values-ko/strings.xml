@@ -185,4 +185,9 @@
     <string name="setup_wizard_enable_subtitle">언어 및 키보드 설정에서 FusionIME를 활성화해 주세요.</string>
     <string name="setup_wizard_select_title">2단계</string>
     <string name="setup_wizard_select_subtitle">입력 방식 목록에서 FusionIME를 선택해 주세요.</string>
+    <string name="settings_input_mode_clear_user_history_confirm_language">%s 언어에 대한 학습 데이터를 모두 지우시겠습니까\?</string>
+    <string name="settings_input_mode_clear_user_history_cleared">사용자 입력 기록이 삭제되었습니다.</string>
+    <string name="settings_input_mode_clear_user_history_failed">사용자 입력 기록 삭제에 실패했습니다.</string>
+    <string name="settings_input_mode_clear_user_history_title">입력 기록 비우기</string>
+    <string name="settings_input_mode_clear_user_history_summary">이 언어에 대한 사용자 입력 기반 추천 데이터를 비웁니다.</string>
 </resources>
