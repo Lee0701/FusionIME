@@ -87,6 +87,11 @@ class PinyinIMEMode(
         startPinyinDecoderService(context)
     }
 
+    override fun onUnload(context: Context) {
+        stopPinyinDecoderService(context)
+        super.onUnload(context)
+    }
+
     override fun onStart(inputConnection: InputConnection, editorInfo: EditorInfo) {
         super.onStart(inputConnection, editorInfo)
         decInfo.mIPinyinDecoderService.setChineseTraditional(chineseTraditional)

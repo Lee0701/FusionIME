@@ -86,6 +86,8 @@ class LatinIMEMode(
         ScriptUtils.getScriptFromSpellCheckerLocale(locale)
     }
 
+    private var candidates: List<CandidateView.Candidate> = listOf()
+
     override fun onLoad(context: Context) {
         super.onLoad(context)
         this.context = context
@@ -100,6 +102,11 @@ class LatinIMEMode(
         KeyboardSwitcher.init(this)
         keyboardSwitcher = KeyboardSwitcher.getInstance()
         inputLogic = InputLogic(this, this, dictionaryFacilitator)
+    }
+
+    override fun onUnload(context: Context) {
+        dictionaryFacilitator?.closeDictionaries()
+        super.onUnload(context)
     }
 
     override fun onStart(inputConnection: InputConnection, editorInfo: EditorInfo) {
@@ -120,7 +127,24 @@ class LatinIMEMode(
     override fun onCandidateSelected(candidate: CandidateView.Candidate) {
         if(candidate is LatinCandidate) {
             pickSuggestionManually(candidate.suggestedWordInfo)
+        } else if(candidate is CandidateView.ConfirmDeleteCandidate) {
+            val inputLogic = inputLogic ?: return
+            inputLogic.unlearnWord(
+                candidate.text.toString(),
+                settingsValues,
+                Constants.EVENT_REJECTION
+            )
+            handler.postUpdateSuggestionStrip(SuggestedWords.INPUT_STYLE_NONE)
         }
+    }
+
+    override fun onCandidateLongPressed(candidate: CandidateView.Candidate) {
+        if(candidate !is LatinCandidate) return
+        val newCandidates = candidates.map {
+            if(it == candidate) CandidateView.ConfirmDeleteCandidate(it)
+            else it
+        }
+        submitCandidates(newCandidates)
     }
 
     override fun onChar(codePoint: Int) {
@@ -535,6 +559,11 @@ class LatinIMEMode(
         return context is InputMethodService && context.enableHardwareAcceleration()
     }
 
+    override fun submitCandidates(candidates: List<CandidateView.Candidate>) {
+        this.candidates = candidates
+        super.submitCandidates(candidates)
+    }
+
     class SharedPreferenceImpl(
         val map: Map<String, String>
     ): SharedPreferences {
@@ -627,11 +656,8 @@ class LatinIMEMode(
 
         companion object {
             fun parse(map: Map<String, String>): Params {
-                val localeName = (map["locale"] ?: Locale.ENGLISH.language).split('_')
-                val builder = Locale.Builder()
-                builder.setLanguage(localeName[0])
-                if(localeName.size == 2) builder.setRegion(localeName[1])
-                val locale = builder.build()
+                val localeName = (map["locale"] ?: Locale.ENGLISH.language)
+                val locale = parseLocale(localeName)
                 val defaultLayout = if(locale.language == "fr") Layout.Azerty else Layout.Qwerty
                 val layout = Layout.entries.find { it.name == map["layout"] } ?: defaultLayout
                 val autoCaps = map["auto_caps"]?.toBoolean() ?: false
@@ -643,6 +669,14 @@ class LatinIMEMode(
                     autoPeriod = autoPeriod,
                     extra = map
                 )
+            }
+
+            fun parseLocale(name: String): Locale {
+                val segments = name.split('_')
+                val builder = Locale.Builder()
+                builder.setLanguage(segments[0])
+                if(segments.size == 2) builder.setRegion(segments[1])
+                return builder.build()
             }
         }
     }

@@ -8,7 +8,9 @@ class VietnameseConverter(
     context: Context,
     dictResdId: Int
 ) {
-    private val dictionary: DiskDictionary = DiskDictionary(context.resources.openRawResource(dictResdId))
+    private val dictionary: DiskDictionary = context.resources.openRawResource(dictResdId).use {
+        DiskDictionary(it)
+    }
 
     fun convert(text: String): List<CandidateView.Candidate> {
         val result = (1 .. text.length).asSequence()

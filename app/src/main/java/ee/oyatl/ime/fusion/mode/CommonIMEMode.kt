@@ -136,6 +136,8 @@ abstract class CommonIMEMode(
         )
     }
 
+    override fun onUnload(context: Context) = Unit
+
     override fun onStart(inputConnection: InputConnection, editorInfo: EditorInfo) {
         util = KeyEventUtil(inputConnection, editorInfo)
         onReset()
@@ -278,8 +280,8 @@ abstract class CommonIMEMode(
 
         return when(symbolState) {
             KeyboardState.Symbol.Text -> params
-            KeyboardState.Symbol.Symbol -> params.copy(shiftAutoRelease = false, extra = mapOf())
-            KeyboardState.Symbol.Number -> params.copy(shiftAutoRelease = false, splitWidth = 0, extra = mapOf())
+            KeyboardState.Symbol.Symbol -> params.copy(shiftAutoRelease = false, extra = mapOf(), touchCorrection = false)
+            KeyboardState.Symbol.Number -> params.copy(shiftAutoRelease = false, splitWidth = 0, extra = mapOf(), touchCorrection = false)
         }
     }
 

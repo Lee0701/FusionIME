@@ -11,6 +11,7 @@ interface IMEMode {
     var keyboardTheme: KeyboardTheme?
 
     fun onLoad(context: Context)
+    fun onUnload(context: Context)
     fun onStart(inputConnection: InputConnection, editorInfo: EditorInfo)
     fun onFinish()
     fun createInputView(context: Context): View

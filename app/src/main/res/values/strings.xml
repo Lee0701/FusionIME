@@ -51,6 +51,11 @@
     <string name="settings_input_mode_remove_description">Remove</string>
     <string name="settings_input_mode_locale_title">Language</string>
     <string name="settings_input_mode_layout_title">Keyboard Layout</string>
+    <string name="settings_input_mode_clear_user_history_title">Clear User Input History</string>
+    <string name="settings_input_mode_clear_user_history_summary">Clear personalized suggestions for this language.</string>
+    <string name="settings_input_mode_clear_user_history_confirm_language">Do you want to delete all learned data for %s?</string>
+    <string name="settings_input_mode_clear_user_history_cleared">User history cleared.</string>
+    <string name="settings_input_mode_clear_user_history_failed">Could not clear the user history.</string>
     <string name="settings_input_mode_auto_caps_title">Auto Capitalization</string>
     <string name="settings_input_mode_auto_period_title">Auto Period</string>
     <string name="settings_input_mode_auto_period_summary">Double-tap on spacebar inserts a period followed by a space.</string>
