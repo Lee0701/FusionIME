@@ -25,19 +25,36 @@ open class DiskTrieDictionary(input: InputStream)
         // root
         var p = data.getInt(data.capacity() - 4)
         for(c in key) {
-            // children count
-            val children = data.getShort(p)
-            for(i in 0 until children) {
-                val ch = data.getChar(p + 2 + i*6)
-                val addr = data.getInt(p + 2 + i*6 + 2)
-                if(ch == c) {
-                    p = addr
-                    break
-                } else if(i == children - 1) {
-                    return -1
-                }
-            }
+            p = binarySearch(p, c)
+            if(p == -1) return -1
         }
         return p
+    }
+
+    fun linearSearch(node: Int, key: Char): Int {
+        val children = data.getShort(node)
+        val p = node + 2
+        for(i in 0 until children) {
+            val ch = data.getChar(p + i*6)
+            if(ch == key) {
+                return data.getInt(p + i*6 + 2)
+            }
+        }
+        return -1
+    }
+
+    fun binarySearch(node: Int, key: Char): Int {
+        val children = data.getShort(node)
+        val p = node + 2
+        var l = 0
+        var r = children - 1
+        while(l <= r) {
+            val m = l + (r - l) / 2
+            val ch = data.getChar(p + m*6)
+            if(ch < key) l = m + 1
+            else if(ch > key) r = m - 1
+            else return data.getInt(p + m*6 + 2)
+        }
+        return -1
     }
 }

@@ -2,9 +2,10 @@ package ee.oyatl.ime.newdict
 
 import java.io.DataOutputStream
 
-class TrieDictionary
-    : MutableDictionary<String, List<Int>>, WritableDictionary<String, List<Int>> {
-    private val root = Node()
+class TrieDictionary(
+    private val root: Node = Node()
+): MutableDictionary<String, List<Int>>, WritableDictionary<String, List<Int>> {
+
 
     override fun get(key: String): List<Int> {
         var p = root
@@ -22,6 +23,10 @@ class TrieDictionary
         p.entries += value
     }
 
+    fun sorted(): TrieDictionary {
+        return TrieDictionary(root.sorted())
+    }
+
     override fun write(os: DataOutputStream) {
         val rootAddress = root.write(os)
         os.writeInt(rootAddress)
@@ -31,6 +36,13 @@ class TrieDictionary
         val children: MutableMap<Char, Node> = mutableMapOf(),
         val entries: MutableList<Int> = mutableListOf()
     ) {
+        fun sorted(): Node {
+            return Node(
+                children.mapValues { (_, v) -> v.sorted() }.toSortedMap(),
+                entries.sorted().toMutableList()
+            )
+        }
+
         fun write(os: DataOutputStream): Int {
             val childrenMap = children.mapValues { (c, node) ->
                 node.write(os)
