@@ -38,7 +38,6 @@ import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.TripleCandidateView
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.layout.preset.LatinLayoutPresets
-import ee.oyatl.ime.fusion.mode.MozcIMEMode.MozcCandidate
 import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
 import ee.oyatl.ime.keyboard.KeyboardState
 import java.util.Locale
@@ -657,11 +656,8 @@ class LatinIMEMode(
 
         companion object {
             fun parse(map: Map<String, String>): Params {
-                val localeName = (map["locale"] ?: Locale.ENGLISH.language).split('_')
-                val builder = Locale.Builder()
-                builder.setLanguage(localeName[0])
-                if(localeName.size == 2) builder.setRegion(localeName[1])
-                val locale = builder.build()
+                val localeName = (map["locale"] ?: Locale.ENGLISH.language)
+                val locale = parseLocale(localeName)
                 val defaultLayout = if(locale.language == "fr") Layout.Azerty else Layout.Qwerty
                 val layout = Layout.entries.find { it.name == map["layout"] } ?: defaultLayout
                 val numberRow = map["number_row"]?.toBoolean() ?: false
@@ -676,6 +672,14 @@ class LatinIMEMode(
                     autoCaps = autoCaps,
                     autoPeriod = autoPeriod
                 )
+            }
+
+            fun parseLocale(name: String): Locale {
+                val segments = name.split('_')
+                val builder = Locale.Builder()
+                builder.setLanguage(segments[0])
+                if(segments.size == 2) builder.setRegion(segments[1])
+                return builder.build()
             }
         }
     }

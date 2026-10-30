@@ -2,7 +2,6 @@ package ee.oyatl.ime.fusion.preference
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.KeyCharacterMap
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
