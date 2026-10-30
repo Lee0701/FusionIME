@@ -1,7 +1,7 @@
 package org.jyutping.jyutping
 
 import android.content.Context
-import ee.oyatl.ime.fusion.dictionary.manager.DictionaryCache
+import ee.oyatl.ime.dictionary.manager.DictionaryCache
 import ee.oyatl.ime.newdict.DiskBSTDictionary
 import ee.oyatl.ime.newdict.DiskJyutpingDictionary
 import ee.oyatl.ime.newdict.DiskTrieDictionary

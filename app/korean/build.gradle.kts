@@ -50,7 +50,6 @@ dependencies {
     implementation(project(":app:korean:hangul"))
     implementation(project(":app:latin"))
     implementation(project(":app:dictionary"))
-    implementation(project(":app:dictionary-manager"))
     implementation(project(":app:keyboard"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

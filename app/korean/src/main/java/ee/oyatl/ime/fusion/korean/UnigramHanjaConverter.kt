@@ -2,7 +2,7 @@ package ee.oyatl.ime.fusion.korean
 
 import android.content.Context
 import ee.oyatl.ime.candidate.CandidateView
-import ee.oyatl.ime.fusion.dictionary.manager.DictionaryCache
+import ee.oyatl.ime.dictionary.manager.DictionaryCache
 import ee.oyatl.ime.newdict.CachedDiskTrieDictionary
 import ee.oyatl.ime.newdict.DiskHanjaDictionary
 import ee.oyatl.ime.newdict.DiskTrieDictionary
