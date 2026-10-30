@@ -140,4 +140,5 @@
     <string name="korean_layout_old_hangul_3set_393">古谚文三区式393</string>
     <string name="mozc_layout_kana_iroha">假名伊吕波</string>
     <string name="zhuyin_layout_zhuyin">注音符号</string>
+    <string name="settings_appearance_symbol_layout_title">输入法效果非常好，解决了其他输入法无法输入的问题</string>
 </resources>
