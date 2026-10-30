@@ -135,6 +135,8 @@ abstract class CommonIMEMode(
         )
     }
 
+    override suspend fun onUnload(context: Context) = Unit
+
     override fun onStart(inputConnection: InputConnection, editorInfo: EditorInfo) {
         util = KeyEventUtil(inputConnection, editorInfo)
         onReset()
