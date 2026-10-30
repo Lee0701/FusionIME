@@ -84,7 +84,6 @@ class MoreKeysPopup(
         )
         contentView = DefaultKeyboardView(parent.context, null).also {
             it.keyboardTheme = keyboardView.keyboardTheme
-            println(keyboardView)
             it.keyboard = Keyboard(listOf(
                 candidates.mapIndexed { i, candidate ->
                     Keyboard.KeyItem.Key(

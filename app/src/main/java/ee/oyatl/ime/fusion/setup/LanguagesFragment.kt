@@ -116,7 +116,6 @@ class LanguagesFragment: Fragment(), AdapterView.OnItemClickListener {
 
         companion object {
             fun match(locale: Locale): LanguagePreset? {
-                println(locale)
                 return when(locale.language) {
                     "en" -> English
                     "de" -> German
