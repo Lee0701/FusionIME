@@ -32,7 +32,6 @@ object KeyboardThemes {
             backgroundColor = R.color.candidate_bg_static_light,
             itemThemes = mapOf(
                 CandidateItemType.Default to CandidateItemTheme(
-                    backgroundColor = R.color.transparent,
                     foregroundColor = R.color.black,
                     extraColor = R.color.black
                 )
@@ -77,7 +76,6 @@ object KeyboardThemes {
             backgroundColor = R.color.candidate_bg_static_dark,
             itemThemes = mapOf(
                 CandidateItemType.Default to CandidateItemTheme(
-                    backgroundColor = R.color.transparent,
                     foregroundColor = R.color.white,
                     extraColor = R.color.white
                 )
@@ -122,7 +120,6 @@ object KeyboardThemes {
             backgroundColor = R.color.candidate_bg_dynamic_light,
             itemThemes = mapOf(
                 CandidateItemType.Default to CandidateItemTheme(
-                    backgroundColor = R.color.transparent,
                     foregroundColor = R.color.black,
                     extraColor = R.color.black
                 )
@@ -167,7 +164,6 @@ object KeyboardThemes {
             backgroundColor = R.color.candidate_bg_dynamic_dark,
             itemThemes = mapOf(
                 CandidateItemType.Default to CandidateItemTheme(
-                    backgroundColor = R.color.transparent,
                     foregroundColor = R.color.white,
                     extraColor = R.color.white
                 )

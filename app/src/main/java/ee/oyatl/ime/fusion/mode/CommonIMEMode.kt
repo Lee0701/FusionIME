@@ -18,6 +18,7 @@ import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.layout.preset.LatinLayoutPresets
 import ee.oyatl.ime.fusion.layout.preset.SymbolLayoutPresets
 import ee.oyatl.ime.keyboard.CanvasKeyboardView
+import ee.oyatl.ime.keyboard.DefaultKeyboardView
 import ee.oyatl.ime.keyboard.KeyLabel
 import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
 import ee.oyatl.ime.keyboard.KeyboardParams
@@ -134,6 +135,8 @@ abstract class CommonIMEMode(
         )
     }
 
+    override suspend fun onUnload(context: Context) = Unit
+
     override fun onStart(inputConnection: InputConnection, editorInfo: EditorInfo) {
         util = KeyEventUtil(inputConnection, editorInfo)
         onReset()
@@ -163,21 +166,21 @@ abstract class CommonIMEMode(
         val symbolKeyboard = symbolLayoutPreset.keyboardTemplate.inflate(symbolKeyboardParams, symbolLayoutPreset.softKeyCodeMapper)
         val numberKeyboard = numberLayoutPreset.keyboardTemplate.inflate(numberKeyboardParams, symbolLayoutPreset.softKeyCodeMapper)
 
-        val textKeyboardView = CanvasKeyboardView(context, null).also {
+        val textKeyboardView = DefaultKeyboardView(context, null).also {
             it.keyboardTheme = keyboardTheme
             it.keyboard = textKeyboard
             it.listener = createKeyboardListener(context, textKeyboardParams)
             it.touchHandler = createTouchHandler(it, textKeyboardParams, KeyboardState.Symbol.Text)
             it.popupManager = DefaultPopupManager()
         }
-        val symbolKeyboardView = CanvasKeyboardView(context, null).also {
+        val symbolKeyboardView = DefaultKeyboardView(context, null).also {
             it.keyboardTheme = keyboardTheme
             it.keyboard = symbolKeyboard
             it.listener = createKeyboardListener(context, symbolKeyboardParams)
             it.touchHandler = createTouchHandler(it, symbolKeyboardParams, KeyboardState.Symbol.Symbol)
             it.popupManager = DefaultPopupManager()
         }
-        val numberKeyboardView = CanvasKeyboardView(context, null).also {
+        val numberKeyboardView = DefaultKeyboardView(context, null).also {
             it.keyboardTheme = keyboardTheme
             it.keyboard = numberKeyboard
             it.listener = createKeyboardListener(context, numberKeyboardParams)
@@ -275,8 +278,8 @@ abstract class CommonIMEMode(
 
         return when(symbolState) {
             KeyboardState.Symbol.Text -> params
-            KeyboardState.Symbol.Symbol -> params.copy(shiftAutoRelease = false)
-            KeyboardState.Symbol.Number -> params.copy(shiftAutoRelease = false, splitWidth = 0)
+            KeyboardState.Symbol.Symbol -> params.copy(shiftAutoRelease = false, touchCorrection = false)
+            KeyboardState.Symbol.Number -> params.copy(shiftAutoRelease = false, splitWidth = 0, touchCorrection = false)
         }
     }
 
@@ -409,7 +412,7 @@ abstract class CommonIMEMode(
         return true
     }
 
-    protected fun submitCandidates(candidates: List<CandidateView.Candidate>) {
+    protected open fun submitCandidates(candidates: List<CandidateView.Candidate>) {
         CoroutineScope(Dispatchers.Main).launch {
             candidateView?.submitList(candidates)
             listener.onExpandedCandidates(candidates)

@@ -80,6 +80,14 @@ class LatinIMEMode(
         return inputLogic.currentRecapitalizeState
     }
 
+    // KeyboardSwitcher.loadKeyboard() is never called, so its script id stays SCRIPT_UNKNOWN,
+    // which treats every code point as a word character. Derive the script from the locale instead.
+    override val currentKeyboardScriptId: Int by lazy {
+        ScriptUtils.getScriptFromSpellCheckerLocale(locale)
+    }
+
+    private var candidates: List<CandidateView.Candidate> = listOf()
+
     override suspend fun onLoad(context: Context) {
         super.onLoad(context)
         this.context = context
@@ -90,6 +98,11 @@ class LatinIMEMode(
         KeyboardSwitcher.init(this)
         keyboardSwitcher = KeyboardSwitcher.getInstance()
         inputLogic = InputLogic(this, this, dictionaryFacilitator)
+    }
+
+    override suspend fun onUnload(context: Context) {
+        dictionaryFacilitator?.closeDictionaries()
+        super.onUnload(context)
     }
 
     override fun onStart(inputConnection: InputConnection, editorInfo: EditorInfo) {
@@ -110,7 +123,24 @@ class LatinIMEMode(
     override fun onCandidateSelected(candidate: CandidateView.Candidate) {
         if(candidate is LatinCandidate) {
             pickSuggestionManually(candidate.suggestedWordInfo)
+        } else if(candidate is CandidateView.ConfirmDeleteCandidate) {
+            val inputLogic = inputLogic ?: return
+            inputLogic.unlearnWord(
+                candidate.text.toString(),
+                settingsValues,
+                Constants.EVENT_REJECTION
+            )
+            handler.postUpdateSuggestionStrip(SuggestedWords.INPUT_STYLE_NONE)
         }
+    }
+
+    override fun onCandidateLongPressed(candidate: CandidateView.Candidate) {
+        if(candidate !is LatinCandidate) return
+        val newCandidates = candidates.map {
+            if(it == candidate) CandidateView.ConfirmDeleteCandidate(it)
+            else it
+        }
+        submitCandidates(newCandidates)
     }
 
     override fun onChar(codePoint: Int) {
@@ -161,7 +191,7 @@ class LatinIMEMode(
         if(shiftState == KeyboardState.Shift.Locked) return
         if(currentAutoCapsState != Constants.TextUtils.CAP_MODE_OFF) {
             shiftState = KeyboardState.Shift.AutoShifted
-        } else {
+        } else if(shiftState == KeyboardState.Shift.AutoShifted) {
             shiftState = KeyboardState.Shift.Released
         }
         updateInputView()
@@ -257,6 +287,13 @@ class LatinIMEMode(
         loadSettings()
         dictionaryFacilitator?.onStartInput()
         inputLogic?.startInput(richImm?.combiningRulesExtraValueOfCurrentSubtype, settingsValues)
+        // As in LatinIME.onStartInputViewInternal: sync the expected cursor with the editor.
+        // Must run after startInput(), which applies its own cursor heuristics.
+        if(editorInfo != null) {
+            inputLogic?.mConnection?.resetCachesUponCursorMoveAndReturnSuccess(
+                editorInfo.initialSelStart, editorInfo.initialSelEnd, false
+            )
+        }
     }
 
     override fun onFinishInputInternal() {
@@ -342,7 +379,7 @@ class LatinIMEMode(
             inputLogic.onCodeInput(
                 settingsValues, event,
                 keyboardSwitcher.getKeyboardShiftMode(),
-                keyboardSwitcher.getCurrentKeyboardScriptId(), handler
+                currentKeyboardScriptId, handler
             )
         updateStateAfterInputTransaction(completeInputTransaction)
         keyboardSwitcher.onEvent(event, currentAutoCapsState, currentRecapitalizeState)
@@ -433,7 +470,7 @@ class LatinIMEMode(
         val completeInputTransaction: InputTransaction = inputLogic?.onPickSuggestionManually(
             settingsValues, suggestionInfo,
             keyboardSwitcher?.getKeyboardShiftMode() ?: WordComposer.CAPS_MODE_OFF,
-            keyboardSwitcher?.getCurrentKeyboardScriptId() ?: ScriptUtils.SCRIPT_UNKNOWN,
+            currentKeyboardScriptId,
             handler
         ) ?: return
         updateStateAfterInputTransaction(completeInputTransaction)
@@ -516,6 +553,11 @@ class LatinIMEMode(
     override fun enableHardwareAcceleration(): Boolean {
         val context = this.context
         return context is InputMethodService && context.enableHardwareAcceleration()
+    }
+
+    override fun submitCandidates(candidates: List<CandidateView.Candidate>) {
+        this.candidates = candidates
+        super.submitCandidates(candidates)
     }
 
     class SharedPreferenceImpl(
@@ -614,11 +656,8 @@ class LatinIMEMode(
 
         companion object {
             fun parse(map: Map<String, String>): Params {
-                val localeName = (map["locale"] ?: Locale.ENGLISH.language).split('_')
-                val builder = Locale.Builder()
-                builder.setLanguage(localeName[0])
-                if(localeName.size == 2) builder.setRegion(localeName[1])
-                val locale = builder.build()
+                val localeName = (map["locale"] ?: Locale.ENGLISH.language)
+                val locale = parseLocale(localeName)
                 val defaultLayout = if(locale.language == "fr") Layout.Azerty else Layout.Qwerty
                 val layout = Layout.entries.find { it.name == map["layout"] } ?: defaultLayout
                 val numberRow = map["number_row"]?.toBoolean() ?: false
@@ -633,6 +672,14 @@ class LatinIMEMode(
                     autoCaps = autoCaps,
                     autoPeriod = autoPeriod
                 )
+            }
+
+            fun parseLocale(name: String): Locale {
+                val segments = name.split('_')
+                val builder = Locale.Builder()
+                builder.setLanguage(segments[0])
+                if(segments.size == 2) builder.setRegion(segments[1])
+                return builder.build()
             }
         }
     }

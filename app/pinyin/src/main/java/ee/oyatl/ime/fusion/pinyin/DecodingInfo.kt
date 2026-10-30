@@ -389,10 +389,10 @@ class DecodingInfo(
     private val candiagtesForCache: Unit
         get() {
             val fetchStart = mCandidatesList.size
-            var fetchSize = mTotalChoicesNum - fetchStart
-            if (fetchSize > MAX_PAGE_SIZE_DISPLAY) {
-                fetchSize = MAX_PAGE_SIZE_DISPLAY
-            }
+            // Fetch every remaining candidate, not just one display page: FusionIME's own
+            // candidate bar shows the whole list and has no way to ask for the next page.
+            // The decoder runs in-process, so even ~1450 candidates take a few milliseconds.
+            val fetchSize = mTotalChoicesNum - fetchStart
             var newList: List<String> = listOf()
             if (ImeState.STATE_INPUT == imeState || ImeState.STATE_IDLE == imeState || ImeState.STATE_COMPOSING == imeState) {
                 newList = mIPinyinDecoderService.imGetChoiceList(

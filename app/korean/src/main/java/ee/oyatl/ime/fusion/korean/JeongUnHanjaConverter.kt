@@ -9,7 +9,9 @@ class JeongUnHanjaConverter: HanjaConverter {
     private lateinit var dict: DiskDictionary
 
     override fun load(context: Context) {
-        dict = DiskDictionary(context.resources.openRawResource(R.raw.jeongun))
+        dict = context.resources.openRawResource(R.raw.jeongun).use {
+            DiskDictionary(it)
+        }
     }
 
     override fun reset() = Unit

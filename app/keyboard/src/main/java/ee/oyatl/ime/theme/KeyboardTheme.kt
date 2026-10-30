@@ -36,7 +36,6 @@ data class CandidatesTheme(
 )
 
 data class CandidateItemTheme(
-    @ColorRes val backgroundColor: Int,
     @ColorRes val foregroundColor: Int,
     @ColorRes val extraColor: Int
 )

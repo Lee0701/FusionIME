@@ -19,6 +19,7 @@ import com.android.inputmethod.latin.permissions.PermissionsManager.PermissionsR
 import com.android.inputmethod.latin.settings.Settings
 import com.android.inputmethod.latin.suggestions.SuggestionStripView
 import com.android.inputmethod.latin.suggestions.SuggestionStripViewAccessor
+import com.android.inputmethod.latin.utils.ScriptUtils
 import javax.annotation.Nonnull
 
 interface ILatinIME : KeyboardActionListener, SuggestionStripView.Listener,
@@ -33,6 +34,11 @@ interface ILatinIME : KeyboardActionListener, SuggestionStripView.Listener,
     val settings: Settings?
 
     val keyboardSwitcher: KeyboardSwitcher?
+
+    // KeyboardSwitcher only knows the script once a keyboard layout set has been loaded.
+    // Implementations that never load one should override this.
+    val currentKeyboardScriptId: Int
+        get() = keyboardSwitcher?.getCurrentKeyboardScriptId() ?: ScriptUtils.SCRIPT_UNKNOWN
 
     val isInputViewShown: Boolean
 

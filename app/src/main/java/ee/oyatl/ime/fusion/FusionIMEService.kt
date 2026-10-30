@@ -122,8 +122,8 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
     }
 
     fun onUnload() {
-        imeModeSwitcher.entries.forEach { entry ->
-            if(entry.imeMode is PinyinIMEMode) entry.imeMode.stopPinyinDecoderService(this)
+        coroutineScope.launch {
+            imeModeSwitcher.entries.forEach { it.imeMode.onUnload(this@FusionIMEService) }
         }
     }
 

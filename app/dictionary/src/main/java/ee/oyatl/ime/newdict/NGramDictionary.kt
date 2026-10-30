@@ -2,8 +2,9 @@ package ee.oyatl.ime.newdict
 
 import java.io.DataOutputStream
 
-class NGramDictionary: MutableDictionary<List<Int>, Map<Int, Int>>, WritableDictionary<List<Int>, Map<Int, Int>> {
-    private val root = Node()
+class NGramDictionary(
+    private val root: Node = Node()
+): MutableDictionary<List<Int>, Map<Int, Int>>, WritableDictionary<List<Int>, Map<Int, Int>> {
 
     override fun get(key: List<Int>): Map<Int, Int> {
         var p = root
@@ -24,6 +25,10 @@ class NGramDictionary: MutableDictionary<List<Int>, Map<Int, Int>>, WritableDict
         value.forEach { (i, freq) -> p.children += i to Node(freq) }
     }
 
+    fun sorted(): NGramDictionary {
+        return NGramDictionary(root.sorted())
+    }
+
     override fun write(os: DataOutputStream) {
         val rootAddress = root.write(os)
         os.writeInt(rootAddress)
@@ -33,6 +38,13 @@ class NGramDictionary: MutableDictionary<List<Int>, Map<Int, Int>>, WritableDict
         val frequency: Int = 0,
         val children: MutableMap<Int, Node> = mutableMapOf()
     ) {
+        fun sorted(): Node {
+            return Node(
+                frequency,
+                children.mapValues { (_, v) -> v.sorted() }.toSortedMap()
+            )
+        }
+
         fun write(os: DataOutputStream): Int {
             val childrenMap = children.mapValues { (i, node) ->
                 node.write(os)
