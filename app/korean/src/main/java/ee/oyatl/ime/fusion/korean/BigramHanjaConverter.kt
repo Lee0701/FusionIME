@@ -24,14 +24,20 @@ class BigramHanjaConverter(
         val vocabDictId = R.raw.hanja_content
         val bigramDictId = R.raw.hanja_bigram
         indexDict = DictionaryCache.get(indexDictId) {
-            if(useCache) CachedDiskTrieDictionary(context.resources.openRawResource(indexDictId))
-            else DiskTrieDictionary(context.resources.openRawResource(indexDictId))
+            context.resources.openRawResource(indexDictId).use {
+                if(useCache) CachedDiskTrieDictionary(it)
+                else DiskTrieDictionary(it)
+            }
         }
         vocabDict = DictionaryCache.get(vocabDictId) {
-            DiskHanjaDictionary(context.resources.openRawResource(vocabDictId))
+            context.resources.openRawResource(vocabDictId).use {
+                DiskHanjaDictionary(it)
+            }
         }
         bigramDict = DictionaryCache.get(bigramDictId) {
-            DiskNGramDictionary(context.resources.openRawResource(bigramDictId))
+            context.resources.openRawResource(bigramDictId).use {
+                DiskNGramDictionary(it)
+            }
         }
         isLoaded = true
     }
