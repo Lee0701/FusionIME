@@ -18,4 +18,19 @@
         android:title="@string/settings_input_mode_layout_title"
         app:useSimpleSummaryProvider="true" />
 
+    <ee.oyatl.ime.fusion.preference.ClearLatinUserHistoryPreference
+        android:title="@string/settings_input_mode_clear_user_history_title"
+        android:summary="@string/settings_input_mode_clear_user_history_summary" />
+
+    <SwitchPreferenceCompat
+        android:key="auto_caps"
+        android:title="@string/settings_input_mode_auto_caps_title"
+        android:defaultValue="false" />
+
+    <SwitchPreferenceCompat
+        android:key="auto_period"
+        android:title="@string/settings_input_mode_auto_period_title"
+        android:summary="@string/settings_input_mode_auto_period_summary"
+        android:defaultValue="false" />
+
 </androidx.preference.PreferenceScreen>

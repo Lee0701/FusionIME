@@ -399,7 +399,7 @@ object Researcher {
                 val spellCode: Int = text.hashCode()
                 val instances: MutableList<Lexicon> = mutableListOf()
                 val limitValue: Int = limit ?: -1
-                BinaryDictionaries.spellDict.search(spellCode).forEach { number ->
+                BinaryDictionaries.spellDict.get(spellCode).forEach { number ->
                         yield()
                         val entry = BinaryDictionaries.vocabDict.get(number)
                         val markText = mark ?: entry.romanization.filterNot { it.isCantoneseToneDigit }
@@ -412,7 +412,7 @@ object Researcher {
                 if (anchors.isEmpty()) return emptyList()
                 val instances: MutableList<Lexicon> = mutableListOf()
                 val limitValue: Int = limit ?: -1
-                val spellMatch = BinaryDictionaries.spellDict.search(spell).toSet()
+                val spellMatch = BinaryDictionaries.spellDict.get(spell).toSet()
                 val anchorMatch = BinaryDictionaries.anchorDict.get(anchors.map { it.character }.joinToString("")).toSet()
                 spellMatch.filter { it in anchorMatch }.forEach { number ->
                         yield()

@@ -11,28 +11,30 @@ import androidx.preference.PreferenceManager
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.ScrollingCandidateView
 import ee.oyatl.ime.fusion.FlickAction
-import ee.oyatl.ime.fusion.KeyEventUtil
-import ee.oyatl.ime.fusion.PreferenceUtil.getOrientationBoolean
-import ee.oyatl.ime.fusion.PreferenceUtil.getOrientationInteger
-import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
+import ee.oyatl.ime.fusion.util.KeyEventUtil
+import ee.oyatl.ime.fusion.util.PreferenceUtil.getOrientationBoolean
+import ee.oyatl.ime.fusion.util.PreferenceUtil.getOrientationInteger
 import ee.oyatl.ime.fusion.R
-import ee.oyatl.ime.fusion.layout.preset.SymbolLayoutPresets
 import ee.oyatl.ime.fusion.layout.preset.LatinLayoutPresets
+import ee.oyatl.ime.fusion.layout.preset.SymbolLayoutPresets
+import ee.oyatl.ime.keyboard.CanvasKeyboardView
 import ee.oyatl.ime.keyboard.DefaultKeyboardView
 import ee.oyatl.ime.keyboard.KeyLabel
+import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
 import ee.oyatl.ime.keyboard.KeyboardParams
 import ee.oyatl.ime.keyboard.KeyboardState
 import ee.oyatl.ime.keyboard.KeyboardView
 import ee.oyatl.ime.keyboard.LayoutTable
 import ee.oyatl.ime.keyboard.SwitcherKeyboardView
 import ee.oyatl.ime.keyboard.TouchMode
-import ee.oyatl.ime.keyboard.listener.CompoundKeyboardListener
 import ee.oyatl.ime.keyboard.listener.DeleteRepeater
 import ee.oyatl.ime.keyboard.listener.FlickListener
 import ee.oyatl.ime.keyboard.listener.InputOnKeyUp
 import ee.oyatl.ime.keyboard.listener.KeyFeedbackManager
 import ee.oyatl.ime.keyboard.listener.KeyboardListener
 import ee.oyatl.ime.keyboard.listener.LongPressListener
+import ee.oyatl.ime.keyboard.listener.ParallelKeyboardListener
+import ee.oyatl.ime.keyboard.listener.SerialKeyboardListener
 import ee.oyatl.ime.keyboard.listener.ShiftStateManager
 import ee.oyatl.ime.keyboard.popup.DefaultPopupManager
 import ee.oyatl.ime.keyboard.popup.MoreKeysPopup
@@ -41,6 +43,7 @@ import ee.oyatl.ime.keyboard.touchhandler.FlickTouchHandler
 import ee.oyatl.ime.keyboard.touchhandler.LongPressTouchHandler
 import ee.oyatl.ime.keyboard.touchhandler.SeekTouchHandler
 import ee.oyatl.ime.keyboard.touchhandler.TouchHandler
+import ee.oyatl.ime.theme.KeyboardTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -48,8 +51,10 @@ import kotlin.math.roundToInt
 
 abstract class CommonIMEMode(
     private val listener: IMEMode.Listener
-): IMEMode, KeyboardListener, FlickListener, LongPressListener, CandidateView.Listener {
+): IMEMode, KeyboardListener, FlickListener, LongPressListener, CandidateView.Listener, ShiftStateManager.ShiftStateHolder {
     protected val keyCharacterMap: KeyCharacterMap = KeyCharacterMap.load(KeyCharacterMap.VIRTUAL_KEYBOARD)
+
+    override var keyboardTheme: KeyboardTheme? = null
 
     open var textLayoutPreset: KeyboardLayoutPreset = LatinLayoutPresets.qwerty()
     open var symbolLayoutPreset: KeyboardLayoutPreset = SymbolLayoutPresets.symbolG()
@@ -74,7 +79,11 @@ abstract class CommonIMEMode(
     protected var candidateView: CandidateView? = null
 
     var symbolState: KeyboardState.Symbol = KeyboardState.Symbol.Text
-    var shiftState: KeyboardState.Shift = KeyboardState.Shift.Released
+    override var shiftState: KeyboardState.Shift = KeyboardState.Shift.Released
+        set(value) {
+            field = value
+            updateInputView()
+        }
 
     private var defaultFlickActions: Map<FlickDirection, FlickAction> = mapOf()
 
@@ -126,13 +135,15 @@ abstract class CommonIMEMode(
         )
     }
 
+    override suspend fun onUnload(context: Context) = Unit
+
     override fun onStart(inputConnection: InputConnection, editorInfo: EditorInfo) {
         util = KeyEventUtil(inputConnection, editorInfo)
         onReset()
         setPreferredKeyboard(editorInfo)
         shiftState = KeyboardState.Shift.Released
         updateInputView()
-        keyboardView?.onReset()
+        CoroutineScope(Dispatchers.Main).launch { keyboardView?.onReset() }
     }
 
     override fun onFinish() {
@@ -156,18 +167,21 @@ abstract class CommonIMEMode(
         val numberKeyboard = numberLayoutPreset.keyboardTemplate.inflate(numberKeyboardParams, symbolLayoutPreset.softKeyCodeMapper)
 
         val textKeyboardView = DefaultKeyboardView(context, null).also {
+            it.keyboardTheme = keyboardTheme
             it.keyboard = textKeyboard
             it.listener = createKeyboardListener(context, textKeyboardParams)
             it.touchHandler = createTouchHandler(it, textKeyboardParams, KeyboardState.Symbol.Text)
             it.popupManager = DefaultPopupManager()
         }
         val symbolKeyboardView = DefaultKeyboardView(context, null).also {
+            it.keyboardTheme = keyboardTheme
             it.keyboard = symbolKeyboard
             it.listener = createKeyboardListener(context, symbolKeyboardParams)
             it.touchHandler = createTouchHandler(it, symbolKeyboardParams, KeyboardState.Symbol.Symbol)
             it.popupManager = DefaultPopupManager()
         }
         val numberKeyboardView = DefaultKeyboardView(context, null).also {
+            it.keyboardTheme = keyboardTheme
             it.keyboard = numberKeyboard
             it.listener = createKeyboardListener(context, numberKeyboardParams)
             it.touchHandler = createTouchHandler(it, numberKeyboardParams, KeyboardState.Symbol.Number)
@@ -187,6 +201,7 @@ abstract class CommonIMEMode(
 
     override fun createCandidateView(context: Context): View {
         candidateView = ScrollingCandidateView(context, null).apply {
+            keyboardTheme = this@CommonIMEMode.keyboardTheme
             listener = this@CommonIMEMode
         }
         return candidateView as View
@@ -194,7 +209,7 @@ abstract class CommonIMEMode(
 
     override fun getInputView(): View? {
         updateInputView()
-        return keyboardView as? View
+        return keyboardView?.view
     }
 
     protected fun updateInputView() {
@@ -208,6 +223,7 @@ abstract class CommonIMEMode(
                 KeyboardState.Shift.Released -> ee.oyatl.ime.keyboard.R.drawable.keyic_shift
                 KeyboardState.Shift.Pressed -> ee.oyatl.ime.keyboard.R.drawable.keyic_shift_pressed
                 KeyboardState.Shift.Locked -> ee.oyatl.ime.keyboard.R.drawable.keyic_shift_locked
+                KeyboardState.Shift.AutoShifted -> ee.oyatl.ime.keyboard.R.drawable.keyic_shift_pressed
             }
             val icons = mapOf(
                 KeyEvent.KEYCODE_SHIFT_LEFT to KeyLabel.Default(icon = shiftIcon),
@@ -238,6 +254,7 @@ abstract class CommonIMEMode(
         val soundVolume = if(sound) 1f else 0f
         val vibrationDuration = if(haptic) duration else 0L
         val touchMode = TouchMode.entries.find { it.name == preference.getString("touch_mode", null) } ?: TouchMode.Seek
+        val touchCorrection = preference.getBoolean("touch_correction", true)
         val defaultFlickSensitivity = context.resources.getInteger(R.integer.flick_sensitivity_default).toFloat()
         val flickSensitivity = preference.getFloat("flick_sensitivity", defaultFlickSensitivity).toInt()
         val params = KeyboardParams(
@@ -249,6 +266,7 @@ abstract class CommonIMEMode(
             soundVolume = soundVolume,
             vibrationDuration = vibrationDuration,
             touchMode = touchMode,
+            touchCorrection = touchCorrection,
             flickSensitivity = flickSensitivity,
             longPressDelay = 300,
             shiftLockDelay = 300,
@@ -260,8 +278,8 @@ abstract class CommonIMEMode(
 
         return when(symbolState) {
             KeyboardState.Symbol.Text -> params
-            KeyboardState.Symbol.Symbol -> params.copy(shiftAutoRelease = false)
-            KeyboardState.Symbol.Number -> params.copy(shiftAutoRelease = false, splitWidth = 0)
+            KeyboardState.Symbol.Symbol -> params.copy(shiftAutoRelease = false, touchCorrection = false)
+            KeyboardState.Symbol.Number -> params.copy(shiftAutoRelease = false, splitWidth = 0, touchCorrection = false)
         }
     }
 
@@ -269,11 +287,13 @@ abstract class CommonIMEMode(
         context: Context,
         params: KeyboardParams
     ): KeyboardListener {
-        return CompoundKeyboardListener(
+        return SerialKeyboardListener(
             KeyFeedbackManager(context, params),
             DeleteRepeater(this, params),
-            ShiftStateManager(this, params),
-            InputOnKeyUp(this)
+            ParallelKeyboardListener(
+                InputOnKeyUp(this, ignoreKeyCodes = ShiftStateManager.KEY_CODES),
+                ShiftStateManager(this, params, this)
+            )
         )
     }
 
@@ -392,7 +412,7 @@ abstract class CommonIMEMode(
         return true
     }
 
-    protected fun submitCandidates(candidates: List<CandidateView.Candidate>) {
+    protected open fun submitCandidates(candidates: List<CandidateView.Candidate>) {
         CoroutineScope(Dispatchers.Main).launch {
             candidateView?.submitList(candidates)
             listener.onExpandedCandidates(candidates)

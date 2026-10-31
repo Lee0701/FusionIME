@@ -66,7 +66,7 @@
     <string name="settings_input_mode_syllables_key_layout_title">音节键盘配置</string>
     <string name="settings_input_mode_syllables_key_layout_summary">选择五十音或伊吕波配置的按键排列。</string>
     <string name="settings_info_app_info_title">应用程序信息</string>
-    <string name="settings_info_version">版本 </string>
+    <string name="settings_info_version">版本</string>
     <string name="settings_info_source_code_title">源代码</string>
     <string name="settings_info_contact_maintainer_title">联络开发者</string>
     <string name="settings_info_used_projectss_title">使用的开源专案</string>

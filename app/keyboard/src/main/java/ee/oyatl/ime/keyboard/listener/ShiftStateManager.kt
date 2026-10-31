@@ -1,41 +1,18 @@
 package ee.oyatl.ime.keyboard.listener
 
-import android.os.Handler
 import android.view.KeyEvent
 import ee.oyatl.ime.keyboard.KeyboardParams
 import ee.oyatl.ime.keyboard.KeyboardState
 
 class ShiftStateManager(
     val listener: KeyboardListener,
-    val params: KeyboardParams
+    val params: KeyboardParams,
+    val stateHolder: ShiftStateHolder
 ): KeyboardListener {
-    val handler = Handler()
-
-    var shiftState: KeyboardState.Shift = KeyboardState.Shift.Released
-        set(value) {
-            field = value
-            when(value) {
-                KeyboardState.Shift.Released -> {
-                    listener.onKeyUp(KeyEvent.KEYCODE_CAPS_LOCK, metaState)
-                    listener.onKeyUp(KeyEvent.KEYCODE_SHIFT_LEFT, metaState)
-                }
-                KeyboardState.Shift.Pressed -> {
-                    listener.onKeyDown(KeyEvent.KEYCODE_SHIFT_LEFT, metaState)
-                }
-                KeyboardState.Shift.Locked -> {
-                    listener.onKeyDown(KeyEvent.KEYCODE_CAPS_LOCK, metaState)
-                }
-            }
-        }
     private var shiftPressing: Boolean = false
     private var shiftTime: Long = 0
+    private var inputWhileShiftPressing: Boolean = false
     private var inputWhileShifted: Boolean = false
-
-    private val metaState: Int get() = when(shiftState) {
-        KeyboardState.Shift.Released -> 0
-        KeyboardState.Shift.Pressed -> KeyEvent.META_SHIFT_ON
-        KeyboardState.Shift.Locked -> KeyEvent.META_CAPS_LOCK_ON
-    }
 
     override fun onKeyDown(keyCode: Int, metaState: Int): Boolean {
         when(keyCode) {
@@ -44,7 +21,7 @@ class ShiftStateManager(
                 return true
             }
             else -> {
-                return false
+                return true
             }
         }
     }
@@ -56,61 +33,85 @@ class ShiftStateManager(
                 return true
             }
             else -> {
-                handler.post { autoReleaseShift() }
-                return false
+                autoReleaseShift()
+                return true
             }
         }
     }
 
     override fun onReset() {
-        shiftState = KeyboardState.Shift.Released
+        releaseShift()
     }
 
     private fun onShiftPressed(code: Int) {
         shiftPressing = true
-        when(shiftState) {
-            KeyboardState.Shift.Released -> {
-                shiftState = KeyboardState.Shift.Pressed
+        if(params.shiftAutoRelease) {
+            val diff = System.currentTimeMillis() - shiftTime
+            if(diff < params.shiftLockDelay && !inputWhileShifted) {
+                stateHolder.shiftState = KeyboardState.Shift.Locked
+                return
             }
-            KeyboardState.Shift.Pressed -> {
-                if(params.shiftAutoRelease) {
-                    val diff = System.currentTimeMillis() - shiftTime
-                    if(diff < params.shiftLockDelay) shiftState = KeyboardState.Shift.Locked
-                    else shiftState = KeyboardState.Shift.Released
-                } else {
-                    shiftState = KeyboardState.Shift.Released
-                }
+        }
+        when(stateHolder.shiftState) {
+            KeyboardState.Shift.Released -> {
+                pressShift()
+            }
+            KeyboardState.Shift.Pressed, KeyboardState.Shift.AutoShifted -> {
+                releaseShift()
             }
             KeyboardState.Shift.Locked -> {
-                shiftState = KeyboardState.Shift.Released
+                releaseShift()
             }
         }
     }
 
     private fun onShiftReleased(code: Int) {
         shiftPressing = false
-        when(shiftState) {
+        when(stateHolder.shiftState) {
             KeyboardState.Shift.Released -> {
             }
-            KeyboardState.Shift.Pressed -> {
-                if(inputWhileShifted) shiftState = KeyboardState.Shift.Released
-                else shiftState = KeyboardState.Shift.Pressed
+            KeyboardState.Shift.Pressed, KeyboardState.Shift.AutoShifted -> {
+                if(inputWhileShiftPressing) releaseShift()
+                else pressShift()
             }
             KeyboardState.Shift.Locked -> {
             }
         }
         shiftTime = System.currentTimeMillis()
+        inputWhileShiftPressing = false
+    }
+
+    private fun pressShift() {
+        stateHolder.shiftState = KeyboardState.Shift.Pressed
+        inputWhileShifted = false
+    }
+
+    private fun releaseShift() {
+        stateHolder.shiftState = KeyboardState.Shift.Released
         inputWhileShifted = false
     }
 
     private fun autoReleaseShift() {
         if(!params.shiftAutoRelease) return
-        if(shiftState == KeyboardState.Shift.Pressed) {
+        if(stateHolder.shiftState == KeyboardState.Shift.Pressed) {
             if(!shiftPressing) {
-                shiftState = KeyboardState.Shift.Released
+                releaseShift()
             } else {
-                inputWhileShifted = true
+                inputWhileShiftPressing = true
             }
         }
+        inputWhileShifted = true
+    }
+
+    interface ShiftStateHolder {
+        var shiftState: KeyboardState.Shift
+    }
+
+    companion object {
+        val KEY_CODES = setOf(
+            KeyEvent.KEYCODE_SHIFT_LEFT,
+            KeyEvent.KEYCODE_SHIFT_RIGHT,
+            KeyEvent.KEYCODE_CAPS_LOCK
+        )
     }
 }

@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.view.Gravity
 import android.view.View
 import android.widget.PopupWindow
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.graphics.drawable.toDrawable
 import ee.oyatl.ime.keyboard.DefaultKeyboardView
 import ee.oyatl.ime.keyboard.KeyLabel
@@ -71,6 +72,7 @@ class MoreKeysPopup(
             hapticFeedback = false,
             vibrationDuration = 0L,
             touchMode = TouchMode.Seek,
+            touchCorrection = false,
             soundVolume = 0f,
             flickSensitivity = 0,
             longPressDelay = 0,
@@ -81,6 +83,7 @@ class MoreKeysPopup(
             previewPopups = false
         )
         contentView = DefaultKeyboardView(parent.context, null).also {
+            it.keyboardTheme = keyboardView.keyboardTheme
             it.keyboard = Keyboard(listOf(
                 candidates.mapIndexed { i, candidate ->
                     Keyboard.KeyItem.Key(
@@ -97,10 +100,16 @@ class MoreKeysPopup(
         window.contentView = view
         window.width = popupWidth
         window.height = popupHeight
-        window.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
         window.isClippingEnabled = false
         window.isTouchable = false
         window.isOutsideTouchable = false
+
+        val keyboardTheme = keyboardView.keyboardTheme
+        if(keyboardTheme != null) {
+            val background = AppCompatResources.getDrawable(parent.context, keyboardTheme.moreKeysBackground)
+            background?.setTint(parent.context.getColor(keyboardTheme.backgroundColor))
+            window.setBackgroundDrawable(background)
+        }
     }
 
     override fun selectAt(rawX: Int, rawY: Int) {

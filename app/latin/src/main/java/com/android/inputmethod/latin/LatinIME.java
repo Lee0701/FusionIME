@@ -272,12 +272,12 @@ public class LatinIME extends InputMethodService implements ILatinIME {
             case MSG_RESUME_SUGGESTIONS:
                 latinIme.getInputLogic().restartSuggestionsOnWordTouchedByCursor(
                         latinIme.getSettings().getCurrent(), false /* forStartInput */,
-                        latinIme.getKeyboardSwitcher().getCurrentKeyboardScriptId());
+                        latinIme.getCurrentKeyboardScriptId());
                 break;
             case MSG_RESUME_SUGGESTIONS_FOR_START_INPUT:
                 latinIme.getInputLogic().restartSuggestionsOnWordTouchedByCursor(
                         latinIme.getSettings().getCurrent(), true /* forStartInput */,
-                        latinIme.getKeyboardSwitcher().getCurrentKeyboardScriptId());
+                        latinIme.getCurrentKeyboardScriptId());
                 break;
             case MSG_REOPEN_DICTIONARIES:
                 // We need to re-evaluate the currently composing word in case the script has
