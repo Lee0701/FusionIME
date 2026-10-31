@@ -89,7 +89,7 @@
     <string name="settings_dialog_keystroke_key_code">按鍵代碼</string>
     <string name="settings_dialog_keystroke_shift">Shift</string>
     <string name="settings_dialog_keystroke_control">Control</string>
-    <string name="settings_info_version">版本 </string>
+    <string name="settings_info_version">版本</string>
     <string name="settings_dialog_keystroke_meta">Meta</string>
     <string name="screen_mode_mobile">手機</string>
     <string name="screen_mode_tablet">平板</string>
