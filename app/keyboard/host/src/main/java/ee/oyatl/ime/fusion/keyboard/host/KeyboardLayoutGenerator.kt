@@ -15,7 +15,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
 
-class KeyboardLayoutExporter(
+class KeyboardLayoutGenerator(
     val exportDir: String
 ): KeyboardLayoutPresetWriter() {
     override fun openOutput(name: String): OutputStream {
@@ -27,12 +27,14 @@ fun export(dirname: String, presets: Map<String, KeyboardLayoutPreset>) {
     val exportDir = File(dirname)
     if(exportDir.exists()) exportDir.deleteRecursively()
     exportDir.mkdirs()
-    val exporter = KeyboardLayoutExporter(exportDir.path)
+    val exporter = KeyboardLayoutGenerator(exportDir.path)
     presets.forEach { (name, preset) -> exporter.save(name, preset) }
 }
 
 fun main(args: Array<String>) {
-    val dirname = "app/src/main/assets/keyboard"
+    val dirname =
+        if(args.size == 1) args[0]
+        else "app/src/main/assets/keyboard"
 
     export("$dirname/latin", mapOf(
         "qwerty" to LatinLayoutPresets.qwerty(),

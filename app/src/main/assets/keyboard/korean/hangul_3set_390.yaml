@@ -1,9 +1,0 @@
-keyboardTemplate: "hangul_3set_390.template"
-layoutTable: "hangul_3set_390.layout"
-altGraphTable: "hangul_3set_390.altgr"
-moreKeysTable: "hangul_3set_390.morekeys"
-softKeyCodeMapper: "hangul_3set_390.softkeycode"
-hardKeyCodeMapper: "hangul_3set_390.hardkeycode"
-keyLabels: "hangul_3set_390.labels"
-extra: !<hangul>
-  jamoCombinationTable: "hangul_3set_390.combination"

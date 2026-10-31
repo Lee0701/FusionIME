@@ -1,8 +1,0 @@
-keyboardTemplate: "bopomofo.template"
-layoutTable: "bopomofo.layout"
-altGraphTable: "bopomofo.altgr"
-moreKeysTable: "bopomofo.morekeys"
-softKeyCodeMapper: "bopomofo.softkeycode"
-hardKeyCodeMapper: "bopomofo.hardkeycode"
-keyLabels: "bopomofo.labels"
-extra: !<none> {}

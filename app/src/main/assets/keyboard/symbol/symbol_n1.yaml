@@ -1,8 +1,0 @@
-keyboardTemplate: "symbol_n1.template"
-layoutTable: "symbol_n1.layout"
-altGraphTable: "symbol_n1.altgr"
-moreKeysTable: "symbol_n1.morekeys"
-softKeyCodeMapper: "symbol_n1.softkeycode"
-hardKeyCodeMapper: "symbol_n1.hardkeycode"
-keyLabels: "symbol_n1.labels"
-extra: !<none> {}

@@ -1,8 +1,0 @@
-keyboardTemplate: "kana_jis.template"
-layoutTable: "kana_jis.layout"
-altGraphTable: "kana_jis.altgr"
-moreKeysTable: "kana_jis.morekeys"
-softKeyCodeMapper: "kana_jis.softkeycode"
-hardKeyCodeMapper: "kana_jis.hardkeycode"
-keyLabels: "kana_jis.labels"
-extra: !<none> {}

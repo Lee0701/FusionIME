@@ -1,8 +1,0 @@
-keyboardTemplate: "romaji_qwerty.template"
-layoutTable: "romaji_qwerty.layout"
-altGraphTable: "romaji_qwerty.altgr"
-moreKeysTable: "romaji_qwerty.morekeys"
-softKeyCodeMapper: "romaji_qwerty.softkeycode"
-hardKeyCodeMapper: "romaji_qwerty.hardkeycode"
-keyLabels: "romaji_qwerty.labels"
-extra: !<none> {}

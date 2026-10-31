@@ -57,6 +57,11 @@ configure<ApplicationExtension> {
         viewBinding = true
         buildConfig = true
     }
+
+    val dependencyAssets = project(":app:keyboard:host").layout.buildDirectory.dir("generated/dependencyAssets").get().asFile.path
+    sourceSets["main"].assets.directories.add(dependencyAssets)
+
+    tasks["preBuild"].dependsOn(":app:keyboard:host:generateKeyboardLayouts")
 }
 
 kotlin {

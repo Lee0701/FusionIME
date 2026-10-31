@@ -1,8 +1,0 @@
-keyboardTemplate: "cangjie.template"
-layoutTable: "cangjie.layout"
-altGraphTable: "cangjie.altgr"
-moreKeysTable: "cangjie.morekeys"
-softKeyCodeMapper: "cangjie.softkeycode"
-hardKeyCodeMapper: "cangjie.hardkeycode"
-keyLabels: "cangjie.labels"
-extra: !<none> {}

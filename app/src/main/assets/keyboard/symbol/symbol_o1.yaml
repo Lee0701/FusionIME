@@ -1,8 +1,0 @@
-keyboardTemplate: "symbol_o1.template"
-layoutTable: "symbol_o1.layout"
-altGraphTable: "symbol_o1.altgr"
-moreKeysTable: "symbol_o1.morekeys"
-softKeyCodeMapper: "symbol_o1.softkeycode"
-hardKeyCodeMapper: "symbol_o1.hardkeycode"
-keyLabels: "symbol_o1.labels"
-extra: !<none> {}

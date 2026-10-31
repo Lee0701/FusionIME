@@ -1,8 +1,0 @@
-keyboardTemplate: "dayi3.template"
-layoutTable: "dayi3.layout"
-altGraphTable: "dayi3.altgr"
-moreKeysTable: "dayi3.morekeys"
-softKeyCodeMapper: "dayi3.softkeycode"
-hardKeyCodeMapper: "dayi3.hardkeycode"
-keyLabels: "dayi3.labels"
-extra: !<none> {}

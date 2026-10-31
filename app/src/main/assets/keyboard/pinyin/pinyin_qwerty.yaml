@@ -1,8 +1,0 @@
-keyboardTemplate: "pinyin_qwerty.template"
-layoutTable: "pinyin_qwerty.layout"
-altGraphTable: "pinyin_qwerty.altgr"
-moreKeysTable: "pinyin_qwerty.morekeys"
-softKeyCodeMapper: "pinyin_qwerty.softkeycode"
-hardKeyCodeMapper: "pinyin_qwerty.hardkeycode"
-keyLabels: "pinyin_qwerty.labels"
-extra: !<none> {}

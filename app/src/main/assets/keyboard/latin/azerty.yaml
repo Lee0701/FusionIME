@@ -1,8 +1,0 @@
-keyboardTemplate: "azerty.template"
-layoutTable: "azerty.layout"
-altGraphTable: "azerty.altgr"
-moreKeysTable: "azerty.morekeys"
-softKeyCodeMapper: "azerty.softkeycode"
-hardKeyCodeMapper: "azerty.hardkeycode"
-keyLabels: "azerty.labels"
-extra: !<none> {}
