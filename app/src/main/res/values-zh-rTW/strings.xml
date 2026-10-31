@@ -184,4 +184,7 @@
     <string name="latin_layout_qwertz">QWERTZ</string>
     <string name="symbol_layout_g">Google 式佈局</string>
     <string name="symbol_layout_n1">Naver 式佈局</string>
+    <string name="latin_layout_deutsch">德語</string>
+    <string name="zhuyin_conversion_engine_simple">簡單</string>
+    <string name="zhuyin_conversion_engine_chewing">注音</string>
 </resources>
