@@ -53,7 +53,7 @@
     <string name="flick_action_default">文字</string>
     <string name="flick_action_shifted">シフト文字</string>
     <string name="screen_mode_full">PC</string>
-    <string name="flick_action_shifted_symbol">シフト記号</string>
+    <string name="flick_action_shifted_symbol">シフトされた記号</string>
     <string name="input_mode_latin">ラテン文字</string>
     <string name="input_mode_korean">韓国語</string>
     <string name="input_mode_mozc">Mozc（日本語）</string>
@@ -118,7 +118,7 @@
     <string name="settings_input_mode_syllables_key_layout_summary">五十音表やいろは配列でのキー配列を選択します。</string>
     <string name="mozc_layout_kana_iroha">かないろは順</string>
     <string name="mozc_syllables_key_layout_horizontal">横</string>
-    <string name="mozc_layout_kana_12key">かな12キー</string>
+    <string name="mozc_layout_kana_12key">かな 12 キー</string>
     <string name="mozc_syllables_key_layout_vertical_left">縦（左から右）</string>
     <string name="mozc_syllables_key_layout_vertical_right">縦（右から左）</string>
     <string name="mozc_flick_mode_flick_toggle">フリック及びトグル</string>
@@ -155,7 +155,7 @@
     <string name="korean_converter_hangul_only">ハングル専用コンバーター</string>
     <string name="input_mode_emoji">絵文字</string>
     <string name="latin_layout_qwertz">QWERTZ</string>
-    <string name="latin_layout_deutsch">独逸語</string>
+    <string name="latin_layout_deutsch">ドイツ語</string>
     <string name="settings_input_mode_auto_caps_title">自動大文字化</string>
     <string name="settings_input_mode_auto_period_summary">スペースキーをダブルタップするとピリオドとスペースが入力されます。</string>
     <string name="viet_layout_vni_quoc_ngu">VNI（チュ・クオック・グー）</string>
