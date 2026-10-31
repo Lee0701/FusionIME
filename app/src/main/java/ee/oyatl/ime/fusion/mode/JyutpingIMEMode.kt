@@ -3,19 +3,23 @@ package ee.oyatl.ime.fusion.mode
 import android.content.Context
 import android.view.KeyEvent
 import ee.oyatl.ime.candidate.CandidateView
-import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.korean.WordComposer
 import ee.oyatl.ime.fusion.layout.preset.JyutpingLayoutPresets
 import ee.oyatl.ime.fusion.layout.preset.LatinLayoutPresets
+import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.jyutping.jyutping.BinaryDictionaries
 import org.jyutping.jyutping.models.Researcher
 import org.jyutping.jyutping.models.Segmenter
 import org.jyutping.jyutping.models.VirtualInputKey
+import org.jyutping.jyutping.models.previewMark
+import org.jyutping.jyutping.models.schemeLength
+import org.jyutping.jyutping.presets.PresetCharacter
 import java.util.Locale
 
 class JyutpingIMEMode(
@@ -54,10 +58,11 @@ class JyutpingIMEMode(
                         convertJob?.join()
                         val bestCandidate = bestCandidate
                         if(bestCandidate != null) onCandidateSelected(bestCandidate)
+                        else onReset()
                     } else {
+                        onReset()
                         util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_SPACE)
                     }
-                    onReset()
                 }
             }
             KeyEvent.KEYCODE_ENTER -> {
@@ -98,18 +103,41 @@ class JyutpingIMEMode(
     }
 
     private fun renderInput() {
-        currentInputConnection?.setComposingText(wordComposer.getSpannableSurfaceString(), 1)
         postUpdateSuggestions()
     }
 
     private fun postUpdateSuggestions() {
         convertJob?.cancel()
         convertJob = coroutineScope.launch {
-            val keys = wordComposer.textBeforeCursor.mapNotNull { VirtualInputKey.matchVirtualInputKey(it) }
-            val suggestions = Researcher.suggest(keys, Segmenter.segment(keys))
+            val textBeforeCursor = wordComposer.textBeforeCursor
+            val textAfterCursor = wordComposer.textAfterCursor
+            val keys = textBeforeCursor.mapNotNull { VirtualInputKey.matchVirtualInputKey(it) }
+            val segmentation = Segmenter.segment(keys)
+            val suggestions = Researcher.suggest(keys, segmentation)
             val candidates = suggestions.map { JyutpingCandidate(it.text, it.romanization, it.input) }.distinctBy { it.text }
             bestCandidate = candidates.firstOrNull()
             submitCandidates(candidates)
+            val mark = run {
+                val isPeculiar = keys.any { key -> key.text.any { it.isUpperCase() } || !key.isSyllableLetter }
+                if(isPeculiar) return@run keys.previewMarkNormalized()
+                val firstCandidate = suggestions.firstOrNull()
+                if(firstCandidate?.inputCount == keys.size) return@run firstCandidate.mark
+                val bestScheme = segmentation.firstOrNull()
+                val leadingLength = bestScheme?.schemeLength ?: 0
+                val leadingMark = bestScheme?.previewMark ?: ""
+                when(leadingLength) {
+                    0 -> textBeforeCursor
+                    textBeforeCursor.length -> leadingMark
+                    else -> leadingMark + " " + textBeforeCursor.drop(leadingLength)
+                }
+            }
+            withContext(Dispatchers.Main) {
+                val space = textBeforeCursor.isNotEmpty() && textAfterCursor.isNotEmpty()
+                currentInputConnection?.setComposingText(WordComposer.buildSpannableSurfaceString(
+                    mark,
+                    (if(space) " " else "") + textAfterCursor
+                ), 1)
+            }
         }
     }
 
@@ -120,7 +148,49 @@ class JyutpingIMEMode(
         } else {
             wordComposer.consume(candidate.text.length)
         }
+        wordComposer.moveCursor(wordComposer.composingText.length)
         renderInput()
+    }
+
+    fun List<VirtualInputKey>.previewMarkNormalized(): String = buildString {
+        val inputLength = this@previewMarkNormalized.size
+        var index = 0
+        while (index < inputLength) {
+            val key = this@previewMarkNormalized[index]
+            val isPaired = (index + 1 < inputLength) && (key == this@previewMarkNormalized[index + 1])
+            if (isPaired) {
+                val replacement = when (key) {
+                    VirtualInputKey.letterV -> VirtualInputKey.number4
+                    VirtualInputKey.letterX -> VirtualInputKey.number5
+                    VirtualInputKey.letterQ -> VirtualInputKey.number6
+                    else -> null
+                }
+                if (replacement != null) {
+                    append(replacement.character)
+                    index += 2
+                    if (index < inputLength) {
+                        append(PresetCharacter.SPACE)
+                    }
+                    continue
+                }
+            }
+            val matched = when (key) {
+                VirtualInputKey.letterV -> VirtualInputKey.number1
+                VirtualInputKey.letterX -> VirtualInputKey.number2
+                VirtualInputKey.letterQ -> VirtualInputKey.number3
+                else -> if (key.isLetter) null else key
+            }
+            index += 1
+            if (matched != null) {
+                append(matched.character)
+                if (index < inputLength) {
+                    append(PresetCharacter.SPACE)
+                }
+            } else {
+                val keyText = if (key.text.any { it.isUpperCase() }) key.text.uppercase() else key.text
+                append(keyText)
+            }
+        }
     }
 
     class Params(

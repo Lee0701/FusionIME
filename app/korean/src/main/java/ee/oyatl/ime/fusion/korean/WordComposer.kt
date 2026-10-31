@@ -13,7 +13,7 @@ class WordComposer {
     private var cursor: Int = 0
     val composingText: String get() = composingWord.take(cursor) + composingChar + composingWord.drop(cursor)
     val textBeforeCursor: String get() = composingWord.take(cursor) + composingChar
-    val cursorPosition: Int get() = cursor
+    val textAfterCursor: String get() = composingWord.drop(cursor)
 
     fun compose(text: String) {
         composingChar = text
@@ -59,17 +59,27 @@ class WordComposer {
     }
 
     fun getSpannableSurfaceString(): CharSequence {
-        val builder = SpannableStringBuilder()
-        builder.append(composingWord.take(cursor), BackgroundColorSpan(0x664DB6AC), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        builder.append(composingChar, BackgroundColorSpan(0x664DB6AC), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        builder.append(composingWord.drop(cursor))
-        builder.setSpan(UnderlineSpan(), 0, composingWord.length + composingChar.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        return builder
+        return buildSpannableSurfaceString(textBeforeCursor, textAfterCursor)
     }
 
     fun reset() {
         composingWord = ""
         composingChar = ""
         cursor = 0
+    }
+
+    companion object {
+        const val COMPOSING_BACKGROUND: Int = 0x664DB6AC
+
+        fun buildSpannableSurfaceString(
+            textBeforeCursor: String,
+            textAfterCursor: String
+        ): CharSequence {
+            val builder = SpannableStringBuilder()
+            builder.append(textBeforeCursor, BackgroundColorSpan(COMPOSING_BACKGROUND), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            builder.append(textAfterCursor)
+            builder.setSpan(UnderlineSpan(), 0, textBeforeCursor.length + textAfterCursor.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            return builder
+        }
     }
 }
