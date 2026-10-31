@@ -76,7 +76,7 @@
     <string name="settings_input_mode_syllables_key_layout_title">Syllables Key Layout</string>
     <string name="settings_input_mode_syllables_key_layout_summary">Choose Key Arrangement for Gojuon or Iroha Layout.</string>
     <string name="settings_info_app_info_title">App Info</string>
-    <string name="settings_info_version">Version </string>
+    <string name="settings_info_version">Version</string>
     <string name="settings_info_source_code_title">Source Code</string>
     <string name="settings_info_contact_maintainer_title">Contact Maintainer</string>
     <string name="settings_info_used_projectss_title">Used Projects</string>
@@ -89,11 +89,11 @@
     <string name="screen_mode_mobile">Mobile</string>
     <string name="screen_mode_tablet">Tablet</string>
     <string name="screen_mode_full">Full</string>
-    <string name="symbol_layout_g">Type G</string>
-    <string name="symbol_layout_n1">Type N1</string>
-    <string name="symbol_layout_n2">Type N2</string>
-    <string name="symbol_layout_o1">Type O1</string>
-    <string name="symbol_layout_o2">Type O2</string>
+    <string name="symbol_layout_g">Gboard Type</string>
+    <string name="symbol_layout_n1">Naver Type 1</string>
+    <string name="symbol_layout_n2">Naver Type 2</string>
+    <string name="symbol_layout_o1">OpenWnn Korean Type 1</string>
+    <string name="symbol_layout_o2">OpenWnn Korean Type 2</string>
     <string name="keyboard_theme_static">Static Colours</string>
     <string name="keyboard_theme_dynamic">Dynamic Colours</string>
     <string name="touch_mode_seek">Seek</string>
