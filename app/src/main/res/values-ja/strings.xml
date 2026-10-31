@@ -186,7 +186,7 @@
     <string name="setup_wizard_welcome_subtitle">FusionIME を使用するには、案内に従って初期設定を行ってください。</string>
     <string name="setup_wizard_enable_label">FusionIME を有効化</string>
     <string name="settings_input_mode_clear_user_history_title">入力履歴の初期化</string>
-    <string name="settings_input_mode_clear_user_history_summary">この言語におけるユーザー入力データをクリアします。</string>
+    <string name="settings_input_mode_clear_user_history_summary">この言語におけるユーザー入力データを削除します。</string>
     <string name="settings_input_mode_clear_user_history_confirm_language">%sの学習データをすべて削除しますか？</string>
     <string name="settings_input_mode_clear_user_history_cleared">ユーザー入力履歴を削除しました。</string>
     <string name="settings_input_mode_clear_user_history_failed">ユーザー入力履歴の削除に失敗しました。</string>
