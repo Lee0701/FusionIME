@@ -58,10 +58,11 @@ class JyutpingIMEMode(
                         convertJob?.join()
                         val bestCandidate = bestCandidate
                         if(bestCandidate != null) onCandidateSelected(bestCandidate)
+                        else onReset()
                     } else {
+                        onReset()
                         util?.sendDownUpKeyEvents(KeyEvent.KEYCODE_SPACE)
                     }
-                    onReset()
                 }
             }
             KeyEvent.KEYCODE_ENTER -> {
@@ -147,6 +148,7 @@ class JyutpingIMEMode(
         } else {
             wordComposer.consume(candidate.text.length)
         }
+        wordComposer.moveCursor(wordComposer.composingText.length)
         renderInput()
     }
 
