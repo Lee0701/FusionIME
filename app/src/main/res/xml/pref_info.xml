@@ -48,6 +48,11 @@
             app:url="https://android.googlesource.com/platform/packages/inputmethods/PinyinIME" />
 
         <ee.oyatl.ime.fusion.preference.OpenWebPreference
+            android:title="Conway Stroke Data"
+            android:summary="Copyright 2021–2026 Conway. CC BY 4.0 (stroke sequences), CC0 1.0 (rankings). Converted to binary dictionaries."
+            app:url="https://github.com/stroke-input/stroke-input-data" />
+
+        <ee.oyatl.ime.fusion.preference.OpenWebPreference
             android:title="Jyutping"
             android:summary="CC0 1.0 Universal"
             app:url="https://github.com/yuetyam/jyutping-android" />
