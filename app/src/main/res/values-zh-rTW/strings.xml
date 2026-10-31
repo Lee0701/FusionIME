@@ -182,4 +182,6 @@
     <string name="korean_converter_hangul_only">韓文專用字詞預測器</string>
     <string name="latin_layout_azerty">AZERTY</string>
     <string name="latin_layout_qwertz">QWERTZ</string>
+    <string name="symbol_layout_g">Google 式佈局</string>
+    <string name="symbol_layout_n1">Naver 式佈局</string>
 </resources>
