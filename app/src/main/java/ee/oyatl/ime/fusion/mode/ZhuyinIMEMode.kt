@@ -37,12 +37,14 @@ class ZhuyinIMEMode(
     override fun onLoad(context: Context) {
         super.onLoad(context)
         val loader = AssetsPresetLoader(context.assets, "keyboard/zhuyin")
-        textLayoutPreset = loader.inflate(loader.load(presetName))
+        runCatching { textLayoutPreset = loader.inflate(loader.load(presetName)) }
         val symbolLoader = AssetsPresetLoader(context.assets, "keyboard/symbol")
-        val chineseSymbols = symbolLoader.inflate(symbolLoader.load("symbol_chinese"))
-        symbolLayoutPreset = super.symbolLayoutPreset.copy(
-            layoutTable = super.symbolLayoutPreset.layoutTable + chineseSymbols.layoutTable
-        )
+        runCatching {
+            val chineseSymbols = symbolLoader.inflate(symbolLoader.load("symbol_chinese"))
+            symbolLayoutPreset = super.symbolLayoutPreset.copy(
+                layoutTable = super.symbolLayoutPreset.layoutTable + chineseSymbols.layoutTable
+            )
+        }
         converter.initialize(context)
     }
 

@@ -83,7 +83,7 @@ class PinyinIMEMode(
         val hasSemicolonKey = spelling.doublePinyinScheme?.acceptsFinal(';') == true
         val suffix = if(hasSemicolonKey) "_semicolon" else ""
         val presetName = presetName + suffix
-        textLayoutPreset = loader.inflate(loader.load(presetName))
+        runCatching { textLayoutPreset = loader.inflate(loader.load(presetName)) }
         startPinyinDecoderService(context)
     }
 

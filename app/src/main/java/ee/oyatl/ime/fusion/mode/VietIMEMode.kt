@@ -30,7 +30,7 @@ class VietIMEMode(
         val loader = AssetsPresetLoader(context.assets, "keyboard/vietnamese")
         val suffix = if(layout.nomMode) "_nom" else ""
         val presetName = "qwerty$suffix"
-        textLayoutPreset = loader.inflate(loader.load(presetName))
+        runCatching { textLayoutPreset = loader.inflate(loader.load(presetName)) }
         if(layout.dictResId != 0) {
             converter = VietnameseConverter(context, layout.dictResId)
         }

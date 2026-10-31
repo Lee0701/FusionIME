@@ -93,7 +93,7 @@ class LatinIMEMode(
         this.context = context
 
         val loader = AssetsPresetLoader(context.assets, "keyboard/latin")
-        textLayoutPreset = loader.inflate(loader.load(presetName))
+        runCatching { textLayoutPreset = loader.inflate(loader.load(presetName)) }
 
         dummyKeyboard = KeyboardBuilder(context, keyboardParams).build()
         dictionaryFacilitator = DictionaryFacilitatorProvider.getDictionaryFacilitator(false)

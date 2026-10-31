@@ -36,7 +36,7 @@ abstract class CangjieIMEMode(
     override fun onLoad(context: Context) {
         super.onLoad(context)
         val loader = AssetsPresetLoader(context.assets, "keyboard/cangjie")
-        textLayoutPreset = loader.inflate(loader.load(presetName))
+        runCatching { textLayoutPreset = loader.inflate(loader.load(presetName)) }
         val table = TableLoader()
         table.setPath(context.filesDir.absolutePath.encodeToByteArray())
         table.initialize()
@@ -180,10 +180,12 @@ abstract class CangjieIMEMode(
         override fun onLoad(context: Context) {
             super.onLoad(context)
             val symbolLoader = AssetsPresetLoader(context.assets, "keyboard/symbol")
-            val chineseSymbols = symbolLoader.inflate(symbolLoader.load("symbol_chinese"))
-            symbolLayoutPreset = super.symbolLayoutPreset.copy(
-                layoutTable = super.symbolLayoutPreset.layoutTable + chineseSymbols.layoutTable
-            )
+            runCatching {
+                val chineseSymbols = symbolLoader.inflate(symbolLoader.load("symbol_chinese"))
+                symbolLayoutPreset = super.symbolLayoutPreset.copy(
+                    layoutTable = super.symbolLayoutPreset.layoutTable + chineseSymbols.layoutTable
+                )
+            }
         }
     }
 

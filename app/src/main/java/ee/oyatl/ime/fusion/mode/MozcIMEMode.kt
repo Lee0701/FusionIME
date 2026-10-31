@@ -252,7 +252,7 @@ abstract class MozcIMEMode(
             super.onLoad(context)
 
             val loader = AssetsPresetLoader(context.assets, "keyboard/japanese")
-            textLayoutPreset = loader.inflate(loader.load(presetName))
+            runCatching { textLayoutPreset = loader.inflate(loader.load(presetName)) }
         }
     }
 

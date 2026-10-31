@@ -125,8 +125,8 @@ abstract class CommonIMEMode(
         val loader = AssetsPresetLoader(context.assets, "keyboard/symbol")
         val symbolLayoutTypeName = preference.getString("symbol_layout", null)
         val symbolLayoutType = SymbolLayout.entries.find { it.name == symbolLayoutTypeName } ?: SymbolLayout.G
-        this.symbolLayoutPreset = loader.inflate(loader.load(symbolLayoutType.presetName))
-        this.numberLayoutPreset = loader.inflate(loader.load("number"))
+        runCatching { this.symbolLayoutPreset = loader.inflate(loader.load(symbolLayoutType.presetName)) }
+        runCatching { this.numberLayoutPreset = loader.inflate(loader.load("number")) }
 
         val flickActionUp = FlickAction.valueOf(preference.getString("default_flick_action_up", null) ?: FlickAction.Shifted.name)
         val flickActionDown = FlickAction.valueOf(preference.getString("default_flick_action_down", null) ?: FlickAction.Symbol.name)

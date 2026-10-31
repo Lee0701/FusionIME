@@ -41,7 +41,7 @@ class KoreanIMEMode(
     override fun onLoad(context: Context) {
         super.onLoad(context)
         val loader = AssetsPresetLoader(context.assets, "keyboard/korean")
-        textLayoutPreset = loader.inflate(loader.load(presetName))
+        runCatching { textLayoutPreset = loader.inflate(loader.load(presetName)) }
         val jamoCombinationTable = (textLayoutPreset.extra as? KeyboardLayoutPreset.Extra.Hangul)
             ?.jamoCombinationTable ?: JamoCombinationTable()
         val correctOrders = (extra["correct_orders"] ?: "false").toBoolean()
