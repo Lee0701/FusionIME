@@ -41,7 +41,7 @@ fun main(args: Array<String>) {
         "qwerty_spanish" to LatinLayoutPresets.spanishQwerty(),
         "azerty" to LatinLayoutPresets.azerty(),
         "qwertz" to LatinLayoutPresets.qwertz(),
-        "qwerz_german" to LatinLayoutPresets.germanQwertz(),
+        "qwertz_german" to LatinLayoutPresets.germanQwertz(),
         "dvorak" to LatinLayoutPresets.dvorak(),
         "colemak" to LatinLayoutPresets.colemak()
     ))
