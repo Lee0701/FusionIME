@@ -138,16 +138,16 @@
     <string name="mozc_layout_godan">GODAN（五段）</string>
     <string name="settings_info_contact_maintainer_title">開発者に連絡</string>
     <string name="settings_input_mode_cursor_keys_title">カーソルキー</string>
-    <string name="settings_info_version">バージョン </string>
+    <string name="settings_info_version">バージョン</string>
     <string name="settings_info_source_code_title">ソースコード</string>
     <string name="settings_input_mode_mozc_flick_hint_summary">12キーとGODANでフリックのヒントを表示します。</string>
     <string name="settings_input_mode_zhuyin_conversion_engine_title">変換エンジン</string>
     <string name="settings_appearance_symbol_layout_title">記号配列</string>
-    <string name="symbol_layout_n1">タイプN1</string>
-    <string name="symbol_layout_n2">タイプN2</string>
-    <string name="symbol_layout_o1">タイプO1</string>
-    <string name="symbol_layout_o2">タイプO2</string>
-    <string name="symbol_layout_g">タイプG</string>
+    <string name="symbol_layout_n1">Naver式配列</string>
+    <string name="symbol_layout_n2">Naver式配列（高級）</string>
+    <string name="symbol_layout_o1">OpenWnn Korean式配列</string>
+    <string name="symbol_layout_o2">OpenWnn Korean式配列（高級）</string>
+    <string name="symbol_layout_g">Gboard式配列</string>
     <string name="latin_layout_azerty">AZERTY</string>
     <string name="zhuyin_conversion_engine_simple">簡単</string>
     <string name="zhuyin_conversion_engine_chewing">Chewing</string>
@@ -185,4 +185,9 @@
     <string name="keyboard_theme_dynamic">動的カラー</string>
     <string name="setup_wizard_welcome_subtitle">FusionIME を使用するには、案内に従って初期設定を行ってください。</string>
     <string name="setup_wizard_enable_label">FusionIME を有効化</string>
+    <string name="settings_input_mode_clear_user_history_title">入力履歴の初期化</string>
+    <string name="settings_input_mode_clear_user_history_summary">この言語におけるユーザー入力データをクリアします。</string>
+    <string name="settings_input_mode_clear_user_history_confirm_language">%sの学習データをすべて削除しますか？</string>
+    <string name="settings_input_mode_clear_user_history_cleared">ユーザー入力履歴を削除しました。</string>
+    <string name="settings_input_mode_clear_user_history_failed">ユーザー入力履歴の削除に失敗しました。</string>
 </resources>
