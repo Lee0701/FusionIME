@@ -22,7 +22,6 @@ import ee.oyatl.ime.fusion.keyboard.core.KeyLabel
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardParams
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardState
-import ee.oyatl.ime.fusion.keyboard.core.KeyboardState.Symbol
 import ee.oyatl.ime.fusion.keyboard.core.TouchMode
 import ee.oyatl.ime.fusion.util.KeyEventUtil
 import ee.oyatl.ime.fusion.util.PreferenceUtil.getOrientationBoolean
@@ -385,10 +384,10 @@ abstract class CommonIMEMode(
             return true
         }
         is FusionKeyEvent.LongPress -> {
-            val event = translateKeyEvent(event)
+            val translatedEvent = translateKeyEvent(event)
             val keyboardView = keyboardView ?: return false
             val key = keyboardView.findKeys(event.keyCode).firstOrNull() ?: return false
-            val input = FusionKeyEvent.Press(event.keyCode, shiftState, false, KeyEventSource.Unknown)
+            val input = FusionKeyEvent.Press(translatedEvent.keyCode, shiftState, false, KeyEventSource.Unknown)
             val baseChar = currentLayoutPreset.layoutTable[input] ?: return false
             val candidates = currentLayoutPreset.moreKeysTable.candidatesFor(baseChar)
             if(candidates.isEmpty()) return false
@@ -434,7 +433,7 @@ abstract class CommonIMEMode(
             else -> event.shiftState
         }
         return when(symbolState) {
-            Symbol.Text -> event.with(keyCode = keyCode, shiftState = shiftState)
+            KeyboardState.Symbol.Text -> event.with(keyCode = keyCode, shiftState = shiftState)
             else -> event.with(shiftState = shiftState)
         }
     }
