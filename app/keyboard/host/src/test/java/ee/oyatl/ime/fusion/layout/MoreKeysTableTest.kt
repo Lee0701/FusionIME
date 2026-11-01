@@ -1,7 +1,6 @@
-package ee.oyatl.ime.keyboard
+package ee.oyatl.ime.fusion.layout
 
 import ee.oyatl.ime.fusion.keyboard.core.MoreKeysTable
-import ee.oyatl.ime.fusion.layout.LatinMoreKeysTable
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test

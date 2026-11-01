@@ -2,6 +2,8 @@ package ee.oyatl.ime.fusion.layout
 
 import ee.oyatl.ime.fusion.keyboard.core.KeyCode
 import ee.oyatl.ime.fusion.keyboard.core.FusionKeyEvent
+import ee.oyatl.ime.fusion.keyboard.core.KeyCodeMapper
+import ee.oyatl.ime.fusion.keyboard.core.KeyEventSource
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardState
 import ee.oyatl.ime.fusion.keyboard.core.LayoutTable
 import org.junit.Assert.assertEquals
@@ -41,9 +43,9 @@ class LayoutLatinTest {
         expectedNormal: Char,
         expectedShifted: Char
     ) {
-        val mappedKeyCode = mapper.map[keyCode] ?: keyCode
-        val actualNormal = table[FusionKeyEvent(mappedKeyCode, KeyboardState.Shift.Released)]
-        val actualShifted = table[FusionKeyEvent(mappedKeyCode, KeyboardState.Shift.Pressed)]
+        val mappedKeyCode = mapper[keyCode]
+        val actualNormal = table[FusionKeyEvent.Press(mappedKeyCode, KeyboardState.Shift.Released, false, KeyEventSource.Unknown)]
+        val actualShifted = table[FusionKeyEvent.Press(mappedKeyCode, KeyboardState.Shift.Pressed, false, KeyEventSource.Unknown)]
         assertEquals(expectedNormal.code, actualNormal)
         assertEquals(expectedShifted.code, actualShifted)
     }
