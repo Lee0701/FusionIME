@@ -256,110 +256,16 @@ abstract class MozcIMEMode(
         override val textPresetName: String = "romaji_qwerty"
     }
 
-    class Kana12Key(
-        listener: IMEMode.Listener,
-        candidateViewHeight: Int,
-        val flickMode: FlickMode,
-        val flickHint: Boolean,
-        extra: Map<String, String>
-    ): MozcIMEMode(listener, candidateViewHeight, extra) {
-        override val keyboardSpecification: KeyboardSpecification = flickMode.keyboardSpecification
-        override val textPresetName: String = "kana_12key"
-
-        // Remove flick labels if toggle only mode
-        // Show them as hints only when option is on
-        private val keyLabels12Key: Map<Int, KeyLabel> by lazy {
-            if(flickMode == FlickMode.ToggleOnly) textKeyboardLayout.keyLabels.map.mapValues { (k, v) ->
-                KeyLabel(v.text)
-            }
-            else textKeyboardLayout.keyLabels.map.mapValues { (k, v) ->
-                v.copy(showFlickHint = flickHint)
-            }
-        }
-
-        override val keyLabels: Map<Int, KeyLabel>
-            get() =
-                if(symbolState == Symbol.Text) super.keyLabels + keyLabels12Key
-                else super.keyLabels
-
-        private val flicks: MutableMap<Int, FlickDirection> = mutableMapOf()
-
-        override fun createKeyboardParams(context: Context, symbolState: Symbol): KeyboardParams {
-            val params = super.createKeyboardParams(context, symbolState)
-            // Never split 12-key based keyboard
-            if(symbolState == Symbol.Text) return params.copy(splitWidth = 0)
-            return params
-        }
-
-        override fun createTouchHandler(
-            keyboardView: KeyboardView,
-            params: KeyboardParams,
-            symbolState: Symbol
-        ): TouchHandler {
-            if(symbolState == Symbol.Text) {
-                return FlickTouchHandler(keyboardView, params, diagonal = false, multiFlick = false, sendOnUp = true)
-            } else {
-                return super.createTouchHandler(keyboardView, params, symbolState)
-            }
-        }
-
-        override fun onKeyEvent(event: FusionKeyEvent): Boolean = when(event) {
-            is FusionKeyEvent.Press -> {
-                val event = translateKeyEvent(event)
-                if(event.keyCode <= 0 || !keyCharacterMap.isPrintingKey(event.keyCode)) {
-                    return super.onKeyEvent(event)
-                }
-                return false
-            }
-            is FusionKeyEvent.Release -> {
-                val event = translateKeyEvent(event)
-                if(event.keyCode <= 0 || !keyCharacterMap.isPrintingKey(event.keyCode)) {
-                    return super.onKeyEvent(event)
-                }
-                val direction = flicks.remove(event.keyCode)
-                val input =
-                    if(direction != null) FusionKeyEvent.Flick(event.keyCode, direction, shiftState, false, event.source)
-                    else FusionKeyEvent.Press(event.keyCode, shiftState, false, event.source)
-                val text = currentKeyboardLayout.layoutTable[input] ?: return false
-                onChar(text)
-                return true
-            }
-            is FusionKeyEvent.Flick -> {
-                val event = translateKeyEvent(event) as FusionKeyEvent.Flick
-                if(symbolState != Symbol.Text) {
-                    return super.onKeyEvent(event)
-                }
-                if(flickMode == FlickMode.ToggleOnly) return false
-                flicks[event.keyCode] = event.direction
-                return false
-            }
-            else -> super.onKeyEvent(event)
-        }
-    }
-
-
-    class Godan(
+    abstract class GodanKana12Key(
         listener: IMEMode.Listener,
         candidateViewHeight: Int,
         val flickHint: Boolean,
         extra: Map<String, String>
     ): MozcIMEMode(listener, candidateViewHeight, extra) {
-        override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.GODAN_KANA
-        override val textPresetName: String = "godan"
-
-        // Show flick hints only when option is on
-        private val keyLabelsGodan: Map<Int, KeyLabel> by lazy {
-            textKeyboardLayout.keyLabels.map.mapValues { (k, v) ->
-                v.copy(showFlickHint = flickHint)
-            }
-        }
-
-        override val keyLabels: Map<Int, KeyLabel>
-            get() =
-                if(symbolState == Symbol.Text) super.keyLabels + keyLabelsGodan
-                else super.keyLabels
-
         private val flicks: MutableMap<Int, FlickDirection> = mutableMapOf()
+
+        override val keyLabels: Map<Int, KeyLabel> get() =
+            super.keyLabels.mapValues { (_, v) -> v.copy(showFlickHint = flickHint) }
 
         override fun createKeyboardParams(context: Context, symbolState: Symbol): KeyboardParams {
             val params = super.createKeyboardParams(context, symbolState)
@@ -416,6 +322,36 @@ abstract class MozcIMEMode(
             }
             else -> super.onKeyEvent(event)
         }
+    }
+
+    class Kana12Key(
+        listener: IMEMode.Listener,
+        candidateViewHeight: Int,
+        val flickMode: FlickMode,
+        flickHint: Boolean,
+        extra: Map<String, String>
+    ): GodanKana12Key(listener, candidateViewHeight, flickHint && flickMode != FlickMode.ToggleOnly, extra) {
+        override val keyboardSpecification: KeyboardSpecification = flickMode.keyboardSpecification
+        override val textPresetName: String = "kana_12key"
+
+        override val keyLabels: Map<Int, KeyLabel> get() =
+            if(flickMode == FlickMode.ToggleOnly) super.keyLabels.mapValues { (_, v) -> KeyLabel(v.text) }
+            else super.keyLabels
+
+        override fun onKeyEvent(event: FusionKeyEvent): Boolean {
+            if(event is FusionKeyEvent.Flick && flickMode == FlickMode.ToggleOnly) return false
+            return super.onKeyEvent(event)
+        }
+    }
+
+    class Godan(
+        listener: IMEMode.Listener,
+        candidateViewHeight: Int,
+        flickHint: Boolean,
+        extra: Map<String, String>
+    ): GodanKana12Key(listener, candidateViewHeight, flickHint, extra) {
+        override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.GODAN_KANA
+        override val textPresetName: String = "godan"
     }
 
     class KanaJIS(
