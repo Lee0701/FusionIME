@@ -32,7 +32,8 @@ object LayoutSymbol {
         KeyCode.KEYCODE_V to listOf(':'.code, '™'.code),
         KeyCode.KEYCODE_B to listOf(';'.code, '✓'.code),
         KeyCode.KEYCODE_N to listOf('!'.code, '['.code),
-        KeyCode.KEYCODE_M to listOf('?'.code, ']'.code)
+        KeyCode.KEYCODE_M to listOf('?'.code, ']'.code),
+        KeyCode.KEYCODE_SLASH to listOf('*'.code, '%'.code)
     )
 
     val TABLE_N1 = mapOf(
@@ -64,7 +65,8 @@ object LayoutSymbol {
         KeyCode.KEYCODE_V to listOf('.'.code, '→'.code),
         KeyCode.KEYCODE_B to listOf(','.code, '·'.code),
         KeyCode.KEYCODE_N to listOf('!'.code, '['.code),
-        KeyCode.KEYCODE_M to listOf('?'.code, ']'.code)
+        KeyCode.KEYCODE_M to listOf('?'.code, ']'.code),
+        KeyCode.KEYCODE_SLASH to listOf('\''.code, '←'.code)
     )
 
     val TABLE_N2 = mapOf(
@@ -107,7 +109,8 @@ object LayoutSymbol {
         KeyCode.KEYCODE_V to listOf('.'.code, '→'.code),
         KeyCode.KEYCODE_B to listOf(','.code, '↔'.code),
         KeyCode.KEYCODE_N to listOf('!'.code, '«'.code),
-        KeyCode.KEYCODE_M to listOf('?'.code, '»'.code)
+        KeyCode.KEYCODE_M to listOf('?'.code, '»'.code),
+        KeyCode.KEYCODE_SLASH to listOf('\''.code, '←'.code)
     )
 
     val TABLE_O1 = mapOf(
@@ -138,7 +141,8 @@ object LayoutSymbol {
         KeyCode.KEYCODE_V to listOf('+'.code, '×'.code),
         KeyCode.KEYCODE_B to listOf('?'.code, 'π'.code),
         KeyCode.KEYCODE_N to listOf('-'.code, '「'.code),
-        KeyCode.KEYCODE_M to listOf('"'.code, '」'.code)
+        KeyCode.KEYCODE_M to listOf('"'.code, '」'.code),
+        KeyCode.KEYCODE_SLASH to listOf('_'.code, '|'.code)
     )
 
     val TABLE_O2 = mapOf(
@@ -180,7 +184,8 @@ object LayoutSymbol {
         KeyCode.KEYCODE_V to listOf('+'.code, '×'.code),
         KeyCode.KEYCODE_B to listOf('?'.code, 'π'.code),
         KeyCode.KEYCODE_N to listOf('-'.code, '「'.code),
-        KeyCode.KEYCODE_M to listOf('"'.code, '」'.code)
+        KeyCode.KEYCODE_M to listOf('"'.code, '」'.code),
+        KeyCode.KEYCODE_SLASH to listOf('_'.code, '|'.code)
     )
 
     val KEYCODE_MAP_SYMBOLS = mapOf(
