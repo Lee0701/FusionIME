@@ -39,6 +39,10 @@ class ShiftStateManager(
                 }
             }
         }
+        is FusionKeyEvent.Flick -> {
+            autoReleaseShift()
+            return false
+        }
         else -> false
     }
 
