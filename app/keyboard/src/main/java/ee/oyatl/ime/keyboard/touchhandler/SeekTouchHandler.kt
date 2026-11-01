@@ -51,8 +51,8 @@ class SeekTouchHandler(
         if(newKey != oldKey) {
             oldKey?.let { key -> keyboardView.findKeys(key.keyCode).forEach { it.onReleased() } }
             newKey?.let { key -> keyboardView.findKeys(key.keyCode).forEach { it.onPressed() } }
-            if(oldKey?.keyCode == KeyEvent.KEYCODE_DEL) {
-                keyboardView.listener.onKeyEvent(FusionKeyEvent.Release(
+            if(oldKey != null) {
+                keyboardView.listener.onKeyEvent(FusionKeyEvent.Cancel(
                     oldKey.keyCode,
                     KeyboardState.Shift.Released,
                     false,

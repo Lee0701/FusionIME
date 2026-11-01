@@ -404,6 +404,9 @@ abstract class CommonIMEMode(
             }
             return true
         }
+        else -> {
+            return false
+        }
     }
 
     override fun translateKeyCode(keyCode: Int): Int {

@@ -39,4 +39,12 @@ sealed interface FusionKeyEvent {
         override val source: KeyEventSource,
         override val time: Long = System.currentTimeMillis()
     ): FusionKeyEvent
+
+    data class Cancel(
+        override val keyCode: Int,
+        override val shiftState: KeyboardState.Shift,
+        override val altGrState: Boolean,
+        override val source: KeyEventSource,
+        override val time: Long = System.currentTimeMillis()
+    ): FusionKeyEvent
 }
