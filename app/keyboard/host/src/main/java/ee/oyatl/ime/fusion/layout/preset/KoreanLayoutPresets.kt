@@ -7,6 +7,7 @@ import ee.oyatl.ime.fusion.layout.HangulOld
 import ee.oyatl.ime.fusion.keyboard.core.KeyCode
 import ee.oyatl.ime.fusion.keyboard.core.KeyCodeMapper
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardConfiguration
+import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayout
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardTemplate
 import ee.oyatl.ime.fusion.layout.LayoutExt
@@ -24,7 +25,7 @@ object KoreanLayoutPresets {
         val jamoCombinationTable = JamoCombinationTable.from(Hangul2Set.COMBINATION_KS)
         return hangulKSCompatible().copy(
             layoutTable = layoutTable,
-            extra = KeyboardLayoutPreset.Extra.Hangul(
+            extra = KeyboardLayout.Extra.Hangul(
                 jamoCombinationTable = jamoCombinationTable
             )
         )
@@ -35,7 +36,7 @@ object KoreanLayoutPresets {
         val jamoCombinationTable = JamoCombinationTable.from(HangulOld.COMBINATION_FULL)
         return hangulKSCompatible().copy(
             layoutTable = layoutTable,
-            extra = KeyboardLayoutPreset.Extra.Hangul(
+            extra = KeyboardLayout.Extra.Hangul(
                 jamoCombinationTable = jamoCombinationTable
             )
         )
@@ -74,7 +75,7 @@ object KoreanLayoutPresets {
         return hangul3Set390391().copy(
             layoutTable = layoutTable,
             softKeyCodeMapper = softKeyCodeMapper,
-            extra = KeyboardLayoutPreset.Extra.Hangul(
+            extra = KeyboardLayout.Extra.Hangul(
                 jamoCombinationTable = jamoCombinationTable
             )
         )
@@ -85,7 +86,7 @@ object KoreanLayoutPresets {
         val jamoCombinationTable = JamoCombinationTable.from(Hangul3Set.COMBINATION_390_391)
         return hangul3Set390391().copy(
             layoutTable = layoutTable,
-            extra = KeyboardLayoutPreset.Extra.Hangul(
+            extra = KeyboardLayout.Extra.Hangul(
                 jamoCombinationTable = jamoCombinationTable
             )
         )
@@ -96,7 +97,7 @@ object KoreanLayoutPresets {
         val jamoCombinationTable = JamoCombinationTable.from(Hangul3Set.COMBINATION_391_STRICT)
         return hangul3Set390391().copy(
             layoutTable = layoutTable,
-            extra = KeyboardLayoutPreset.Extra.Hangul(
+            extra = KeyboardLayout.Extra.Hangul(
                 jamoCombinationTable = jamoCombinationTable
             )
         )
@@ -151,7 +152,7 @@ object KoreanLayoutPresets {
                 mobile = KeyCodeMapper(Hangul3Set.KEYCODE_MAP_393_MOBILE),
                 tablet = KeyCodeMapper()
             ),
-            extra = KeyboardLayoutPreset.Extra.Hangul(
+            extra = KeyboardLayout.Extra.Hangul(
                 jamoCombinationTable = JamoCombinationTable.from(HangulOld.COMBINATION_FULL)
             )
         )

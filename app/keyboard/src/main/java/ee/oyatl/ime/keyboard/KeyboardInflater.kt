@@ -23,13 +23,6 @@ object KeyboardInflater {
     }
 
     fun inflate(
-        preset: KeyboardLayoutPreset,
-        params: KeyboardParams
-    ): Keyboard {
-        return inflate(preset.keyboardTemplate, params)
-    }
-
-    private fun inflate(
         template: KeyboardTemplate,
         params: KeyboardParams
     ): Keyboard {

@@ -23,6 +23,7 @@ import com.android.inputmethod.pinyin.R
 import com.android.inputmethod.pinyin.Settings
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.fusion.AssetsPresetLoader
+import ee.oyatl.ime.fusion.keyboard.core.KeyboardState
 import ee.oyatl.ime.fusion.pinyin.CandidatesContainer
 import ee.oyatl.ime.fusion.pinyin.ComposingView
 import ee.oyatl.ime.fusion.pinyin.ComposingView.ComposingStatus
@@ -37,7 +38,7 @@ class PinyinIMEMode(
     listener: IMEMode.Listener,
     val spelling: Spelling,
     val chineseTraditional: Boolean,
-    val presetName: String,
+    override val textPresetName: String,
     override val extra: Map<String, String>
 ): CommonIMEMode(listener), DecodingInfo.IMEStateHolder {
     /**
@@ -79,11 +80,6 @@ class PinyinIMEMode(
 
     override fun onLoad(context: Context) {
         super.onLoad(context)
-        val loader = AssetsPresetLoader(context.assets, "keyboard/pinyin")
-        val hasSemicolonKey = spelling.doublePinyinScheme?.acceptsFinal(';') == true
-        val suffix = if(hasSemicolonKey) "_semicolon" else ""
-        val presetName = presetName + suffix
-        runCatching { textLayoutPreset = loader.inflate(loader.load(presetName)) }
         startPinyinDecoderService(context)
     }
 
@@ -100,6 +96,23 @@ class PinyinIMEMode(
     override fun onReset() {
         super.onReset()
         resetToIdleState(true)
+    }
+
+    override fun getKeyboardLayoutPresetName(
+        context: Context,
+        symbolState: KeyboardState.Symbol
+    ): String {
+        if(symbolState == KeyboardState.Symbol.Text) {
+            val hasSemicolonKey = spelling.doublePinyinScheme?.acceptsFinal(';') == true
+            val suffix = if(hasSemicolonKey) "_semicolon" else ""
+            return "$textPresetName$suffix"
+        }
+        return super.getKeyboardLayoutPresetName(context, symbolState)
+    }
+
+    override fun getKeyboardLayoutPresetDirname(symbolState: KeyboardState.Symbol): String {
+        if(symbolState == KeyboardState.Symbol.Text) return "pinyin"
+        return super.getKeyboardLayoutPresetDirname(symbolState)
     }
 
     override fun createCandidateView(context: Context): View {

@@ -8,7 +8,7 @@ import com.miyabi_hiroshi.app.libchewing_android_app_module.ConversionEngines
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.fusion.AssetsPresetLoader
 import ee.oyatl.ime.fusion.R
-import ee.oyatl.ime.fusion.keyboard.core.LayoutTable
+import ee.oyatl.ime.fusion.keyboard.core.KeyboardState
 import ee.oyatl.ime.fusion.korean.WordComposer
 import ee.oyatl.ime.fusion.zhuyin.ChewingConverter
 import java.util.Locale
@@ -16,7 +16,7 @@ import java.util.Locale
 class ZhuyinIMEMode(
     listener: IMEMode.Listener,
     conversionEngine: ConversionEngines,
-    val presetName: String,
+    override val textPresetName: String,
     override val extra: Map<String, String>
 ): CommonIMEMode(listener) {
     private val handler: Handler = Handler(Looper.getMainLooper()) { msg ->
@@ -36,13 +36,11 @@ class ZhuyinIMEMode(
 
     override fun onLoad(context: Context) {
         super.onLoad(context)
-        val loader = AssetsPresetLoader(context.assets, "keyboard/zhuyin")
-        runCatching { textLayoutPreset = loader.inflate(loader.load(presetName)) }
-        val symbolLoader = AssetsPresetLoader(context.assets, "keyboard/symbol")
+        val loader = AssetsPresetLoader(context.assets, "keyboard")
         runCatching {
-            val chineseSymbols = symbolLoader.inflate(symbolLoader.load("symbol_chinese"))
-            symbolLayoutPreset = super.symbolLayoutPreset.copy(
-                layoutTable = super.symbolLayoutPreset.layoutTable + chineseSymbols.layoutTable
+            val chineseSymbols = loader.inflate(loader.load("symbol/symbol_chinese"))
+            symbolKeyboardLayout = super.symbolKeyboardLayout.copy(
+                layoutTable = super.symbolKeyboardLayout.layoutTable + chineseSymbols.layoutTable
             )
         }
         converter.initialize(context)
@@ -52,6 +50,11 @@ class ZhuyinIMEMode(
         super.onReset()
         bestCandidate = null
         wordComposer.reset()
+    }
+
+    override fun getKeyboardLayoutPresetDirname(symbolState: KeyboardState.Symbol): String {
+        if(symbolState == KeyboardState.Symbol.Text) return "zhuyin"
+        return super.getKeyboardLayoutPresetDirname(symbolState)
     }
 
     override fun onCandidateSelected(candidate: CandidateView.Candidate) {

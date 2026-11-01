@@ -5,8 +5,8 @@ import android.view.KeyEvent
 import androidx.annotation.RawRes
 import androidx.annotation.StringRes
 import ee.oyatl.ime.candidate.CandidateView
-import ee.oyatl.ime.fusion.AssetsPresetLoader
 import ee.oyatl.ime.fusion.R
+import ee.oyatl.ime.fusion.keyboard.core.KeyboardState
 import ee.oyatl.ime.fusion.korean.WordComposer
 import ee.oyatl.ime.viet.VietnameseConverter
 import net.sourceforge.vietpad.inputmethod.InputMethod
@@ -27,10 +27,6 @@ class VietIMEMode(
 
     override fun onLoad(context: Context) {
         super.onLoad(context)
-        val loader = AssetsPresetLoader(context.assets, "keyboard/vietnamese")
-        val suffix = if(layout.nomMode) "_nom" else ""
-        val presetName = "qwerty$suffix"
-        runCatching { textLayoutPreset = loader.inflate(loader.load(presetName)) }
         if(layout.dictResId != 0) {
             converter = VietnameseConverter(context, layout.dictResId)
         }
@@ -40,6 +36,23 @@ class VietIMEMode(
         super.onReset()
         wordComposer.reset()
         bestCandidate = null
+    }
+
+    override fun getKeyboardLayoutPresetName(
+        context: Context,
+        symbolState: KeyboardState.Symbol
+    ): String {
+        if(symbolState == KeyboardState.Symbol.Text) {
+            val presetName = "qwerty"
+            val suffix = if(layout.nomMode) "_nom" else ""
+            return "$presetName$suffix"
+        }
+        return super.getKeyboardLayoutPresetName(context, symbolState)
+    }
+
+    override fun getKeyboardLayoutPresetDirname(symbolState: KeyboardState.Symbol): String {
+        if(symbolState == KeyboardState.Symbol.Text) return "vietnamese"
+        return super.getKeyboardLayoutPresetDirname(symbolState)
     }
 
     override fun onCandidateSelected(candidate: CandidateView.Candidate) {

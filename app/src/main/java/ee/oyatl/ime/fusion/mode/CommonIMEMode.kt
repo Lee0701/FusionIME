@@ -16,9 +16,9 @@ import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.SymbolLayout
 import ee.oyatl.ime.fusion.keyboard.core.FlickDirection
 import ee.oyatl.ime.fusion.keyboard.core.FusionKeyEvent
-import ee.oyatl.ime.fusion.keyboard.core.KeyCodeMapper
 import ee.oyatl.ime.fusion.keyboard.core.KeyEventSource
 import ee.oyatl.ime.fusion.keyboard.core.KeyLabel
+import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayout
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardParams
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardState
@@ -27,7 +27,7 @@ import ee.oyatl.ime.fusion.util.KeyEventUtil
 import ee.oyatl.ime.fusion.util.PreferenceUtil.getOrientationBoolean
 import ee.oyatl.ime.fusion.util.PreferenceUtil.getOrientationInteger
 import ee.oyatl.ime.keyboard.DefaultKeyboardView
-import ee.oyatl.ime.keyboard.KeyboardInflater
+import ee.oyatl.ime.keyboard.KeyboardLayoutInflater
 import ee.oyatl.ime.keyboard.KeyboardView
 import ee.oyatl.ime.keyboard.SwitcherKeyboardView
 import ee.oyatl.ime.keyboard.listener.DeleteRepeater
@@ -56,29 +56,28 @@ abstract class CommonIMEMode(
 
     override var keyboardTheme: KeyboardTheme? = null
     protected open val extra: Map<String, String> = mapOf()
-
-    open var textLayoutPreset: KeyboardLayoutPreset = KeyboardLayoutPreset()
-    open var symbolLayoutPreset: KeyboardLayoutPreset = KeyboardLayoutPreset()
-    open var numberLayoutPreset: KeyboardLayoutPreset = KeyboardLayoutPreset()
-
-    val currentLayoutPreset: KeyboardLayoutPreset get() = when(symbolState) {
-        KeyboardState.Symbol.Text -> textLayoutPreset
-        KeyboardState.Symbol.Symbol -> symbolLayoutPreset
-        KeyboardState.Symbol.Number -> numberLayoutPreset
-    }
+    protected open val textPresetName: String = "qwerty"
 
     open val keyLabels: Map<Int, KeyLabel>
-        get() = currentLayoutPreset.layoutTable.map.keys.associateWith { keyCode ->
+        get() = currentKeyboardLayout.layoutTable.map.keys.associateWith { keyCode ->
             val event = FusionKeyEvent.Press(keyCode, shiftState, false, KeyEventSource.SoftwareKeyboard)
             val input = translateKeyEvent(event)
-            val text = currentLayoutPreset.layoutTable[input]?.toChar()?.toString()
+            val text = currentKeyboardLayout.layoutTable[input]?.toChar()?.toString()
             KeyLabel(text)
         }
 
     protected var keyboardView: KeyboardView? = null
     protected var candidateView: CandidateView? = null
 
-    var softKeyCodeMapper: KeyCodeMapper = KeyCodeMapper()
+    lateinit var textKeyboardLayout: KeyboardLayout
+    lateinit var symbolKeyboardLayout: KeyboardLayout
+    lateinit var numberKeyboardLayout: KeyboardLayout
+
+    val currentKeyboardLayout: KeyboardLayout get() = when(symbolState) {
+        KeyboardState.Symbol.Text -> textKeyboardLayout
+        KeyboardState.Symbol.Symbol -> symbolKeyboardLayout
+        KeyboardState.Symbol.Number -> numberKeyboardLayout
+    }
 
     var symbolState: KeyboardState.Symbol = KeyboardState.Symbol.Text
     override var shiftState: KeyboardState.Shift = KeyboardState.Shift.Released
@@ -125,11 +124,17 @@ abstract class CommonIMEMode(
     override fun onLoad(context: Context) {
         val preference = PreferenceManager.getDefaultSharedPreferences(context)
 
-        val loader = AssetsPresetLoader(context.assets, "keyboard/symbol")
-        val symbolLayoutTypeName = preference.getString("symbol_layout", null)
-        val symbolLayoutType = SymbolLayout.entries.find { it.name == symbolLayoutTypeName } ?: SymbolLayout.G
-        runCatching { this.symbolLayoutPreset = loader.inflate(loader.load(symbolLayoutType.presetName)) }
-        runCatching { this.numberLayoutPreset = loader.inflate(loader.load("number")) }
+        val textKeyboardParams = createKeyboardParams(context, KeyboardState.Symbol.Text)
+        val symbolKeyboardParams = createKeyboardParams(context, KeyboardState.Symbol.Symbol)
+        val numberKeyboardParams = createKeyboardParams(context, KeyboardState.Symbol.Number)
+
+        val textLayoutPreset = createKeyboardLayoutPreset(context, KeyboardState.Symbol.Text)
+        val symbolLayoutPreset = createKeyboardLayoutPreset(context, KeyboardState.Symbol.Symbol)
+        val numberLayoutPreset = createKeyboardLayoutPreset(context, KeyboardState.Symbol.Number)
+
+        textKeyboardLayout = KeyboardLayoutInflater.inflate(textLayoutPreset, textKeyboardParams)
+        symbolKeyboardLayout = KeyboardLayoutInflater.inflate(symbolLayoutPreset, symbolKeyboardParams)
+        numberKeyboardLayout = KeyboardLayoutInflater.inflate(numberLayoutPreset, numberKeyboardParams)
 
         val flickActionUp = FlickAction.valueOf(preference.getString("default_flick_action_up", null) ?: FlickAction.Shifted.name)
         val flickActionDown = FlickAction.valueOf(preference.getString("default_flick_action_down", null) ?: FlickAction.Symbol.name)
@@ -162,40 +167,25 @@ abstract class CommonIMEMode(
     }
 
     override fun createInputView(context: Context): View {
-        val textKeyboardParams = createKeyboardParams(context, KeyboardState.Symbol.Text)
-        val symbolKeyboardParams = createKeyboardParams(context, KeyboardState.Symbol.Symbol)
-        val numberKeyboardParams = createKeyboardParams(context, KeyboardState.Symbol.Number)
-
-        this.softKeyCodeMapper = when(textKeyboardParams.screenMode) {
-            KeyboardState.ScreenMode.Mobile -> textLayoutPreset.softKeyCodeMapper.mobile
-            KeyboardState.ScreenMode.Tablet -> textLayoutPreset.softKeyCodeMapper.tablet
-            KeyboardState.ScreenMode.Full -> textLayoutPreset.softKeyCodeMapper.full
-            else -> softKeyCodeMapper
-        }
-
-        val textKeyboard = KeyboardInflater.inflate(textLayoutPreset, textKeyboardParams)
-        val symbolKeyboard = KeyboardInflater.inflate(symbolLayoutPreset, symbolKeyboardParams)
-        val numberKeyboard = KeyboardInflater.inflate(numberLayoutPreset, numberKeyboardParams)
-
         val textKeyboardView = DefaultKeyboardView(context, null).also {
             it.keyboardTheme = keyboardTheme
-            it.keyboard = textKeyboard
-            it.listener = createKeyboardListener(context, textKeyboardParams)
-            it.touchHandler = createTouchHandler(it, textKeyboardParams, KeyboardState.Symbol.Text)
+            it.keyboard = textKeyboardLayout.keyboard
+            it.listener = createKeyboardListener(context, textKeyboardLayout.params)
+            it.touchHandler = createTouchHandler(it, textKeyboardLayout.params, KeyboardState.Symbol.Text)
             it.popupManager = DefaultPopupManager()
         }
         val symbolKeyboardView = DefaultKeyboardView(context, null).also {
             it.keyboardTheme = keyboardTheme
-            it.keyboard = symbolKeyboard
-            it.listener = createKeyboardListener(context, symbolKeyboardParams)
-            it.touchHandler = createTouchHandler(it, symbolKeyboardParams, KeyboardState.Symbol.Symbol)
+            it.keyboard = symbolKeyboardLayout.keyboard
+            it.listener = createKeyboardListener(context, symbolKeyboardLayout.params)
+            it.touchHandler = createTouchHandler(it, symbolKeyboardLayout.params, KeyboardState.Symbol.Symbol)
             it.popupManager = DefaultPopupManager()
         }
         val numberKeyboardView = DefaultKeyboardView(context, null).also {
             it.keyboardTheme = keyboardTheme
-            it.keyboard = numberKeyboard
-            it.listener = createKeyboardListener(context, numberKeyboardParams)
-            it.touchHandler = createTouchHandler(it, numberKeyboardParams, KeyboardState.Symbol.Number)
+            it.keyboard = numberKeyboardLayout.keyboard
+            it.listener = createKeyboardListener(context, numberKeyboardLayout.params)
+            it.touchHandler = createTouchHandler(it, numberKeyboardLayout.params, KeyboardState.Symbol.Number)
             it.popupManager = DefaultPopupManager()
         }
 
@@ -323,6 +313,44 @@ abstract class CommonIMEMode(
         return LongPressTouchHandler(keyboardView, handler, params)
     }
 
+    open fun createKeyboardLayoutPreset(
+        context: Context,
+        symbolState: KeyboardState.Symbol
+    ): KeyboardLayoutPreset {
+        val name = getKeyboardLayoutPresetName(context, symbolState)
+        val dirname = getKeyboardLayoutPresetDirname(symbolState)
+        val loader = AssetsPresetLoader(context.assets, "keyboard/$dirname")
+        return runCatching { loader.inflate(loader.load(name)) }.getOrElse { KeyboardLayoutPreset() }
+    }
+
+    open fun getKeyboardLayoutPresetDirname(
+        symbolState: KeyboardState.Symbol
+    ): String {
+        return when(symbolState) {
+            KeyboardState.Symbol.Text -> "latin"
+            KeyboardState.Symbol.Symbol -> "symbol"
+            KeyboardState.Symbol.Number -> "symbol"
+        }
+    }
+
+    open fun getKeyboardLayoutPresetName(
+        context: Context,
+        symbolState: KeyboardState.Symbol
+    ): String {
+        when(symbolState) {
+            KeyboardState.Symbol.Text -> {
+                return textPresetName
+            }
+            KeyboardState.Symbol.Symbol -> {
+                val preference = PreferenceManager.getDefaultSharedPreferences(context)
+                val symbolLayoutTypeName = preference.getString("symbol_layout", null)
+                val symbolLayoutType = SymbolLayout.entries.find { it.name == symbolLayoutTypeName } ?: SymbolLayout.G
+                return symbolLayoutType.presetName
+            }
+            KeyboardState.Symbol.Number -> return "number"
+        }
+    }
+
     protected fun setPreferredKeyboard(editorInfo: EditorInfo) {
         when(editorInfo.inputType and EditorInfo.TYPE_MASK_CLASS) {
             EditorInfo.TYPE_CLASS_NUMBER -> {
@@ -365,8 +393,8 @@ abstract class CommonIMEMode(
                 onChar(-event.keyCode)
             } else if(event.keyCode > KeyEvent.getMaxKeyCode() || keyCharacterMap.isPrintingKey(event.keyCode)) {
                 val table =
-                    if(event.altGrState) currentLayoutPreset.altGraphTable
-                    else currentLayoutPreset.layoutTable
+                    if(event.altGrState) currentKeyboardLayout.altGraphTable
+                    else currentKeyboardLayout.layoutTable
                 val text = table[event] ?: return false
                 onChar(text)
             } else {
@@ -388,8 +416,8 @@ abstract class CommonIMEMode(
             val keyboardView = keyboardView ?: return false
             val key = keyboardView.findKeys(event.keyCode).firstOrNull() ?: return false
             val input = FusionKeyEvent.Press(translatedEvent.keyCode, shiftState, false, KeyEventSource.Unknown)
-            val baseChar = currentLayoutPreset.layoutTable[input] ?: return false
-            val candidates = currentLayoutPreset.moreKeysTable.candidatesFor(baseChar)
+            val baseChar = currentKeyboardLayout.layoutTable[input] ?: return false
+            val candidates = currentKeyboardLayout.moreKeysTable.candidatesFor(baseChar)
             if(candidates.isEmpty()) return false
             keyboardView.popupManager.removePopup(key)
             keyboardView.popupManager.showPopup(key) {
@@ -406,8 +434,8 @@ abstract class CommonIMEMode(
             val shiftState =
                 if(action == FlickAction.Shifted || action == FlickAction.ShiftedSymbol) KeyboardState.Shift.Pressed
                 else shiftState
-            val text = currentLayoutPreset.layoutTable[translateKeyEvent(event).with(shiftState = shiftState)]
-            val symbol = symbolLayoutPreset.layoutTable[event.with(shiftState = shiftState)]
+            val text = currentKeyboardLayout.layoutTable[translateKeyEvent(event).with(shiftState = shiftState)]
+            val symbol = symbolKeyboardLayout.layoutTable[event.with(shiftState = shiftState)]
             when(defaultFlickActions[event.direction]) {
                 FlickAction.Default -> onChar(text ?: return false)
                 FlickAction.Shifted -> onChar(text ?: return false)
@@ -424,22 +452,19 @@ abstract class CommonIMEMode(
 
     override fun translateKeyEvent(event: FusionKeyEvent): FusionKeyEvent {
         val keyCode = when(event.source) {
-            KeyEventSource.HardwareKeyboard -> currentLayoutPreset.hardKeyCodeMapper[event.keyCode]
-            KeyEventSource.SoftwareKeyboard -> softKeyCodeMapper[event.keyCode]
+            KeyEventSource.HardwareKeyboard -> currentKeyboardLayout.hardKeyCodeMapper[event.keyCode]
+            KeyEventSource.SoftwareKeyboard -> currentKeyboardLayout.softKeyCodeMapper[event.keyCode]
             else -> event.keyCode
         }
         val shiftState = when(event.source) {
             KeyEventSource.SoftwareKeyboard -> shiftState
             else -> event.shiftState
         }
-        return when(symbolState) {
-            KeyboardState.Symbol.Text -> event.with(keyCode = keyCode, shiftState = shiftState)
-            else -> event.with(shiftState = shiftState)
-        }
+        return event.with(keyCode = keyCode, shiftState = shiftState)
     }
 
     override fun isAltGraphCapable(): Boolean {
-        return currentLayoutPreset.altGraphTable.map.isNotEmpty()
+        return currentKeyboardLayout.altGraphTable.map.isNotEmpty()
     }
 
     protected open fun submitCandidates(candidates: List<CandidateView.Candidate>) {

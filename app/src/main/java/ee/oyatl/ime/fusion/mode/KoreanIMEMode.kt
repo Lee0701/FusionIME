@@ -8,7 +8,9 @@ import ee.oyatl.ime.fusion.AssetsPresetLoader
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.hangul.HangulCombiner
 import ee.oyatl.ime.fusion.hangul.JamoCombinationTable
+import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayout
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPreset
+import ee.oyatl.ime.fusion.keyboard.core.KeyboardState
 import ee.oyatl.ime.fusion.korean.BigramHanjaConverter
 import ee.oyatl.ime.fusion.korean.HangulPredictor
 import ee.oyatl.ime.fusion.korean.HanjaConverter
@@ -24,7 +26,7 @@ import java.util.concurrent.Executors
 
 class KoreanIMEMode(
     converterType: ConverterType,
-    val presetName: String,
+    override val textPresetName: String,
     override val extra: Map<String, String>,
     listener: IMEMode.Listener
 ): CommonIMEMode(listener) {
@@ -40,9 +42,7 @@ class KoreanIMEMode(
 
     override fun onLoad(context: Context) {
         super.onLoad(context)
-        val loader = AssetsPresetLoader(context.assets, "keyboard/korean")
-        runCatching { textLayoutPreset = loader.inflate(loader.load(presetName)) }
-        val jamoCombinationTable = (textLayoutPreset.extra as? KeyboardLayoutPreset.Extra.Hangul)
+        val jamoCombinationTable = (textKeyboardLayout.extra as? KeyboardLayout.Extra.Hangul)
             ?.jamoCombinationTable ?: JamoCombinationTable()
         val correctOrders = (extra["correct_orders"] ?: "false").toBoolean()
         hangulCombiner = HangulCombiner(jamoCombinationTable, correctOrders)
@@ -54,6 +54,11 @@ class KoreanIMEMode(
         wordComposer.reset()
         currentState = HangulCombiner.State.Initial
         hanjaConverter.reset()
+    }
+
+    override fun getKeyboardLayoutPresetDirname(symbolState: KeyboardState.Symbol): String {
+        if(symbolState == KeyboardState.Symbol.Text) return "korean"
+        return super.getKeyboardLayoutPresetDirname(symbolState)
     }
 
     override fun onCandidateSelected(candidate: CandidateView.Candidate) {

@@ -17,7 +17,7 @@ import java.util.Locale
 
 abstract class CangjieIMEMode(
     listener: IMEMode.Listener,
-    val presetName: String,
+    override val textPresetName: String,
     override val extra: Map<String, String>
 ): CommonIMEMode(listener) {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
@@ -35,8 +35,6 @@ abstract class CangjieIMEMode(
 
     override fun onLoad(context: Context) {
         super.onLoad(context)
-        val loader = AssetsPresetLoader(context.assets, "keyboard/cangjie")
-        runCatching { textLayoutPreset = loader.inflate(loader.load(presetName)) }
         val table = TableLoader()
         table.setPath(context.filesDir.absolutePath.encodeToByteArray())
         table.initialize()
@@ -47,6 +45,11 @@ abstract class CangjieIMEMode(
         super.onReset()
         wordComposer.reset()
         bestCandidate = null
+    }
+
+    override fun getKeyboardLayoutPresetDirname(symbolState: KeyboardState.Symbol): String {
+        if(symbolState == KeyboardState.Symbol.Text) return "cangjie"
+        return super.getKeyboardLayoutPresetDirname(symbolState)
     }
 
     override fun onCandidateSelected(candidate: CandidateView.Candidate) {
@@ -179,11 +182,11 @@ abstract class CangjieIMEMode(
 
         override fun onLoad(context: Context) {
             super.onLoad(context)
-            val symbolLoader = AssetsPresetLoader(context.assets, "keyboard/symbol")
+            val loader = AssetsPresetLoader(context.assets, "keyboard")
             runCatching {
-                val chineseSymbols = symbolLoader.inflate(symbolLoader.load("symbol_chinese"))
-                symbolLayoutPreset = super.symbolLayoutPreset.copy(
-                    layoutTable = super.symbolLayoutPreset.layoutTable + chineseSymbols.layoutTable
+                val chineseSymbols = loader.inflate(loader.load("symbol/symbol_chinese"))
+                symbolKeyboardLayout = super.symbolKeyboardLayout.copy(
+                    layoutTable = super.symbolKeyboardLayout.layoutTable + chineseSymbols.layoutTable
                 )
             }
         }

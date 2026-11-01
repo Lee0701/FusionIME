@@ -13,18 +13,5 @@ data class KeyboardLayoutPreset(
     val softKeyCodeMapper: KeyCodeMapper.ByScreenMode = KeyCodeMapper.ByScreenMode(),
     val hardKeyCodeMapper: KeyCodeMapper = KeyCodeMapper(),
     val keyLabels: KeyLabels = KeyLabels(),
-    val extra: Extra = Extra.None
-) {
-    @Serializable
-    sealed interface Extra {
-        @SerialName("none")
-        @Serializable
-        object None: Extra
-
-        @SerialName("hangul")
-        @Serializable
-        data class Hangul(
-            val jamoCombinationTable: JamoCombinationTable
-        ): Extra
-    }
-}
+    val extra: KeyboardLayout.Extra = KeyboardLayout.Extra.None
+)

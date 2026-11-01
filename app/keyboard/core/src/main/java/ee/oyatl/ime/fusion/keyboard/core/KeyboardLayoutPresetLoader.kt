@@ -40,12 +40,12 @@ abstract class KeyboardLayoutPresetLoader {
         )
     }
 
-    fun inflateExtra(extra: KeyboardLayoutPresetDef.Extra): KeyboardLayoutPreset.Extra {
+    fun inflateExtra(extra: KeyboardLayoutPresetDef.Extra): KeyboardLayout.Extra {
         return when(extra) {
-            is KeyboardLayoutPresetDef.Extra.None -> KeyboardLayoutPreset.Extra.None
+            is KeyboardLayoutPresetDef.Extra.None -> KeyboardLayout.Extra.None
             is KeyboardLayoutPresetDef.Extra.Hangul -> {
                 val jamoCombinationTable = import<JamoCombinationTable>(extra.jamoCombinationTable)
-                KeyboardLayoutPreset.Extra.Hangul(
+                KeyboardLayout.Extra.Hangul(
                     jamoCombinationTable = jamoCombinationTable
                 )
             }

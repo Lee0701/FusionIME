@@ -44,10 +44,10 @@ abstract class KeyboardLayoutPresetWriter {
         export<KeyboardLayoutPresetDef>(name, def)
     }
 
-    fun saveExtra(name: String, extra: KeyboardLayoutPreset.Extra): KeyboardLayoutPresetDef.Extra {
+    fun saveExtra(name: String, extra: KeyboardLayout.Extra): KeyboardLayoutPresetDef.Extra {
         return when(extra) {
-            is KeyboardLayoutPreset.Extra.None -> KeyboardLayoutPresetDef.Extra.None
-            is KeyboardLayoutPreset.Extra.Hangul -> {
+            is KeyboardLayout.Extra.None -> KeyboardLayoutPresetDef.Extra.None
+            is KeyboardLayout.Extra.Hangul -> {
                 val combination = "$name.combination"
                 export<JamoCombinationTable>(combination, extra.jamoCombinationTable)
                 KeyboardLayoutPresetDef.Extra.Hangul(

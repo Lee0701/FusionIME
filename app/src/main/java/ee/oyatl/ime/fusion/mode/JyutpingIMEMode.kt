@@ -5,6 +5,7 @@ import android.view.KeyEvent
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.fusion.AssetsPresetLoader
 import ee.oyatl.ime.fusion.R
+import ee.oyatl.ime.fusion.keyboard.core.KeyboardState
 import ee.oyatl.ime.fusion.korean.WordComposer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -17,7 +18,7 @@ import org.jyutping.jyutping.models.VirtualInputKey
 import java.util.Locale
 
 class JyutpingIMEMode(
-    val presetName: String,
+    override val textPresetName: String,
     override val extra: Map<String, String>,
     listener: IMEMode.Listener
 ): CommonIMEMode(listener) {
@@ -30,9 +31,6 @@ class JyutpingIMEMode(
     override fun onLoad(context: Context) {
         super.onLoad(context)
 
-        val loader = AssetsPresetLoader(context.assets, "keyboard/jyutping")
-        runCatching { textLayoutPreset = loader.inflate(loader.load(presetName)) }
-
         Segmenter.prepare()
         BinaryDictionaries.loadDictionaries(context)
     }
@@ -41,6 +39,11 @@ class JyutpingIMEMode(
         super.onReset()
         wordComposer.reset()
         bestCandidate = null
+    }
+
+    override fun getKeyboardLayoutPresetDirname(symbolState: KeyboardState.Symbol): String {
+        if(symbolState == KeyboardState.Symbol.Text) return "jyutping"
+        return super.getKeyboardLayoutPresetDirname(symbolState)
     }
 
     override fun onChar(codePoint: Int) {

@@ -44,7 +44,7 @@ import java.util.Locale
 class LatinIMEMode(
     private val listener: IMEMode.Listener,
     val locale: Locale,
-    val presetName: String,
+    override val textPresetName: String,
     override val extra: Map<String, String>,
     val autoCaps: Boolean,
     val autoPeriod: Boolean
@@ -92,9 +92,6 @@ class LatinIMEMode(
         super.onLoad(context)
         this.context = context
 
-        val loader = AssetsPresetLoader(context.assets, "keyboard/latin")
-        runCatching { textLayoutPreset = loader.inflate(loader.load(presetName)) }
-
         dummyKeyboard = KeyboardBuilder(context, keyboardParams).build()
         dictionaryFacilitator = DictionaryFacilitatorProvider.getDictionaryFacilitator(false)
         settings = Settings.getInstance()
@@ -107,6 +104,11 @@ class LatinIMEMode(
     override fun onUnload(context: Context) {
         dictionaryFacilitator?.closeDictionaries()
         super.onUnload(context)
+    }
+
+    override fun getKeyboardLayoutPresetDirname(symbolState: KeyboardState.Symbol): String {
+        if(symbolState == KeyboardState.Symbol.Text) return "latin"
+        return super.getKeyboardLayoutPresetDirname(symbolState)
     }
 
     override fun onStart(inputConnection: InputConnection, editorInfo: EditorInfo) {

@@ -18,6 +18,7 @@ import ee.oyatl.ime.fusion.keyboard.core.KeyEventSource
 import ee.oyatl.ime.fusion.keyboard.core.KeyLabel
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardParams
+import ee.oyatl.ime.fusion.keyboard.core.KeyboardState
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardState.Symbol
 import ee.oyatl.ime.fusion.mozc.InputConnectionRenderer
 import ee.oyatl.ime.fusion.preset.JapaneseSyllables
@@ -91,6 +92,11 @@ abstract class MozcIMEMode(
         sessionExecutor?.deleteSession()
         super.onReset()
         restartInput()
+    }
+
+    override fun getKeyboardLayoutPresetDirname(symbolState: Symbol): String {
+        if(symbolState == Symbol.Text) return "japanese"
+        return super.getKeyboardLayoutPresetDirname(symbolState)
     }
 
     private fun restartInput() {
@@ -241,28 +247,13 @@ abstract class MozcIMEMode(
         )
     }
 
-    abstract class StaticPreset(
-        listener: IMEMode.Listener,
-        candidateViewHeight: Int,
-        extra: Map<String, String>
-    ): MozcIMEMode(listener, candidateViewHeight, extra) {
-        abstract val presetName: String
-
-        override fun onLoad(context: Context) {
-            super.onLoad(context)
-
-            val loader = AssetsPresetLoader(context.assets, "keyboard/japanese")
-            runCatching { textLayoutPreset = loader.inflate(loader.load(presetName)) }
-        }
-    }
-
     class RomajiQwerty(
         listener: IMEMode.Listener,
         candidateViewHeight: Int,
         extra: Map<String, String>
-    ): StaticPreset(listener, candidateViewHeight, extra) {
+    ): MozcIMEMode(listener, candidateViewHeight, extra) {
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.QWERTY_KANA
-        override val presetName: String = "romaji_qwerty"
+        override val textPresetName: String = "romaji_qwerty"
     }
 
     class Kana12Key(
@@ -271,17 +262,17 @@ abstract class MozcIMEMode(
         val flickMode: FlickMode,
         val flickHint: Boolean,
         extra: Map<String, String>
-    ): StaticPreset(listener, candidateViewHeight, extra) {
+    ): MozcIMEMode(listener, candidateViewHeight, extra) {
         override val keyboardSpecification: KeyboardSpecification = flickMode.keyboardSpecification
-        override val presetName: String = "kana_12key"
+        override val textPresetName: String = "kana_12key"
 
         // Remove flick labels if toggle only mode
         // Show them as hints only when option is on
         private val keyLabels12Key: Map<Int, KeyLabel> by lazy {
-            if(flickMode == FlickMode.ToggleOnly) textLayoutPreset.keyLabels.map.mapValues { (k, v) ->
+            if(flickMode == FlickMode.ToggleOnly) textKeyboardLayout.keyLabels.map.mapValues { (k, v) ->
                 KeyLabel(v.text)
             }
-            else textLayoutPreset.keyLabels.map.mapValues { (k, v) ->
+            else textKeyboardLayout.keyLabels.map.mapValues { (k, v) ->
                 v.copy(showFlickHint = flickHint)
             }
         }
@@ -329,7 +320,7 @@ abstract class MozcIMEMode(
                 val input =
                     if(direction != null) FusionKeyEvent.Flick(event.keyCode, direction, shiftState, false, event.source)
                     else FusionKeyEvent.Press(event.keyCode, shiftState, false, event.source)
-                val text = currentLayoutPreset.layoutTable[input] ?: return false
+                val text = currentKeyboardLayout.layoutTable[input] ?: return false
                 onChar(text)
                 return true
             }
@@ -352,13 +343,13 @@ abstract class MozcIMEMode(
         candidateViewHeight: Int,
         val flickHint: Boolean,
         extra: Map<String, String>
-    ): StaticPreset(listener, candidateViewHeight, extra) {
+    ): MozcIMEMode(listener, candidateViewHeight, extra) {
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.GODAN_KANA
-        override val presetName: String = "godan"
+        override val textPresetName: String = "godan"
 
         // Show flick hints only when option is on
         private val keyLabelsGodan: Map<Int, KeyLabel> by lazy {
-            textLayoutPreset.keyLabels.map.mapValues { (k, v) ->
+            textKeyboardLayout.keyLabels.map.mapValues { (k, v) ->
                 v.copy(showFlickHint = flickHint)
             }
         }
@@ -411,7 +402,7 @@ abstract class MozcIMEMode(
                 val input =
                     if(direction != null) FusionKeyEvent.Flick(event.keyCode, direction, shiftState, false, event.source)
                     else FusionKeyEvent.Press(event.keyCode, shiftState, false, event.source)
-                val text = currentLayoutPreset.layoutTable[input] ?: return false
+                val text = currentKeyboardLayout.layoutTable[input] ?: return false
                 onChar(text)
                 return true
             }
@@ -431,20 +422,26 @@ abstract class MozcIMEMode(
         listener: IMEMode.Listener,
         candidateViewHeight: Int,
         extra: Map<String, String>
-    ): StaticPreset(listener, candidateViewHeight, extra) {
+    ): MozcIMEMode(listener, candidateViewHeight, extra) {
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.QWERTY_KANA_JIS
-        override val presetName: String = "kana_jis"
+        override val textPresetName: String = "kana_jis"
     }
 
     class KanaSyllables(
         listener: IMEMode.Listener,
         candidateViewHeight: Int,
-        keys: String,
-        keyLayout: JapaneseSyllables.KeyLayout,
+        private val keys: String,
+        private val keyLayout: JapaneseSyllables.KeyLayout,
         extra: Map<String, String>
     ): MozcIMEMode(listener, candidateViewHeight, extra) {
         override val keyboardSpecification: KeyboardSpecification = KeyboardSpecification.TWELVE_KEY_FLICK_KANA
-        override var textLayoutPreset: KeyboardLayoutPreset = JapaneseSyllables.syllables(keys, keyLayout)
+        override fun createKeyboardLayoutPreset(
+            context: Context,
+            symbolState: Symbol
+        ): KeyboardLayoutPreset {
+            if(symbolState == Symbol.Text) return JapaneseSyllables.syllables(keys, keyLayout)
+            return super.createKeyboardLayoutPreset(context, symbolState)
+        }
     }
 
     data class Params(
