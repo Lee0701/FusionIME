@@ -41,7 +41,7 @@ data class KeyboardConfiguration(
             val width: Float = 1f,
             val special: Boolean = false,
             val label: String? = null,
-            val iconRes: Int? = null,
+            val showIcon: Boolean = true,
             val merge: Merge = Merge.None
         ): Item {
             @Serializable

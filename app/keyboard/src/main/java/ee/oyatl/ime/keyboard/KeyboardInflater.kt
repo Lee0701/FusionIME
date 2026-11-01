@@ -72,15 +72,14 @@ object KeyboardInflater {
                 listOf(Keyboard.KeyItem.Spacer(item.width))
             }
             is KeyboardConfiguration.Item.TemplateKey -> {
-                val keyCode = item.keyCode
-                if(params.splitWidth != 0 && keyCode == KeyCode.KEYCODE_SPACE) {
+                if(params.splitWidth != 0 && item.keyCode == KeyCode.KEYCODE_SPACE) {
                     listOf(
-                        inflateKey(keyCode, item.copy(width = item.width / 2)),
+                        inflateKey(item.copy(width = item.width / 2)),
                         Keyboard.KeyItem.SplitSpacer(params.splitWidth),
-                        inflateKey(keyCode, item.copy(width = item.width / 2))
+                        inflateKey(item.copy(width = item.width / 2))
                     )
                 } else {
-                    listOf(inflateKey(keyCode, item))
+                    listOf(inflateKey(item))
                 }
             }
             is KeyboardConfiguration.Item.IfEq -> {
@@ -114,13 +113,13 @@ object KeyboardInflater {
         )
     }
 
-    private fun inflateKey(keyCode: Int, item: KeyboardConfiguration.Item.TemplateKey): Keyboard.KeyItem {
+    private fun inflateKey(item: KeyboardConfiguration.Item.TemplateKey): Keyboard.KeyItem {
         val bkgRes = KeyBackground.forMerge(item.merge)
         return if(item.special) {
-            val type = SpecialKeyType.ofKeyCode(keyCode) ?: SpecialKeyType.Default
-            val iconRes = SpecialKeyIcon.iconFor(type) ?: 0
+            val type = SpecialKeyType.ofKeyCode(item.keyCode) ?: SpecialKeyType.Default
+            val iconRes = if(item.showIcon) SpecialKeyIcon.iconFor(type) ?: 0 else 0
             Keyboard.KeyItem.Key(
-                keyCode,
+                item.keyCode,
                 width = item.width,
                 label = "",
                 iconRes = iconRes,
@@ -129,7 +128,7 @@ object KeyboardInflater {
             )
         } else {
             Keyboard.KeyItem.Key(
-                keyCode,
+                item.keyCode,
                 width = item.width,
                 bkgRes = bkgRes
             )

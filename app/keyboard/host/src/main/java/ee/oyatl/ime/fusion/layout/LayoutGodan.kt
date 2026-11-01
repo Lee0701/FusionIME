@@ -42,6 +42,7 @@ object LayoutGodan {
                     TemplateKey(
                         KeyCode.KEYCODE_SYM,
                         special = true,
+                        showIcon = false,
                         merge = TemplateKey.Merge.Down
                     ),
                     TemplateKey(KeyCode.KEYCODE_E),
@@ -50,6 +51,7 @@ object LayoutGodan {
                     TemplateKey(
                         KeyCode.KEYCODE_ENTER,
                         special = true,
+                        showIcon = false,
                         merge = TemplateKey.Merge.Down
                     )
                 ),
