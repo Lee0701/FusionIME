@@ -1,7 +1,5 @@
 package ee.oyatl.ime.fusion.keyboard.core
 
-import ee.oyatl.ime.fusion.hangul.JamoCombinationTable
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -12,6 +10,6 @@ data class KeyboardLayoutPreset(
     val moreKeysTable: MoreKeysTable = MoreKeysTable(),
     val softKeyCodeMapper: KeyCodeMapper.ByScreenMode = KeyCodeMapper.ByScreenMode(),
     val hardKeyCodeMapper: KeyCodeMapper = KeyCodeMapper(),
-    val keyLabels: KeyLabels = KeyLabels(),
+    val keyLabelTable: KeyLabelTable = KeyLabelTable(),
     val extra: KeyboardLayout.Extra = KeyboardLayout.Extra.None
 )

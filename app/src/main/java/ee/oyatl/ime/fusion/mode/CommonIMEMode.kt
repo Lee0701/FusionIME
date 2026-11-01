@@ -62,7 +62,7 @@ abstract class CommonIMEMode(
         get() = currentKeyboardLayout.layoutTable.map.keys.associateWith { keyCode ->
             val event = FusionKeyEvent.Press(keyCode, shiftState, false, KeyEventSource.SoftwareKeyboard)
             val input = translateKeyEvent(event)
-            currentKeyboardLayout.keyLabels.map[input.keyCode]
+            currentKeyboardLayout.keyLabelTable[input.keyCode]
                 ?: KeyLabel(currentKeyboardLayout.layoutTable[input]?.toChar()?.toString())
         }
 

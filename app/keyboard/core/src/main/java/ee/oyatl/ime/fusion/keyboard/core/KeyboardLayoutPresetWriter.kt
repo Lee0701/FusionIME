@@ -29,7 +29,7 @@ abstract class KeyboardLayoutPresetWriter {
         export<MoreKeysTable>(moreKeys, preset.moreKeysTable)
         export<KeyCodeMapper.ByScreenMode>(softKeyCode, preset.softKeyCodeMapper)
         export<KeyCodeMapper>(hardKeyCode, preset.hardKeyCodeMapper)
-        export<KeyLabels>(keyLabels, preset.keyLabels)
+        export<KeyLabelTable>(keyLabels, preset.keyLabelTable)
         val extra = saveExtra(name, preset.extra)
         val def = KeyboardLayoutPresetDef(
             keyboardTemplate = template,

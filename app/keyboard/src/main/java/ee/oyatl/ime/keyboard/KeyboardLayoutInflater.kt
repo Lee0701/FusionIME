@@ -26,7 +26,7 @@ object KeyboardLayoutInflater {
             moreKeysTable = preset.moreKeysTable,
             softKeyCodeMapper = softKeyCodeMapper,
             hardKeyCodeMapper = preset.hardKeyCodeMapper,
-            keyLabels = preset.keyLabels,
+            keyLabelTable = preset.keyLabelTable,
             extra = preset.extra
         )
     }

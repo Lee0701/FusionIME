@@ -37,12 +37,6 @@ data class LayoutTable(
         return LayoutTable(this.map + other.map)
     }
 
-    fun mapKeyCodes(keyCodeMap: Map<Int, Int>): LayoutTable {
-        // Convert from "QWERTY to LAYOUT" to "LAYOUT TO QWERTY" by swapping keys and values
-        val revKeyCodeMap = keyCodeMap.map { (k, v) -> v to k }.toMap()
-        return LayoutTable(map.mapKeys { (key, _) -> revKeyCodeMap[key] ?: key })
-    }
-
     @Serializable
     sealed interface Item {
         @SerialName("output")

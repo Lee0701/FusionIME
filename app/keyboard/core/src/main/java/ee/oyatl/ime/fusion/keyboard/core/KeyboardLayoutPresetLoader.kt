@@ -26,7 +26,7 @@ abstract class KeyboardLayoutPresetLoader {
         val moreKeysTable = import<MoreKeysTable>(def.moreKeysTable)
         val softKeyCodeMapper = import<KeyCodeMapper.ByScreenMode>(def.softKeyCodeMapper)
         val hardKeyCodeMapper = import<KeyCodeMapper>(def.hardKeyCodeMapper)
-        val keyLabels = import<KeyLabels>(def.keyLabels)
+        val keyLabelTable = import<KeyLabelTable>(def.keyLabels)
         val extra = inflateExtra(def.extra)
         return KeyboardLayoutPreset(
             keyboardTemplate = keyboardTemplate,
@@ -35,7 +35,7 @@ abstract class KeyboardLayoutPresetLoader {
             moreKeysTable = moreKeysTable,
             softKeyCodeMapper = softKeyCodeMapper,
             hardKeyCodeMapper = hardKeyCodeMapper,
-            keyLabels = keyLabels,
+            keyLabelTable = keyLabelTable,
             extra = extra
         )
     }

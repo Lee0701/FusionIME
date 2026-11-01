@@ -3,7 +3,7 @@ package ee.oyatl.ime.fusion.layout.preset
 import ee.oyatl.ime.fusion.keyboard.core.ExtKeyCode
 import ee.oyatl.ime.fusion.keyboard.core.KeyCode
 import ee.oyatl.ime.fusion.keyboard.core.KeyCodeMapper
-import ee.oyatl.ime.fusion.keyboard.core.KeyLabels
+import ee.oyatl.ime.fusion.keyboard.core.KeyLabelTable
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardConfiguration
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardTemplate
@@ -43,7 +43,7 @@ object JapaneseLayoutPresets {
             ),
             layoutTable = LayoutTable
                 .fromFlick4Dirs(LayoutKana.TABLE_12KEY.mapValues { (_, list) -> list.map { it.code } }),
-            keyLabels = KeyLabels(LayoutKana.LABELS_12KEY)
+            keyLabelTable = KeyLabelTable(LayoutKana.LABELS_12KEY)
         )
     }
 
@@ -56,7 +56,7 @@ object JapaneseLayoutPresets {
                 )
             ),
             layoutTable = LayoutTable.fromFlick4Dirs(LayoutGodan.TABLE),
-            keyLabels = KeyLabels(LayoutGodan.LABELS)
+            keyLabelTable = KeyLabelTable(LayoutGodan.LABELS)
         )
     }
 
