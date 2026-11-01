@@ -1,7 +1,7 @@
 package ee.oyatl.ime.fusion
 
 import android.content.res.AssetManager
-import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPresetLoader
+import ee.oyatl.ime.fusion.keyboard.core.preset.KeyboardLayoutPresetLoader
 import java.io.InputStream
 
 class AssetsPresetLoader(

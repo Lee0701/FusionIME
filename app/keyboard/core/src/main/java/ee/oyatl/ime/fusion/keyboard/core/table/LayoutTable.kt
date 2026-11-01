@@ -1,5 +1,8 @@
-package ee.oyatl.ime.fusion.keyboard.core
+package ee.oyatl.ime.fusion.keyboard.core.table
 
+import ee.oyatl.ime.fusion.keyboard.core.FlickDirection
+import ee.oyatl.ime.fusion.keyboard.core.FusionKeyEvent
+import ee.oyatl.ime.fusion.keyboard.core.KeyboardState
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

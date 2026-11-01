@@ -2,7 +2,7 @@ package ee.oyatl.ime.fusion.layout
 
 import ee.oyatl.ime.fusion.keyboard.core.ExtKeyCode
 import ee.oyatl.ime.fusion.keyboard.core.KeyCode
-import ee.oyatl.ime.fusion.keyboard.core.KeyLabel
+import ee.oyatl.ime.fusion.keyboard.core.table.KeyLabel
 
 object LayoutKana {
     val ROWS_12KEY: List<String> = listOf(

@@ -2,13 +2,13 @@ package ee.oyatl.ime.fusion.layout.preset
 
 import ee.oyatl.ime.fusion.keyboard.core.ExtKeyCode
 import ee.oyatl.ime.fusion.keyboard.core.KeyCode
-import ee.oyatl.ime.fusion.keyboard.core.KeyCodeMapper
-import ee.oyatl.ime.fusion.keyboard.core.KeyLabelTable
-import ee.oyatl.ime.fusion.keyboard.core.KeyboardConfiguration
-import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPreset
-import ee.oyatl.ime.fusion.keyboard.core.KeyboardTemplate
-import ee.oyatl.ime.fusion.keyboard.core.KeyboardTemplate.Basic
-import ee.oyatl.ime.fusion.keyboard.core.LayoutTable
+import ee.oyatl.ime.fusion.keyboard.core.table.KeyCodeMapper
+import ee.oyatl.ime.fusion.keyboard.core.table.KeyLabelTable
+import ee.oyatl.ime.fusion.keyboard.core.preset.KeyboardConfiguration
+import ee.oyatl.ime.fusion.keyboard.core.preset.KeyboardLayoutPreset
+import ee.oyatl.ime.fusion.keyboard.core.preset.KeyboardTemplate
+import ee.oyatl.ime.fusion.keyboard.core.preset.KeyboardTemplate.Basic
+import ee.oyatl.ime.fusion.keyboard.core.table.LayoutTable
 import ee.oyatl.ime.fusion.layout.LayoutExt
 import ee.oyatl.ime.fusion.layout.LayoutGodan
 import ee.oyatl.ime.fusion.layout.LayoutKana

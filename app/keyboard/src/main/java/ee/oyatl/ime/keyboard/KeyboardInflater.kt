@@ -2,18 +2,15 @@ package ee.oyatl.ime.keyboard
 
 import android.view.KeyCharacterMap
 import ee.oyatl.ime.fusion.keyboard.core.KeyCode
-import ee.oyatl.ime.fusion.keyboard.core.KeyCodeMapper
 import ee.oyatl.ime.fusion.keyboard.core.Keyboard
-import ee.oyatl.ime.fusion.keyboard.core.KeyboardConfiguration
-import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPreset
+import ee.oyatl.ime.fusion.keyboard.core.preset.KeyboardConfiguration
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardParams
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardState
-import ee.oyatl.ime.fusion.keyboard.core.KeyboardTemplate
+import ee.oyatl.ime.fusion.keyboard.core.preset.KeyboardTemplate
 import ee.oyatl.ime.fusion.keyboard.core.SpecialKeyType
 import ee.oyatl.ime.theme.KeyBackground
 import ee.oyatl.ime.theme.SpecialKeyIcon
 import kotlin.collections.map
-import kotlin.text.get
 
 object KeyboardInflater {
     private val keyCharacterMap: KeyCharacterMap = KeyCharacterMap.load(KeyCharacterMap.VIRTUAL_KEYBOARD)

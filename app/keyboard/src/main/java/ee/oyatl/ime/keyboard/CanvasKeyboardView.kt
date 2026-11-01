@@ -15,7 +15,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.drawable.toDrawable
-import ee.oyatl.ime.fusion.keyboard.core.KeyLabel
+import ee.oyatl.ime.fusion.keyboard.core.table.KeyLabel
 import ee.oyatl.ime.fusion.keyboard.core.Keyboard
 import ee.oyatl.ime.keyboard.listener.EmptyListener
 import ee.oyatl.ime.keyboard.listener.KeyboardListener

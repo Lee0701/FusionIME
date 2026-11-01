@@ -1,10 +1,10 @@
 package ee.oyatl.ime.fusion.layout
 
 import ee.oyatl.ime.fusion.keyboard.core.KeyCode
-import ee.oyatl.ime.fusion.keyboard.core.KeyLabel
-import ee.oyatl.ime.fusion.keyboard.core.KeyboardConfiguration
+import ee.oyatl.ime.fusion.keyboard.core.table.KeyLabel
+import ee.oyatl.ime.fusion.keyboard.core.preset.KeyboardConfiguration
 
-import ee.oyatl.ime.fusion.keyboard.core.KeyboardConfiguration.Item.TemplateKey
+import ee.oyatl.ime.fusion.keyboard.core.preset.KeyboardConfiguration.Item.TemplateKey
 
 /**
  * Gboard-style GODAN layout.

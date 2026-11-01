@@ -1,12 +1,12 @@
 package ee.oyatl.ime.fusion.preset
 
 import ee.oyatl.ime.fusion.keyboard.core.KeyCode
-import ee.oyatl.ime.fusion.keyboard.core.KeyboardConfiguration
-import ee.oyatl.ime.fusion.keyboard.core.KeyboardConfiguration.Item
-import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPreset
-import ee.oyatl.ime.fusion.keyboard.core.KeyboardTemplate
-import ee.oyatl.ime.fusion.keyboard.core.KeyboardTemplate.Basic
-import ee.oyatl.ime.fusion.keyboard.core.LayoutTable
+import ee.oyatl.ime.fusion.keyboard.core.preset.KeyboardConfiguration
+import ee.oyatl.ime.fusion.keyboard.core.preset.KeyboardConfiguration.Item
+import ee.oyatl.ime.fusion.keyboard.core.preset.KeyboardLayoutPreset
+import ee.oyatl.ime.fusion.keyboard.core.preset.KeyboardTemplate
+import ee.oyatl.ime.fusion.keyboard.core.preset.KeyboardTemplate.Basic
+import ee.oyatl.ime.fusion.keyboard.core.table.LayoutTable
 import kotlin.math.ceil
 
 object JapaneseSyllables {

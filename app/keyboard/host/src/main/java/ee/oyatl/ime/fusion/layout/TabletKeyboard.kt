@@ -1,9 +1,9 @@
 package ee.oyatl.ime.fusion.layout
 
 import ee.oyatl.ime.fusion.keyboard.core.KeyCode
-import ee.oyatl.ime.fusion.keyboard.core.KeyboardConfiguration
+import ee.oyatl.ime.fusion.keyboard.core.preset.KeyboardConfiguration
 
-import ee.oyatl.ime.fusion.keyboard.core.KeyboardConfiguration.Item
+import ee.oyatl.ime.fusion.keyboard.core.preset.KeyboardConfiguration.Item
 
 object TabletKeyboard {
     fun bottom(): KeyboardConfiguration {

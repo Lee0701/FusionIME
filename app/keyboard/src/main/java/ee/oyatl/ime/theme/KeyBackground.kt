@@ -1,7 +1,7 @@
 package ee.oyatl.ime.theme
 
 import androidx.annotation.DrawableRes
-import ee.oyatl.ime.fusion.keyboard.core.KeyboardConfiguration
+import ee.oyatl.ime.fusion.keyboard.core.preset.KeyboardConfiguration
 import ee.oyatl.ime.keyboard.R
 
 object KeyBackground {

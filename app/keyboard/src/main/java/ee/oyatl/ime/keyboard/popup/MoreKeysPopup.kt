@@ -5,7 +5,7 @@ import android.view.View
 import android.widget.PopupWindow
 import androidx.appcompat.content.res.AppCompatResources
 import ee.oyatl.ime.keyboard.DefaultKeyboardView
-import ee.oyatl.ime.fusion.keyboard.core.KeyLabel
+import ee.oyatl.ime.fusion.keyboard.core.table.KeyLabel
 import ee.oyatl.ime.fusion.keyboard.core.Keyboard
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardParams
 import ee.oyatl.ime.keyboard.KeyboardView

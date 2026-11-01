@@ -2,10 +2,10 @@ package ee.oyatl.ime.fusion.layout
 
 import ee.oyatl.ime.fusion.keyboard.core.KeyCode
 import ee.oyatl.ime.fusion.keyboard.core.FusionKeyEvent
-import ee.oyatl.ime.fusion.keyboard.core.KeyCodeMapper
+import ee.oyatl.ime.fusion.keyboard.core.table.KeyCodeMapper
 import ee.oyatl.ime.fusion.keyboard.core.KeyEventSource
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardState
-import ee.oyatl.ime.fusion.keyboard.core.LayoutTable
+import ee.oyatl.ime.fusion.keyboard.core.table.LayoutTable
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

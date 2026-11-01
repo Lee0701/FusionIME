@@ -4,12 +4,10 @@ import android.content.Context
 import android.view.KeyEvent
 import androidx.annotation.StringRes
 import ee.oyatl.ime.candidate.CandidateView
-import ee.oyatl.ime.fusion.AssetsPresetLoader
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.hangul.HangulCombiner
 import ee.oyatl.ime.fusion.hangul.JamoCombinationTable
-import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayout
-import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPreset
+import ee.oyatl.ime.fusion.keyboard.core.preset.KeyboardLayout
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardState
 import ee.oyatl.ime.fusion.korean.BigramHanjaConverter
 import ee.oyatl.ime.fusion.korean.HangulPredictor

@@ -1,8 +1,8 @@
 package ee.oyatl.ime.keyboard
 
-import ee.oyatl.ime.fusion.keyboard.core.KeyCodeMapper
-import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayout
-import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPreset
+import ee.oyatl.ime.fusion.keyboard.core.table.KeyCodeMapper
+import ee.oyatl.ime.fusion.keyboard.core.preset.KeyboardLayout
+import ee.oyatl.ime.fusion.keyboard.core.preset.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardParams
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardState
 

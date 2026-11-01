@@ -5,18 +5,18 @@ import ee.oyatl.ime.fusion.keyboard.core.ExtKeyCode
 import ee.oyatl.ime.fusion.layout.Hangul3Set
 import ee.oyatl.ime.fusion.layout.HangulOld
 import ee.oyatl.ime.fusion.keyboard.core.KeyCode
-import ee.oyatl.ime.fusion.keyboard.core.KeyCodeMapper
-import ee.oyatl.ime.fusion.keyboard.core.KeyboardConfiguration
-import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayout
-import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPreset
-import ee.oyatl.ime.fusion.keyboard.core.KeyboardTemplate
+import ee.oyatl.ime.fusion.keyboard.core.table.KeyCodeMapper
+import ee.oyatl.ime.fusion.keyboard.core.preset.KeyboardConfiguration
+import ee.oyatl.ime.fusion.keyboard.core.preset.KeyboardLayout
+import ee.oyatl.ime.fusion.keyboard.core.preset.KeyboardLayoutPreset
+import ee.oyatl.ime.fusion.keyboard.core.preset.KeyboardTemplate
 import ee.oyatl.ime.fusion.layout.LayoutExt
 import ee.oyatl.ime.fusion.layout.LayoutQwerty
 import ee.oyatl.ime.fusion.layout.MobileKeyboard
 import ee.oyatl.ime.fusion.layout.MobileKeyboardRows
 import ee.oyatl.ime.fusion.layout.TabletKeyboard
 import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
-import ee.oyatl.ime.fusion.keyboard.core.LayoutTable
+import ee.oyatl.ime.fusion.keyboard.core.table.LayoutTable
 import ee.oyatl.ime.fusion.layout.Hangul2Set
 
 object KoreanLayoutPresets {

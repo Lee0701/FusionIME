@@ -10,15 +10,12 @@ import androidx.annotation.StringRes
 import com.google.common.base.Optional
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.VerticalScrollingCandidateView
-import ee.oyatl.ime.fusion.AssetsPresetLoader
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.keyboard.core.FlickDirection
 import ee.oyatl.ime.fusion.keyboard.core.FusionKeyEvent
-import ee.oyatl.ime.fusion.keyboard.core.KeyEventSource
-import ee.oyatl.ime.fusion.keyboard.core.KeyLabel
-import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPreset
+import ee.oyatl.ime.fusion.keyboard.core.table.KeyLabel
+import ee.oyatl.ime.fusion.keyboard.core.preset.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardParams
-import ee.oyatl.ime.fusion.keyboard.core.KeyboardState
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardState.Symbol
 import ee.oyatl.ime.fusion.mozc.InputConnectionRenderer
 import ee.oyatl.ime.fusion.preset.JapaneseSyllables

@@ -1,6 +1,12 @@
-package ee.oyatl.ime.fusion.keyboard.core
+package ee.oyatl.ime.fusion.keyboard.core.preset
 
 import ee.oyatl.ime.fusion.hangul.JamoCombinationTable
+import ee.oyatl.ime.fusion.keyboard.core.Keyboard
+import ee.oyatl.ime.fusion.keyboard.core.KeyboardParams
+import ee.oyatl.ime.fusion.keyboard.core.table.KeyCodeMapper
+import ee.oyatl.ime.fusion.keyboard.core.table.KeyLabelTable
+import ee.oyatl.ime.fusion.keyboard.core.table.LayoutTable
+import ee.oyatl.ime.fusion.keyboard.core.table.MoreKeysTable
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

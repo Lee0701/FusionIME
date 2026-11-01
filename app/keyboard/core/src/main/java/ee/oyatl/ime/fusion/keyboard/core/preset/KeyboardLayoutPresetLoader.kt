@@ -1,9 +1,13 @@
-package ee.oyatl.ime.fusion.keyboard.core
+package ee.oyatl.ime.fusion.keyboard.core.preset
 
 import com.charleskorn.kaml.Yaml
 import com.charleskorn.kaml.YamlConfiguration
 import com.charleskorn.kaml.decodeFromStream
 import ee.oyatl.ime.fusion.hangul.JamoCombinationTable
+import ee.oyatl.ime.fusion.keyboard.core.table.KeyCodeMapper
+import ee.oyatl.ime.fusion.keyboard.core.table.KeyLabelTable
+import ee.oyatl.ime.fusion.keyboard.core.table.LayoutTable
+import ee.oyatl.ime.fusion.keyboard.core.table.MoreKeysTable
 import java.io.InputStream
 
 abstract class KeyboardLayoutPresetLoader {

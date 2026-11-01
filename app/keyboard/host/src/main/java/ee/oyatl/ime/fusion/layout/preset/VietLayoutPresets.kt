@@ -1,8 +1,8 @@
 package ee.oyatl.ime.fusion.layout.preset
 
-import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPreset
+import ee.oyatl.ime.fusion.keyboard.core.preset.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.layout.LayoutExt
-import ee.oyatl.ime.fusion.keyboard.core.LayoutTable
+import ee.oyatl.ime.fusion.keyboard.core.table.LayoutTable
 
 object VietLayoutPresets {
     fun chuQuocNgu(

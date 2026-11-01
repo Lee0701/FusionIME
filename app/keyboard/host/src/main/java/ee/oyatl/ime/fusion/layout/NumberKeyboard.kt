@@ -1,7 +1,7 @@
 package ee.oyatl.ime.fusion.layout
 
 import ee.oyatl.ime.fusion.keyboard.core.KeyCode
-import ee.oyatl.ime.fusion.keyboard.core.KeyboardConfiguration
+import ee.oyatl.ime.fusion.keyboard.core.preset.KeyboardConfiguration
 
 object NumberKeyboard {
     val ROWS_COMMON: List<String> = listOf(

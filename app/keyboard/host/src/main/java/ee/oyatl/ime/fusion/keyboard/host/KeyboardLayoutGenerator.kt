@@ -1,7 +1,7 @@
 package ee.oyatl.ime.fusion.keyboard.host
 
-import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPreset
-import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPresetWriter
+import ee.oyatl.ime.fusion.keyboard.core.preset.KeyboardLayoutPreset
+import ee.oyatl.ime.fusion.keyboard.core.preset.KeyboardLayoutPresetWriter
 import ee.oyatl.ime.fusion.layout.preset.CangjieLayoutPresets
 import ee.oyatl.ime.fusion.layout.preset.JapaneseLayoutPresets
 import ee.oyatl.ime.fusion.layout.preset.JyutpingLayoutPresets

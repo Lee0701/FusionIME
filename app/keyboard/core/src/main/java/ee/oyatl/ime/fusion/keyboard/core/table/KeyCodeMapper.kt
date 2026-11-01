@@ -1,4 +1,4 @@
-package ee.oyatl.ime.fusion.keyboard.core
+package ee.oyatl.ime.fusion.keyboard.core.table
 
 import kotlinx.serialization.Serializable
 

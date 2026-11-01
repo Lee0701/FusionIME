@@ -12,7 +12,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.LinearLayout
-import ee.oyatl.ime.fusion.keyboard.core.KeyLabel
+import ee.oyatl.ime.fusion.keyboard.core.table.KeyLabel
 import ee.oyatl.ime.fusion.keyboard.core.Keyboard
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardState
 import ee.oyatl.ime.keyboard.databinding.KbdKeyBinding
@@ -26,7 +26,6 @@ import ee.oyatl.ime.keyboard.touchhandler.EmptyTouchHandler
 import ee.oyatl.ime.keyboard.touchhandler.TouchHandler
 import ee.oyatl.ime.theme.KeyboardTheme
 import kotlin.math.max
-import kotlin.math.min
 import kotlin.math.roundToInt
 
 class DefaultKeyboardView(

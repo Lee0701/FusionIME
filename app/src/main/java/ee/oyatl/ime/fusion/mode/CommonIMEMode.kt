@@ -17,9 +17,9 @@ import ee.oyatl.ime.fusion.SymbolLayout
 import ee.oyatl.ime.fusion.keyboard.core.FlickDirection
 import ee.oyatl.ime.fusion.keyboard.core.FusionKeyEvent
 import ee.oyatl.ime.fusion.keyboard.core.KeyEventSource
-import ee.oyatl.ime.fusion.keyboard.core.KeyLabel
-import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayout
-import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPreset
+import ee.oyatl.ime.fusion.keyboard.core.table.KeyLabel
+import ee.oyatl.ime.fusion.keyboard.core.preset.KeyboardLayout
+import ee.oyatl.ime.fusion.keyboard.core.preset.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardParams
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardState
 import ee.oyatl.ime.fusion.keyboard.core.TouchMode
