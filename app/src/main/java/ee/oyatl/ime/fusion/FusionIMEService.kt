@@ -28,7 +28,6 @@ import ee.oyatl.ime.fusion.keyboard.core.KeyboardState
 import ee.oyatl.ime.fusion.mode.IMEMode
 import ee.oyatl.ime.fusion.mode.IMEModeSwitcher
 import ee.oyatl.ime.fusion.mode.LatinIMEMode
-import ee.oyatl.ime.fusion.mode.PinyinIMEMode
 import ee.oyatl.ime.fusion.preference.KeyStrokePreference
 import ee.oyatl.ime.fusion.settings.InputModeSettingsFragment
 import ee.oyatl.ime.fusion.util.PreferenceUtil
@@ -200,7 +199,7 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
         }
         if(event.isSystem) return super.onKeyDown(keyCode, event)
 
-        val logicalKey = imeModeSwitcher.currentMode.translateKeyCode(event.keyCode)
+        val logicalKey = imeModeSwitcher.currentMode.translateHardwareKeyCode(event.keyCode)
         val translatedEvent = cloneEvent(event, logicalKey)
         pressedKeys += event.keyCode to logicalKey
 
@@ -230,7 +229,7 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
         if(event.isSystem) return super.onKeyUp(keyCode, event)
 
         val logicalKey = pressedKeys.remove(event.keyCode)
-            ?: imeModeSwitcher.currentMode.translateKeyCode(event.keyCode)
+            ?: imeModeSwitcher.currentMode.translateHardwareKeyCode(event.keyCode)
         val translatedEvent = cloneEvent(event, logicalKey)
 
         val isAltGraphPressed = (event.metaState and KeyEvent.META_ALT_RIGHT_ON != 0) &&

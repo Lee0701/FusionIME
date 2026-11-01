@@ -353,7 +353,7 @@ abstract class CommonIMEMode(
                 onChar(-event.keyCode)
             } else if(event.keyCode > KeyEvent.getMaxKeyCode() || keyCharacterMap.isPrintingKey(event.keyCode)) {
                 val table =
-                    if(event.altGrState) currentLayoutPreset.altGraphTable ?: currentLayoutPreset.layoutTable
+                    if(event.altGrState) currentLayoutPreset.altGraphTable
                     else currentLayoutPreset.layoutTable
                 val text = table[event] ?: return false
                 onChar(text)
@@ -409,12 +409,12 @@ abstract class CommonIMEMode(
         }
     }
 
-    override fun translateKeyCode(keyCode: Int): Int {
+    override fun translateHardwareKeyCode(keyCode: Int): Int {
         return currentLayoutPreset.hardKeyCodeMapper[keyCode]
     }
 
     override fun isAltGraphCapable(): Boolean {
-        return currentLayoutPreset.altGraphTable != null
+        return currentLayoutPreset.altGraphTable.map.isNotEmpty()
     }
 
     protected open fun submitCandidates(candidates: List<CandidateView.Candidate>) {

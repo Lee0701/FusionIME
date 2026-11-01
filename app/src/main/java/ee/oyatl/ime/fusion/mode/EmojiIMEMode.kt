@@ -97,7 +97,7 @@ class EmojiIMEMode(
 
     override fun onKeyEvent(event: FusionKeyEvent): Boolean = false
 
-    override fun translateKeyCode(keyCode: Int): Int = keyCode
+    override fun translateHardwareKeyCode(keyCode: Int): Int = keyCode
 
     override fun isAltGraphCapable(): Boolean = false
 

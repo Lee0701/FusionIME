@@ -20,7 +20,7 @@ interface IMEMode: KeyboardListener {
     fun createCandidateView(context: Context): View
     fun getInputView(): View?
 
-    fun translateKeyCode(keyCode: Int): Int
+    fun translateHardwareKeyCode(keyCode: Int): Int
     fun isAltGraphCapable(): Boolean
 
     fun updateSelection(
