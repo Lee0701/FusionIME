@@ -12,6 +12,7 @@ import ee.oyatl.ime.keyboard.KeyboardView
 import ee.oyatl.ime.keyboard.R
 import ee.oyatl.ime.fusion.keyboard.core.TouchMode
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardState
+import ee.oyatl.ime.theme.KeyBackground
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -86,8 +87,9 @@ class MoreKeysPopup(
             it.keyboard = Keyboard(listOf(
                 candidates.mapIndexed { i, candidate ->
                     Keyboard.KeyItem.Key(
-                        i,
-                        candidate.toChar().toString()
+                        keyCode = i,
+                        label = candidate.toChar().toString(),
+                        bkgRes = KeyBackground.forMerge(null)
                     )
                 }
             ), keyboardParams)

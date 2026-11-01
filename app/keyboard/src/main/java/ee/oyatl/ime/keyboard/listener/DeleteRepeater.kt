@@ -34,7 +34,7 @@ class DeleteRepeater(
             return false
         }
         is FusionKeyEvent.LongPress -> {
-            return false
+            return listener.onKeyEvent(event)
         }
         else -> {
             handler.removeCallbacksAndMessages(null)
