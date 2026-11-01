@@ -1,6 +1,6 @@
 package ee.oyatl.ime.fusion.layout.preset
 
-import ee.oyatl.ime.fusion.keyboard.core.HardKeyCodeMapper
+import ee.oyatl.ime.fusion.keyboard.core.KeyCodeMapper
 import ee.oyatl.ime.fusion.keyboard.core.KeyCode
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardConfiguration
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPreset
@@ -15,7 +15,6 @@ import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
 import ee.oyatl.ime.fusion.layout.LatinMoreKeysTable
 import ee.oyatl.ime.fusion.keyboard.core.LayoutTable
 import ee.oyatl.ime.fusion.keyboard.core.MoreKeysTable
-import ee.oyatl.ime.fusion.keyboard.core.SoftKeyCodeMapper
 
 object LatinLayoutPresets {
     fun qwerty(
@@ -60,17 +59,17 @@ object LatinLayoutPresets {
         return qwerty.copy(
             layoutTable = qwerty.layoutTable + LayoutTable.fromShiftStates(LayoutLatin.TABLE_AZERTY),
             altGraphTable = LayoutTable.fromShiftStates(LayoutLatin.TABLE_AZERTY_ALTGR),
-            softKeyCodeMapper = SoftKeyCodeMapper.ByScreenMode(
-                mobile = SoftKeyCodeMapper.Basic(LayoutLatin.KEYCODE_MAP_AZERTY
+            softKeyCodeMapper = KeyCodeMapper.ByScreenMode(
+                mobile = KeyCodeMapper(LayoutLatin.KEYCODE_MAP_AZERTY
                         + LayoutLatin.SOFT_KEYCODE_MAP_AZERTY_NUMBERS
                         + LayoutLatin.SOFT_KEYCODE_MAP_AZERTY_MOBILE
                 ),
-                tablet = SoftKeyCodeMapper.Basic(LayoutLatin.KEYCODE_MAP_AZERTY
+                tablet = KeyCodeMapper(LayoutLatin.KEYCODE_MAP_AZERTY
                         + LayoutLatin.SOFT_KEYCODE_MAP_AZERTY_NUMBERS
                 ),
-                full = SoftKeyCodeMapper.Basic(LayoutLatin.KEYCODE_MAP_AZERTY)
+                full = KeyCodeMapper(LayoutLatin.KEYCODE_MAP_AZERTY)
             ),
-            hardKeyCodeMapper = HardKeyCodeMapper(LayoutLatin.KEYCODE_MAP_AZERTY)
+            hardKeyCodeMapper = KeyCodeMapper(LayoutLatin.KEYCODE_MAP_AZERTY)
         )
     }
 
@@ -79,8 +78,8 @@ object LatinLayoutPresets {
         return qwerty.copy(
             layoutTable = qwerty.layoutTable + LayoutTable.fromShiftStates(LayoutLatin.TABLE_GERMAN_QWERTZ),
             altGraphTable = LayoutTable.fromShiftStates(LayoutLatin.TABLE_GERMAN_QWERTZ_ALTGR),
-            softKeyCodeMapper = SoftKeyCodeMapper.Basic(LayoutLatin.KEYCODE_MAP_QWERTZ),
-            hardKeyCodeMapper = HardKeyCodeMapper(LayoutLatin.KEYCODE_MAP_QWERTZ)
+            softKeyCodeMapper = KeyCodeMapper.ByScreenMode(KeyCodeMapper(LayoutLatin.KEYCODE_MAP_QWERTZ)),
+            hardKeyCodeMapper = KeyCodeMapper(LayoutLatin.KEYCODE_MAP_QWERTZ)
         )
     }
 
@@ -107,12 +106,13 @@ object LatinLayoutPresets {
             layoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE_EXT + LayoutQwerty.TABLE_QWERTY + LayoutLatin.TABLE_GERMAN_QWERTZ),
             altGraphTable = LayoutTable.fromShiftStates(LayoutLatin.TABLE_GERMAN_QWERTZ_ALTGR),
             moreKeysTable = MoreKeysTable.from(LatinMoreKeysTable.DEFAULT, LatinMoreKeysTable.DEFAULT_UPPERCASE_OVERRIDE),
-            softKeyCodeMapper = SoftKeyCodeMapper.Basic(LayoutLatin.KEYCODE_MAP_QWERTZ + LayoutLatin.SOFT_KEYCODE_MAP_DEUTSCH_QWERTZ),
-            hardKeyCodeMapper = HardKeyCodeMapper(LayoutLatin.KEYCODE_MAP_QWERTZ)
+            softKeyCodeMapper = KeyCodeMapper.ByScreenMode(KeyCodeMapper(LayoutLatin.KEYCODE_MAP_QWERTZ + LayoutLatin.SOFT_KEYCODE_MAP_DEUTSCH_QWERTZ)),
+            hardKeyCodeMapper = KeyCodeMapper(LayoutLatin.KEYCODE_MAP_QWERTZ)
         )
     }
 
     fun dvorak(): KeyboardLayoutPreset {
+        val keyCodeMapper = KeyCodeMapper(LayoutLatin.KEYCODE_MAP_DVORAK)
         return KeyboardLayoutPreset(
             keyboardTemplate = KeyboardTemplate.ByScreenMode(
                 mobile = KeyboardTemplate.Basic(
@@ -134,11 +134,13 @@ object LatinLayoutPresets {
             ),
             layoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE_EXT + LayoutQwerty.TABLE_QWERTY),
             moreKeysTable = MoreKeysTable.from(LatinMoreKeysTable.DEFAULT, LatinMoreKeysTable.DEFAULT_UPPERCASE_OVERRIDE),
-            softKeyCodeMapper = SoftKeyCodeMapper.Basic(LayoutLatin.KEYCODE_MAP_DVORAK)
+            softKeyCodeMapper = KeyCodeMapper.ByScreenMode(keyCodeMapper),
+            hardKeyCodeMapper = keyCodeMapper
         )
     }
 
     fun colemak(): KeyboardLayoutPreset {
+        val keyCodeMapper = KeyCodeMapper(LayoutLatin.KEYCODE_MAP_COLEMAK)
         return KeyboardLayoutPreset(
             keyboardTemplate = KeyboardTemplate.ByScreenMode(
                 mobile = KeyboardTemplate.Basic(
@@ -160,7 +162,8 @@ object LatinLayoutPresets {
             ),
             layoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE_EXT + LayoutQwerty.TABLE_QWERTY),
             moreKeysTable = MoreKeysTable.from(LatinMoreKeysTable.DEFAULT, LatinMoreKeysTable.DEFAULT_UPPERCASE_OVERRIDE),
-            softKeyCodeMapper = SoftKeyCodeMapper.Basic(LayoutLatin.KEYCODE_MAP_COLEMAK)
+            softKeyCodeMapper = KeyCodeMapper.ByScreenMode(keyCodeMapper),
+            hardKeyCodeMapper = keyCodeMapper
         )
     }
 }

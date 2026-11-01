@@ -314,22 +314,27 @@ abstract class MozcIMEMode(
 
         override fun onKeyEvent(event: FusionKeyEvent): Boolean = when(event) {
             is FusionKeyEvent.Press -> {
+                val event = translateKeyEvent(event)
                 if(event.keyCode <= 0 || !keyCharacterMap.isPrintingKey(event.keyCode)) {
                     return super.onKeyEvent(event)
                 }
                 return false
             }
             is FusionKeyEvent.Release -> {
+                val event = translateKeyEvent(event)
                 if(event.keyCode <= 0 || !keyCharacterMap.isPrintingKey(event.keyCode)) {
                     return super.onKeyEvent(event)
                 }
-                val direction = flicks.remove(event.keyCode) ?: return false
-                val input = FusionKeyEvent.Flick(event.keyCode, direction, shiftState, false, KeyEventSource.Unknown)
+                val direction = flicks.remove(event.keyCode)
+                val input =
+                    if(direction != null) FusionKeyEvent.Flick(event.keyCode, direction, shiftState, false, event.source)
+                    else FusionKeyEvent.Press(event.keyCode, shiftState, false, event.source)
                 val text = currentLayoutPreset.layoutTable[input] ?: return false
                 onChar(text)
                 return true
             }
             is FusionKeyEvent.Flick -> {
+                val event = translateKeyEvent(event) as FusionKeyEvent.Flick
                 if(symbolState != Symbol.Text) {
                     return super.onKeyEvent(event)
                 }
@@ -391,22 +396,27 @@ abstract class MozcIMEMode(
 
         override fun onKeyEvent(event: FusionKeyEvent): Boolean = when(event) {
             is FusionKeyEvent.Press -> {
+                val event = translateKeyEvent(event)
                 if(event.keyCode <= 0 || !keyCharacterMap.isPrintingKey(event.keyCode)) {
                     return super.onKeyEvent(event)
                 }
                 return false
             }
             is FusionKeyEvent.Release -> {
+                val event = translateKeyEvent(event)
                 if(event.keyCode <= 0 || !keyCharacterMap.isPrintingKey(event.keyCode)) {
                     return super.onKeyEvent(event)
                 }
-                val direction = flicks.remove(event.keyCode) ?: return false
-                val input = FusionKeyEvent.Flick(event.keyCode, direction, shiftState, false, KeyEventSource.Unknown)
+                val direction = flicks.remove(event.keyCode)
+                val input =
+                    if(direction != null) FusionKeyEvent.Flick(event.keyCode, direction, shiftState, false, event.source)
+                    else FusionKeyEvent.Press(event.keyCode, shiftState, false, event.source)
                 val text = currentLayoutPreset.layoutTable[input] ?: return false
                 onChar(text)
                 return true
             }
             is FusionKeyEvent.Flick -> {
+                val event = translateKeyEvent(event) as FusionKeyEvent.Flick
                 if(symbolState != Symbol.Text) {
                     return super.onKeyEvent(event)
                 }

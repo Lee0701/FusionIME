@@ -1,11 +1,11 @@
 package ee.oyatl.ime.fusion.layout.preset
 
+import ee.oyatl.ime.fusion.keyboard.core.KeyCodeMapper
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardConfiguration
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardTemplate
 import ee.oyatl.ime.fusion.keyboard.core.LayoutTable
 import ee.oyatl.ime.fusion.keyboard.core.MoreKeysTable
-import ee.oyatl.ime.fusion.keyboard.core.SoftKeyCodeMapper
 import ee.oyatl.ime.fusion.layout.LayoutExt
 import ee.oyatl.ime.fusion.layout.LayoutQwerty
 import ee.oyatl.ime.fusion.layout.LayoutSymbol
@@ -54,7 +54,7 @@ object SymbolLayoutPresets {
         moreKeysTable = MoreKeysTable.from(
             SymbolMoreKeysTable.DEFAULT
         ),
-        softKeyCodeMapper = softKeyCodeMapper()
+        softKeyCodeMapper = KeyCodeMapper.ByScreenMode(softKeyCodeMapper())
     )
 
     fun symbolN1(): KeyboardLayoutPreset = KeyboardLayoutPreset(
@@ -80,7 +80,7 @@ object SymbolLayoutPresets {
         moreKeysTable = MoreKeysTable.from(
             SymbolMoreKeysTable.DEFAULT
         ),
-        softKeyCodeMapper = softKeyCodeMapper()
+        softKeyCodeMapper = KeyCodeMapper.ByScreenMode(softKeyCodeMapper())
     )
 
     fun symbolN2(): KeyboardLayoutPreset = KeyboardLayoutPreset(
@@ -108,7 +108,7 @@ object SymbolLayoutPresets {
         moreKeysTable = MoreKeysTable.from(
             SymbolMoreKeysTable.DEFAULT
         ),
-        softKeyCodeMapper = softKeyCodeMapper()
+        softKeyCodeMapper = KeyCodeMapper.ByScreenMode(softKeyCodeMapper())
     )
 
     fun symbolO1(): KeyboardLayoutPreset = KeyboardLayoutPreset(
@@ -134,7 +134,7 @@ object SymbolLayoutPresets {
         moreKeysTable = MoreKeysTable.from(
             SymbolMoreKeysTable.DEFAULT
         ),
-        softKeyCodeMapper = softKeyCodeMapper()
+        softKeyCodeMapper = KeyCodeMapper.ByScreenMode(softKeyCodeMapper())
     )
 
     fun symbolO2(): KeyboardLayoutPreset = KeyboardLayoutPreset(
@@ -162,11 +162,11 @@ object SymbolLayoutPresets {
         moreKeysTable = MoreKeysTable.from(
             SymbolMoreKeysTable.DEFAULT
         ),
-        softKeyCodeMapper = softKeyCodeMapper()
+        softKeyCodeMapper = KeyCodeMapper.ByScreenMode(softKeyCodeMapper())
     )
 
-    fun softKeyCodeMapper(): SoftKeyCodeMapper {
-        return SoftKeyCodeMapper.Basic(LayoutSymbol.KEYCODE_MAP_SYMBOLS)
+    fun softKeyCodeMapper(): KeyCodeMapper {
+        return KeyCodeMapper(LayoutSymbol.KEYCODE_MAP_SYMBOLS)
     }
 
     fun symbolChinese(): KeyboardLayoutPreset {

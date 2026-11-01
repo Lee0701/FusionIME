@@ -2,13 +2,13 @@ package ee.oyatl.ime.keyboard
 
 import android.view.KeyCharacterMap
 import ee.oyatl.ime.fusion.keyboard.core.KeyCode
+import ee.oyatl.ime.fusion.keyboard.core.KeyCodeMapper
 import ee.oyatl.ime.fusion.keyboard.core.Keyboard
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardConfiguration
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardParams
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardState
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardTemplate
-import ee.oyatl.ime.fusion.keyboard.core.SoftKeyCodeMapper
 import ee.oyatl.ime.fusion.keyboard.core.SpecialKeyType
 import ee.oyatl.ime.theme.KeyBackground
 import ee.oyatl.ime.theme.SpecialKeyIcon
@@ -26,36 +26,33 @@ object KeyboardInflater {
         preset: KeyboardLayoutPreset,
         params: KeyboardParams
     ): Keyboard {
-        return inflate(preset.keyboardTemplate, preset.softKeyCodeMapper, params)
+        return inflate(preset.keyboardTemplate, params)
     }
 
     private fun inflate(
         template: KeyboardTemplate,
-        softKeyCodeMapper: SoftKeyCodeMapper,
         params: KeyboardParams
     ): Keyboard {
         return when(template) {
-            is KeyboardTemplate.Basic -> inflateBasic(template, softKeyCodeMapper, params)
-            is KeyboardTemplate.ByScreenMode -> inflateByScreenMode(template, softKeyCodeMapper, params)
+            is KeyboardTemplate.Basic -> inflateBasic(template, params)
+            is KeyboardTemplate.ByScreenMode -> inflateByScreenMode(template, params)
         }
     }
 
     private fun inflateByScreenMode(
         template: KeyboardTemplate.ByScreenMode,
-        softKeyCodeMapper: SoftKeyCodeMapper,
         params: KeyboardParams
     ): Keyboard {
         return when(params.screenMode) {
-            KeyboardState.ScreenMode.Mobile -> inflate(template.mobile, softKeyCodeMapper, params)
-            KeyboardState.ScreenMode.Tablet -> inflate(template.tablet, softKeyCodeMapper, params)
-            KeyboardState.ScreenMode.Full -> inflate(template.full, softKeyCodeMapper, params)
-            else -> inflate(template.mobile, softKeyCodeMapper, params)
+            KeyboardState.ScreenMode.Mobile -> inflate(template.mobile, params)
+            KeyboardState.ScreenMode.Tablet -> inflate(template.tablet, params)
+            KeyboardState.ScreenMode.Full -> inflate(template.full, params)
+            else -> inflate(template.mobile, params)
         }
     }
 
     private fun inflateBasic(
         template: KeyboardTemplate.Basic,
-        softKeyCodeMapper: SoftKeyCodeMapper,
         params: KeyboardParams
     ): Keyboard {
         val keyCodeRows = template.contentRows.map { row -> row.map { keyCharToKeyCode(it) } }
@@ -64,16 +61,15 @@ object KeyboardInflater {
         fun inflateItem(item: KeyboardConfiguration.Item): List<Keyboard.KeyItem> = when(item) {
             is KeyboardConfiguration.Item.ContentKey -> {
                 val rowIndex = keyCodeRows.size - item.rowId - 1
-                val keyCode = softKeyCodeMapper[params, keyCodeRows[rowIndex][item.index]]
+                val keyCode = keyCodeRows[rowIndex][item.index]
                 listOf(inflateKey(keyCode))
             }
             is KeyboardConfiguration.Item.ContentRow -> {
                 val rowIndex = keyCodeRows.size - item.rowId - 1
-                val content = keyCodeRows[rowIndex].map {
-                    if(it == KeyCode.KEYCODE_SPACE) {
+                val content = keyCodeRows[rowIndex].map { keyCode ->
+                    if(keyCode == KeyCode.KEYCODE_SPACE) {
                         Keyboard.KeyItem.SplitSpacer(params.splitWidth)
                     } else {
-                        val keyCode = softKeyCodeMapper[params, it]
                         inflateKey(keyCode)
                     }
                 }
@@ -83,7 +79,7 @@ object KeyboardInflater {
                 listOf(Keyboard.KeyItem.Spacer(item.width))
             }
             is KeyboardConfiguration.Item.TemplateKey -> {
-                val keyCode = softKeyCodeMapper[params, item.keyCode]
+                val keyCode = item.keyCode
                 if(params.splitWidth != 0 && keyCode == KeyCode.KEYCODE_SPACE) {
                     listOf(
                         inflateKey(keyCode, item.copy(width = item.width / 2)),

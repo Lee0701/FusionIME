@@ -2,13 +2,13 @@ package ee.oyatl.ime.fusion.layout.preset
 
 import ee.oyatl.ime.fusion.keyboard.core.ExtKeyCode
 import ee.oyatl.ime.fusion.keyboard.core.KeyCode
+import ee.oyatl.ime.fusion.keyboard.core.KeyCodeMapper
 import ee.oyatl.ime.fusion.keyboard.core.KeyLabels
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardConfiguration
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardTemplate
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardTemplate.Basic
 import ee.oyatl.ime.fusion.keyboard.core.LayoutTable
-import ee.oyatl.ime.fusion.keyboard.core.SoftKeyCodeMapper
 import ee.oyatl.ime.fusion.layout.LayoutExt
 import ee.oyatl.ime.fusion.layout.LayoutGodan
 import ee.oyatl.ime.fusion.layout.LayoutKana
@@ -23,9 +23,9 @@ object JapaneseLayoutPresets {
         preset: KeyboardLayoutPreset
     ): KeyboardLayoutPreset {
         val layoutTable = preset.layoutTable + LayoutTable.fromShiftStates(LayoutRomaji.TABLE_QWERTY)
-        val softKeyCodeMapper = SoftKeyCodeMapper.ByScreenMode(
-            mobile = SoftKeyCodeMapper.Basic(LayoutRomaji.KEYCODE_MAP_QWERTY),
-            full = SoftKeyCodeMapper.Empty
+        val softKeyCodeMapper = KeyCodeMapper.ByScreenMode(
+            mobile = KeyCodeMapper(LayoutRomaji.KEYCODE_MAP_QWERTY),
+            full = KeyCodeMapper()
         )
         return preset.copy(
             layoutTable = layoutTable,
@@ -81,8 +81,8 @@ object JapaneseLayoutPresets {
                 )
             ),
             layoutTable = LayoutTable.fromShiftStates(LayoutExt.TABLE_EXT + LayoutKana.TABLE_JIS),
-            softKeyCodeMapper = SoftKeyCodeMapper.ByScreenMode(
-                mobile = SoftKeyCodeMapper.Basic(mapOf(
+            softKeyCodeMapper = KeyCodeMapper.ByScreenMode(
+                mobile = KeyCodeMapper(mapOf(
                     KeyCode.KEYCODE_MINUS to ExtKeyCode.KEYCODE_KANA_MINUS,
                     KeyCode.KEYCODE_APOSTROPHE to ExtKeyCode.KEYCODE_KANA_APOSTROPHE,
                     KeyCode.KEYCODE_LEFT_BRACKET to ExtKeyCode.KEYCODE_KANA_VOICED_MARK

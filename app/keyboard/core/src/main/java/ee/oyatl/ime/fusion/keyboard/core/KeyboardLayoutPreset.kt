@@ -10,8 +10,8 @@ data class KeyboardLayoutPreset(
     val layoutTable: LayoutTable = LayoutTable(),
     val altGraphTable: LayoutTable = LayoutTable(),
     val moreKeysTable: MoreKeysTable = MoreKeysTable(),
-    val softKeyCodeMapper: SoftKeyCodeMapper = SoftKeyCodeMapper.Empty,
-    val hardKeyCodeMapper: HardKeyCodeMapper = HardKeyCodeMapper(),
+    val softKeyCodeMapper: KeyCodeMapper.ByScreenMode = KeyCodeMapper.ByScreenMode(),
+    val hardKeyCodeMapper: KeyCodeMapper = KeyCodeMapper(),
     val keyLabels: KeyLabels = KeyLabels(),
     val extra: Extra = Extra.None
 ) {

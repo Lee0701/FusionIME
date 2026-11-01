@@ -4,7 +4,6 @@ import ee.oyatl.ime.fusion.keyboard.core.KeyCode
 import ee.oyatl.ime.fusion.keyboard.core.FusionKeyEvent
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardState
 import ee.oyatl.ime.fusion.keyboard.core.LayoutTable
-import ee.oyatl.ime.fusion.keyboard.core.SoftKeyCodeMapper
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -22,7 +21,7 @@ class LayoutLatinTest {
         val table = LayoutTable.fromShiftStates(
             LayoutExt.TABLE_EXT + LayoutQwerty.TABLE_QWERTY + LayoutLatin.TABLE_AZERTY
         )
-        val mapper = SoftKeyCodeMapper.Basic(LayoutLatin.KEYCODE_MAP_AZERTY
+        val mapper = KeyCodeMapper(LayoutLatin.KEYCODE_MAP_AZERTY
                 + LayoutLatin.SOFT_KEYCODE_MAP_AZERTY_NUMBERS
                 + LayoutLatin.SOFT_KEYCODE_MAP_AZERTY_MOBILE
         )
@@ -37,7 +36,7 @@ class LayoutLatinTest {
 
     private fun assertKey(
         table: LayoutTable,
-        mapper: SoftKeyCodeMapper.Basic,
+        mapper: KeyCodeMapper,
         keyCode: Int,
         expectedNormal: Char,
         expectedShifted: Char

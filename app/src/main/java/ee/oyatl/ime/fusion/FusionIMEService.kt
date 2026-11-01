@@ -199,25 +199,27 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
         }
         if(event.isSystem) return super.onKeyDown(keyCode, event)
 
-        val logicalKey = imeModeSwitcher.currentMode.translateHardwareKeyCode(event.keyCode)
-        val translatedEvent = cloneEvent(event, logicalKey)
-        pressedKeys += event.keyCode to logicalKey
-
         val isAltGraphPressed = (event.metaState and KeyEvent.META_ALT_RIGHT_ON != 0) &&
                 imeModeSwitcher.currentMode.isAltGraphCapable()
+
+        val shiftState = if(event.isShiftPressed) KeyboardState.Shift.Pressed else KeyboardState.Shift.Released
+        val fusionEvent = FusionKeyEvent.Press(
+            keyCode,
+            shiftState,
+            isAltGraphPressed,
+            KeyEventSource.HardwareKeyboard
+        )
+        val translatedFusionEvent = imeModeSwitcher.currentMode.translateKeyEvent(fusionEvent)
+        val translatedEvent = cloneEvent(event, translatedFusionEvent.keyCode)
 
         if(event.isSystem || event.isCtrlPressed || (event.isAltPressed && !isAltGraphPressed) || event.isMetaPressed) {
             currentInputConnection.sendKeyEvent(translatedEvent)
             return true
         }
 
-        val shiftState = if(event.isShiftPressed) KeyboardState.Shift.Pressed else KeyboardState.Shift.Released
-        val result = imeModeSwitcher.currentMode.onKeyEvent(FusionKeyEvent.Press(
-            logicalKey,
-            shiftState,
-            isAltGraphPressed,
-            KeyEventSource.HardwareKeyboard
-        ))
+        val result = imeModeSwitcher.currentMode.onKeyEvent(fusionEvent)
+        pressedKeys += keyCode to translatedFusionEvent.keyCode
+
         if(!result) {
             currentInputConnection.sendKeyEvent(translatedEvent)
         }
@@ -228,25 +230,28 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
         if(hardwareLanguageKeyStroke.matches(event)) return true
         if(event.isSystem) return super.onKeyUp(keyCode, event)
 
-        val logicalKey = pressedKeys.remove(event.keyCode)
-            ?: imeModeSwitcher.currentMode.translateHardwareKeyCode(event.keyCode)
-        val translatedEvent = cloneEvent(event, logicalKey)
-
         val isAltGraphPressed = (event.metaState and KeyEvent.META_ALT_RIGHT_ON != 0) &&
                 imeModeSwitcher.currentMode.isAltGraphCapable()
+
+        val shiftState = if(event.isShiftPressed) KeyboardState.Shift.Pressed else KeyboardState.Shift.Released
+        val fusionEvent = FusionKeyEvent.Release(
+            keyCode,
+            shiftState,
+            isAltGraphPressed,
+            KeyEventSource.HardwareKeyboard
+        )
+        val translatedFusionEvent = imeModeSwitcher.currentMode.translateKeyEvent(fusionEvent)
+
+        val logicalKey = pressedKeys.remove(keyCode)
+            ?: translatedFusionEvent.keyCode
+        val translatedEvent = cloneEvent(event, logicalKey)
 
         if(event.isSystem || event.isCtrlPressed || (event.isAltPressed && !isAltGraphPressed) || event.isMetaPressed) {
             currentInputConnection.sendKeyEvent(translatedEvent)
             return true
         }
 
-        val shiftState = if(event.isShiftPressed) KeyboardState.Shift.Pressed else KeyboardState.Shift.Released
-        val result = imeModeSwitcher.currentMode.onKeyEvent(FusionKeyEvent.Release(
-            logicalKey,
-            shiftState,
-            isAltGraphPressed,
-            KeyEventSource.HardwareKeyboard
-        ))
+        val result = imeModeSwitcher.currentMode.onKeyEvent(fusionEvent)
         if(!result) {
             currentInputConnection.sendKeyEvent(translatedEvent)
         }

@@ -5,6 +5,7 @@ import ee.oyatl.ime.fusion.keyboard.core.ExtKeyCode
 import ee.oyatl.ime.fusion.layout.Hangul3Set
 import ee.oyatl.ime.fusion.layout.HangulOld
 import ee.oyatl.ime.fusion.keyboard.core.KeyCode
+import ee.oyatl.ime.fusion.keyboard.core.KeyCodeMapper
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardConfiguration
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardTemplate
@@ -15,7 +16,6 @@ import ee.oyatl.ime.fusion.layout.MobileKeyboardRows
 import ee.oyatl.ime.fusion.layout.TabletKeyboard
 import ee.oyatl.ime.fusion.layout.TabletKeyboardRows
 import ee.oyatl.ime.fusion.keyboard.core.LayoutTable
-import ee.oyatl.ime.fusion.keyboard.core.SoftKeyCodeMapper
 import ee.oyatl.ime.fusion.layout.Hangul2Set
 
 object KoreanLayoutPresets {
@@ -66,9 +66,9 @@ object KoreanLayoutPresets {
 
     fun hangul3Set390(): KeyboardLayoutPreset {
         val layoutTable = LayoutTable.fromShiftStates(Hangul3Set.TABLE_390)
-        val softKeyCodeMapper = SoftKeyCodeMapper.ByScreenMode(
-            mobile = SoftKeyCodeMapper.Basic(Hangul3Set.KEYCODE_MAP_390_MOBILE),
-            tablet = SoftKeyCodeMapper.Empty
+        val softKeyCodeMapper = KeyCodeMapper.ByScreenMode(
+            mobile = KeyCodeMapper(Hangul3Set.KEYCODE_MAP_390_MOBILE),
+            tablet = KeyCodeMapper()
         )
         val jamoCombinationTable = JamoCombinationTable.from(Hangul3Set.COMBINATION_390_391)
         return hangul3Set390391().copy(
@@ -147,9 +147,9 @@ object KoreanLayoutPresets {
             ),
             layoutTable = LayoutTable
                 .fromShiftStates(LayoutExt.TABLE_EXT + LayoutQwerty.TABLE_QWERTY + HangulOld.TABLE_OLD_393),
-            softKeyCodeMapper = SoftKeyCodeMapper.ByScreenMode(
-                mobile = SoftKeyCodeMapper.Basic(Hangul3Set.KEYCODE_MAP_393_MOBILE),
-                tablet = SoftKeyCodeMapper.Empty
+            softKeyCodeMapper = KeyCodeMapper.ByScreenMode(
+                mobile = KeyCodeMapper(Hangul3Set.KEYCODE_MAP_393_MOBILE),
+                tablet = KeyCodeMapper()
             ),
             extra = KeyboardLayoutPreset.Extra.Hangul(
                 jamoCombinationTable = JamoCombinationTable.from(HangulOld.COMBINATION_FULL)

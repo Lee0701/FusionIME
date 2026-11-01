@@ -16,11 +16,13 @@ import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.SymbolLayout
 import ee.oyatl.ime.fusion.keyboard.core.FlickDirection
 import ee.oyatl.ime.fusion.keyboard.core.FusionKeyEvent
+import ee.oyatl.ime.fusion.keyboard.core.KeyCodeMapper
 import ee.oyatl.ime.fusion.keyboard.core.KeyEventSource
 import ee.oyatl.ime.fusion.keyboard.core.KeyLabel
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardParams
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardState
+import ee.oyatl.ime.fusion.keyboard.core.KeyboardState.Symbol
 import ee.oyatl.ime.fusion.keyboard.core.TouchMode
 import ee.oyatl.ime.fusion.util.KeyEventUtil
 import ee.oyatl.ime.fusion.util.PreferenceUtil.getOrientationBoolean
@@ -67,14 +69,17 @@ abstract class CommonIMEMode(
     }
 
     open val keyLabels: Map<Int, KeyLabel>
-        get() = currentLayoutPreset.layoutTable.map.mapValues { (k, _) ->
-            val input = FusionKeyEvent.Press(k, shiftState, false, KeyEventSource.Unknown)
+        get() = currentLayoutPreset.layoutTable.map.keys.associateWith { keyCode ->
+            val event = FusionKeyEvent.Press(keyCode, shiftState, false, KeyEventSource.SoftwareKeyboard)
+            val input = translateKeyEvent(event)
             val text = currentLayoutPreset.layoutTable[input]?.toChar()?.toString()
             KeyLabel(text)
         }
 
     protected var keyboardView: KeyboardView? = null
     protected var candidateView: CandidateView? = null
+
+    var softKeyCodeMapper: KeyCodeMapper = KeyCodeMapper()
 
     var symbolState: KeyboardState.Symbol = KeyboardState.Symbol.Text
     override var shiftState: KeyboardState.Shift = KeyboardState.Shift.Released
@@ -161,6 +166,13 @@ abstract class CommonIMEMode(
         val textKeyboardParams = createKeyboardParams(context, KeyboardState.Symbol.Text)
         val symbolKeyboardParams = createKeyboardParams(context, KeyboardState.Symbol.Symbol)
         val numberKeyboardParams = createKeyboardParams(context, KeyboardState.Symbol.Number)
+
+        this.softKeyCodeMapper = when(textKeyboardParams.screenMode) {
+            KeyboardState.ScreenMode.Mobile -> textLayoutPreset.softKeyCodeMapper.mobile
+            KeyboardState.ScreenMode.Tablet -> textLayoutPreset.softKeyCodeMapper.tablet
+            KeyboardState.ScreenMode.Full -> textLayoutPreset.softKeyCodeMapper.full
+            else -> softKeyCodeMapper
+        }
 
         val textKeyboard = KeyboardInflater.inflate(textLayoutPreset, textKeyboardParams)
         val symbolKeyboard = KeyboardInflater.inflate(symbolLayoutPreset, symbolKeyboardParams)
@@ -343,6 +355,7 @@ abstract class CommonIMEMode(
 
     override fun onKeyEvent(event: FusionKeyEvent): Boolean = when(event) {
         is FusionKeyEvent.Press -> {
+            val event = translateKeyEvent(event)
             if(event.keyCode == KeyEvent.KEYCODE_SHIFT_LEFT || event.keyCode == KeyEvent.KEYCODE_SHIFT_RIGHT) {
                 shiftState = KeyboardState.Shift.Pressed
             } else if(event.keyCode == KeyEvent.KEYCODE_CAPS_LOCK) {
@@ -364,6 +377,7 @@ abstract class CommonIMEMode(
             return true
         }
         is FusionKeyEvent.Release -> {
+            val event = translateKeyEvent(event)
             if(event.keyCode == KeyEvent.KEYCODE_SHIFT_LEFT || event.keyCode == KeyEvent.KEYCODE_SHIFT_RIGHT) {
                 shiftState = KeyboardState.Shift.Released
             }
@@ -371,6 +385,7 @@ abstract class CommonIMEMode(
             return true
         }
         is FusionKeyEvent.LongPress -> {
+            val event = translateKeyEvent(event)
             val keyboardView = keyboardView ?: return false
             val key = keyboardView.findKeys(event.keyCode).firstOrNull() ?: return false
             val input = FusionKeyEvent.Press(event.keyCode, shiftState, false, KeyEventSource.Unknown)
@@ -392,9 +407,8 @@ abstract class CommonIMEMode(
             val shiftState =
                 if(action == FlickAction.Shifted || action == FlickAction.ShiftedSymbol) KeyboardState.Shift.Pressed
                 else shiftState
-            val input = FusionKeyEvent.Flick(event.keyCode, event.direction, shiftState, false, KeyEventSource.Unknown)
-            val text = currentLayoutPreset.layoutTable[input]
-            val symbol = symbolLayoutPreset.layoutTable[input]
+            val text = currentLayoutPreset.layoutTable[translateKeyEvent(event).with(shiftState = shiftState)]
+            val symbol = symbolLayoutPreset.layoutTable[event.with(shiftState = shiftState)]
             when(defaultFlickActions[event.direction]) {
                 FlickAction.Default -> onChar(text ?: return false)
                 FlickAction.Shifted -> onChar(text ?: return false)
@@ -409,8 +423,20 @@ abstract class CommonIMEMode(
         }
     }
 
-    override fun translateHardwareKeyCode(keyCode: Int): Int {
-        return currentLayoutPreset.hardKeyCodeMapper[keyCode]
+    override fun translateKeyEvent(event: FusionKeyEvent): FusionKeyEvent {
+        val keyCode = when(event.source) {
+            KeyEventSource.HardwareKeyboard -> currentLayoutPreset.hardKeyCodeMapper[event.keyCode]
+            KeyEventSource.SoftwareKeyboard -> softKeyCodeMapper[event.keyCode]
+            else -> event.keyCode
+        }
+        val shiftState = when(event.source) {
+            KeyEventSource.SoftwareKeyboard -> shiftState
+            else -> event.shiftState
+        }
+        return when(symbolState) {
+            Symbol.Text -> event.with(keyCode = keyCode, shiftState = shiftState)
+            else -> event.with(shiftState = shiftState)
+        }
     }
 
     override fun isAltGraphCapable(): Boolean {
