@@ -15,7 +15,8 @@ import ee.oyatl.ime.fusion.FlickAction
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.SymbolLayout
 import ee.oyatl.ime.fusion.keyboard.core.FlickDirection
-import ee.oyatl.ime.fusion.keyboard.core.KeyInput
+import ee.oyatl.ime.fusion.keyboard.core.FusionKeyEvent
+import ee.oyatl.ime.fusion.keyboard.core.KeyEventSource
 import ee.oyatl.ime.fusion.keyboard.core.KeyLabel
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardParams
@@ -29,11 +30,9 @@ import ee.oyatl.ime.keyboard.KeyboardInflater
 import ee.oyatl.ime.keyboard.KeyboardView
 import ee.oyatl.ime.keyboard.SwitcherKeyboardView
 import ee.oyatl.ime.keyboard.listener.DeleteRepeater
-import ee.oyatl.ime.keyboard.listener.FlickListener
 import ee.oyatl.ime.keyboard.listener.InputOnKeyUp
 import ee.oyatl.ime.keyboard.listener.KeyFeedbackManager
 import ee.oyatl.ime.keyboard.listener.KeyboardListener
-import ee.oyatl.ime.keyboard.listener.LongPressListener
 import ee.oyatl.ime.keyboard.listener.ParallelKeyboardListener
 import ee.oyatl.ime.keyboard.listener.SerialKeyboardListener
 import ee.oyatl.ime.keyboard.listener.ShiftStateManager
@@ -51,7 +50,7 @@ import kotlin.math.roundToInt
 
 abstract class CommonIMEMode(
     private val listener: IMEMode.Listener
-): IMEMode, KeyboardListener, FlickListener, LongPressListener, CandidateView.Listener, ShiftStateManager.ShiftStateHolder {
+): IMEMode, KeyboardListener, CandidateView.Listener, ShiftStateManager.ShiftStateHolder {
     protected val keyCharacterMap: KeyCharacterMap = KeyCharacterMap.load(KeyCharacterMap.VIRTUAL_KEYBOARD)
 
     override var keyboardTheme: KeyboardTheme? = null
@@ -69,7 +68,7 @@ abstract class CommonIMEMode(
 
     open val keyLabels: Map<Int, KeyLabel>
         get() = currentLayoutPreset.layoutTable.map.mapValues { (k, _) ->
-            val input = KeyInput(k, shiftState, null)
+            val input = FusionKeyEvent.Press(k, shiftState, false, KeyEventSource.Unknown)
             val text = currentLayoutPreset.layoutTable[input]?.toChar()?.toString()
             KeyLabel(text)
         }
@@ -342,36 +341,69 @@ abstract class CommonIMEMode(
         }
     }
 
-    override fun onKeyDown(keyCode: Int, metaState: Int): Boolean {
-        if(keyCode == KeyEvent.KEYCODE_SHIFT_LEFT || keyCode == KeyEvent.KEYCODE_SHIFT_RIGHT) {
-            shiftState = KeyboardState.Shift.Pressed
-        } else if(keyCode == KeyEvent.KEYCODE_CAPS_LOCK) {
-            shiftState =
-                if(shiftState != KeyboardState.Shift.Locked) KeyboardState.Shift.Locked
-                else KeyboardState.Shift.Released
-        } else if(keyCode < 0) {
-            onChar(-keyCode)
-        } else if(keyCode > KeyEvent.getMaxKeyCode() || keyCharacterMap.isPrintingKey(keyCode)) {
-            val altGrPressed = metaState and KeyEvent.META_ALT_RIGHT_ON != 0
-            val table =
-                if(altGrPressed) currentLayoutPreset.altGraphTable ?: currentLayoutPreset.layoutTable
-                else currentLayoutPreset.layoutTable
-            val input = KeyInput(keyCode, shiftState, null)
-            val text = table[input] ?: return false
-            onChar(text)
-        } else {
-            onSpecial(keyCode)
+    override fun onKeyEvent(event: FusionKeyEvent): Boolean = when(event) {
+        is FusionKeyEvent.Press -> {
+            if(event.keyCode == KeyEvent.KEYCODE_SHIFT_LEFT || event.keyCode == KeyEvent.KEYCODE_SHIFT_RIGHT) {
+                shiftState = KeyboardState.Shift.Pressed
+            } else if(event.keyCode == KeyEvent.KEYCODE_CAPS_LOCK) {
+                shiftState =
+                    if(shiftState != KeyboardState.Shift.Locked) KeyboardState.Shift.Locked
+                    else KeyboardState.Shift.Released
+            } else if(event.keyCode < 0) {
+                onChar(-event.keyCode)
+            } else if(event.keyCode > KeyEvent.getMaxKeyCode() || keyCharacterMap.isPrintingKey(event.keyCode)) {
+                val table =
+                    if(event.altGrState) currentLayoutPreset.altGraphTable ?: currentLayoutPreset.layoutTable
+                    else currentLayoutPreset.layoutTable
+                val text = table[event] ?: return false
+                onChar(text)
+            } else {
+                onSpecial(event.keyCode)
+            }
+            updateInputView()
+            return true
         }
-        updateInputView()
-        return true
-    }
-
-    override fun onKeyUp(keyCode: Int, metaState: Int): Boolean {
-        if(keyCode == KeyEvent.KEYCODE_SHIFT_LEFT || keyCode == KeyEvent.KEYCODE_SHIFT_RIGHT) {
-            shiftState = KeyboardState.Shift.Released
+        is FusionKeyEvent.Release -> {
+            if(event.keyCode == KeyEvent.KEYCODE_SHIFT_LEFT || event.keyCode == KeyEvent.KEYCODE_SHIFT_RIGHT) {
+                shiftState = KeyboardState.Shift.Released
+            }
+            updateInputView()
+            return true
         }
-        updateInputView()
-        return true
+        is FusionKeyEvent.LongPress -> {
+            val keyboardView = keyboardView ?: return false
+            val key = keyboardView.findKeys(event.keyCode).firstOrNull() ?: return false
+            val input = FusionKeyEvent.Press(event.keyCode, shiftState, false, KeyEventSource.Unknown)
+            val baseChar = currentLayoutPreset.layoutTable[input] ?: return false
+            val candidates = currentLayoutPreset.moreKeysTable.candidatesFor(baseChar)
+            if(candidates.isEmpty()) return false
+            keyboardView.popupManager.removePopup(key)
+            keyboardView.popupManager.showPopup(key) {
+                MoreKeysPopup(keyboardView, key, candidates) {
+                    this.onChar(it)
+                    listener.onLongPressStateChanged(false)
+                }
+            }
+            listener.onLongPressStateChanged(true)
+            return true
+        }
+        is FusionKeyEvent.Flick -> {
+            val action = defaultFlickActions[event.direction]
+            val shiftState =
+                if(action == FlickAction.Shifted || action == FlickAction.ShiftedSymbol) KeyboardState.Shift.Pressed
+                else shiftState
+            val input = FusionKeyEvent.Flick(event.keyCode, event.direction, shiftState, false, KeyEventSource.Unknown)
+            val text = currentLayoutPreset.layoutTable[input]
+            val symbol = symbolLayoutPreset.layoutTable[input]
+            when(defaultFlickActions[event.direction]) {
+                FlickAction.Default -> onChar(text ?: return false)
+                FlickAction.Shifted -> onChar(text ?: return false)
+                FlickAction.Symbol -> onChar(symbol ?: return false)
+                FlickAction.ShiftedSymbol -> onChar(symbol ?: return false)
+                else -> Unit
+            }
+            return true
+        }
     }
 
     override fun translateKeyCode(keyCode: Int): Int {
@@ -380,42 +412,6 @@ abstract class CommonIMEMode(
 
     override fun isAltGraphCapable(): Boolean {
         return currentLayoutPreset.altGraphTable != null
-    }
-
-    override fun onFlick(keyCode: Int, direction: FlickDirection): Boolean {
-        val action = defaultFlickActions[direction]
-        val shiftState =
-            if(action == FlickAction.Shifted || action == FlickAction.ShiftedSymbol) KeyboardState.Shift.Pressed
-            else shiftState
-        val input = KeyInput(keyCode, shiftState, direction)
-        val text = currentLayoutPreset.layoutTable[input]
-        val symbol = symbolLayoutPreset.layoutTable[input]
-        when(defaultFlickActions[direction]) {
-            FlickAction.Default -> onChar(text ?: return false)
-            FlickAction.Shifted -> onChar(text ?: return false)
-            FlickAction.Symbol -> onChar(symbol ?: return false)
-            FlickAction.ShiftedSymbol -> onChar(symbol ?: return false)
-            else -> Unit
-        }
-        return true
-    }
-
-    override fun onKeyLongPress(keyCode: Int, metaState: Int): Boolean {
-        val keyboardView = keyboardView ?: return false
-        val key = keyboardView.findKeys(keyCode).firstOrNull() ?: return false
-        val input = KeyInput(keyCode, shiftState, null)
-        val baseChar = currentLayoutPreset.layoutTable[input] ?: return false
-        val candidates = currentLayoutPreset.moreKeysTable.candidatesFor(baseChar)
-        if(candidates.isEmpty()) return false
-        keyboardView.popupManager.removePopup(key)
-        keyboardView.popupManager.showPopup(key) {
-            MoreKeysPopup(keyboardView, key, candidates) {
-                this.onChar(it)
-                listener.onLongPressStateChanged(false)
-            }
-        }
-        listener.onLongPressStateChanged(true)
-        return true
     }
 
     protected open fun submitCandidates(candidates: List<CandidateView.Candidate>) {

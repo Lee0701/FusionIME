@@ -3,7 +3,9 @@ package ee.oyatl.ime.keyboard.touchhandler
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardParams
 import ee.oyatl.ime.keyboard.KeyboardView
 import ee.oyatl.ime.fusion.keyboard.core.FlickDirection
-import ee.oyatl.ime.keyboard.listener.FlickListener
+import ee.oyatl.ime.fusion.keyboard.core.FusionKeyEvent
+import ee.oyatl.ime.fusion.keyboard.core.KeyEventSource
+import ee.oyatl.ime.fusion.keyboard.core.KeyboardState
 import ee.oyatl.ime.keyboard.popup.PreviewPopup
 import kotlin.math.PI
 import kotlin.math.atan2
@@ -36,7 +38,12 @@ class FlickTouchHandler(
         val pointer = Pointer(pointerId, x, y, x, y, key)
         if(key != null) {
             keyboardView.findKeys(key.keyCode).forEach { it.onPressed() }
-            keyboardView.listener.onKeyDown(key.keyCode, 0)
+            keyboardView.listener.onKeyEvent(FusionKeyEvent.Press(
+                key.keyCode,
+                KeyboardState.Shift.Released,
+                false,
+                KeyEventSource.SoftwareKeyboard
+            ))
             if(keyboardParams.previewPopups && key.label.isNotEmpty()) {
                 keyboardView.popupManager.showPopup(key) { PreviewPopup(keyboardView, key) }
             }
@@ -66,10 +73,13 @@ class FlickTouchHandler(
                             val newLabel = keyboardView.labels[pointer.key.keyCode]
                             newLabel?.forDirection(direction)?.let { popup.label = it }
                         }
-                        val listener = keyboardView.listener
-                        if(listener is FlickListener) {
-                            listener.onFlick(pointer.key.keyCode, direction)
-                        }
+                        keyboardView.listener.onKeyEvent(FusionKeyEvent.Flick(
+                            pointer.key.keyCode,
+                            direction,
+                            KeyboardState.Shift.Released,
+                            false,
+                            KeyEventSource.SoftwareKeyboard
+                        ))
                     }
                     flicks += direction
                 }
@@ -85,7 +95,14 @@ class FlickTouchHandler(
         val key = pointer.key
         if(key != null) {
             keyboardView.findKeys(key.keyCode).forEach { it.onReleased() }
-            if(pointer.flicks.isEmpty() || sendOnUp) keyboardView.listener.onKeyUp(key.keyCode, 0)
+            if(pointer.flicks.isEmpty() || sendOnUp) {
+                keyboardView.listener.onKeyEvent(FusionKeyEvent.Release(
+                    key.keyCode,
+                    KeyboardState.Shift.Released,
+                    false,
+                    KeyEventSource.SoftwareKeyboard
+                ))
+            }
             keyboardView.popupManager.removePopup(key)
         }
         pointers -= pointerId

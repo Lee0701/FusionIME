@@ -14,6 +14,7 @@ import ee.oyatl.ime.fusion.util.DimensionUtil
 import ee.oyatl.ime.fusion.util.KeyEventUtil
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.databinding.EmojiImeModeBinding
+import ee.oyatl.ime.fusion.keyboard.core.FusionKeyEvent
 import ee.oyatl.ime.theme.KeyboardTheme
 
 class EmojiIMEMode(
@@ -29,6 +30,8 @@ class EmojiIMEMode(
     override fun onLoad(context: Context) = Unit
 
     override fun onUnload(context: Context) = Unit
+
+    override fun onReset() = Unit
 
     override fun onStart(
         inputConnection: InputConnection,
@@ -92,9 +95,7 @@ class EmojiIMEMode(
         util?.deleteSurroundingText(1, 0)
     }
 
-    override fun onKeyDown(keyCode: Int, metaState: Int): Boolean = false
-
-    override fun onKeyUp(keyCode: Int, metaState: Int): Boolean = false
+    override fun onKeyEvent(event: FusionKeyEvent): Boolean = false
 
     override fun translateKeyCode(keyCode: Int): Int = keyCode
 

@@ -5,21 +5,21 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
 import ee.oyatl.ime.candidate.CandidateView
+import ee.oyatl.ime.keyboard.listener.KeyboardListener
 import ee.oyatl.ime.theme.KeyboardTheme
 
-interface IMEMode {
+interface IMEMode: KeyboardListener {
     var keyboardTheme: KeyboardTheme?
 
     fun onLoad(context: Context)
     fun onUnload(context: Context)
+    fun onReset()
     fun onStart(inputConnection: InputConnection, editorInfo: EditorInfo)
     fun onFinish()
     fun createInputView(context: Context): View
     fun createCandidateView(context: Context): View
     fun getInputView(): View?
 
-    fun onKeyDown(keyCode: Int, metaState: Int): Boolean
-    fun onKeyUp(keyCode: Int, metaState: Int): Boolean
     fun translateKeyCode(keyCode: Int): Int
     fun isAltGraphCapable(): Boolean
 

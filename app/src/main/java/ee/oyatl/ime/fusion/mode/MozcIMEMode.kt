@@ -13,7 +13,8 @@ import ee.oyatl.ime.candidate.VerticalScrollingCandidateView
 import ee.oyatl.ime.fusion.AssetsPresetLoader
 import ee.oyatl.ime.fusion.R
 import ee.oyatl.ime.fusion.keyboard.core.FlickDirection
-import ee.oyatl.ime.fusion.keyboard.core.KeyInput
+import ee.oyatl.ime.fusion.keyboard.core.FusionKeyEvent
+import ee.oyatl.ime.fusion.keyboard.core.KeyEventSource
 import ee.oyatl.ime.fusion.keyboard.core.KeyLabel
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardParams
@@ -21,7 +22,6 @@ import ee.oyatl.ime.fusion.keyboard.core.KeyboardState.Symbol
 import ee.oyatl.ime.fusion.mozc.InputConnectionRenderer
 import ee.oyatl.ime.fusion.preset.JapaneseSyllables
 import ee.oyatl.ime.keyboard.KeyboardView
-import ee.oyatl.ime.keyboard.listener.FlickListener
 import ee.oyatl.ime.keyboard.touchhandler.FlickTouchHandler
 import ee.oyatl.ime.keyboard.touchhandler.TouchHandler
 import org.mozc.android.inputmethod.japanese.MozcUtil
@@ -271,7 +271,7 @@ abstract class MozcIMEMode(
         val flickMode: FlickMode,
         val flickHint: Boolean,
         extra: Map<String, String>
-    ): StaticPreset(listener, candidateViewHeight, extra), FlickListener {
+    ): StaticPreset(listener, candidateViewHeight, extra) {
         override val keyboardSpecification: KeyboardSpecification = flickMode.keyboardSpecification
         override val presetName: String = "kana_12key"
 
@@ -312,30 +312,32 @@ abstract class MozcIMEMode(
             }
         }
 
-        override fun onKeyDown(keyCode: Int, metaState: Int): Boolean {
-            if(keyCode <= 0 || !keyCharacterMap.isPrintingKey(keyCode)) {
-                return super.onKeyDown(keyCode, metaState)
+        override fun onKeyEvent(event: FusionKeyEvent): Boolean = when(event) {
+            is FusionKeyEvent.Press -> {
+                if(event.keyCode <= 0 || !keyCharacterMap.isPrintingKey(event.keyCode)) {
+                    return super.onKeyEvent(event)
+                }
+                return false
             }
-            return false
-        }
-
-        override fun onKeyUp(keyCode: Int, metaState: Int): Boolean {
-            if(keyCode <= 0 || !keyCharacterMap.isPrintingKey(keyCode)) {
-                return super.onKeyUp(keyCode, metaState)
+            is FusionKeyEvent.Release -> {
+                if(event.keyCode <= 0 || !keyCharacterMap.isPrintingKey(event.keyCode)) {
+                    return super.onKeyEvent(event)
+                }
+                val direction = flicks.remove(event.keyCode) ?: return false
+                val input = FusionKeyEvent.Flick(event.keyCode, direction, shiftState, false, KeyEventSource.Unknown)
+                val text = currentLayoutPreset.layoutTable[input] ?: return false
+                onChar(text)
+                return true
             }
-            val input = KeyInput(keyCode, shiftState, flicks.remove(keyCode))
-            val text = currentLayoutPreset.layoutTable[input] ?: return false
-            onChar(text)
-            return true
-        }
-
-        override fun onFlick(
-            keyCode: Int,
-            direction: FlickDirection
-        ): Boolean {
-            if(flickMode == FlickMode.ToggleOnly) return false
-            this.flicks += keyCode to direction
-            return false
+            is FusionKeyEvent.Flick -> {
+                if(symbolState != Symbol.Text) {
+                    return super.onKeyEvent(event)
+                }
+                if(flickMode == FlickMode.ToggleOnly) return false
+                flicks[event.keyCode] = event.direction
+                return false
+            }
+            else -> super.onKeyEvent(event)
         }
     }
 
@@ -387,29 +389,31 @@ abstract class MozcIMEMode(
             )
         }
 
-        override fun onKeyDown(keyCode: Int, metaState: Int): Boolean {
-            if(keyCode <= 0 || !keyCharacterMap.isPrintingKey(keyCode)) {
-                return super.onKeyDown(keyCode, metaState)
+        override fun onKeyEvent(event: FusionKeyEvent): Boolean = when(event) {
+            is FusionKeyEvent.Press -> {
+                if(event.keyCode <= 0 || !keyCharacterMap.isPrintingKey(event.keyCode)) {
+                    return super.onKeyEvent(event)
+                }
+                return false
             }
-            return false
-        }
-
-        override fun onKeyUp(keyCode: Int, metaState: Int): Boolean {
-            if(keyCode <= 0 || !keyCharacterMap.isPrintingKey(keyCode)) {
-                return super.onKeyUp(keyCode, metaState)
+            is FusionKeyEvent.Release -> {
+                if(event.keyCode <= 0 || !keyCharacterMap.isPrintingKey(event.keyCode)) {
+                    return super.onKeyEvent(event)
+                }
+                val direction = flicks.remove(event.keyCode) ?: return false
+                val input = FusionKeyEvent.Flick(event.keyCode, direction, shiftState, false, KeyEventSource.Unknown)
+                val text = currentLayoutPreset.layoutTable[input] ?: return false
+                onChar(text)
+                return true
             }
-            val input = KeyInput(keyCode, shiftState, flicks.remove(keyCode))
-            val text = currentLayoutPreset.layoutTable[input] ?: return false
-            onChar(text)
-            return true
-        }
-
-        override fun onFlick(keyCode: Int, direction: FlickDirection): Boolean {
-            if(symbolState != Symbol.Text) {
-                return super.onFlick(keyCode, direction)
+            is FusionKeyEvent.Flick -> {
+                if(symbolState != Symbol.Text) {
+                    return super.onKeyEvent(event)
+                }
+                flicks[event.keyCode] = event.direction
+                return false
             }
-            flicks[keyCode] = direction
-            return false
+            else -> super.onKeyEvent(event)
         }
     }
 

@@ -1,7 +1,7 @@
 package ee.oyatl.ime.keyboard.listener
 
+import ee.oyatl.ime.fusion.keyboard.core.FusionKeyEvent
+
 interface KeyboardListener {
-    fun onKeyDown(keyCode: Int, metaState: Int): Boolean
-    fun onKeyUp(keyCode: Int, metaState: Int): Boolean
-    fun onReset()
+    fun onKeyEvent(event: FusionKeyEvent): Boolean
 }

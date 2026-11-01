@@ -1,6 +1,7 @@
 package ee.oyatl.ime.keyboard.listener
 
 import android.view.KeyEvent
+import ee.oyatl.ime.fusion.keyboard.core.FusionKeyEvent
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardParams
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardState
 
@@ -14,33 +15,31 @@ class ShiftStateManager(
     private var inputWhileShiftPressing: Boolean = false
     private var inputWhileShifted: Boolean = false
 
-    override fun onKeyDown(keyCode: Int, metaState: Int): Boolean {
-        when(keyCode) {
-            KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.KEYCODE_SHIFT_RIGHT -> {
-                onShiftPressed(keyCode)
-                return true
-            }
-            else -> {
-                return true
-            }
-        }
-    }
-
-    override fun onKeyUp(keyCode: Int, metaState: Int): Boolean {
-        when(keyCode) {
-            KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.KEYCODE_SHIFT_RIGHT -> {
-                onShiftReleased(keyCode)
-                return true
-            }
-            else -> {
-                autoReleaseShift()
-                return true
+    override fun onKeyEvent(event: FusionKeyEvent): Boolean = when(event) {
+        is FusionKeyEvent.Press -> {
+            when(event.keyCode) {
+                KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.KEYCODE_SHIFT_RIGHT -> {
+                    onShiftPressed(event.keyCode)
+                    return true
+                }
+                else -> {
+                    return true
+                }
             }
         }
-    }
-
-    override fun onReset() {
-        releaseShift()
+        is FusionKeyEvent.Release -> {
+            when(event.keyCode) {
+                KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.KEYCODE_SHIFT_RIGHT -> {
+                    onShiftReleased(event.keyCode)
+                    return true
+                }
+                else -> {
+                    autoReleaseShift()
+                    return true
+                }
+            }
+        }
+        else -> false
     }
 
     private fun onShiftPressed(code: Int) {

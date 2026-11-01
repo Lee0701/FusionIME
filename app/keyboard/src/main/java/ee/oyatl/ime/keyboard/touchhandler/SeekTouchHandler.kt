@@ -1,7 +1,10 @@
 package ee.oyatl.ime.keyboard.touchhandler
 
 import android.view.KeyEvent
+import ee.oyatl.ime.fusion.keyboard.core.FusionKeyEvent
+import ee.oyatl.ime.fusion.keyboard.core.KeyEventSource
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardParams
+import ee.oyatl.ime.fusion.keyboard.core.KeyboardState
 import ee.oyatl.ime.keyboard.KeyboardView
 import ee.oyatl.ime.keyboard.popup.PreviewPopup
 
@@ -28,7 +31,12 @@ class SeekTouchHandler(
         val pointer = Pointer(pointerId, x, y, key)
         if(key != null) {
             keyboardView.findKeys(key.keyCode).forEach { it.onPressed() }
-            keyboardView.listener.onKeyDown(key.keyCode, 0)
+            keyboardView.listener.onKeyEvent(FusionKeyEvent.Press(
+                key.keyCode,
+                KeyboardState.Shift.Released,
+                false,
+                KeyEventSource.SoftwareKeyboard
+            ))
             if(keyboardParams.previewPopups && key.label.isNotEmpty()) {
                 keyboardView.popupManager.showPopup(key) { PreviewPopup(keyboardView, key) }
             }
@@ -43,7 +51,14 @@ class SeekTouchHandler(
         if(newKey != oldKey) {
             oldKey?.let { key -> keyboardView.findKeys(key.keyCode).forEach { it.onReleased() } }
             newKey?.let { key -> keyboardView.findKeys(key.keyCode).forEach { it.onPressed() } }
-            if(oldKey?.keyCode == KeyEvent.KEYCODE_DEL) keyboardView.listener.onKeyUp(oldKey.keyCode, 0)
+            if(oldKey?.keyCode == KeyEvent.KEYCODE_DEL) {
+                keyboardView.listener.onKeyEvent(FusionKeyEvent.Release(
+                    oldKey.keyCode,
+                    KeyboardState.Shift.Released,
+                    false,
+                    KeyEventSource.SoftwareKeyboard
+                ))
+            }
             if(keyboardParams.previewPopups) {
                 if(oldKey != null) keyboardView.popupManager.removePopup(oldKey)
                 if(newKey != null && newKey.label.isNotEmpty())
@@ -59,7 +74,12 @@ class SeekTouchHandler(
         val key = pointer.key
         if(key != null) {
             keyboardView.findKeys(key.keyCode).forEach { it.onReleased() }
-            keyboardView.listener.onKeyUp(key.keyCode, 0)
+            keyboardView.listener.onKeyEvent(FusionKeyEvent.Release(
+                key.keyCode,
+                KeyboardState.Shift.Released,
+                false,
+                KeyEventSource.SoftwareKeyboard
+            ))
             keyboardView.popupManager.removePopup(key)
         }
         pointers -= pointerId

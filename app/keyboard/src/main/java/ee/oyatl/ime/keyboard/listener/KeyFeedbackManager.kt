@@ -10,6 +10,7 @@ import android.os.VibratorManager
 import android.view.KeyEvent
 import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresPermission
+import ee.oyatl.ime.fusion.keyboard.core.FusionKeyEvent
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardParams
 import kotlin.math.min
 
@@ -26,33 +27,33 @@ class KeyFeedbackManager(
     private val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
     private var downTime: Long = 0
 
-    override fun onKeyDown(keyCode: Int, metaState: Int): Boolean {
-        downTime = System.currentTimeMillis()
-        if(params.vibrationDuration > 0) {
-            vibrate(params.vibrationDuration)
-        }
-        if(params.soundVolume > 0f) {
-            val fx = when(keyCode) {
-                KeyEvent.KEYCODE_DEL -> AudioManager.FX_KEYPRESS_DELETE
-                KeyEvent.KEYCODE_ENTER -> AudioManager.FX_KEYPRESS_RETURN
-                KeyEvent.KEYCODE_SPACE -> AudioManager.FX_KEYPRESS_SPACEBAR
-                else -> AudioManager.FX_KEYPRESS_STANDARD
+    override fun onKeyEvent(event: FusionKeyEvent): Boolean = when(event) {
+        is FusionKeyEvent.Press -> {
+            downTime = event.time
+            if(params.vibrationDuration > 0) {
+                vibrate(params.vibrationDuration)
             }
-            audioManager.playSoundEffect(fx, params.soundVolume)
+            if(params.soundVolume > 0f) {
+                val fx = when(event.keyCode) {
+                    KeyEvent.KEYCODE_DEL -> AudioManager.FX_KEYPRESS_DELETE
+                    KeyEvent.KEYCODE_ENTER -> AudioManager.FX_KEYPRESS_RETURN
+                    KeyEvent.KEYCODE_SPACE -> AudioManager.FX_KEYPRESS_SPACEBAR
+                    else -> AudioManager.FX_KEYPRESS_STANDARD
+                }
+                audioManager.playSoundEffect(fx, params.soundVolume)
+            }
+            return false
         }
-        return false
-    }
-
-    override fun onKeyUp(keyCode: Int, metaState: Int): Boolean {
-        val diff = System.currentTimeMillis() - downTime
-        if(params.vibrationDuration > 0) {
-            val duration = params.vibrationDuration / 5f * min(diff / 100f, 1f)
-            vibrate(duration.toLong())
+        is FusionKeyEvent.Release -> {
+            val diff = System.currentTimeMillis() - downTime
+            if(params.vibrationDuration > 0) {
+                val duration = params.vibrationDuration / 5f * min(diff / 100f, 1f)
+                vibrate(duration.toLong())
+            }
+            return false
         }
-        return false
+        else -> false
     }
-
-    override fun onReset() = Unit
 
     @RequiresPermission(Manifest.permission.VIBRATE)
     fun vibrate(duration: Long) {

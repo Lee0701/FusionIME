@@ -7,13 +7,13 @@ import kotlinx.serialization.Serializable
 data class LayoutTable(
     val map: Map<Int, Item> = emptyMap()
 ) {
-    operator fun get(input: KeyInput): Int? {
+    operator fun get(input: FusionKeyEvent): Int? {
         val item = get(map[input.keyCode] ?: return null, input)
         if(item is Item.Output) return item.char
         return null
     }
 
-    fun get(item: Item?, input: KeyInput): Item? {
+    fun get(item: Item?, input: FusionKeyEvent): Item? {
         return when(item) {
             is Item.Output -> item
             is Item.ShiftState -> get(when(input.shiftState) {
@@ -22,7 +22,7 @@ data class LayoutTable(
                 KeyboardState.Shift.Locked -> item.locked ?: item.shifted ?: item.normal
                 KeyboardState.Shift.AutoShifted -> item.locked ?: item.shifted ?: item.normal
             }, input)
-            is Item.Flick -> get(when(input.flickDirection) {
+            is Item.Flick -> get(when((input as? FusionKeyEvent.Flick)?.direction) {
                 FlickDirection.Up -> item.up ?: item.normal
                 FlickDirection.Down -> item.down ?: item.normal
                 FlickDirection.Left -> item.left ?: item.normal

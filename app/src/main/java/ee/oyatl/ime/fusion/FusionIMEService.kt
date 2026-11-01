@@ -22,6 +22,9 @@ import androidx.preference.PreferenceManager
 import com.android.inputmethod.latin.RichInputMethodManager
 import com.android.inputmethod.latin.settings.Settings
 import ee.oyatl.ime.candidate.CandidateView
+import ee.oyatl.ime.fusion.keyboard.core.FusionKeyEvent
+import ee.oyatl.ime.fusion.keyboard.core.KeyEventSource
+import ee.oyatl.ime.fusion.keyboard.core.KeyboardState
 import ee.oyatl.ime.fusion.mode.IMEMode
 import ee.oyatl.ime.fusion.mode.IMEModeSwitcher
 import ee.oyatl.ime.fusion.mode.LatinIMEMode
@@ -209,7 +212,13 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
             return true
         }
 
-        val result = imeModeSwitcher.currentMode.onKeyDown(logicalKey, translatedEvent.metaState)
+        val shiftState = if(event.isShiftPressed) KeyboardState.Shift.Pressed else KeyboardState.Shift.Released
+        val result = imeModeSwitcher.currentMode.onKeyEvent(FusionKeyEvent.Press(
+            logicalKey,
+            shiftState,
+            isAltGraphPressed,
+            KeyEventSource.HardwareKeyboard
+        ))
         if(!result) {
             currentInputConnection.sendKeyEvent(translatedEvent)
         }
@@ -232,7 +241,13 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
             return true
         }
 
-        val result = imeModeSwitcher.currentMode.onKeyUp(logicalKey, translatedEvent.metaState)
+        val shiftState = if(event.isShiftPressed) KeyboardState.Shift.Pressed else KeyboardState.Shift.Released
+        val result = imeModeSwitcher.currentMode.onKeyEvent(FusionKeyEvent.Release(
+            logicalKey,
+            shiftState,
+            isAltGraphPressed,
+            KeyEventSource.HardwareKeyboard
+        ))
         if(!result) {
             currentInputConnection.sendKeyEvent(translatedEvent)
         }

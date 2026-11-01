@@ -3,9 +3,11 @@ package ee.oyatl.ime.keyboard.touchhandler
 import android.os.Handler
 import android.os.Looper
 import android.view.ViewConfiguration
+import ee.oyatl.ime.fusion.keyboard.core.FusionKeyEvent
+import ee.oyatl.ime.fusion.keyboard.core.KeyEventSource
 import ee.oyatl.ime.fusion.keyboard.core.KeyboardParams
+import ee.oyatl.ime.fusion.keyboard.core.KeyboardState
 import ee.oyatl.ime.keyboard.KeyboardView
-import ee.oyatl.ime.keyboard.listener.LongPressListener
 import ee.oyatl.ime.keyboard.popup.SelectionPopup
 import kotlin.math.hypot
 
@@ -84,9 +86,13 @@ class LongPressTouchHandler(
     private fun activate(pointerId: Int) {
         val pointer = pointers[pointerId] ?: return
         if(pointer.cancelled || pointer.activated) return
-        val listener = keyboardView.listener
-        if(listener !is LongPressListener) return
-        if(!listener.onKeyLongPress(pointer.key.keyCode, 0)) return
+        val result = keyboardView.listener.onKeyEvent(FusionKeyEvent.LongPress(
+            pointer.key.keyCode,
+            KeyboardState.Shift.Released,
+            false,
+            KeyEventSource.SoftwareKeyboard
+        ))
+        if(!result) return
 
         delegate.onTouchCancel(pointerId)
         pointer.activated = true
