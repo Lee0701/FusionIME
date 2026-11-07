@@ -1,0 +1,21 @@
+KANJIDIC2
+
+Japanese kun-reading okurigana boundaries in unihan_cjkv.bin are derived
+and adapted from KANJIDIC2, maintained by the Electronic Dictionary
+Research and Development Group (EDRDG).
+
+Project and source data:
+https://www.edrdg.org/wiki/KANJIDIC_Project.html
+https://www.edrdg.org/pub/Nihongo/kanjidic2.xml.gz
+
+KANJIDIC2 is licensed under the Creative Commons
+Attribution-ShareAlike 4.0 International License (CC BY-SA 4.0):
+https://creativecommons.org/licenses/by-sa/4.0/
+
+Changes made for FusionIME:
+- selected Japanese kun readings only
+- converted KANJIDIC2 okurigana separators from "." to "-"
+- merged the marked readings with selected Unicode Unihan properties
+- encoded the result in FusionIME's compact binary dictionary format
+
+The adapted dictionary data is distributed under CC BY-SA 4.0.

@@ -61,6 +61,16 @@
             android:title="TrueTap Keyboard"
             app:url="https://github.com/RedZero13/TrueTap-Keyboard" />
 
+        <ee.oyatl.ime.fusion.preference.OpenWebPreference
+            android:title="Unicode Unihan Database"
+            android:summary="Unicode License v3"
+            app:url="https://www.unicode.org/reports/tr38/" />
+
+        <ee.oyatl.ime.fusion.preference.OpenWebPreference
+            android:title="KANJIDIC2"
+            android:summary="CC BY-SA 4.0"
+            app:url="https://www.edrdg.org/wiki/KANJIDIC_Project.html" />
+
     </PreferenceCategory>
 
 </androidx.preference.PreferenceScreen>

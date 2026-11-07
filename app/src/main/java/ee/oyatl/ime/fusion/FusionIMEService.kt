@@ -22,6 +22,11 @@ import androidx.preference.PreferenceManager
 import com.android.inputmethod.latin.RichInputMethodManager
 import com.android.inputmethod.latin.settings.Settings
 import ee.oyatl.ime.candidate.CandidateView
+import ee.oyatl.ime.fusion.cjkv.CjkvDictionary
+import ee.oyatl.ime.fusion.cjkv.CjkvDictionaryViewState
+import ee.oyatl.ime.fusion.cjkv.CursorCharacterResult
+import ee.oyatl.ime.fusion.cjkv.extractCharacterBeforeCursor
+import ee.oyatl.ime.fusion.cjkv.readCharacterBeforeCursor
 import ee.oyatl.ime.fusion.mode.IMEMode
 import ee.oyatl.ime.fusion.mode.IMEModeSwitcher
 import ee.oyatl.ime.fusion.mode.LatinIMEMode
@@ -52,6 +57,7 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
     private val primaryClipChangedListener = ClipboardManager.OnPrimaryClipChangedListener {
         clipboardHandler.post(::updateClipboardCandidate)
     }
+    private val cjkvDictionary by lazy { runCatching { CjkvDictionary.load(this) } }
 
     override fun onCreate() {
         super.onCreate()
@@ -290,6 +296,53 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
         return cleared
     }
 
+    override fun onDictionaryRequested(): CjkvDictionaryViewState {
+        val editorInfo = currentInputEditorInfo ?: return CjkvDictionaryViewState.Unavailable
+        if(isSensitiveInputType(editorInfo.inputType)) return CjkvDictionaryViewState.SensitiveInput
+        val inputConnection = currentInputConnection ?: return CjkvDictionaryViewState.Unavailable
+        return dictionaryState(readCharacterBeforeCursor(inputConnection))
+    }
+
+    /** Looks up a character long-pressed in the dictionary panel. */
+    override fun onDictionaryLookup(text: String): CjkvDictionaryViewState? {
+        val result = extractCharacterBeforeCursor(text)
+        if(result !is CursorCharacterResult.Han) return null
+        return dictionaryState(result)
+    }
+
+    private fun dictionaryState(result: CursorCharacterResult): CjkvDictionaryViewState {
+        return when(result) {
+            CursorCharacterResult.Empty -> CjkvDictionaryViewState.Empty
+            CursorCharacterResult.Unavailable -> CjkvDictionaryViewState.Unavailable
+            is CursorCharacterResult.NotHan -> CjkvDictionaryViewState.NotHan(result.text, result.codePoint)
+            is CursorCharacterResult.Han -> cjkvDictionary.fold(
+                onSuccess = { dictionary ->
+                    val entry = runCatching { dictionary.lookupResolved(result.character.codePoint) }.getOrElse {
+                        return CjkvDictionaryViewState.DataError
+                    }
+                    CjkvDictionaryViewState.Found(result.character, entry)
+                },
+                onFailure = { CjkvDictionaryViewState.DataError },
+            )
+        }
+    }
+
+    override fun onDictionaryLookupRequested(candidate: CandidateView.Candidate) {
+        val editorInfo = currentInputEditorInfo ?: return
+        if(isSensitiveInputType(editorInfo.inputType)) return
+        imeModeSwitcher.openDictionaryPanel(candidate)
+    }
+
+    override fun onDictionaryCompositionDiscarded() {
+        currentInputConnection?.setComposingText("", 1)
+    }
+
+    override fun onDictionaryTextSelected(text: String) {
+        val editorInfo = currentInputEditorInfo ?: return
+        if(isSensitiveInputType(editorInfo.inputType)) return
+        currentInputConnection?.commitText(text, 1)
+    }
+
     override fun onCandidateViewVisibilityChange(visible: Boolean) {
         if(visible) imeModeSwitcher.showCandidates()
         else imeModeSwitcher.showTabBar()
@@ -320,6 +373,7 @@ class FusionIMEService: InputMethodService(), IMEMode.Listener, IMEModeSwitcher.
         imeModeSwitcher.currentMode.updateSelection(
             oldSelStart, oldSelEnd, newSelStart, newSelEnd, candidatesStart, candidatesEnd
         )
+        imeModeSwitcher.onSelectionChanged(newSelStart, newSelEnd, composing = candidatesStart >= 0)
     }
 
     override fun onRequestHideSelf(flags: Int) {

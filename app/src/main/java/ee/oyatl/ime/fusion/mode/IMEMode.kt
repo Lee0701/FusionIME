@@ -35,6 +35,9 @@ interface IMEMode {
         fun onCandidateViewVisibilityChange(visible: Boolean)
         fun onExpandedCandidates(candidates: List<CandidateView.Candidate>)
         fun onLongPressStateChanged(active: Boolean)
+
+        /** Opens a long-pressed candidate in the CJKV dictionary panel. */
+        fun onDictionaryLookupRequested(candidate: CandidateView.Candidate) = Unit
     }
 
     interface Params {

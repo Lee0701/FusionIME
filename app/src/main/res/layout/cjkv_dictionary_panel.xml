@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Stays in place while the entry below scrolls. -->
+    <LinearLayout
+        android:id="@+id/dictionary_header"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="20dp"
+        android:paddingTop="12dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="10dp">
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/dictionary_back"
+            android:src="@drawable/keyic_left"
+            android:contentDescription="@string/cjkv_dictionary_back"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:padding="8dp"
+            android:visibility="gone"
+            android:layout_width="48dp"
+            android:layout_height="48dp" />
+
+        <TextView
+            android:id="@+id/dictionary_character"
+            android:background="?android:attr/selectableItemBackground"
+            android:textSize="56sp"
+            android:gravity="center"
+            android:layout_width="88dp"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/dictionary_code_point"
+                android:textSize="18sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/dictionary_note"
+                android:text="@string/cjkv_dictionary_no_data"
+                android:textSize="14sp"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp" />
+
+        </LinearLayout>
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/dictionary_expand"
+            android:src="@drawable/arrow_drop_down_24"
+            android:contentDescription="@string/cjkv_dictionary_expand"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:padding="8dp"
+            android:layout_gravity="top"
+            android:layout_width="48dp"
+            android:layout_height="48dp" />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/dictionary_close"
+            android:src="@drawable/close_24"
+            android:contentDescription="@string/cjkv_dictionary_close"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:padding="8dp"
+            android:layout_gravity="top"
+            android:layout_width="48dp"
+            android:layout_height="48dp" />
+
+    </LinearLayout>
+
+<ScrollView
+    android:id="@+id/dictionary_scroll"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+    android:fillViewport="true"
+    android:overScrollMode="ifContentScrolls">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="240dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="12dp">
+
+        <TextView
+            android:id="@+id/dictionary_status"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:id="@+id/dictionary_content"
+            android:visibility="gone"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- The characters of a looked-up word (製造); tap one to show it. -->
+            <ee.oyatl.ime.fusion.cjkv.CjkvTappableTextView
+                android:id="@+id/dictionary_word"
+                android:textSize="24sp"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp" />
+
+            <LinearLayout style="@style/CjkvDictionaryRow">
+                <TextView android:id="@+id/dictionary_definition_label" style="@style/CjkvDictionaryLabel" android:text="@string/cjkv_dictionary_definition" />
+                <ee.oyatl.ime.fusion.cjkv.CjkvTappableTextView android:id="@+id/dictionary_definition" style="@style/CjkvDictionaryValue" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/dictionary_sound_section"
+                android:layout_marginTop="4dp"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/dictionary_readings"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <LinearLayout android:id="@+id/dictionary_japanese_on_row" style="@style/CjkvDictionaryRow">
+                    <TextView android:id="@+id/dictionary_japanese_on_label" style="@style/CjkvDictionaryLabel" android:text="@string/cjkv_dictionary_japanese_on" />
+                    <ee.oyatl.ime.fusion.cjkv.CjkvTappableTextView android:id="@+id/dictionary_japanese_on" style="@style/CjkvDictionaryValue" />
+                </LinearLayout>
+
+                <LinearLayout android:id="@+id/dictionary_japanese_kun_row" style="@style/CjkvDictionaryRow">
+                    <TextView android:id="@+id/dictionary_japanese_kun_label" style="@style/CjkvDictionaryLabel" android:text="@string/cjkv_dictionary_japanese_kun" />
+                    <ee.oyatl.ime.fusion.cjkv.CjkvTappableTextView android:id="@+id/dictionary_japanese_kun" style="@style/CjkvDictionaryValue" />
+                </LinearLayout>
+
+                <LinearLayout android:id="@+id/dictionary_mandarin_row" style="@style/CjkvDictionaryRow">
+                    <TextView android:id="@+id/dictionary_mandarin_label" style="@style/CjkvDictionaryLabel" android:text="@string/cjkv_dictionary_mandarin" />
+                    <ee.oyatl.ime.fusion.cjkv.CjkvTappableTextView android:id="@+id/dictionary_mandarin" style="@style/CjkvDictionaryValue" />
+                </LinearLayout>
+
+                <LinearLayout android:id="@+id/dictionary_cantonese_row" style="@style/CjkvDictionaryRow">
+                    <TextView android:id="@+id/dictionary_cantonese_label" style="@style/CjkvDictionaryLabel" android:text="@string/cjkv_dictionary_cantonese" />
+                    <ee.oyatl.ime.fusion.cjkv.CjkvTappableTextView android:id="@+id/dictionary_cantonese" style="@style/CjkvDictionaryValue" />
+                </LinearLayout>
+
+                <LinearLayout android:id="@+id/dictionary_korean_row" style="@style/CjkvDictionaryRow">
+                    <TextView android:id="@+id/dictionary_korean_label" style="@style/CjkvDictionaryLabel" android:text="@string/cjkv_dictionary_korean" />
+                    <ee.oyatl.ime.fusion.cjkv.CjkvTappableTextView android:id="@+id/dictionary_korean" style="@style/CjkvDictionaryValue" />
+                </LinearLayout>
+
+
+                <LinearLayout android:id="@+id/dictionary_vietnamese_row" style="@style/CjkvDictionaryRow">
+                    <TextView android:id="@+id/dictionary_vietnamese_label" style="@style/CjkvDictionaryLabel" android:text="@string/cjkv_dictionary_vietnamese" />
+                    <ee.oyatl.ime.fusion.cjkv.CjkvTappableTextView android:id="@+id/dictionary_vietnamese" style="@style/CjkvDictionaryValue" />
+                </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout style="@style/CjkvDictionaryRow">
+                    <TextView android:id="@+id/dictionary_middle_chinese_label" style="@style/CjkvDictionaryLabel" android:text="@string/cjkv_dictionary_middle_chinese" />
+                    <ee.oyatl.ime.fusion.cjkv.CjkvTappableTextView android:id="@+id/dictionary_middle_chinese" style="@style/CjkvDictionaryValue" />
+                </LinearLayout>
+
+                <LinearLayout style="@style/CjkvDictionaryRow">
+                    <TextView android:id="@+id/dictionary_fanqie_label" style="@style/CjkvDictionaryLabel" android:text="@string/cjkv_dictionary_fanqie" />
+                    <ee.oyatl.ime.fusion.cjkv.CjkvTappableTextView android:id="@+id/dictionary_fanqie" style="@style/CjkvDictionaryValue" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/dictionary_glyph_section"
+                android:layout_marginTop="12dp"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout style="@style/CjkvDictionaryRow">
+                    <TextView android:id="@+id/dictionary_total_strokes_label" style="@style/CjkvDictionaryLabel" android:text="@string/cjkv_dictionary_total_strokes" />
+                    <ee.oyatl.ime.fusion.cjkv.CjkvTappableTextView android:id="@+id/dictionary_total_strokes" style="@style/CjkvDictionaryValue" />
+                </LinearLayout>
+
+                <LinearLayout style="@style/CjkvDictionaryRow">
+                    <TextView android:id="@+id/dictionary_radical_strokes_label" style="@style/CjkvDictionaryLabel" android:text="@string/cjkv_dictionary_radical_strokes" />
+                    <ee.oyatl.ime.fusion.cjkv.CjkvTappableTextView android:id="@+id/dictionary_radical_strokes" style="@style/CjkvDictionaryValue" />
+                </LinearLayout>
+
+                <LinearLayout style="@style/CjkvDictionaryRow">
+                    <TextView android:id="@+id/dictionary_cangjie_label" style="@style/CjkvDictionaryLabel" android:text="@string/cjkv_dictionary_cangjie" />
+                    <ee.oyatl.ime.fusion.cjkv.CjkvTappableTextView android:id="@+id/dictionary_cangjie" style="@style/CjkvDictionaryValue" />
+                </LinearLayout>
+
+                <LinearLayout style="@style/CjkvDictionaryRow">
+                    <TextView android:id="@+id/dictionary_four_corner_label" style="@style/CjkvDictionaryLabel" android:text="@string/cjkv_dictionary_four_corner" />
+                    <ee.oyatl.ime.fusion.cjkv.CjkvTappableTextView android:id="@+id/dictionary_four_corner" style="@style/CjkvDictionaryValue" />
+                </LinearLayout>
+
+
+
+
+                <LinearLayout style="@style/CjkvDictionaryRow">
+                    <TextView android:id="@+id/dictionary_simplified_label" style="@style/CjkvDictionaryLabel" android:text="@string/cjkv_dictionary_simplified" />
+                    <ee.oyatl.ime.fusion.cjkv.CjkvTappableTextView android:id="@+id/dictionary_simplified" style="@style/CjkvDictionaryValue" />
+                </LinearLayout>
+
+                <LinearLayout style="@style/CjkvDictionaryRow">
+                    <TextView android:id="@+id/dictionary_traditional_label" style="@style/CjkvDictionaryLabel" android:text="@string/cjkv_dictionary_traditional" />
+                    <ee.oyatl.ime.fusion.cjkv.CjkvTappableTextView android:id="@+id/dictionary_traditional" style="@style/CjkvDictionaryValue" />
+                </LinearLayout>
+
+                <LinearLayout style="@style/CjkvDictionaryRow">
+                    <TextView android:id="@+id/dictionary_japanese_new_label" style="@style/CjkvDictionaryLabel" android:text="@string/cjkv_dictionary_japanese_new" />
+                    <ee.oyatl.ime.fusion.cjkv.CjkvTappableTextView android:id="@+id/dictionary_japanese_new" style="@style/CjkvDictionaryValue" />
+                </LinearLayout>
+
+                <LinearLayout style="@style/CjkvDictionaryRow">
+                    <TextView android:id="@+id/dictionary_japanese_old_label" style="@style/CjkvDictionaryLabel" android:text="@string/cjkv_dictionary_japanese_old" />
+                    <ee.oyatl.ime.fusion.cjkv.CjkvTappableTextView android:id="@+id/dictionary_japanese_old" style="@style/CjkvDictionaryValue" />
+                </LinearLayout>
+
+                <LinearLayout style="@style/CjkvDictionaryRow">
+                    <TextView android:id="@+id/dictionary_compatibility_label" style="@style/CjkvDictionaryLabel" android:text="@string/cjkv_dictionary_compatibility" />
+                    <ee.oyatl.ime.fusion.cjkv.CjkvTappableTextView android:id="@+id/dictionary_compatibility" style="@style/CjkvDictionaryValue" />
+                </LinearLayout>
+
+                <LinearLayout style="@style/CjkvDictionaryRow">
+                    <TextView android:id="@+id/dictionary_semantic_variants_label" style="@style/CjkvDictionaryLabel" android:text="@string/cjkv_dictionary_semantic_variants" />
+                    <ee.oyatl.ime.fusion.cjkv.CjkvTappableTextView android:id="@+id/dictionary_semantic_variants" style="@style/CjkvDictionaryValue" />
+                </LinearLayout>
+
+                <LinearLayout style="@style/CjkvDictionaryRow">
+                    <TextView android:id="@+id/dictionary_specialized_semantic_variants_label" style="@style/CjkvDictionaryLabel" android:text="@string/cjkv_dictionary_specialized_semantic_variants" />
+                    <ee.oyatl.ime.fusion.cjkv.CjkvTappableTextView android:id="@+id/dictionary_specialized_semantic_variants" style="@style/CjkvDictionaryValue" />
+                </LinearLayout>
+
+                <LinearLayout style="@style/CjkvDictionaryRow">
+                    <TextView android:id="@+id/dictionary_z_variants_label" style="@style/CjkvDictionaryLabel" android:text="@string/cjkv_dictionary_z_variants" />
+                    <ee.oyatl.ime.fusion.cjkv.CjkvTappableTextView android:id="@+id/dictionary_z_variants" style="@style/CjkvDictionaryValue" />
+                </LinearLayout>
+
+
+
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+</ScrollView>
+
+</LinearLayout>

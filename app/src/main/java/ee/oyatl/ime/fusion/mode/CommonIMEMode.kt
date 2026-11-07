@@ -9,6 +9,7 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
 import androidx.preference.PreferenceManager
 import ee.oyatl.ime.candidate.CandidateView
+import ee.oyatl.ime.fusion.cjkv.containsHan
 import ee.oyatl.ime.candidate.ScrollingCandidateView
 import ee.oyatl.ime.fusion.FlickAction
 import ee.oyatl.ime.fusion.util.KeyEventUtil
@@ -410,6 +411,19 @@ abstract class CommonIMEMode(
         }
         listener.onLongPressStateChanged(true)
         return true
+    }
+
+    /**
+     * A long-pressed candidate with Han characters opens in the dictionary.
+     * Modes that use the long press for something else (deleting a learnt
+     * candidate) override this and offer the dictionary as a button instead.
+     */
+    override fun onCandidateLongPressed(candidate: CandidateView.Candidate) {
+        requestDictionaryLookup(candidate)
+    }
+
+    protected fun requestDictionaryLookup(candidate: CandidateView.Candidate) {
+        if(containsHan(candidate.text)) listener.onDictionaryLookupRequested(candidate)
     }
 
     protected open fun submitCandidates(candidates: List<CandidateView.Candidate>) {

@@ -9,6 +9,8 @@ import android.view.inputmethod.InputConnection
 import androidx.annotation.StringRes
 import com.google.common.base.Optional
 import ee.oyatl.ime.candidate.CandidateView
+import ee.oyatl.ime.fusion.cjkv.CjkvLookupCandidate
+import ee.oyatl.ime.fusion.cjkv.containsHan
 import ee.oyatl.ime.candidate.VerticalScrollingCandidateView
 import ee.oyatl.ime.keyboard.KeyboardLayoutPreset
 import ee.oyatl.ime.fusion.R
@@ -51,6 +53,8 @@ abstract class MozcIMEMode(
     private var inputConnectionRenderer: InputConnectionRenderer? = null
 
     private var candidates: List<CandidateView.Candidate> = listOf()
+    // The list as it was before a long press turned a candidate into buttons.
+    private var candidatesBeforeLongPress: List<CandidateView.Candidate>? = null
 
     private val renderResultCallback = EvaluationCallback { command, triggeringKeyEvent ->
         if(!command.isPresent) return@EvaluationCallback
@@ -163,6 +167,10 @@ abstract class MozcIMEMode(
             val candidateToDelete = candidate.candidate as? MozcCandidate ?: return
             val sessionExecutor = this.sessionExecutor ?: return
             sessionExecutor.deleteCandidateFromHistory(candidateToDelete.id, renderResultCallback)
+        } else if(candidate is CjkvLookupCandidate) {
+            // Put the candidate back so it can still be chosen after looking it up.
+            candidatesBeforeLongPress?.let(::submitCandidates)
+            requestDictionaryLookup(candidate.candidate)
         }
     }
 
@@ -172,11 +180,17 @@ abstract class MozcIMEMode(
      */
     override fun onCandidateLongPressed(candidate: CandidateView.Candidate) {
         if(candidate !is MozcCandidate) return
-        val newCandidates = candidates.map {
-            if(it == candidate) CandidateView.ConfirmDeleteCandidate(it)
-            else it
+        val before = candidates
+        // The long press already means "delete", so the dictionary gets its own button beside it.
+        val newCandidates = candidates.flatMap {
+            when {
+                it != candidate -> listOf(it)
+                containsHan(it.text) -> listOf(CjkvLookupCandidate(it), CandidateView.ConfirmDeleteCandidate(it))
+                else -> listOf(CandidateView.ConfirmDeleteCandidate(it))
+            }
         }
         submitCandidates(newCandidates)
+        candidatesBeforeLongPress = before
     }
 
     override fun onChar(codePoint: Int) {
@@ -224,6 +238,7 @@ abstract class MozcIMEMode(
 
     override fun submitCandidates(candidates: List<CandidateView.Candidate>) {
         this.candidates = candidates
+        candidatesBeforeLongPress = null
         super.submitCandidates(candidates)
     }
 

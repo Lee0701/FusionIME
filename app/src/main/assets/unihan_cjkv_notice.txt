@@ -1,0 +1,38 @@
+FusionIME CJKV dictionary data
+
+The file unihan_cjkv.bin is generated from selected properties in the
+Unicode Unihan Database, Unicode Version 18.0.0:
+
+https://www.unicode.org/Public/18.0.0/ucd/Unihan.zip
+
+Included properties:
+
+- kJapanese, kJapaneseOn, kJapaneseKun
+- kMandarin
+- kCantonese
+- kHangul
+- kVietnamese
+- kTang, kFanqie
+- kCangjie, kFourCornerCode
+- kRSUnicode, kTotalStrokes
+- kSimplifiedVariant, kTraditionalVariant
+- kJapaneseNewVariant, kJapaneseOldVariant
+- kCompatibilityVariant
+- kSemanticVariant, kSpecializedSemanticVariant, kZVariant
+- kIRG_GSource, kIRG_HSource, kIRG_JSource, kIRG_KPSource,
+  kIRG_KSource, kIRG_MSource, kIRG_SSource, kIRG_TSource,
+  kIRG_UKSource, kIRG_USource, kIRG_VSource
+
+The generated binary contains only the values needed by FusionIME. See
+unihan_cjkv_metadata.json for the source and generated-file checksums.
+
+The Unicode data is used under the Unicode License v3. A copy of that
+license is included as unicode_license.txt.
+
+Japanese kun-reading okurigana boundaries are adapted from KANJIDIC2.
+See kanjidic2_notice.txt for its attribution and license.
+
+Korean hun/eum labels are selected from the Korean dictionary source already
+distributed in this repository as data/ko_dict_all.tsv. The repository README
+credits the National Institute of Korean Language's Korean Standard Dictionary:
+https://stdict.korean.go.kr/
