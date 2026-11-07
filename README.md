@@ -43,6 +43,8 @@ Supports Chu Quoc Ngu and Han Nom conversion.
 ## Dictionary Data
 * Korean: [Korean Standard Dictionary](https://stdict.korean.go.kr), [libhangul](https://github.com/libhangul/libhangul)
 * Vietnamese: [chunom.org](https://chunom.org/)
+* CJKV character readings, input codes, radical/stroke data, and variants: [Unicode Unihan Database](https://www.unicode.org/reports/tr38/) (Unicode License v3)
+* Japanese kun-reading okurigana boundaries: [KANJIDIC2](https://www.edrdg.org/wiki/KANJIDIC_Project.html) (CC BY-SA 4.0)
 
 ## License
 GNU General Public License v3.0

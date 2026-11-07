@@ -1,5 +1,6 @@
 package ee.oyatl.ime.candidate
 
+import androidx.annotation.DrawableRes
 import ee.oyatl.ime.theme.KeyboardTheme
 
 interface CandidateView {
@@ -24,6 +25,12 @@ interface CandidateView {
 
     interface ExtraCandidate: Candidate {
         val extra: CharSequence
+    }
+
+    /** Shown as an icon instead of its text, like [ConfirmDeleteCandidate]. */
+    interface IconCandidate: Candidate {
+        @get:DrawableRes
+        val icon: Int
     }
 
     data class ConfirmDeleteCandidate(

@@ -79,8 +79,10 @@ abstract class RecyclerCandidateView(
                 view.text.visibility = VISIBLE
                 view.extra.visibility = VISIBLE
                 view.icon.visibility = GONE
-            } else if(candidate is CandidateView.ConfirmDeleteCandidate) {
-                view.icon.setImageResource(R.drawable.candic_delete)
+            } else if(candidate is CandidateView.ConfirmDeleteCandidate || candidate is CandidateView.IconCandidate) {
+                view.icon.setImageResource(
+                    if(candidate is CandidateView.IconCandidate) candidate.icon else R.drawable.candic_delete
+                )
                 view.text.visibility = INVISIBLE
                 view.extra.visibility = INVISIBLE
                 view.icon.visibility = VISIBLE

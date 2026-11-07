@@ -27,6 +27,11 @@ import androidx.core.widget.TextViewCompat
 import androidx.preference.PreferenceManager
 import ee.oyatl.ime.candidate.CandidateView
 import ee.oyatl.ime.candidate.ExpandedCandidateView
+import ee.oyatl.ime.fusion.R
+import ee.oyatl.ime.fusion.cjkv.CjkvDictionaryViewState
+import ee.oyatl.ime.fusion.cjkv.CjkvDictionaryLanguage
+import ee.oyatl.ime.fusion.cjkv.CjkvDictionaryPresentation
+import ee.oyatl.ime.fusion.cjkv.CjkvGlyphLocale
 import ee.oyatl.ime.fusion.util.PreferenceUtil
 import ee.oyatl.ime.fusion.databinding.InputViewWrapperBinding
 import ee.oyatl.ime.fusion.databinding.ModeSwitcherTabBarBinding
@@ -51,6 +56,16 @@ class IMEModeSwitcher(
 
     private var inputViewWrapper: InputViewWrapperBinding? = null
     private var tabs: List<ModeSwitcherTabBinding> = listOf()
+    private var dictionaryTab: ModeSwitcherTabBinding? = null
+    private var dictionaryVisible = false
+    private var keyboardVisibilityBeforeDictionary = View.VISIBLE
+    private var dictionaryKeyboardHeight = 0
+    // The tallest entry fitted since the panel opened; it does not shrink until closed.
+    private var dictionaryFitHeight = 0
+    private var selectionStart = -1
+    private var selectionEnd = -1
+    // The candidate the dictionary was opened from, while its conversion is still going.
+    private var dictionaryCandidate: CandidateView.Candidate? = null
     private var clipboardText: String? = null
 
     val expandedCandidateView: ExpandedCandidateView? get() = inputViewWrapper?.expandedCandidateView
@@ -105,13 +120,17 @@ class IMEModeSwitcher(
     private val preference: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
 
     fun onStart(inputConnection: InputConnection, editorInfo: EditorInfo) {
+        closeDictionaryPanel()
         this.inputConnection = inputConnection
         this.editorInfo = editorInfo
+        selectionStart = editorInfo.initialSelStart
+        selectionEnd = editorInfo.initialSelEnd
         currentEntry.imeMode.onStart(inputConnection, editorInfo)
         showTabBar()
     }
 
     fun onFinish() {
+        closeDictionaryPanel()
         this.inputConnection = null
         this.editorInfo = null
         currentEntry.imeMode.onFinish()
@@ -122,6 +141,30 @@ class IMEModeSwitcher(
         val inputView = InputViewWrapperBinding.inflate(inflater)
 
         inputView.expandedCandidateView.keyboardTheme = keyboardTheme
+        inputView.dictionaryPanel.applyTheme(keyboardTheme)
+        inputView.dictionaryPanel.onTextSelected = { text ->
+            val mode = currentMode as? CommonIMEMode
+            if(dictionaryCandidate != null) {
+                // Opened from a candidate (製造): drop the conversion and type only the character
+                // being shown, then the tapped text after a space (造 zào).
+                callback.onDictionaryCompositionDiscarded()
+                mode?.onReset()
+                val character = inputView.dictionaryPanel.currentCharacter
+                callback.onDictionaryTextSelected(
+                    if(character == null || character == text) text else "$character $text"
+                )
+            } else {
+                // Settle any composition first, so the tapped text goes after it instead of replacing it.
+                mode?.onReset()
+                callback.onDictionaryTextSelected(text)
+            }
+            closeDictionaryPanel()
+        }
+        inputView.dictionaryPanel.onLookupRequested = callback::onDictionaryLookup
+        inputView.dictionaryPanel.onCloseRequested = ::closeDictionaryPanel
+        inputView.dictionaryPanel.onLayoutNeedsFit = {
+            if(dictionaryVisible) applyDictionaryHeight(inputView)
+        }
 
         val itemTheme = keyboardTheme.candidatesTheme.itemThemes.getValue(CandidateItemType.Default)
         inputView.idleView.setBackgroundColor(context.getColor(keyboardTheme.tabBarTheme.backgroundColor))
@@ -175,6 +218,10 @@ class IMEModeSwitcher(
             context.resources.displayMetrics.widthPixels,
             PreferenceUtil.getKeyboardHeight(context) - oneDp
         )
+        inputView.dictionaryPanel.layoutParams = FrameLayout.LayoutParams(
+            context.resources.displayMetrics.widthPixels,
+            PreferenceUtil.getKeyboardHeight(context) - oneDp
+        )
         inputView.expandedCandidateView.listener = object : CandidateView.Listener {
             override fun onCandidateSelected(candidate: CandidateView.Candidate) {
                 val currentMode = currentMode
@@ -205,6 +252,7 @@ class IMEModeSwitcher(
         }
 
         this.inputViewWrapper = inputView
+        dictionaryVisible = false
         return inputView.root
     }
 
@@ -241,6 +289,7 @@ class IMEModeSwitcher(
     fun switchMode(index: Int) {
         val inputConnection = this.inputConnection ?: return
         val editorInfo = this.editorInfo ?: return
+        closeDictionaryPanel()
         currentEntry.imeMode.onFinish()
         currentModeIndex = index
         updateInputView()
@@ -250,6 +299,7 @@ class IMEModeSwitcher(
     }
 
     fun showCandidates() {
+        // The dictionary stays open: it can be opened from a candidate, and has its own close button.
         val inputView = inputViewWrapper ?: return
         inputView.clipboardCandidate.stopScrolling()
         inputView.candidateView.visibility = View.VISIBLE
@@ -317,11 +367,155 @@ class IMEModeSwitcher(
 
             tab.label.text = entry.label
             tab.root.setOnClickListener {
-                callback.onSwitchInputMode(index)
+                if(dictionaryVisible && index == currentModeIndex) closeDictionaryPanel()
+                else callback.onSwitchInputMode(index)
             }
             return@mapIndexed tab
         }
+        dictionaryTab = ModeSwitcherTabBinding.inflate(layoutInflater, tabBar.content, true).apply {
+            val theme = keyboardTheme.tabBarTheme.itemTheme
+            root.setBackgroundResource(theme.backgroundDrawable)
+            root.backgroundTintList = context.getColorStateList(theme.backgroundColor)
+            label.setTextColor(context.getColor(theme.foregroundColor))
+            label.setText(R.string.cjkv_dictionary_tab)
+            root.setOnClickListener { openDictionaryPanel() }
+        }
         return tabBar.root
+    }
+
+    private fun openDictionaryPanel() {
+        val inputView = inputViewWrapper ?: return
+        dictionaryCandidate = null
+        inputView.dictionaryPanel.render(callback.onDictionaryRequested(), dictionaryPresentation())
+        showDictionaryPanel(inputView)
+    }
+
+    /** Opens the dictionary on a candidate long-pressed before committing it. */
+    fun openDictionaryPanel(candidate: CandidateView.Candidate) {
+        val inputView = inputViewWrapper ?: return
+        inputView.dictionaryPanel.renderWord(candidate.text.toString(), dictionaryPresentation())
+        showDictionaryPanel(inputView)
+        dictionaryCandidate = candidate
+    }
+
+    private fun showDictionaryPanel(inputView: InputViewWrapperBinding) {
+        // The keyboard is already hidden when the expanded candidate list is open.
+        if(!dictionaryVisible) {
+            keyboardVisibilityBeforeDictionary = inputView.keyboardView.visibility
+            // Take exactly the space the keyboard had, so the window does not change size.
+            val keyboardHeight = inputView.keyboardView.height
+            if(keyboardHeight > 0) dictionaryKeyboardHeight = keyboardHeight
+            dictionaryFitHeight = 0
+            applyDictionaryHeight(inputView)
+        }
+        inputView.keyboardView.visibility = View.GONE
+        inputView.dictionaryPanel.visibility = View.VISIBLE
+        dictionaryVisible = true
+        tabs.forEach { it.root.isSelected = false }
+        dictionaryTab?.root?.isSelected = true
+    }
+
+    /**
+     * Follows the cursor while the dictionary is open, showing the character before it.
+     *
+     * The dictionary closes once something is typed or committed: a tapped item
+     * closes it at once, and a dictionary opened from a candidate closes when the
+     * conversion ends, however the candidate was chosen.
+     */
+    fun onSelectionChanged(newSelStart: Int, newSelEnd: Int, composing: Boolean) {
+        selectionStart = newSelStart
+        selectionEnd = newSelEnd
+        // While converting, the panel may be showing a candidate; the cursor is not what to look up.
+        if(composing || !dictionaryVisible) return
+        if(dictionaryCandidate != null) {
+            closeDictionaryPanel()
+            return
+        }
+        val inputView = inputViewWrapper ?: return
+        inputView.dictionaryPanel.render(callback.onDictionaryRequested(), dictionaryPresentation())
+    }
+
+    private fun dictionaryPresentation(): CjkvDictionaryPresentation {
+        val languages = mutableListOf<CjkvDictionaryLanguage>()
+        val glyphs = mutableListOf<CjkvGlyphLocale>()
+        entries.forEach { entry ->
+            when(val mode = entry.imeMode) {
+                is MozcIMEMode -> {
+                    languages += CjkvDictionaryLanguage.Japanese
+                    glyphs += CjkvGlyphLocale.Japanese
+                }
+                is KoreanIMEMode -> {
+                    languages += CjkvDictionaryLanguage.Korean
+                    glyphs += CjkvGlyphLocale.Korean
+                }
+                is PinyinIMEMode -> {
+                    languages += CjkvDictionaryLanguage.Mandarin
+                    glyphs += if(mode.chineseTraditional) {
+                        CjkvGlyphLocale.TraditionalChinese
+                    } else {
+                        CjkvGlyphLocale.SimplifiedChinese
+                    }
+                }
+                is ZhuyinIMEMode, is CangjieIMEMode -> {
+                    languages += CjkvDictionaryLanguage.Mandarin
+                    glyphs += CjkvGlyphLocale.TraditionalChinese
+                }
+                is JyutpingIMEMode -> {
+                    languages += CjkvDictionaryLanguage.Cantonese
+                    glyphs += CjkvGlyphLocale.HongKongChinese
+                }
+                is VietIMEMode -> {
+                    languages += CjkvDictionaryLanguage.Vietnamese
+                    glyphs += CjkvGlyphLocale.Vietnamese
+                }
+            }
+        }
+        return CjkvDictionaryPresentation(
+            languageOrder = (languages + CjkvDictionaryLanguage.entries).distinct(),
+            glyphOrder = (glyphs + CjkvGlyphLocale.entries).distinct(),
+        )
+    }
+
+    private fun closeDictionaryPanel() {
+        dictionaryCandidate = null
+        hideDictionaryPanel()
+    }
+
+    /**
+     * The panel is as tall as the keyboard it replaces. Expanded, it grows to fit
+     * its entry, up to where the whole input view (candidate bar included) takes
+     * a share of the screen; it does not shrink back while open, so moving to a
+     * shorter entry does not make the app above jump.
+     */
+    private fun applyDictionaryHeight(inputView: InputViewWrapperBinding) {
+        val panel = inputView.dictionaryPanel
+        val base = dictionaryKeyboardHeight.takeIf { it > 0 } ?: panel.layoutParams.height
+        if(!panel.expanded) {
+            dictionaryFitHeight = 0
+            setDictionaryHeight(inputView, base)
+            return
+        }
+        dictionaryFitHeight = maxOf(dictionaryFitHeight, panel.fittingHeight())
+        val max = (context.resources.displayMetrics.heightPixels * DICTIONARY_MAX_SCREEN_SHARE).toInt() -
+            inputView.buttonsView.height
+        setDictionaryHeight(inputView, maxOf(base, minOf(dictionaryFitHeight, max)))
+    }
+
+    private fun setDictionaryHeight(inputView: InputViewWrapperBinding, height: Int) {
+        if(height > 0 && inputView.dictionaryPanel.layoutParams.height != height) {
+            inputView.dictionaryPanel.layoutParams = inputView.dictionaryPanel.layoutParams.apply { this.height = height }
+        }
+    }
+
+    /** Puts the keyboard back in place of the dictionary. */
+    private fun hideDictionaryPanel() {
+        if(!dictionaryVisible) return
+        val inputView = inputViewWrapper ?: return
+        inputView.dictionaryPanel.visibility = View.GONE
+        inputView.keyboardView.visibility = keyboardVisibilityBeforeDictionary
+        dictionaryVisible = false
+        dictionaryTab?.root?.isSelected = false
+        tabs.getOrNull(currentModeIndex)?.root?.isSelected = true
     }
 
     fun expandCandidateView() {
@@ -337,6 +531,11 @@ class IMEModeSwitcher(
         fun onSwitchInputMethod(id: String, subtype: InputMethodSubtype)
         fun onClipboardCandidateSelected(text: String)
         fun onClipboardCandidateClearRequested(): Boolean
+        fun onDictionaryRequested(): CjkvDictionaryViewState
+        fun onDictionaryTextSelected(text: String)
+        /** Drops the text being composed without committing it. */
+        fun onDictionaryCompositionDiscarded()
+        fun onDictionaryLookup(text: String): CjkvDictionaryViewState?
     }
 
     data class Entry(
@@ -350,5 +549,6 @@ class IMEModeSwitcher(
     companion object {
         const val SWITCH_DELAY: Long = 10
         const val EXPAND_COLLAPSE_DURATION: Long = 300
+        private const val DICTIONARY_MAX_SCREEN_SHARE = 0.8f
     }
 }
